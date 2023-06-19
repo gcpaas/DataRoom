@@ -53,7 +53,7 @@
 
 * [使用手册、二次开发、部署手册、常见问题](https://www.yuque.com/chuinixiongkou/bigscreen/index)
 * [前端代码仓库(GitHub)](https://github.com/gcpaas/DataRoom/tree/master/data-room-ui)、[前端代码仓库(码云)](https://gitee.com/gcpaas/gc-starter-bigscreen-ui)
-* [后端代码仓库(GitHub)](https://github.com/gcpaas/gc-starter-bigscreen)、 [后端代码仓库(码云)](https://gitee.com/gcpaas/gc-starter-bigscreen)
+* [后端代码仓库(GitHub)](https://github.com/gcpaas/DataRoom/tree/master/DataRoom)、 [后端代码仓库(码云)](https://gitee.com/gcpaas/gc-starter-bigscreen)
 
 ## 如何集成
 
@@ -75,7 +75,7 @@ Vue.use(ElementUI, { size: 'mini' })
 import 'codemirror/mode/vue/vue.js'
 
 // 引入大屏css
-import 'gc-starter-bigscreen-ui/lib/bigScreen.css'
+import '@gcpaas/data-room-ui/lib/bigScreen.css'
 ```
 
 ###  3. 在 `main.js` 配置大屏

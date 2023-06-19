@@ -1,10 +1,8 @@
-# data-room-uii.zip
-# data-room-uii
 chuangDa
 chuangDa.zip
 deploy.sh
 dist
-gc-starter-lowcode-ui
+data-room-ui
 ### VisualStudioCode template
 .vscode/*
 !.vscode/settings.json
@@ -368,4 +366,4 @@ bh_unicode_properties.cache
 GitHub.sublime-settings
 
 lib
-gc-starter-lowcode-ui
+data-room-ui
