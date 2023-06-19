@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head >
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <title>GCPAAS大屏设计器</title>
+  <!-- 使用CDN的JS文件 -->
+  <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+    <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+  <% } %>
+  <style>
+    html,
+    body,
+    #app {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    #loader-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 99999;
+      background-color: #151a26;
+    }
+
+    #loader-wrapper .loader-box {
+      position: fixed;
+      left: calc(50% - 250px);
+      top: calc(50% - 100px);
+      margin: 0 auto;
+      width: 500px;
+      height: 200px;
+      text-align: center;
+      vertical-align: center;
+      font-weight: bold;
+      color: #87888E;
+      font-size: 35px;
+    }
+
+    #loader-wrapper .loader-box>span {
+      opacity: 0.4;
+      display: inline-block;
+      animation: bouncingLoader 1s infinite alternate;
+    }
+
+    #loader-wrapper .loader-box>span:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    #loader-wrapper .loader-box>span:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    #loader-wrapper .loader-box>span:nth-child(4) {
+      animation-delay: 0.3s;
+    }
+
+    #loader-wrapper .loader-box>span:nth-child(5) {
+      animation-delay: 0.4s;
+    }
+
+    #loader-wrapper .loader-box>span:nth-child(6) {
+      animation-delay: 0.5s;
+    }
+
+    #loader-wrapper .loader-box>span:nth-child(7) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes bouncingLoader {
+
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(25px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    #loader-wrapper .load_title {
+      font-weight: bold;
+      z-index: 1002;
+      position: absolute;
+      top: 50%;
+      margin-top: 15px;
+      color: #87888E;
+      font-size: 18px;
+      width: 100%;
+      height: 30px;
+      text-align: center;
+      opacity: 0.4;
+      line-height: 30px;
+    }
+
+    .CodeMirror-hints {
+      z-index: 9999 !important
+    }
+    .CodeMirror-lint-tooltip {
+      z-index: 9999 !important
+    }
+  </style>
+  <script
+    src='<%= process.env.VUE_APP_HISTORY === "y" ? process.env.VUE_APP_BASE +"/config/starter.js" : "config/starter.js"  %>'>
+  </script>
+  <script
+    src='<%= process.env.VUE_APP_HISTORY === "y" ? process.env.VUE_APP_BASE +"/config/index-" + process.env.NODE_ENV + ".js" : "config/index-" + process.env.NODE_ENV + ".js"  %>'>
+  </script>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= webpackConfig.name %> doesn't work properly without JavaScript enabled. Please enable it
+      to continue.</strong>
+  </noscript>
+  <div id="loader-wrapper">
+    <div class="loader-box">
+      <span>GCPAAS</span>
+      <span>大</span>
+      <span>屏</span>
+      <span>设</span>
+      <span>计</span>
+      <span>器</span>
+    </div>
+    <div class="load_title">加载中…</div>
+  </div>
+  <div id="app" >
+  </div>
+  <!-- built files will be auto injected -->
+</body>
+
+</html>

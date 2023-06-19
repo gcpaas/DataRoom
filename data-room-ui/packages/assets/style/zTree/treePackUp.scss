@@ -1,0 +1,138 @@
+.pack-up-box {
+  margin: 0 -16px;
+  height: 100%;
+  position: absolute;
+  background-color: #f6f7fb;
+  display: flex;
+}
+
+.pack-up-button {
+  position: absolute;
+  margin: 0 -16px;
+  height: none;
+  min-height: calc(100vh - 40px);
+  line-height: calc(100vh - 40px);
+  background-color: #f6f7fb;
+  display: flex;
+
+  a {
+    display: block;
+    height: 100px;
+    line-height: 100px;
+    padding: 50px 0 50px 0;
+    display: flex;
+    top: 45%;
+    // align-self: center;
+    justify-content: center;
+    background-color: #f1f1f1;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+
+    i {
+      align-self: center;
+
+      color: #c6c6db;
+    }
+
+    span {
+      align-self: center;
+    }
+
+    &:hover {
+      background-color: var(--bs-el-color-primary);
+    }
+  }
+}
+
+.visible-pack-up {
+  right: 7px;
+  display: flex;
+  height: 40px !important;
+  line-height: 40px !important;
+  position: absolute !important;
+  cursor: col-resize !important;
+  background-color: var(--bs-background-2) !important;
+  opacity: 0.8;
+
+  span {
+    opacity: 0.7;
+    font-size: 16px;
+    color: #ffffff;
+    align-self: center;
+    white-space: nowrap;
+    display: block;
+    margin-right: 4px;
+  }
+
+  &:hover {
+    cursor: col-resize;
+  }
+}
+
+.visible-tree {
+  width: 25%;
+  float: left;
+}
+
+.hidden-tree {
+  opacity: 0;
+  width: 0%;
+  height: 0;
+}
+
+.table-portion {
+  float: left;
+  width: 75%;
+}
+
+.table-overall {
+  width: 100%;
+  height: 100%;
+}
+
+.resize {
+  cursor: col-resize;
+  float: left;
+  user-select: none;
+  width: 15px;
+  z-index: 1;
+  width: 14px;
+  display: flex;
+  height: auto;
+  background-color: var(--bs-el-background-1);
+  height: 100%;
+
+  a {
+    align-self: center;
+    display: block;
+    height: 100px;
+    line-height: 0px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    background-color: var(--bs-background-2);
+
+    i {
+      line-height: 100px;
+      color: #c6c6db;
+    }
+
+    &:hover {
+      background-color: var(--bs-el-color-primary);
+    }
+  }
+}
+
+.left-box {
+  width: 25%;
+  height: auto;
+  overflow: hidden;
+
+  .inner-container {
+    height: 100% !important;
+  }
+}
+
+.right-box {
+  width: 75%;
+  // margin-left: 1px;
+}

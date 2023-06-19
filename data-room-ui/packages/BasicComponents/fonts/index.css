@@ -1,0 +1,25 @@
+@font-face {
+  font-family: "bigScreen-iconfont"; /* Project id 3745398 */
+  src: url('iconfont.woff2') format('woff2'),
+  url('iconfont.woff') format('woff'),
+  url('iconfont.ttf') format('truetype');
+}
+
+.bigScreen-iconfont {
+  font-family: "bigScreen-iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-share-s:before {
+  content: "\e637";
+}
+
+.icon-jinggao1:before {
+  content: "\e64f";
+  color: #FFD600;
+  font-size:14px;
+}
+

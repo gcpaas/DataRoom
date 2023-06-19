@@ -1,0 +1,264 @@
+.select-item-wrap {
+  padding: 8px;
+
+  .filter-select-item {
+    box-sizing: border-box;
+
+    div {
+      display: inline-block;
+    }
+
+    .filter-item-input-wrap {
+      width: 146px;
+      margin-right: 4px;
+    }
+
+    .field-choose-item {
+      width: 119px !important;
+    }
+
+    .filter-item-input-value {
+      width: 268px;
+    }
+
+    .filter-delete {
+      width: 28px !important;
+    }
+  }
+}
+.bs-setting-wrap{
+  position: relative;
+  height: 100%;
+
+  /deep/ .el-collapse {
+    border: none !important;
+  }
+  /deep/ .el-collapse-item__wrap {
+    border: none !important;
+  }
+
+  /*overflow-y: auto;*/
+.table-header{
+  border-bottom: 2px solid var(--bs-el-color-primary);
+}
+  /deep/ .el-form-item {
+    margin-bottom: 6px;
+  }
+  .toolbar{
+    width: 320px;
+    height: 50px;
+    bottom: 0;
+    z-index: 10;
+    position: fixed;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bs-background-1);
+
+    .el-button{
+      margin-right: 10px;
+    }
+  }
+  /deep/.CodeMirror{
+    height: 150px!important;
+  }
+ /deep/.CodeMirror-scroll{
+    height: 150px!important;
+  }
+}
+/deep/ .el-tabs__nav-scroll {
+  display: flex;
+  justify-content: center;
+}
+
+/deep/ .el-tabs__nav-wrap::after {
+  height: 0;
+}
+
+/deep/ .el-collapse-item__header {
+  background: var(--bs-background-2);
+  height: 32px;
+  padding: 0 12px;
+  border:none
+}
+
+/deep/ .el-collapse-item__content {
+  padding-bottom: 0
+}
+
+/deep/ .lc-field-title {
+  color: var(--bs-el-title);
+}
+
+.lc-field-body {
+  padding: 12px;
+  background: var(--bs-background-2);
+
+  input, textarea {
+    background-color: var(--bs-el-background-1) !important;
+    color: var(--bs-el-text) !important;
+    border-color: var(--bs-el-text) !important;
+  }
+
+}
+.data-form-item{
+  padding: 12px;
+}
+
+/deep/ .select-item {
+  border: none;
+  color: var(--bs-el-title);
+}
+
+/deep/ .el-tabs__nav-scroll {
+  display: flex;
+  justify-content: center;
+}
+
+/deep/ .el-tabs__nav-wrap::after {
+  height: 0;
+}
+
+  .design-tab-warp{
+    padding: 10px;
+  }
+/deep/.el-tabs--top{
+  height: 100%;
+}
+/deep/ .el-tabs__content {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 6px !important;
+    background-color: transparent !important;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 6px !important;
+    // background-color: transparent;
+  }
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      background-color: #494848 !important;
+    }
+  }
+}
+/deep/ .el-tabs__header {
+  margin: 0;
+}
+
+/deep/ .el-form-item__label {
+  font-size: 12px;
+}
+
+.setting-body{
+  height: 100%;
+}
+.el-icon-circle-plus-outline{
+  &:hover{
+    cursor: pointer;
+  }
+}
+.analysisSql-box{
+  text-align: right;
+}
+
+.add-link-btn {
+  width: 100%;
+}
+
+// 筛选条件的按钮样式
+.add-filter-box{
+  position: relative;
+  .add-filter{
+    margin-left: 80px;
+    margin-bottom: 10px;
+  }
+  .add-filter-btn{
+    position: absolute;
+    top: 0;
+  }
+}
+.source-key-option{
+  display: flex;
+  justify-content: space-between;
+  .option-txt{
+    color: rgb(132, 146, 166);
+  }
+}
+/*滚动条样式*/
+/deep/::-webkit-scrollbar {
+  width: 6px;
+  border-radius: 3px;
+  height: 6px;
+}
+/deep/::-webkit-scrollbar-thumb {
+  background: #dddddd !important;
+  border-radius: 10px;
+}
+
+// 参数配置
+.params-config{
+  ::v-deep .el-form-item__content{
+    display:flex;
+    align-items: center;
+    margin-left: 0 !important;
+  }
+  .el-tooltip{
+    margin-left: 4px;
+  }
+}
+/deep/ .el-form-item__label,
+/deep/ .el-tabs__item,
+/deep/ .el-collapse-item__arrow
+{
+  color: var(--bs-el-title) !important
+}
+/deep/ .el-collapse-item__wrap {
+  background: var(--bs-background-1);
+  color: var(--bs-el-title);
+}
+
+
+/deep/ .el-input__inner,
+/deep/ .el-color-picker__color-inner,
+/deep/ .el-radio__inner,
+/deep/ .el-input-number--mini,
+/deep/ .el-textarea__inner,
+/deep/ .el-input-group__append
+{
+  background: var(--bs-el-background-1);
+  color: var(--bs-el-text);
+  border: 0 !important;
+}
+
+/deep/ .el-radio__label
+{
+  font-size: 12px;
+  background: var(--bs-el-background-1-1);
+  color: var(--bs-el-title);
+  border: 0 !important;
+}
+
+
+
+/deep/ .el-radio {
+  margin-right: 10px
+}
+
+/deep/ .el-table {
+  background: var(--bs-el-background-1);
+  border-bottom: 1px solid var(--bs-el-title);
+}
+
+/deep/ .el-table__cell {
+  background: var(--bs-el-background-1) !important;
+  color: var(--bs-el-title) !important;
+  border-color: var(--bs-el-text) !important;
+}
+

@@ -1,0 +1,847 @@
+<template>
+  <div
+    class="inner-container"
+    :element-loading-text="saveText"
+  >
+    <el-scrollbar class="data-set-scrollbar">
+      <div class="header">
+        <el-page-header class="bs-el-page-header">
+          <template slot="content">
+            <div class="page-header">
+              <div class="page-header-left">
+                {{ !isEdit ? 'js数据集详情' : dataForm.id ? 'js数据集编辑' : 'js数据集新增' }}
+              </div>
+              <div class="page-header-right">
+                <el-button
+                  class="bs-el-button-default"
+                  @click="openNewWindow('https://www.yuque.com/chuinixiongkou/bigscreen/groovy_dataset')"
+                >
+                  帮助
+                </el-button>
+                <el-button
+                  v-if="isEdit"
+                  type="primary"
+                  @click="save('form')"
+                >
+                  保存
+                </el-button>
+                <el-button
+                  class="bs-el-button-default"
+                  @click="goBack"
+                >
+                  返回
+                </el-button>
+              </div>
+            </div>
+          </template>
+        </el-page-header>
+      </div>
+      <el-row style="margin: 16px 16px 0;">
+        <el-col :span="isEdit ? 16 : 24">
+          <el-form
+            ref="form"
+            :model="dataForm"
+            :rules="rules"
+            label-width="120px"
+            style="padding: 16px 16px 0;"
+          >
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item
+                  label="名称"
+                  prop="name"
+                >
+                  <el-input
+                    v-model="dataForm.name"
+                    class="bs-el-input"
+                    clearable
+                    :disabled="!isEdit"
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item
+                  label="分组"
+                  prop="typeId"
+                >
+                  <el-select
+                    ref="selectParentName"
+                    v-model="dataForm.typeId"
+                    class="bs-el-select"
+                    popper-class="bs-el-select"
+                    clearable
+                    :disabled="!isEdit"
+                    @clear="clearType"
+                    @visible-change="setCurrentNode"
+                  >
+                    <el-option
+                      style="height: auto;padding: 0;"
+                      :label="typeName"
+                      :value="dataForm.typeId"
+                    >
+                      <div class="tree-box">
+                        <el-tree
+                          ref="categorySelectTree"
+                          :data="categoryData"
+                          node-key="id"
+                          :indent="0"
+                          :props="{ label: 'name', children: 'children' }"
+                          :default-expand-all="true"
+                          :highlight-current="true"
+                          :expand-on-click-node="false"
+                          class="bs-el-tree"
+                          @node-click="selectParentCategory"
+                        >
+                          <span
+                            slot-scope="{ data }"
+                            class="custom-tree-node"
+                          >
+                            <span>
+                              <i
+                                :class="data.children && data.children.length ? 'el-icon el-icon-folder' : 'el-icon el-icon-document'"
+                              />
+                              {{ data.name }}
+                            </span>
+                          </span>
+                        </el-tree>
+                      </div>
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item
+                  label="描述"
+                  prop="remark"
+                >
+                  <el-input
+                    v-model="dataForm.remark"
+                    class="bs-el-input"
+                    :disabled="!isEdit"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+          <div
+            v-if="isEdit"
+            class="sql-config"
+          >
+            <div>
+              <codemirror
+                ref="targetInSql"
+                v-model="dataForm.config.script"
+                :options="codemirrorOption"
+                style="margin-top: 2px"
+              />
+            </div>
+            <div style="text-align: center; padding: 16px 0;">
+              <el-button
+                type="primary"
+                @click="toExecute"
+              >
+                执行
+              </el-button>
+            </div>
+          </div>
+        </el-col>
+        <el-col
+          v-if="isEdit"
+          :span="8"
+        >
+          <div class="right-setting">
+            <div class="paramConfig">
+              <div class="title-style bs-title-style">
+                方法参数
+                <el-button
+                  type="text"
+                  style="float: right;border: none;margin-top: -4px;"
+                  @click="$refs.paramsSettingDialog.open()"
+                >
+                  配置
+                </el-button>
+              </div>
+              <div class="field-wrap bs-field-wrap bs-scrollbar">
+                <div
+                  v-for="param in dataForm.config.paramsList"
+                  :key="param.name"
+                  class="field-item"
+                  @click="$refs.paramsSettingDialog.open()"
+                >
+                  <span>{{ param.name }}</span>&nbsp;<span
+                    v-show="param.remark"
+                    style="color: #909399;"
+                  >
+                    ({{ param.remark }})
+                  </span>
+                  <el-button
+                    class="edit_field"
+                    type="text"
+                    style="float: right;border: none;margin-top: 2px;"
+                    @click="$refs.paramsSettingDialog.open()"
+                  >
+                    配置
+                  </el-button>
+                </div>
+              </div>
+            </div>
+            <div class="structure">
+              <div class="title-style bs-title-style">
+                输出字段
+                <el-button
+                  type="text"
+                  style="float: right;border: none;margin-top: -4px;"
+                  @click="$refs.outputFieldDialog.open()"
+                >
+                  配置
+                </el-button>
+              </div>
+              <div class="field-wrap bs-field-wrap bs-scrollbar">
+                <div
+                  v-for="(field,key) in outputFieldList"
+                  :key="key"
+                  class="field-item"
+                  @click="$refs.outputFieldDialog.open()"
+                >
+                  <span>{{ field.fieldName }}</span>&nbsp;
+                  <span
+                    v-show="field.fieldDesc"
+                    style="color: #909399;"
+                  >
+                    ({{ field.fieldDesc }})</span>
+                  <el-button
+                    class="edit_field"
+                    type="text"
+                    style="float: right;border: none;margin-top: 2px;"
+                    @click="$refs.outputFieldDialog.open()"
+                  >
+                    配置
+                  </el-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+      <div
+        v-if="isEdit"
+        class="dataPreView"
+        style="margin-top: 12px;"
+      >
+        <div class="result-view">
+          数据预览
+        </div>
+        <div
+          v-loading="tableLoading"
+          class="bs-table-box is-Edit bs-scrollbar"
+        >
+          <el-table
+            align="center"
+            :data="dataPreviewList"
+            max-height="400"
+            :border="true"
+            class="bs-el-table bs-scrollbar"
+          >
+            <el-table-column
+              v-for="(value, key) in dataPreviewList[0]"
+              :key="key"
+              :label="key"
+              align="center"
+              show-overflow-tooltip
+              :render-header="renderHeader"
+            >
+              <template slot-scope="scope">
+                <span>{{ scope.row[key] }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+      <div
+        v-if="!isEdit"
+        class="dataPreView"
+      >
+        <el-tabs v-model="activeName">
+          <el-tab-pane
+            v-loading="tableLoading"
+            label="数据预览"
+            name="data"
+          >
+            <div class="bs-table-box">
+              <el-table
+                align="center"
+                :data="dataPreviewList"
+                max-height="400"
+                :border="true"
+                class="bs-el-table"
+              >
+                <el-table-column
+                  v-for="(value, key) in dataPreviewList[0]"
+                  :key="key"
+                  :label="key"
+                  align="center"
+                  show-overflow-tooltip
+                  :render-header="renderHeader"
+                >
+                  <template slot-scope="scope">
+                    <span>{{ scope.row[key] }}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane
+            v-loading="tableLoading"
+            label="数据集结构"
+            name="structure"
+          >
+            <div class="bs-table-box">
+              <el-table
+                max-height="400"
+                :data="outputFieldList"
+                :border="true"
+                align="center"
+              >
+                <el-table-column
+                  align="center"
+                  show-overflow-tooltip
+                  prop="fieldName"
+                  label="字段值"
+                />
+                <el-table-column
+                  align="center"
+                  prop="fieldDesc"
+                  label="字段描述"
+                >
+                  <template slot-scope="scope">
+                    <el-input
+                      v-if="isEdit"
+                      v-model="scope.row.fieldDesc"
+                      size="small"
+                      class="labeldsc bs-el-input"
+                    />
+                    <span v-else>{{ scope.row.fieldDesc }}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+      <ParamsSettingDialog
+        ref="paramsSettingDialog"
+        :params-list="dataForm.config.paramsList"
+        @saveParams="saveParams"
+      />
+      <OutputFieldDialog
+        ref="outputFieldDialog"
+        :output-field-list="outputFieldList"
+      />
+    </el-scrollbar>
+    <FieldFillDialog
+      ref="fieldFillDialog"
+      @fieldDescFill="fieldDescFill"
+      @fieldDescEdit="fieldDescEdit"
+      @toSave="toSave"
+    />
+  </div>
+</template>
+
+<script>
+import ParamsSettingDialog from './ParamsSettingDialog.vue'
+import OutputFieldDialog from './OutputFieldDialog.vue'
+import FieldFillDialog from './FieldFillDialog.vue'
+import { nameCheckRepeat, datasetAddorUpdate, getDataset, getDatasetTypeList } from 'packages/js/utils/datasetConfigService'
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/nord.css'
+export default {
+  name: 'JsDataSet',
+  components: {
+    codemirror,
+    FieldFillDialog,
+    ParamsSettingDialog,
+    OutputFieldDialog
+  },
+  props: {
+    config: {
+      type: Object,
+      default: () => {}
+    },
+    isEdit: {
+      type: Boolean,
+      default: false
+    },
+    datasetId: {
+      type: String,
+      default: null
+    },
+    typeId: {
+      type: String,
+      default: ''
+    },
+    appCode: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    const validateName = (rule, value, callback) => {
+      nameCheckRepeat({
+        id: this.datasetId,
+        name: value,
+        moduleCode: this.appCode
+      }).then((r) => {
+        if (r) {
+          callback(new Error('数据集名称已存在'))
+        } else {
+          callback()
+        }
+      })
+    }
+    return {
+      dataForm: {
+        id: '',
+        name: '',
+        typeId: '',
+        remark: '',
+        config: {
+          script: '',
+          paramsList: []
+        }
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入数据集名称', trigger: 'blur' },
+          { validator: validateName, trigger: 'blur' }
+        ]
+      },
+      codemirrorOption: {
+        mode: 'text/javascript',
+        lineNumbers: true,
+        lineWrapping: true,
+        theme: 'nord',
+        extraKey: { Ctrl: 'autocomplete' },
+        hintOptions: {
+          completeSingle: true
+        }
+      },
+      activeName: 'data',
+      dataPreviewList: [],
+      outputFieldList: [],
+      structurePreviewListCopy: [],
+      typeName: '',
+      categoryData: [],
+      // fieldDescVisible: false,
+      fieldsetVisible: false,
+      paramsVisible: false,
+      tableLoading: false,
+      saveloading: false,
+      saveText: '',
+      // paramsListCopy: [],
+      isSet: false, // 参数是否配置状态
+      passTest: false,
+      fieldDesc: null // 字段描述
+    }
+  },
+  watch: {
+    'dataForm.config.script' () {
+      this.passTest = false
+    }
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    async init () {
+      this.categoryData = await getDatasetTypeList({ tableName: 'r_dataset', moduleCode: this.appCode })
+      if (this.typeId) {
+        this.dataForm.typeId = this.typeId
+        this.$nextTick(() => {
+          try {
+            this.typeName = this.$refs.categorySelectTree.getNode(this.dataForm.typeId).data.name
+          } catch (error) {
+            console.error(error)
+          }
+        })
+      }
+      if (this.datasetId) {
+        getDataset(this.datasetId).then(res => {
+          const { id, name, typeId, remark, config } = res
+          const { script, paramsList, fieldDesc, fieldList } = config
+          this.dataForm = { id, name, typeId, remark, config: { script, paramsList } }
+          this.fieldDesc = fieldDesc
+          this.outputFieldList = fieldList
+          this.scriptExecute(true)
+        })
+      }
+    },
+    // 保存数据集
+    save (formName, nochecktosave = false) {
+      if (this.passTest === false) {
+        this.$message.error('请确保脚本不为空且执行通过')
+        return
+      }
+      if (!this.outputFieldList.length) {
+        this.$message.warning('该执行脚本未生成输出字段，请重新检查')
+        return
+      }
+      if (!nochecktosave) {
+        const temp = this.outputFieldList.some(item => {
+          return item.fieldDesc === '' || !item.hasOwnProperty('fieldDesc')
+        }) // true-存在为空
+        if (temp) {
+          this.$refs.fieldFillDialog.open()
+          // this.fieldDescVisible = true
+          return
+        }
+      }
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.saveloading = true
+          this.saveText = '正在保存...'
+          const { datasetId, dataForm, config, appCode, fieldDesc, outputFieldList } = this
+          const form = {
+            id: datasetId,
+            name: dataForm.name,
+            typeId: dataForm.typeId,
+            remark: dataForm.remark,
+            datasetType: config.datasetType,
+            moduleCode: appCode,
+            editable: appCode ? 1 : 0,
+            config: {
+              className: config.className,
+              script: dataForm.config.script,
+              fieldDesc,
+              paramsList: dataForm.config.paramsList,
+              fieldList: outputFieldList
+            }
+          }
+          // const datasetSave = this.dataForm.id === '' ? datasetAdd : datasetUpdate
+          datasetAddorUpdate(form).then(() => {
+            this.$message.success('操作成功')
+            this.$parent.init(false)
+            this.$parent.setType = null
+            this.saveloading = false
+            this.saveText = ''
+          }).catch(() => {
+            this.saveloading = false
+            this.saveText = ''
+          })
+        }
+      })
+    },
+    saveParams (val) {
+      this.dataForm.config.paramsList = val
+    },
+    // 取消操作
+    // cancelField () {
+    //   this.structurePreviewListCopy = cloneDeep(this.outputFieldList)
+    //   this.fieldsetVisible = false
+    // },
+    // 设置输出字段
+    setField () {
+      // this.outputFieldList = cloneDeep(this.structurePreviewListCopy)
+      // if (this.outputFieldList.length) {
+      //   this.fieldDesc = {}
+      //   this.outputFieldList.forEach(key => {
+      //     this.fieldDesc[key.fieldName] = key.fieldDesc
+      //   })
+      // } else {
+      //   this.fieldDesc = null
+      // }
+      // this.fieldsetVisible = false
+    },
+    // 字段值填充
+    fieldDescFill () {
+      this.fieldDesc = {}
+      this.outputFieldList.forEach(field => {
+        if (field.fieldDesc === '' || !field.hasOwnProperty('fieldDesc')) {
+          field.fieldDesc = field.fieldName
+          this.fieldDesc[field.fieldName] = field.fieldName
+        } else {
+          this.fieldDesc[field.fieldName] = field.fieldDesc
+        }
+      })
+      this.save('form')
+      this.$refs.fieldFillDialog.close()
+      // this.fieldDescVisible = false
+    },
+    // 进入编辑
+    fieldDescEdit () {
+      this.$refs.fieldFillDialog.close()
+      // this.fieldDescVisible = false
+      this.fieldsetVisible = true
+    },
+    // 继续保存
+    toSave () {
+      this.fieldDesc = {}
+      this.outputFieldList.forEach(field => {
+        this.fieldDesc[field.fieldName] = field.fieldDesc
+      })
+      this.save('form', true)
+      this.$refs.fieldFillDialog.close()
+      // this.fieldDescVisible = false
+    },
+    // 字段描述构建及同步
+    buildFieldDesc () {
+      const fieldDesc = {}
+      this.outputFieldList.forEach(field => {
+        if (this.fieldDesc.hasOwnProperty(field.fieldName)) {
+          field.fieldDesc = this.fieldDesc[field.fieldName]
+        }
+        fieldDesc[field.fieldName] = field.fieldDesc
+      })
+      this.fieldDesc = fieldDesc
+    },
+    // 脚本执行
+    scriptExecute (isInit = false) {
+      if (this.dataForm.config.script) {
+        const javascript = this.dataForm.config.script
+        let scriptMethod = null
+        try {
+          scriptMethod = eval(`(${javascript})`)
+        } catch (error) {
+          this.passTest = false
+          this.$message.error('脚本执行错误，请检查脚本')
+          return
+        }
+        // 调用方法生成随机数据
+        const returnResult = scriptMethod()
+        //  检查数据是否为数组
+        if (!Array.isArray(returnResult)) {
+          this.passTest = false
+          this.$message.error('脚本执行结果不是数组，请检查脚本')
+          return
+        }
+        const keys = []
+        returnResult.forEach(item => {
+          Object.keys(item).forEach(key => {
+            if (!keys.includes(key)) {
+              keys.push(key)
+            }
+          })
+        })
+        this.outputFieldList = keys.map(item => {
+          return {
+            fieldName: item,
+            fieldDesc: ''
+          }
+        })
+        if (this.outputFieldList.length && this.fieldDesc) {
+          this.buildFieldDesc()
+        }
+        // 如果有数据，就通过测试
+        if (this.outputFieldList.length > 0) {
+          // this.structurePreviewListCopy = cloneDeep(this.outputFieldList)
+          this.dataPreviewList = returnResult
+          this.passTest = true
+          if (!isInit) {
+            this.$message.success('脚本执行通过')
+          }
+        } else {
+          this.passTest = false
+        }
+      } else {
+        this.passTest = false
+        this.$message.error('请填写脚本')
+      }
+    },
+    // 执行事件
+    toExecute () {
+      // if (this.dataForm.config.paramsList.length) {
+      //   this.isSet = false
+      //   this.paramsVisible = true
+      // } else {
+      // 无参数，直接执行脚本
+      this.scriptExecute()
+      // }
+    },
+    // 清空分类
+    clearType () {
+      this.typeName = ''
+      this.dataForm.typeId = ''
+    },
+    // 分类展开高亮
+    setCurrentNode ($event) {
+      if ($event) {
+        const key = this.dataForm.typeId || null
+        this.$refs.categorySelectTree.setCurrentKey(key)
+      }
+    },
+    // openParamsSetting () {
+    //   this.$refs.paramsSettingDialog.open()
+    // },
+    // 分类选择
+    selectParentCategory (value) {
+      this.dataForm.typeId = value.id
+      this.typeName = value.name
+      this.$refs.selectParentName.blur()
+    },
+    goBack () {
+      this.$emit('back')
+    },
+    renderHeader (h, { column, index }) {
+      const labelLong = column.label.length // 表头label长度
+      const size = 14 // 根据需要定义标尺，直接使用字体大小确定就行，也可以根据需要定义
+      column.minWidth = labelLong * size < 120 ? 120 : labelLong * size // 根据label长度计算该表头最终宽度
+      return h('span', { class: 'cell-content', style: { width: '100%' } }, [column.label])
+    },
+    openNewWindow (url) {
+      window.open(url, '_blank')
+    }
+  }
+}
+</script>
+
+  <style lang="scss" scoped>
+  @import '~packages/assets/style/bsTheme.scss';
+
+  .data-set-scrollbar {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: none;
+
+    .el-scrollbar__view {
+      height: 100%;
+    }
+  }
+
+  /deep/ .el-input__inner {
+    width: 100% !important;
+  }
+
+  .page-header {
+    display: flex;
+    position: relative;
+
+    .page-header-right {
+      position: absolute;
+      right: 16px;
+    }
+  }
+
+  .sql-config {
+    padding: 0 16px;
+  }
+
+  .operation {
+    /deep/ .el-select {
+      width: 200px !important;
+      margin-right: 16px;
+    }
+
+    display: flex;
+  }
+
+  /deep/ .CodeMirror {
+    height: 180px !important;
+    font-family: Helvetica, Tahoma;
+  }
+
+  .no-border {
+    border: 0;
+  }
+
+  /deep/ .fieldDescCheck {
+    .el-dialog__body {
+      height: fit-content !important;
+      min-height: unset !important;
+    }
+  }
+
+  .title-style {
+    padding: 8px 12px;
+    background-color: #f6f7fb;
+    border-left: 5px solid var(--bs-el-color-primary);
+    margin: 16px 16px 0 0;
+  }
+
+  .field-wrap {
+    // max-height: 110px;
+    overflow: auto;
+    margin-right: 16px;
+    cursor: pointer;
+
+    .field-item {
+      line-height: 32px;
+      padding: 0 12px 0 16px;
+
+      .edit_field {
+        display: none;
+      }
+
+      &:hover {
+        background-color: #f2f7fe;
+
+        .edit_field {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .right-setting {
+    height: 358px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    .paramConfig {
+      max-height: 179px;
+
+      .field-wrap {
+        max-height: 127px;
+      }
+    }
+
+    .structure {
+      flex: 1;
+      overflow: hidden;
+
+      .field-wrap {
+        height: calc(100% - 40px);
+      }
+    }
+  }
+
+  .result-view {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bs-el-text);
+    position: relative;
+    padding: 16px 0;
+    padding-left: 12px;
+    border-bottom: 1px solid var(--bs-background-1);
+
+    &::before {
+      content: "";
+      height: 14px;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left: 4px solid var(--bs-el-color-primary);
+    }
+  }
+
+  /deep/ .bs-table-box.is-Edit .el-table {
+    max-height: unset !important;
+
+    .el-table__body-wrapper {
+      max-height: unset !important;
+    }
+  }
+
+  .bs-table-box {
+    padding: 0;
+    height: 100% !important;
+    margin-bottom: 0 !important;
+  }
+  .tree-box{
+    padding: 0;
+  }
+  </style>

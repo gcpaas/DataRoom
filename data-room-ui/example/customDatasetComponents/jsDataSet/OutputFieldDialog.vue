@@ -1,0 +1,108 @@
+<template>
+  <div>
+    <el-dialog
+      title="输出字段配置"
+      :visible.sync="dialogVisible"
+      width="1000px"
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="handleClose"
+      class="bs-dialog-wrap bs-el-dialog"
+    >
+      <div class="bs-table-box">
+        <el-table
+          :data="outputFieldList"
+          :border="true"
+          align="center"
+          class="bs-el-table"
+        >
+          <el-empty slot="empty" />
+          <el-table-column
+            align="left"
+            show-overflow-tooltip
+            prop="fieldName"
+            label="字段值"
+          />
+          <el-table-column
+            align="center"
+            prop="fieldDesc"
+            label="字段描述"
+          >
+            <template slot-scope="scope">
+              <el-input
+                v-model="scope.row.fieldDesc"
+                size="small"
+                class="labeldsc bs-el-input"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          class="bs-el-button-default"
+          @click="cancelField"
+        >
+          取消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="setField"
+        >
+          确定
+        </el-button>
+      </span>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { cloneDeep } from 'lodash'
+export default {
+  name: 'OutputFieldDialog',
+  props: {
+    outputFieldList: {
+      type: Array,
+      default: () => []
+    }
+  },
+  data () {
+    return {
+      dialogVisible: false,
+      structurePreviewListCopy: []
+    }
+  },
+  methods: {
+    open () {
+      this.dialogVisible = true
+    },
+    close () {
+      this.dialogVisible = false
+    },
+    handleClose () {
+      this.fieldsetVisible = false
+    },
+    cancelField () {
+      this.dialogVisible = false
+    },
+    setField () {
+      if (this.outputFieldList.length) {
+        this.fieldDesc = {}
+        this.outputFieldList.forEach(key => {
+          this.fieldDesc[key.fieldName] = key.fieldDesc
+        })
+      } else {
+        this.fieldDesc = null
+      }
+      this.dialogVisible = false
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+@import '~packages/assets/style/bsTheme.scss';
+</style>

@@ -1,0 +1,57 @@
+.noData {
+  height: 32px;
+  line-height: 32px;
+}
+
+.ztree-filter-container {
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 16px 16px 0px;
+
+  .el-input {
+    min-width: 100px !important;
+    margin-right: 10px;
+  }
+  // .el-button{
+  //   display: inline-flex !important;
+  // }
+}
+
+.loading {
+  display: contents;
+
+  .el-loading-text {
+    display: list-item;
+    white-space: nowrap
+  }
+}
+
+.br {
+  display: none;
+}
+
+::v-deep .el-input__icon {
+  line-height: 30px;
+}
+
+.scrollInSelect {
+  height: calc(100vh - 480px);
+
+  ::v-deep .el-scrollbar__wrap {
+    margin-bottom: 0 !important;
+    overflow-x: auto;
+  }
+
+  .ztree {
+    height: 100%;
+    padding: 0;
+    ::v-deep li a.curSelectedNode {
+      color: var(--bs-el-color-primary);
+      text-decoration: none;
+    }
+  }
+
+  .empty {
+    margin-top: 30px;
+  }
+}
