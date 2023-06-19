@@ -77,7 +77,7 @@
     <profiles>
         <profile>
             <!--注意,此id必须与setting.xml中指定的一致-->
-            <id>release</id>
+            <id>deploy</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -163,7 +163,7 @@
 
             <distributionManagement>
                 <repository>
-                    <id>release</id>
+                    <id>deploy</id>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
             </distributionManagement>

@@ -49,7 +49,7 @@
 
     <profiles>
         <profile>
-            <id>dev</id>
+            <id>package</id>
             <build>
                 <!-- 定义打包后的名称 -->
                 <finalName>dataroom-server</finalName>
