@@ -1,0 +1,17 @@
+{
+  "plugins": [
+    [
+      "component",
+      {
+        "libraryName": "gc-starter-ui",
+        "styleLibraryName": false
+      }
+    ]
+  ],
+  "env": {
+    "development":{
+      // 将import方法转成require()，且是动态的
+      "plugins":["dynamic-import-node"]
+    }
+  }
+}

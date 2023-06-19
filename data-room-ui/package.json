@@ -1,18 +1,18 @@
 {
   "name": "@gcpaas/data-room-ui",
-  "version": "0.0.1-2023061902-Alpha",
+  "version": "0.0.1-2023061903-Alpha",
   "description": "自定义大屏",
   "author": "gc-starter",
   "license": "MIT",
-  "main": "lib/bigScreen.umd.min.js",
+  "main": "lib/dataRoom.umd.min.js",
   "files": [
     "lib/fonts/*",
     "lib/img/*",
-    "lib/bigScreen.css",
-    "lib/bigScreen.umd.min.js.gz"
+    "lib/dataRoom.css",
+    "lib/dataRoom.umd.min.js.gz"
   ],
   "keywords": [
-    "bigScreen",
+    "dataRoom",
     "大屏设计器",
     "低代码",
     "low code"
@@ -21,7 +21,7 @@
     "type": "github",
     "url": "https://github.com/gcpaas/DataRoom/tree/master/data-room-ui"
   },
-  "homepage": "https://github.com/gcpaas/DataRoom/tree/master/data-room-ui",
+  "homepage": "https://github.com/gcpaas/DataRoom",
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "serve:max": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js serve --open",

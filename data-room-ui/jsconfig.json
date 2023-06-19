@@ -8,5 +8,5 @@
   "vueCompilerOptions": {
     "experimentalDisableTemplateSupport" : true
   },
-  "exclude": ["node_modules", "dist","lib"]
+  "exclude": ["node_modules", "dist"]
 }

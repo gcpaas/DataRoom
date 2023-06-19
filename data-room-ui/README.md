@@ -1,6 +1,6 @@
 ## 📚简介
 <p align="center">
-  <img alt="logo" width="50" src="../doc/logo.png">
+  <img alt="logo" width="50" src="./doc/logo.png">
 </p>
 
 🔥基于SpringBoot、MyBatisPlus、ElementUI、G2Plot、Echarts等技术栈的大屏设计器，具备大屏目录管理、大屏设计、大屏预览能力，支持MySQL、Oracle、PostgreSQL、JSON等数据集接入，对于复杂数据处理还可以使用Groovy脚本数据集，使用简单，完全免费，代码开源。
@@ -19,10 +19,10 @@
 ## 效果图
 
 #### 管理页
-<img alt="logo" src="../doc/images/home.png">
+<img alt="logo" src="./doc/images/home.png">
 
 #### 设计器
-<img alt="logo" src="../doc/images/design01.png">
+<img alt="logo" src="./doc/images/design01.png">
 
 ## 优势
 
@@ -53,14 +53,14 @@
 
 * [使用手册、二次开发、部署手册、常见问题](https://www.yuque.com/chuinixiongkou/bigscreen/index)
 * [前端代码仓库(GitHub)](https://github.com/gcpaas/DataRoom/tree/master/data-room-ui)、[前端代码仓库(码云)](https://gitee.com/gcpaas/gc-starter-bigscreen-ui)
-* [后端代码仓库(GitHub)](https://github.com/gcpaas/DataRoom/tree/master/DataRoom)、 [后端代码仓库(码云)](https://gitee.com/gcpaas/gc-starter-bigscreen)
+* [后端代码仓库(GitHub)](https://github.com/gcpaas/gc-starter-bigscreen)、 [后端代码仓库(码云)](https://gitee.com/gcpaas/gc-starter-bigscreen)
 
 ## 如何集成
 
 ### 1. 安装依赖
 
 ``` bash
-npm install gc-starter-bigscreen-ui
+npm install @gcpaas/data-room-ui
 ```
 
 ### 2. 在 `main.js` 引入大屏
@@ -91,7 +91,7 @@ window.CONFIG.baseUrl=http://127.0.0.1:8081/bigScreenServer
 ```javascript
 // file: main.js
 
-import { registerConfig } from 'gc-starter-bigscreen-ui'
+import { registerConfig } from '@gcpaas/data-room-ui'
 registerConfig({
   httpConfigs: {
     baseURL: `这里是后端服务地址的值，如：window.CONFIG.baseUrl`
@@ -110,7 +110,7 @@ VUE_APP_BASE_URL=http://127.0.0.1:8081/bigScreenServer
 ```javascript
 // file: main.js
 
-import { registerConfig } from 'gc-starter-bigscreen-ui'
+import { registerConfig } from '@gcpaas/data-room-ui'
 // 注意写在 new Vue() 之前
 registerConfig({
   httpConfigs: {
@@ -124,7 +124,7 @@ registerConfig({
 ```js
 // file: 项目中导出strore的文件
 
-import { $bigScreen } from 'gc-starter-bigscreen-ui'
+import { $bigScreen } from '@gcpaas/data-room-ui'
 const store = new Vuex.Store({
   modules: 
     // 导出大屏所需vuex模块
@@ -150,7 +150,7 @@ export default store
 <img alt="QQ群" src="https://img.shields.io/badge/QQ群-322302395-blue.svg">
 
 <p>
-    <img alt="logo" width="200" src="../doc/images/qq.jpeg">
+    <img alt="logo" width="200" src="./doc/images/qq.jpeg">
 </p>
 
 ## License
