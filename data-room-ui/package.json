@@ -19,9 +19,9 @@
   ],
   "repository": {
     "type": "github",
-    "url": "https://github.com/gcpaas/gc-starter-bigscreen-ui"
+    "url": "https://github.com/gcpaas/DataRoom/tree/master/data-room-ui"
   },
-  "homepage": "https://github.com/gcpaas/gc-starter-bigscreen-ui",
+  "homepage": "https://github.com/gcpaas/DataRoom/tree/master/data-room-ui",
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "serve:max": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js serve --open",
