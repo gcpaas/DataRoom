@@ -1,6 +1,6 @@
 ## 📚简介
 <p align="center">
-  <img alt="logo" width="50" src="../doc/logo.png">
+  <img alt="logo" width="50" src="./doc/logo.png">
 </p>
 
 🔥基于SpringBoot、MyBatisPlus、ElementUI、G2Plot、Echarts等技术栈的大屏设计器，具备大屏目录管理、大屏设计、大屏预览能力，支持MySQL、Oracle、PostgreSQL、JSON等数据集接入，对于复杂数据处理还可以使用Groovy脚本数据集，使用简单，完全免费，代码开源。
@@ -19,10 +19,10 @@
 ## 效果图
 
 #### 管理页
-<img alt="logo" src="../doc/images/home.png">
+<img alt="logo" src="./doc/images/home.png">
 
 #### 设计器
-<img alt="logo" src="../doc/images/design01.png">
+<img alt="logo" src="./doc/images/design01.png">
 
 ## 优势
 
