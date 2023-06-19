@@ -3,4 +3,4 @@ src/assets
 public/
 dist
 node_modules/
-src/views/bigScreen/*
+src/views/dataRoom/*

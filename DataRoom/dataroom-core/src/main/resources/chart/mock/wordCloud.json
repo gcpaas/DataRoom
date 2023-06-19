@@ -1,0 +1,259 @@
+{
+    "success": false,
+    "data": [
+        {
+            "name": "联想",
+            "sum(num)": 112872
+        },
+        {
+            "name": "惠普",
+            "sum(num)": 168101
+        },
+        {
+            "name": "华硕",
+            "sum(num)": 57790
+        },
+        {
+            "name": "华为",
+            "sum(num)": 556835
+        },
+        {
+            "name": "苹果",
+            "sum(num)": 107318
+        },
+        {
+            "name": "中兴",
+            "sum(num)": 55
+        },
+        {
+            "name": "小米",
+            "sum(num)": 444295
+        },
+        {
+            "name": "三星",
+            "sum(num)": 529
+        },
+        {
+            "name": "魅族",
+            "sum(num)": 277339
+        },
+        {
+            "name": "酷派",
+            "sum(num)": 128278
+        },
+        {
+            "name": "红米",
+            "sum(num)": 194979
+        },
+        {
+            "name": "传音",
+            "sum(num)": 216672
+        },
+        {
+            "name": "vivo",
+            "sum(num)": 114744
+        },
+        {
+            "name": "荣耀",
+            "sum(num)": 174475
+        },
+        {
+            "name": "一加",
+            "sum(num)": 55884
+        },
+        {
+            "name": "iqoo",
+            "sum(num)": 74585
+        },
+        {
+            "name": "朵唯",
+            "sum(num)": 74415
+        },
+        {
+            "name": "海信",
+            "sum(num)": 74854
+        },
+        {
+            "name": "金立",
+            "sum(num)": 774474
+        },
+        {
+            "name": "魅蓝",
+            "sum(num)": 44447
+        },
+        {
+            "name": "ivvi",
+            "sum(num)": 789552
+        },
+        {
+            "name": "酷派",
+            "sum(num)": 555558
+        },
+        {
+            "name": "乐视",
+            "sum(num)": 1545
+        },
+        {
+            "name": "imoo",
+            "sum(num)": 47855
+        },
+        {
+            "name": "长虹",
+            "sum(num)": 14566
+        },
+        {
+            "name": "康佳",
+            "sum(num)": 12545
+        },
+        {
+            "name": "蓝魔",
+            "sum(num)": 84545
+        },
+        {
+            "name": "青葱",
+            "sum(num)": 548874
+        },
+        {
+            "name": "青橙",
+            "sum(num)": 45563
+        },
+        {
+            "name": "神舟",
+            "sum(num)": 15485
+        },
+        {
+            "name": "卓普",
+            "sum(num)": 15547
+        },
+        {
+            "name": "天语",
+            "sum(num)": 1579
+        },
+        {
+            "name": "龙酷",
+            "sum(num)": 254789
+        },
+        {
+            "name": "纽曼",
+            "sum(num)": 15795
+        },
+        {
+            "name": "红米",
+            "sum(num)": 194979
+        },
+        {
+            "name": "影驰",
+            "sum(num)": 330
+        },
+        {
+            "name": "云狐",
+            "sum(num)": 247
+        },
+        {
+            "name": "爱国者",
+            "sum(num)": 4781
+        },
+        {
+            "name": "北斗",
+            "sum(num)": 64427
+        },
+        {
+            "name": "经纬",
+            "sum(num)": 2254
+        },
+        {
+            "name": "盛大",
+            "sum(num)": 1088
+        },
+        {
+            "name": "优派",
+            "sum(num)": 55
+        },
+        {
+            "name": "海尔",
+            "sum(num)": 444295
+        },
+        {
+            "name": "夏新",
+            "sum(num)": 897
+        },
+        {
+            "name": "英华达",
+            "sum(num)": 33698
+        },
+        {
+            "name": "万利达",
+            "sum(num)": 12457
+        },
+        {
+            "name": "欧恩",
+            "sum(num)": 224
+        },
+        {
+            "name": "多普达",
+            "sum(num)": 231
+        },
+        {
+            "name": "首派",
+            "sum(num)": 18721
+        },
+        {
+            "name": "中恒",
+            "sum(num)": 36698
+        },
+        {
+            "name": "摩西",
+            "sum(num)": 221
+        },
+        {
+            "name": "锋达通",
+            "sum(num)": 11567
+        },
+        {
+            "name": "英华通",
+            "sum(num)": 66
+        },
+        {
+            "name": "齐乐",
+            "sum(num)": 887
+        },
+        {
+            "name": "七喜",
+            "sum(num)": 1001
+        },
+        {
+            "name": "优米",
+            "sum(num)": 120
+        },
+        {
+            "name": "凡尔纳",
+            "sum(num)": 12379
+        },
+        {
+            "name": "创维",
+            "sum(num)": 524
+        },
+        {
+            "name": "小蜜蜂",
+            "sum(num)": 336
+        }
+    ],
+    "columnData": {
+        "name": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "name",
+            "aggregate": "",
+            "alias": "name",
+            "remark": "产品名称"
+        },
+        "num": {
+            "type": "bigint",
+            "tableName": "",
+            "originalColumn": "num",
+            "aggregate": "sum",
+            "alias": "sum(num)",
+            "remark": "销量[求和]"
+        }
+    }
+}

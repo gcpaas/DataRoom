@@ -3,7 +3,7 @@
     [
       "component",
       {
-        "libraryName": "data-room-ui",
+        "libraryName": "gc-starter-ui",
         "styleLibraryName": false
       }
     ]

@@ -32,7 +32,7 @@ export function getRemoteComponents (comList) {
       icon: null,
       img: config.img,
       className:
-        'com.gccloud.bigscreen.core.module.chart.components.RemoteComponentChart',
+        'com.gccloud.dataroom.core.module.chart.components.RemoteComponentChart',
       w: 450,
       h: 320,
       x: 0,
@@ -63,7 +63,7 @@ export function getRemoteComponentConfig (code, name) {
     icon: null,
     img: null,
     className:
-      'com.gccloud.bigscreen.core.module.chart.components.RemoteComponentChart',
+      'com.gccloud.dataroom.core.module.chart.components.RemoteComponentChart',
     w: 450,
     h: 320,
     x: 0,

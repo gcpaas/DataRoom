@@ -1,0 +1,135 @@
+{
+    "success": false,
+    "data": [
+        {
+            "__timestamp": "2022-11-01",
+            "sum(sales)": 3
+        },
+        {
+            "__timestamp": "2022-11-02",
+            "sum(sales)": 12
+        },
+        {
+            "__timestamp": "2022-11-03",
+            "sum(sales)": 16
+        },
+        {
+            "__timestamp": "2022-11-04",
+            "sum(sales)": 17
+        },
+        {
+            "__timestamp": "2022-11-05",
+            "sum(sales)": 22
+        },
+        {
+            "__timestamp": "2022-11-06",
+            "sum(sales)": 26
+        },
+        {
+            "__timestamp": "2022-11-07",
+            "sum(sales)": 30
+        },
+        {
+            "__timestamp": "2022-11-08",
+            "sum(sales)": 42
+        },
+        {
+            "__timestamp": "2022-11-09",
+            "sum(sales)": 62
+        },
+        {
+            "__timestamp": "2022-11-10",
+            "sum(sales)": 78
+        },
+        {
+            "__timestamp": "2022-11-11",
+            "sum(sales)": 128
+        },
+        {
+            "__timestamp": "2022-11-12",
+            "sum(sales)": 136
+        },
+        {
+            "__timestamp": "2022-11-13",
+            "sum(sales)": 146
+        },
+        {
+            "__timestamp": "2022-11-14",
+            "sum(sales)": 155
+        },
+        {
+            "__timestamp": "2022-11-15",
+            "sum(sales)": 178
+        },
+        {
+            "__timestamp": "2022-11-16",
+            "sum(sales)": 189
+        },
+        {
+            "__timestamp": "2022-11-17",
+            "sum(sales)": 190
+        },
+        {
+            "__timestamp": "2022-11-18",
+            "sum(sales)": 196
+        },
+        {
+            "__timestamp": "2022-11-19",
+            "sum(sales)": 200
+        },
+        {
+            "__timestamp": "2022-11-20",
+            "sum(sales)": 260
+        },
+        {
+            "__timestamp": "2022-11-21",
+            "sum(sales)": 300
+        },
+        {
+            "__timestamp": "2022-11-22",
+            "sum(sales)": 362
+        },
+        {
+            "__timestamp": "2022-11-23",
+            "sum(sales)": 391
+        },
+        {
+            "__timestamp": "2022-11-24",
+            "sum(sales)": 437
+        },
+        {
+            "__timestamp": "2022-11-25",
+            "sum(sales)": 499
+        },
+        {
+            "__timestamp": "2022-11-26",
+            "sum(sales)": 539
+        },
+        {
+            "__timestamp": "2022-11-27",
+            "sum(sales)": 619
+        },
+        {
+            "__timestamp": "2022-11-28",
+            "sum(sales)": 694
+        }
+    ],
+    "columnData": {
+        "date": {
+            "type": "date",
+            "tableName": "",
+            "originalColumn": "date",
+            "aggregate": "",
+            "alias": "__timestamp",
+            "remark": "日期"
+        },
+        "sales": {
+            "type": "bigint",
+            "tableName": "",
+            "originalColumn": "sales",
+            "aggregate": "sum",
+            "alias": "sum(sales)",
+            "remark": "销售额[求和]"
+        }
+    }
+}

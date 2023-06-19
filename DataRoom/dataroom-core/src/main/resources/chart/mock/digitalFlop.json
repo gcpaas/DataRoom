@@ -1,0 +1,18 @@
+{
+    "success": false,
+    "data": [
+        {
+            "value": 12345
+        }
+    ],
+    "columnData": {
+        "num": {
+            "type": "bigint",
+            "tableName": "",
+            "originalColumn": "value",
+            "aggregate": "",
+            "alias": "value",
+            "remark": "总数"
+        }
+    }
+}

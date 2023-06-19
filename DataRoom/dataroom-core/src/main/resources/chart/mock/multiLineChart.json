@@ -1,0 +1,181 @@
+{
+    "success": false,
+    "data": [
+        {
+            "__timestamp": "2022-09-01",
+            "sum(sales)": 2158,
+            "category": "家电"
+        },
+        {
+            "__timestamp": "2022-09-02",
+            "sum(sales)": 3025,
+            "category": "家电"
+        },
+        {
+            "__timestamp": "2022-09-03",
+            "sum(sales)": 2292,
+            "category": "家电"
+        },
+        {
+            "__timestamp": "2022-09-04",
+            "sum(sales)": 2317,
+            "category": "家电"
+        },
+        {
+            "__timestamp": "2022-09-05",
+            "sum(sales)": 2668,
+            "category": "家电"
+        },
+        {
+            "__timestamp": "2022-09-06",
+            "sum(sales)": 1968,
+            "category": "家电"
+        },
+        {
+            "__timestamp": "2022-09-07",
+            "sum(sales)": 2635,
+            "category": "家电"
+        },
+        {
+            "__timestamp": "2022-09-08",
+            "sum(sales)": 2240,
+            "category": "家电"
+        },
+        {
+            "__timestamp": "2022-09-09",
+            "sum(sales)": 2595,
+            "category": "家电"
+        },
+        {
+            "__timestamp": "2022-09-10",
+            "sum(sales)": 2406,
+            "category": "家电"
+        },
+        {
+            "__timestamp": "2022-09-01",
+            "sum(sales)": 6034,
+            "category": "手机"
+        },
+        {
+            "__timestamp": "2022-09-02",
+            "sum(sales)": 6988,
+            "category": "手机"
+        },
+        {
+            "__timestamp": "2022-09-03",
+            "sum(sales)": 6663,
+            "category": "手机"
+        },
+        {
+            "__timestamp": "2022-09-04",
+            "sum(sales)": 6992,
+            "category": "手机"
+        },
+        {
+            "__timestamp": "2022-09-05",
+            "sum(sales)": 7268,
+            "category": "手机"
+        },
+        {
+            "__timestamp": "2022-09-06",
+            "sum(sales)": 7154,
+            "category": "手机"
+        },
+        {
+            "__timestamp": "2022-09-07",
+            "sum(sales)": 6315,
+            "category": "手机"
+        },
+        {
+            "__timestamp": "2022-09-08",
+            "sum(sales)": 7193,
+            "category": "手机"
+        },
+        {
+            "__timestamp": "2022-09-09",
+            "sum(sales)": 6459,
+            "category": "手机"
+        },
+        {
+            "__timestamp": "2022-09-10",
+            "sum(sales)": 7090,
+            "category": "手机"
+        },
+        {
+            "__timestamp": "2022-09-01",
+            "sum(sales)": 2156,
+            "category": "电脑"
+        },
+        {
+            "__timestamp": "2022-09-02",
+            "sum(sales)": 1969,
+            "category": "电脑"
+        },
+        {
+            "__timestamp": "2022-09-03",
+            "sum(sales)": 2206,
+            "category": "电脑"
+        },
+        {
+            "__timestamp": "2022-09-04",
+            "sum(sales)": 2455,
+            "category": "电脑"
+        },
+        {
+            "__timestamp": "2022-09-05",
+            "sum(sales)": 2144,
+            "category": "电脑"
+        },
+        {
+            "__timestamp": "2022-09-06",
+            "sum(sales)": 1956,
+            "category": "电脑"
+        },
+        {
+            "__timestamp": "2022-09-07",
+            "sum(sales)": 2056,
+            "category": "电脑"
+        },
+        {
+            "__timestamp": "2022-09-08",
+            "sum(sales)": 2276,
+            "category": "电脑"
+        },
+        {
+            "__timestamp": "2022-09-09",
+            "sum(sales)": 1789,
+            "category": "电脑"
+        },
+        {
+            "__timestamp": "2022-09-10",
+            "sum(sales)": 2325,
+            "category": "电脑"
+        }
+    ],
+    "columnData": {
+        "date": {
+            "type": "date",
+            "tableName": "",
+            "originalColumn": "date",
+            "aggregate": "",
+            "alias": "__timestamp",
+            "remark": "日期"
+        },
+        "sales": {
+            "type": "bigint",
+            "tableName": "",
+            "originalColumn": "sales",
+            "aggregate": "sum",
+            "alias": "sum(sales)",
+            "remark": "销售额[求和]"
+        },
+        "category": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "category",
+            "aggregate": "",
+            "alias": "category",
+            "remark": "类别"
+        }
+    }
+}

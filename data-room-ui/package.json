@@ -1,6 +1,6 @@
 {
   "name": "@gcpaas/data-room-ui",
-  "version": "0.0.1-2023061903-Alpha",
+  "version": "0.0.1-2023061904-Alpha",
   "description": "自定义大屏",
   "author": "gc-starter",
   "license": "MIT",
@@ -38,7 +38,7 @@
     "set-commit-hook": "git config core.hooksPath hooks",
     "generate-changelog": "conventional-changelog -p -i CHANGELOG.md -s -r 0",
     "analyzer": "cross-env NODE_ENV=production npm_config_report=true npm run build",
-    "lib": "vue-cli-service build --no-lint --mode package  --target lib --name bigScreen --dest lib packages/index.js",
+    "lib": "vue-cli-service build --no-lint --mode package  --target lib --name dataRoom --dest lib packages/index.js",
     "package": "npm run lib && npm publish",
     "package:test": "npm run lib && npm pack"
   },

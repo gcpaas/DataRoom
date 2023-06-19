@@ -1,0 +1,1 @@
+UPDATE big_screen_page SET config = REPLACE(config, '"className":"com.gccloud.bigscreen', '"className":"com.gccloud.dataroom') WHERE type = 'bigScreen'

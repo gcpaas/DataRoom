@@ -1,0 +1,18 @@
+{
+    "success": false,
+    "data": [
+        {
+            "sum(num)": 1456532
+        }
+    ],
+    "columnData": {
+        "num": {
+            "type": "bigint",
+            "tableName": "",
+            "originalColumn": "num",
+            "aggregate": "sum",
+            "alias": "sum(num)",
+            "remark": "访问次数"
+        }
+    }
+}
