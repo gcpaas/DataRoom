@@ -2,7 +2,6 @@ import Icon from 'packages/assets/images/bigScreenIcon/export'
 // import _ from 'lodash'
 export default function getComponentConfig (type) {
   // const _type = _.upperFirst(type)
-  // const className = `com.gccloud.starter.lowcode.page.bigscreen.components.${_type}Chart`
   switch (type) {
     case 'texts':
       return {
@@ -10,7 +9,7 @@ export default function getComponentConfig (type) {
         title: '文本',
         icon: Icon.getNameList()[0],
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenTextChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenTextChart',
         w: 150,
         h: 30,
         x: 0,
@@ -23,7 +22,7 @@ export default function getComponentConfig (type) {
         title: '超链接',
         icon: Icon.getNameList()[15],
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenLinkChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenLinkChart',
         w: 150,
         h: 30,
         x: 0,
@@ -37,7 +36,7 @@ export default function getComponentConfig (type) {
         icon: Icon.getNameList()[10],
         component: null,
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenBorderChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenBorderChart',
         w: 300,
         h: 40,
         x: 0,
@@ -51,7 +50,7 @@ export default function getComponentConfig (type) {
         icon: Icon.getNameList()[11],
         component: null,
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenBorderChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenBorderChart',
         w: 40,
         h: 300,
         x: 0,
@@ -65,7 +64,7 @@ export default function getComponentConfig (type) {
         title: '图片',
         icon: Icon.getNameList()[1],
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenPictureChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenPictureChart',
         w: 280,
         h: 200,
         x: 0,
@@ -78,7 +77,7 @@ export default function getComponentConfig (type) {
         title: '轮播表',
         icon: Icon.getNameList()[2],
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenScrollBoardChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenScrollBoardChart',
         w: 500,
         h: 300,
         x: 0,
@@ -91,7 +90,7 @@ export default function getComponentConfig (type) {
         title: '排名表',
         icon: Icon.getNameList()[3],
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenScrollRankingChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenScrollRankingChart',
         w: 550,
         h: 350,
         x: 0,
@@ -104,7 +103,7 @@ export default function getComponentConfig (type) {
         title: '表格',
         icon: Icon.getNameList()[4],
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenTablesChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenTablesChart',
         w: 600,
         h: 400,
         x: 0,
@@ -117,7 +116,7 @@ export default function getComponentConfig (type) {
         title: '当前时间',
         icon: Icon.getNameList()[6],
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenCurrentTimeChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenCurrentTimeChart',
         w: 380,
         h: 130,
         x: 0,
@@ -130,7 +129,7 @@ export default function getComponentConfig (type) {
         title: '倒计时',
         icon: Icon.getNameList()[7],
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenTimeCountDownChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenTimeCountDownChart',
         w: 500,
         h: 130,
         x: 0,
@@ -143,7 +142,7 @@ export default function getComponentConfig (type) {
         title: '外链',
         icon: Icon.getNameList()[8],
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenIframeChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenIframeChart',
         w: 500,
         h: 500,
         x: 0,
@@ -157,7 +156,7 @@ export default function getComponentConfig (type) {
         icon: null,
         img: require('packages/BasicComponents/DigitalFlop/images/fanpaiqi.png'),
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenDigitalFlopChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenDigitalFlopChart',
         w: 800,
         h: 150,
         x: 0,
@@ -170,7 +169,7 @@ export default function getComponentConfig (type) {
         title: '播放器',
         icon: Icon.getNameList()[12],
         className:
-          'com.gccloud.bigscreen.core.module.chart.components.ScreenVideoChart',
+          'com.gccloud.dataroom.core.module.chart.components.ScreenVideoChart',
         w: 800,
         h: 500,
         x: 0,
@@ -183,7 +182,7 @@ export default function getComponentConfig (type) {
         name: '输入框',
         title: '输入框',
         icon: Icon.getNameList()[13],
-        className: 'com.gccloud.bigscreen.core.module.chart.components.ScreenInputChart',
+        className: 'com.gccloud.dataroom.core.module.chart.components.ScreenInputChart',
         w: 180,
         h: 40,
         x: 0,
@@ -195,7 +194,7 @@ export default function getComponentConfig (type) {
         name: '按钮',
         title: '按钮',
         icon: Icon.getNameList()[14],
-        className: 'com.gccloud.bigscreen.core.module.chart.components.ScreenButtonChart',
+        className: 'com.gccloud.dataroom.core.module.chart.components.ScreenButtonChart',
         w: 80,
         h: 40,
         x: 0,
