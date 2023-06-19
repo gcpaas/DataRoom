@@ -313,7 +313,7 @@ export default {
           name: val.originalName,
           icon: null,
           className:
-            'com.gccloud.bigscreen.core.module.chart.components.ScreenPictureChart',
+            'com.gccloud.dataroom.core.module.chart.components.ScreenPictureChart',
           w: 300,
           h: 300,
           x: 0,

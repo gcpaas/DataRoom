@@ -323,7 +323,7 @@ export default {
           ? (form) => post('/bigScreen/bizComponent/add', form)
           : (form) => post('/bigScreen/bizComponent/update', form)
         const form = {
-          className: 'com.gccloud.bigscreen.core.module.manage.dto.BigScreenPageDTO',
+          className: 'com.gccloud.dataroom.core.module.manage.dto.BigScreenPageDTO',
           id: this.dataForm.id,
           code: this.dataForm.code,
           name: this.dataForm.name,
@@ -371,7 +371,7 @@ export default {
           ? (form) => post('/bigScreen/design/add', form)
           : (form) => post('/bigScreen/design/update', form)
         const form = {
-          className: 'com.gccloud.bigscreen.core.module.manage.dto.BigScreenPageDTO',
+          className: 'com.gccloud.dataroom.core.module.manage.dto.BigScreenPageDTO',
           chartList: this.dataForm.chartList,
           code: this.dataForm.code,
           icon: this.dataForm.icon,

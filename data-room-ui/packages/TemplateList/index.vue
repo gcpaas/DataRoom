@@ -124,7 +124,7 @@ export default {
           type: 'warning',
           customClass: 'bs-el-message-box'
         }).then(() => {
-          const className = this.type === 'com.gccloud.bigscreen.core.module.manage.dto.BigScreenPageDTO'
+          const className = this.type === 'com.gccloud.dataroom.core.module.manage.dto.BigScreenPageDTO'
           this.innerLoading = true
           post(`/bigScreen/${this.type}/design/get/template`, {
             pageTemplateId: id,

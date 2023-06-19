@@ -585,7 +585,7 @@ export default {
     // 大屏 dashboard从模版新建, 使用某个模版新建
     useIt (pageTemplateId, parentNode, type) {
       this.templateLoading = true
-      const className = 'com.gccloud.bigscreen.core.module.manage.dto.BigScreenPageDTO'
+      const className = 'com.gccloud.dataroom.core.module.manage.dto.BigScreenPageDTO'
       post(`/bigScreen/${type}/design/add/template`, {
         pageTemplateId,
         parentCode: parentNode.code,

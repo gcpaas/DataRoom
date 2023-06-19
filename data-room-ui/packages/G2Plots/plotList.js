@@ -32,7 +32,7 @@ function getPlotList (files) {
       icon: null,
       img: require(`packages/G2Plots/images/componentLogo/${config.title}.png`),
       className:
-        'com.gccloud.bigscreen.core.module.chart.components.CustomComponentChart',
+        'com.gccloud.dataroom.core.module.chart.components.CustomComponentChart',
       w: config?.option?.width || 450,
       h: config?.option?.height || 320,
       x: 0,
@@ -63,7 +63,7 @@ export function getCustomPlots () {
       icon: null,
       img: config.img,
       className:
-        'com.gccloud.bigscreen.core.module.chart.components.CustomComponentChart',
+        'com.gccloud.dataroom.core.module.chart.components.CustomComponentChart',
       w: 450,
       h: 320,
       x: 0,

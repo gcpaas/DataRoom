@@ -17,7 +17,7 @@ function getSvgList (iconList) {
       title: svg + '图标',
       name: svg,
       icon: svg,
-      className: 'com.gccloud.bigscreen.core.module.chart.components.ScreenSvgsChart',
+      className: 'com.gccloud.dataroom.core.module.chart.components.ScreenSvgsChart',
       w: 100,
       h: 100,
       x: 0,
