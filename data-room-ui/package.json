@@ -1,5 +1,5 @@
 {
-  "name": "gc-starter-bigscreen-ui",
+  "name": "@gcpaas/data-room-ui",
   "version": "0.0.1-2023061403-Alpha",
   "description": "自定义大屏",
   "author": "gc-starter",
