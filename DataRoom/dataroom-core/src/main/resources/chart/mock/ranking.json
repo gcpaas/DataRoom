@@ -1,0 +1,71 @@
+{
+    "success": false,
+    "data": [
+        {
+            "name": "联想",
+            "sum(num)": 112872
+        },
+        {
+            "name": "惠普",
+            "sum(num)": 112745
+        },
+        {
+            "name": "华硕",
+            "sum(num)": 112523
+        },
+        {
+            "name": "华为",
+            "sum(num)": 111234
+        },
+        {
+            "name": "苹果",
+            "sum(num)": 110981
+        },
+        {
+            "name": "中兴",
+            "sum(num)": 110019
+        },
+        {
+            "name": "小米",
+            "sum(num)": 100876
+        },
+        {
+            "name": "三星",
+            "sum(num)": 97265
+        },
+        {
+            "name": "魅族",
+            "sum(num)": 97123
+        },
+        {
+            "name": "酷派",
+            "sum(num)": 97001
+        },
+        {
+            "name": "红米",
+            "sum(num)": 96999
+        },
+        {
+            "name": "传音",
+            "sum(num)": 96231
+        }
+    ],
+    "columnData": {
+        "name": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "name",
+            "aggregate": "",
+            "alias": "name",
+            "remark": "产品名称"
+        },
+        "num": {
+            "type": "bigint",
+            "tableName": "",
+            "originalColumn": "num",
+            "aggregate": "sum",
+            "alias": "sum(num)",
+            "remark": "销量[求和]"
+        }
+    }
+}

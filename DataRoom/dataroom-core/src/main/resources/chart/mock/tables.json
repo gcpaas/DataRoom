@@ -1,0 +1,101 @@
+{
+    "success": false,
+    "totalCount": 10,
+    "totalPage": 1,
+    "data": [
+        {
+            "ranking": 1,
+            "keyWord": "中国",
+            "userNum": "110",
+            "searchNum": "11927"
+        },
+        {
+            "ranking": 2,
+            "keyWord": "俄罗斯",
+            "userNum": "81",
+            "searchNum": "11332"
+        },
+        {
+            "ranking": 3,
+            "keyWord": "美国",
+            "userNum": "63",
+            "searchNum": "93783"
+        },
+        {
+            "ranking": 4,
+            "keyWord": "法国",
+            "userNum": "86",
+            "searchNum": "1737"
+        },
+        {
+            "ranking": 5,
+            "keyWord": "英格兰",
+            "userNum": "2826",
+            "searchNum": "17256"
+        },
+        {
+            "ranking": 6,
+            "keyWord": "日本",
+            "userNum": "10",
+            "searchNum": "998"
+        },
+        {
+            "ranking": 7,
+            "keyWord": "乌克兰",
+            "userNum": "33",
+            "searchNum": "23112"
+        },
+        {
+            "ranking": 8,
+            "keyWord": "印度",
+            "userNum": "12",
+            "searchNum": "1123"
+        },
+        {
+            "ranking": 9,
+            "keyWord": "巴基斯坦",
+            "userNum": "23",
+            "searchNum": "3311"
+        },
+        {
+            "ranking": 10,
+            "keyWord": "朝鲜",
+            "userNum": "23",
+            "searchNum": "1211"
+        }
+    ],
+    "columnData": {
+        "ranking": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "ranking",
+            "aggregate": "",
+            "alias": "ranking",
+            "remark": "排名"
+        },
+        "keyWord": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "keyWord",
+            "aggregate": "",
+            "alias": "keyWord",
+            "remark": "关键词"
+        },
+        "userNum": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "userNum",
+            "aggregate": "",
+            "alias": "userNum",
+            "remark": "用户数"
+        },
+        "searchNum": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "searchNum",
+            "aggregate": "",
+            "alias": "searchNum",
+            "remark": "搜索次数"
+        }
+    }
+}

@@ -1,0 +1,71 @@
+{
+    "success": false,
+    "data": [
+        {
+            "month": "一月",
+            "visits": 5430796.0
+        },
+        {
+            "month": "二月",
+            "visits": 3543961.0
+        },
+        {
+            "month": "三月",
+            "visits": 3311985.0
+        },
+        {
+            "month": "四月",
+            "visits": 2390275.0
+        },
+        {
+            "month": "五月",
+            "visits": 2376385.0
+        },
+        {
+            "month": "六月",
+            "visits": 2357411.0
+        },
+        {
+            "month": "七月",
+            "visits": 1968060.0
+        },
+        {
+            "month": "八月",
+            "visits": 1938321.0
+        },
+        {
+            "month": "九月",
+            "visits": 1486126.0
+        },
+        {
+            "month": "十月",
+            "visits": 1285126.0
+        },
+        {
+            "month": "十一月",
+            "visits": 1287356.0
+        },
+        {
+            "month": "十二月",
+            "visits": 1287646.0
+        }
+    ],
+    "columnData": {
+        "month": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "month",
+            "aggregate": "",
+            "alias": "month",
+            "remark": "月份"
+        },
+        "visits": {
+            "type": "bigint",
+            "tableName": "",
+            "originalColumn": "visits",
+            "aggregate": "",
+            "alias": "visits",
+            "remark": "访问量"
+        }
+    }
+}

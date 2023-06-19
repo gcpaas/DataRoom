@@ -1,0 +1,91 @@
+{
+    "success": false,
+    "data": [
+        {
+            "month": "一月",
+            "visits": 231,
+            "type": "门店"
+        },
+        {
+            "month": "二月",
+            "visits": 321,
+            "type": "门店"
+        },
+        {
+            "month": "三月",
+            "visits": 233,
+            "type": "门店"
+        },
+        {
+            "month": "四月",
+            "visits": 432,
+            "type": "门店"
+        },
+        {
+            "month": "五月",
+            "visits": 211,
+            "type": "门店"
+        },
+        {
+            "month": "六月",
+            "visits": 122,
+            "type": "门店"
+        },
+        {
+            "month": "一月",
+            "visits": 333,
+            "type": "电商"
+        },
+        {
+            "month": "二月",
+            "visits": 555,
+            "type": "电商"
+        },
+        {
+            "month": "三月",
+            "visits": 222,
+            "type": "电商"
+        },
+        {
+            "month": "四月",
+            "visits": 333,
+            "type": "电商"
+        },
+        {
+            "month": "五月",
+            "visits": 453,
+            "type": "电商"
+        },
+        {
+            "month": "六月",
+            "visits": 111,
+            "type": "电商"
+        }
+    ],
+    "columnData": {
+        "month": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "month",
+            "aggregate": "",
+            "alias": "month",
+            "remark": "月份"
+        },
+        "visits": {
+            "type": "bigint",
+            "tableName": "",
+            "originalColumn": "visits",
+            "aggregate": "",
+            "alias": "visits",
+            "remark": "访问量"
+        },
+        "type": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "type",
+            "aggregate": "",
+            "alias": "type",
+            "remark": "类型"
+        }
+    }
+}

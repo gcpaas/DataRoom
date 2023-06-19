@@ -1,0 +1,71 @@
+{
+    "success": false,
+    "data": [
+        {
+            "__timestamp": "2022-08-01",
+            "sum(sales)": 140
+        },
+        {
+            "__timestamp": "2022-08-02",
+            "sum(sales)": 136
+        },
+        {
+            "__timestamp": "2022-08-03",
+            "sum(sales)": 236
+        },
+        {
+            "__timestamp": "2022-08-04",
+            "sum(sales)": 224
+        },
+        {
+            "__timestamp": "2022-08-05",
+            "sum(sales)": 207
+        },
+        {
+            "__timestamp": "2022-08-06",
+            "sum(sales)": 230
+        },
+        {
+            "__timestamp": "2022-08-07",
+            "sum(sales)": 131
+        },
+        {
+            "__timestamp": "2022-08-08",
+            "sum(sales)": 264
+        },
+        {
+            "__timestamp": "2022-08-09",
+            "sum(sales)": 236
+        },
+        {
+            "__timestamp": "2022-08-10",
+            "sum(sales)": 252
+        },
+        {
+            "__timestamp": "2022-08-11",
+            "sum(sales)": 215
+        },
+        {
+            "__timestamp": "2022-08-12",
+            "sum(sales)": 294
+        }
+    ],
+    "columnData": {
+        "date": {
+            "type": "date",
+            "tableName": "",
+            "originalColumn": "date",
+            "aggregate": "",
+            "alias": "__timestamp",
+            "remark": "日期"
+        },
+        "sales": {
+            "type": "bigint",
+            "tableName": "",
+            "originalColumn": "sales",
+            "aggregate": "sum",
+            "alias": "sum(sales)",
+            "remark": "销售额[求和]"
+        }
+    }
+}

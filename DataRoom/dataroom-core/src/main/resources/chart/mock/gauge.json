@@ -1,0 +1,18 @@
+{
+    "success": false,
+    "data": [
+        {
+            "percentage": 0.7456532
+        }
+    ],
+    "columnData": {
+        "num": {
+            "type": "bigint",
+            "tableName": "",
+            "originalColumn": "percentage",
+            "aggregate": "percentage",
+            "alias": "percentage",
+            "remark": "活跃用户数占比"
+        }
+    }
+}

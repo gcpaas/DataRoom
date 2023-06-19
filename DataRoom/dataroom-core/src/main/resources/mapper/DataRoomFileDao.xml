@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gccloud.dataroom.core.module.file.dao.DataRoomFileDao">
+
+    <!--  更新文件下载次数  -->
+    <update id="updateDownloadCount">
+        update big_screen_file
+        set download_count=download_count + #{addCount}
+        where id = #{id};
+    </update>
+
+    <select id="getAllExtension" resultType="java.lang.String">
+        select distinct extension from big_screen_file
+    </select>
+
+</mapper>

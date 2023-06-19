@@ -1,0 +1,18 @@
+{
+    "success": false,
+    "data": [
+        {
+            "title": "文本标签占位符"
+        }
+    ],
+    "columnData": {
+        "num": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "title",
+            "aggregate": "",
+            "alias": "title",
+            "remark": "标题"
+        }
+    }
+}

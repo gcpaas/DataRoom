@@ -1,0 +1,27 @@
+{
+    "success": false,
+    "data": [
+        {
+          "sales": 26,
+          "saleroom": 103974
+        }
+    ],
+    "columnData": {
+        "saleroom": {
+          "type": "BIGINT",
+          "tableName": "sales_data",
+          "originalColumn": "saleroom",
+          "aggregate": "",
+          "alias": "saleroom",
+          "remark": "销售额"
+        },
+        "sales": {
+          "type": "INT",
+          "tableName": "sales_data",
+          "originalColumn": "sales",
+          "aggregate": "",
+          "alias": "sales",
+          "remark": "销量"
+        }
+    }
+}

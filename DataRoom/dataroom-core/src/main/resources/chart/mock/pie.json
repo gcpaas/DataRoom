@@ -1,0 +1,39 @@
+{
+    "success": false,
+    "data": [
+        {
+            "area": "丽江市",
+            "count(name)": 28
+        },
+        {
+            "area": "天水市",
+            "count(name)": 69
+        },
+        {
+            "area": "海口市",
+            "count(name)": 55
+        },
+        {
+            "area": "苏州市",
+            "count(name)": 84
+        }
+    ],
+    "columnData": {
+        "name": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "name",
+            "aggregate": "count",
+            "alias": "count(name)",
+            "remark": "门店名称[统计]"
+        },
+        "area": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "area",
+            "aggregate": "",
+            "alias": "area",
+            "remark": "门店所在地区"
+        }
+    }
+}
