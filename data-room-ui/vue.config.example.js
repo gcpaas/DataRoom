@@ -42,7 +42,7 @@ module.exports = {
   },
   publicPath:
     process.env.VUE_APP_HISTORY === 'y' ? process.env.VUE_APP_BASE : './',
-  outputDir: 'gc-starter-bigscreen-ui',
+  outputDir: '@gcpaas/data-room-ui',
   assetsDir: 'static',
   lintOnSave: false,
   productionSourceMap: false,
@@ -68,7 +68,7 @@ module.exports = {
         vue$: 'vue/dist/vue.common',
         // 大屏工程路径别名
         packages: resolve('packages'),
-        'gc-starter-bigscreen-ui': resolve('packages/index.js')
+        '@gcpaas/data-room-ui': resolve('packages/index.js')
       },
       fallback: {
         path: false,
