@@ -3,7 +3,7 @@ export const defaultData = {
   // 大屏信息
   pageInfo: {
     className:
-      'com.gccloud.dataroom.core.module.manage.dto.BigScreenPageDTO',
+      'com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO',
     id: '',
     name: '测试bigScreen',
     code: '',
