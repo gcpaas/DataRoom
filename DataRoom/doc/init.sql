@@ -93,106 +93,56 @@ CREATE TABLE `big_screen_biz_component` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务组件表';
 
-
-DROP TABLE IF EXISTS `big_screen_category_tree`;
-CREATE TABLE `big_screen_category_tree` (
+DROP TABLE IF EXISTS `ds_category_tree`;
+CREATE TABLE `ds_category_tree` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `ids` text COMMENT 'id序列',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   `parent_id` bigint(64) DEFAULT NULL COMMENT '父级ID',
-  `parent_name` varchar(255) DEFAULT NULL COMMENT '父级名称',
-  `tree_level` bigint(20) NOT NULL DEFAULT '0',
+  `type` varchar(255) NOT NULL,
+  `module_code` varchar(255) DEFAULT NULL,
   `update_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识',
-  `table_name` varchar(255) NOT NULL,
-  `module_code` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据集种类树';
 
-DROP TABLE IF EXISTS `big_screen_datasource_config`;
-CREATE TABLE `big_screen_datasource_config` (
+
+DROP TABLE IF EXISTS `ds_datasource`;
+CREATE TABLE `ds_datasource` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `source_name` varchar(255) DEFAULT NULL COMMENT '数据源名称',
   `source_type` varchar(255) DEFAULT NULL COMMENT '数据源类型',
   `driver_class_name` varchar(255) DEFAULT NULL COMMENT '连接驱动',
-  `database` varchar(255) DEFAULT NULL COMMENT '数据',
+  `url` varchar(255) DEFAULT NULL COMMENT '连接url',
   `host` varchar(255) DEFAULT NULL COMMENT '主机',
   `port` int(16) DEFAULT NULL COMMENT '端口',
   `username` varchar(255) DEFAULT NULL COMMENT '用户名',
   `password` text COMMENT '密码',
-  `coding` varchar(255) DEFAULT NULL COMMENT '编码',
-  `url` varchar(255) DEFAULT NULL COMMENT '连接url',
-  `advance_setting_flag` int(16) DEFAULT NULL COMMENT '是否启用高级设置，1：是  ，0：否',
-  `init_conn_num` int(16) DEFAULT NULL COMMENT '初始化连接数',
-  `max_active_conn_num` int(16) DEFAULT NULL COMMENT '最大活动连接数',
-  `max_idle_conn_num` int(16) DEFAULT NULL COMMENT '最大空闲连接数',
-  `min_idle_conn_num` int(16) DEFAULT NULL COMMENT '最小空闲连接数',
-  `max_wait_conn_num` varchar(255) DEFAULT NULL COMMENT '最大等待时间 [ 单位:毫秒 ]',
-  `sql_check` text COMMENT 'SQL验证查询',
-  `getconn_check_flag` int(16) DEFAULT NULL COMMENT '获取连接是否校验，1：是  ，0：否',
-  `return_check_flag` int(16) DEFAULT NULL COMMENT '归还连接是否校验，1：是  ，0：否',
-  `start_idle_check_flag` int(16) DEFAULT NULL COMMENT '开启空闲回收期校验，1：是  ，0：否',
-  `idle_conn_dormant_time` int(16) DEFAULT NULL COMMENT '空闲连接回收器休眠时间  [ 单位:毫秒 ]',
-  `idle_conn_check_num` int(16) DEFAULT NULL COMMENT '空闲连接回收检查数',
-  `keep_idle_min_time` int(16) DEFAULT NULL COMMENT '保持空闲最小时间值 [ 单位：秒]',
-  `update_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识',
   `module_code` varchar(255) DEFAULT NULL COMMENT '模块编码',
   `editable` tinyint(2) DEFAULT '0' COMMENT '是否可编辑，0 不可编辑 1 可编辑',
   `remark` varchar(255) DEFAULT NULL,
+  `update_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='数据源配置表';
 
-DROP TABLE IF EXISTS `big_screen_dataset`;
-CREATE TABLE `big_screen_dataset` (
+DROP TABLE IF EXISTS `ds_dataset`;
+CREATE TABLE `ds_dataset` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '名称',
-  `type_id` bigint(32) DEFAULT NULL COMMENT '种类ID',
+  `code` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '编码',
+  `type_id` varchar(255) DEFAULT NULL COMMENT '种类ID',
   `remark` text CHARACTER SET utf8 COMMENT '描述',
   `dataset_type` varchar(64) CHARACTER SET utf8 NOT NULL COMMENT '数据集类型（自定义数据集 custom、模型数据集model、原始数据集original、API数据集api、JSON数据集 json）',
-  `dataset_rel_id` bigint(32) DEFAULT NULL COMMENT '数据集关联ID',
   `module_code` varchar(255) COLLATE utf8_general_mysql500_ci DEFAULT NULL COMMENT '模块编码',
   `editable` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否可编辑，0 不可编辑 1 可编辑',
+  `source_id` bigint(32) DEFAULT NULL COMMENT '数据源ID',
+  `cache` tinyint(1) DEFAULT 0 NOT NULL COMMENT '是否对执行结构缓存 0 不缓存 1 缓存',
+  `config` longtext COMMENT '数据集配置',
   `update_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识',
-  `data` text COLLATE utf8_general_mysql500_ci COMMENT '用于存储数据集配置的字段',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB   DEFAULT CHARSET=utf8 COLLATE=utf8_general_mysql500_ci COMMENT='数据集表';
-
-DROP TABLE IF EXISTS `big_screen_datasets_custom`;
-CREATE TABLE `big_screen_datasets_custom` (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '数据集ID',
-  `code` varchar(64) NOT NULL COMMENT '数据集编码',
-  `curing_type` varchar(32) DEFAULT NULL COMMENT '结果固化形式，1、表 ； 2、视图',
-  `source_id` varchar(64) DEFAULT NULL COMMENT '数据源id',
-  `process_type` int(16) NOT NULL COMMENT '数据集加工类型。1、可视化数据加工 ；2、SQL数据加工；3、代码编辑器',
-  `field_json` text COMMENT '数据集字段json',
-  `sql_process` text COMMENT 'Sql数据处理',
-  `code_process` longtext COMMENT '代码数据处理',
-  `param_config` text COMMENT '参数配置json',
-  `field_desc` text COMMENT '字段描述json',
-  `cache_field` longtext COMMENT '缓存字段',
-  `script` text COMMENT '结果转换脚本',
-  `update_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='自助数据集表';
-
-DROP TABLE IF EXISTS `big_screen_datasets_original`;
-CREATE TABLE `big_screen_datasets_original` (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '数据集ID',
-  `table_name` varchar(255) DEFAULT NULL COMMENT '表名',
-  `source_id` bigint(32) DEFAULT NULL COMMENT '关联数据源ID',
-  `field_json` text COMMENT '数据集字段json',
-  `field_desc` text COMMENT '字段描述',
-  `field_info` text COMMENT '所选字段',
-  `repeat_status` tinyint(2) NOT NULL DEFAULT '0',
-  `cache_field` longtext COMMENT '缓存字段',
-  `update_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB   DEFAULT CHARSET=utf8 COMMENT='原始数据集表';

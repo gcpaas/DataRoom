@@ -1,6 +1,6 @@
 package com.gccloud.dataroom.core.module.chart.bean;
 
-import com.gccloud.dataroom.core.module.dataset.dto.DatasetParamDto;
+import com.gccloud.dataset.dto.DatasetParamDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -48,7 +48,7 @@ public class Field {
         private String itemValueName;
 
         @ApiModelProperty(value = "参数")
-        private List<DatasetParamDto> params;
+        private List<DatasetParamDTO> params;
 
     }
 

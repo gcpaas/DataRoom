@@ -1,6 +1,6 @@
 package com.gccloud.dataroom.core.module.manage.dto;
 
-import com.gccloud.dataroom.core.dto.SearchDTO;
+import com.gccloud.common.dto.SearchDTO;
 import lombok.Data;
 
 /**

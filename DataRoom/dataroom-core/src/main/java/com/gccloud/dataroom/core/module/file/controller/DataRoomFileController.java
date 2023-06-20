@@ -1,14 +1,14 @@
 package com.gccloud.dataroom.core.module.file.controller;
 
-import com.gccloud.dataroom.core.controller.SuperController;
 import com.gccloud.dataroom.core.module.file.dto.FileSearchDTO;
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomFileService;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomOssService;
 import com.gccloud.dataroom.core.module.file.vo.DataRoomFileVO;
-import com.gccloud.dataroom.core.utils.BeanConvertUtils;
-import com.gccloud.dataroom.core.vo.PageVO;
-import com.gccloud.dataroom.core.vo.R;
+import com.gccloud.common.controller.SuperController;
+import com.gccloud.common.utils.BeanConvertUtils;
+import com.gccloud.common.vo.PageVO;
+import com.gccloud.common.vo.R;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

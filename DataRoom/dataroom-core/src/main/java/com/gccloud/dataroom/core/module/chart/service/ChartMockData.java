@@ -1,8 +1,8 @@
 package com.gccloud.dataroom.core.module.chart.service;
 
-import com.gccloud.dataroom.core.module.chart.vo.ChartDataVO;
 import com.gccloud.dataroom.core.constant.PageDesignConstant;
-import com.gccloud.dataroom.core.utils.JSON;
+import com.gccloud.dataroom.core.module.chart.vo.ChartDataVO;
+import com.gccloud.common.utils.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.io.Resource;
@@ -25,10 +25,10 @@ public class ChartMockData {
     public static ChartDataVO getMockData(String type) {
         ChartDataVO chartDataDTO;
         String fileName = "chart/mock/" + type + ".json";
-        if (PageDesignConstant.DataRoom.Type.SCREEN_SCROLL_BOARD.equals(type)) {
+        if (PageDesignConstant.BigScreen.Type.SCREEN_SCROLL_BOARD.equals(type)) {
             fileName = "chart/mock/tables.json";
         }
-        if (PageDesignConstant.DataRoom.Type.SCREEN_SCROLL_RANKING.equals(type)) {
+        if (PageDesignConstant.BigScreen.Type.SCREEN_SCROLL_RANKING.equals(type)) {
             fileName = "chart/mock/ranking.json";
         }
         String json = "";

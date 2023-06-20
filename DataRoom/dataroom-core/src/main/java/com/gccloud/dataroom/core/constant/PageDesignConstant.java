@@ -46,7 +46,7 @@ public interface PageDesignConstant {
     /**
      * 大屏
      */
-    interface DataRoom {
+    interface BigScreen {
 
         /**
          * 组件类型

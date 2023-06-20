@@ -1,10 +1,10 @@
 package com.gccloud.dataroom.core.module.manage.service;
 
 import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
-import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
 import com.gccloud.dataroom.core.module.basic.service.IBasePageService;
+import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomSearchDTO;
-import com.gccloud.dataroom.core.vo.PageVO;
+import com.gccloud.common.vo.PageVO;
 
 /**
  * @author hongyang

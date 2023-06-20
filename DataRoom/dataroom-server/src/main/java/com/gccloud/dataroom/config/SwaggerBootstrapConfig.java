@@ -45,7 +45,7 @@ public class SwaggerBootstrapConfig implements WebMvcConfigurer {
     );
 
     @Bean
-    public Docket bigScreenDocket() {
+    public Docket dataRoomDocket() {
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("大屏")
                 .version("1.0.0")

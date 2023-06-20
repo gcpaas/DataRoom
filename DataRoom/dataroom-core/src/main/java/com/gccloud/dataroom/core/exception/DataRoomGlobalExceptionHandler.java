@@ -1,7 +1,8 @@
 package com.gccloud.dataroom.core.exception;
 
 import com.gccloud.dataroom.core.constant.DataRoomConst;
-import com.gccloud.dataroom.core.vo.R;
+import com.gccloud.common.exception.GlobalException;
+import com.gccloud.common.vo.R;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

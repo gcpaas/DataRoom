@@ -2,10 +2,10 @@ package com.gccloud.dataroom.core.module.basic.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.gccloud.dataroom.core.entity.SuperEntity;
 import com.gccloud.dataroom.core.constant.PageDesignConstant;
 import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
 import com.gccloud.dataroom.core.module.basic.entity.type.BasePageDTOTypeHandler;
+import com.gccloud.common.entity.SuperEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

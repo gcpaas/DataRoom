@@ -1,6 +1,6 @@
 package com.gccloud.dataroom.core.permission;
 
-import com.gccloud.dataroom.core.exception.GlobalException;
+import com.gccloud.common.exception.GlobalException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;

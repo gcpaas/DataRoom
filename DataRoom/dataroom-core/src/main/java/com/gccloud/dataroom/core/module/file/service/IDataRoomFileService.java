@@ -2,8 +2,8 @@ package com.gccloud.dataroom.core.module.file.service;
 
 import com.gccloud.dataroom.core.module.file.dto.FileSearchDTO;
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
-import com.gccloud.dataroom.core.service.ISuperService;
-import com.gccloud.dataroom.core.vo.PageVO;
+import com.gccloud.common.service.ISuperService;
+import com.gccloud.common.vo.PageVO;
 
 import java.util.List;
 

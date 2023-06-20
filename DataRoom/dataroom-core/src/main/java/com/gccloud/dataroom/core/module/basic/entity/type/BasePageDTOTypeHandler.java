@@ -1,7 +1,7 @@
 package com.gccloud.dataroom.core.module.basic.entity.type;
 
 import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
-import com.gccloud.dataroom.core.utils.JSON;
+import com.gccloud.common.utils.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;

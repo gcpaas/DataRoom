@@ -26,25 +26,25 @@
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- 追加日志到原文件结尾 -->
-        <Prudent>true</Prudent>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %method 方法名  %L 行数 %msg：日志消息，%n是换行符-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %X{traceId:-} [%thread] %-5level %logger{56}.%method:%L - %msg%n</pattern>
-            <charset>utf-8</charset>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!--日志文件输出的文件名 每小时生成日志文件-->
-            <FileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}.%i.log</FileNamePattern>
-            <!--日志文件保留天数-->
-            <MaxHistory>30</MaxHistory>
-            <!-- 除按日志记录之外，还配置了日志文件不能超过100M(默认)，若超过100M，日志文件会以索引0开始， -->
-            <maxFileSize>100MB</maxFileSize>
-            <!--  日志文件大小和超过10GMB会清空之前的 -->
-            <totalSizeCap>10GB</totalSizeCap>
-        </rollingPolicy>
-    </appender>
+<!--    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        &lt;!&ndash; 追加日志到原文件结尾 &ndash;&gt;-->
+<!--        <Prudent>true</Prudent>-->
+<!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+<!--            &lt;!&ndash;格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %method 方法名  %L 行数 %msg：日志消息，%n是换行符&ndash;&gt;-->
+<!--            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %X{traceId:-} [%thread] %-5level %logger{56}.%method:%L - %msg%n</pattern>-->
+<!--            <charset>utf-8</charset>-->
+<!--        </encoder>-->
+<!--        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+<!--            &lt;!&ndash;日志文件输出的文件名 每小时生成日志文件&ndash;&gt;-->
+<!--            <FileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}.%i.log</FileNamePattern>-->
+<!--            &lt;!&ndash;日志文件保留天数&ndash;&gt;-->
+<!--            <MaxHistory>30</MaxHistory>-->
+<!--            &lt;!&ndash; 除按日志记录之外，还配置了日志文件不能超过100M(默认)，若超过100M，日志文件会以索引0开始， &ndash;&gt;-->
+<!--            <maxFileSize>100MB</maxFileSize>-->
+<!--            &lt;!&ndash;  日志文件大小和超过10GMB会清空之前的 &ndash;&gt;-->
+<!--            <totalSizeCap>10GB</totalSizeCap>-->
+<!--        </rollingPolicy>-->
+<!--    </appender>-->
 
     <!--  SpringBoot 默认的  -->
     <logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
@@ -70,7 +70,7 @@
     </springProfile>
 
     <root level="INFO">
-        <appender-ref ref="FILE"/>
+<!--        <appender-ref ref="FILE"/>-->
         <appender-ref ref="CONSOLE"/>
     </root>
 

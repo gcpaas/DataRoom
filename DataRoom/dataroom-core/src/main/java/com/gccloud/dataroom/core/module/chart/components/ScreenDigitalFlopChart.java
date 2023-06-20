@@ -14,7 +14,7 @@ import lombok.Data;
 public class ScreenDigitalFlopChart extends Chart {
 
     @ApiModelProperty(notes = "类型")
-    private String type = PageDesignConstant.DataRoom.Type.DIGITAL_FLOP;
+    private String type = PageDesignConstant.BigScreen.Type.DIGITAL_FLOP;
 
     @ApiModelProperty(notes = "个性化")
     private Customize customize = new Customize();

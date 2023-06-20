@@ -20,6 +20,11 @@ public class ChartDataVO {
     private Boolean success = Boolean.FALSE;
 
     /**
+     * 是否前端执行
+     */
+    private Boolean executionByFrontend = Boolean.FALSE;
+
+    /**
      * 返回的数据
      */
     @ApiModelProperty(notes = "返回的数据")

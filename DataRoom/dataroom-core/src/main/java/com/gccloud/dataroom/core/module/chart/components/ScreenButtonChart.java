@@ -17,7 +17,7 @@ import java.util.List;
 public class ScreenButtonChart extends Chart {
     
     @ApiModelProperty(notes = "组件类型")
-    private String type = PageDesignConstant.DataRoom.Type.BUTTON;
+    private String type = PageDesignConstant.BigScreen.Type.BUTTON;
 
     @ApiModelProperty(notes = "个性化")
     private Customize customize = new Customize();

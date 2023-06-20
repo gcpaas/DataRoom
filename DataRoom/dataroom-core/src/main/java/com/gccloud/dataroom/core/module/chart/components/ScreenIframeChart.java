@@ -17,6 +17,6 @@ public class ScreenIframeChart extends Chart {
     private String url;
 
     @ApiModelProperty(notes = "类型")
-    private String type = PageDesignConstant.DataRoom.Type.IFRAME;
+    private String type = PageDesignConstant.BigScreen.Type.IFRAME;
 
 }

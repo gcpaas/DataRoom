@@ -1,9 +1,9 @@
 package com.gccloud.dataroom.core.module.basic.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.gccloud.dataroom.core.service.ISuperService;
-import com.gccloud.dataroom.core.utils.AssertUtils;
 import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
+import com.gccloud.common.service.ISuperService;
+import com.gccloud.common.utils.AssertUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public interface IBasePageService extends ISuperService<PageEntity> {
         LambdaQueryWrapper<PageEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PageEntity::getType, type);
         queryWrapper.select(PageEntity::getName);
-        List<PageEntity> list = getBaseDao().selectList(queryWrapper);
+        List<PageEntity> list = getBaseMapper().selectList(queryWrapper);
         Set<String> allName = list.stream().map(PageEntity::getName).collect(Collectors.toSet());
         return allName;
     }
@@ -44,7 +44,7 @@ public interface IBasePageService extends ISuperService<PageEntity> {
         AssertUtils.isTrue(StringUtils.isNotBlank(code), "页面编码不能为空");
         LambdaQueryWrapper<PageEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PageEntity::getCode, code);
-        PageEntity pageEntity = getBaseDao().selectOne(queryWrapper);
+        PageEntity pageEntity = getBaseMapper().selectOne(queryWrapper);
         return pageEntity;
     }
 
@@ -60,7 +60,7 @@ public interface IBasePageService extends ISuperService<PageEntity> {
                 .eq(PageEntity::getName, entity.getName())
                 .eq(PageEntity::getType, entity.getType())
                 .ne(StringUtils.isNotBlank(entity.getId()), PageEntity::getId, entity.getId());
-        return getBaseDao().selectCount(queryWrapper) > 0;
+        return getBaseMapper().selectCount(queryWrapper) > 0;
     }
 
     /**
@@ -78,7 +78,7 @@ public interface IBasePageService extends ISuperService<PageEntity> {
                 .eq(PageEntity::getName, name)
                 .eq(PageEntity::getType, type)
                 .ne(StringUtils.isNotBlank(id), PageEntity::getId, id);
-        return getBaseDao().selectCount(queryWrapper) > 0;
+        return getBaseMapper().selectCount(queryWrapper) > 0;
     }
 
 
@@ -94,7 +94,7 @@ public interface IBasePageService extends ISuperService<PageEntity> {
                 .eq(PageEntity::getCode, entity.getCode())
                 .eq(PageEntity::getType, entity.getType())
                 .ne(StringUtils.isNotBlank(entity.getId()), PageEntity::getId, entity.getId());
-        return getBaseDao().selectCount(queryWrapper) > 0;
+        return getBaseMapper().selectCount(queryWrapper) > 0;
     }
 
 }

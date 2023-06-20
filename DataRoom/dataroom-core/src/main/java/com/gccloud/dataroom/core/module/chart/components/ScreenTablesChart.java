@@ -1,10 +1,10 @@
 package com.gccloud.dataroom.core.module.chart.components;
 
+import com.gccloud.dataroom.core.constant.PageDesignConstant;
 import com.gccloud.dataroom.core.module.chart.bean.Btn;
 import com.gccloud.dataroom.core.module.chart.bean.Chart;
 import com.gccloud.dataroom.core.module.chart.bean.Field;
 import com.gccloud.dataroom.core.module.chart.components.datasource.BaseChartDataSource;
-import com.gccloud.dataroom.core.constant.PageDesignConstant;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -21,7 +21,7 @@ public class ScreenTablesChart extends Chart {
     private BaseChartDataSource dataSource;
 
     @ApiModelProperty(notes = "类型")
-    private String type = PageDesignConstant.DataRoom.Type.TABLES;
+    private String type = PageDesignConstant.BigScreen.Type.TABLES;
 
     @ApiModelProperty(notes = "个性化")
     private Customize customize = new Customize();

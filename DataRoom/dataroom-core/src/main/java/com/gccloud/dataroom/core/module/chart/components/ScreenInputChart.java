@@ -15,7 +15,7 @@ import lombok.Data;
 public class ScreenInputChart extends Chart {
     
     @ApiModelProperty(notes = "组件类型")
-    private String type = PageDesignConstant.DataRoom.Type.INPUT;
+    private String type = PageDesignConstant.BigScreen.Type.INPUT;
 
     @ApiModelProperty(notes = "个性化")
     private Customize customize = new Customize();

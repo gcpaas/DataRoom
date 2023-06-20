@@ -1,6 +1,6 @@
 package com.gccloud.dataroom.core.module.type.dao;
 
-import com.gccloud.dataroom.core.dao.DataRoomBaseDao;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gccloud.dataroom.core.module.type.entity.TypeEntity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,6 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @Version 1.0.0
  */
 @Mapper
-public interface TypeDao extends DataRoomBaseDao<TypeEntity> {
+public interface TypeDao extends BaseMapper<TypeEntity> {
 
 }

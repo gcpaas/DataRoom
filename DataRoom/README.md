@@ -66,7 +66,7 @@
 ```xml
 <dependency>
     <groupId>com.gccloud</groupId>
-    <artifactId>gc-starter-bigscreen-core</artifactId>
+    <artifactId>dataroom-core</artifactId>
     <version>最新版本号</version>
 </dependency>
 ```

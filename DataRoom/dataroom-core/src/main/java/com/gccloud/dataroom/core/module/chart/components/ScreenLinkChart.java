@@ -15,7 +15,7 @@ import lombok.Data;
 public class ScreenLinkChart extends Chart {
     
     @ApiModelProperty(notes = "组件类型")
-    private String type = PageDesignConstant.DataRoom.Type.LINK;
+    private String type = PageDesignConstant.BigScreen.Type.LINK;
 
     @ApiModelProperty(notes = "个性化")
     private Customize customize = new Customize();

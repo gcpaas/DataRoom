@@ -17,7 +17,7 @@ import java.util.List;
 public class RemoteComponentChart extends Chart {
 
     @ApiModelProperty(notes = "类型")
-    private String type = PageDesignConstant.DataRoom.Type.CUSTOM_COMPONENT;
+    private String type = PageDesignConstant.BigScreen.Type.CUSTOM_COMPONENT;
 
     @ApiModelProperty(notes = "自定义处理配置脚本")
     private String optionHandler;

@@ -1,6 +1,6 @@
 package com.gccloud.dataroom.core.permission;
 
-import com.gccloud.dataroom.core.vo.R;
+import com.gccloud.common.vo.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package com.gccloud.dataroom.core.module.chart.components;
 
-import com.gccloud.dataroom.core.module.chart.bean.Chart;
 import com.gccloud.dataroom.core.constant.PageDesignConstant;
+import com.gccloud.dataroom.core.module.chart.bean.Chart;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -20,7 +20,7 @@ public class ScreenCurrentTimeChart extends Chart {
     private Customize customize = new Customize();
 
     @ApiModelProperty(notes = "类型")
-    private String type = PageDesignConstant.DataRoom.Type.CURRENT_TIME;
+    private String type = PageDesignConstant.BigScreen.Type.CURRENT_TIME;
 
     @Data
     public static class Customize {

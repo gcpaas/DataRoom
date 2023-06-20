@@ -2,7 +2,7 @@ package com.gccloud.dataroom.core.module.type.service;
 
 import com.gccloud.dataroom.core.module.type.dto.TypeDTO;
 import com.gccloud.dataroom.core.module.type.entity.TypeEntity;
-import com.gccloud.dataroom.core.service.ISuperService;
+import com.gccloud.common.service.ISuperService;
 
 import java.util.List;
 

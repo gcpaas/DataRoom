@@ -1,8 +1,8 @@
 package com.gccloud.dataroom.core.module.type.dto;
 
 import com.gccloud.dataroom.core.constant.PageDesignConstant;
-import com.gccloud.dataroom.core.validator.group.Insert;
-import com.gccloud.dataroom.core.validator.group.Update;
+import com.gccloud.common.validator.group.Insert;
+import com.gccloud.common.validator.group.Update;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

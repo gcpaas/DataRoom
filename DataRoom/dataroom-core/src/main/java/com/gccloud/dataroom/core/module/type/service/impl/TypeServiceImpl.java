@@ -2,13 +2,13 @@ package com.gccloud.dataroom.core.module.type.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gccloud.dataroom.core.exception.GlobalException;
 import com.gccloud.dataroom.core.module.type.dao.TypeDao;
 import com.gccloud.dataroom.core.module.type.dto.TypeDTO;
 import com.gccloud.dataroom.core.module.type.entity.TypeEntity;
 import com.gccloud.dataroom.core.module.type.service.ITypeService;
-import com.gccloud.dataroom.core.utils.BeanConvertUtils;
 import com.gccloud.dataroom.core.utils.CodeGenerateUtils;
+import com.gccloud.common.exception.GlobalException;
+import com.gccloud.common.utils.BeanConvertUtils;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

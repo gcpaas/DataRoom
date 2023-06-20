@@ -2,8 +2,8 @@ package com.gccloud.dataroom.core.module.template.service;
 
 import com.gccloud.dataroom.core.module.template.dto.PageTemplateSearchDTO;
 import com.gccloud.dataroom.core.module.template.entity.PageTemplateEntity;
-import com.gccloud.dataroom.core.vo.PageVO;
-import com.gccloud.dataroom.core.service.ISuperService;
+import com.gccloud.common.service.ISuperService;
+import com.gccloud.common.vo.PageVO;
 
 import java.util.List;
 

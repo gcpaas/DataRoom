@@ -15,7 +15,7 @@ import lombok.Data;
 public class ScreenVideoChart extends Chart {
     
     @ApiModelProperty(notes = "组件类型")
-    private String type = PageDesignConstant.DataRoom.Type.VIDEO;
+    private String type = PageDesignConstant.BigScreen.Type.VIDEO;
 
     @ApiModelProperty(notes = "个性化")
     private Customize customize = new Customize();

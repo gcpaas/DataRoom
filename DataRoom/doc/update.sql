@@ -1,1 +1,2 @@
-UPDATE big_screen_page SET config = REPLACE(config, '"className":"com.gccloud.bigscreen', '"className":"com.gccloud.dataroom') WHERE type = 'bigScreen'
+UPDATE big_screen_page SET config = REPLACE(config, '"className":"com.gccloud.bigscreen', '"className":"com.gccloud.dataroom') WHERE type = 'bigScreen';
+UPDATE big_screen_page SET config = REPLACE(config, '"className":"com.gccloud.dataroom.core.module.manage.dto.BigScreenPageDTO', '"className":"com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO') WHERE type = 'bigScreen';

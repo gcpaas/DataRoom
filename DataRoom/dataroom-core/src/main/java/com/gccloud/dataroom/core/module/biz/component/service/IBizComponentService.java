@@ -2,8 +2,8 @@ package com.gccloud.dataroom.core.module.biz.component.service;
 
 import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentSearchDTO;
 import com.gccloud.dataroom.core.module.biz.component.entity.BizComponentEntity;
-import com.gccloud.dataroom.core.service.ISuperService;
-import com.gccloud.dataroom.core.vo.PageVO;
+import com.gccloud.common.service.ISuperService;
+import com.gccloud.common.vo.PageVO;
 
 import java.util.List;
 
