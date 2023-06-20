@@ -568,7 +568,7 @@ import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/nord.css'
 import 'codemirror/mode/sql/sql.js'
 import _ from 'lodash'
-import { datasetMixins} from 'packages/js/mixins/datasetMixin'
+import { datasetMixins } from 'packages/js/mixins/datasetMixin'
 
 export default {
   name: 'StoredProcedureEditForm',
