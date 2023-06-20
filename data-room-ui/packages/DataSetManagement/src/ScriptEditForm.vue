@@ -1,6 +1,6 @@
 <template>
   <div
-    v-loading="saveloading"
+    v-loading="saveLoading"
     class="inner-container"
     :element-loading-text="saveText"
   >
@@ -201,11 +201,11 @@
               <div class="field-wrap bs-field-wrap bs-scrollbar">
                 <div
                   v-for="field in structurePreviewList"
-                  :key="field.columnName"
+                  :key="field.fieldName"
                   class="field-item"
                   @click="fieldsetVisible = true"
                 >
-                  <span>{{ field.columnName }}</span>&nbsp;<span
+                  <span>{{ field.fieldName }}</span>&nbsp;<span
                     v-show="field.fieldDesc"
                     style="color: #909399;"
                   >({{
@@ -258,78 +258,6 @@
           </el-table>
         </div>
       </div>
-      <div
-        v-if="!isEdit"
-        class="dataPreView"
-      >
-        <el-tabs v-model="activeName">
-          <el-tab-pane
-            v-loading="tableLoading"
-            label="数据预览"
-            name="data"
-          >
-            <div class="bs-table-box">
-              <el-table
-                align="center"
-                :data="dataPreviewList"
-                max-height="400"
-                :border="true"
-                class="bs-el-table"
-              >
-                <el-table-column
-                  v-for="(value, key) in dataPreviewList[0]"
-                  :key="key"
-                  :label="key"
-                  align="center"
-                  show-overflow-tooltip
-                  :render-header="renderHeader"
-                >
-                  <template slot-scope="scope">
-                    <span>{{ scope.row[key] }}</span>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane
-            v-loading="tableLoading"
-            label="数据集结构"
-            name="structure"
-          >
-            <div class="bs-table-box">
-              <el-table
-                max-height="400"
-                :data="structurePreviewList"
-                :border="true"
-                align="center"
-              >
-                <el-table-column
-                  align="center"
-                  show-overflow-tooltip
-                  prop="columnName"
-                  label="字段值"
-                />
-                <el-table-column
-                  align="center"
-                  prop="fieldDesc"
-                  label="字段描述"
-                >
-                  <template slot-scope="scope">
-                    <el-input
-                      v-if="isEdit"
-                      v-model="scope.row.fieldDesc"
-                      size="small"
-                      class="labeldsc bs-el-input"
-                    />
-                    <span v-else>{{ scope.row.fieldDesc }}</span>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
-
       <!-- 字段填充方式 -->
       <el-dialog
         title="提示"
@@ -385,7 +313,7 @@
             <el-table-column
               align="left"
               show-overflow-tooltip
-              prop="columnName"
+              prop="fieldName"
               label="字段值"
             />
             <el-table-column
@@ -588,9 +516,14 @@
 </template>
 
 <script>
-import { nameCheckRepeat, getDatasetTypeList, datasetAddorUpdate, getDataset, datasetExecute } from 'packages/js/utils/datasetConfigService'
+import {
+  nameCheckRepeat,
+  getCategoryTree,
+  getDataset,
+  datasetExecuteTest,
+  datasetAdd, datasetUpdate
+} from 'packages/js/utils/datasetConfigService'
 import { codemirror } from 'vue-codemirror'
-// import 'codemirror/mode/sql/sql.js'
 import 'codemirror/mode/groovy/groovy'
 
 import 'codemirror/lib/codemirror.css'
@@ -642,18 +575,19 @@ export default {
         id: '',
         name: '',
         typeId: '',
+        datasetType: 'script',
         remark: '',
+        // 以下为config配置
         script: '',
-        paramsList: []
+        paramsList: [],
+        fieldDesc: {},
+        fieldList: []
       },
       rules: {
         name: [
           { required: true, message: '请输入数据集名称', trigger: 'blur' },
           { validator: validateName, trigger: 'blur' }
         ]
-        // typeId: [
-        //   {required: true, message: '请选择分组', trigger: 'blur'}
-        // ]
       },
       cOptions: {
         mode: 'text/x-groovy',
@@ -665,28 +599,23 @@ export default {
           completeSingle: true
         }
       },
-      activeName: 'data',
       dataPreviewList: [],
       structurePreviewList: [],
       structurePreviewListCopy: [],
-      typeSelect: [{
-        value: 'String'
-      }, {
-        value: 'Integer'
-      }, {
-        value: 'Double'
-      }, {
-        value: 'Long'
-      }, {
-        value: 'Date'
-      }],
+      typeSelect: [
+        { value: 'String' },
+        { value: 'Integer' },
+        { value: 'Double' },
+        { value: 'Long' },
+        { value: 'Date' }
+      ],
       typeName: '',
       categoryData: [],
       fieldDescVisible: false,
       fieldsetVisible: false,
       paramsVisible: false,
       tableLoading: false,
-      saveloading: false,
+      saveLoading: false,
       saveText: '',
       paramsListCopy: [],
       isSet: false, // 参数是否配置状态
@@ -703,8 +632,50 @@ export default {
     this.init()
   },
   methods: {
-    // 保存数据集
-    save (formName, nochecktosave = false) {
+    /**
+     * 初始化
+     * 1. 获取数据集分类
+     * 2. 获取数据集详情
+     * 3. 执行脚本数据集
+     */
+    async init () {
+      this.categoryData = await getCategoryTree({ type: 'dataset', moduleCode: this.appCode })
+      if (this.typeId) {
+        this.dataForm.typeId = this.typeId
+        this.$nextTick(() => {
+          try {
+            this.typeName = this.$refs.categorySelectTree.getNode(this.dataForm.typeId).data.name
+          } catch (error) {
+            console.error(error)
+          }
+        })
+      }
+      if (!this.datasetId) {
+        return
+      }
+      getDataset(this.datasetId).then(res => {
+        this.dataForm.id = res.id
+        this.dataForm.name = res.name
+        this.dataForm.typeId = res.typeId
+        this.dataForm.remark = res.remark
+        this.dataForm.datasetType = res.datasetType
+        this.dataForm.moduleCode = res.moduleCode
+        this.dataForm.editable = res.editable
+        this.dataForm.sourceId = res.sourceId
+        // config 配置
+        this.dataForm.script = res.config.script
+        this.dataForm.paramsList = res.config.paramsList ? res.config.paramsList : []
+        this.dataForm.fieldDesc = res.config.fieldDesc
+        this.dataForm.fieldList = res.config.fieldList
+        this.scriptExecute(true)
+      })
+    },
+    /**
+     * 保存数据集
+     * @param formName
+     * @param noCheckToSave 是否不检查直接保存
+     */
+    save (formName, noCheckToSave = false) {
       if (this.passTest === false) {
         this.$message.error('请确保脚本不为空且执行通过')
         return
@@ -713,7 +684,7 @@ export default {
         this.$message.warning('该执行脚本未生成输出字段，请重新检查')
         return
       }
-      if (!nochecktosave) {
+      if (!noCheckToSave) {
         const temp = this.structurePreviewList.some(item => {
           return item.fieldDesc === '' || !item.hasOwnProperty('fieldDesc')
         }) // true-存在为空
@@ -723,138 +694,93 @@ export default {
         }
       }
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          if (this.dataForm.paramsList.length > 0) {
-            const names = this.dataForm.paramsList.map(value => value.name)
-            const namesSet = new Set(names)
-            if (namesSet.size !== names.length) {
-              this.$message.error('参数名称不能重复，请重新输入')
-              return
-            }
-          }
-          this.saveloading = true
-          this.saveText = '正在保存...'
-          const data = {
-            script: this.dataForm.script,
-            fieldDesc: this.fieldDesc,
-            paramsList: this.dataForm.paramsList
-          }
-          datasetAddorUpdate({
-            id: this.datasetId,
-            name: this.dataForm.name,
-            typeId: this.dataForm.typeId,
-            remark: this.dataForm.remark,
-            datasetType: 'script',
-            moduleCode: this.appCode,
-            editable: this.appCode ? 1 : 0,
-            data: JSON.stringify(data)
-          }).then(() => {
-            this.$message.success('保存成功')
-            this.$parent.init(false)
-            this.$parent.setType = null
-            this.saveloading = false
-            this.saveText = ''
-          }).catch(() => {
-            this.saveloading = false
-            this.saveText = ''
-          })
-        } else {
+        if (!valid) {
           return false
         }
-      })
-    },
-    // 取消操作
-    cancelField () {
-      this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
-      this.fieldsetVisible = false
-    },
-    // 设置输出字段
-    setField () {
-      this.structurePreviewList = _.cloneDeep(this.structurePreviewListCopy)
-      if (this.structurePreviewList.length) {
-        this.fieldDesc = {}
-        this.structurePreviewList.forEach(key => {
-          this.fieldDesc[key.columnName] = key.fieldDesc
+        if (this.dataForm.paramsList.length > 0) {
+          const names = this.dataForm.paramsList.map(value => value.name)
+          const namesSet = new Set(names)
+          if (namesSet.size !== names.length) {
+            this.$message.error('参数名称不能重复，请重新输入')
+            return
+          }
+        }
+        this.dataForm.fieldList = this.structurePreviewList.length ? this.structurePreviewList : []
+        // 组装输出字段描述
+        const columnMap = {}
+        if (this.structurePreviewList.length > 0) {
+          this.structurePreviewList.forEach(r => {
+            columnMap[r.fieldName] = r.fieldDesc
+          })
+          this.dataForm.fieldDesc = columnMap
+        }
+        this.saveLoading = true
+        this.saveText = '正在保存...'
+        const datasetSave = this.dataForm.id === '' ? datasetAdd : datasetUpdate
+        const datasetParams = {
+          id: this.dataForm.id,
+          name: this.dataForm.name,
+          typeId: this.dataForm.typeId,
+          datasetType: 'script',
+          remark: this.dataForm.remark,
+          sourceId: this.dataForm.sourceId,
+          moduleCode: this.appCode,
+          editable: this.appCode ? 1 : 0,
+          config: {
+            className: 'com.gccloud.dataset.entity.config.GroovyDataSetConfig',
+            script: this.dataForm.script,
+            paramsList: this.dataForm.paramsList,
+            fieldList: this.dataForm.fieldList,
+            fieldDesc: this.dataForm.fieldDesc
+          }
+        }
+        datasetSave(datasetParams).then(() => {
+          this.$message.success('保存成功')
+          this.$parent.init(false)
+          this.$parent.setType = null
+          this.saveLoading = false
+          this.saveText = ''
+        }).catch(() => {
+          this.saveLoading = false
+          this.saveText = ''
         })
-      } else {
-        this.fieldDesc = null
-      }
-      this.fieldsetVisible = false
-    },
-    // 字段值填充
-    fieldDescFill () {
-      this.fieldDesc = {}
-      this.structurePreviewList.forEach(field => {
-        if (field.fieldDesc === '' || !field.hasOwnProperty('fieldDesc')) {
-          field.fieldDesc = field.columnName
-          this.fieldDesc[field.columnName] = field.columnName
-        } else {
-          this.fieldDesc[field.columnName] = field.fieldDesc
-        }
       })
-      this.save('form')
-      this.fieldDescVisible = false
     },
-    // 进入编辑
-    fieldDescEdit () {
-      this.fieldDescVisible = false
-      this.fieldsetVisible = true
-    },
-    // 继续保存
-    toSave () {
-      this.fieldDesc = {}
-      this.structurePreviewList.forEach(field => {
-        this.fieldDesc[field.columnName] = field.fieldDesc
-      })
-      this.save('form', true)
-      this.fieldDescVisible = false
-    },
-    // 字段描述构建及同步
-    buildFieldDesc () {
-      const fieldDesc = {}
-      this.structurePreviewList.forEach(field => {
-        if (this.fieldDesc.hasOwnProperty(field.columnName)) {
-          field.fieldDesc = this.fieldDesc[field.columnName]
-        }
-        fieldDesc[field.columnName] = field.fieldDesc
-      })
-      this.fieldDesc = fieldDesc
-    },
+
     // 脚本执行
     scriptExecute (isInit = false) {
-      const data = {
+      // 组装数据集执行参数
+      const executeParams = {
         script: this.dataForm.script,
-        fieldDesc: this.fieldDesc,
-        paramsList: this.paramsListCopy
+        params: this.dataForm.paramsList,
+        dataSetType: 'script'
       }
-      this.saveloading = true
-      datasetExecute({
-        params: this.paramsListCopy,
-        dataSetType: 'script',
-        data: JSON.stringify(data)
-      }).then(res => {
+      this.saveLoading = true
+      datasetExecuteTest(executeParams).then(res => {
         if (!isInit) {
           this.$message.success('脚本执行通过')
         }
-        this.dataPreviewList = res.length ? res : []
+        this.dataPreviewList = res.data ? res.data : []
         this.structurePreviewList = []
-        if (res.length) {
-          this.structurePreviewList = Object.keys(res[0]).map(item => {
+        if (res.data.length) {
+          this.structurePreviewList = Object.keys(res.data[0]).map(item => {
             return {
-              columnName: item,
+              fieldName: item,
               fieldDesc: ''
             }
           })
         }
-        if (this.structurePreviewList.length && this.fieldDesc) {
+        console.log(this.structurePreviewList)
+        if (this.structurePreviewList.length && this.dataForm.fieldDesc) {
           this.buildFieldDesc()
         }
         this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
-        this.saveloading = false
+        this.saveLoading = false
         this.passTest = true
-      }).catch(() => {
+      }).catch((e) => {
+        console.log(e)
         this.passTest = false
-        this.saveloading = false
+        this.saveLoading = false
       })
     },
     // 执行事件
@@ -867,17 +793,77 @@ export default {
         this.scriptExecute()
       }
     },
-    // 脚本参数配置
+    /**
+     * 使用字段名填充字段描述
+     */
+    fieldDescFill () {
+      this.structurePreviewList.forEach(field => {
+        if (field.fieldDesc === '' || !field.hasOwnProperty('fieldDesc')) {
+          field.fieldDesc = field.fieldName
+        }
+      })
+      this.save('form')
+      this.fieldDescVisible = false
+    },
+    /**
+     * 打开字段描述编辑弹窗
+     */
+    fieldDescEdit () {
+      this.fieldDescVisible = false
+      this.fieldsetVisible = true
+    },
+    /**
+     * 跳过字段描述编辑直接保存
+     */
+    toSave () {
+      this.save('form', true)
+      this.fieldDescVisible = false
+    },
+    /**
+     * 取消编辑字段
+     */
+    cancelField () {
+      this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
+      this.fieldsetVisible = false
+    },
+    /**
+     * 保存字段设置
+     */
+    setField () {
+      this.structurePreviewList = _.cloneDeep(this.structurePreviewListCopy)
+      this.fieldsetVisible = false
+    },
+    /**
+     * 字段描述构建及同步
+     */
+    buildFieldDesc () {
+      const fieldDesc = {}
+      this.structurePreviewList.forEach(field => {
+        if (this.dataForm.fieldDesc.hasOwnProperty(field.fieldName)) {
+          field.fieldDesc = this.dataForm.fieldDesc[field.fieldName]
+        }
+        fieldDesc[field.fieldName] = field.fieldDesc
+      })
+      this.dataForm.fieldDesc = fieldDesc
+    },
+
+    /**
+     * 打开参数配置弹窗
+     */
     openParamsConfig () {
       this.isSet = true
       this.paramsVisible = true
     },
-    // 取消操作
+    /**
+     * 取消编辑参数
+     */
     cancelParam () {
       this.paramsListCopy = _.cloneDeep(this.dataForm.paramsList)
       this.paramsVisible = false
     },
-    // 设置脚本参数
+    /**
+     * 保存参数设置
+     */
     setParam () {
       if (!this.isSet) {
         this.scriptExecute()
@@ -886,6 +872,37 @@ export default {
         this.dataForm.paramsList = _.cloneDeep(this.paramsListCopy)
       }
       this.paramsVisible = false
+    },
+    /**
+     * 校验名称【参数名称不能与字段名重复】
+     * @param value
+     */
+    checkParamsName (value) {
+      const checkList = this.structurePreviewList.filter(item => item.fieldName === value.name)
+      if (checkList.length) {
+        this.$message.warning('参数名称不可以与字段名相同！')
+        value.name = ''
+      }
+    },
+    /**
+     * 删除参数配置
+     * @param index
+     */
+    delRow (index) {
+      this.paramsListCopy.splice(index, 1)
+    },
+    /**
+     * 新增参数配置
+     */
+    addParam () {
+      this.paramsListCopy.push({
+        name: '',
+        type: '',
+        value: '',
+        status: 1,
+        require: 0,
+        remark: ''
+      })
     },
     // 清空分类
     clearType () {
@@ -905,64 +922,8 @@ export default {
       this.typeName = value.name
       this.$refs.selectParentName.blur()
     },
-    // 获取树节点
-    // getTreeList() {
-    //   getOriginalTableList().then(res => {
-    //     this.categoryData = res
-    //   })
-    // },
-    // 校验名称【参数名称不能与字段名重复】
-    checkParamsName (value) {
-      const checkList = this.structurePreviewList.filter(item => item.columnName === value.name)
-      if (checkList.length) {
-        this.$message.warning('参数名称不可以与字段名相同！')
-        value.name = ''
-      }
-    },
-    // 删除参数配置
-    delRow (index) {
-      this.paramsListCopy.splice(index, 1)
-    },
-    // 新增参数配置
-    addParam () {
-      this.paramsListCopy.push({
-        name: '',
-        type: '',
-        value: '',
-        status: 1,
-        require: 0,
-        remark: ''
-      })
-    },
     goBack () {
       this.$emit('back')
-    },
-    async init () {
-      this.categoryData = await getDatasetTypeList({ tableName: 'r_dataset', moduleCode: this.appCode })
-      if (this.typeId) {
-        this.dataForm.typeId = this.typeId
-        this.$nextTick(() => {
-          try {
-            this.typeName = this.$refs.categorySelectTree.getNode(this.dataForm.typeId).data.name
-          } catch (error) {
-            console.error(error)
-          }
-        })
-      }
-      if (this.datasetId) {
-        getDataset(this.datasetId).then(res => {
-          this.dataForm.id = res.id
-          const data = JSON.parse(res.data)
-          this.dataForm.name = res.name
-          this.dataForm.typeId = res.typeId
-          this.dataForm.remark = res.remark
-          this.dataForm.script = data.script
-          this.dataForm.paramsList = data.paramsList
-          this.paramsListCopy = _.cloneDeep(this.dataForm.paramsList)
-          this.fieldDesc = data.fieldDesc
-          this.scriptExecute(true)
-        })
-      }
     },
     renderHeader (h, { column, index }) {
       const labelLong = column.label.length // 表头label长度

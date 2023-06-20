@@ -85,7 +85,6 @@
           </el-form-item>
           <el-form-item class="filter-item">
             <el-button
-              v-if="!isDialog"
               class="bs-el-button-default"
               @click="addDataset"
             >
@@ -144,7 +143,7 @@
             <el-table-column
               prop="remark"
               label="备注"
-              align="center"
+              align="left"
               show-overflow-tooltip
             />
             <!--操作栏-->
@@ -153,23 +152,24 @@
               width="200"
               align="center"
             >
-              <template slot-scope="scope">
-                <div v-if="showOperate(scope.row.datasetType)">
-                  <el-button
-                    class="bs-el-button-default"
-                    :disabled="scope.row.editable === 1 && !appCode"
-                    @click="toEdit(scope.row.id, scope.row.datasetType, scope.row.name, scope.row.typeId)"
-                  >
-                    编辑
-                  </el-button>
-                  <el-button
-                    class="bs-el-button-default"
-                    :disabled="scope.row.editable === 1 && !appCode"
-                    @click="delDataset(scope.row.id)"
-                  >
-                    删除
-                  </el-button>
-                </div>
+              <template
+                v-if="showOperate(scope.row.datasetType)"
+                slot-scope="scope"
+              >
+                <el-button
+                  class="bs-el-button-default"
+                  :disabled="scope.row.editable === 1 && !appCode"
+                  @click="toEdit(scope.row.id, scope.row.datasetType, scope.row.name, scope.row.typeId)"
+                >
+                  编辑
+                </el-button>
+                <el-button
+                  class="bs-el-button-default"
+                  :disabled="scope.row.editable === 1 && !appCode"
+                  @click="delDataset(scope.row.id)"
+                >
+                  删除
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -199,10 +199,10 @@
       @openAddForm="openAddForm"
     />
     <component
-      :is="customDatasetComponentData.component"
+      :is="componentData.component"
       ref="EditForm"
-      :key="customDatasetComponentData.key"
-      :config="customDatasetComponentData.config"
+      :key="componentData.key"
+      :config="componentData.config"
       :dataset-id="datasetId"
       :dataset-name="datasetName"
       :type-id="typeId"
@@ -214,16 +214,17 @@
 </template>
 
 <script>
-import table from 'packages/js/utils/table.js'
 import TypeTree from './TypeTree.vue'
-import DatasetTypeDialog from './DatasetTypeDialog.vue'
-import OriginalEditForm from './OriginalEditForm.vue'
-import CustomEditForm from './CustomEditForm.vue'
 import JsonEditForm from './JsonEditForm.vue'
-import StoredProcedureEditForm from './StoredProcedureEditForm.vue'
+import table from 'packages/js/utils/table.js'
 import ScriptEditForm from './ScriptEditForm.vue'
-import { datasetPage, datasetRemove } from 'packages/js/utils/datasetConfigService'
+import CustomEditForm from './CustomEditForm.vue'
 import { pageMixins } from 'packages/js/mixins/page'
+import OriginalEditForm from './OriginalEditForm.vue'
+import DatasetTypeDialog from './DatasetTypeDialog.vue'
+// import remoteComponents from '@/customDatasetComponents/exports.js'
+import StoredProcedureEditForm from './StoredProcedureEditForm.vue'
+import { datasetPage, datasetRemove } from 'packages/js/utils/datasetConfigService'
 export default {
   name: 'DataSetManagement',
   directives: {
@@ -260,6 +261,7 @@ export default {
       type: Boolean,
       default: false
     }
+
   },
   data () {
     return {
@@ -272,6 +274,8 @@ export default {
         datasetType: '',
         typeId: '' // 分类id
       }, // 查询条件
+      // 数据集类型
+      datasetTypeList: [],
       isPackUpTree: false,
       transition: 0.1,
       loadingText: '正在加载数据',
@@ -287,8 +291,8 @@ export default {
       typeId: '', // 详情typeId
       curRow: null,
       multipleSelection: [],
-      datasetTypeList: [],
-      customDatasetComponentData: {
+      // 远程组件
+      componentData: {
         component: null,
         config: null,
         key: new Date().getTime()
@@ -347,9 +351,6 @@ export default {
         }
       }
     },
-    showOperate (datasetType) {
-      return this.getComponents(this.datasetTypeList.find(type => type.datasetType === datasetType).componentName)?.config?.showOperate ?? true
-    },
     // 手动勾选
     selectDs (selection, row) {
       if (this.isDialog && this.multiple) {
@@ -405,16 +406,10 @@ export default {
       this.typeId = typeId
       this.isEdit = false
     },
-    openAddForm (type, componentName) {
-      this.datasetType = type
-      this.customDatasetComponentData = this.getComponents(componentName)
-      this.typeId = this.queryForm.typeId
-      this.isEdit = true
-    },
     toEdit (id, type, name, typeId) {
       this.datasetId = id
       this.datasetType = type
-      this.customDatasetComponentData = this.getComponents(this.datasetTypeList.find(item => item?.datasetType === type).componentName)
+      this.componentData = this.getComponents(this.datasetTypeList.find(item => item?.datasetType === type).componentName)
       this.datasetName = name
       this.typeId = typeId
       this.isEdit = true
@@ -424,25 +419,29 @@ export default {
       this.datasetType = null
       this.isEdit = false
     },
+    // 新增数据集-类型
+    openAddForm (type, componentName) {
+      this.datasetType = type
+      this.componentData = this.getComponents(componentName)
+      this.typeId = this.queryForm.typeId
+      this.isEdit = true
+    },
+    showOperate (datasetType) {
+      return this.getComponents(this.datasetTypeList.find(type => type.datasetType === datasetType).componentName)?.config?.showOperate ?? true
+    },
     getComponents (componentName) {
       const components = Object.values(this.$options.components)
-      let componentData = null
+      let remoteComponentData = null
       if (window.BS_CONFIG?.customDatasetComponents.length > 0) {
         // 获取远程组件
-        componentData = window.BS_CONFIG?.customDatasetComponents.find(item => item.config.componentName === componentName)
+        remoteComponentData = window.BS_CONFIG?.customDatasetComponents.find(item => item.config.componentName === componentName)
       }
       return {
-        component: components.find(component => component.name === componentName) || componentData?.vueFile,
-        config: componentData?.config || null,
+        component: components.find(component => component.name === componentName) || remoteComponentData?.vueFile,
+        config: remoteComponentData?.config || null,
         key: new Date().getTime()
       }
     },
-    // 新增数据集-类型
-    // setDatasetOfType (type) {
-    //   this.datasetType = type
-    //   this.typeId = this.queryForm.typeId
-    //   this.isEdit = true
-    // },
     // 初始化
     init (temp = true) {
       if (temp) {

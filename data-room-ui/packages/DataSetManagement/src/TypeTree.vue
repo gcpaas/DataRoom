@@ -139,7 +139,7 @@
           </ul>
         </div>
       </div>
-      <CategroyEditForm
+      <org-edit-form
         v-if="editFormVisible"
         ref="editForm"
         :app-code="appCode"
@@ -157,12 +157,12 @@ import 'ztree/js/jquery.ztree.exhide'
 import 'packages/assets/style/zTree/metroStyle.css'
 import 'packages/assets/style/zTree/zTree.scss'
 import 'packages/assets/style/zTree/zTreeSelect.scss'
-import { getDatasetTypeList, categoryRemove } from 'packages/js/utils/datasetConfigService'
-import CategroyEditForm from './CategroyEditForm.vue'
+import { getCategoryTree, categoryRemove } from 'packages/js/utils/datasetConfigService'
+import OrgEditForm from './CategroyEditForm.vue'
 export default {
-  name: 'TypeTree',
+  name: 'OrgTreeIndex',
   components: {
-    CategroyEditForm
+    OrgEditForm
   },
   props: {
     datasetTypeList: {
@@ -178,14 +178,6 @@ export default {
     return {
       activeName: 'group',
       categoryData: [],
-      // typeDataList: [
-      //   { name: '全部', datasetType: '' },
-      //   { name: '原始数据集', datasetType: 'original' },
-      //   { name: '自助数据集', datasetType: 'custom' },
-      //   { name: '存储过程数据集', datasetType: 'storedProcedure' },
-      //   { name: 'JSON数据集', datasetType: 'json' },
-      //   { name: '脚本数据集', datasetType: 'script' }
-      // ],
       curType: '-1',
       noData: false,
       loading: false,
@@ -229,14 +221,7 @@ export default {
       isBoth: false // 是否为全部
     }
   },
-  computed: {
-    // typeData () {
-    //   const types = this.typeDataList.filter(type => {
-    //     return type.datasetType === '' || this.dsType.includes(type.datasetType)
-    //   })
-    //   return types
-    // }
-  },
+  computed: { },
   mounted () {
     this.initLazyOrgTree()
   },
@@ -305,7 +290,7 @@ export default {
     // 初始化树节点
     initLazyOrgTree () {
       this.loading = true
-      getDatasetTypeList({ tableName: 'r_dataset', moduleCode: this.appCode }).then((res) => {
+      getCategoryTree({ type: 'dataset', moduleCode: this.appCode }).then((res) => {
         this.categoryData = res.map((item) => {
           return { isParent: item.hasChildren, ...item }
         })
@@ -394,7 +379,7 @@ export default {
       this.editFormVisible = true
       if (editType === this.editTypeConstant.editOrg) {
         this.$nextTick(() => {
-          this.$refs.editForm.tableName = 'r_dataset'
+          this.$refs.editForm.type = 'dataset'
           this.$refs.editForm.dialogFormVisible = true
           this.$refs.editForm.init(this.rightClickForm.org, false)
           this.$refs.editForm.title = '节点编辑'
@@ -404,7 +389,7 @@ export default {
       // 新增同级节点
       if (editType === this.editTypeConstant.addSiblingOrg) {
         this.$nextTick(() => {
-          this.$refs.editForm.tableName = 'r_dataset'
+          this.$refs.editForm.type = 'dataset'
           this.$refs.editForm.dialogFormVisible = true
           this.$refs.editForm.init(this.rightClickForm.org, true)
           this.$refs.editForm.radio = 0
@@ -415,7 +400,7 @@ export default {
       // 新增子节点
       if (editType === this.editTypeConstant.addChildOrg) {
         this.$nextTick(() => {
-          this.$refs.editForm.tableName = 'r_dataset'
+          this.$refs.editForm.type = 'dataset'
           this.$refs.editForm.dialogFormVisible = true
           this.$refs.editForm.init(this.rightClickForm.org, true)
           this.$refs.editForm.radio = 1
