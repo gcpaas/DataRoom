@@ -75,7 +75,7 @@ Vue.use(ElementUI, { size: 'mini' })
 import 'codemirror/mode/vue/vue.js'
 
 // 引入大屏css
-import '@gcpaas/data-room-ui/lib/bigScreen.css'
+import '@gcpaas/data-room-ui/lib/dataRoom.css'
 ```
 
 ###  3. 在 `main.js` 配置大屏
