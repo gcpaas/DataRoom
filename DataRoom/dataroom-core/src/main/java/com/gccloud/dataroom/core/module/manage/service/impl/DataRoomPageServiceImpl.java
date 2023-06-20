@@ -66,7 +66,7 @@ public class DataRoomPageServiceImpl extends ServiceImpl<PageDao, PageEntity> im
             }
             chart.setCode(CodeGenerateUtils.generate(chart.getType() == null ? "chart" : chart.getType()));
         }
-        if (StringUtils.isBlank(bigScreenPageDTO.getCoverPicture())) {
+        if (StringUtils.isNotBlank(bigScreenPageDTO.getCoverPicture())) {
             String base64Str = bigScreenPageDTO.getCoverPicture();
             String fileUrl = this.saveCoverPicture(base64Str, bigScreenPageDTO.getCode());
             bigScreenPageDTO.setCoverPicture(fileUrl);
