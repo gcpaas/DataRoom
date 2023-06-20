@@ -45,6 +45,7 @@ export default {
       this.dataLoading = true
       return getUpdateChartInfo(params)
         .then(res => {
+          console.log(2, res)
           config = this.buildOption(config, res)
           this.changeChartConfig(config)
           this.changeChartKey(config.code)

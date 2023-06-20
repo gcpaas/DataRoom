@@ -32,6 +32,27 @@ export default {
       pasteCharts: 'pasteCharts'
     }),
     keydown (event) {
+      if (event.keyCode === 37) {
+        // 关闭默认事件
+        event.preventDefault()
+        // 左箭头键被按下
+        this.changeActivePos({ diffX: -1, diffY: 0 })
+      } else if (event.keyCode === 38) {
+        // 关闭默认事件
+        event.preventDefault()
+        // 上箭头键被按下
+        this.changeActivePos({ diffX: 0, diffY: -1 })
+      } else if (event.keyCode === 39) {
+        // 关闭默认事件
+        event.preventDefault()
+        // 右箭头键被按下
+        this.changeActivePos({ diffX: 1, diffY: 0 })
+      } else if (event.keyCode === 40) {
+        // 关闭默认事件
+        event.preventDefault()
+        // 下箭头键被按下
+        this.changeActivePos({ diffX: 0, diffY: 1 })
+      }
       // ctrl/command + s保存
       if ((event.ctrlKey || event.metaKey) && event.keyCode === 83) {
         // 关闭默认事件
@@ -76,27 +97,6 @@ export default {
       }
     },
     designKeydown (event) {
-      if (event.keyCode === 37) {
-        // 关闭默认事件
-        event.preventDefault()
-        // 左箭头键被按下
-        this.changeActivePos({ diffX: -1, diffY: 0 })
-      } else if (event.keyCode === 38) {
-        // 关闭默认事件
-        event.preventDefault()
-        // 上箭头键被按下
-        this.changeActivePos({ diffX: 0, diffY: -1 })
-      } else if (event.keyCode === 39) {
-        // 关闭默认事件
-        event.preventDefault()
-        // 右箭头键被按下
-        this.changeActivePos({ diffX: 1, diffY: 0 })
-      } else if (event.keyCode === 40) {
-        // 关闭默认事件
-        event.preventDefault()
-        // 下箭头键被按下
-        this.changeActivePos({ diffX: 0, diffY: 1 })
-      }
       // 删除键被按下且鼠标没有在输入框中
       if (
         (event.keyCode === 8 || event.keyCode === 46) &&
@@ -125,6 +125,7 @@ export default {
       }
 
       if ((event.ctrlKey || event.metaKey) && event.keyCode === 86) {
+        console.log('粘贴')
         // 粘贴
         this.pasteCharts()
       }

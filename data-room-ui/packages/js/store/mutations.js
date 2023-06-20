@@ -2,8 +2,8 @@
  * @description: vuex mutations 事件
  * @Date: 2023-03-13 10:04:59
  * @Author: xing.heng
- * @LastEditors: wujian
- * @LastEditTime: 2023-06-15 10:52:06
+ * @LastEditors: xing.heng
+ * @LastEditTime: 2023-06-08 15:24:01
  */
 
 import Vue from 'vue'
@@ -11,7 +11,6 @@ import _ from 'lodash'
 import { defaultData } from './state'
 import moment from 'moment'
 import { randomString } from 'packages/js/utils'
-import { EventBus } from 'packages/js/utils/eventBus'
 export default {
   // 改变页面基本信息，后端请求的页面信息存储到此处
   changePageInfo (state, pageInfo) {
@@ -27,22 +26,18 @@ export default {
   },
   // 改变当前选择组件id
   changeActiveCode (state, code) {
-    if (state.activeCode !== code) {
-      const activeItem = _.cloneDeep(state.pageInfo.chartList?.find(
-        item => item.code === code
-      ))
-      state.activeItemConfig = _.cloneDeep(activeItem)
-    }
     state.activeCode = code
     state.hoverCode = code
+
+    const activeItem = _.cloneDeep(state.pageInfo.chartList?.find(
+      item => item.code === code
+    ))
     changeGroup(code, state)
+    state.activeItemConfig = _.cloneDeep(activeItem)
   },
   changeActiveCodes (state, codes) {
     state.activeCodes = codes
     state.pageInfo.chartList = state.pageInfo.chartList?.map(chart => {
-      if (chart.group === 'tempGroup') {
-        chart.group = ''
-      }
       return {
         ...chart,
         group: (codes.includes(chart.code) && !chart.group) ? 'tempGroup' : chart.group
@@ -86,13 +81,6 @@ export default {
   changeActiveItemConfig (state, config) {
     state.activeItemConfig = _.cloneDeep(config)
   },
-  // 改变当前组件的xywh
-  changeActiveItemWH (state, pwh) {
-    state.activeItemConfig = {
-      ...state.activeItemConfig,
-      ...pwh
-    }
-  },
   // 新增一个组件
   addItem (state, itemConfig) {
     // 放到第一项
@@ -104,14 +92,11 @@ export default {
   delItem (state, codes) {
     if (Array.isArray(codes)) {
       state.pageInfo.chartList = state.pageInfo.chartList.filter(chart => !codes.includes(chart.code))
-      state.pageInfo.pageConfig.refreshConfig = state.pageInfo.pageConfig.refreshConfig.filter(timer => !codes.includes(timer.code))
     } else {
-      state.pageInfo.pageConfig.refreshConfig = state.pageInfo.pageConfig.refreshConfig.filter(item => item.code !== codes)
       state.pageInfo.chartList = state.pageInfo.chartList.filter(chart => codes !== chart.code)
     }
     // 存储删除后的状态
     saveTimeLineFunc(state, '删除组件')
-    EventBus.$emit('closeRightPanel')
   },
   changePageConfig (state, pageConfig) {
     Vue.set(state.pageInfo, 'pageConfig', _.cloneDeep(pageConfig))
@@ -153,6 +138,32 @@ export default {
     const config = state.pageInfo.chartList[index]
     Vue.set(config, 'key', config.code + new Date().getTime())
   },
+  // 改变缓存数据集中的字段列表
+  changeCacheDataFields (state, { dataSetId, data }) {
+    // 将 state.pageInfo.pageConfig.cacheDataSets 中的 dataSetId 对应fields字段数据替换为 data
+    const index = state.pageInfo.pageConfig.cacheDataSets.findIndex(cacheData => cacheData.dataSetId === dataSetId)
+    if (index < 0) {
+      return
+    }
+    Vue.set(state.pageInfo.pageConfig.cacheDataSets[index], 'fields', data?.fields || [])
+  },
+  // 改变缓存数据集中的数据参数
+  changeCacheDataParams (state, { dataSetId, data }) {
+    // 将 state.pageInfo.pageConfig.cacheDataSets 中的 dataSetId 对应fields字段数据替换为 data
+    const index = state.pageInfo.pageConfig.cacheDataSets.findIndex(cacheData => cacheData.dataSetId === dataSetId)
+    if (index < 0) {
+      return
+    }
+    Vue.set(state.pageInfo.pageConfig.cacheDataSets[index], 'params', data?.params || [])
+  },
+  // 改变缓存数据集中的数据
+  changeCacheDataSetData (state, { dataSetId, data }) {
+    const index = state.pageInfo.pageConfig.cacheDataSets.findIndex(cacheData => cacheData.dataSetId === dataSetId)
+    if (index < 0) {
+      return
+    }
+    state.pageInfo.pageConfig.cacheDataSets[index].data = data || []
+  },
   // 改变shift是否被按下
   changeCtrlOrCommandDown (state, isDown) {
     state.shiftKeyDown = isDown
@@ -168,9 +179,6 @@ export default {
   },
   changeFitZoom (state, zoom) {
     state.fitZoom = zoom
-  },
-  changeRefreshConfig (state, refreshConfig) {
-    state.pageInfo.pageConfig.refreshConfig = refreshConfig
   },
   changeActivePos (state, { diffX, diffY }) {
     const activeCodes = state.activeCodes
@@ -296,16 +304,7 @@ function changeGroup (code, state) {
       state.activeCodes = state.pageInfo.chartList?.filter(chart => chart.group === group && chart.group).map(item => item.code)
     }
     if (state.shiftKeyDown) {
-      // 如果code 在 activeCodes中，就删除 且 当前code的组件group为''
-      if (state.activeCodes.includes(code)) {
-        state.activeCodes = state.activeCodes.filter(item => item !== code)
-        state.pageInfo.chartList = state.pageInfo.chartList?.map(chart => ({
-          ...chart,
-          group: chart.code === code ? '' : chart.group
-        }))
-      } else {
-        state.activeCodes = _.uniq([...state.activeCodes, code])
-      }
+      state.activeCodes = _.uniq([...state.activeCodes, code])
       // eslint-disable-next-line no-unused-expressions
       state.pageInfo.chartList?.forEach(chart => {
         if (state.activeCodes.includes(chart.code)) {
@@ -314,19 +313,7 @@ function changeGroup (code, state) {
       })
     } else {
       if (!group) {
-        if (!state.activeCodes?.includes(code)) {
-          state.activeCodes = [code]
-
-          state.pageInfo.chartList = state.pageInfo.chartList?.map(chart => {
-            if (chart.group === 'tempGroup') {
-              chart.group = ''
-            }
-            return {
-              ...chart,
-              group: chart.code === code ? '' : chart.group
-            }
-          })
-        }
+        state.activeCodes = [code]
       }
     }
   } else {

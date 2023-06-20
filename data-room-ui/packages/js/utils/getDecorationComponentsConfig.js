@@ -3,7 +3,7 @@
  */
 export default function getComponentConfig (type, classNameType) {
   const className =
-    'com.gccloud.dataroom.core.module.chart.components.ScreenDecorationChart'
+    'com.gccloud.bigscreen.core.module.chart.components.ScreenDecorationChart'
   switch (type) {
     case 'decoration1':
       return {

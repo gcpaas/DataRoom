@@ -65,7 +65,7 @@ export default function (customConfig) {
     ...customConfig.root,
     dataSource: {
       className:
-        'com.gccloud.dataroom.core.module.chart.components.datasource.DataSetDataSource',
+        'com.gccloud.bigscreen.core.module.chart.components.datasource.DataSetDataSource',
       dataSourceKey: '', // 数据源，选择不同数据库
       businessKey: '', // 数据集标识
       dimensionField: '', // 维度

@@ -5,6 +5,7 @@
  */
 import _ from 'lodash'
 import { mapMutations, mapState } from 'vuex'
+import { EventBus } from 'packages/js/utils/eventBus'
 import { getChatInfo, getUpdateChartInfo } from '../api/bigScreenApi'
 export default {
   data () {
@@ -19,10 +20,15 @@ export default {
       pageCode: state => state.bigScreen.pageInfo.code
     }),
     isPreview () {
-      return this.$route.path !== window?.BS_CONFIG?.routers?.designUrl
+      return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
     }
   },
-  mounted () {},
+  mounted () {
+    if (!['digitalFlop', 'screenScrollRanking', 'screenScrollBoard', 'tables'].includes(this.config.type)) {
+      this.chartInit()
+    }
+    this.watchCacheData()
+  },
   methods: {
     ...mapMutations({
       changeChartConfig: 'bigScreen/changeChartConfig'
@@ -34,21 +40,26 @@ export default {
       // 初始化组件和数据，若自己的组件的初始化和数据处理不一样，可重写该方法
       // 如果key和code相等，说明是一进来刷新，调用/chart/data/list，否则是更新，调用 chart/data/chart
       // 或者是组件联动isLink,也需要调用/chart/data/list更新
-      if (this.config.code === this.config.key || this.isPreview) {
-        // 根据数据集初始化的组件
-        if (this.isPreview) {
-          this.getCurrentOption().then(({ config, data }) => {
-            config = this?.buildOption(config, data)
-            if (config) {
-              this.changeChartConfig(config)
-              this?.newChart(config.option)
-            }
-          })
+      if (this.config.code === this.config.key) {
+        // 根据缓存数据初始化的组件
+        if (this.config.dataSource.dataSetType === '2') {
+          this.config = this.buildOption(this.config, { success: false })
+          this.changeChartConfig(this.config)
+          this.newChart(this.config.option)
         } else {
-          this.updateChartData(this.config)
+          // 根据数据集初始化的组件
+          if (this.isPreview) {
+            this.getCurrentOption().then(({ config, data }) => {
+              config = this.buildOption(config, data)
+              this.changeChartConfig(config)
+              this.newChart(config.option)
+            })
+          } else {
+            this.updateChartData(this.config)
+          }
         }
       } else {
-        this?.newChart(this.config.option)
+        this.newChart(this.config.option)
       }
     },
     /**
@@ -121,24 +132,57 @@ export default {
         type: config.type,
         filterList
       }
+      // if (config.type === 'remoteComponent') {
+      //   config = this.buildOption(config, { success: false })
+      //   config.key = new Date().getTime()
+      //   this.changeChartConfig(config)
+      //   return
+      // }
       getUpdateChartInfo(params).then((res) => {
-        // 获取数据后更新组件配置
-        config.key = new Date().getTime()
-        config = this.buildOption(config, res)
-        if (config) {
-          this.changeChartConfig(config)
+        console.log('更新组件数据', res)
+        console.log('更新组件数据', config)
+        // 数据集脚本前端执行
+        if (res.executionByFrontend) {
+          try {
+            const returnResult = eval(`(${res.data})`)()
+            res.data = returnResult
+          } catch (error) {
+            console.error('数据集脚本执行失败', error)
+          }
         }
+        config = this.buildOption(config, res)
+        config.key = new Date().getTime()
+        this.changeChartConfig(config)
+        // 获取数据后更新组件配置
+
         // this.$message.success('更新成功')
       }).catch((err) => {
         console.error(err)
         // this.$message.error('更新失败')
       })
     },
-    buildOption (config, data) {
-      // 覆盖
+    newChart () {
+      // 需要在自己的组件中重写此方法，用于构建自己的组件
     },
-    newChart (option) {
-      // 覆盖
+    buildOption (config, data) {
+      // 需要在自己的组件中重写此方法:config当前组件的配置，data后端返回的数据
+      return config
+    },
+    // 缓存组件数据监听
+    watchCacheData () {
+      EventBus.$on('cacheDataInit', (data, dataSetId) => {
+        // 如果是缓存数据集
+        // 且当前组件的businessKey和缓存的dataSetId相等时，更新组件
+        if (
+          this.config.dataSource.dataSetType === '2' &&
+          this.config.dataSource.businessKey === dataSetId
+        ) {
+          const config = this.buildOption(this.config, data)
+          config.key = new Date().getTime()
+          this.changeChartConfig(config)
+          this.newChart(config.option)
+        }
+      })
     }
   }
 }
