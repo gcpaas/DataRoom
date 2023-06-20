@@ -116,8 +116,9 @@
     </div>
     <div>
       <SettingTitle>定时器</SettingTitle>
+      <!-- 定时器空数据 -->
       <el-empty
-        v-if="pageInfo.chartList.length === 0"
+        v-if="timerEmptyState()"
         description="请添加图表，并绑定数据集"
       />
       <div
@@ -461,6 +462,9 @@ export default {
     close () {
       this.drawerVisible = false
       this.$emit('close')
+    },
+    timerEmptyState () {
+      return this.pageInfo.chartList.every(chart => chart.dataSource.businessKey === '')
     }
   }
 }
