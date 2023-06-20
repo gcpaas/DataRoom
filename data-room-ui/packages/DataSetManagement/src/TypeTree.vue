@@ -51,7 +51,7 @@
             </div>
             <ul
               v-show="!noData"
-              id="orgTree"
+              id="datasetTypeTree"
               class="ztree"
             />
             <div
@@ -160,7 +160,7 @@ import 'packages/assets/style/zTree/zTreeSelect.scss'
 import { getCategoryTree, categoryRemove } from 'packages/js/utils/datasetConfigService'
 import OrgEditForm from './CategroyEditForm.vue'
 export default {
-  name: 'OrgTreeIndex',
+  name: 'DatasetTypeTreeIndex',
   components: {
     OrgEditForm
   },
@@ -223,7 +223,7 @@ export default {
   },
   computed: { },
   mounted () {
-    this.initLazyOrgTree()
+    this.initLazyDatasetTypeTree()
   },
 
   methods: {
@@ -288,14 +288,14 @@ export default {
       }
     },
     // 初始化树节点
-    initLazyOrgTree () {
+    initLazyDatasetTypeTree () {
       this.loading = true
       getCategoryTree({ type: 'dataset', moduleCode: this.appCode }).then((res) => {
         this.categoryData = res.map((item) => {
           return { isParent: item.hasChildren, ...item }
         })
         this.categoryData.unshift({ name: '全部', id: '', parentId: '0' })
-        this.ztreeObj = $.fn.zTree.init($('#orgTree'), this.ztreeSetting, this.categoryData)
+        this.ztreeObj = $.fn.zTree.init($('#datasetTypeTree'), this.ztreeSetting, this.categoryData)
         this.$emit('reCategory')
       }).then((e) => {
         this.loading = false
@@ -347,14 +347,14 @@ export default {
     reSearch () {
       this.activeName = 'group'
       if (this.queryForm.searchKey) {
-        const treeObj = $.fn.zTree.getZTreeObj('orgTree')
+        const treeObj = $.fn.zTree.getZTreeObj('datasetTypeTree')
         const nodes = treeObj.getNodesByParam('isHidden', true)
         treeObj.showNodes(nodes)
         const hiddenNodes = treeObj.getNodesByFilter(this.filterNode)
         treeObj.hideNodes(hiddenNodes)
         treeObj.expandAll(true)
       } else {
-        this.initLazyOrgTree()
+        this.initLazyDatasetTypeTree()
       }
     },
     // 节点点击事件
@@ -433,7 +433,7 @@ export default {
         categoryRemove(org.id).then((data) => {
           this.$message.success('操作成功')
           // this.ztreeObj.removeNode(org)
-          this.initLazyOrgTree()
+          this.initLazyDatasetTypeTree()
           // 刷新右侧表格
           this.$emit('refreshData', org)
         })

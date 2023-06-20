@@ -139,7 +139,7 @@ export default {
               try {
                 this.$parent.init()
               } catch (error) {
-                this.$parent.initLazyOrgTree()
+                this.$parent.initLazyDatasetTypeTree()
               }
             })
           } else {
@@ -149,7 +149,7 @@ export default {
               try {
                 this.$parent.init()
               } catch (error) {
-                this.$parent.initLazyOrgTree()
+                this.$parent.initLazyDatasetTypeTree()
               }
             })
           }

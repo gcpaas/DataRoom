@@ -174,7 +174,7 @@
                   clearable
                   :multiple="setting.multiple"
                   :placeholder="`请选择${setting.label}`"
-                  @change="changeCustomProps(...arguments, setting.field)"
+                  @change="changeCustomProps(...arguments, index)"
                 >
                   <el-option
                     v-for="(field, fieldIndex) in dataSourceDataList"
@@ -618,12 +618,14 @@ export default {
     ...mapState({
       pageInfo: state => state.bigScreen.pageInfo,
       config: state => state.bigScreen.activeItemConfig
+      // 缓存数据集
+      // cacheDataSets: state => state.bigScreen.pageInfo.pageConfig.cacheDataSets
     }),
     dataSourceDataList () {
       return this.fieldsList?.map(item => ({
         ...item,
-        comment: item?.comment || item?.name,
-        name: item?.name
+        comment: item?.fieldDesc || item?.fieldName,
+        name: item?.fieldName
       }))
     },
     appCode: {
@@ -647,8 +649,8 @@ export default {
       return (
         list?.map(field => {
           return {
-            label: field.comment,
-            value: field.name
+            label: field.fieldDesc,
+            value: field.fieldName
           }
         }) || []
       )
@@ -685,7 +687,6 @@ export default {
     if (this.config.dataSource && this.config.dataSource.businessKey) {
       this.getDataSetDetailsById(this.config.dataSource.businessKey, 'initial')
     }
-    console.log(this.config)
   },
   methods: {
     // 切换前后端分页
@@ -746,8 +747,8 @@ export default {
           this.config.inParams =
             this.fieldsList?.map(field => {
               return {
-                name: field.comment, // 参数名
-                code: field.name // 参数值
+                name: field.fieldDesc, // 参数名
+                code: field.fieldName // 参数值
               }
             }) || []
         }
@@ -795,10 +796,15 @@ export default {
       this.config.customize.columnConfig = cloneDeep(this.headerList)
       this.$store.commit('bigScreen/changeActiveItemConfig', this.config)
     },
-    changeCustomProps (value, field) {
-      const index = this.config.setting.findIndex(param => param.field === field)
+    changeCustomProps (value, index) {
       this.$set(this.config.setting[index], 'value', value)
     }
+    // 改变缓存数据集key
+    // changeCacheBusinessKey (id) {
+    //   // 根据id在缓存中获取fields
+    //   this.fieldsList = this.cacheDataSets?.find(cache => cache.dataSetId === id)?.fields
+    //   this.params = this.cacheDataSets?.find(cache => cache.dataSetId === id)?.params
+    // }
   }
 }
 </script>
