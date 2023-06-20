@@ -86,8 +86,14 @@
                       >
                         加载中···
                       </div>
-                      <div slot="error" class="image-slot" style="font-size: 20px">
-                        <div class="error-img-text"> {{ screen.name }}</div>
+                      <div
+                        slot="error"
+                        class="image-slot"
+                        style="font-size: 20px"
+                      >
+                        <div class="error-img-text">
+                          {{ screen.name }}
+                        </div>
                       </div>
                     </el-image>
                   </div>
@@ -203,8 +209,14 @@
                       >
                         加载中···
                       </div>
-                      <div slot="error" class="image-slot" style="font-size: 20px">
-                        <div class="error-img-text"> {{ screen.name }}</div>
+                      <div
+                        slot="error"
+                        class="image-slot"
+                        style="font-size: 20px"
+                      >
+                        <div class="error-img-text">
+                          {{ screen.name }}
+                        </div>
                       </div>
                     </el-image>
                   </div>
@@ -655,5 +667,11 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
     -o-text-overflow:ellipsis;
+  }
+
+  ::v-deep .el-tabs__nav-wrap{
+    &:after{
+      background-color: var(--bs-background-1);
+    }
   }
 </style>
