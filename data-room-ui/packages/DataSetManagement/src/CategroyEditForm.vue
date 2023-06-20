@@ -16,7 +16,7 @@
         label-width="90px"
       >
         <el-form-item
-          label="节点名称"
+          label="分组名称"
           prop="name"
         >
           <el-input
@@ -68,7 +68,7 @@ export default {
       nodeFlag: false,
       rules: {
         name: [
-          { required: true, message: '节点名称不能为空', trigger: 'blur' }
+          { required: true, message: '分组名称不能为空', trigger: 'blur' }
         ]
       },
       nodeData: {}

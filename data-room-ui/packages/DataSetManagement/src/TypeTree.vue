@@ -419,7 +419,7 @@ export default {
     },
     // 删除分类
     deleteOrg (org) {
-      this.$confirm('删除数据集分类，确定进行删除操作?', '提示',
+      this.$confirm('删除数据集分组，确定进行删除操作?', '提示',
         {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
