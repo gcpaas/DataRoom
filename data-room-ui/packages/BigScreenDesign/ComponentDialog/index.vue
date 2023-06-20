@@ -671,7 +671,7 @@ export default {
 
   ::v-deep .el-tabs__nav-wrap{
     &:after{
-      background-color: var(--bs-background-1);
+      display: none;
     }
   }
 </style>
