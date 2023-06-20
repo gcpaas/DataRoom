@@ -39,8 +39,19 @@ public class BizComponentServiceImpl extends ServiceImpl<BizComponentDao, BizCom
         LambdaQueryWrapper<BizComponentEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(searchDTO.getName()), BizComponentEntity::getName, searchDTO.getName());
         queryWrapper.eq(StringUtils.isNotBlank(searchDTO.getType()), BizComponentEntity::getType, searchDTO.getType());
-        return this.page(searchDTO, queryWrapper);
-        
+        PageVO<BizComponentEntity> page = this.page(searchDTO, queryWrapper);
+        List<BizComponentEntity> list = page.getList();
+        String urlPrefix = bigScreenConfig.getFile().getUrlPrefix();
+        if (!urlPrefix.endsWith("/")) {
+            urlPrefix += "/";
+        }
+        for (BizComponentEntity entity : list) {
+            if (StringUtils.isBlank(entity.getCoverPicture())) {
+                continue;
+            }
+            entity.setCoverPicture(urlPrefix + entity.getCoverPicture().replace("\\", "/"));
+        }
+        return page;
     }
 
     @Override
@@ -48,7 +59,18 @@ public class BizComponentServiceImpl extends ServiceImpl<BizComponentDao, BizCom
         LambdaQueryWrapper<BizComponentEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(searchDTO.getName()), BizComponentEntity::getName, searchDTO.getName());
         queryWrapper.eq(StringUtils.isNotBlank(searchDTO.getType()), BizComponentEntity::getType, searchDTO.getType());
-        return this.list(queryWrapper);
+        List<BizComponentEntity> list = this.list(queryWrapper);
+        String urlPrefix = bigScreenConfig.getFile().getUrlPrefix();
+        if (!urlPrefix.endsWith("/")) {
+            urlPrefix += "/";
+        }
+        for (BizComponentEntity entity : list) {
+            if (StringUtils.isBlank(entity.getCoverPicture())) {
+                continue;
+            }
+            entity.setCoverPicture(urlPrefix + entity.getCoverPicture().replace("\\", "/"));
+        }
+        return list;
     }
 
     @Override
@@ -62,7 +84,18 @@ public class BizComponentServiceImpl extends ServiceImpl<BizComponentDao, BizCom
         if (list.size() == 0) {
             throw new GlobalException("组件不存在");
         }
-        return list.get(0);
+        BizComponentEntity bizComponentEntity = list.get(0);
+        String urlPrefix = bigScreenConfig.getFile().getUrlPrefix();
+        if (!urlPrefix.endsWith("/")) {
+            urlPrefix += "/";
+        }
+        for (BizComponentEntity entity : list) {
+            if (StringUtils.isBlank(entity.getCoverPicture())) {
+                continue;
+            }
+            entity.setCoverPicture(urlPrefix + entity.getCoverPicture().replace("\\", "/"));
+        }
+        return bizComponentEntity;
     }
 
     @Override
