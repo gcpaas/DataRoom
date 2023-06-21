@@ -602,7 +602,6 @@ export default {
     },
     // 脚本执行
     scriptExecute (isInit = false) {
-      console.log(isInit)
       if (this.dataForm.config.script) {
         const javascript = this.dataForm.config.script
         let scriptMethod = null

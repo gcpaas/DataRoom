@@ -37,6 +37,11 @@ export default {
     }
   },
   mounted () {
+    const type = this.$route?.query?.type
+    if (type) {
+      this.activeType = type
+      this.$emit('getPageInfo', type)
+    }
   },
   methods: {
     // 点击左侧组件

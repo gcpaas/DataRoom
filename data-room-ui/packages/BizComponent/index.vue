@@ -220,7 +220,10 @@ export default {
     },
     backManagement () {
       this.$router.push({
-        path: window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components'
+        path: window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components',
+        query: {
+          type: 'bizComponent'
+        }
       })
     },
     save () {
