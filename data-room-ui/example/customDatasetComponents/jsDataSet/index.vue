@@ -200,7 +200,7 @@
               </div>
               <div class="field-wrap bs-field-wrap bs-scrollbar">
                 <div
-                  v-for="(field,key) in outputFieldList"
+                  v-for="(field, key) in outputFieldList"
                   :key="key"
                   class="field-item"
                   @click="$refs.outputFieldDialog.open()"
@@ -338,6 +338,7 @@
       <OutputFieldDialog
         ref="outputFieldDialog"
         :output-field-list="outputFieldList"
+        @setFieldList="(list) => { outputFieldList = list }"
       />
     </el-scrollbar>
     <FieldFillDialog
@@ -369,7 +370,7 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
     isEdit: {
       type: Boolean,
@@ -448,8 +449,10 @@ export default {
     }
   },
   watch: {
-    'dataForm.config.script' () {
-      this.passTest = false
+    'dataForm.config.script' (val) {
+      if (!val) {
+        this.passTest = false
+      }
     }
   },
   mounted () {
@@ -599,6 +602,7 @@ export default {
     },
     // 脚本执行
     scriptExecute (isInit = false) {
+      console.log(isInit)
       if (this.dataForm.config.script) {
         const javascript = this.dataForm.config.script
         let scriptMethod = null
@@ -635,7 +639,7 @@ export default {
           })
         }
 
-        if (this.outputFieldList.length && this.fieldDesc) {
+        if (this.outputFieldList.length && this.fieldDesc && !isInit) {
           this.buildFieldDesc()
         }
         // 如果有数据，就通过测试
@@ -701,151 +705,152 @@ export default {
 }
 </script>
 
-  <style lang="scss" scoped>
-  @import '~packages/assets/style/bsTheme.scss';
+<style lang="scss" scoped>
+@import '~packages/assets/style/bsTheme.scss';
 
-  .data-set-scrollbar {
+.data-set-scrollbar {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: none;
+
+  .el-scrollbar__view {
     height: 100%;
-    overflow-y: auto;
-    overflow-x: none;
-
-    .el-scrollbar__view {
-      height: 100%;
-    }
   }
+}
 
-  /deep/ .el-input__inner {
-    width: 100% !important;
+/deep/ .el-input__inner {
+  width: 100% !important;
+}
+
+.page-header {
+  display: flex;
+  position: relative;
+
+  .page-header-right {
+    position: absolute;
+    right: 16px;
   }
+}
 
-  .page-header {
-    display: flex;
-    position: relative;
+.sql-config {
+  padding: 0 16px;
+}
 
-    .page-header-right {
-      position: absolute;
-      right: 16px;
-    }
-  }
-
-  .sql-config {
-    padding: 0 16px;
-  }
-
-  .operation {
-    /deep/ .el-select {
-      width: 200px !important;
-      margin-right: 16px;
-    }
-
-    display: flex;
-  }
-
-  /deep/ .CodeMirror {
-    height: 180px !important;
-    font-family: Helvetica, Tahoma;
-  }
-
-  .no-border {
-    border: 0;
-  }
-
-  /deep/ .fieldDescCheck {
-    .el-dialog__body {
-      height: fit-content !important;
-      min-height: unset !important;
-    }
-  }
-
-  .title-style {
-    padding: 8px 12px;
-    background-color: #f6f7fb;
-    border-left: 5px solid var(--bs-el-color-primary);
-    margin: 16px 16px 0 0;
-  }
-
-  .field-wrap {
-    // max-height: 110px;
-    overflow: auto;
+.operation {
+  /deep/ .el-select {
+    width: 200px !important;
     margin-right: 16px;
-    cursor: pointer;
+  }
 
-    .field-item {
-      line-height: 32px;
-      padding: 0 12px 0 16px;
+  display: flex;
+}
+
+/deep/ .CodeMirror {
+  height: 180px !important;
+  font-family: Helvetica, Tahoma;
+}
+
+.no-border {
+  border: 0;
+}
+
+/deep/ .fieldDescCheck {
+  .el-dialog__body {
+    height: fit-content !important;
+    min-height: unset !important;
+  }
+}
+
+.title-style {
+  padding: 8px 12px;
+  background-color: #f6f7fb;
+  border-left: 5px solid var(--bs-el-color-primary);
+  margin: 16px 16px 0 0;
+}
+
+.field-wrap {
+  // max-height: 110px;
+  overflow: auto;
+  margin-right: 16px;
+  cursor: pointer;
+
+  .field-item {
+    line-height: 32px;
+    padding: 0 12px 0 16px;
+
+    .edit_field {
+      display: none;
+    }
+
+    &:hover {
+      background-color: #f2f7fe;
 
       .edit_field {
-        display: none;
-      }
-
-      &:hover {
-        background-color: #f2f7fe;
-
-        .edit_field {
-          display: block;
-        }
+        display: block;
       }
     }
   }
+}
 
-  .right-setting {
-    height: 358px;
+.right-setting {
+  height: 358px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .paramConfig {
+    max-height: 179px;
+
+    .field-wrap {
+      max-height: 127px;
+    }
+  }
+
+  .structure {
+    flex: 1;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
 
-    .paramConfig {
-      max-height: 179px;
-
-      .field-wrap {
-        max-height: 127px;
-      }
-    }
-
-    .structure {
-      flex: 1;
-      overflow: hidden;
-
-      .field-wrap {
-        height: calc(100% - 40px);
-      }
+    .field-wrap {
+      height: calc(100% - 40px);
     }
   }
+}
 
-  .result-view {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--bs-el-text);
-    position: relative;
-    padding: 16px 0;
-    padding-left: 12px;
-    border-bottom: 1px solid var(--bs-background-1);
+.result-view {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bs-el-text);
+  position: relative;
+  padding: 16px 0;
+  padding-left: 12px;
+  border-bottom: 1px solid var(--bs-background-1);
 
-    &::before {
-      content: "";
-      height: 14px;
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      border-left: 4px solid var(--bs-el-color-primary);
-    }
+  &::before {
+    content: "";
+    height: 14px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: 4px solid var(--bs-el-color-primary);
   }
+}
 
-  /deep/ .bs-table-box.is-Edit .el-table {
+/deep/ .bs-table-box.is-Edit .el-table {
+  max-height: unset !important;
+
+  .el-table__body-wrapper {
     max-height: unset !important;
+  }
+}
 
-    .el-table__body-wrapper {
-      max-height: unset !important;
-    }
-  }
+.bs-table-box {
+  padding: 0;
+  height: 100% !important;
+  margin-bottom: 0 !important;
+}
 
-  .bs-table-box {
-    padding: 0;
-    height: 100% !important;
-    margin-bottom: 0 !important;
-  }
-  .tree-box{
-    padding: 0;
-  }
-  </style>
+.tree-box {
+  padding: 0;
+}
+</style>
