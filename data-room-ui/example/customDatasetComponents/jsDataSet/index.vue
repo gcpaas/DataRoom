@@ -353,7 +353,7 @@
 import ParamsSettingDialog from './ParamsSettingDialog.vue'
 import OutputFieldDialog from './OutputFieldDialog.vue'
 import FieldFillDialog from './FieldFillDialog.vue'
-import { nameCheckRepeat, datasetAddorUpdate, getDataset, getDatasetTypeList } from 'packages/js/utils/datasetConfigService'
+import { nameCheckRepeat, datasetAdd, datasetUpdate, getDataset, getCategoryTree } from 'packages/js/utils/datasetConfigService'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/lib/codemirror.css'
@@ -457,7 +457,7 @@ export default {
   },
   methods: {
     async init () {
-      this.categoryData = await getDatasetTypeList({ tableName: 'r_dataset', moduleCode: this.appCode })
+      this.categoryData = await getCategoryTree({ tableName: 'dataset', moduleCode: this.appCode })
       if (this.typeId) {
         this.dataForm.typeId = this.typeId
         this.$nextTick(() => {
@@ -520,8 +520,8 @@ export default {
               fieldList: outputFieldList
             }
           }
-          // const datasetSave = this.dataForm.id === '' ? datasetAdd : datasetUpdate
-          datasetAddorUpdate(form).then(() => {
+          const datasetSave = this.dataForm.id === '' ? datasetAdd : datasetUpdate
+          datasetSave(form).then(() => {
             this.$message.success('操作成功')
             this.$parent.init(false)
             this.$parent.setType = null
