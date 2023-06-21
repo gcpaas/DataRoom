@@ -77,7 +77,8 @@ export default {
         this.newChart(config.option)
 
         // 再根据数据更新组件
-        this.updateChart()
+        // this.updateChart()
+        this.updateData()
       } else {
         // 否则说明是更新或者复制
         this.newChart(this.config.option)
@@ -96,9 +97,7 @@ export default {
       this.chart.render()
       this.registerEvent()
     },
-    /**
-     * @description: 只更新数据
-     */
+    // 根据G2Plot组件配置的dataKey，将获取到的数据赋值给指定的dataKey
     updateData () {
       this.getCurrentOption().then(({ data, config }) => {
         if (data.success) {
@@ -123,23 +122,23 @@ export default {
     /**
      * 更新组件
      */
-    updateChart () {
-      if (this.isPreview) {
-        this.getCurrentOption().then(({ data, config }) => {
-          if (data.success) {
-            // 成功后更新数据
-            config = this.buildOption(config, data)
-            this.changeChartConfig(config)
-            this.chart.update(config.option)
-          } else {
-            config.option.data = this.plotList.find(plot => plot.name === config.name)?.option.data
-            this.chart.update(config.option)
-          }
-        })
-      } else {
-        this.updateChartData(this.config)
-      }
-    },
+    // updateChart () {
+    //   if (this.isPreview) {
+    //     this.getCurrentOption().then(({ data, config }) => {
+    //       if (data.success) {
+    //         // 成功后更新数据
+    //         config = this.buildOption(config, data)
+    //         this.changeChartConfig(config)
+    //         this.chart.update(config.option)
+    //       } else {
+    //         config.option.data = this.plotList.find(plot => plot.name === config.name)?.option.data
+    //         this.chart.update(config.option)
+    //       }
+    //     })
+    //   } else {
+    //     this.updateChartData(this.config)
+    //   }
+    // },
     /**
      * 注册事件
      */
@@ -182,7 +181,7 @@ export default {
       // eslint-disable-next-line no-unused-vars
       const option = config.option
       // eslint-disable-next-line no-unused-vars
-      const setting = config.setting
+      // const setting = config.setting
       if (this.config.optionHandler) {
         try {
           // 此处函数处理config
@@ -225,3 +224,20 @@ export default {
 }
 
 </style>
+function generateRandomData() {
+  const data = [];
+  function generateRandomValue() {
+    // 生成随机的字符串作为值
+    return Math.random().toString(36).substr(2, 7);
+  }
+
+  for (let i = 0; i < 10; i++) {
+    const obj = {
+      key1: generateRandomValue(),
+      key2: generateRandomValue(),
+      key3: generateRandomValue()
+    };
+    data.push(obj);
+  }
+  return data;
+}

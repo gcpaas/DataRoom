@@ -200,6 +200,7 @@
     />
     <component
       :is="componentData.component"
+      v-if="datasetType"
       ref="EditForm"
       :key="componentData.key"
       :config="componentData.config"

@@ -63,9 +63,36 @@ export default {
       }
     },
     // 组件仅更新数据
-    changeData () {},
+    changeData () { },
     // 组件仅更新样式
-    changeStyle () {},
+    changeStyle () {
+      this.config = _.cloneDeep(this.config)
+      // 遍历config.setting，将config.setting中的值赋值给config.option中对应的optionField
+      this.config.setting.forEach(set => {
+        if (set.optionField) {
+          const optionField = set.optionField.split('.')
+          let option = this.config.option
+          optionField.forEach((field, index) => {
+            if (index === optionField.length - 1) {
+              // 数据配置时，必须有值才更新
+              if ((set.tabName === 'data' && set.value) || set.tabName === 'custom') {
+                option[field] = set.value
+              }
+            } else {
+              option = option[field]
+            }
+          })
+        }
+      })
+      if (this.config.optionHandler) {
+        try {
+          // 此处函数处理config
+          eval(this.config.optionHandler)
+        } catch (e) {
+          console.error(e)
+        }
+      }
+    },
     /**
      * 初始化组件时获取后端返回的数据, 返回数据和当前组件的配置
      * @param settingConfig 设置时的配置。不传则为当前组件的配置
