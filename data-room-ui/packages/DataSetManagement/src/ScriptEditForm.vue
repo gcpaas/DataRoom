@@ -667,6 +667,8 @@ export default {
         this.dataForm.paramsList = res.config.paramsList ? res.config.paramsList : []
         this.dataForm.fieldDesc = res.config.fieldDesc
         this.dataForm.fieldList = res.config.fieldList
+
+        this.paramsListCopy = _.cloneDeep(this.dataForm.paramsList)
         this.scriptExecute(true)
       })
     },
