@@ -28,11 +28,7 @@
               <data-set-select
                 :dataset-name="datasetName"
                 :ds-id="config.dataSource.businessKey"
-                @getDsId="
-                  dsId => {
-                    getDataSetDetailsById(dsId, 'treeTable');
-                  }
-                "
+                @getDsId="dsId => { getDataSetDetailsById(dsId, 'treeTable');}"
               />
             </el-form-item>
           </div>
@@ -713,57 +709,58 @@ export default {
     },
     // 根据数据集来获取数据集详情
     getDataSetDetailsById (id, type) {
-      this.config.dataSource.businessKey = id
-      getDataSetDetails(id).then(res => {
-        this.fieldsList = res.fields
-        // 初始化时以组件本来的参数设置为主
-        if (type === 'initial') {
-          for (const key in this.config.dataSource.params) {
-            const param = res?.params?.find(field => field.name === key)
-            this.params.push({
-              name: key,
-              value: this.config.dataSource.params[key],
-              type: param?.type,
-              remark: param?.remark
-            })
+      if (id) {
+        this.config.dataSource.businessKey = id
+        getDataSetDetails(id).then(res => {
+          this.fieldsList = res.fields
+          // 初始化时以组件本来的参数设置为主
+          if (type === 'initial') {
+            for (const key in this.config.dataSource.params) {
+              const param = res?.params?.find(field => field.name === key)
+              this.params.push({
+                name: key,
+                value: this.config.dataSource.params[key],
+                type: param?.type,
+                remark: param?.remark
+              })
+            }
+          } else {
+            this.params = res.params
           }
-        } else {
-          this.params = res.params
-        }
 
-        this.datasetName = res.name
-        // 选择数据集的时候，如果数据集类型是dataModel,则不显示参数配置
-        this.config.option.displayOption.params.enable = res.type !== 'dataModel'
-        // 根据数据集初始化组件的入参：inparams
-        if (res.type !== 'dataModel') {
-          this.config.inParams =
+          this.datasetName = res.name
+          // 选择数据集的时候，如果数据集类型是dataModel,则不显示参数配置
+          this.config.option.displayOption.params.enable = res.type !== 'dataModel'
+          // 根据数据集初始化组件的入参：inparams
+          if (res.type !== 'dataModel') {
+            this.config.inParams =
             this.params?.map(param => {
               return {
                 name: param.remark, // 参数名
                 code: param.name // 参数值
               }
             }) || []
-        } else {
-          this.config.inParams =
+          } else {
+            this.config.inParams =
             this.fieldsList?.map(field => {
               return {
                 name: field.fieldDesc, // 参数名
                 code: field.fieldName // 参数值
               }
             }) || []
-        }
-
-        // 根据数据集的参数初始化表单项
-        this.config.paramsList = this.params
-        if (type === 'treeTable') {
-          const enumeration = {
-            dataSetType: '1', // 数据集类型
-            dataSetKey: '', // 数据集
-            itemKeyName: '', // 选项显示字段
-            itemValueName: '', // 选项value字段
-            params: []
           }
-          this.config.fields =
+
+          // 根据数据集的参数初始化表单项
+          this.config.paramsList = this.params
+          if (type === 'treeTable') {
+            const enumeration = {
+              dataSetType: '1', // 数据集类型
+              dataSetKey: '', // 数据集
+              itemKeyName: '', // 选项显示字段
+              itemValueName: '', // 选项value字段
+              params: []
+            }
+            this.config.fields =
             this.params?.map(param => {
               return {
                 name: param.name,
@@ -776,8 +773,9 @@ export default {
                 queryRule: 'like'
               }
             }) || []
-        }
-      })
+          }
+        })
+      }
     },
     // 改变维度
     dimensionFieldListChange (list) {

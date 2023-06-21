@@ -139,8 +139,6 @@ export default {
       //   return
       // }
       getUpdateChartInfo(params).then((res) => {
-        console.log('更新组件数据', res)
-        console.log('更新组件数据', config)
         // 数据集脚本前端执行
         if (res.executionByFrontend) {
           try {
