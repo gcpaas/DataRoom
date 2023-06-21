@@ -62,6 +62,10 @@ export default {
         this.newChart(this.config.option)
       }
     },
+    // 组件仅更新数据
+    changeData () {},
+    // 组件仅更新样式
+    changeStyle () {},
     /**
      * 初始化组件时获取后端返回的数据, 返回数据和当前组件的配置
      * @param settingConfig 设置时的配置。不传则为当前组件的配置
@@ -139,8 +143,6 @@ export default {
       //   return
       // }
       getUpdateChartInfo(params).then((res) => {
-        console.log('更新组件数据', res)
-        console.log('更新组件数据', config)
         // 数据集脚本前端执行
         if (res.executionByFrontend) {
           try {
