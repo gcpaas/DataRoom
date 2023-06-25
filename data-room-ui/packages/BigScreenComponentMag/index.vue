@@ -18,7 +18,7 @@ export default {
   components: { SideMenu, MenuContent },
   data () {
     return {
-      catalogInfo: 'component'
+      catalogInfo: ''
     }
   },
   mounted () {},

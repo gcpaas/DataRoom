@@ -279,12 +279,8 @@ export default {
       this.$refs.CatalogEditForm.formVisible = true
     },
     // 获取分组列表
-    getCatalogList () {
-      get(`/bigScreen/type/list/${this.catalogType}`)
-        .then((data) => {
-          this.catalogList = data
-        })
-        .catch(() => {})
+    async getCatalogList () {
+      this.catalogList = await get(`/bigScreen/type/list/${this.catalogType}`)
     },
     getDataList () {
       this.loading = true

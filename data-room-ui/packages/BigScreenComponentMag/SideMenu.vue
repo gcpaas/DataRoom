@@ -36,7 +36,7 @@ export default {
       activeType: 'component'
     }
   },
-  mounted () {
+  created () {
     const type = this.$route?.query?.type
     if (type) {
       this.activeType = type

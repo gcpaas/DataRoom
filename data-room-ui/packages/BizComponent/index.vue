@@ -13,7 +13,10 @@
         </div>
       </div>
       <div class="right-btn-wrap">
-        <CusBtn>
+        <CusBtn
+          :loading="loading"
+          @click.native="createdImg()"
+        >
           生成图片
         </CusBtn>
         <CusBtn
@@ -104,6 +107,7 @@
   </div>
 </template>
 <script>
+import { toJpeg, toPng } from 'html-to-image'
 import CusBtn from 'packages/BigScreenDesign/BtnLoading'
 // import MonacoEditor from 'packages/MonacoEditor'
 import BizComponentPreview from './Preview'
@@ -114,6 +118,13 @@ import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/material-darker.css'
 import 'codemirror/addon/selection/active-line.js'
 import 'codemirror/mode/vue/vue.js'
+
+import {
+  showSize,
+  dataURLtoBlob,
+  translateBlobToBase64
+} from 'packages/js/utils/compressImg'
+import * as imageConversion from 'image-conversion'
 
 export default {
   name: 'BizComponentDesign',
@@ -228,13 +239,64 @@ export default {
     },
     save () {
       this.loading = true
-      updateBizComponent(this.form).then(() => {
-        this.$message.success('保存成功')
-      }).catch(() => {
-        this.$message.error('保存失败')
-      }).finally(() => {
-        this.loading = false
-      })
+      const node = document.querySelector('.bs-preview-inner')
+      toJpeg(node, { quality: 0.2 })
+        .then((dataUrl) => {
+          const that = this
+          if (showSize(dataUrl) > 200) {
+            const url = dataURLtoBlob(dataUrl)
+            // 压缩到500KB,这里的500就是要压缩的大小,可自定义
+            imageConversion
+              .compressAccurately(url, {
+                size: 200, // 图片大小压缩到100kb
+                width: 1280, // 宽度压缩到1280
+                height: 720 // 高度压缩到720
+              })
+              .then((res) => {
+                translateBlobToBase64(res, function (e) {
+                  this.form.coverPicture = e.result
+                  updateBizComponent(this.form)
+                    .then((res) => {
+                      that.$message.success('保存成功')
+                    })
+                    .finally(() => {
+                      that.loading = false
+                    })
+                })
+              })
+          } else {
+            this.form.coverPicture = dataUrl
+            updateBizComponent(this.form)
+              .then(() => {
+                this.$message.success('保存成功')
+              })
+              .finally(() => {
+                this.loading = false
+              })
+          }
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+    createdImg () {
+      this.loading = true
+      const node = document.querySelector('.bs-preview-inner')
+      toPng(node)
+        .then((dataUrl) => {
+          const link = document.createElement('a')
+          link.download = `${this.form.name}.png`
+          link.href = dataUrl
+          link.click()
+          link.addEventListener('click', () => {
+            link.remove()
+          })
+          this.loading = false
+        })
+        .catch(() => {
+          this.$message.warning('出现未知错误，请重试')
+          this.loading = false
+        })
     }
   }
 }
