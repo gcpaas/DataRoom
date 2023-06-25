@@ -120,7 +120,7 @@
           </div>
           <div class="big-screen-card-img">
             <el-image
-              :src="catalogInfo !== 'system'?screen.coverPicture:screen.img"
+              :src="catalogInfo !== 'system' ? screen.coverPicture : screen.img"
               fit="fill"
               style="width: 100%; height: 100%"
             >
