@@ -137,7 +137,7 @@
               show-overflow-tooltip
             >
               <template slot-scope="scope">
-                <span>{{ datasetTypeList.find(type=>type.datasetType===scope.row.datasetType).name || '其他' }}</span>
+                <span>{{ datasetTypeList.find(type=>type.datasetType===scope.row.datasetType) ? datasetTypeList.find(type=>type.datasetType===scope.row.datasetType).name : '其他' }}</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -223,7 +223,6 @@ import CustomEditForm from './CustomEditForm.vue'
 import { pageMixins } from 'packages/js/mixins/page'
 import OriginalEditForm from './OriginalEditForm.vue'
 import DatasetTypeDialog from './DatasetTypeDialog.vue'
-// import remoteComponents from '@/customDatasetComponents/exports.js'
 import StoredProcedureEditForm from './StoredProcedureEditForm.vue'
 import { datasetPage, datasetRemove } from 'packages/js/utils/datasetConfigService'
 export default {
@@ -410,7 +409,7 @@ export default {
     toEdit (id, type, name, typeId) {
       this.datasetId = id
       this.datasetType = type
-      this.componentData = this.getComponents(this.datasetTypeList.find(item => item?.datasetType === type).componentName)
+      this.componentData = this.getComponents(this.datasetTypeList.find(item => item?.datasetType === type)?.componentName) ?? ''
       this.datasetName = name
       this.typeId = typeId
       this.isEdit = true
@@ -428,19 +427,19 @@ export default {
       this.isEdit = true
     },
     showOperate (datasetType) {
-      return this.getComponents(this.datasetTypeList.find(type => type.datasetType === datasetType).componentName)?.config?.showOperate ?? true
+      return this.getComponents(this.datasetTypeList.find(type => type.datasetType === datasetType)?.componentName)?.config?.showOperate ?? true
     },
     getComponents (componentName) {
-      const components = Object.values(this.$options.components)
-      let remoteComponentData = null
-      if (window.BS_CONFIG?.customDatasetComponents.length > 0) {
+      if (window.BS_CONFIG?.customDatasetComponents && window.BS_CONFIG?.customDatasetComponents.length > 0) {
+        const components = Object.values(this.$options.components)
+        let remoteComponentData = null
         // 获取远程组件
         remoteComponentData = window.BS_CONFIG?.customDatasetComponents.find(item => item.config.componentName === componentName)
-      }
-      return {
-        component: components.find(component => component.name === componentName) || remoteComponentData?.vueFile,
-        config: remoteComponentData?.config || null,
-        key: new Date().getTime()
+        return {
+          component: components.find(component => component.name === componentName) || remoteComponentData?.vueFile,
+          config: remoteComponentData?.config || null,
+          key: new Date().getTime()
+        }
       }
     },
     // 初始化
@@ -465,10 +464,12 @@ export default {
         { name: 'JSON数据集', datasetType: 'json', componentName: 'JsonEditForm' },
         { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' }
       ]
-      // 将获得到的远程数据集进行组装
-      window.BS_CONFIG?.customDatasetComponents.forEach((item) => {
-        this.datasetTypeList.push({ name: item.config.name, datasetType: item.config.datasetType, componentName: item.config.componentName })
-      })
+      if (window.BS_CONFIG?.customDatasetComponents && window.BS_CONFIG?.customDatasetComponents.length > 0) {
+        // 将获得到的远程数据集进行组装
+        window.BS_CONFIG?.customDatasetComponents.forEach((item) => {
+          this.datasetTypeList.push({ name: item.config.name, datasetType: item.config.datasetType, componentName: item.config.componentName })
+        })
+      }
     },
     // 新增数据集
     addDataset () {
