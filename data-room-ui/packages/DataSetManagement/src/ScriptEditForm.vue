@@ -772,7 +772,6 @@ export default {
             }
           })
         }
-        console.log(this.structurePreviewList)
         if (this.structurePreviewList.length && this.dataForm.fieldDesc) {
           this.buildFieldDesc()
         }
@@ -780,7 +779,6 @@ export default {
         this.saveLoading = false
         this.passTest = true
       }).catch((e) => {
-        console.log(e)
         this.passTest = false
         this.saveLoading = false
       })

@@ -226,7 +226,6 @@ export default {
       }
     },
     code () {
-      // return this.catalogInfo?.page?.code
       return ''
     },
     gridComputed () {

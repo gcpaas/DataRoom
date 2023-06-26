@@ -154,7 +154,9 @@ export default {
     this.windowSize()
   },
   mounted () {
-    this.startTimer()
+    if (this.pageInfo.pageConfig.refreshConfig && this.pageInfo.pageConfig.refreshConfig.length > 0) {
+      this.startTimer()
+    }
   },
   beforeDestroy () {
     this.stopTimer()
