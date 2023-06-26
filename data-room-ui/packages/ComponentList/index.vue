@@ -201,16 +201,12 @@ import innerRemoteComponents, { getRemoteComponents } from 'packages/RemoteCompo
 export default {
   name: 'BigScreenList',
   mixins: [pageMixins],
-  props: {
-    catalogInfo: {
-      type: String,
-      default: ''
-    }
-  },
+  props: { },
   components: { EditForm, CatalogEditForm },
   data () {
     return {
       name: '',
+      catalogInfo: 'component',
       catalogVisible: false,
       templateLoading: false,
       searchKey: '',
@@ -238,7 +234,8 @@ export default {
     }
   },
   watch: {
-    catalogInfo () {
+    $route (val) {
+      this.catalogInfo = val.query.type || 'component'
       this.reset()
       this.init()
     },
@@ -247,6 +244,7 @@ export default {
     }
   },
   mounted () {
+    this.catalogInfo = this.$route.query.type || 'component'
     this.init()
   },
   methods: {
@@ -279,8 +277,12 @@ export default {
       this.$refs.CatalogEditForm.formVisible = true
     },
     // 获取分组列表
-    async getCatalogList () {
-      this.catalogList = await get(`/bigScreen/type/list/${this.catalogType}`)
+    getCatalogList () {
+      get(`/bigScreen/type/list/${this.catalogType}`)
+        .then((data) => {
+          this.catalogList = data
+        })
+        .catch(() => {})
     },
     getDataList () {
       this.loading = true
