@@ -199,7 +199,6 @@ export default {
       saveTimeLine: 'bigScreen/saveTimeLine'
     }),
     setAlign (command) {
-      debugger
       const pageInfo = _.cloneDeep(this.pageInfo)
       // 获取所有选中的组件
       let activeChartList = pageInfo.chartList.filter((chart) => {
