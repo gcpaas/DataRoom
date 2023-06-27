@@ -75,7 +75,7 @@ export default {
           const settingContent = data.settingContent
           if (!this.config?.option?.data) {
             this.resolveStrSetting(settingContent)
-            this.config = this.buildOption(this.config, { success: false })
+            this.config = this.dataFormatting(this.config, { success: false })
           }
 
           this.remoteComponent = remoteVueLoader('data:text/plain,' + encodeURIComponent(vueContent))
@@ -132,22 +132,16 @@ export default {
      */
     updateChart () {
       if (this.isPreview) {
-        this.getCurrentOption().then(({ data, config }) => {
-          if (data.success) {
-            // 成功后更新数据
-            config = this.buildOption(config, data)
-            this.changeChartConfig(config)
-          }
-        })
+        this.changeDataByCode()
       } else {
-        this.updateChartData(this.config)
+        this.changeData(this.config)
       }
     },
     /**
      * 组件的配置
      * @returns {Promise<unknown>}
      */
-    buildOption (config, data) {
+    dataFormatting (config, data) {
       config = _.cloneDeep(config)
       // 遍历config.setting，将config.setting中的值赋值给config.option中对应的optionField
       config.setting.forEach(set => {
