@@ -37,72 +37,25 @@ export default {
      * 初始化组件
      */
     chartInit () {
-      // 初始化组件和数据，若自己的组件的初始化和数据处理不一样，可重写该方法
-      // 如果key和code相等，说明是一进来刷新，调用/chart/data/list，否则是更新，调用 chart/data/chart
-      // 或者是组件联动isLink,也需要调用/chart/data/list更新
-      if (this.config.code === this.config.key) {
-        // 根据缓存数据初始化的组件
-        if (this.config.dataSource.dataSetType === '2') {
-          this.config = this.buildOption(this.config, { success: false })
-          this.changeChartConfig(this.config)
-          this.newChart(this.config.option)
-        } else {
-          // 根据数据集初始化的组件
-          if (this.isPreview) {
-            this.getCurrentOption().then(({ config, data }) => {
-              config = this.buildOption(config, data)
-              this.changeChartConfig(config)
-              this.newChart(config.option)
-            })
-          } else {
-            this.updateChartData(this.config)
-          }
-        }
+      let config = this.config
+      // key和code相等，说明是一进来刷新，调用list接口
+      if (this.config.code === this.config.key || this.isPreview) {
+        // 改变样式
+        config = this.changeStyle(config) ? this.changeStyle(config) : config
+        // 改变数据
+        config = this.changeDataByCode(config)
       } else {
-        this.newChart(this.config.option)
-      }
-    },
-    // 组件仅更新数据
-    changeData () { },
-    // 组件仅更新样式
-    changeStyle () {
-      this.config = _.cloneDeep(this.config)
-      // 遍历config.setting，将config.setting中的值赋值给config.option中对应的optionField
-      this.config.setting.forEach(set => {
-        if (set.optionField) {
-          const optionField = set.optionField.split('.')
-          let option = this.config.option
-          optionField.forEach((field, index) => {
-            if (index === optionField.length - 1) {
-              // 数据配置时，必须有值才更新
-              if ((set.tabName === 'data' && set.value) || set.tabName === 'custom') {
-                option[field] = set.value
-              }
-            } else {
-              option = option[field]
-            }
-          })
-        }
-      })
-      if (this.config.optionHandler) {
-        try {
-          // 此处函数处理config
-          eval(this.config.optionHandler)
-        } catch (e) {
-          console.error(e)
-        }
+        // 否则说明是更新，这里的更新只指更新数据（改变样式时是直接调取changeStyle方法），因为更新数据会改变key,调用chart接口
+        // eslint-disable-next-line no-unused-vars
+        config = this.changeData(config)
       }
     },
     /**
-     * 初始化组件时获取后端返回的数据, 返回数据和当前组件的配置
+     * 初始化组件时获取后端返回的数据, 返回数据和当前组件的配置_list
      * @param settingConfig 设置时的配置。不传则为当前组件的配置
      * @returns {Promise<unknown>}
      */
-    getCurrentOption (settingConfig) {
-      const pageCode = this.pageCode
-      const chartCode = this.config.code
-      const type = this.config.type
-      const config = _.cloneDeep(settingConfig || this.config)
+    changeDataByCode (config) {
       let currentPage = 1
       let size = 10
       if (config?.option?.pagination) {
@@ -110,49 +63,28 @@ export default {
         size = config.option.pagination.pageSize
       }
       return new Promise((resolve, reject) => {
-        this.getDataByCode(pageCode, chartCode, type, currentPage, size).then((data) => {
-          resolve({
-            config, data
-          })
+        getChatInfo({
+          // innerChartCode: this.pageCode ? config.code : undefined,
+          chartCode: config.code,
+          current: currentPage,
+          pageCode: this.pageCode,
+          size: size,
+          type: config.type
+        }).then((data) => {
+          config = this.dataFormatting(config, data)
+          this.changeChartConfig(config)
         }).catch((err) => {
-          reject(err)
+          console.log(err)
+        }).finally(() => {
+          resolve(config)
         })
       })
     },
     /**
-     *  根据 chatCode 获取后端返回的数据
-     * @param pageCode
-     * @param chartCode
-     * @param type
-     * @param current
-     * @param size
-     * @returns {Promise<*>}
-     */
-    async getDataByCode (
-      pageCode,
-      chartCode,
-      type,
-      current = 1,
-      size = 10
-    ) {
-      let parentCode
-      const data = await getChatInfo({
-        innerChartCode: parentCode ? chartCode : undefined,
-        chartCode: parentCode || chartCode,
-        current: current,
-        pageCode: pageCode,
-        size: size,
-        type: type
-      })
-      return data
-    },
-
-    /**
      * @description: 更新chart
      * @param {Object} config
      */
-    updateChartData (config) {
-      const filterList = this.filterList
+    changeData (config, filterList) {
       const params = {
         chart: {
           ...config,
@@ -161,41 +93,36 @@ export default {
         current: 1,
         pageCode: this.pageCode,
         type: config.type,
-        filterList
+        filterList: filterList || this.filterList
       }
-      // if (config.type === 'remoteComponent') {
-      //   config = this.buildOption(config, { success: false })
-      //   config.key = new Date().getTime()
-      //   this.changeChartConfig(config)
-      //   return
-      // }
-      getUpdateChartInfo(params).then((res) => {
-        // 数据集脚本前端执行
-        if (res.executionByFrontend) {
-          try {
-            const returnResult = eval(`(${res.data})`)()
-            res.data = returnResult
-          } catch (error) {
-            console.error('数据集脚本执行失败', error)
+      return new Promise((resolve, reject) => {
+        getUpdateChartInfo(params).then((data) => {
+          config = this.dataFormatting(config, data)
+          // this.changeChartConfig(config)
+          if (this.chart) {
+            // 单指标组件和多指标组件的changeData传参不同
+            if (['Liquid', 'Gauge', 'RingProgress'].includes(config.chartType)) {
+              this.chart.changeData(config.option.percent)
+            } else {
+              this.chart.changeData(config.option.data)
+            }
           }
-        }
-        config = this.buildOption(config, res)
-        config.key = new Date().getTime()
-        this.changeChartConfig(config)
-        // 获取数据后更新组件配置
-
-        // this.$message.success('更新成功')
-      }).catch((err) => {
-        console.error(err)
-        // this.$message.error('更新失败')
+        }).catch(err => {
+          console.log(err)
+        }).finally(() => {
+          resolve(config)
+        })
       })
     },
-    newChart () {
-      // 需要在自己的组件中重写此方法，用于构建自己的组件
+    dataFormatting (config, data) {
+      // 覆盖
     },
-    buildOption (config, data) {
-      // 需要在自己的组件中重写此方法:config当前组件的配置，data后端返回的数据
-      return config
+    newChart (option) {
+      // 覆盖
+    },
+    changeStyle (config) {
+      // this.changeChartConfig(config)
+      // return config
     },
     // 缓存组件数据监听
     watchCacheData () {
@@ -206,7 +133,7 @@ export default {
           this.config.dataSource.dataSetType === '2' &&
           this.config.dataSource.businessKey === dataSetId
         ) {
-          const config = this.buildOption(this.config, data)
+          const config = this.dataFormatting(this.config, data)
           config.key = new Date().getTime()
           this.changeChartConfig(config)
           this.newChart(config.option)

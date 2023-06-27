@@ -51,6 +51,7 @@ import rightSetting from 'packages/js/utils/rightSettingImport'
 import CustomComponent from './G2CustomSetting.vue'
 import Svgs from 'packages/Svgs/setting.vue'
 import { mapState, mapMutations } from 'vuex'
+import _ from 'lodash'
 // 整体动态导入右侧设置组件，不用手动注册
 const components = {}
 for (const key in rightSetting) {
@@ -86,23 +87,23 @@ export default {
     },
     configDataSource () {
       return {
-        dataSource: this.config.dataSource,
-        linkage: this.config?.linkage,
+        dataSource: _.cloneDeep(this.config.dataSource),
+        linkage: _.cloneDeep(this.config?.linkage),
         dataHandler: this.config?.dataHandler,
-        dataSourceSetting: this.config?.setting?.filter(item => item.tabName === 'data') || []
+        dataSourceSetting: _.cloneDeep(this.config?.setting?.filter(item => item.tabName === 'data')) || []
       }
     },
     configStyle () {
       return {
         showTitle: this.config.showTitle,
-        title: this.config?.title,
+        title: _.cloneDeep(this.config?.title),
         w: this.config?.w,
         h: this.config?.h,
         x: this.config?.x,
         y: this.config?.y,
         z: this.config?.z,
-        setting: this.config?.setting,
-        customize: this.config?.customize,
+        setting: _.cloneDeep(this.config?.setting),
+        customize: _.cloneDeep(this.config?.customize),
         url: this.config?.url,
         dateFormat: this.config?.dateFormat,
         endTime: this.config?.endTime
@@ -112,8 +113,8 @@ export default {
   watch: {
     // 只更新样式部分，不调用接口
     configStyle: {
-      handler (val) {
-        if (val) {
+      handler (val, oldValue) {
+        if (!_.isEqual(val, oldValue)) {
           this.$emit('updateSetting', this.config)
           this.saveTimeLine(`更新${val?.title}组件属性`)
         }
@@ -122,8 +123,8 @@ export default {
     },
     // 更新数据源部分，需要调用接口
     configDataSource: {
-      handler (val) {
-        if (val) {
+      handler (val, oldValue) {
+        if (!_.isEqual(val, oldValue)) {
           this.$emit('updateDataSetting', this.config)
           this.saveTimeLine(`更新${val?.title}组件属性`)
         }
