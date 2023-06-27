@@ -613,7 +613,7 @@ export default {
           scriptMethod = new Function(scriptAfterReplacement)
         } catch (error) {
           this.passTest = false
-          this.$message.error('脚本执行错误，请检查脚本')
+          this.$message.error(`脚本执行错误，请检查脚本，具体错误：${error}`)
           return
         }
         // 调用方法生成随机数据

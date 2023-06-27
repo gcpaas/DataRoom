@@ -142,8 +142,13 @@ export default {
         // 数据集脚本前端执行
         if (res.executionByFrontend) {
           try {
-            const returnResult = eval(`(${res.data})`)()
-            res.data = returnResult
+            const scriptAfterReplacement = res.data.replace(/\${(.*?)}/g, (match, p) => {
+              // 根据parmas的key获取value
+              return `'${this.config.dataSource?.params[p]}' || '${p}'`
+            })
+            // eslint-disable-next-line no-new-func
+            const scriptMethod = new Function(scriptAfterReplacement)
+            res.data = scriptMethod()
           } catch (error) {
             console.error('数据集脚本执行失败', error)
           }
