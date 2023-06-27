@@ -59,7 +59,25 @@ export default {
     this.charts?.clear()
   },
   methods: {
-    buildOption (config, data) {
+    chartInit () {
+      let config = this.config
+      // key和code相等，说明是一进来刷新，调用list接口
+      if (this.config.code === this.config.key || this.isPreview) {
+        // 改变数据
+        this.changeDataByCode(config).then((res) => {
+          // 改变样式
+          // config = this.changeStyle(res)
+          this.newChart(config)
+        }).catch(() => {})
+      } else {
+        // 否则说明是更新，这里的更新只指更新数据（改变样式时是直接调取changeStyle方法），因为更新数据会改变key,调用chart接口
+        this.changeData(config).then((res) => {
+          // 初始化图表
+          this.newChart(res)
+        })
+      }
+    },
+    dataFormatting (config, data) {
       const dataList = []
       data?.data?.forEach(item => {
         dataList.push({ name: item[config.customize.name], value: [item[config.customize.xaxis], item[config.customize.yaxis], item[config.customize.value]] })
@@ -70,19 +88,19 @@ export default {
       }
       return config
     },
-    async newChart (options) {
+    async newChart (config) {
       this.charts = echarts.init(
         document.getElementById(`chart${this.config.code}`)
       )
       const option = {
         // 背景颜色
-        backgroundColor: this.config.customize.backgroundColor,
+        backgroundColor: config.customize.backgroundColor,
         geo: {
-          map: this.config.customize.scope,
+          map: config.customize.scope,
           label: {
             // 通常状态下的样式
             normal: {
-              show: this.config.customize.mapName,
+              show: config.customize.mapName,
               textStyle: {
                 color: '#fff'
               }
@@ -97,9 +115,9 @@ export default {
           // 地图区域的样式设置
           itemStyle: {
             normal: {
-              borderColor: this.config.customize.mapLineColor,
+              borderColor: config.customize.mapLineColor,
               borderWidth: 1,
-              areaColor: this.config.customize.areaColor,
+              areaColor: config.customize.areaColor,
               shadowColor: 'fffff',
               shadowOffsetX: -2,
               shadowOffsetY: 2,
@@ -117,8 +135,8 @@ export default {
           show: false,
           trigger: 'item',
           alwaysShowContent: false,
-          backgroundColor: this.config.customize.tooltipBackgroundColor,
-          borderColor: this.config.customize.borderColor,
+          backgroundColor: config.customize.tooltipBackgroundColor,
+          borderColor: config.customize.borderColor,
           hideDelay: 100,
           triggerOn: 'mousemove',
           enterable: true,
@@ -131,7 +149,7 @@ export default {
           },
           showDelay: 100
         },
-        series: this.config.customize.scatter
+        series: config.customize.scatter
           ? [
               // {
               //   type: 'effectScatter',
@@ -188,29 +206,29 @@ export default {
                   formatter (value) {
                     return value.data.value[2]
                   },
-                  color: this.config.customize.scatterColor
+                  color: config.customize.scatterColor
                 },
                 // 标志的样式
                 itemStyle: {
                   normal: {
-                    color: this.config.customize.scatterBackgroundColor,
+                    color: config.customize.scatterBackgroundColor,
                     shadowBlur: 2,
                     shadowColor: 'D8BC37'
                   }
                 },
-                data: options.data
+                data: config.option?.data
               }
             ]
           : [
               {
                 type: 'map',
-                map: this.config.customize.scope,
+                map: config.customize.scope,
                 geoIndex: 0,
                 roam: false,
                 zoom: 1.5,
                 center: [105, 36],
                 showLegendSymbol: false, // 存在legend时显示
-                data: options.data,
+                data: config.option?.data,
                 tooltip: {
                   formatter (params) {
                     return `<p style="text-align:center;line-height: 30px;height:30px;font-size: 14px;border-bottom: 1px solid #7A8698;">${
@@ -225,20 +243,20 @@ export default {
               }
             ]
       }
-      if (this.config.customize.visual) {
+      if (config.customize.visual) {
         option.visualMap = {
           show: true,
-          min: this.config.customize.range[0],
-          max: this.config.customize.range[1],
+          min: config.customize.range[0],
+          max: config.customize.range[1],
           seriesIndex: [0],
           inRange: {
-            color: this.config.customize.rangeColor
+            color: config.customize.rangeColor
           }
         }
       }
-      const mapUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/${this.config.customize.level}/${this.config.customize.dataMap}`
+      const mapUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/${config.customize.level}/${config.customize.dataMap}`
       const map = await get(decodeURI(mapUrl), {}, true)
-      echarts.registerMap(this.config.customize.scope, map)
+      echarts.registerMap(config.customize.scope, map)
       this.charts.setOption(option)
       // this.charts.on('click', (params) => {
       //   get(

@@ -151,6 +151,7 @@ export default {
       'changeLayout',
       'changeActiveCode',
       'changeChartConfig',
+      'changeActiveItemConfig',
       'changeActiveItemWH',
       'addItem',
       'delItem',
@@ -237,6 +238,13 @@ export default {
         x: left,
         y: top
       })
+      this.changeActiveItemConfig({
+        ...chart,
+        w: width,
+        h: height,
+        x: left,
+        y: top
+      })
       if (chart.code === this.activeCode) {
         this.changeActiveItemWH({
           w: width,
@@ -254,6 +262,11 @@ export default {
       if (!this.freeze) {
         if (this.rawChart.x !== left || this.rawChart.y !== top) {
           this.changeChartConfig({
+            ...chart,
+            x: left,
+            y: top
+          })
+          this.changeActiveItemConfig({
             ...chart,
             x: left,
             y: top

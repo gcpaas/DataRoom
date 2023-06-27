@@ -107,6 +107,15 @@ export default {
     state.activeId = activeItem.code
     // state.settingJson = _.cloneDeep(activeItem.settingConfig) || {}
   },
+  // 改变当前组件的xywh
+  changeActiveItemWH(state, chart) {
+    if (chart.code === state.activeItemConfig.code) {
+      state.activeItemConfig = {
+        ...state.activeItemConfig,
+        ...chart
+      }
+    }
+  },
   // 清空卡尺对齐线
   resetPresetLine (state) {
     state.presetLine = []
