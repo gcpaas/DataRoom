@@ -94,10 +94,9 @@ export default {
   },
   watch: {},
   mounted () {
-    this.chartInit()
   },
   methods: {
-    buildOption (config, data) {
+    dataFormatting (config, data) {
       let dataList = ''
       if (data.data instanceof Array) {
         dataList = config.dataSource.dimensionField
@@ -111,14 +110,6 @@ export default {
         data: dataList
       }
       return config
-    },
-    updateData () {
-      this.getCurrentOption().then(({ data, config }) => {
-        if (data.success) {
-          const _config = this.buildOption(config, data)
-          this.config.option.data = _config.option.data
-        }
-      })
     }
   }
 }

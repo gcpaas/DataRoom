@@ -24,7 +24,7 @@ export default {
     }
   },
   mounted () {
-    if (!['digitalFlop', 'screenScrollRanking', 'screenScrollBoard', 'tables'].includes(this.config.type)) {
+    if (!['tables'].includes(this.config.type)) {
       this.chartInit()
     }
     this.watchCacheData()

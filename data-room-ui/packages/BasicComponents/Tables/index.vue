@@ -14,6 +14,7 @@
       :header-cell-style="headerCellStyle"
       :cell-style="cellStyle"
       :row-class-name="tableRowClassName"
+      @row-click="rowClick"
     >
       <el-table-column
         v-for="(col, index) in config.option.columnData"
@@ -112,6 +113,10 @@ export default {
     this.initStyle()
   },
   methods: {
+    // 表格点击事件
+    rowClick (row) {
+      this.linkage(row)
+    },
     initStyle () {
       if (this.customTheme === 'custom') {
         this.headerCellStyleToObj()
@@ -174,7 +179,7 @@ export default {
     tableRowClassName ({ row, rowIndex }) {
       return rowIndex % 2 === 0 ? `even-row${this.config.code}` : `odd-row${this.config.code}`
     },
-    buildOption (config, data) {
+    dataFormatting (config, data) {
       config.option.tableData = data?.data
       const filteredData = {}
       const columnData = data?.columnData || {}
@@ -191,16 +196,6 @@ export default {
         config.option.columnData = columnData
       }
       return config
-    },
-    // 更新数据
-    updateData () {
-      this.getCurrentOption().then(({ data, config }) => {
-        if (data.success) {
-          this.config.option.tableData = data?.data
-          this.config.option.columnData = data?.columnData || {}
-          this.$refs.table.doLayout()
-        }
-      })
     },
     // 将样式字符串转成对象, 用于自定义主题，表格头部样式
     headerCellStyleToObj () {

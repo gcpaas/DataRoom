@@ -47,10 +47,9 @@ export default {
   watch: {
   },
   mounted () {
-    this.chartInit()
   },
   methods: {
-    buildOption (config, data) {
+    dataFormatting (config, data) {
       const dataSourseList = []
       data.data.forEach(item => {
         dataSourseList.push({ name: item[config.dataSource.dimensionField || 'name'], value: item[config.dataSource.metricField || 'sum(num)'] })
@@ -60,13 +59,6 @@ export default {
         data: dataSourseList
       }
       return config
-    },
-    updateData () {
-      this.getCurrentOption().then(({ data, config }) => {
-        const _config = this.buildOption(config, data)
-        this.option.data = _config.option.data
-        this.updateKey++
-      })
     }
 
   }

@@ -48,7 +48,7 @@ export default {
     this.chartInit()
   },
   methods: {
-    buildOption (config, data) {
+    dataFormatting (config, data) {
       const header = []
       const dataList = []
       const alignList = []
@@ -105,13 +105,6 @@ export default {
         align: [...alignList]
       }
       return config
-    },
-    updateData () {
-      this.getCurrentOption().then(({ data, config }) => {
-        const _config = this.buildOption(config, data)
-        this.option.data = _config.option.data
-        this.updateKey++
-      })
     }
 
   }

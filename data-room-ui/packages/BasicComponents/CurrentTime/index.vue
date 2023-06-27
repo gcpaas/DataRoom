@@ -56,6 +56,9 @@ export default {
     }
   },
   methods: {
+    changeStyle (config) {
+      this.getCurrentTime(config.dateFormat)
+    },
     // 实时显示当前系统时间
     getCurrentTime (dateFormat) {
       if (this.timer) {

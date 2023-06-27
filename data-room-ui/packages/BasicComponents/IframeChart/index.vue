@@ -42,9 +42,12 @@ export default {
   },
   watch: {},
   mounted () {
-    this.newUrl = this.replaceUrlVariables(this.config.url)
+    this.changeStyle()
   },
   methods: {
+    changeStyle (config) {
+      this.newUrl = this.replaceUrlVariables(this.config.url)
+    },
     replaceUrlVariables (url) {
       const variableRegex = /\${([A-Za-z0-9_.]+)}/g
       const variables = {}
