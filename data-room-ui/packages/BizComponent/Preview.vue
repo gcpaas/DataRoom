@@ -90,7 +90,7 @@ export default {
         getBizComponentInfo(this.$route.query?.code).then(data => {
           this.vueContentInner = data.vueContent
           this.settingContentInner = data.settingContent
-          this.buildOption(this.config)
+          this.dataFormatting(this.config)
           this.remoteComponent = remoteVueLoader('data:text/plain,' + encodeURIComponent(this.vueContentInner))
         }).finally(() => {
           this.loading = false
@@ -111,7 +111,7 @@ export default {
     // 尝试渲染远程文件或远程字符串
     getRemoteComponent () {
       this.loading = true
-      this.buildOption(this.config)
+      this.dataFormatting(this.config)
       this.remoteComponent = remoteVueLoader('data:text/plain,' + encodeURIComponent(this.vueContentInner))
       this.loading = false
     },
@@ -119,7 +119,7 @@ export default {
      * 组件的配置
      * @returns {Promise<unknown>}
      */
-    buildOption (config, data) {
+    dataFormatting (config, data) {
       config = _.cloneDeep(config)
       // 遍历config.setting，将config.setting中的值赋值给config.option中对应的optionField
       config.setting.forEach(set => {
