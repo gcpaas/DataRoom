@@ -134,7 +134,7 @@ export default {
           })
         }
       })
-      config.option = option
+      config.option = { ...config.option, ...option }
       return config
     },
     dataFormatting (config, data) {
