@@ -31,6 +31,7 @@
 import commonMixins from 'packages/js/mixins/commonMixins'
 import paramsMixins from 'packages/js/mixins/paramsMixins'
 import linkageMixins from 'packages/js/mixins/linkageMixins'
+import _ from 'lodash'
 export default {
   name: 'TableChart',
   mixins: [paramsMixins, commonMixins, linkageMixins],
@@ -46,6 +47,7 @@ export default {
   },
   data () {
     return {
+      updateKey: '',
       headerCellStyleObj: {
         backgroundColor: 'transparent'
       },
@@ -110,14 +112,15 @@ export default {
   created () { },
   mounted () {
     this.chartInit()
-    this.initStyle()
+    this.changeStyle(this.config)
   },
   methods: {
     // 表格点击事件
     rowClick (row) {
       this.linkage(row)
     },
-    initStyle () {
+    changeStyle (oldConfig) {
+      const config = _.cloneDeep(oldConfig)
       if (this.customTheme === 'custom') {
         this.headerCellStyleToObj()
         this.cellStyleToObj()
@@ -126,7 +129,7 @@ export default {
         this.headerCellStyleToObj()
         this.cellStyleToObj()
       }
-      if (this.config.customize.stripe) {
+      if (config.customize.stripe) {
         const trs = document
           .getElementById(this.config.code)
           ?.querySelectorAll('tr.el-table__row--striped')
@@ -142,7 +145,7 @@ export default {
         }
       } else {
         const trs = document
-          .getElementById(this.config.code)
+          .getElementById(config.code)
           ?.querySelectorAll('tr.el-table__row--striped')
         if (trs) {
           trs.forEach(tr => {
@@ -159,21 +162,23 @@ export default {
       // });
       }
       // this.chartInit();
-      if (this.config.customize.evenRowBackgroundColor && !this.config.customize.oddRowBackgroundColor) {
-        this.config.customize.oddRowBackgroundColor = this.config.customize.bodyBackgroundColor
-      } else if (!this.config.customize.evenRowBackgroundColor && this.config.customize.oddRowBackgroundColor) {
-        this.config.customize.evenRowBackgroundColor = this.config.customize.bodyBackgroundColor
-      } else if (!(!this.config.customize.evenRowBackgroundColor && !this.config.customize.oddRowBackgroundColor)) {
-        this.config.customize.bodyBackgroundColor = ''
+      if (config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor) {
+        config.customize.oddRowBackgroundColor = config.customize.bodyBackgroundColor
+      } else if (!config.customize.evenRowBackgroundColor && config.customize.oddRowBackgroundColor) {
+        config.customize.evenRowBackgroundColor = config.customize.bodyBackgroundColor
+      } else if (!(!config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor)) {
+        config.customize.bodyBackgroundColor = ''
       }
       window.requestAnimationFrame(() => {
-        document.querySelectorAll(`.even-row${this.config.code}`).forEach(node => {
-          node.style.backgroundColor = this.config.customize.evenRowBackgroundColor
+        document.querySelectorAll(`.even-row${config.code}`).forEach(node => {
+          node.style.backgroundColor = config.customize.evenRowBackgroundColor
         })
-        document.querySelectorAll(`.odd-row${this.config.code}`).forEach(node => {
-          node.style.backgroundColor = this.config.customize.oddRowBackgroundColor
+        document.querySelectorAll(`.odd-row${config.code}`).forEach(node => {
+          node.style.backgroundColor = config.customize.oddRowBackgroundColor
         })
       })
+      this.updateKey = new Date().getTime()
+      return config
     },
     // 表格行样式
     tableRowClassName ({ row, rowIndex }) {
@@ -195,6 +200,7 @@ export default {
       } else {
         config.option.columnData = columnData
       }
+      this.updateKey = new Date().getTime()
       return config
     },
     // 将样式字符串转成对象, 用于自定义主题，表格头部样式
