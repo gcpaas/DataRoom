@@ -576,13 +576,13 @@ const data = [
 ]
 
 // 配置处理脚本
-const optionHandler = 'let wordFieldValue = setting.find(settingItem=>settingItem.field === \'wordField\').value\n' +
+const optionHandler = ''
+
+// 数据处理脚本
+const dataHandler = 'let wordFieldValue = setting.find(settingItem=>settingItem.field === \'wordField\').value\n' +
   'if (wordFieldValue) {\n' +
   '  option.colorField = wordFieldValue\n' +
   '}'
-
-// 数据处理脚本
-const dataHandler = ''
 
 // 图表配置 new Line('domName', option)
 const option = {
