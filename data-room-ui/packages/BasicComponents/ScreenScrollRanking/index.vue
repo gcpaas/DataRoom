@@ -8,6 +8,7 @@
       class="ranking-box"
       :class="{'light-theme':customTheme === 'light','auto-theme':customTheme =='auto','dark-theme':customTheme =='dark'}"
       :config="option"
+      @click="rowClick"
     />
   </div>
 </template>
@@ -49,6 +50,11 @@ export default {
   mounted () {
   },
   methods: {
+    // 点击事件
+    rowClick (row) {
+      console.log(row)
+      this.linkage(row)
+    },
     dataFormatting (config, data) {
       const dataSourseList = []
       data.data.forEach(item => {

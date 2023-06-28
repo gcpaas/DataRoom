@@ -359,6 +359,9 @@ export default {
       'changeRefreshConfig'
     ]),
     init () {
+      if (!this.pageInfo.pageConfig.refreshConfig) {
+        this.pageInfo.pageConfig.refreshConfig = []
+      }
       this.form = { ...this.pageInfo.pageConfig }
       this.drawerVisible = true
       if (this.pageInfo.chartList.length === 0) {
@@ -374,7 +377,7 @@ export default {
               disabled: false
             })
           } else {
-            this.pageInfo.pageConfig.refreshConfig = this.pageInfo.pageConfig.refreshConfig.filter(item => item.code !== chart.code)
+            this.pageInfo.pageConfig.refreshConfig = this.pageInfo?.pageConfig?.refreshConfig?.filter(item => item.code !== chart.code) || []
           }
         })
       }

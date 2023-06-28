@@ -7,6 +7,7 @@
       :key="updateKey"
       :class="{'light-theme':customTheme === 'light','auto-theme':customTheme =='auto','dark-theme':customTheme =='dark'}"
       :config="option"
+      @click="rowClick"
     />
   </div>
 </template>
@@ -48,6 +49,11 @@ export default {
     this.chartInit()
   },
   methods: {
+    // 表格点击事件
+    rowClick (row) {
+      console.log('点击')
+      this.linkage(row)
+    },
     dataFormatting (config, data) {
       const header = []
       const dataList = []

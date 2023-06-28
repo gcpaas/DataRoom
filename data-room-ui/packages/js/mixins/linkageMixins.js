@@ -27,35 +27,8 @@ export default {
       filterList = this.combineFilterList(isInner).filter(
         field => ![undefined, ''].includes(field.value)
       )
-      this.dataLinkageHandle(this.config, this.pageInfo.code, filterList)
-    },
-    // 数据联动时改变数据（与点击设置面板的更新按钮及初始化时的数据处理做区分）
-    async dataLinkageHandle (config, pageCode, filterList) {
-      const params = {
-        chart: {
-          ...config,
-          option: undefined
-        },
-        current: 1,
-        pageCode,
-        type: config.type,
-        filterList,
-        treeParentId: this.treeParentId || '0'
-      }
-      this.dataLoading = true
-      return getUpdateChartInfo(params)
-        .then(res => {
-          console.log(2, res)
-          config = this.buildOption(config, res)
-          this.changeChartConfig(config)
-          this.changeChartKey(config.code)
-        })
-        .catch(error => {
-          console.error(error)
-        })
-        .finally(() => {
-          this.dataLoading = false
-        })
+      // this.dataLinkageHandle(this.config, this.pageInfo.code, filterList)
+      this.changeData(this.config, filterList)
     },
     /**
      * 联动数据
