@@ -247,11 +247,11 @@ export default {
       })
       if (chart.code === this.activeCode) {
         this.changeActiveItemWH({
+          code:chart.code,
           w: width,
           h: height
         })
       }
-
       this.saveTimeLine(`改变${chart?.title}大小`)
       this.changeGridShow(false)
     },
@@ -273,6 +273,7 @@ export default {
           })
           if (chart.code === this.activeCode) {
             this.changeActiveItemWH({
+              code:chart.code,
               x: left,
               y: top
             })
