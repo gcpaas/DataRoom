@@ -7,6 +7,7 @@
     <el-table
       :id="config.code"
       ref="table"
+      :key="updateKey"
       class="custom-table"
       height="100%"
       :stripe="config.customize.stripe"
