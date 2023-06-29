@@ -84,11 +84,22 @@ export default {
         })
       }
     },
-    chartInit () {
-      // key和code相等，说明是一进来刷新，调用/chart/data/list
+    async chartInit () {
+      let config = this.config
+      // key和code相等，说明是一进来刷新，调用list接口
       if (this.config.code === this.config.key || this.isPreview) {
-        // 再根据数据更新组件
-        this.updateChart()
+        // 改变样式
+        config = this.changeStyle(config) ? this.changeStyle(config) : config
+        // 改变数据
+        config = await this.changeDataByCode(config)
+      } else {
+        // 否则说明是更新，这里的更新只指更新数据（改变样式时是直接调取changeStyle方法），因为更新数据会改变key,调用chart接口
+        // TODO 直接改变prop控制台会报错，待优化
+        try {
+          this.config = await this.changeData(config)
+        } catch (e) {
+          console.error(e)
+        }
       }
     },
     linkEvent (formData) {
@@ -119,22 +130,6 @@ export default {
       return {
         option,
         setting
-      }
-    },
-    /**
-     * @description: 只更新数据
-     */
-    updateData () {
-      this.updateChart()
-    },
-    /**
-     * 更新组件
-     */
-    updateChart () {
-      if (this.isPreview) {
-        this.changeDataByCode()
-      } else {
-        this.changeData(this.config)
       }
     },
     /**
