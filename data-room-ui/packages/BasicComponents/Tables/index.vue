@@ -81,7 +81,7 @@ export default {
         color:
           this.customTheme === 'light'
             ? '#000000'
-            : this.config.customize.headerFontColor || '#ffffff',
+            : this.config.customize.headerFontColor || '#000000',
         fontSize: this.config.customize.headerFontSize + 'px' || '14px'
       }
       return style
