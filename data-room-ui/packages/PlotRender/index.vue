@@ -162,6 +162,7 @@ export default {
     },
     // 组件的样式改变，返回改变后的config
     changeStyle (config) {
+      config={...this.config,...config}
       config = this.transformSettingToOption(config, 'custom')
       // 这里定义了option和setting是为了保证在执行eval时,optionHandler、dataHandler里面可能会用到，
       const option = config.option
