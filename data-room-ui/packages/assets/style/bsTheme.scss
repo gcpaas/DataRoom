@@ -160,13 +160,14 @@
     border-color: var(--bs-el-border) !important;
     background-color: var(--bs-el-background-3) !important;
   }
-
+ 
   .popper__arrow {
+    bottom: 0 !important;
     border-top-color: var(--bs-el-background-1) !important;
     border-bottom-color: var(--bs-el-background-1) !important;
 
     &:after {
-      bottom: 0;
+      bottom: 0 !important;
       border-top-color: var(--bs-el-background-1) !important;
       border-bottom-color: var(--bs-el-background-1) !important;
     }
@@ -337,10 +338,7 @@
     border-top-color: var(--bs-el-background-1) !important;
 
     &:after {
-      top: 0 !important;
-      bottom: 0 !important;
-      border-bottom-color: var(--bs-el-background-1) !important;
-      border-top-color: var(--bs-el-background-1) !important;
+      display: none;
     }
   }
 
