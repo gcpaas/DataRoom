@@ -40,7 +40,7 @@ const customConfig = {
     // 表格头部背景颜色
     headerBackgroundColor: '',
     // 表格头部字体颜色
-    headerFontColor: '#000000',
+    headerFontColor: '#ffffff',
     // 表格头部字体大小
     headerFontSize: 14,
     // 表格主体背景颜色
