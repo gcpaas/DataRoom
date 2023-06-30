@@ -113,7 +113,6 @@ export default {
   created () { },
   mounted () {
     this.chartInit()
-    this.changeStyle(this.config)
   },
   methods: {
     // 表格点击事件
