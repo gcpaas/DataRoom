@@ -11,7 +11,7 @@
         @click="toggleNav(nav)"
       >
         <span class="nav-icon">
-          <i :class="['iconfont-bigscreen', nav.icon]" />
+          <!-- <i :class="['iconfont-bigscreen', nav.icon]" /> -->
         </span>
         {{ nav.name }}
       </a>
@@ -73,8 +73,8 @@ export default {
 
   .nav-span {
     position: relative;
-    top: 3px;
-    background-image: url('./images/line.png');
+    top: 1px;
+    // background-image: url('./images/line.png');
     background-repeat: repeat-x;
     background-position: 0 34px;
 
@@ -103,10 +103,20 @@ export default {
     }
 
     &.nav-active {
-      background-image: url('./images/tab.png');
-      background-size: 100% 100%;
-      background-repeat: no-repeat;
-      background-position: center bottom;
+      background-color: var(--bs-background-1);
+      &:after{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background-color: var(--bs-el-color-primary);
+      }
+      // background-image: url('./images/tab.png');
+      // background-size: 100% 100%;
+      // background-repeat: no-repeat;
+      // background-position: center bottom;
       /* border-bottom: 1px solid var(--bs-background-1); */
       /* background-color: var(--bs-background-1) */
     }

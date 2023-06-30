@@ -140,38 +140,38 @@ export default {
         this.headerCellStyleToObj()
         this.cellStyleToObj()
       }
-      if (config.customize.stripe) {
-        const trs = document
-          .getElementById(this.config.code)
-          ?.querySelectorAll('tr.el-table__row--striped')
-        if (trs) {
-          trs.forEach(tr => {
-            tr.style.opacity = '0.9'
-          // 透明度
-          // const overlay = document.createElement("div");
-          // overlay.classList.add("overlay");
-          // // 将蒙版添加到容器中
-          // tr.appendChild(overlay);
-          })
-        }
-      } else {
-        const trs = document
-          .getElementById(config.code)
-          ?.querySelectorAll('tr.el-table__row--striped')
-        if (trs) {
-          trs.forEach(tr => {
-            tr.style.opacity = '1'
-          // 透明度
-          // const overlay = document.createElement("div");
-          // overlay.classList.add("overlay");
-          // // 将蒙版添加到容器中
-          // tr.appendChild(overlay);
-          })
-        }
-      // document.querySelectorAll(".overlay").forEach(overlay => {
-      //   overlay.remove();
-      // });
-      }
+      // if (config.customize.stripe) {
+      //   const trs = document
+      //     .getElementById(this.config.code)
+      //     ?.querySelectorAll('tr.el-table__row--striped')
+      //   if (trs) {
+      //     trs.forEach(tr => {
+      //       tr.style.opacity = '0.9'
+      //     // 透明度
+      //     // const overlay = document.createElement("div");
+      //     // overlay.classList.add("overlay");
+      //     // // 将蒙版添加到容器中
+      //     // tr.appendChild(overlay);
+      //     })
+      //   }
+      // } else {
+      //   const trs = document
+      //     .getElementById(config.code)
+      //     ?.querySelectorAll('tr.el-table__row--striped')
+      //   if (trs) {
+      //     trs.forEach(tr => {
+      //       tr.style.opacity = '1'
+      //     // 透明度
+      //     // const overlay = document.createElement("div");
+      //     // overlay.classList.add("overlay");
+      //     // // 将蒙版添加到容器中
+      //     // tr.appendChild(overlay);
+      //     })
+      //   }
+      // // document.querySelectorAll(".overlay").forEach(overlay => {
+      // //   overlay.remove();
+      // // });
+      // }
       // this.chartInit();
       if (config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor) {
         config.customize.oddRowBackgroundColor = config.customize.bodyBackgroundColor

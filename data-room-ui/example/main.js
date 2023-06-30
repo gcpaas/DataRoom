@@ -48,6 +48,8 @@ registerConfig(
       '--bs-el-title': '#ffffff', // 标题字体颜色
       '--bs-el-text': '#ffffff', // 一般字体颜色
       '--bs-el-color-primary': '#409EFF', // elment-ui主题色，激活
+      // 主题色激活
+      '--bs-el-color-primary-active': '64, 158, 255', // => rgba(64, 158, 255, 1) = #409EFF
       '--bs-el-border': 'transparent' // 边框颜色
     },
     customPlots: [],

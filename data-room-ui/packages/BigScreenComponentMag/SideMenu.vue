@@ -52,7 +52,8 @@ export default {
   .side-catalog-wrap {
     .component-item-box {
       width: 100%;
-      padding: 8px 16px;
+      padding: 0px 16px;
+      line-height: 36px;
       display: flex;
       justify-content: space-between;
 
@@ -62,7 +63,7 @@ export default {
     }
   }
   .side-catalog-wrap{
-    padding-top: 16px;
+    // padding-top: 16px;
     width: 220px;
     height: 100%;
     box-sizing: border-box;
@@ -76,7 +77,8 @@ export default {
       }
       .side-catalog-item{
         width: 100%;
-        padding: 8px 16px;
+        padding: 0px 16px;
+        line-height: 36px;
         display: flex;
         justify-content: space-between;
         &:hover{
@@ -105,9 +107,16 @@ export default {
       }
       /*菜单激活时的样式*/
       .active-catalog{
-        background-image: linear-gradient(to right , var(--bs-el-color-primary), var(--bs-background-2));
-        background-repeat: round;
+        background-color: rgba(var(--bs-el-color-primary-active), 0.4);
         color: var(--bs-el-text);
+        &::after{
+          content: '';
+          position: absolute;
+          left: 0;
+          width: 4px;
+          height: 36px;
+          background-color: var(--bs-el-color-primary);
+        }
       }
     }
     .add-catalog-box{

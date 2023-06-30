@@ -216,8 +216,6 @@ export default {
     this.getDataList()
   },
   methods: {
-    uploadError (err, file, fileList) {
-    },
     uploadSuccess (response, file, fileList) {
       if (response.code === 200) {
         this.$message({
@@ -311,7 +309,8 @@ export default {
   height: 100%;
   padding: 16px;
   color: #9ea9b2;
-  background-color: var(--bs-background-1) !important;
+  margin:0 16px;
+  background-color: var(--bs-background-2) !important;
 
   .top-search-wrap {
     display: flex;
@@ -323,14 +322,14 @@ export default {
       width: 200px;
       margin-right: 20px;
       /deep/.el-input__inner {
-        background-color: #232832 !important;
+        background-color: var(--bs-background-1) !important;
       }
     }
 
     .el-select {
       margin-right: 20px;
       /deep/.el-input__inner {
-        background-color: #232832 !important;
+        background-color: var(--bs-background-1) !important;
       }
     }
   }
@@ -340,19 +339,19 @@ export default {
     overflow: auto;
     // 间隙自适应
     justify-content: space-around;
-    max-height: calc(100vh - 270px);
+    max-height: calc(100vh - 304px);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 15px;
 
-    /deep/ .el-loading-mask {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: calc(100vh - 260px) !important;
-      z-index: 999;
-      top: 50px;
-    }
+    // /deep/ .el-loading-mask {
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: center;
+    //   height: calc(100vh - 260px) !important;
+    //   z-index: 999;
+    //   top: 50px;
+    // }
 
     .big-screen-card-wrap {
       position: relative;
@@ -426,7 +425,7 @@ export default {
         background-color: var(--bs-background-2);
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
         color: var(--bs-el-title);
-        border: 1px solid var(--bs-background-2);
+        border: 1px solid var(--bs-background-1);
         &:hover {
           color: var(--bs-el-text);
           border: 1px solid var(--bs-el-color-primary);
@@ -510,14 +509,14 @@ export default {
   }
 
   .footer-pagination-wrap {
-    position: absolute;
-    bottom: 10px;
+    // position: absolute;
+    // bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     width: 100%;
-    margin-top: 20px;
-    padding: 0 20px;
+    margin-top: 16px;
+    // padding: 0 16px;
   }
 }
 .bs-pagination {

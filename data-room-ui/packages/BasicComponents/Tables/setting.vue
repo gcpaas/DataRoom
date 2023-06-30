@@ -9,7 +9,10 @@
       class="setting-body"
     >
       <SettingTitle>基础</SettingTitle>
-      <el-form-item class="lc-field-body" label="名称">
+      <el-form-item
+        class="lc-field-body"
+        label="名称"
+      >
         <el-input
           v-model="config.title"
           clearable
@@ -86,7 +89,6 @@
           />
         </el-form-item>
       </div>
-
     </el-form>
   </div>
 </template>
