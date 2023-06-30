@@ -146,7 +146,7 @@ export default {
     position: absolute;
     top: 150px;
     overflow: hidden;
-    padding: 16px 0;
+    // padding-top: 16px;
     width: 100%;
     height: calc(100vh - 150px);
     background-color: var(--bs-background-1);

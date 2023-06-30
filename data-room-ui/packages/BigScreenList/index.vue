@@ -433,6 +433,7 @@ export default {
         }
 
         .add-big-screen-card-text {
+          color: var(--bs-el-color-primary);
           font-size: 24px;
         }
 
@@ -518,13 +519,15 @@ export default {
 
   .footer-pagination-wrap {
     // position: absolute;
-    bottom: 16px;
-    right: auto;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+    // bottom: 16px;
+    // right: auto;
+    // display: flex;
+    // align-items: center;
+    // justify-content: flex-end;
     width: 100%;
-    margin-top: 16px;
+    position: absolute;
+    bottom: 16px;
+    right: 12px;
     // padding: 0 16px;
   }
 }

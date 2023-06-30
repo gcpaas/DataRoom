@@ -559,6 +559,7 @@ export default {
           }
 
           .add-big-screen-card-text {
+            color: var(--bs-el-color-primary);
             font-size: 24px;
           }
 
@@ -636,12 +637,14 @@ export default {
     }
 
     .footer-pagination-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
+      position: absolute;
+      // display: flex;
+      // align-items: center;
+      // justify-content: flex-end;
       width: 100%;
-      margin-top: 16px;
-      padding: 0 16px;
+      bottom: 16px;
+      right: 12px;
+      // padding: 0 16px;
     }
   }
   .bs-pagination {

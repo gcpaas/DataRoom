@@ -10,7 +10,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   width: 100%;
   position: absolute;
   box-sizing: border-box;
-  padding:0 16px;
+  padding: 16px;
   .inner-container {
     height: 100% !important;
     background-color: var(--bs-background-2);
@@ -39,7 +39,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
     // page页样式
     .bs-pagination {
-      padding: 0 0 4px 16px;
+      padding: 0 10px 0px 16px;
     }
 
     //输入框样式

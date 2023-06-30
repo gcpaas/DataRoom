@@ -44,5 +44,6 @@ export default {
 .bs-manage-main-wrap {
   display: flex;
   height: 100%;
+  padding-top: 16px;
 }
 </style>
