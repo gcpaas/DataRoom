@@ -14,7 +14,7 @@
       :data="config.option.tableData"
       :header-cell-style="headerCellStyle"
       :cell-style="cellStyle"
-      :row-class-name="tableRowClassName"
+      :row-style="rowStyle"
       @row-click="rowClick"
     >
       <el-table-column
@@ -115,6 +115,17 @@ export default {
     this.chartInit()
   },
   methods: {
+    rowStyle ({ row, rowIndex }) {
+      if (rowIndex % 2) {
+        return {
+          backgroundColor: this.config.customize.evenRowBackgroundColor
+        }
+      } else {
+        return {
+          backgroundColor: this.config.customize.oddRowBackgroundColor
+        }
+      }
+    },
     // 表格点击事件
     rowClick (row) {
       this.linkage(row)
@@ -169,20 +180,8 @@ export default {
       } else if (!(!config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor)) {
         config.customize.bodyBackgroundColor = ''
       }
-      window.requestAnimationFrame(() => {
-        document.querySelectorAll(`.even-row${config.code}`).forEach(node => {
-          node.style.backgroundColor = config.customize.evenRowBackgroundColor
-        })
-        document.querySelectorAll(`.odd-row${config.code}`).forEach(node => {
-          node.style.backgroundColor = config.customize.oddRowBackgroundColor
-        })
-      })
       this.updateKey = new Date().getTime()
       return config
-    },
-    // 表格行样式
-    tableRowClassName ({ row, rowIndex }) {
-      return rowIndex % 2 === 0 ? `even-row${this.config.code}` : `odd-row${this.config.code}`
     },
     dataFormatting (config, data) {
       config.option.tableData = data?.data
