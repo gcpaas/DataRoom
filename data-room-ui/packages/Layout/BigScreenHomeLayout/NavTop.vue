@@ -110,7 +110,7 @@ export default {
         top: 0;
         left: 0;
         width: 100%;
-        height: 4px;
+        height: 2px;
         background-color: var(--bs-el-color-primary);
       }
       // background-image: url('./images/tab.png');

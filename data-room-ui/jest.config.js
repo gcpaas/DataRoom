@@ -16,7 +16,7 @@ module.exports = {
   collectCoverageFrom: ['example/utils/**/*.{js,vue}', '!example/utils/axios.js', 'example/components/**/*.{js,vue}'],
   coverageDirectory: '<rootDir>/tests/unit/coverage',
   // 'collectCoverage': true,
-  'coverageReporters': [
+  coverageReporters: [
     'lcov',
     'text-summary'
   ],
