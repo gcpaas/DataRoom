@@ -42,7 +42,7 @@ module.exports = {
   },
   publicPath:
     process.env.VUE_APP_HISTORY === 'y' ? process.env.VUE_APP_BASE : './',
-  outputDir: 'data-room-ui',
+  outputDir: 'bigScreen',
   assetsDir: 'static',
   lintOnSave: false,
   productionSourceMap: false,

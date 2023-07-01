@@ -3,6 +3,7 @@ chuangDa.zip
 deploy.sh
 dist
 data-room-ui
+bigScreen
 ### VisualStudioCode template
 .vscode/*
 !.vscode/settings.json
@@ -367,3 +368,4 @@ GitHub.sublime-settings
 
 lib
 data-room-ui
+bigScreen
