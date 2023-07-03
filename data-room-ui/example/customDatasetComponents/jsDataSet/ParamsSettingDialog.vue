@@ -217,5 +217,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~packages/assets/style/bsTheme.scss';
+@import '../../../packages/assets/style/bsTheme.scss';
 </style>

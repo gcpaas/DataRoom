@@ -275,7 +275,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~packages/assets/style/echartStyle';
+@import '../../assets/style/echartStyle';
 .light-theme {
   background-color: #ffffff;
   color: #000000;
