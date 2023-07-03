@@ -167,6 +167,7 @@ import ColorSelect from 'packages/ColorMultipleSelect/index.vue'
 import PaddingSetting from 'packages/BigScreenDesign/RightSetting/PaddingSetting/index.vue'
 import GradualSetting from 'packages/BigScreenDesign/RightSetting/GradualSetting/index.vue'
 import PosWhSetting from 'packages/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import _ from 'lodash'
 export default {
   name: 'CustomComponentSetting',
   components: {
@@ -207,7 +208,7 @@ export default {
         return this.$store.state.bigScreen.activeItemConfig
       },
       set (val) {
-        this.$store.state.bigScreen.activeItemConfig = val
+        this.$store.commit('bigScreen/changeActiveItemConfig', val)
       }
     },
     appCode: {
@@ -219,8 +220,17 @@ export default {
       return this.$route.query.code
     }
   },
-  watch: {},
+  watch: {
+    groupList: {
+      handler (val) {
+        const setList = [].concat(...val.map(item => item.list))
+        this.$store.commit('bigScreen/changeActiveItemConfig', { ...this.config, setting: [...this.config.setting, ...setList] })
+      },
+      deep: true
+    }
+  },
   mounted () {
+    this.init()
     const groupNameList = []
     this.config.setting.filter(
       (item) => item.tabName === 'custom'
@@ -254,7 +264,11 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    init () {
+      this.config = this.$store.state.bigScreen.activeItemConfig
+    }
+  }
 }
 </script>
 
