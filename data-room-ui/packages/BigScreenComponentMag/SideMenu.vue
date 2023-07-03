@@ -2,10 +2,10 @@
   <div class="side-catalog-wrap">
     <el-scrollbar class="side-catalog-box">
       <div
-        v-for="(com,index) in componentList"
+        v-for="(com, index) in componentList"
         :key="index"
         class="component-item-box"
-        :class="{'active-catalog':activeType === com.type}"
+        :class="{ 'active-catalog': activeType === com.type }"
         @click="componentHandle(com)"
       >
         {{ com.name }}
@@ -16,7 +16,7 @@
 <script>
 
 export default {
-  components: { },
+  components: {},
   data () {
     return {
       componentList: [
@@ -36,13 +36,24 @@ export default {
       activeType: 'component'
     }
   },
-  mounted () {
+  created () {
+    const type = this.$route?.query?.type
+    if (type) {
+      this.componentHandle(this.componentList.find(item => item.type === type))
+    } else {
+      this.componentHandle(this.componentList[0])
+    }
   },
   methods: {
     // 点击左侧组件
     componentHandle (com) {
       this.activeType = com.type
-      this.$emit('getPageInfo', com.type)
+      this.$router.push({
+        path: window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components',
+        query: {
+          type: com.type
+        }
+      })
     }
   }
 }

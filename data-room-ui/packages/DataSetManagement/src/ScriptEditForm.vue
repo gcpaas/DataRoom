@@ -667,6 +667,8 @@ export default {
         this.dataForm.paramsList = res.config.paramsList ? res.config.paramsList : []
         this.dataForm.fieldDesc = res.config.fieldDesc
         this.dataForm.fieldList = res.config.fieldList
+
+        this.paramsListCopy = _.cloneDeep(this.dataForm.paramsList)
         this.scriptExecute(true)
       })
     },
@@ -770,7 +772,6 @@ export default {
             }
           })
         }
-        console.log(this.structurePreviewList)
         if (this.structurePreviewList.length && this.dataForm.fieldDesc) {
           this.buildFieldDesc()
         }
@@ -778,7 +779,6 @@ export default {
         this.saveLoading = false
         this.passTest = true
       }).catch((e) => {
-        console.log(e)
         this.passTest = false
         this.saveLoading = false
       })

@@ -133,7 +133,6 @@ export default {
       }
 
       if ((event.ctrlKey || event.metaKey) && event.keyCode === 86) {
-        console.log('粘贴')
         // 粘贴
         this.pasteCharts()
       }

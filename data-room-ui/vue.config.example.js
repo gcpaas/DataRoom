@@ -39,7 +39,8 @@ module.exports = {
       chunks: 'all'
     }
   },
-  publicPath: process.env.VUE_APP_HISTORY === 'y' ? process.env.VUE_APP_BASE : './',
+  publicPath:
+    process.env.VUE_APP_HISTORY === 'y' ? process.env.VUE_APP_BASE : './',
   outputDir: 'bigScreen',
   assetsDir: 'static',
   lintOnSave: false,

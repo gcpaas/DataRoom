@@ -9,7 +9,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? 'js数据集详情' : dataForm.id ? 'js数据集编辑' : 'js数据集新增' }}
+                {{ !isEdit ? 'JS数据集详情' : dataForm.id ? 'JS数据集编辑' : 'JS数据集新增' }}
               </div>
               <div class="page-header-right">
                 <el-button
@@ -140,7 +140,7 @@
             <div style="text-align: center; padding: 16px 0;">
               <el-button
                 type="primary"
-                @click="toExecute"
+                @click="scriptExecute()"
               >
                 执行
               </el-button>
@@ -154,7 +154,7 @@
           <div class="right-setting">
             <div class="paramConfig">
               <div class="title-style bs-title-style">
-                方法参数
+                动态参数
                 <el-button
                   type="text"
                   style="float: right;border: none;margin-top: -4px;"
@@ -200,7 +200,7 @@
               </div>
               <div class="field-wrap bs-field-wrap bs-scrollbar">
                 <div
-                  v-for="(field,key) in outputFieldList"
+                  v-for="(field, key) in outputFieldList"
                   :key="key"
                   class="field-item"
                   @click="$refs.outputFieldDialog.open()"
@@ -338,6 +338,7 @@
       <OutputFieldDialog
         ref="outputFieldDialog"
         :output-field-list="outputFieldList"
+        @setFieldList="(list) => { outputFieldList = list }"
       />
     </el-scrollbar>
     <FieldFillDialog
@@ -369,7 +370,7 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
     isEdit: {
       type: Boolean,
@@ -448,8 +449,10 @@ export default {
     }
   },
   watch: {
-    'dataForm.config.script' () {
-      this.passTest = false
+    'dataForm.config.script' (val) {
+      if (!val) {
+        this.passTest = false
+      }
     }
   },
   mounted () {
@@ -603,10 +606,14 @@ export default {
         const javascript = this.dataForm.config.script
         let scriptMethod = null
         try {
-          scriptMethod = eval(`(${javascript})`)
+          const scriptAfterReplacement = javascript.replace(/\${(.*?)}/g, (match, p) => {
+            return `'${this.dataForm.config.paramsList.find(param => param.name === p).value}'`
+          })
+          // eslint-disable-next-line no-new-func
+          scriptMethod = new Function(scriptAfterReplacement)
         } catch (error) {
           this.passTest = false
-          this.$message.error('脚本执行错误，请检查脚本')
+          this.$message.error(`脚本执行错误，请检查脚本，具体错误：${error}`)
           return
         }
         // 调用方法生成随机数据
@@ -625,13 +632,29 @@ export default {
             }
           })
         })
-        this.outputFieldList = keys.map(item => {
-          return {
-            fieldName: item,
-            fieldDesc: ''
-          }
-        })
-        if (this.outputFieldList.length && this.fieldDesc) {
+        if (this.outputFieldList.length === 0) {
+          this.outputFieldList = keys.map(item => {
+            return {
+              fieldName: item,
+              fieldDesc: ''
+            }
+          })
+        }
+        // 如果脚本有变化，生成的keys和outputFieldList的长度不一致，就重新生成outputFieldList，仅添加变化的那个字段，其余的不变化
+        if (this.outputFieldList.length !== keys.length) {
+          const newKeys = keys.filter(item => {
+            return !this.outputFieldList.some(key => {
+              return key.fieldName === item
+            })
+          })
+          newKeys.forEach(item => {
+            this.outputFieldList.push({
+              fieldName: item,
+              fieldDesc: ''
+            })
+          })
+        }
+        if (this.outputFieldList.length && this.fieldDesc && !isInit) {
           this.buildFieldDesc()
         }
         // 如果有数据，就通过测试
@@ -651,15 +674,15 @@ export default {
       }
     },
     // 执行事件
-    toExecute () {
-      // if (this.dataForm.config.paramsList.length) {
-      //   this.isSet = false
-      //   this.paramsVisible = true
-      // } else {
-      // 无参数，直接执行脚本
-      this.scriptExecute()
-      // }
-    },
+    // toExecute () {
+    // if (this.dataForm.config.paramsList.length) {
+    //   this.isSet = false
+    //   this.paramsVisible = true
+    // } else {
+    // 无参数，直接执行脚本
+    // this.scriptExecute()
+    // }
+    // },
     // 清空分类
     clearType () {
       this.typeName = ''
@@ -697,151 +720,152 @@ export default {
 }
 </script>
 
-  <style lang="scss" scoped>
-  @import '../../../packages/assets/style/bsTheme.scss';
+<style lang="scss" scoped>
+@import '../../../packages/assets/style/bsTheme.scss';
 
-  .data-set-scrollbar {
+.data-set-scrollbar {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: none;
+
+  .el-scrollbar__view {
     height: 100%;
-    overflow-y: auto;
-    overflow-x: none;
-
-    .el-scrollbar__view {
-      height: 100%;
-    }
   }
+}
 
-  /deep/ .el-input__inner {
-    width: 100% !important;
+/deep/ .el-input__inner {
+  width: 100% !important;
+}
+
+.page-header {
+  display: flex;
+  position: relative;
+
+  .page-header-right {
+    position: absolute;
+    right: 16px;
   }
+}
 
-  .page-header {
-    display: flex;
-    position: relative;
+.sql-config {
+  padding: 0 16px;
+}
 
-    .page-header-right {
-      position: absolute;
-      right: 16px;
-    }
-  }
-
-  .sql-config {
-    padding: 0 16px;
-  }
-
-  .operation {
-    /deep/ .el-select {
-      width: 200px !important;
-      margin-right: 16px;
-    }
-
-    display: flex;
-  }
-
-  /deep/ .CodeMirror {
-    height: 180px !important;
-    font-family: Helvetica, Tahoma;
-  }
-
-  .no-border {
-    border: 0;
-  }
-
-  /deep/ .fieldDescCheck {
-    .el-dialog__body {
-      height: fit-content !important;
-      min-height: unset !important;
-    }
-  }
-
-  .title-style {
-    padding: 8px 12px;
-    background-color: #f6f7fb;
-    border-left: 5px solid var(--bs-el-color-primary);
-    margin: 16px 16px 0 0;
-  }
-
-  .field-wrap {
-    // max-height: 110px;
-    overflow: auto;
+.operation {
+  /deep/ .el-select {
+    width: 200px !important;
     margin-right: 16px;
-    cursor: pointer;
+  }
 
-    .field-item {
-      line-height: 32px;
-      padding: 0 12px 0 16px;
+  display: flex;
+}
+
+/deep/ .CodeMirror {
+  height: 180px !important;
+  font-family: Helvetica, Tahoma;
+}
+
+.no-border {
+  border: 0;
+}
+
+/deep/ .fieldDescCheck {
+  .el-dialog__body {
+    height: fit-content !important;
+    min-height: unset !important;
+  }
+}
+
+.title-style {
+  padding: 8px 12px;
+  background-color: #f6f7fb;
+  border-left: 5px solid var(--bs-el-color-primary);
+  margin: 16px 16px 0 0;
+}
+
+.field-wrap {
+  // max-height: 110px;
+  overflow: auto;
+  margin-right: 16px;
+  cursor: pointer;
+
+  .field-item {
+    line-height: 32px;
+    padding: 0 12px 0 16px;
+
+    .edit_field {
+      display: none;
+    }
+
+    &:hover {
+      background-color: #f2f7fe;
 
       .edit_field {
-        display: none;
-      }
-
-      &:hover {
-        background-color: #f2f7fe;
-
-        .edit_field {
-          display: block;
-        }
+        display: block;
       }
     }
   }
+}
 
-  .right-setting {
-    height: 358px;
+.right-setting {
+  height: 358px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .paramConfig {
+    max-height: 179px;
+
+    .field-wrap {
+      max-height: 127px;
+    }
+  }
+
+  .structure {
+    flex: 1;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
 
-    .paramConfig {
-      max-height: 179px;
-
-      .field-wrap {
-        max-height: 127px;
-      }
-    }
-
-    .structure {
-      flex: 1;
-      overflow: hidden;
-
-      .field-wrap {
-        height: calc(100% - 40px);
-      }
+    .field-wrap {
+      height: calc(100% - 40px);
     }
   }
+}
 
-  .result-view {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--bs-el-text);
-    position: relative;
-    padding: 16px 0;
-    padding-left: 12px;
-    border-bottom: 1px solid var(--bs-background-1);
+.result-view {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bs-el-text);
+  position: relative;
+  padding: 16px 0;
+  padding-left: 12px;
+  border-bottom: 1px solid var(--bs-background-1);
 
-    &::before {
-      content: "";
-      height: 14px;
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      border-left: 4px solid var(--bs-el-color-primary);
-    }
+  &::before {
+    content: "";
+    height: 14px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: 4px solid var(--bs-el-color-primary);
   }
+}
 
-  /deep/ .bs-table-box.is-Edit .el-table {
+/deep/ .bs-table-box.is-Edit .el-table {
+  max-height: unset !important;
+
+  .el-table__body-wrapper {
     max-height: unset !important;
+  }
+}
 
-    .el-table__body-wrapper {
-      max-height: unset !important;
-    }
-  }
+.bs-table-box {
+  padding: 0;
+  height: 100% !important;
+  margin-bottom: 0 !important;
+}
 
-  .bs-table-box {
-    padding: 0;
-    height: 100% !important;
-    margin-bottom: 0 !important;
-  }
-  .tree-box{
-    padding: 0;
-  }
-  </style>
+.tree-box {
+  padding: 0;
+}
+</style>

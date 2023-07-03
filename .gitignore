@@ -3,6 +3,7 @@ gc-starter-dashboard-ui
 chuangDa
 chuangDa.zip
 deploy.sh
+bigScreen
 dist
 gc-starter-lowcode-ui
 ### VisualStudioCode template
@@ -277,8 +278,6 @@ dist
 # TODO: where does this rule come from?
 docs/_book
 
-# TODO: where does this rule come from?
-test/
 
 ### Windows template
 # Windows thumbnail cache files
@@ -370,3 +369,41 @@ GitHub.sublime-settings
 lib
 gc-starter-lowcode-ui
 libApp
+
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# 忽略配置文件提交
+application-*.yml
+!application-demo.yml

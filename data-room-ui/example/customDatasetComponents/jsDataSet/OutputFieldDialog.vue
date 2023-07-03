@@ -11,7 +11,7 @@
     >
       <div class="bs-table-box">
         <el-table
-          :data="outputFieldList"
+          :data="insideFieldList"
           :border="true"
           align="center"
           class="bs-el-table"
@@ -72,11 +72,14 @@ export default {
   data () {
     return {
       dialogVisible: false,
-      structurePreviewListCopy: []
+      structurePreviewListCopy: [],
+      // 内部的输出字段列表 用于编辑
+      insideFieldList: []
     }
   },
   methods: {
     open () {
+      this.insideFieldList = cloneDeep(this.outputFieldList)
       this.dialogVisible = true
     },
     close () {
@@ -89,11 +92,12 @@ export default {
       this.dialogVisible = false
     },
     setField () {
-      if (this.outputFieldList.length) {
+      if (this.insideFieldList.length) {
         this.fieldDesc = {}
-        this.outputFieldList.forEach(key => {
+        this.insideFieldList.forEach(key => {
           this.fieldDesc[key.fieldName] = key.fieldDesc
         })
+        this.$emit('setFieldList', this.insideFieldList)
       } else {
         this.fieldDesc = null
       }

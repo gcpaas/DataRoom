@@ -945,7 +945,6 @@ export default {
         this.currentCount = data.data.currentCount
         this.tableLoading = false
       }).catch((e) => {
-        console.log(e)
         this.dataPreviewList = []
         this.structurePreviewList = []
         this.structurePreviewListCopy = []

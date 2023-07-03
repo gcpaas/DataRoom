@@ -38,7 +38,6 @@ export default {
   // 初始化缓存数据集字段
   getCacheDataFields ({ commit, dispatch }, { dataSetId }) {
     getDataSetDetails(dataSetId).then(data => {
-      console.log(2, data)
       commit('changeCacheDataFields', { dataSetId, data })
       commit('changeCacheDataParams', { dataSetId, data })
     })
@@ -65,6 +64,7 @@ export function handleResData (data) {
   }
   // 如果pageConfig中的cacheDataSets为null，赋值[]
   pageInfo.pageConfig.cacheDataSets = pageInfo.pageConfig.cacheDataSets || []
+  pageInfo.pageConfig.refreshConfig = pageInfo.pageConfig.refreshConfig || []
   pageInfo.chartList.forEach((chart) => {
     if (!['customComponent', 'remoteComponent'].includes(chart.type)) {
       chart.option = _.cloneDeep(setModules[chart.type])

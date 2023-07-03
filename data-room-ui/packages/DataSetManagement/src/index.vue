@@ -460,7 +460,7 @@ export default {
         { name: '全部', datasetType: '' },
         { name: '原始数据集', datasetType: 'original', componentName: 'OriginalEditForm' },
         { name: '自助数据集', datasetType: 'custom', componentName: 'CustomEditForm' },
-        { name: '存储过程数据集', datasetType: 'storedProcedure', componentName: 'CustomEditForm' },
+        { name: '存储过程数据集', datasetType: 'storedProcedure', componentName: 'StoredProcedureEditForm' },
         { name: 'JSON数据集', datasetType: 'json', componentName: 'JsonEditForm' },
         { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' }
       ]

@@ -138,7 +138,6 @@ export default {
   methods: {
     // 选择新增类型
     openAddForm (type, componentName) {
-      console.log()
       this.dialogVisible = false
       this.$emit('openAddForm', type, componentName)
     }
