@@ -216,6 +216,12 @@ export default {
     this.getDataList()
   },
   methods: {
+    uploadError () {
+      this.$message({
+        type: 'error',
+        message: '上传失败'
+      })
+    },
     uploadSuccess (response, file, fileList) {
       if (response.code === 200) {
         this.$message({
