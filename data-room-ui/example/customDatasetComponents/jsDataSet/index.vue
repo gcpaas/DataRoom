@@ -641,20 +641,39 @@ export default {
             }
           })
         }
-        // 如果脚本有变化，生成的keys和outputFieldList的长度不一致，就重新生成outputFieldList，仅添加变化的那个字段，其余的不变化
+        // 如果脚本有变化，生成的keys和outputFieldList的长度不一致，就重新生成outputFieldList，仅删除或添加变化的那个字段，其余的不变化
         if (this.outputFieldList.length !== keys.length) {
-          const newKeys = keys.filter(item => {
-            return !this.outputFieldList.some(key => {
-              return key.fieldName === item
-            })
+          const newOutputFieldList = []
+          keys.forEach(key => {
+            const field = this.outputFieldList.find(item => item.fieldName === key)
+            if (field) {
+              newOutputFieldList.push(field)
+            } else {
+              newOutputFieldList.push({
+                fieldName: key,
+                fieldDesc: ''
+              })
+            }
           })
-          newKeys.forEach(item => {
-            this.outputFieldList.push({
-              fieldName: item,
-              fieldDesc: ''
-            })
-          })
+          this.outputFieldList = newOutputFieldList
         }
+        // 如果脚本有变化，生成的keys和outputFieldList的长度一致，仅字段名变化了，就重新生成outputFieldList
+        if (this.outputFieldList.length === keys.length) {
+          const newOutputFieldList = []
+          keys.forEach(key => {
+            const field = this.outputFieldList.find(item => item.fieldName === key)
+            if (field) {
+              newOutputFieldList.push(field)
+            } else {
+              newOutputFieldList.push({
+                fieldName: key,
+                fieldDesc: ''
+              })
+            }
+          })
+          this.outputFieldList = newOutputFieldList
+        }
+        // 如果有字段描述，就同步
         if (this.outputFieldList.length && this.fieldDesc && !isInit) {
           this.buildFieldDesc()
         }
