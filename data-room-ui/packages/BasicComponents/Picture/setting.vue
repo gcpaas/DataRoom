@@ -11,6 +11,7 @@
       label-position="left"
       :model="config"
       :rules="rules"
+      class="bs-el-form"
     >
       <SettingTitle>标题</SettingTitle>
       <div class="lc-field-body">
@@ -66,13 +67,13 @@
                 alt=""
               >
               <span class="el-upload-list__item-actions">
-                  <span
-                    class="el-upload-list__item-delete"
-                    @click="handleRemove(file)"
-                  >
-                    <i class="el-icon-delete" />
-                  </span>
+                <span
+                  class="el-upload-list__item-delete"
+                  @click="handleRemove(file)"
+                >
+                  <i class="el-icon-delete" />
                 </span>
+              </span>
             </div>
             <el-input
               slot="tip"

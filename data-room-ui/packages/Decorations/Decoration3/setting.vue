@@ -5,12 +5,12 @@
       :model="config"
       label-width="90px"
       label-position="left"
-      class="setting-body"
+      class="setting-body bs-el-form"
     >
       <el-form
         :model="config.customize"
         label-position="left"
-        class="setting-body"
+        class="setting-body bs-el-form"
         label-width="90px"
       >
         <SettingTitle>标题</SettingTitle>

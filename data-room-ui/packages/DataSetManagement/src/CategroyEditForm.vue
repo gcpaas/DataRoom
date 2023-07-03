@@ -14,6 +14,7 @@
         :rules="rules"
         label-position="left"
         label-width="90px"
+        class="bs-el-form"
       >
         <el-form-item
           label="分组名称"

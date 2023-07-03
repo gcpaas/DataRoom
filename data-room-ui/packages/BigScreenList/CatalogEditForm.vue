@@ -6,13 +6,14 @@
       :visible.sync="formVisible"
       :append-to-body="true"
       destroy-on-close
-      class="bs-dialog-wrap bs-el-dialog catalog-edit-wrap"
+      class="bs-dialog-wrap bs-el-dialog catalog-edit-wrap "
     >
       <el-form
         v-if="formVisible"
         ref="dataForm"
         label-position="right"
         label-width="100px"
+        class="bs-el-form"
       >
         <el-input
           v-model="searchKey"
@@ -90,6 +91,7 @@
         :model="currentCatalog"
         label-width="80px"
         :rules="formRules"
+        class="bs-el-form"
       >
         <el-form-item
           label="分组名称"

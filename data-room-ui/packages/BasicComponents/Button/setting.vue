@@ -5,14 +5,14 @@
       :model="config"
       label-width="100px"
       label-position="left"
-      class="setting-body"
+      class="setting-body bs-el-form"
     >
       <div>
         <slot name="top" />
         <el-form
           :model="config.customize"
           label-position="left"
-          class="setting-body"
+          class="setting-body bs-el-form"
           label-width="100px"
         >
           <SettingTitle>位置</SettingTitle>

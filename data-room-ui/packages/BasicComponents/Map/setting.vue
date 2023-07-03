@@ -5,7 +5,7 @@
       :model="config"
       label-width="90px"
       label-position="left"
-      class="setting-body"
+      class="setting-body bs-el-form"
     >
       <SettingTitle>标题</SettingTitle>
       <div class="lc-field-body">
@@ -218,7 +218,6 @@
           </div>
         </el-form-item>
       </div>
-
     </el-form>
   </div>
 </template>

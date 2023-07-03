@@ -20,6 +20,7 @@
         size="small"
         label-position="right"
         :label-width="dataForm.advanceSettingFlag ? '200px' : '150px'"
+        class="bs-el-form"
       >
         <el-form-item
           label="类型"

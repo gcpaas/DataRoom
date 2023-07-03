@@ -57,7 +57,7 @@
         <el-form
           ref="queryForm"
           :model="queryForm"
-          class="filter-container"
+          class="filter-container bs-el-form"
           @submit.native.prevent
         >
           <el-form-item

@@ -3,28 +3,31 @@
     <el-form
       ref="form"
       :model="config"
-      class="setting-body"
+      class="setting-body bs-el-form"
       label-position="left"
       label-width="90px"
     >
       <el-form
-      :model="config.customize"
-      class="setting-body"
-      label-position="left"
-      label-width="90px"
-    >
-      <SettingTitle>标题</SettingTitle>
-      <el-form-item class="lc-field-body" label="装饰名称">
-        <el-input
-          v-model="config.title"
-          clearable
-        />
-      </el-form-item>
-      <SettingTitle>位置</SettingTitle>
+        :model="config.customize"
+        class="setting-body bs-el-form"
+        label-position="left"
+        label-width="90px"
+      >
+        <SettingTitle>标题</SettingTitle>
+        <el-form-item
+          class="lc-field-body"
+          label="装饰名称"
+        >
+          <el-input
+            v-model="config.title"
+            clearable
+          />
+        </el-form-item>
+        <SettingTitle>位置</SettingTitle>
         <div class="lc-field-body">
           <PosWhSetting :config="config" />
         </div>
-      <SettingTitle>基础</SettingTitle>
+        <SettingTitle>基础</SettingTitle>
         <div class="lc-field-body">
           <el-form-item label="装饰主颜色">
             <ColorPicker
@@ -47,8 +50,7 @@
             />
           </el-form-item>
         </div>
-
-    </el-form>
+      </el-form>
     </el-form>
   </div>
 </template>

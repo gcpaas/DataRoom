@@ -583,3 +583,9 @@
    background: var(--bs-el-background-1);
  }
 }
+
+.bs-el-form {
+  .el-form-item__label{
+    color: var(--bs-el-title);
+  }
+}

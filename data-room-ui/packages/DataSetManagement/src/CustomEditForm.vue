@@ -46,6 +46,7 @@
             :rules="rules"
             label-width="120px"
             style="padding: 16px 16px 0;"
+            class="bs-el-form"
           >
             <el-row :gutter="20">
               <el-col :span="12">

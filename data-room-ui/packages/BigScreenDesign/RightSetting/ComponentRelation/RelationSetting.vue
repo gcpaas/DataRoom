@@ -18,6 +18,7 @@
     <el-form
       ref="form"
       label-width="100px"
+      class="bs-el-form"
     >
       <el-table
         :data="configMapConfig.maps"

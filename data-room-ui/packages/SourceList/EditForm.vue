@@ -14,6 +14,7 @@
         :rules="dataFormRules"
         label-position="right"
         label-width="100px"
+        class="bs-el-form"
       >
         <el-form-item
           label="名称"

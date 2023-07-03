@@ -4,7 +4,7 @@
     <div class="inner-container">
       <el-form
         :inline="true"
-        class="filter-container"
+        class="filter-container bs-el-form"
       >
         <el-form-item class="filter-input filter-item">
           <el-input

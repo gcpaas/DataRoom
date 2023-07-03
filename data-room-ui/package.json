@@ -1,16 +1,10 @@
 {
   "name": "@gcpaas/data-room-ui",
-  "version": "0.0.1-2023061908-Alpha",
+  "version": "0.0.1-2023070301-Alpha",
   "description": "自定义大屏",
   "author": "gc-starter",
   "license": "MIT",
-  "main": "lib/dataRoom.umd.min.js",
-  "files": [
-    "lib/fonts/*",
-    "lib/img/*",
-    "lib/dataRoom.css",
-    "lib/dataRoom.umd.min.js.gz"
-  ],
+  "main": "packages/index.js",
   "keywords": [
     "dataRoom",
     "大屏设计器",

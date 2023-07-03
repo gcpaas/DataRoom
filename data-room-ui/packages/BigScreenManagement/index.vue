@@ -148,6 +148,7 @@
         :model="catalogData"
         label-width="80px"
         :rules="formRules"
+        class="bs-el-form"
       >
         <el-form-item
           label="上级目录"

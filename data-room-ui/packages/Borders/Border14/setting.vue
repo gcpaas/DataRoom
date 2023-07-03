@@ -5,14 +5,14 @@
       :model="config"
       label-width="90px"
       label-position="left"
-      class="setting-body"
+      class="setting-body bs-el-form"
     >
       <div class="lc-field-body">
         <slot name="top" />
         <el-form
           :model="config.customize"
           label-position="left"
-          class="setting-body"
+          class="setting-body bs-el-form"
           label-width="90px"
         >
           <el-form-item label="边框名称">

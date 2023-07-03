@@ -11,6 +11,7 @@
       label-position="left"
       :model="config"
       :rules="rules"
+      class="bs-el-form"
     >
       <SettingTitle>标题</SettingTitle>
       <div class="bs-setting-wrap">

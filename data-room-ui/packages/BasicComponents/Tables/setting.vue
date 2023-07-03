@@ -6,7 +6,7 @@
       :rules="customRules"
       label-width="120px"
       label-position="left"
-      class="setting-body"
+      class="setting-body bs-el-form"
     >
       <SettingTitle>基础</SettingTitle>
       <el-form-item

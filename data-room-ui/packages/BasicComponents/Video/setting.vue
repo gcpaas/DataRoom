@@ -5,17 +5,20 @@
       :model="config"
       label-width="90px"
       label-position="left"
-      class="setting-body"
+      class="setting-body bs-el-form"
     >
       <slot name="top" />
       <el-form
         :model="config.customize"
         label-position="left"
-        class="setting-body"
+        class="setting-body bs-el-form"
         label-width="90px"
       >
         <SettingTitle>标题</SettingTitle>
-        <el-form-item label="播放器名称" class="lc-field-body">
+        <el-form-item
+          label="播放器名称"
+          class="lc-field-body"
+        >
           <el-input
             v-model="config.title"
             clearable

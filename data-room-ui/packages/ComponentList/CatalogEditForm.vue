@@ -13,6 +13,7 @@
         ref="dataForm"
         label-position="right"
         label-width="100px"
+        class="bs-el-form"
       >
         <div class="top-search-wrap">
           <el-input

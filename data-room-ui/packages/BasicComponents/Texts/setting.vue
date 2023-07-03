@@ -11,6 +11,7 @@
       label-position="left"
       :model="config"
       :rules="rules"
+      class="bs-el-form"
     >
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">

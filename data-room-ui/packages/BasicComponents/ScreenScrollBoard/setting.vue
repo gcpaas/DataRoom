@@ -3,13 +3,13 @@
     <el-form
       ref="form"
       :model="config"
-      class="setting-body"
+      class="setting-body bs-el-form"
       label-position="left"
       label-width="90px"
     >
       <el-form
         :model="config.customize"
-        class="setting-body"
+        class="setting-body bs-el-form"
         label-position="left"
         label-width="90px"
       >

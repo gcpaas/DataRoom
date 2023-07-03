@@ -9,7 +9,7 @@
       :rules="rules"
       label-width="100px"
       label-position="left"
-      class="setting-body"
+      class="setting-body bs-el-form"
     >
       <div class="data-setting-box">
         <div

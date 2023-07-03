@@ -1,0 +1,14 @@
+# 忽略的文件和文件夹
+node_modules/
+example/
+dist/
+lib/
+hooks/
+
+# 只包含packages和public文件
+!packages/
+!LICENSE
+!README.md
+
+# 排除根目录下的配置文件
+/*

@@ -5,6 +5,7 @@
       label-width="100px"
       label-position="left"
       :model="config"
+      class="bs-el-form"
     >
       <el-form-item
         label="标题"

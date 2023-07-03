@@ -5,16 +5,19 @@
       :model="config"
       label-width="100px"
       label-position="left"
-      class="setting-body"
+      class="setting-body bs-el-form"
     >
       <el-form
         :model="config.customize"
         label-position="left"
-        class="setting-body"
+        class="setting-body bs-el-form"
         label-width="100px"
       >
         <SettingTitle>标题</SettingTitle>
-        <el-form-item label="边框名称" class="lc-field-body">
+        <el-form-item
+          label="边框名称"
+          class="lc-field-body"
+        >
           <el-input
             v-model="config.title"
             clearable

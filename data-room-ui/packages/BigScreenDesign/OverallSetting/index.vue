@@ -7,7 +7,7 @@
         v-model="form"
         label-width="100px"
         label-position="left"
-        class="setting-body"
+        class="setting-body bs-el-form"
       >
         <el-form-item label="推荐分辨率">
           <el-select

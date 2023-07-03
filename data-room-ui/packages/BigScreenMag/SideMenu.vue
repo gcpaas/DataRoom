@@ -69,6 +69,7 @@
         :model="currentCatalog"
         label-width="80px"
         :rules="formRules"
+        class="bs-el-form"
       >
         <el-form-item
           label="分组名称"
