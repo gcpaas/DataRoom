@@ -213,7 +213,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~packages/assets/style/settingWrap.scss';
+@import '../../assets/style/settingWrap.scss';
 .bs-slider {
   .el-input-number__decrease {
     background: var(--bs-el-background-1);

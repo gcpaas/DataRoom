@@ -417,7 +417,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~packages/assets/style/bsTheme.scss';
+@import '../assets/style/bsTheme.scss';
 .big-screen-list-wrap {
   position: relative;
   height: 100%;

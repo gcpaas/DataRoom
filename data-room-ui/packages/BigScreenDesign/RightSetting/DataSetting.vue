@@ -808,7 +808,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~packages/assets/style/settingWrap.scss";
+  @import "../../assets/style/settingWrap.scss";
   .add-filter-box {
     position: relative;
     .add-filter {

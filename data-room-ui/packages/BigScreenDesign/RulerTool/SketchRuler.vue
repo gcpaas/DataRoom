@@ -257,7 +257,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '~packages/BigScreenDesign/fonts/iconfont.css';
+@import '../../BigScreenDesign/fonts/iconfont.css';
 .wrapper {
   box-sizing: border-box;
   position: absolute;

@@ -260,14 +260,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~packages/assets/style/bsTheme.scss';
+@import '../assets/style/bsTheme.scss';
 .catalog-edit-wrap{
   .el-input {
     width: 200px;
-    margin-right: 20px;
-    /deep/.el-input__inner {
-      /*background-color: #232832 !important;*/
-    }
+    margin-right: 20px
   }
 }
 </style>

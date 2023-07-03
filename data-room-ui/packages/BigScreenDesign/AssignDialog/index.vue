@@ -90,7 +90,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~packages/assets/style/bsTheme.scss';
+@import '../../assets/style/bsTheme.scss';
 .content {
   display: flex;
   flex-direction: column;

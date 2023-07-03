@@ -3,7 +3,7 @@
     <div class="logo-wrap item-wrap">
       <img
         class="menu-img"
-        src="~packages/BigScreenDesign/images/app.png"
+        src="../BigScreenDesign/images/app.png"
         alt="返回"
         @click="backManagement"
       >
@@ -459,7 +459,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '~packages/BigScreenDesign/fonts/iconfont.css';
+@import '../BigScreenDesign/fonts/iconfont.css';
 .default-layout-box {
   display: flex;
   flex-wrap: wrap;

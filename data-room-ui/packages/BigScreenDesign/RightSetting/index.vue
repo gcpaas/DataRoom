@@ -115,7 +115,7 @@ export default {
     configStyle: {
       handler (val, oldValue) {
         if (!_.isEqual(val, oldValue)) {
-          this.$emit('updateSetting',{...val,type:this.config.type,code:this.config.code})
+          this.$emit('updateSetting', { ...val, type: this.config.type, code: this.config.code })
           this.saveTimeLine(`更新${val?.title}组件属性`)
         }
       },
@@ -209,7 +209,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~packages/assets/style/settingWrap.scss';
+@import '../../assets/style/settingWrap.scss';
 .add-filter-box {
   position: relative;
   .add-filter {

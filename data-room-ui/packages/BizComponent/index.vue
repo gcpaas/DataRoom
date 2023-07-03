@@ -5,7 +5,7 @@
         <div class="logo-wrap item-wrap">
           <img
             class="menu-img"
-            src="~packages/BigScreenDesign/images/app.png"
+            src="../BigScreenDesign/images/app.png"
             alt="返回"
             @click="backManagement"
           >

@@ -108,8 +108,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~packages/BigScreenDesign/fonts/iconfont.css';
-@import '~packages/assets/style/bsTheme.scss';
+@import '../../BigScreenDesign/fonts/iconfont.css';
+@import '../../assets/style/bsTheme.scss';
 .layer-list-wrap {
   /deep/ .choosed-row {
     .bs-el-table-column {

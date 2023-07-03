@@ -126,7 +126,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../~packages/assets/style/settingWrap.scss";
+@import "../../assets/style/settingWrap.scss";
 .setting-wrap {
   padding-top: 16px;
 }

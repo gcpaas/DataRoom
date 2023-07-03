@@ -348,7 +348,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~packages/assets/style/bsTheme.scss';
+@import '../assets/style/bsTheme.scss';
 .el-scrollbar {
   height: 300px;
   overflow-x: hidden;
