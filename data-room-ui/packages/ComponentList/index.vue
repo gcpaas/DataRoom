@@ -271,7 +271,6 @@ export default {
         this.list = arr?.filter((item) => item.title.indexOf(this.name) !== -1)
       }
     },
-    // 分组管理
     catalogManage () {
       this.$refs.CatalogEditForm.formVisible = true
     },

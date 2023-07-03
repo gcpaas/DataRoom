@@ -19,7 +19,7 @@
           <el-input
             v-model="searchKey"
             class="bs-el-input"
-            placeholder="'请输入分组名称'"
+            placeholder="请输入分组名称"
             prefix-icon="el-icon-search"
             clearable
             @clear="reSearch"
