@@ -139,7 +139,7 @@ const setting = [
     type: 'colorPicker',
     field: 'label_style_fill',
     optionField: 'label.style.fill',
-    value: '#000000',
+    value: '#fff',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -489,7 +489,7 @@ const option = {
   },
   label: {
     style: {
-      fill: '#000',
+      fill: '#fff',
       opacity: 0,
       fontSize: 12
     }
