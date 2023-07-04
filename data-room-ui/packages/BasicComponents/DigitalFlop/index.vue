@@ -59,6 +59,8 @@ export default {
   },
   computed: {
     option () {
+      let str=this.config.option.data
+      if (!this.config.option.data) return { ...this.config.customize, data: [] }
       if (
         this.config.option.data.toString().split('').length <
         this.config.customize.numberDigits
@@ -68,16 +70,16 @@ export default {
           this.config.option.data.toString().split('').length
         for (let i = 0; i < len; i++) {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-          this.config.option.data =
+          str =
             (this.config.customize.placeHolder
               ? this.config.customize.placeHolder
-              : ' ') + this.config.option.data
+              : ' ') + str
         }
       }
       const a =
         this.config.customize.formatter === 0
-          ? this.config.option.data
-          : formatter(this.config.option.data, this.config.customize.formatter)
+          ? str
+          : formatter(str, this.config.customize.formatter)
       const arr = a.toString().split('')
 
       if (this.config.customize.slotRight !== '') {
