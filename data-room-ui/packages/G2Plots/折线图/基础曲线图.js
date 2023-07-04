@@ -45,7 +45,7 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
-    label: '线条宽度',
+    label: '曲线宽度',
     type: 'inputNumber',
     field: 'lineStyle_lineWidth',
     optionField: 'lineStyle.lineWidth',
@@ -54,7 +54,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '线条颜色',
+    label: '曲线颜色',
     type: 'gradual',
     field: 'lineStyle_stroke',
     optionField: 'lineStyle.stroke',
@@ -240,16 +240,16 @@ const setting = [
     tabName: 'custom',
     options: [
       {
-        label: '下',
-        value: 'start'
+        label: '上',
+        value: 'end'
       },
       {
         label: '中',
         value: 'center'
       },
       {
-        label: '上',
-        value: 'end'
+        label: '下',
+        value: 'start'
       }],
     groupName: 'yAxis'
   },
@@ -307,7 +307,7 @@ const setting = [
     type: 'inputNumber',
     field: 'yAxis_line_lineWidth',
     optionField: 'yAxis.line.style.lineWidth',
-    value: 1,
+    value: 0,
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -318,17 +318,17 @@ const setting = [
     optionField: 'yAxis.line.style.stroke',
     // 是否多选
     multiple: false,
-    value: 'rgba(255,255,255,0)',
+    value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'yAxis'
   },
   // 边距 padding
-  {
+    {
     label: '图表边距',
     type: 'padding',
     field: 'appendPadding',
     optionField: 'appendPadding',
-    value: [20, 20, 20, 20],
+    value: [16, 16, 16, 16],
     tabName: 'custom',
     groupName: 'padding'
   }
@@ -336,16 +336,16 @@ const setting = [
 
 // 模拟数据
 const data = [
-  {"Date": "2010-01", "scales": 1998},
-  {"Date": "2010-02", "scales": 1850},
-  {"Date": "2010-03", "scales": 1720},
-  {"Date": "2010-04", "scales": 1818},
-  {"Date": "2010-05", "scales": 1920},
-  {"Date": "2010-06", "scales": 1802},
-  {"Date": "2010-07", "scales": 1945},
-  {"Date": "2010-08", "scales": 1856},
-  {"Date": "2010-09", "scales": 2107},
-  {"Date": "2010-10", "scales": 2140}
+  { Date: '2010-01', scales: 1998 },
+  { Date: '2010-02', scales: 1850 },
+  { Date: '2010-03', scales: 1720 },
+  { Date: '2010-04', scales: 1818 },
+  { Date: '2010-05', scales: 1920 },
+  { Date: '2010-06', scales: 1802 },
+  { Date: '2010-07', scales: 1945 },
+  { Date: '2010-08', scales: 1856 },
+  { Date: '2010-09', scales: 2107 },
+  { Date: '2010-10', scales: 2140 }
 ]
 
 // 配置处理脚本
@@ -360,7 +360,7 @@ const option = {
   dataKey: 'data',
   data,
   color: '',
-  appendPadding: [20, 20, 20, 20], // 设置图标的边距
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   xField: 'Date',
   yField: 'scales',
   smooth: true,
@@ -428,11 +428,9 @@ const option = {
     },
     line: {
       style: {
-        stroke: 'rgba(255,255,255,0)',
-        lineWidth: 1
-      },
-      stroke: 'rgba(255,255,255,0)',
-      lineWidth: 1
+        stroke: '#d0d0d0',
+        lineWidth: 0
+      }
     }
   }
 }

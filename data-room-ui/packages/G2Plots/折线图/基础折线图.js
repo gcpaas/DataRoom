@@ -45,7 +45,7 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
-    label: '数据点形状',
+    label: '折线点样式',
     type: 'select',
     field: 'point_shape',
     optionField: 'point.shape',
@@ -54,14 +54,59 @@ const setting = [
     value: '',
     tabName: 'custom',
     options: [
-      { label: '圆形', value: 'circle' },
-      { label: '三角形', value: 'triangle' },
-      { label: '菱形', value: 'diamond' }
+      {
+        label: '无',
+        value: false
+      },
+      {
+        label: '空心圆',
+        value: 'hollow-circle'
+      },
+      {
+        label: '圆形',
+        value: 'circle'
+      },
+      {
+        label: '正方形',
+        value: 'square'
+      },
+      {
+        label: '菱形',
+        value: 'diamond'
+      },
+      {
+        label: '三角形',
+        value: 'triangle'
+      },
+      {
+        label: '六边形',
+        value: 'hexagon'
+      },
+      {
+        label: '菱形交叉',
+        value: 'bowtie'
+      },
+      {
+        label: '十字形',
+        value: 'cross'
+      },
+      {
+        label: 'I形',
+        value: 'tick'
+      },
+      {
+        label: '加号',
+        value: 'plus'
+      },
+      {
+        label: '连字号',
+        value: 'hyphen'
+      }
     ],
     groupName: 'graph'
   },
   {
-    label: '数据点大小',
+    label: '折线点大小',
     type: 'inputNumber',
     field: 'point_size',
     optionField: 'point.size',
@@ -70,7 +115,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '数据点颜色',
+    label: '折线点颜色',
     type: 'colorPicker',
     field: 'point_style_fill',
     optionField: 'point.style.fill',
@@ -81,11 +126,11 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '数据标签字体大小',
-    type: 'inputNumber',
-    field: 'label_style_fontSize',
-    optionField: 'label.style.fontSize',
-    value: 12,
+    label: '数据标签',
+    type: 'switchNumber', // 设置组件类型
+    field: 'label_style_opacity', // 字段
+    optionField: 'label.style.opacity', // 对应options中的字段
+    value: 0,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -94,12 +139,21 @@ const setting = [
     type: 'colorPicker',
     field: 'label_style_fill',
     optionField: 'label.style.fill',
-    value: 'rgba(255,255,255,0)',
+    value: '#000000',
     tabName: 'custom',
     groupName: 'graph'
   },
   {
-    label: '线条宽度',
+    label: '数据标签大小',
+    type: 'inputNumber',
+    field: 'label_style_fontSize',
+    optionField: 'label.style.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '折线宽度',
     type: 'inputNumber',
     field: 'lineStyle_lineWidth',
     optionField: 'lineStyle.lineWidth',
@@ -108,7 +162,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '线条颜色',
+    label: '折线颜色',
     type: 'gradual',
     field: 'lineStyle_stroke',
     optionField: 'lineStyle.stroke',
@@ -294,16 +348,16 @@ const setting = [
     tabName: 'custom',
     options: [
       {
-        label: '下',
-        value: 'start'
+        label: '上',
+        value: 'end'
       },
       {
         label: '中',
         value: 'center'
       },
       {
-        label: '上',
-        value: 'end'
+        label: '下',
+        value: 'start'
       }],
     groupName: 'yAxis'
   },
@@ -361,7 +415,7 @@ const setting = [
     type: 'inputNumber',
     field: 'yAxis_line_lineWidth',
     optionField: 'yAxis.line.style.lineWidth',
-    value: 1,
+    value: 0,
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -372,7 +426,7 @@ const setting = [
     optionField: 'yAxis.line.style.stroke',
     // 是否多选
     multiple: false,
-    value: 'rgba(255,255,255,0)',
+    value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -382,7 +436,7 @@ const setting = [
     type: 'padding',
     field: 'appendPadding',
     optionField: 'appendPadding',
-    value: [20, 20, 20, 20],
+    value: [16, 16, 16, 16],
     tabName: 'custom',
     groupName: 'padding'
   }
@@ -414,7 +468,7 @@ const option = {
   dataKey: 'data',
   data,
   color: '',
-  appendPadding: [20, 20, 20, 20], // 设置图标的边距
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   xField: 'Date',
   yField: 'scales',
   smooth: false,
@@ -424,7 +478,8 @@ const option = {
   },
   label: {
     style: {
-      fill: '#fff',
+      fill: '#000',
+      opacity: 0,
       fontSize: 12
     }
   },
@@ -507,11 +562,9 @@ const option = {
     },
     line: {
       style: {
-        stroke: 'rgba(255,255,255,0)',
-        lineWidth: 1
-      },
-      stroke: 'rgba(255,255,255,0)',
-      lineWidth: 1
+        stroke: '#d0d0d0',
+        lineWidth: 0
+      }
     }
   }
 }

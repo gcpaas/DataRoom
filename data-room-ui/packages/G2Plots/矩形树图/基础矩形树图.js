@@ -40,7 +40,31 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
-    label: '颜色配置',
+    label: '字体大小',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'lable_style_fontSize',
+    // 对应options中的字段
+    optionField: 'label.style.fontSize',
+    value: '14',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '字体颜色',
+    // 设置组件类型
+    type: 'colorPicker',
+    // 字段
+    field: 'label_style_color',
+    // 对应options中的字段
+    optionField: 'label.style.fill',
+    value: '#FFFFFF',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '颜色',
     // 设置组件类型
     type: 'colorSelect',
     // 字段
@@ -86,13 +110,42 @@ const setting = [
     ],
     groupName: 'legend'
   },
+  {
+    label: '字体大小',
+    type: 'inputNumber',
+    field: 'legendItemName_style_fontSize',
+    optionField: 'legendItemName.style.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体权重',
+    type: 'inputNumber',
+    step: 100,
+    max: 900,
+    field: 'legendItemName_style_fontWeight',
+    optionField: 'legendItemName.style.fontWeight',
+    value: 400,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体颜色',
+    type: 'colorPicker',
+    field: 'legendItemName_style_fill',
+    optionField: 'legendItemName.style.fill',
+    value: '#595959',
+    tabName: 'custom',
+    groupName: 'legend'
+  },
   // 边距 padding
   {
     label: '图表边距',
     type: 'padding', // 设置组件类型
     field: 'appendPadding', // 字段
     optionField: 'appendPadding', // 对应options中的字段
-    value: [20, 20, 20, 20],
+    value: [16, 16, 16, 16],
     tabName: 'custom',
     groupName: 'padding'
   }
@@ -126,7 +179,10 @@ const data = {
 }
 
 // 配置处理脚本
-const optionHandler = '\noption.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;'
+const optionHandler = '\noption.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
+  '\n  if (option.legendEnable) {\n' +
+  '    option.legend.itemName = option.legendItemName\n' +
+  '  }'
 
 // 数据处理脚本
 const dataHandler = '// 转换数据格式\n' +
@@ -145,13 +201,25 @@ const option = {
   dataKey: 'data',
   data,
   color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
-  appendPadding: [20, 20, 20, 20], // 设置图标的边距
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   colorField: 'name',
   valueField: 'value',
   legendEnable: false,
   legendLayout: 'vertical',
   legendPosition: 'top',
-  legend: false
+  legend: false,
+  legendItemName: {
+    style: {
+      fill: '#595959',
+      fontSize: 12,
+      fontWeight: 400
+    }
+  },
+  label: {
+    style: {
+      fontSize: '30px'
+    }
+  }
 }
 
 export default {

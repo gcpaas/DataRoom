@@ -45,7 +45,7 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
-    label: '是否平滑',
+    label: '平滑',
     type: 'switch', // 设置组件类型
     field: 'smooth', // 字段
     optionField: 'smooth', // 对应options中的字段
@@ -54,7 +54,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '线条宽度',
+    label: '折线宽度',
     type: 'inputNumber', // 设置组件类型
     field: 'line_size', // 字段
     optionField: 'line.size', // 对应options中的字段
@@ -63,7 +63,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '线条颜色',
+    label: '折线颜色',
     type: 'gradual', // 设置组件类型
     field: 'line_color', // 字段
     optionField: 'line.color', // 对应options中的字段
@@ -72,7 +72,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '填充颜色',
+    label: '面积颜色',
     type: 'gradual', // 设置组件类型
     field: 'areaStyle_fill', // 字段
     optionField: 'areaStyle.fill', // 对应options中的字段
@@ -81,13 +81,26 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '填充透明度',
-    type: 'slider', // 设置组件类型
+    label: '面积透明度',
+    type: 'inputNumber', // 设置组件类型
     field: 'areaStyle_fillOpacity', // 字段
     optionField: 'areaStyle.fillOpacity', // 对应options中的字段
     value: 0.3,
     tabName: 'custom',
-    groupName: 'graph'
+    groupName: 'graph',
+    step:0.01,
+    max:1,
+    min:0
+  },
+  // 边距 padding
+  {
+    label: '图表边距',
+    type: 'padding', // 设置组件类型
+    field: 'appendPadding', // 字段
+    optionField: 'appendPadding', // 对应options中的字段
+    value: [16, 16, 16, 16],
+    tabName: 'custom',
+    groupName: 'padding'
   }
 ]
 
@@ -100,7 +113,10 @@ const dataHandler = '// 取出所有指标的值 \ndata = data.map(item => item[
 // 图表配置 new Line('domName', option)
 const option = {
   data: [16, 95, 35, 27, 50, 36, 78, 99, 60, 62, 37],
-  height: 60,
+  xField:'',
+  yField:'',
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
+  height: 6,
   autoFit: true,
   smooth: true,
   areaStyle: {

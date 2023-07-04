@@ -30,6 +30,7 @@ const setting = [
     tabName: 'data'
   },
   {
+
     label: '指标',
     // 设置组件类型
     type: 'select',
@@ -43,9 +44,18 @@ const setting = [
     tabName: 'data'
   },
   /** 样式配置 **/
+  {
+    label: '平滑',
+    type: 'switch', // 设置组件类型
+    field: 'smooth', // 字段
+    optionField: 'smooth', // 对应options中的字段
+    value: true,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
   // 图表 graph
   {
-    label: '线条宽度',
+    label: '折线宽度',
     type: 'inputNumber', // 设置组件类型
     field: 'lineStyle_lineWidth', // 字段
     optionField: 'lineStyle.lineWidth', // 对应options中的字段
@@ -54,7 +64,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '线条颜色',
+    label: '折线颜色',
     type: 'gradual', // 设置组件类型
     field: 'lineStyle_stroke', // 字段
     optionField: 'lineStyle.stroke', // 对应options中的字段
@@ -62,14 +72,15 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
+  // 边距 padding
   {
-    label: '是否平滑',
-    type: 'switch', // 设置组件类型
-    field: 'smooth', // 字段
-    optionField: 'smooth', // 对应options中的字段
-    value: true,
+    label: '图表边距',
+    type: 'padding', // 设置组件类型
+    field: 'appendPadding', // 字段
+    optionField: 'appendPadding', // 对应options中的字段
+    value: [16, 16, 16, 16],
     tabName: 'custom',
-    groupName: 'graph'
+    groupName: 'padding'
   }
 ]
 
@@ -78,8 +89,11 @@ const dataHandler = '// 取出所有指标的值 \ndata = data.map(item => item[
 
 // 图表配置 new Line('domName', option)
 const option = {
+  xField:'',
+  yField:'',
   data: [16, 95, 35, 27, 50, 36, 78, 99, 60, 62, 37],
-  height: 60,
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
+  height: 6,
   autoFit: true,
   smooth: true,
   lineStyle: {

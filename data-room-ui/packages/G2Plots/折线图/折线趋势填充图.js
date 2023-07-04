@@ -58,7 +58,7 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
-    label: '线条宽度',
+    label: '折线宽度',
     type: 'inputNumber',
     field: 'lineStyle_lineWidth',
     optionField: 'lineStyle.lineWidth',
@@ -67,7 +67,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '颜色配置',
+    label: '折线颜色',
     // 设置组件类型
     type: 'colorSelect',
     // 字段
@@ -79,16 +79,19 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '趋势区域透明度',
+    label: '透明度',
     // 设置组件类型
-    type: 'input',
+    type: 'inputNumber',
     // 字段
     field: 'area_style_fillOpacity',
     // 对应options中的字段
     optionField: 'area.style.fillOpacity',
-    value: '0.15',
+    value: 0.15,
     tabName: 'custom',
-    groupName: 'graph'
+    groupName: 'graph',
+    step: 0.01,
+    max: 1,
+    min: 0
   },
   {
     label: '动画效果',
@@ -114,16 +117,18 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '动画执行时间',
+    label: '动画时长（ms)',
     // 设置组件类型
-    type: 'input',
+    type: 'inputNumber',
     // 字段
     field: 'animation_appear_duration',
     // 对应options中的字段
     optionField: 'animation.appear.duration',
-    value: '5000',
+    value: 5000,
+    max:10000,
     tabName: 'custom',
-    groupName: 'graph'
+    groupName: 'graph',
+    step: 1
   },
   // 网格线 grid
   {
@@ -177,6 +182,35 @@ const setting = [
       { label: '左下角', value: 'bottom-left' },
       { label: '右下角', value: 'bottom-right' }
     ],
+    groupName: 'legend'
+  },
+  {
+    label: '字体大小',
+    type: 'inputNumber',
+    field: 'legendItemName_style_fontSize',
+    optionField: 'legendItemName.style.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体权重',
+    type: 'inputNumber',
+    step: 100,
+    max: 900,
+    field: 'legendItemName_style_fontWeight',
+    optionField: 'legendItemName.style.fontWeight',
+    value: 400,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体颜色',
+    type: 'colorPicker',
+    field: 'legendItemName_style_fill',
+    optionField: 'legendItemName.style.fill',
+    value: '#595959',
+    tabName: 'custom',
     groupName: 'legend'
   },
   // X轴 xAxis
@@ -337,16 +371,16 @@ const setting = [
     tabName: 'custom',
     options: [
       {
-        label: '下',
-        value: 'start'
+        label: '上',
+        value: 'end'
       },
       {
         label: '中',
         value: 'center'
       },
       {
-        label: '上',
-        value: 'end'
+        label: '下',
+        value: 'start'
       }],
     groupName: 'yAxis'
   },
@@ -404,7 +438,7 @@ const setting = [
     type: 'inputNumber',
     field: 'yAxis_line_lineWidth',
     optionField: 'yAxis.line.style.lineWidth',
-    value: 1,
+    value: 0,
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -415,17 +449,17 @@ const setting = [
     optionField: 'yAxis.line.style.stroke',
     // 是否多选
     multiple: false,
-    value: 'rgba(255,255,255,0)',
+    value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'yAxis'
   },
   // 边距 padding
-  {
+    {
     label: '图表边距',
     type: 'padding',
     field: 'appendPadding',
     optionField: 'appendPadding',
-    value: [20, 20, 20, 20],
+    value: [16, 16, 16, 16],
     tabName: 'custom',
     groupName: 'padding'
   }
@@ -531,7 +565,10 @@ const data = [
 ]
 
 // 配置处理脚本
-const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;'
+const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
+  '\n  if (option.legendEnable) {\n' +
+  '    option.legend.itemName = option.legendItemName\n' +
+  '  }'
 
 // 数据处理脚本
 const dataHandler = ''
@@ -545,7 +582,7 @@ const option = {
   xField: 'year',
   yField: 'gdp',
   seriesField: 'name',
-  appendPadding: [20, 20, 20, 20], // 设置图标的边距
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   xAxis: {
     title: {
       text: '',
@@ -614,17 +651,22 @@ const option = {
     },
     line: {
       style: {
-        stroke: 'rgba(255,255,255,0)',
-        lineWidth: 1
-      },
-      stroke: 'rgba(255,255,255,0)',
-      lineWidth: 1
+        stroke: '#d0d0d0',
+        lineWidth: 0
+      }
     }
   },
   legendEnable: false,
   legendLayout: 'vertical',
   legendPosition: 'top',
   legend: false,
+  legendItemName: {
+    style: {
+      fill: '#595959',
+      fontSize: 12,
+      fontWeight: 400
+    }
+  },
   smooth: true,
   // 配置折线趋势填充
   area: {

@@ -173,13 +173,42 @@ const setting = [
     ],
     groupName: 'legend'
   },
+  {
+    label: '字体大小',
+    type: 'inputNumber',
+    field: 'legendItemName_style_fontSize',
+    optionField: 'legendItemName.style.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体权重',
+    type: 'inputNumber',
+    step: 100,
+    max: 900,
+    field: 'legendItemName_style_fontWeight',
+    optionField: 'legendItemName.style.fontWeight',
+    value: 400,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体颜色',
+    type: 'colorPicker',
+    field: 'legendItemName_style_fill',
+    optionField: 'legendItemName.style.fill',
+    value: '#595959',
+    tabName: 'custom',
+    groupName: 'legend'
+  },
   // 边距 padding
   {
     label: '图表边距',
     type: 'padding', // 设置组件类型
     field: 'appendPadding', // 字段
     optionField: 'appendPadding', // 对应options中的字段
-    value: [20, 20, 20, 20],
+    value: [16, 16, 16, 16],
     tabName: 'custom',
     groupName: 'padding'
   }
@@ -200,14 +229,16 @@ const data = [
 ]
 
 // 配置处理脚本
-const optionHandler = `option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === "legendPosition").value} : false;
+const optionHandler = `option.legend = option.legendEnable ? {position: option.legendPosition}: false;
 window.conversionTagName = option.conversionTagName
 option.conversionTag.formatter = (datum) => {
   return window.conversionTagName + datum.$$percentage$$.toFixed(2) * 100 + '%'
 }
+if (option.legendEnable) {
+   option.legend.itemName = option.legendItemName
+}
 `
 
-// 数据处理脚本
 // 数据处理脚本
 const dataHandler = 'data = data.sort((a, b) => b[option.yField] - a[option.yField])'
 
@@ -217,7 +248,7 @@ const option = {
   dataKey: 'data',
   data,
   color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
-  appendPadding: [20, 20, 20, 20], // 设置图标的边距
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   xField: 'stage',
   yField: 'number',
   seriesField: 'company',
@@ -226,6 +257,13 @@ const option = {
   legendLayout: 'vertical',
   legendPosition: 'top',
   legend: false,
+  legendItemName: {
+    style: {
+      fill: '#595959',
+      fontSize: 12,
+      fontWeight: 400
+    }
+  },
   conversionTagName: '转化率 ',
   label: { // 图表内的数据标签
     // 配置样式

@@ -37,8 +37,8 @@
               :key="settingIndex+1"
             >
               <el-form-item
-                :label="setting.label"
-                label-width="120px"
+                :label="setting.type=== 'padding' ? '' : setting.label"
+                :label-width="setting.type=== 'padding' ? '0px' :'120px'"
               >
                 <el-input
                   v-if="setting.type === 'input'"
