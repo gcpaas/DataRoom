@@ -35,9 +35,10 @@
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
-          label="链接"
+          label="URL"
           label-width="100px"
           prop="customize.url"
+          style="margin-bottom: 14px"
         >
           <el-upload
             class="bs-el-upload"
@@ -79,7 +80,7 @@
               slot="tip"
               v-model="config.customize.url"
               class="upload-tip"
-              placeholder="或输入链接地址"
+              placeholder="或输入URL地址"
               clearable
               @change="handleUrlChange"
             />
@@ -89,25 +90,27 @@
           label="不透明度"
           label-width="100px"
         >
-          <el-slider
-            v-model="config.customize.opacity"
-            class="bs-slider bs-el-input-number"
-            :min="0"
-            :max="100"
-            show-input
-          />
-        </el-form-item>
-        <el-form-item
-          label="圆角"
-          label-width="100px"
-        >
           <el-input-number
-            v-model="config.customize.radius"
-            class="bs-el-input-number"
-            placeholder="请输入圆角大小"
-            :min="0"
+            v-model="config.customize.opacity"
+            class="bs-el-input-number db-el-input-number"
+            placeholder="请输入不透明度"
+            :min="0.01"
+            :max="1"
+            :precision="2"
+            :step="0.01"
           />
         </el-form-item>
+<!--        <el-form-item-->
+<!--          label="圆角"-->
+<!--          label-width="100px"-->
+<!--        >-->
+<!--          <el-input-number-->
+<!--            v-model="config.customize.radius"-->
+<!--            class="bs-el-input-number"-->
+<!--            placeholder="请输入圆角大小"-->
+<!--            :min="0"-->
+<!--          />-->
+<!--        </el-form-item>-->
       </div>
     </el-form>
   </div>
@@ -136,14 +139,14 @@ export default {
       hideUpload: false,
       rules: {
         'customize.url': [
-          { required: true, message: '请输入链接地址', trigger: 'blur' },
+          { required: true, message: '请输入URL地址', trigger: 'blur' },
           // 地址校验
           {
             validator: (rule, value, callback) => {
               if (value) {
                 const reg = /^(http|https):\/\/([\w.]+\/?)\S*/
                 if (!reg.test(value)) {
-                  callback(new Error('请输入正确的链接地址'))
+                  callback(new Error('请输入正确的URL地址'))
                 } else {
                   callback()
                 }
