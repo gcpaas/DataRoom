@@ -138,6 +138,12 @@
                   :active-value="1"
                   :inactive-value="0"
                 />
+                <el-switch
+                  v-else-if="setting.type === 'switchCustom'"
+                  v-model="setting.value"
+                  :active-value="setting.active"
+                  :inactive-value="setting.inactive"
+                />
                 <el-slider
                   v-else-if="setting.type === 'slider'"
                   v-model="setting.value"
