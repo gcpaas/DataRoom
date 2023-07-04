@@ -30,7 +30,7 @@ import java.util.List;
  * @date 2022/8/8 15:11
  */
 @Slf4j
-@RestController
+@RestController("dataRoomChartController")
 @RequestMapping("/bigScreen/chart/data")
 @Api(tags = "图表组件数据获取")
 public class ChartDataController {

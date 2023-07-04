@@ -37,7 +37,7 @@ import java.util.*;
  */
 @Data
 @Slf4j
-@Service
+@Service("dataRoomBaseChartDataService")
 public class BaseChartDataService {
 
     @Resource

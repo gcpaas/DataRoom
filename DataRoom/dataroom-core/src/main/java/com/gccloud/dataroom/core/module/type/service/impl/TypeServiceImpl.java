@@ -2,7 +2,7 @@ package com.gccloud.dataroom.core.module.type.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gccloud.dataroom.core.module.type.dao.TypeDao;
+import com.gccloud.dataroom.core.module.type.dao.DataRoomTypeDao;
 import com.gccloud.dataroom.core.module.type.dto.TypeDTO;
 import com.gccloud.dataroom.core.module.type.entity.TypeEntity;
 import com.gccloud.dataroom.core.module.type.service.ITypeService;
@@ -22,8 +22,8 @@ import java.util.List;
  * @date 2023/5/26 9:42
  */
 @Slf4j
-@Service
-public class TypeServiceImpl extends ServiceImpl<TypeDao, TypeEntity> implements ITypeService {
+@Service("dataRoomTypeService")
+public class TypeServiceImpl extends ServiceImpl<DataRoomTypeDao, TypeEntity> implements ITypeService {
 
     @Override
     public String add(TypeDTO typeDTO) {

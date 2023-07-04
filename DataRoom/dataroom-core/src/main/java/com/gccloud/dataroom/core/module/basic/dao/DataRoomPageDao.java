@@ -10,6 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @Version 1.0.0
  */
 @Mapper
-public interface PageDao extends BaseMapper<PageEntity> {
+public interface DataRoomPageDao extends BaseMapper<PageEntity> {
 
 }

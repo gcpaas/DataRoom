@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 
 @Slf4j
 @Configuration
-@ConditionalOnProperty(prefix = "gc.starter.component", name = "ObjectMapperConfiguration", havingValue = "ObjectMapperConfiguration", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "gc.starter.dataroom.component", name = "ObjectMapperConfiguration", havingValue = "ObjectMapperConfiguration", matchIfMissing = true)
 public class ObjectMapperConfiguration {
 
     @Resource

@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Slf4j
 @Configuration
-@ConditionalOnProperty(prefix = "gc.starter.component", name = "CorsBeanConfig", havingValue = "CorsBeanConfig", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "gc.starter.dataroom.component", name = "CorsBeanConfig", havingValue = "CorsBeanConfig", matchIfMissing = true)
 public class CorsBeanConfig implements WebMvcConfigurer {
 
     @Override

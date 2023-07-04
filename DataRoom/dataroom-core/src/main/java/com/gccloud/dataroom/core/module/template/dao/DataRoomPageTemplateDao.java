@@ -10,5 +10,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2023/3/20 16:41
  */
 @Mapper
-public interface PageTemplateDao extends BaseMapper<PageTemplateEntity> {
+public interface DataRoomPageTemplateDao extends BaseMapper<PageTemplateEntity> {
 }

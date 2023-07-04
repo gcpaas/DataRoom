@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gccloud.dataroom.core.config.DataRoomConfig;
 import com.gccloud.dataroom.core.constant.PageDesignConstant;
-import com.gccloud.dataroom.core.module.basic.dao.PageDao;
+import com.gccloud.dataroom.core.module.basic.dao.DataRoomPageDao;
 import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
 import com.gccloud.dataroom.core.module.chart.bean.Chart;
 import com.gccloud.dataroom.core.module.chart.components.datasource.DataSetDataSource;
@@ -41,7 +41,7 @@ import java.util.Objects;
  */
 @Service
 @Slf4j
-public class DataRoomPageServiceImpl extends ServiceImpl<PageDao, PageEntity> implements IDataRoomPageService {
+public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEntity> implements IDataRoomPageService {
 
 
     @Resource
