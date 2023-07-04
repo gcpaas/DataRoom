@@ -79,8 +79,8 @@ export default function getComponentConfig (type) {
         icon: Icon.getNameList()[2],
         className:
           'com.gccloud.dataroom.core.module.chart.components.ScreenScrollBoardChart',
-        w: 500,
-        h: 300,
+        w: 600,
+        h: 400,
         x: 0,
         y: 0,
         type
@@ -92,8 +92,8 @@ export default function getComponentConfig (type) {
         icon: Icon.getNameList()[3],
         className:
           'com.gccloud.dataroom.core.module.chart.components.ScreenScrollRankingChart',
-        w: 550,
-        h: 350,
+        w: 600,
+        h: 400,
         x: 0,
         y: 0,
         type
@@ -144,8 +144,8 @@ export default function getComponentConfig (type) {
         icon: Icon.getNameList()[8],
         className:
           'com.gccloud.dataroom.core.module.chart.components.ScreenIframeChart',
-        w: 500,
-        h: 500,
+        w: 600,
+        h: 400,
         x: 0,
         y: 0,
         type
@@ -171,8 +171,8 @@ export default function getComponentConfig (type) {
         icon: Icon.getNameList()[12],
         className:
           'com.gccloud.dataroom.core.module.chart.components.ScreenVideoChart',
-        w: 800,
-        h: 500,
+        w: 600,
+        h: 400,
         x: 0,
         y: 0,
         type

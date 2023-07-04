@@ -34,13 +34,12 @@
       <SettingTitle>基础</SettingTitle>
       <div class="bs-setting-wrap">
         <el-form-item
-          label="链接地址"
+          label="URL"
           label-width="100px"
-          prop="title"
         >
           <el-input
             v-model="config.customize.url"
-            placeholder="请输入链接地址"
+            placeholder="请输入URL地址"
             clearable
           />
         </el-form-item>
