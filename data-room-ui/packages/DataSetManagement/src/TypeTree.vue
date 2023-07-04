@@ -235,7 +235,7 @@ export default {
         this.$refs.editForm.dialogFormVisible = true
         this.$refs.editForm.init({ parentId: 0 }, true)
         this.$refs.editForm.radio = 0
-        this.$refs.editForm.title = '节点新增'
+        this.$refs.editForm.title = '分组新增'
       })
     },
     addDiyDom (treeId, treeNode) {
@@ -382,7 +382,7 @@ export default {
           this.$refs.editForm.type = 'dataset'
           this.$refs.editForm.dialogFormVisible = true
           this.$refs.editForm.init(this.rightClickForm.org, false)
-          this.$refs.editForm.title = '节点编辑'
+          this.$refs.editForm.title = '分组编辑'
         })
         return
       }
@@ -393,7 +393,7 @@ export default {
           this.$refs.editForm.dialogFormVisible = true
           this.$refs.editForm.init(this.rightClickForm.org, true)
           this.$refs.editForm.radio = 0
-          this.$refs.editForm.title = '节点新增'
+          this.$refs.editForm.title = '分组新增'
         })
         return
       }
@@ -404,7 +404,7 @@ export default {
           this.$refs.editForm.dialogFormVisible = true
           this.$refs.editForm.init(this.rightClickForm.org, true)
           this.$refs.editForm.radio = 1
-          this.$refs.editForm.title = '节点新增'
+          this.$refs.editForm.title = '分组新增'
         })
       }
     },

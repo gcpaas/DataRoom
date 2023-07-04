@@ -71,9 +71,9 @@
                     style="
                     display: flex;
                     align-items: center;
-                    height: 42px;
                     flex-wrap: wrap;
                   "
+                    class="color-picker-box"
                   >
                     <el-color-picker
                       v-for="(colorItem, colorItemIndex) in colors"
@@ -335,5 +335,10 @@ export default {
 
 ::v-deep .el-color-picker__trigger {
   border-color: var(--bs-el-border);
+}
+.color-picker-box{
+  ::v-deep .el-color-picker__trigger {
+    width: 27px!important;
+  }
 }
 </style>

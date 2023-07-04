@@ -26,7 +26,7 @@
       label-width="100px"
     >
       <div class="color-picker-box">
-        <el-color-picker v-model="startColor" /> <div class="el-icon-right" /> <el-color-picker v-model="endColor" />
+        <el-color-picker v-model="startColor" /> <div class="el-icon-right"/> <el-color-picker v-model="endColor" />
       </div>
     </el-form-item>
   </div>
@@ -109,6 +109,7 @@ export default {
   .el-icon-right{
     width: 40px;
     text-align: center;
+    /*color: #778390;*/
   }
  }
 </style>
