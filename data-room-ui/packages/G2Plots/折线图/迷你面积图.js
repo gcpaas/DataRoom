@@ -116,7 +116,7 @@ const option = {
   xField:'',
   yField:'',
   appendPadding: [16, 16, 16, 16], // 设置图标的边距
-  height: 6,
+  height: 60,
   autoFit: true,
   smooth: true,
   areaStyle: {

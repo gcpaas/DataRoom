@@ -93,7 +93,7 @@ const option = {
   yField:'',
   data: [16, 95, 35, 27, 50, 36, 78, 99, 60, 62, 37],
   appendPadding: [16, 16, 16, 16], // 设置图标的边距
-  height: 6,
+  height: 60,
   autoFit: true,
   smooth: true,
   lineStyle: {
