@@ -125,7 +125,7 @@ export default {
           optionField.forEach((field, index) => {
             if (index === optionField.length - 1) {
               // 数据配置时，必须有值才更新
-              if (set.tabName === type && set.value) {
+              if ((set.tabName === type && type === 'data' && set.value) || (set.tabName === type && type === 'custom'))  {
                 option[field] = set.value
               }
             } else {

@@ -94,8 +94,8 @@ const option = {
   autoFit: true,
   percent: 0.8,
   barWidthRatio: 0.3,
-  backColor: '#fff',
-  frontColor: '#4a7af4',
+  backColor: '#EEEEEE',
+  frontColor: '#4391F4',
   color: ['#4a7af4', '#fff'],
   progressStyle: {
     current: {

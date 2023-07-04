@@ -52,7 +52,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '背景图url',
+    label: '背景图URL',
     // 设置组件类型
     type: 'input',
     // 字段
