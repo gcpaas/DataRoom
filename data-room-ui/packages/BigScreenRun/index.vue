@@ -127,6 +127,13 @@ export default {
       if (val) {
         this.init()
       }
+    },
+    'pageInfo.pageConfig.refreshConfig.length':{
+      handler(val){
+        if (val){
+          this.startTimer()
+        }
+      }
     }
   },
   beforeRouteEnter (to, from, next) {
