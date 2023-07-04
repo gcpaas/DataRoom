@@ -45,6 +45,17 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
+    label: '折线点',
+    type: 'switchCustom',
+    field: 'point_size',
+    optionField: 'point.size',
+    value: 0,
+    active: 5,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
     label: '折线平滑',
     type: 'switch', // 设置组件类型
     field: 'smooth', // 字段
@@ -480,7 +491,8 @@ const optionHandler = '  let pointEnable = setting.find(settingItem=>settingItem
   '    option.point = {shape: pointEnable}\n' +
   '    let pointColor = setting.find(settingItem=>settingItem.field === \'point_color\').value\n' +
   '    option.point.color = pointColor\n' +
-  '  };' +
+  '  option.point.size =  setting.find(settingItem=>settingItem.field === \'point_size\').value\n'  +
+  '};' +
   'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
 
 // 数据处理脚本
@@ -512,6 +524,7 @@ const option = {
   point: {
     color: '',
     shape: 'hollow-circle',
+    size: 0
   },
   xAxis: {
     title: {
