@@ -222,9 +222,22 @@ export default {
   },
   watch: {
     groupList: {
+      // 1、原数组，2、修改后的数组只包含custom，3、合并的时候xy的配置必须放在最前面
       handler (val) {
         const setList = [].concat(...val.map(item => item.list))
-        this.$store.commit('bigScreen/changeActiveItemConfig', { ...this.config, setting: [...this.config.setting, ...setList] })
+        const newSetList =  [...this.config.setting,...setList]
+        let newArr = []; //存新数组
+        let hash={}
+        newArr=  newSetList.reduce(function (acc, cru,index) {
+          if (!hash[cru['field']]) {
+            hash[cru['field']] = { index: index }
+            acc.push(cru)
+          } else {
+            acc.splice(hash[cru['field']]['index'], 1, cru)
+          }
+          return acc
+        }, [])
+        this.$store.commit('bigScreen/changeActiveItemConfig', { ...this.config, setting: newArr })
       },
       deep: true
     }
