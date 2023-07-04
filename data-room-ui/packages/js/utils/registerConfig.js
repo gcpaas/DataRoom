@@ -138,7 +138,8 @@ function registerTheme (config) {
     '--bs-el-background-3': '#303640', // 组件背景色，表格头部、下拉框hover...
     '--bs-el-title': '#ffffff', // 标题字体颜色
     '--bs-el-text': '#ffffff', // 一般字体颜色
-    '--bs-el-border': 'transparent' // 边框颜色
+    '--bs-el-border': 'transparent', // 边框颜色
+    '--bs-el-color-primary-active': '64, 158, 255'
   }
   const mergedTheme = { ...defaultTheme, ...config?.customTheme }
   const style = document.createElement('style')

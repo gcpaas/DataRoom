@@ -228,7 +228,7 @@ export default {
       const isImage = file.type.startsWith('image/')
       const isVideo = file.type.startsWith('video/')
       const isValidFileType = isImage || isVideo
-      console.log(isValidFileType)
+
       if (!isValidFileType) {
         this.$message.error('只能上传图片或视频文件')
       }
@@ -330,7 +330,8 @@ export default {
   height: 100%;
   padding: 16px;
   color: #9ea9b2;
-  margin:0 16px;
+  // margin:0 16px;
+  margin-left: 16px;
   background-color: var(--bs-background-2) !important;
 
   .top-search-wrap {

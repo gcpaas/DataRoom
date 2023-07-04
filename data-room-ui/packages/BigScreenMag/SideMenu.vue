@@ -256,7 +256,7 @@ export default {
     // padding-top: 16px;
     width: 220px;
     // height: 100%;
-    margin-bottom: 16px;
+    // margin-bottom: 16px;
     box-sizing: border-box;
     color: var(--bs-el-title);
     background-color: var(--bs-background-2);

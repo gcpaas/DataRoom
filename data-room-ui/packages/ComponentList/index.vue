@@ -421,7 +421,8 @@ export default {
   position: relative;
   height: 100%;
   padding: 16px;
-  margin:0 16px;
+  // margin:0 16px;
+  margin-left: 16px;
   color: #9ea9b2;
   background-color: var(--bs-background-2) !important;
 

@@ -7,10 +7,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 // 布局样式
 .bs-container {
   height: 100% !important;
-  width: 100%;
-  position: absolute;
+  // width: 100%;
+  // position: absolute;
   box-sizing: border-box;
-  padding: 16px;
+  // padding: 16px;
+  margin-left: 16px;
+  background-color: var(--bs-background-1);
   .inner-container {
     height: 100% !important;
     background-color: var(--bs-background-2);
