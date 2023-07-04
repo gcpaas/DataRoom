@@ -218,8 +218,8 @@ export default {
 .big-screen-list-wrap {
   position: relative;
   height: 100%;
-  margin:0 16px;
-  padding: 16px;
+  // margin:0 16px;
+  // padding: 16px;
   color: #9ea9b2;
   background-color: var(--bs-background-2) !important;
 
@@ -389,15 +389,9 @@ export default {
   }
 
   .footer-pagination-wrap {
-    // display: flex;
-    // align-items: center;
-    // justify-content: flex-end;
     width: 100%;
-    // margin-top: 16px;
-    // padding: 0 16px;
     position: absolute;
-    bottom: 16px;
-    right: 12px;
+    margin-top: 16px;
   }
 }
 .bs-pagination {
