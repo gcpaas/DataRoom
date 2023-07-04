@@ -27,22 +27,22 @@
       </div>
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
-        <el-form-item label="头部背景颜色">
+        <el-form-item label="表头颜色">
           <ColorPicker
             v-model="config.customize.headerBackgroundColor"
-            placeholder="请选择头部背景颜色"
+            placeholder="请选择表头颜色"
             :predefine-colors="predefineThemeColors"
           />
         </el-form-item>
-        <el-form-item label="头部字体颜色">
+        <el-form-item label="表头字体颜色">
           <ColorPicker
             v-model="config.customize.headerFontColor"
             style="width:180px"
-            placeholder="请选择头部字体颜色"
+            placeholder="请选择表头字体颜色"
             :predefine-colors="predefineThemeColors"
           />
         </el-form-item>
-        <el-form-item label="头部字体大小">
+        <el-form-item label="表头字体大小">
           <el-input-number
             v-model="config.customize.headerFontSize"
             class="bs-el-input-number"

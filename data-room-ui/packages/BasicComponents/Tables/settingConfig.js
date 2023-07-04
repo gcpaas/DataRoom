@@ -38,7 +38,7 @@ const customConfig = {
   customize: {
     theme: 'dark', // 'light'、'dark'
     // 表格头部背景颜色
-    headerBackgroundColor: '',
+    headerBackgroundColor: '#232832',
     // 表格头部字体颜色
     headerFontColor: '#ffffff',
     // 表格头部字体大小
