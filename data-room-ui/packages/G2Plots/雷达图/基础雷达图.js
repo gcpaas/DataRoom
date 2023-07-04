@@ -40,6 +40,15 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
+    label: '底色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'yAxis_grid_alternateColor', // 字段
+    optionField: 'yAxis.grid.alternateColor', // 对应options中的字段
+    value: 'rgba(0, 0, 0, 0.04)',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
     label: '面积填充',
     type: 'switchNumber', // 设置组件类型
     field: 'area', // 字段
@@ -76,9 +85,54 @@ const setting = [
     value: 'circle',
     tabName: 'custom',
     options: [
-      { label: '圆形', value: 'circle' },
-      { label: '三角形', value: 'triangle' },
-      { label: '菱形', value: 'diamond' }
+      {
+        label: '无',
+        value: false
+      },
+      {
+        label: '空心圆',
+        value: 'hollow-circle'
+      },
+      {
+        label: '圆形',
+        value: 'circle'
+      },
+      {
+        label: '正方形',
+        value: 'square'
+      },
+      {
+        label: '菱形',
+        value: 'diamond'
+      },
+      {
+        label: '三角形',
+        value: 'triangle'
+      },
+      {
+        label: '六边形',
+        value: 'hexagon'
+      },
+      {
+        label: '菱形交叉',
+        value: 'bowtie'
+      },
+      {
+        label: '十字形',
+        value: 'cross'
+      },
+      {
+        label: 'I形',
+        value: 'tick'
+      },
+      {
+        label: '加号',
+        value: 'plus'
+      },
+      {
+        label: '连字号',
+        value: 'hyphen'
+      }
     ],
     groupName: 'graph'
   },
@@ -106,7 +160,7 @@ const setting = [
     type: 'padding', // 设置组件类型
     field: 'appendPadding', // 字段
     optionField: 'appendPadding', // 对应options中的字段
-    value: [20, 20, 20, 20],
+    value: [16, 16, 16, 16],
     tabName: 'custom',
     groupName: 'padding'
   }
@@ -135,7 +189,12 @@ const option = {
   yField: 'star',
   smooth: false,
   color: 'l(90) 0:#648ff7 1:#648ff7',
-  appendPadding: [20, 20, 20, 20], // 设置图标的边距
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
+  theme: {
+    styleSheet: {
+      backgroundColor: ''
+    }
+  },
   meta: {
     star: {
       alias: 'star 数量',

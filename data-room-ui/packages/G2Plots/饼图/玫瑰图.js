@@ -40,19 +40,7 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
-    label: '颜色配置',
-    // 设置组件类型
-    type: 'colorSelect',
-    // 字段
-    field: 'color',
-    // 对应options中的字段
-    optionField: 'color',
-    value: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
-    label: '半径',
+    label: '玫瑰半径',
     // 设置组件类型
     type: 'slider',
     // 字段
@@ -84,6 +72,18 @@ const setting = [
     // 对应options中的字段
     optionField: 'label.style.fontSize',
     value: 12,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '玫瑰颜色',
+    // 设置组件类型
+    type: 'colorSelect',
+    // 字段
+    field: 'color',
+    // 对应options中的字段
+    optionField: 'color',
+    value: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -122,13 +122,42 @@ const setting = [
     ],
     groupName: 'legend'
   },
+  {
+    label: '字体大小',
+    type: 'inputNumber',
+    field: 'legendItemName_style_fontSize',
+    optionField: 'legendItemName.style.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体权重',
+    type: 'inputNumber',
+    step: 100,
+    max: 900,
+    field: 'legendItemName_style_fontWeight',
+    optionField: 'legendItemName.style.fontWeight',
+    value: 400,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体颜色',
+    type: 'colorPicker',
+    field: 'legendItemName_style_fill',
+    optionField: 'legendItemName.style.fill',
+    value: '#595959',
+    tabName: 'custom',
+    groupName: 'legend'
+  },
   // 边距 padding
   {
     label: '图表边距',
     type: 'padding', // 设置组件类型
     field: 'appendPadding', // 字段
     optionField: 'appendPadding', // 对应options中的字段
-    value: [20, 20, 20, 20],
+    value: [16, 16, 16, 16],
     tabName: 'custom',
     groupName: 'padding'
   }
@@ -146,7 +175,10 @@ const data = [
 
 // 配置处理脚本
 const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
-  'option.seriesField = option.xField;'
+  'option.seriesField = option.xField;' +
+  '\n  if (option.legendEnable) {\n' +
+  '    option.legend.itemName = option.legendItemName\n' +
+  '  }'
 
 // 数据处理脚本
 const dataHandler = ''
@@ -173,7 +205,14 @@ const option = {
   legendLayout: 'vertical',
   legendPosition: 'top',
   legend: false,
-  appendPadding: [20, 20, 20, 20] // 设置图标的边距
+  legendItemName: {
+    style: {
+      fill: '#595959',
+      fontSize: 12,
+      fontWeight: 400
+    }
+  },
+  appendPadding: [16, 16, 16, 16] // 设置图标的边距
 }
 export default {
   category,

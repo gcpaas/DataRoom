@@ -40,7 +40,7 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
-    label: '颜色配置',
+    label: '字体颜色',
     // 设置组件类型
     type: 'colorSelect',
     // 字段
@@ -52,7 +52,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '遮罩图片url',
+    label: '背景图url',
     // 设置组件类型
     type: 'input',
     // 字段
@@ -70,7 +70,7 @@ const setting = [
     type: 'padding', // 设置组件类型
     field: 'appendPadding', // 字段
     optionField: 'appendPadding', // 对应options中的字段
-    value: [20, 20, 20, 20],
+    value: [16, 16, 16, 16],
     tabName: 'custom',
     groupName: 'padding'
   }
@@ -589,7 +589,7 @@ const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
   data,
-  appendPadding: [20, 20, 20, 20], // 设置图标的边距
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   wordField: 'x',
   weightField: 'value',
   colorField: 'category',

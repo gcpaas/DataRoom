@@ -58,19 +58,7 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
-    label: '颜色配置',
-    // 设置组件类型
-    type: 'colorSelect',
-    // 字段
-    field: 'color',
-    // 对应options中的字段
-    optionField: 'color',
-    value: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
-    label: '条形图形状',
+    label: '条形样式',
     type: 'select', // 设置组件类型
     field: 'shape', // 字段
     optionField: 'shape', // 对应options中的字段
@@ -83,14 +71,14 @@ const setting = [
         label: '实心条形',
         value: 'default'
       },
-      {
-        label: '线性',
-        value: 'line'
-      },
       // {
-      //   label: '空心条形',
-      //   value: 'hollow-rect'
+      //   label: '线性',
+      //   value: 'line'
       // },
+      {
+        label: '空心条形',
+        value: 'hollow-rect'
+      },
       {
         label: '钉形',
         value: 'tick'
@@ -110,7 +98,7 @@ const setting = [
     tabName: 'custom'
   },
   {
-    label: '数据标签显隐',
+    label: '数据标签',
     type: 'switchNumber', // 设置组件类型
     field: 'label_style_opacity', // 字段
     optionField: 'label.style.opacity', // 对应options中的字段
@@ -139,7 +127,30 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
+  {
+    label: '条形颜色',
+    // 设置组件类型
+    type: 'colorSelect',
+    // 字段
+    field: 'color',
+    // 对应options中的字段
+    optionField: 'color',
+    value: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
+    tabName: 'custom',
+    groupName: 'graph'
+  },
   // 网格线 grid
+  {
+    label: '虚线',
+    type: 'switchCustom',
+    field: 'yAxis_grid_line_style_lineDash',
+    optionField: 'yAxis.grid.line.style.lineDash',
+    value: 0,
+    active: 5,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'grid'
+  },
   {
     label: '宽度',
     type: 'inputNumber',
@@ -191,6 +202,35 @@ const setting = [
       { label: '左下角', value: 'bottom-left' },
       { label: '右下角', value: 'bottom-right' }
     ],
+    groupName: 'legend'
+  },
+  {
+    label: '字体大小',
+    type: 'inputNumber',
+    field: 'legendItemName_style_fontSize',
+    optionField: 'legendItemName.style.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体权重',
+    type: 'inputNumber',
+    step: 100,
+    max: 900,
+    field: 'legendItemName_style_fontWeight',
+    optionField: 'legendItemName.style.fontWeight',
+    value: 400,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体颜色',
+    type: 'colorPicker',
+    field: 'legendItemName_style_fill',
+    optionField: 'legendItemName.style.fill',
+    value: '#595959',
+    tabName: 'custom',
     groupName: 'legend'
   },
   // X轴 xAxis
@@ -304,7 +344,7 @@ const setting = [
     tabName: 'custom',
     options: [
       {
-        label: '下',
+        label: '上',
         value: 'start'
       },
       {
@@ -312,7 +352,7 @@ const setting = [
         value: 'center'
       },
       {
-        label: '上',
+        label: '下',
         value: 'end'
       }],
     groupName: 'yAxis'
@@ -371,7 +411,7 @@ const setting = [
     type: 'inputNumber',
     field: 'yAxis_line_lineWidth',
     optionField: 'yAxis.line.style.lineWidth',
-    value: 1,
+    value: 0,
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -439,7 +479,7 @@ const setting = [
     type: 'padding',
     field: 'appendPadding',
     optionField: 'appendPadding',
-    value: [20, 20, 20, 20],
+    value: [16, 16, 16, 16],
     tabName: 'custom',
     groupName: 'padding'
   }
@@ -501,7 +541,8 @@ const data = [
 
 // 配置处理脚本
 const optionHandler = '\noption.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
-  '\nconst radiusNum = setting.find(settingItem=>settingItem.field === \'radiusNum\').value; option.barStyle.radius = [radiusNum,radiusNum,0,0]'
+  '\nconst radiusNum = setting.find(settingItem=>settingItem.field === \'radiusNum\').value; option.barStyle.radius = [radiusNum,radiusNum,0,0];' +
+  'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
 
 // 数据处理脚本
 const dataHandler = ''
@@ -511,7 +552,7 @@ const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
   data,
-  appendPadding: [20, 20, 20, 20], // 设置图标的边距
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   isGroup: true,
   shape: ' ',
   xField: 'value',
@@ -519,6 +560,13 @@ const option = {
   legendEnable: false,
   legendLayout: 'vertical',
   legendPosition: 'top',
+  legendItemName: {
+    style: {
+      fill: '#595959',
+      fontSize: 12,
+      fontWeight: 400
+    }
+  },
   /** 自定义颜色 */
   color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
   seriesField: 'type',
@@ -603,11 +651,9 @@ const option = {
     },
     line: {
       style: {
-        stroke: 'rgba(255,255,255,0)',
-        lineWidth: 1
-      },
-      stroke: 'rgba(255,255,255,0)',
-      lineWidth: 1
+        stroke: '#d0d0d0',
+        lineWidth: 0
+      }
     },
     tickLine: {
       style: {

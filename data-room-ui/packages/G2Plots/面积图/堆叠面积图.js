@@ -59,7 +59,7 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
-    label: '曲线平滑',
+    label: '折线平滑',
     type: 'switch', // 设置组件类型
     field: 'smooth', // 字段
     optionField: 'smooth', // 对应options中的字段
@@ -68,16 +68,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '从0基准线填充',
-    type: 'switch', // 设置组件类型
-    field: 'startOnZero', // 字段
-    optionField: 'startOnZero', // 对应options中的字段
-    value: true,
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
-    label: '颜色配置',
+    label: '面积颜色',
     // 设置组件类型
     type: 'colorSelect',
     // 字段
@@ -85,9 +76,21 @@ const setting = [
     // 对应options中的字段
     optionField: 'color',
     value: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
-    tabName: 'custom'
+    tabName: 'custom',
+    groupName: 'graph'
   },
   // 网格线 grid
+  {
+    label: '虚线',
+    type: 'switchCustom',
+    field: 'yAxis_grid_line_style_lineDash',
+    optionField: 'yAxis.grid.line.style.lineDash',
+    value: 0,
+    active: 5,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'grid'
+  },
   {
     label: '宽度',
     type: 'inputNumber',
@@ -139,6 +142,35 @@ const setting = [
       { label: '左下角', value: 'bottom-left' },
       { label: '右下角', value: 'bottom-right' }
     ],
+    groupName: 'legend'
+  },
+  {
+    label: '字体大小',
+    type: 'inputNumber',
+    field: 'legendItemName_style_fontSize',
+    optionField: 'legendItemName.style.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体权重',
+    type: 'inputNumber',
+    step: 100,
+    max: 900,
+    field: 'legendItemName_style_fontWeight',
+    optionField: 'legendItemName.style.fontWeight',
+    value: 400,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体颜色',
+    type: 'colorPicker',
+    field: 'legendItemName_style_fill',
+    optionField: 'legendItemName.style.fill',
+    value: '#595959',
+    tabName: 'custom',
     groupName: 'legend'
   },
   // X轴 xAxis
@@ -299,16 +331,16 @@ const setting = [
     tabName: 'custom',
     options: [
       {
-        label: '下',
-        value: 'start'
+        label: '上',
+        value: 'end'
       },
       {
         label: '中',
         value: 'center'
       },
       {
-        label: '上',
-        value: 'end'
+        label: '下',
+        value: 'start'
       }],
     groupName: 'yAxis'
   },
@@ -366,7 +398,7 @@ const setting = [
     type: 'inputNumber',
     field: 'yAxis_line_lineWidth',
     optionField: 'yAxis.line.style.lineWidth',
-    value: 1,
+    value: 0,
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -377,17 +409,17 @@ const setting = [
     optionField: 'yAxis.line.style.stroke',
     // 是否多选
     multiple: false,
-    value: 'rgba(255,255,255,0)',
+    value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'yAxis'
   },
   // 边距 padding
-  {
+    {
     label: '图表边距',
     type: 'padding',
     field: 'appendPadding',
     optionField: 'appendPadding',
-    value: [20, 20, 20, 20],
+    value: [16, 16, 16, 16],
     tabName: 'custom',
     groupName: 'padding'
   }
@@ -547,7 +579,11 @@ const data = [
 ]
 
 // 配置处理脚本
-const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;'
+const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
+  '\n  if (option.legendEnable) {\n' +
+  '    option.legend.itemName = option.legendItemName\n' +
+  '  };' +
+  'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
 
 // 数据处理脚本
 const dataHandler = ''
@@ -557,7 +593,7 @@ const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
   data,
-  appendPadding: [20, 20, 20, 20], // 设置图标的边距
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   xField: 'date',
   yField: 'value',
   color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
@@ -567,6 +603,13 @@ const option = {
   legendLayout: 'vertical',
   legendPosition: 'top',
   legend: false,
+  legendItemName: {
+    style: {
+      fill: '#595959',
+      fontSize: 12,
+      fontWeight: 400
+    }
+  },
   startOnZero: true,
   xAxis: {
     title: {
@@ -615,6 +658,7 @@ const option = {
         style: {
           stroke: '#d0d0d0',
           lineWidth: 1,
+          lineDash: [4, 5],
           strokeOpacity: 0.7
         }
       }
@@ -628,11 +672,9 @@ const option = {
     },
     line: {
       style: {
-        stroke: 'rgba(255,255,255,0)',
-        lineWidth: 1
-      },
-      stroke: 'rgba(255,255,255,0)',
-      lineWidth: 1
+        stroke: '#d0d0d0',
+        lineWidth: 0
+      }
     }
   }
   // areaStyle: {

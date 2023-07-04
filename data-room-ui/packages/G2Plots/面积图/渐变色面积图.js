@@ -45,7 +45,7 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
-    label: '曲线平滑',
+    label: '折线平滑',
     type: 'switch', // 设置组件类型
     field: 'smooth', // 字段
     optionField: 'smooth', // 对应options中的字段
@@ -63,11 +63,20 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '线条颜色',
+    label: '折线颜色',
     type: 'colorPicker', // 设置组件类型
     field: 'line_color', // 字段
     optionField: 'line.color', // 对应options中的字段
     value: '#1890ff',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '折线宽度',
+    type: 'inputNumber', // 设置组件类型
+    field: 'line_size', // 字段
+    optionField: 'line.size', // 对应options中的字段
+    value: 1,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -80,16 +89,19 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
-  {
-    label: '线条宽度',
-    type: 'inputNumber', // 设置组件类型
-    field: 'line_size', // 字段
-    optionField: 'line.size', // 对应options中的字段
-    value: 1,
-    tabName: 'custom',
-    groupName: 'graph'
-  },
+
   // 网格线 grid
+  {
+    label: '虚线',
+    type: 'switchCustom',
+    field: 'yAxis_grid_line_style_lineDash',
+    optionField: 'yAxis.grid.line.style.lineDash',
+    value: 0,
+    active: 5,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'grid'
+  },
   {
     label: '宽度',
     type: 'inputNumber',
@@ -267,16 +279,16 @@ const setting = [
     tabName: 'custom',
     options: [
       {
-        label: '下',
-        value: 'start'
+        label: '上',
+        value: 'end'
       },
       {
         label: '中',
         value: 'center'
       },
       {
-        label: '上',
-        value: 'end'
+        label: '下',
+        value: 'start'
       }],
     groupName: 'yAxis'
   },
@@ -334,7 +346,7 @@ const setting = [
     type: 'inputNumber',
     field: 'yAxis_line_lineWidth',
     optionField: 'yAxis.line.style.lineWidth',
-    value: 1,
+    value: 0,
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -345,17 +357,17 @@ const setting = [
     optionField: 'yAxis.line.style.stroke',
     // 是否多选
     multiple: false,
-    value: 'rgba(255,255,255,0)',
+    value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'yAxis'
   },
   // 边距 padding
-  {
+    {
     label: '图表边距',
     type: 'padding',
     field: 'appendPadding',
     optionField: 'appendPadding',
-    value: [20, 20, 20, 20],
+    value: [16, 16, 16, 16],
     tabName: 'custom',
     groupName: 'padding'
   }
@@ -450,7 +462,7 @@ const data = [
   { Date: '2017-01', scales: 145 },
   { Date: '2017-02', scales: 207 }
 ]
-
+const optionHandler = 'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
 // 数据处理脚本
 const dataHandler = ''
 
@@ -459,7 +471,7 @@ const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
   data,
-  appendPadding: [20, 20, 20, 20], // 设置图标的边距
+  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   xField: 'Date',
   yField: 'scales',
   smooth: false,
@@ -518,6 +530,7 @@ const option = {
         style: {
           stroke: '#d0d0d0',
           lineWidth: 1,
+          lineDash: [4, 5],
           strokeOpacity: 0.7
         }
       }
@@ -531,11 +544,9 @@ const option = {
     },
     line: {
       style: {
-        stroke: 'rgba(255,255,255,0)',
-        lineWidth: 1
-      },
-      stroke: 'rgba(255,255,255,0)',
-      lineWidth: 1
+        stroke: '#d0d0d0',
+        lineWidth: 0
+      }
     }
   }
   // point: {
@@ -550,5 +561,6 @@ export default {
   name,
   option,
   setting,
-  dataHandler
+  dataHandler,
+  optionHandler
 }

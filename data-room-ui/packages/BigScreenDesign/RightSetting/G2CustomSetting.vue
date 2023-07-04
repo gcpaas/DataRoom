@@ -37,8 +37,8 @@
               :key="settingIndex+1"
             >
               <el-form-item
-                :label="setting.label"
-                label-width="120px"
+                :label="setting.type=== 'padding' ? '' : setting.label"
+                :label-width="setting.type=== 'padding' ? '0px' :'120px'"
               >
                 <el-input
                   v-if="setting.type === 'input'"
@@ -137,6 +137,12 @@
                   v-model="setting.value"
                   :active-value="1"
                   :inactive-value="0"
+                />
+                <el-switch
+                  v-else-if="setting.type === 'switchCustom'"
+                  v-model="setting.value"
+                  :active-value="setting.active"
+                  :inactive-value="setting.inactive"
                 />
                 <el-slider
                   v-else-if="setting.type === 'slider'"
