@@ -59,7 +59,7 @@
         <postgresql.version>42.3.3</postgresql.version>
         <clickhouse.version>0.3.2</clickhouse.version>
         <commons-io.version>2.2</commons-io.version>
-        <dataset.core.version>0.0.1.2023070401.Alpha</dataset.core.version>
+        <dataset.core.version>0.0.1.2023070402.Alpha</dataset.core.version>
     </properties>
 
     <dependencyManagement>
