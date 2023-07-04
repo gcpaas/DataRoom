@@ -4,7 +4,7 @@
     <div class="inner-container">
       <el-form
         :inline="true"
-        class="filter-container bs-el-form"
+        class="filter-container"
       >
         <el-form-item class="filter-input filter-item">
           <el-input
@@ -171,8 +171,8 @@ export default {
         sourceName: '',
         sourceType: ''
       },
-      size: 10, // 初始pagesize
-      current: 1, // 初始currentpage
+      size: 10,
+      current: 1,
       curRow: null
     }
   },
@@ -280,7 +280,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/style/bsTheme.scss';
+@import '~packages/assets/style/bsTheme.scss';
 
 .bs-pagination {
   ::v-deep .el-input__inner {

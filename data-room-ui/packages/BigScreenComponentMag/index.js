@@ -1,7 +1,7 @@
-import BigScreenManagement from './index.vue'
+import BigScreenComponentMag from './index.vue'
 
-BigScreenManagement.install = function (Vue) {
-  Vue.component(BigScreenManagement.name, BigScreenManagement)
+BigScreenComponentMag.install = function (Vue) {
+  Vue.component(BigScreenComponentMag.name, BigScreenComponentMag)
 }
 
-export default BigScreenManagement
+export default BigScreenComponentMag

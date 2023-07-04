@@ -1258,7 +1258,6 @@ export default {
         }
         this.saveLoading = false
       }).catch((e) => {
-        console.log('测试失败', e)
         this.passTest = false
         this.saveLoading = false
       })

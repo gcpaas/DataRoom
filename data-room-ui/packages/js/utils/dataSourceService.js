@@ -82,7 +82,7 @@ const getSourceView = (id = '-1', flag = false) => get(`/datasource/getViewList/
  * @param flag
  * @returns {Promise<*>}
  */
-const getTableFieldList = (sourceId = '-1', tableName = '', flag = false) => get(`/datasource//getFieldList/table/${sourceId}/${tableName}`, {}, flag)
+const getTableFieldList = (sourceId = '-1', tableName = '', flag = false) => get(`/datasource/getFieldList/table/${sourceId}/${tableName}`, {}, flag)
 
 /**
  * 获取数据源下视图字段列表
@@ -91,8 +91,7 @@ const getTableFieldList = (sourceId = '-1', tableName = '', flag = false) => get
  * @param flag
  * @returns {Promise<*>}
  */
-const getViewFieldList = (sourceId = '-1', viewName = '', flag = false) => get(`/datasource//getFieldList/view/${sourceId}/${viewName}`, {}, flag)
-
+const getViewFieldList = (sourceId = '-1', viewName = '', flag = false) => get(`/datasource/getFieldList/view/${sourceId}/${viewName}`, {}, flag)
 
 export {
   add,

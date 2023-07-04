@@ -20,7 +20,6 @@
         size="small"
         label-position="right"
         :label-width="dataForm.advanceSettingFlag ? '200px' : '150px'"
-        class="bs-el-form"
       >
         <el-form-item
           label="类型"
@@ -209,7 +208,7 @@
 </template>
 
 <script>
-import { checkRepeat, sourceLinkTest, addOrUpdateDataSource } from 'packages/js/utils/dataSourceService'
+import { checkRepeat, sourceLinkTest, add, update } from 'packages/js/utils/dataSourceService'
 export default {
   props: {
     appCode: {
@@ -245,21 +244,7 @@ export default {
         driverClassName: 'com.mysql.jdbc.Driver',
         username: '',
         password: '',
-        coding: '自动',
         url: 'jdbc:mysql://localhost:3306/db_name?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false&useOldAliasMetadataBehavior=true',
-        advanceSettingFlag: 0,
-        initConnNum: 0,
-        maxActiveConnNum: 0,
-        maxIdleConnNum: 0,
-        minIdleConnNum: 0,
-        maxWaitConnNum: 0,
-        sqlCheck: '',
-        getconnCheckFlag: 0,
-        returnCheckFlag: 0,
-        startIdleCheckFlag: 0,
-        idleConnDormantTime: 0,
-        idleConnCheckNum: 0,
-        keepIdleMinTime: 0,
         remark: ''
       },
       rules: {
@@ -366,7 +351,7 @@ export default {
         moduleCode: this.appCode
       }).then(r => {
         if (r) {
-          callback(new Error(r))
+          callback(new Error('数据源名称已存在'))
         } else {
           callback()
         }
@@ -435,21 +420,7 @@ export default {
         driverClassName: 'com.mysql.jdbc.Driver',
         username: '',
         password: '',
-        coding: '自动',
         url: 'jdbc:mysql://localhost:3306/db_name?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false&useOldAliasMetadataBehavior=true',
-        advanceSettingFlag: 0,
-        initConnNum: 0,
-        maxActiveConnNum: 0,
-        maxIdleConnNum: 0,
-        minIdleConnNum: 0,
-        maxWaitConnNum: 0,
-        sqlCheck: '',
-        getconnCheckFlag: 0,
-        returnCheckFlag: 0,
-        startIdleCheckFlag: 0,
-        idleConnDormantTime: 0,
-        idleConnCheckNum: 0,
-        keepIdleMinTime: 0,
         remark: ''
       }
       this.setDatasourceVisible = false
@@ -468,16 +439,29 @@ export default {
       // }
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
-          addOrUpdateDataSource({
-            ...this.dataForm,
-            moduleCode: this.appCode,
-            editable: this.appCode ? 1 : 0
-          }).then(() => {
-            this.$message.success('保存成功')
-            // 刷新表格
-            this.$emit('refreshTable')
-            this.handleClose()
-          })
+          if (this.dataForm.id) {
+            update({
+              ...this.dataForm,
+              moduleCode: this.appCode,
+              editable: this.appCode ? 1 : 0
+            }).then(() => {
+              this.$message.success('保存成功')
+              // 刷新表格
+              this.$emit('refreshTable')
+              this.handleClose()
+            })
+          } else {
+            add({
+              ...this.dataForm,
+              moduleCode: this.appCode,
+              editable: this.appCode ? 1 : 0
+            }).then(() => {
+              this.$message.success('保存成功')
+              // 刷新表格
+              this.$emit('refreshTable')
+              this.handleClose()
+            })
+          }
         } else {
           return false
         }
@@ -488,5 +472,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/style/bsTheme.scss';
+@import '~packages/assets/style/bsTheme.scss';
 </style>

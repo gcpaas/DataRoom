@@ -1,17 +1,7 @@
+
+// 大屏列表管理页面
 import 'packages/assets/style/common/index.scss'
 import 'packages/assets/style/bsTheme.scss'
-// 大屏管理页面
-import BigScreenManagement from 'packages/BigScreenMag'
-// 渲染整个bigScreen的渲染引擎
-import BigScreenRun from 'packages/BigScreenRun'
-// 大屏设计引擎
-import BigScreenDesign from 'packages/BigScreenDesign'
-// 数据源管理
-import DataSourceManagement from 'packages/DataSourceManagement'
-// 数据集管理
-import DataSetManagement from 'packages/DataSetManagement'
-// 大屏管理-数据集管理的顶部路由框架
-// import BigScreenTopLayout from 'packages/Layout'
 
 // 大屏 vuex store数据
 import bigScreenStore from 'packages/js/store'
@@ -20,14 +10,33 @@ import registerConfig from 'packages/js/utils/registerConfig'
 // 更新主题
 import updateTheme from 'packages/js/utils/updateTheme'
 
+// 布局组件
+const BigScreenTopLayout = () => import('./Layout/ApplicationCreateTop/index.vue')
+// 大屏列表管理页面
+const BigScreenManagement = () => import('./BigScreenMag')
+// 大屏资源管理页面
+const BgiScreenSourceMag = () => import('./SourceMag')
+// 大屏组件管理页面
+const BigScreenComponentMag = () => import('./BigScreenComponentMag')
+// 大屏预览页面
+const BigScreenRun = () => import('./BigScreenRun')
+// 大屏设计页面
+const BigScreenDesign = () => import('./BigScreenDesign')
+// 数据集管理页面
+const DataSetManagement = () => import('./DataSetManagement')
+// 数据源管理页面
+const DataSourceManagement = () => import('./DataSourceManagement')
+
 // 存储组件列表
 const components = [
+  BigScreenTopLayout,
   BigScreenManagement,
+  BgiScreenSourceMag,
+  BigScreenComponentMag,
   BigScreenRun,
   BigScreenDesign,
   DataSetManagement,
   DataSourceManagement
-  // BigScreenTopLayout
 ]
 
 const $bigScreen = {
@@ -42,13 +51,14 @@ function install (Vue) {
 
 export {
   install,
+  BigScreenTopLayout,
   BigScreenManagement,
+  BgiScreenSourceMag,
+  BigScreenComponentMag,
   BigScreenRun,
   BigScreenDesign,
   DataSetManagement,
   DataSourceManagement,
-  // BigScreenTopLayout,
-
   $bigScreen,
   registerConfig,
   updateTheme
@@ -56,12 +66,14 @@ export {
 
 export default {
   install,
+  BigScreenTopLayout,
+  BgiScreenSourceMag,
+  BigScreenComponentMag,
   BigScreenManagement,
   BigScreenRun,
   BigScreenDesign,
   DataSetManagement,
   DataSourceManagement,
-
   $bigScreen,
   registerConfig,
   updateTheme

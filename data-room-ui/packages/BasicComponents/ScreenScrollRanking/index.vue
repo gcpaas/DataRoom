@@ -52,7 +52,6 @@ export default {
   methods: {
     // 点击事件
     rowClick (row) {
-      console.log(row)
       this.linkage(row)
     },
     dataFormatting (config, data) {
