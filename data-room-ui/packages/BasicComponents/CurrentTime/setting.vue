@@ -31,27 +31,31 @@
       <SettingTitle>基础</SettingTitle>
       <div class="setting-wrap">
         <el-form-item
-          label="时间字体大小"
+          label="字体大小"
           label-width="100px"
         >
-          <el-input
+          <el-input-number
             v-model="config.customize.fontSize"
-            placeholder="请输入时间字体大小"
-          >
-            <template slot="append">
-              px
-            </template>
-          </el-input>
+            class="bs-el-input-number"
+            placeholder="请输入字体大小"
+            :min="0"
+          />
         </el-form-item>
         <el-form-item
-          label="时间字体权重"
+          label="字体权重"
           label-width="100px"
         >
           <el-input-number
             v-model="config.customize.fontWeight"
             class="bs-el-input-number"
-            placeholder="请输入时间字体权重"
+            placeholder="请输入字体权重"
           />
+        </el-form-item>
+        <el-form-item
+          label="字体颜色"
+          label-width="100px"
+        >
+          <el-color-picker v-model="config.customize.color" />
         </el-form-item>
         <el-form-item
           label="时间格式"
@@ -69,12 +73,6 @@
               :value="item.value"
             />
           </el-select>
-        </el-form-item>
-        <el-form-item
-          label="字体颜色"
-          label-width="100px"
-        >
-          <el-color-picker v-model="config.customize.color" />
         </el-form-item>
       </div>
     </el-form>

@@ -30,38 +30,24 @@
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
-          label="时间字体大小"
+          label="字体大小"
           label-width="100px"
         >
-          <el-input
+          <el-input-number
             v-model="config.customize.fontSize"
-            placeholder="请输入时间字体大小"
-          >
-            <template slot="append">
-              px
-            </template>
-          </el-input>
+            class="bs-el-input-number"
+            placeholder="请输入字体大小"
+            :min="0"
+          />
         </el-form-item>
         <el-form-item
-          label="时间字体权重"
+          label="字体权重"
           label-width="100px"
         >
           <el-input-number
             v-model="config.customize.fontWeight"
             class="bs-el-input-number"
-            placeholder="请输入时间字体权重"
-          />
-        </el-form-item>
-        <el-form-item
-          label="结束日期"
-          label-width="100px"
-        >
-          <el-date-picker
-            v-model="config.endTime"
-            type="datetime"
-            placeholder="请选择结束日期"
-            :picker-options="pickerOptions"
-            value-format="timestamp"
+            placeholder="请输入字体权重"
           />
         </el-form-item>
         <el-form-item
@@ -69,6 +55,20 @@
           label-width="100px"
         >
           <el-color-picker v-model="config.customize.color" />
+        </el-form-item>
+        <el-form-item
+          label="结束日期"
+          label-width="100px"
+        >
+          <el-date-picker
+            v-model="config.endTime"
+            popper-class="dateClass"
+            :append-to-body="true"
+            type="datetime"
+            placeholder="请选择结束日期"
+            :picker-options="pickerOptions"
+            value-format="timestamp"
+          />
         </el-form-item>
       </div>
     </el-form>
@@ -136,5 +136,10 @@ export default {
 }
 .lc-field-body {
   padding: 12px 16px;
+}
+/deep/.dateClass{
+  .el-time-panel{
+    width: 138px!important;
+  }
 }
 </style>
