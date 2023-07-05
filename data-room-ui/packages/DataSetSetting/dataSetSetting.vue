@@ -96,7 +96,9 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/style/bsTheme.scss';
-
+::v-deep .big-screen-router-view-wrap{
+  padding-left: 16px !important;
+}
 .data-set-wrap {
   /deep/ .el-dialog__body {
     position: relative;
@@ -123,6 +125,12 @@ export default {
   }
 
   .bs-data-set-management {
+    ::v-deep .bs-container{
+      margin-left: 0 !important;
+    }
+    ::v-deep  .layout {
+        position: absolute !important;
+      }
     ::v-deep .ztree {
       height: auto !important;
     }

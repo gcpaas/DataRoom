@@ -99,7 +99,9 @@
     color: var(--bs-el-text) !important;
     border-color: var(--bs-el-border) !important;
 
-
+    .cell {
+      color: var(--bs-el-text) !important;
+    }
     th.is-leaf {
       background-color: var(--bs-el-background-1) !important;
     }
@@ -338,7 +340,9 @@
     border-top-color: var(--bs-el-background-1) !important;
 
     &:after {
-      display: none;
+      border-bottom-color: var(--bs-el-background-1) !important;
+      border-top-color: var(--bs-el-background-1) !important;
+      display: none !important;
     }
   }
 
@@ -468,7 +472,10 @@
     border-bottom-color: var(--bs-el-background-1) !important;
 
     &:after {
+      border-bottom-color: var(--bs-el-background-1) !important;
+      border-top-color: var(--bs-el-background-1) !important;
       display: none !important;
+
     }
   }
 }

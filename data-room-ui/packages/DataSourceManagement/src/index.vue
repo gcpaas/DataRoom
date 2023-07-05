@@ -178,6 +178,10 @@ export default {
   },
   mounted () {
     this.init()
+    const layoutEl = document.querySelector('.big-screen-router-view-wrap')
+    if (layoutEl) {
+      layoutEl.style.padding = '16px'
+    }
   },
   methods: {
     // 获取当前选择数据集id

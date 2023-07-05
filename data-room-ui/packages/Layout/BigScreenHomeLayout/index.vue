@@ -149,7 +149,9 @@ export default {
     height: calc(100vh - 150px);
     background-color: var(--bs-background-1);
     box-sizing: border-box;
-    padding: 16px 16px 16px 0;
+    padding-top: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
   }
 }
 

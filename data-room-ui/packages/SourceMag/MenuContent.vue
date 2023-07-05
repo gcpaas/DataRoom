@@ -33,6 +33,6 @@ export default {
 <style lang="scss" scoped>
 .right-screen-list-wrap {
   width: 100%;
-  height: 100%;
+  // height: 100%;
 }
 </style>
