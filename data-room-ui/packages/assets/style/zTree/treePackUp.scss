@@ -45,6 +45,7 @@
 }
 
 .visible-pack-up {
+  position: absolute !important;
   right: 7px;
   display: flex;
   height: 40px !important;
@@ -96,14 +97,15 @@
   user-select: none;
   width: 15px;
   z-index: 1;
-  width: 14px;
+  width: 16px;
   display: flex;
+  align-items: center;
   height: auto;
   background-color: var(--bs-el-background-1);
   height: 100%;
 
   a {
-    align-self: center;
+    position: unset !important;
     display: block;
     height: 100px;
     line-height: 0px;
@@ -134,5 +136,5 @@
 
 .right-box {
   width: 75%;
-  // margin-left: 1px;
+  margin-left: 16px;
 }

@@ -604,6 +604,9 @@ export default {
 @import '../../assets/style/bsTheme.scss';
 @import '../../assets/style/zTree/treePackUp.scss';
 
+::v-deep .big-screen-router-view-wrap{
+  padding-left: 16px !important;
+}
 .bs-pagination {
   ::v-deep .el-input__inner {
     width: 110px !important;
@@ -616,29 +619,6 @@ export default {
   /deep/ .el-input__inner {
     width: 200px;
   }
-}
-
-.right-box {
-  margin-left: 20px;
-
-  // ::v-deep .ztreeNodeMenu {
-  //   ul {
-  //     background-color: var(--bs-background-1);
-  //   }
-
-  //   li:hover {
-  //     background-color: var(--bs-el-color-primary);
-  //   }
-
-  //   span {
-  //     color: var(--bs-el-text);
-  //   }
-
-  //   .triangle {
-  //     background-color: var(--bs-background-1) !important;
-  //   }
-  // }
-
 }
 
 ::v-deep .left-tab-box {
