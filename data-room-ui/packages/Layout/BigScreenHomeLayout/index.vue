@@ -106,7 +106,7 @@ export default {
   height: 100%;
 
   .big-screen-home-wrap-top {
-    position: absolute;
+    position: fixed;
     top: 0;
     width: 100%;
     height: 150px;
