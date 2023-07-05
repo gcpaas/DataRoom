@@ -62,7 +62,7 @@ export default {
     }
   },
   mounted () {
-    this.chartInit()
+    // this.chartInit()
   },
   methods: {
     handleClick () {
