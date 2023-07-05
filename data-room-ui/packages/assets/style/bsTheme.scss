@@ -160,7 +160,7 @@
     border-color: var(--bs-el-border) !important;
     background-color: var(--bs-el-background-3) !important;
   }
- 
+
   .popper__arrow {
     bottom: 0 !important;
     border-top-color: var(--bs-el-background-1) !important;
@@ -587,5 +587,43 @@
 .bs-el-form {
   .el-form-item__label{
     color: var(--bs-el-title);
+  }
+}
+
+//el-date-picker
+.bs-date-popper-class{
+  background-color: var(--bs-background-1) !important;
+  left: -115px!important;
+  .el-picker-panel__footer{
+    background-color: var(--bs-background-1) !important;
+    border-top:1px solid var(--bs-background-2);
+  }
+  .el-date-table td.disabled div{
+    background-color: var(--bs-background-2) !important;
+  }
+  .popper__arrow{
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+  .el-button + .el-button{
+    color: var(--bs-el-text) !important;
+    border-color: var(--bs-el-border) !important;
+    background-color: var(--bs-el-color-primary) !important;
+  }
+  .el-input__inner{
+    border: 1px solid #DCDFE6!important;
+  }
+  .el-time-panel{
+    left: -33px!important;
+    background-color: var(--bs-background-2) !important;
+  }
+  .el-time-spinner__item.active:not(.disabled){
+    color: var(--bs-el-text) !important;
+  }
+  .el-time-panel__btn{
+    color: var(--bs-el-text) !important;
+  }
+  .el-time-panel__btn.confirm{
+    color: var(--bs-el-color-primary) !important;
   }
 }
