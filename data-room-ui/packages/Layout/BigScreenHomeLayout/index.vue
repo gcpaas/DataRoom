@@ -103,9 +103,7 @@ export default {
   box-sizing: border-box;
 }
 .big-screen-home-wrap {
-  position: relative;
-  overflow: hidden;
-  height: 100vh;
+  height: 100%;
 
   .big-screen-home-wrap-top {
     position: absolute;

@@ -328,6 +328,7 @@ export default {
 .big-screen-list-wrap {
   position: relative;
   height: 100%;
+  // height: calc(100% - 16px);
   padding: 16px;
   color: #9ea9b2;
   // margin:0 16px;
@@ -361,7 +362,8 @@ export default {
     overflow: auto;
     // 间隙自适应
     justify-content: space-around;
-    max-height: calc(100vh - 304px);
+    // max-height: calc(100vh - 304px);
+    height: calc(100% - 96px);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 15px;

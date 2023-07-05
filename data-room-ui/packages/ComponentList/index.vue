@@ -18,7 +18,7 @@
         />
       </el-select>
       <el-input
-        v-model="name"
+        v-model="searchKey"
         class="bs-el-input"
         placeholder="请输入组件名称"
         prefix-icon="el-icon-search"
@@ -248,7 +248,11 @@ export default {
   },
   methods: {
     reset () {
-      this.name = ''
+      this.searchKey = ''
+      this.current = 1
+      this.size = 10
+      this.catalogCode = ''
+      this.init()
     },
     init () {
       if (this.catalogInfo !== 'system') {
@@ -268,7 +272,7 @@ export default {
         this.getDataList()
       } else {
         const arr = [...innerRemoteComponents, ...getRemoteComponents()]
-        this.list = arr?.filter((item) => item.title.indexOf(this.name) !== -1)
+        this.list = arr?.filter((item) => item.title.indexOf(this.searchKey) !== -1)
       }
     },
     catalogManage () {
@@ -303,8 +307,8 @@ export default {
         get('/bigScreen/bizComponent/page', {
           current: this.current,
           size: this.size,
-          searchKey: this.searchKey,
-          name: this.name,
+          // searchKey: this.searchKey,
+          name: this.searchKey,
           type: this.catalogCode || null
         })
           .then((data) => {
@@ -453,7 +457,8 @@ export default {
     overflow: auto;
     // 间隙自适应
     justify-content: space-around;
-    max-height: calc(100vh - 304px);
+    // max-height: calc(100vh - 304px);
+    height: calc(100% - 96px);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 15px;

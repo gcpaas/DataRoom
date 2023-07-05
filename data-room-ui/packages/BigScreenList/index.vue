@@ -341,7 +341,8 @@ export default {
     overflow: auto;
     // 间隙自适应
     justify-content: space-around;
-    max-height: calc(100vh - 304px);
+    // max-height: calc(100vh - 304px);
+    height: calc(100% - 96px);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 15px;

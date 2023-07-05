@@ -17,14 +17,16 @@ export default {
     }
   },
   mounted () { },
-  methods: {}
+  methods: { }
 }
 </script>
 
 <style lang="scss" scoped>
 .bs-manage-main-wrap {
-  display: flex;
+  position: relative;
+  width: 100%;
   height: 100%;
+  display: flex;
   background-color: var(--bs-background-1);
   // padding-top: 16px;
 }
