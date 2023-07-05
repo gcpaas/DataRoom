@@ -127,7 +127,8 @@
     "svg-sprite-loader": "6.0.11",
     "svgo": "1.2.2",
     "url-loader": "^4.1.1",
-    "vue-template-compiler": "2.6.10"
+    "vue-template-compiler": "2.6.10",
+    "webpack-bundle-analyzer": "^4.9.0"
   },
   "engines": {
     "node": ">=8.9",

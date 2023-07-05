@@ -5,6 +5,7 @@
 'use strict'
 const path = require('path')
 const CompressionPlugin = require('compression-webpack-plugin')
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const webpack = require('webpack')
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -85,6 +86,7 @@ module.exports = {
     if (process.env.NODE_ENV === 'production') {
       return {
         plugins: [
+          // new BundleAnalyzerPlugin(),
           new CompressionPlugin({
             cache: true, // 开启缓存
             test: /\.js$|\.html$|\.css$|\.jpg$|\.jpeg$|\.png/, // 需要压缩的文件类型
@@ -104,6 +106,59 @@ module.exports = {
   },
 
   chainWebpack: config => {
+    config.optimization.splitChunks({
+      cacheGroups: {
+        element: {
+          name: 'element-ui',
+          test: /[\\/]element-ui[\\/]/,
+          chunks: 'all',
+          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        },
+        remotevue2loader: {
+          name: 'remote-vue2-loader',
+          test: /[\\/]remote-vue2-loader[\\/]/,
+          chunks: 'all',
+          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        },
+        echarts: {
+          name: 'echarts',
+          test: /[\\/]echarts[\\/]/,
+          chunks: 'all',
+          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        },
+        babel: {
+          name: '@babel',
+          test: /[\\/]@babel[\\/]/,
+          chunks: 'all',
+          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        },
+        vueJsonEditor: {
+          name: 'vue-json-editor',
+          test: /[\\/]vue-json-editor[\\/]/,
+          chunks: 'all',
+          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        },
+        moment: {
+          name: 'moment',
+          test: /[\\/]moment[\\/]/,
+          chunks: 'all',
+          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        },
+        antv: {
+          name: '@antv',
+          test: /[\\/]@antv[\\/]/,
+          chunks: 'all',
+          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        },
+        vendors: {
+          name: 'chunk-vendors',
+          test: /[\\/]node_modules[\\/]/,
+          chunks: 'all',
+          priority: 2,
+          reuseExistingChunk: true
+        }
+      }
+    })
     if (process.env.NODE_ENV === 'production') {
       config.plugin('html-index').tap(args => {
         // html中添加cdn
