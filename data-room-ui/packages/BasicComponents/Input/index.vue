@@ -48,26 +48,33 @@ export default {
   data () {
     return { }
   },
+  watch: {
+    'config.customize.value': {
+      handler (val) {
+        this.$store.commit('bigScreen/changeActiveItemConfig', { ...this.config, customize: { ...this.config.customize, value: this.config.customize.value } })
+      }
+    }
+  },
   mounted () {
     this.chartInit()
-    this.updateComponent()
+    // this.changeStyle()
   },
   methods: {
-    updateComponent () {
-      const input = document.querySelector(`#el-input-${this.config.code}`)
+    changeStyle (config) {
+      const input = document.querySelector(`#el-input-${config.code}`)
 
       // const inputIcon = input.querySelector(`.${this.config.customize.icon.name}`)
-      input.style.backgroundColor = this.config.customize.backgroundStyle.backgroundColor
-      input.style.fontSize = this.config.customize.inputStyle.fontSize + 'px'
-      input.style.color = this.config.customize.inputStyle.color
-      input.style.borderColor = this.config.customize.borderStyle.borderColor
-      input.style.borderWidth = this.config.customize.borderStyle.borderWidth + 'px'
-      input.style.borderStyle = this.config.customize.borderStyle.borderStyle
-      input.style.borderRadius = this.config.customize.borderStyle.borderRadius + 'px'
+      input.style.backgroundColor = config.customize.backgroundStyle.backgroundColor
+      input.style.fontSize = config.customize.inputStyle.fontSize + 'px'
+      input.style.color = config.customize.inputStyle.color
+      input.style.borderColor = config.customize.borderStyle.borderColor
+      input.style.borderWidth = config.customize.borderStyle.borderWidth + 'px'
+      input.style.borderStyle = config.customize.borderStyle.borderStyle
+      input.style.borderRadius = config.customize.borderStyle.borderRadius + 'px'
       // inputIcon.style.fontSize = this.config.customize.inputStyle.fontSize + 'px'
-      if (this.config.customize.icon.name) {
-        const inputIcon = document.querySelector(`.${this.config.customize.icon.name}`)
-        inputIcon.style.fontSize = this.config.customize.inputStyle.fontSize + 'px'
+      if (config.customize.icon.name) {
+        const inputIcon = document.querySelector(`.${config.customize.icon.name}`)
+        inputIcon.style.fontSize = config.customize.inputStyle.fontSize + 'px'
       }
     }
   }
@@ -96,6 +103,8 @@ export default {
     ::v-deep .el-input__inner {
       height: 100%;
       width: 100%;
+      background-color:#151a26;
+      border: 1px solid #DCDFE6;
     }
   }
 

@@ -13,8 +13,8 @@
       :rules="rules"
       class="bs-el-form"
     >
-      <SettingTitle>基础</SettingTitle>
-      <div class="lc-field-body">
+      <SettingTitle>标题</SettingTitle>
+      <div class="bs-setting-wrap">
         <el-form-item
           label="标题"
           label-width="100px"
@@ -26,6 +26,13 @@
             clearable
           />
         </el-form-item>
+      </div>
+      <SettingTitle>位置</SettingTitle>
+      <div class="lc-field-body">
+        <PosWhSetting :config="config" />
+      </div>
+      <SettingTitle>基础</SettingTitle>
+      <div class="lc-field-body">
         <el-form-item
           label="标题字体大小"
           label-width="100px"
@@ -51,10 +58,6 @@
           />
         </el-form-item>
         <TextGradient v-model="config.customize.color" />
-      </div>
-      <SettingTitle>位置</SettingTitle>
-      <div class="lc-field-body">
-        <PosWhSetting :config="config" />
       </div>
     </el-form>
   </div>

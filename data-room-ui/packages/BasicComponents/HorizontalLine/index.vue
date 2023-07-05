@@ -8,7 +8,7 @@
       class="custom-border-box"
       :style="{
         height: lineHeight + 'px',
-        opacity: opacity / 100,
+        opacity: opacity,
         'background-image': `linear-gradient(to right, ${
           gradientColor0 ? gradientColor0 : gradientColor1
         } , ${gradientColor1 ? gradientColor1 : gradientColor0})`
