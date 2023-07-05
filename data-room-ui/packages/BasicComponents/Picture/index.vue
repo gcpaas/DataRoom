@@ -7,7 +7,7 @@
         :style="{
           width: '100%',
           height: '100%',
-          opacity: config.customize.opacity / 100,
+          opacity: config.customize.opacity,
           borderRadius: config.customize.radius + 'px'
         }"
         draggable="false"
