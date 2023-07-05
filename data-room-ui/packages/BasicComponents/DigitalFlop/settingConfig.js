@@ -47,7 +47,8 @@ const customConfig = {
     slotRight: '',
     marginRight: 20,
     numberDigits: 5,
-    placeHolder: '0'
+    placeHolder: '0',
+    height: 125
   }
 }
 export const dataConfig = {

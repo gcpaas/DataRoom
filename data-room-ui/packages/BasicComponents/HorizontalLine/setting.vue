@@ -57,12 +57,14 @@
               label="不透明度"
               label-width="100px"
             >
-              <el-slider
+              <el-input-number
                 v-model="config.customize.opacity"
-                class="bs-slider bs-el-input-number"
-                :min="0"
-                :max="100"
-                show-input
+                class="bs-el-input-number db-el-input-number"
+                placeholder="请输入不透明度"
+                :min="0.01"
+                :max="1"
+                :precision="2"
+                :step="0.01"
               />
             </el-form-item>
           </div>
