@@ -12,14 +12,12 @@ export default {
   props: {
     catalogInfo: {
       type: String,
-      default: ''
+      default: 'component'
     }
   },
   components: { ComponentList },
   data () {
-    return {
-
-    }
+    return { }
   }
 }
 </script>
