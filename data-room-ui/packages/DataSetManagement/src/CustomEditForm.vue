@@ -1071,13 +1071,11 @@ export default {
           customClass: 'bs-el-message-box'
         }).then(() => {
           this.saveFun(formName)
-
         }).catch(() => {
 
         })
       } else {
         this.saveFun(formName)
-
       }
     },
     /**
@@ -1470,6 +1468,9 @@ export default {
 }
 
 .bs-pagination {
+  position: relative !important;
+  bottom: 0 !important;
+  padding: 0 12px 16px 16px !important;
   ::v-deep .el-input__inner {
     width: 110px !important;
     border: none;

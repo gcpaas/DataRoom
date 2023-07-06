@@ -1,7 +1,7 @@
 <template>
   <div class="bs-manage-main-wrap">
-    <side-menu />
-    <menu-content />
+    <side-menu @getPageInfo="getPageInfo" />
+    <menu-content :catalog-info="catalogInfo" />
   </div>
 </template>
 <script>
@@ -14,10 +14,15 @@ export default {
   components: { SideMenu, MenuContent },
   data () {
     return {
+      catalogInfo: 'component'
     }
   },
-  mounted () { },
-  methods: { }
+  mounted () {},
+  methods: {
+    getPageInfo (type) {
+      this.catalogInfo = type
+    }
+  }
 }
 </script>
 

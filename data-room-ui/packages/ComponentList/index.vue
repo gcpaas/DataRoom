@@ -153,7 +153,6 @@
           </div>
         </div>
       </div>
-
       <div
         v-if="catalogInfo !== 'system'"
         class="footer-pagination-wrap"
@@ -203,12 +202,16 @@ import innerRemoteComponents, { getRemoteComponents } from 'packages/RemoteCompo
 export default {
   name: 'BigScreenList',
   mixins: [pageMixins],
-  props: { },
+  props: {
+    catalogInfo: {
+      type: String,
+      default: ''
+    }
+  },
   components: { EditForm, CatalogEditForm },
   data () {
     return {
       name: '',
-      catalogInfo: 'component',
       catalogVisible: false,
       templateLoading: false,
       searchKey: '',
@@ -235,8 +238,7 @@ export default {
     }
   },
   watch: {
-    $route (val) {
-      this.catalogInfo = val.query.type || 'component'
+    catalogInfo () {
       this.reset()
       this.init()
     },
@@ -245,7 +247,6 @@ export default {
     }
   },
   mounted () {
-    this.catalogInfo = this.$route.query.type || 'component'
     this.init()
   },
   methods: {

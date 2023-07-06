@@ -135,6 +135,12 @@ export default {
     BizComponentPreview
   },
   props: {},
+  beforeRouteLeave (to, from, next) {
+  // 在离开当前页面之前执行逻辑
+    const data = { componentsManagementType: 'bizComponent' }
+    this.$router.app.$options.globalData = data // 将数据存储在全局变量中
+    next() // 继续导航
+  },
   data () {
     return {
       form: {
@@ -231,10 +237,7 @@ export default {
     },
     backManagement () {
       this.$router.push({
-        path: window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components',
-        query: {
-          type: 'bizComponent'
-        }
+        path: window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components'
       })
     },
     save () {

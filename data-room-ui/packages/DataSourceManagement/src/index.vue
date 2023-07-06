@@ -146,6 +146,22 @@ export default {
   components: {
     setDatasource
   },
+  // 路由守卫-离开页面
+  beforeRouteLeave (to, from, next) {
+    const layoutEl = document.querySelector('.big-screen-router-view-wrap')
+    if (layoutEl) {
+      layoutEl.style.paddingLeft = '0'
+    }
+    next()
+  },
+  // 路由进入页面
+  beforeRouteEnter (to, from, next) {
+    const layoutEl = document.querySelector('.big-screen-router-view-wrap')
+    if (layoutEl) {
+      layoutEl.style.paddingLeft = '16px'
+    }
+    next()
+  },
   mixins: [pageMixins],
   props: {
     isDialog: {
@@ -176,11 +192,12 @@ export default {
       curRow: null
     }
   },
+  created () { },
   mounted () {
     this.init()
     const layoutEl = document.querySelector('.big-screen-router-view-wrap')
     if (layoutEl) {
-      layoutEl.style.padding = '16px'
+      layoutEl.style.paddingLeft = '16px'
     }
   },
   methods: {

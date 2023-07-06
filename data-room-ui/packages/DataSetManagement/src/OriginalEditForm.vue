@@ -1081,10 +1081,8 @@ export default {
 }
 
 /deep/ .bs-table-box.is-Edit .el-table {
-  max-height: calc(100vh - 532px) !important;
-
   .el-table__body-wrapper {
-    max-height: calc(100vh - 568px) !important;
+    max-height: unset !important;
   }
 }
 
@@ -1114,6 +1112,9 @@ export default {
 }
 
 .bs-pagination {
+  position: relative !important;
+  bottom: 0 !important;
+  padding: 0 12px 16px 16px !important;
   ::v-deep .el-input__inner {
     width: 110px !important;
     border: none;
