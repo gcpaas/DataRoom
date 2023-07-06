@@ -19,16 +19,6 @@
           加载中···
         </div>
       </el-image>
-      <!-- <img
-        :src="config.customize.url || noImageUrl"
-        :style="{
-          width: '100%',
-          height: '100%',
-          opacity: config.customize.opacity / 100,
-          borderRadius: config.customize.radius + 'px'
-        }"
-        draggable="false"
-      > -->
     </div>
   </div>
 </template>

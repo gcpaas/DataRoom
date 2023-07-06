@@ -16,7 +16,6 @@
       <SettingTitle>标题</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
-
           label="标题"
           label-width="100px"
           prop="title"
@@ -52,6 +51,7 @@
             :limit="1"
             list-type="picture-card"
             :on-success="handleUploadSuccess"
+            :on-error="handleUploadError"
             :before-upload="beforeUpload"
           >
             <i
@@ -82,7 +82,6 @@
               class="upload-tip"
               placeholder="或输入URL地址"
               clearable
-              @change="handleUrlChange"
             />
           </el-upload>
         </el-form-item>
@@ -100,17 +99,6 @@
             :step="0.01"
           />
         </el-form-item>
-<!--        <el-form-item-->
-<!--          label="圆角"-->
-<!--          label-width="100px"-->
-<!--        >-->
-<!--          <el-input-number-->
-<!--            v-model="config.customize.radius"-->
-<!--            class="bs-el-input-number"-->
-<!--            placeholder="请输入圆角大小"-->
-<!--            :min="0"-->
-<!--          />-->
-<!--        </el-form-item>-->
       </div>
     </el-form>
   </div>
@@ -170,7 +158,20 @@ export default {
       }
     }
   },
-  watch: {},
+  watch: {
+    'config.customize.url': function (val) {
+      if (val) {
+        this.fileList = [
+          {
+            name: this.config.title,
+            url: this.config.customize.url
+          }
+        ]
+      } else {
+        this.fileList = []
+      }
+    }
+  },
   mounted () {
     if (this.config.customize.url) {
       this.fileList = [
@@ -195,7 +196,11 @@ export default {
         ]
       } else {
         this.$message.error(res.msg)
+        this.fileList = []
       }
+    },
+    handleUploadError () {
+      this.$message.error('上传失败')
     },
     handleRemove () {
       this.fileList = []
@@ -207,9 +212,6 @@ export default {
         this.$message.error('上传图片大小不能超过 2MB!')
       }
       return isLt2M
-    },
-    handleUrlChange (val) {
-      this.config.customize.url = val
     }
   }
 }
@@ -217,6 +219,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/style/settingWrap.scss';
+
 .bs-slider {
   .el-input-number__decrease {
     background: var(--bs-el-background-1);
@@ -228,19 +231,23 @@ export default {
     border-left: 1px solid var(--bs-background-1);
   }
 }
+
 .bs-setting-wrap {
   padding-top: 16px;
 
-  /deep/ .hide .el-upload--picture-card {
-    display: none;
+  ::v-deep .hide .el-upload--picture-card {
+    display: none !important;
   }
-  /deep/.el-upload-list__item {
+
+  ::v-deep.el-upload-list__item {
     transition: none !important;
   }
-  /deep/ .el-upload--picture-card {
-    margin-bottom: 12px;
+
+  ::v-deep .el-upload--picture-card {
+    margin-bottom: 12px !important;
   }
 }
+
 .lc-field-body {
   padding: 12px 16px;
 }
