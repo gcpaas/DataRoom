@@ -1071,13 +1071,13 @@ export default {
           customClass: 'bs-el-message-box'
         }).then(() => {
           this.saveFun(formName)
-          this.goBack()
+
         }).catch(() => {
 
         })
       } else {
         this.saveFun(formName)
-        this.goBack()
+
       }
     },
     /**
@@ -1134,6 +1134,7 @@ export default {
           this.$parent.setType = null
           this.saveLoading = false
           this.saveText = ''
+          this.goBack()
         }).catch(() => {
           this.saveLoading = false
           this.saveText = ''
