@@ -1071,11 +1071,13 @@ export default {
           customClass: 'bs-el-message-box'
         }).then(() => {
           this.saveFun(formName)
+          this.goBack()
         }).catch(() => {
 
         })
       } else {
         this.saveFun(formName)
+        this.goBack()
       }
     },
     /**

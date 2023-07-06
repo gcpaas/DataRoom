@@ -795,6 +795,7 @@ export default {
           this.$parent.setType = null
           this.saveLoading = false
           this.saveText = ''
+          this.goBack()
         }).catch(() => {
           this.$message.error('保存失败')
           this.saveLoading = false

@@ -251,7 +251,7 @@
                   </el-button>
                 </div>
               </div>
-              </divclass="field-wrap>
+              <!-- </divclass="field-wrap> -->
             </div>
           </div>
         </el-col>
@@ -840,6 +840,7 @@ export default {
           this.$parent.setType = null
           this.saveLoading = false
           this.saveText = ''
+          this.goBack()
         }).catch(() => {
           this.saveLoading = false
           this.saveText = ''
@@ -879,6 +880,10 @@ export default {
       } else {
         this.datasetTest()
       }
+    },
+
+    goBack () {
+      this.$emit('back')
     },
     /**
      * 执行测试

@@ -531,6 +531,7 @@ export default {
             this.$parent.setType = null
             this.saveloading = false
             this.saveText = ''
+            this.goBack()
           }).catch(() => {
             this.saveloading = false
             this.saveText = ''
