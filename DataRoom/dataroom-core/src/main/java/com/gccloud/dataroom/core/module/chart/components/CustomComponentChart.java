@@ -16,6 +16,9 @@ import java.util.List;
 @Data
 public class CustomComponentChart extends Chart {
 
+    @ApiModelProperty(notes = "版本")
+    private String version;
+
     @ApiModelProperty(notes = "类型")
     private String type = PageDesignConstant.BigScreen.Type.CUSTOM_COMPONENT;
 

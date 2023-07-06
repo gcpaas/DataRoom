@@ -3,7 +3,7 @@ package com.gccloud.dataroom.core.module.biz.component.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gccloud.dataroom.core.config.DataRoomConfig;
-import com.gccloud.dataroom.core.module.biz.component.dao.BizComponentDao;
+import com.gccloud.dataroom.core.module.biz.component.dao.DataRoomBizComponentDao;
 import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentSearchDTO;
 import com.gccloud.dataroom.core.module.biz.component.entity.BizComponentEntity;
 import com.gccloud.dataroom.core.module.biz.component.service.IBizComponentService;
@@ -28,8 +28,8 @@ import java.util.List;
  * @date 2023/6/5 13:35
  */
 @Slf4j
-@Service
-public class BizComponentServiceImpl extends ServiceImpl<BizComponentDao, BizComponentEntity> implements IBizComponentService {
+@Service("dataRoomBizComponentService")
+public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao, BizComponentEntity> implements IBizComponentService {
 
     @Resource
     private DataRoomConfig bigScreenConfig;

@@ -73,6 +73,8 @@ public class DataRoomFileController extends SuperController {
     @ApiOperation(value = "获取所有文件后缀名", notes = "获取所有文件后缀名", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public R<List<String>> getAllFileSuffix() {
     	List<String> extensions = fileService.getAllExtension();
+        // 移除空后缀
+        extensions.remove("");
     	return R.success(extensions);
     }
 

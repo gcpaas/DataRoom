@@ -24,7 +24,7 @@ import java.util.List;
  * @date 2023/5/26 9:44
  */
 @Slf4j
-@RestController
+@RestController("dataRoomTypeController")
 @RequestMapping("/bigScreen/type")
 @Api(tags = "分类管理")
 public class TypeController {

@@ -71,7 +71,7 @@
 </dependency>
 ```
 
-点击<a href="https://central.sonatype.com/artifact/com.gccloud/gc-starter-bigscreen-core">查询最新版本号</a>
+点击<a href="https://central.sonatype.com/artifact/com.gccloud/dataroom-core">查询最新版本号</a>
 
 ### 2. 初始化SQL
 
@@ -102,7 +102,7 @@ gc:
   starter:
     file:
       # 一个存储文件的绝对路径，需要有写入权限
-      basePath: /root/big-screen
+      basePath: /root/dataroom
       # 静态资源访问接口前缀
       urlPrefix: http://127.0.0.1:${server.port}/${server.servlet.context-path}/static/
 ```
@@ -112,8 +112,8 @@ gc:
 ### 4. 启动类配置扫描包路径
 
 ```java
-@SpringBootApplication(scanBasePackages = {BigScreenConst.ScanPackage.COMPONENT})
-@MapperScan(value = {BigScreenConst.ScanPackage.DAO})
+@SpringBootApplication(scanBasePackages = {DataRoomConst.ScanPackage.COMPONENT, DatasetConstant.ScanPackage.COMPONENT, CommonConst.ScanPackage.COMPONENT})
+@MapperScan(value = {DataRoomConst.ScanPackage.DAO, DatasetConstant.ScanPackage.DAO})
 ```
 
 ## 演示DEMO

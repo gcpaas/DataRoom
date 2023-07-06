@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
 import com.gccloud.dataroom.core.module.chart.components.datasource.DataSetDataSource;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
-import com.gccloud.dataroom.core.module.template.dao.PageTemplateDao;
+import com.gccloud.dataroom.core.module.template.dao.DataRoomPageTemplateDao;
 import com.gccloud.dataroom.core.module.template.dto.PageTemplateSearchDTO;
 import com.gccloud.dataroom.core.module.template.entity.PageTemplateEntity;
 import com.gccloud.dataroom.core.module.template.service.IPageTemplateService;
@@ -21,8 +21,8 @@ import java.util.List;
  * @version 1.0
  * @date 2023/3/20 16:38
  */
-@Service
-public class PageTemplateServiceImpl extends ServiceImpl<PageTemplateDao, PageTemplateEntity> implements IPageTemplateService {
+@Service("dataRoomPageTemplateService")
+public class PageTemplateServiceImpl extends ServiceImpl<DataRoomPageTemplateDao, PageTemplateEntity> implements IPageTemplateService {
     @Override
     public PageVO<PageTemplateEntity> getPage(PageTemplateSearchDTO searchDTO) {
         LambdaQueryWrapper<PageTemplateEntity> queryWrapper = new LambdaQueryWrapper<>();

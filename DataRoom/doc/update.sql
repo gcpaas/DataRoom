@@ -58,3 +58,23 @@ CREATE TABLE `ds_dataset` (
   `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB   DEFAULT CHARSET=utf8 COLLATE=utf8_general_mysql500_ci COMMENT='数据集表';
+
+
+# 20230705 添加create_by、update_by
+ALTER TABLE `big_screen_page` ADD COLUMN `create_by` bigint(64) NULL DEFAULT 2 COMMENT '创建人' AFTER `del_flag`;
+ALTER TABLE `big_screen_page` ADD COLUMN `update_by` bigint(64) NULL DEFAULT 2 COMMENT '更新人' AFTER `create_by`;
+ALTER TABLE `big_screen_file` ADD COLUMN `create_by` bigint(64) NULL DEFAULT 2 COMMENT '创建人' AFTER `del_flag`;
+ALTER TABLE `big_screen_file` ADD COLUMN `update_by` bigint(64) NULL DEFAULT 2 COMMENT '更新人' AFTER `create_by`;
+ALTER TABLE `big_screen_biz_component` ADD COLUMN `create_by` bigint(64) NULL DEFAULT 2 COMMENT '创建人' AFTER `del_flag`;
+ALTER TABLE `big_screen_biz_component` ADD COLUMN `update_by` bigint(64) NULL DEFAULT 2 COMMENT '更新人' AFTER `create_by`;
+ALTER TABLE `big_screen_page_template` ADD COLUMN `create_by` bigint(64) NULL DEFAULT 2 COMMENT '创建人' AFTER `del_flag`;
+ALTER TABLE `big_screen_page_template` ADD COLUMN `update_by` bigint(64) NULL DEFAULT 2 COMMENT '更新人' AFTER `create_by`;
+ALTER TABLE `big_screen_type` ADD COLUMN `create_by` bigint(64) NULL DEFAULT 2 COMMENT '创建人' AFTER `del_flag`;
+ALTER TABLE `big_screen_type` ADD COLUMN `update_by` bigint(64) NULL DEFAULT 2 COMMENT '更新人' AFTER `create_by`;
+
+ALTER TABLE `ds_datasource` ADD COLUMN `create_by` bigint(64) NULL DEFAULT 2 COMMENT '创建人' AFTER `del_flag`;
+ALTER TABLE `ds_datasource` ADD COLUMN `update_by` bigint(64) NULL DEFAULT 2 COMMENT '更新人' AFTER `create_by`;
+ALTER TABLE `ds_dataset` ADD COLUMN `create_by` bigint(64) NULL DEFAULT 2 COMMENT '创建人' AFTER `del_flag`;
+ALTER TABLE `ds_dataset` ADD COLUMN `update_by` bigint(64) NULL DEFAULT 2 COMMENT '更新人' AFTER `create_by`;
+ALTER TABLE `ds_category_tree` ADD COLUMN `create_by` bigint(64) NULL DEFAULT 2 COMMENT '创建人' AFTER `del_flag`;
+ALTER TABLE `ds_category_tree` ADD COLUMN `update_by` bigint(64) NULL DEFAULT 2 COMMENT '更新人' AFTER `create_by`;

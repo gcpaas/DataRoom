@@ -30,7 +30,7 @@ import java.net.URLEncoder;
  */
 @Service
 @Slf4j
-@ConditionalOnProperty(prefix = "gc.starter.component", name = "IDataRoomOssService", havingValue = "DataRoomLocalFileServiceImpl", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "gc.starter.dataroom.component", name = "IDataRoomOssService", havingValue = "DataRoomLocalFileServiceImpl", matchIfMissing = true)
 public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
 
     @Resource

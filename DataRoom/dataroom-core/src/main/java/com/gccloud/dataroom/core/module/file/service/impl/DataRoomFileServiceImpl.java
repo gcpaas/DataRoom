@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-@ConditionalOnProperty(prefix = "gc.starter.component", name = "IDataRoomFileService", havingValue = "DataRoomFileServiceImpl", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "gc.starter.dataroom.component", name = "IDataRoomFileService", havingValue = "DataRoomFileServiceImpl", matchIfMissing = true)
 public class DataRoomFileServiceImpl extends ServiceImpl<DataRoomFileDao, DataRoomFileEntity> implements IDataRoomFileService {
 
     @Override

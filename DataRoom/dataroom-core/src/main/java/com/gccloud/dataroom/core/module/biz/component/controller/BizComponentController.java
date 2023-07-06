@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  * @date 2023/6/5 13:43
  */
 @Slf4j
-@RestController
+@RestController("dataRoomBizComponentController")
 @RequestMapping("/bigScreen/bizComponent")
 @Api(tags = "业务组件")
 @ApiSort(value = 110)

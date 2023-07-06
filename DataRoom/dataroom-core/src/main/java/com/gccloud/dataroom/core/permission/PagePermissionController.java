@@ -18,13 +18,13 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2023/5/24 10:36
  */
 @Slf4j
-@RestController
+@RestController("dataRoomPagePermissionController")
 @RequestMapping("/bigScreen/permission")
 @Api(tags = "大屏页权限控制器")
 public class PagePermissionController {
 
     @Resource
-    private PermissionClient permissionClient;
+    private DataRoomPermissionClient permissionClient;
 
     @GetMapping("/check/{code}")
     @ApiOperation(value = "校验大屏页权限")

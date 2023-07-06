@@ -20,6 +20,9 @@ public class ScreenTablesChart extends Chart {
     @ApiModelProperty(notes = "数据源")
     private BaseChartDataSource dataSource;
 
+    @ApiModelProperty(notes = "版本")
+    private String version;
+
     @ApiModelProperty(notes = "类型")
     private String type = PageDesignConstant.BigScreen.Type.TABLES;
 

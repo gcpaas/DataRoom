@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
  * @version 1.0
  * @date 2023/5/15 10:38
  */
-public interface IPermissionService {
+public interface IDataRoomPermissionService {
 
     /**
      * 校验接口权限

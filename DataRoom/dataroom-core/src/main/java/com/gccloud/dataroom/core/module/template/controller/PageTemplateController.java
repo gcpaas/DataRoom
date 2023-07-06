@@ -28,7 +28,7 @@ import java.util.List;
  * @version 1.0
  * @date 2023/3/20 16:38
  */
-@RestController
+@RestController("dataRoomPageTemplateController")
 @RequestMapping("/bigScreen/template")
 @Api(tags = "页面模板")
 @ApiSort(value = 10)
