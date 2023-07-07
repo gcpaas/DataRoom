@@ -52,7 +52,7 @@
         <guava.version>20.0</guava.version>
         <jackson.core.version>2.13.3</jackson.core.version>
         <json.version>20220320</json.version>
-        <druid.version>1.1.23</druid.version>
+        <druid.version>1.2.11</druid.version>
         <p6spy.version>3.9.0</p6spy.version>
         <ojdbc8.version>12.2.0.1</ojdbc8.version>
         <mysql.version>5.1.49</mysql.version>
