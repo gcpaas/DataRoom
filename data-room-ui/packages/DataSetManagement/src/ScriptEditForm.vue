@@ -125,6 +125,19 @@
                   />
                 </el-form-item>
               </el-col>
+              <el-col :span="12">
+                <el-form-item
+                  label="关联标签"
+                  prop="labelIds"
+                >
+                  <label-select
+                    :dataset-id="datasetId"
+                    :id-list="dataForm.labelIds"
+                    @commit="(ids) =>{dataForm.labelIds = ids}"
+                  >
+                  </label-select>
+                </el-form-item>
+              </el-col>
             </el-row>
           </el-form>
           <div
@@ -517,6 +530,7 @@
 </template>
 
 <script>
+import LabelSelect from 'packages/DataSetLabelManagement/src/LabelSelect.vue'
 import {
   nameCheckRepeat,
   getCategoryTree,
@@ -526,37 +540,17 @@ import {
 } from 'packages/js/utils/datasetConfigService'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/groovy/groovy'
-
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/nord.css'
 import _ from 'lodash'
+import { datasetMixins } from 'packages/js/mixins/datasetMixin'
 export default {
   name: 'ScriptEditForm',
   components: {
-    codemirror
+    codemirror,
+    LabelSelect
   },
-  props: {
-    isEdit: {
-      type: Boolean,
-      default: false
-    },
-    datasetId: {
-      type: String,
-      default: null
-    },
-    datasetName: {
-      type: String,
-      default: ''
-    },
-    typeId: {
-      type: String,
-      default: ''
-    },
-    appCode: {
-      type: String,
-      default: ''
-    }
-  },
+  mixins: [datasetMixins],
   data () {
     const validateName = (rule, value, callback) => {
       nameCheckRepeat({
@@ -578,6 +572,7 @@ export default {
         typeId: '',
         datasetType: 'script',
         remark: '',
+        labelIds: [],
         // 以下为config配置
         script: '',
         paramsList: [],
@@ -600,24 +595,7 @@ export default {
           completeSingle: true
         }
       },
-      dataPreviewList: [],
-      structurePreviewList: [],
-      structurePreviewListCopy: [],
-      typeSelect: [
-        { value: 'String' },
-        { value: 'Integer' },
-        { value: 'Double' },
-        { value: 'Long' },
-        { value: 'Date' }
-      ],
-      typeName: '',
-      categoryData: [],
-      fieldDescVisible: false,
-      fieldsetVisible: false,
       paramsVisible: false,
-      tableLoading: false,
-      saveLoading: false,
-      saveText: '',
       paramsListCopy: [],
       isSet: false, // 参数是否配置状态
       passTest: false,
@@ -729,6 +707,7 @@ export default {
           sourceId: this.dataForm.sourceId,
           moduleCode: this.appCode,
           editable: this.appCode ? 1 : 0,
+          labelIds: this.dataForm.labelIds,
           config: {
             className: 'com.gccloud.dataset.entity.config.GroovyDataSetConfig',
             script: this.dataForm.script,
@@ -794,46 +773,6 @@ export default {
         // 无参数，直接执行脚本
         this.scriptExecute()
       }
-    },
-    /**
-     * 使用字段名填充字段描述
-     */
-    fieldDescFill () {
-      this.structurePreviewList.forEach(field => {
-        if (field.fieldDesc === '' || !field.hasOwnProperty('fieldDesc')) {
-          field.fieldDesc = field.fieldName
-        }
-      })
-      this.save('form')
-      this.fieldDescVisible = false
-    },
-    /**
-     * 打开字段描述编辑弹窗
-     */
-    fieldDescEdit () {
-      this.fieldDescVisible = false
-      this.fieldsetVisible = true
-    },
-    /**
-     * 跳过字段描述编辑直接保存
-     */
-    toSave () {
-      this.save('form', true)
-      this.fieldDescVisible = false
-    },
-    /**
-     * 取消编辑字段
-     */
-    cancelField () {
-      this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
-      this.fieldsetVisible = false
-    },
-    /**
-     * 保存字段设置
-     */
-    setField () {
-      this.structurePreviewList = _.cloneDeep(this.structurePreviewListCopy)
-      this.fieldsetVisible = false
     },
     /**
      * 字段描述构建及同步
@@ -905,36 +844,6 @@ export default {
         require: 0,
         remark: ''
       })
-    },
-    // 清空分类
-    clearType () {
-      this.typeName = ''
-      this.dataForm.typeId = ''
-    },
-    // 分类展开高亮
-    setCurrentNode ($event) {
-      if ($event) {
-        const key = this.dataForm.typeId || null
-        this.$refs.categorySelectTree.setCurrentKey(key)
-      }
-    },
-    // 分类选择
-    selectParentCategory (value) {
-      this.dataForm.typeId = value.id
-      this.typeName = value.name
-      this.$refs.selectParentName.blur()
-    },
-    goBack () {
-      this.$emit('back')
-    },
-    renderHeader (h, { column, index }) {
-      const labelLong = column.label.length // 表头label长度
-      const size = 14 // 根据需要定义标尺，直接使用字体大小确定就行，也可以根据需要定义
-      column.minWidth = labelLong * size < 120 ? 120 : labelLong * size // 根据label长度计算该表头最终宽度
-      return h('span', { class: 'cell-content', style: { width: '100%' } }, [column.label])
-    },
-    openNewWindow (url) {
-      window.open(url, '_blank')
     }
   }
 }

@@ -251,6 +251,19 @@
                   />
                 </el-form-item>
               </el-col>
+              <el-col :span="12">
+                <el-form-item
+                  label="关联标签"
+                  prop="labelIds"
+                >
+                  <label-select
+                    :dataset-id="datasetId"
+                    :id-list="dataForm.labelIds"
+                    @commit="(ids) =>{dataForm.labelIds = ids}"
+                  >
+                  </label-select>
+                </el-form-item>
+              </el-col>
             </el-row>
           </el-form>
         </el-col>
@@ -468,6 +481,7 @@
 </template>
 
 <script>
+import LabelSelect from 'packages/DataSetLabelManagement/src/LabelSelect.vue'
 import {
   getCategoryTree,
   nameCheckRepeat,
@@ -476,30 +490,13 @@ import {
 } from 'packages/js/utils/datasetConfigService'
 import { datasourceList, getSourceTable, getSourceView, getTableFieldList } from 'packages/js/utils/dataSourceService'
 import _ from 'lodash'
+import { datasetMixins } from 'packages/js/mixins/datasetMixin'
 export default {
   name: 'OriginalEditForm',
-  props: {
-    isEdit: {
-      type: Boolean,
-      default: false
-    },
-    datasetId: {
-      type: String,
-      default: null
-    },
-    datasetName: {
-      type: String,
-      default: ''
-    },
-    typeId: {
-      type: String,
-      default: ''
-    },
-    appCode: {
-      type: String,
-      default: ''
-    }
+  components: {
+    LabelSelect
   },
+  mixins: [datasetMixins],
   data () {
     const validateName = (rule, value, callback) => {
       nameCheckRepeat({
@@ -521,6 +518,7 @@ export default {
         typeId: '',
         datasetType: 'original',
         remark: '',
+        labelIds: [],
         // 以下为config信息
         sourceId: '',
         repeatStatus: 1,
@@ -544,9 +542,6 @@ export default {
           { required: true, message: '请选择是否去重', trigger: 'blur' }
         ]
       },
-      typeName: '',
-      // 分组分类树
-      categoryData: [],
       // 数据源列表
       sourceList: [],
       // 表列表
@@ -557,21 +552,7 @@ export default {
       fieldList: [],
       isSelectAll: false,
       activeName: 'data',
-      // 预览数据
-      dataPreviewList: [],
-      // 字段结构
-      structurePreviewList: [],
-      // 字段结构副本
-      structurePreviewListCopy: [],
-      tableLoading: false,
-      fieldDescVisible: false,
-      fieldsetVisible: false,
-      saveLoading: false,
-      saveText: '',
-      totalCount: 0,
       currentCount: 0,
-      current: 1,
-      size: 10
     }
   },
   watch: {
@@ -697,46 +678,6 @@ export default {
       return sql
     },
     /**
-     * 取消字段描述编辑
-     */
-    cancelField () {
-      this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
-      this.fieldsetVisible = false
-    },
-    /**
-     * 保存字段描述编辑
-     */
-    setField () {
-      this.structurePreviewList = _.cloneDeep(this.structurePreviewListCopy)
-      this.fieldsetVisible = false
-    },
-    /**
-     * 使用字段名作为字段描述
-     */
-    fieldDescFill () {
-      this.structurePreviewList.forEach(item => {
-        if (item.fieldDesc === '') {
-          item.fieldDesc = item.fieldName
-        }
-      })
-      this.save('form')
-      this.fieldDescVisible = false
-    },
-    /**
-     * 进入字段描述编辑弹窗
-     */
-    fieldDescEdit () {
-      this.fieldDescVisible = false
-      this.fieldsetVisible = true
-    },
-    /**
-     * 跳过字段描述编辑直接保存
-     */
-    toSave () {
-      this.save('form', true)
-      this.fieldDescVisible = false
-    },
-    /**
      * 保存数据集
      * @param formName 表单名称
      * @param noCheckToSave 是否不检查直接保存
@@ -774,6 +715,7 @@ export default {
           remark: this.dataForm.remark,
           datasetType: 'original',
           sourceId: this.dataForm.sourceId,
+          labelIds: this.dataForm.labelIds,
           config: {
             className: 'com.gccloud.dataset.entity.config.OriginalDataSetConfig',
             sourceId: this.dataForm.sourceId,
@@ -955,45 +897,6 @@ export default {
         this.tableLoading = false
       })
     },
-    /**
-     * 表头添加提示
-     */
-    renderHeader (h, { column, index }) {
-      const labelLong = column.label.length // 表头label长度
-      const size = 14 // 根据需要定义标尺，直接使用字体大小确定就行，也可以根据需要定义
-      column.minWidth = labelLong * size < 120 ? 120 : labelLong * size // 根据label长度计算该表头最终宽度
-      return h('span', { class: 'cell-content', style: { width: '100%' } }, [column.label])
-    },
-    /**
-     * 回到数据集列表页面
-     */
-    goBack () {
-      this.$emit('back')
-    },
-    /**
-     * 清空分类
-     */
-    clearType () {
-      this.typeName = ''
-      this.dataForm.typeId = ''
-    },
-    /**
-     * 分类展开高亮
-     */
-    setCurrentNode ($event) {
-      if ($event) {
-        const key = this.dataForm.typeId || null
-        this.$refs.categorySelectTree.setCurrentKey(key)
-      }
-    },
-    /**
-     * 分类选择
-     */
-    selectParentCategory (value) {
-      this.dataForm.typeId = value.id
-      this.typeName = value.name
-      this.$refs.selectParentName.blur()
-    },
     // 每页大小改变触发
     sizeChangeHandle (value) {
       this.size = value
@@ -1004,9 +907,6 @@ export default {
     currentChangeHandle (value) {
       this.current = value
       this.getData()
-    },
-    openNewWindow (url) {
-      window.open(url, '_blank')
     }
   }
 }

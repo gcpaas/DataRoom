@@ -125,6 +125,19 @@
                   />
                 </el-form-item>
               </el-col>
+              <el-col :span="12">
+                <el-form-item
+                  label="关联标签"
+                  prop="labelIds"
+                >
+                  <label-select
+                    :dataset-id="datasetId"
+                    :id-list="dataForm.labelIds"
+                    @commit="(ids) =>{dataForm.labelIds = ids}"
+                  >
+                  </label-select>
+                </el-form-item>
+              </el-col>
             </el-row>
           </el-form>
           <div class="card-border">
@@ -323,39 +336,20 @@
 </template>
 
 <script>
+import LabelSelect from 'packages/DataSetLabelManagement/src/LabelSelect.vue'
 import vueJsonEditor from 'vue-json-editor'
 import vueJsonViewer from 'vue-json-viewer'
 import { getCategoryTree, datasetAdd, datasetUpdate, getDataset, nameCheckRepeat } from 'packages/js/utils/datasetConfigService'
 import _ from 'lodash'
-
+import { datasetMixins } from 'packages/js/mixins/datasetMixin'
 export default {
   name: 'JsonEditForm',
   components: {
     vueJsonEditor,
-    vueJsonViewer
+    vueJsonViewer,
+    LabelSelect
   },
-  props: {
-    isEdit: {
-      type: Boolean,
-      default: false
-    },
-    datasetId: {
-      type: String,
-      default: null
-    },
-    datasetName: {
-      type: String,
-      default: ''
-    },
-    typeId: {
-      type: String,
-      default: ''
-    },
-    appCode: {
-      type: String,
-      default: ''
-    }
-  },
+  mixins: [datasetMixins],
   data () {
     const validateName = (rule, value, callback) => {
       nameCheckRepeat({
@@ -377,6 +371,7 @@ export default {
         typeId: '',
         datasetType: 'json',
         remark: '',
+        labelIds: [],
         // 以下为config配置
         json: '',
         fieldDesc: {},
@@ -388,16 +383,7 @@ export default {
           { validator: validateName, trigger: 'blur' }
         ]
       },
-      typeName: '',
-      categoryData: [],
-      structurePreviewList: [],
-      structurePreviewListCopy: [],
-      dataPreviewList: [],
-      fieldsetVisible: false,
-      fieldDescVisible: false,
       passTest: false, // 通过测试
-      saveLoading: false,
-      saveText: ''
     }
   },
   mounted () {
@@ -488,6 +474,7 @@ export default {
           remark: this.dataForm.remark,
           moduleCode: this.appCode,
           editable: this.appCode ? 1 : 0,
+          labelIds: this.dataForm.labelIds,
           config: {
             className: 'com.gccloud.dataset.entity.config.JsonDataSetConfig',
             json: JSON.stringify(this.dataForm.json),
@@ -525,13 +512,6 @@ export default {
       this.fieldDescVisible = false
     },
     /**
-     * 进入字段描述编辑弹窗
-     */
-    fieldDescEdit () {
-      this.fieldDescVisible = false
-      this.fieldsetVisible = true
-    },
-    /**
      * 跳过字段描述编辑直接保存
      */
     toSave () {
@@ -541,13 +521,6 @@ export default {
       })
       this.save('form', true)
       this.fieldDescVisible = false
-    },
-    /**
-     * 取消字段描述编辑
-     */
-    cancelField () {
-      this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
-      this.fieldsetVisible = false
     },
     /**
      * 保存字段描述编辑
@@ -681,52 +654,6 @@ export default {
         fieldDesc[field.fieldName] = field.fieldDesc
       })
       this.dataForm.fieldDesc = fieldDesc
-    },
-    /**
-     * 回到数据集列表页面
-     */
-    goBack () {
-      this.$emit('back')
-    },
-    /**
-     * 表头添加提示
-     * @param h
-     * @param column
-     * @param index
-     * @returns {*}
-     */
-    renderHeader (h, { column, index }) {
-      const labelLong = column.label.length // 表头label长度
-      const size = 14 // 根据需要定义标尺，直接使用字体大小确定就行，也可以根据需要定义
-      column.minWidth = labelLong * size < 120 ? 120 : labelLong * size // 根据label长度计算该表头最终宽度
-      return h('span', { class: 'cell-content', style: { width: '100%' } }, [column.label])
-    },
-    /**
-     * 清空分类
-     */
-    clearType () {
-      this.typeName = ''
-      this.dataForm.typeId = ''
-    },
-    /**
-     * 分类展开高亮
-     */
-    setCurrentNode ($event) {
-      if ($event) {
-        const key = this.dataForm.typeId || null
-        this.$refs.categorySelectTree.setCurrentKey(key)
-      }
-    },
-    /**
-     * 分类选择
-     */
-    selectParentCategory (value) {
-      this.dataForm.typeId = value.id
-      this.typeName = value.name
-      this.$refs.selectParentName.blur()
-    },
-    openNewWindow (url) {
-      window.open(url, '_blank')
     }
   }
 }
