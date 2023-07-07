@@ -73,6 +73,13 @@ function registerRouters (config, router) {
           }
         },
         {
+          path: config?.routers?.labelUrl || '/big-screen-label',
+          component: () => import('packages/DataSetLabelManagement'),
+          meta: {
+            title: '标签管理'
+          }
+        },
+        {
           path: config?.routers?.SourceUrl || '/big-screen-source',
           component: () => import('packages/SourceManagement'),
           meta: {

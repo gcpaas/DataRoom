@@ -196,5 +196,5 @@ module.exports = {
       .end()
   },
   // 在这里配置需要对node_modules中需要进行语法转义的依赖
-  transpileDependencies: []
+  transpileDependencies: ['@antv/*']
 }

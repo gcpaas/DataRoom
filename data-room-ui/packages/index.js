@@ -26,6 +26,8 @@ const BigScreenDesign = () => import('./BigScreenDesign')
 const DataSetManagement = () => import('./DataSetManagement')
 // 数据源管理页面
 const DataSourceManagement = () => import('./DataSourceManagement')
+// 数据集标签管理页面
+import DataSetLabelManagement from 'packages/DataSetLabelManagement'
 
 // 存储组件列表
 const components = [
@@ -36,7 +38,8 @@ const components = [
   BigScreenRun,
   BigScreenDesign,
   DataSetManagement,
-  DataSourceManagement
+  DataSourceManagement,
+  DataSetLabelManagement
 ]
 
 const $bigScreen = {
@@ -59,6 +62,7 @@ export {
   BigScreenDesign,
   DataSetManagement,
   DataSourceManagement,
+  DataSetLabelManagement,
   $bigScreen,
   registerConfig,
   updateTheme
@@ -74,6 +78,7 @@ export default {
   BigScreenDesign,
   DataSetManagement,
   DataSourceManagement,
+  DataSetLabelManagement,
   $bigScreen,
   registerConfig,
   updateTheme

@@ -1,7 +1,7 @@
-import LabelConfig from './src/index.vue'
+import DataSetLabelManagement from './src/index.vue'
 
-LabelConfig.install = function (Vue) {
-  Vue.component(LabelConfig.name, LabelConfig)
+DataSetLabelManagement.install = function (Vue) {
+  Vue.component(DataSetLabelManagement.name, DataSetLabelManagement)
 }
 
-export default LabelConfig
+export default DataSetLabelManagement
