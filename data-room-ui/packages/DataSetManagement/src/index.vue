@@ -73,6 +73,28 @@
               @clear="handleSearch()"
             />
           </el-form-item>
+          <el-form-item
+            class="filter-item"
+            prop="labelIds"
+          >
+            <el-select
+              class="bs-el-select"
+              v-model="queryForm.labelIds"
+              clearable
+              filterable
+              multiple
+              collapse-tags
+              placeholder="请选择数据集关联标签"
+              @clear="handleSearch()"
+            >
+              <el-option
+                v-for="labelItem in labelList"
+                :key="labelItem.id"
+                :label="labelItem.labelName"
+                :value="labelItem.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item class="filter-item">
             <el-button
               :loading="dataListLoading"
@@ -225,6 +247,7 @@ import OriginalEditForm from './OriginalEditForm.vue'
 import DatasetTypeDialog from './DatasetTypeDialog.vue'
 import StoredProcedureEditForm from './StoredProcedureEditForm.vue'
 import { datasetPage, datasetRemove } from 'packages/js/utils/datasetConfigService'
+import { getLabelList } from 'packages/js/utils/LabelConfigService'
 export default {
   name: 'DataSetManagement',
   directives: {
@@ -276,10 +299,12 @@ export default {
       queryForm: {
         name: '',
         datasetType: '',
-        typeId: '' // 分类id
+        typeId: '', // 分类id
+        labelIds: []
       }, // 查询条件
       // 数据集类型
       datasetTypeList: [],
+      labelList: [],
       isPackUpTree: false,
       transition: 0.1,
       loadingText: '正在加载数据',
@@ -488,6 +513,9 @@ export default {
         })
       }
       this.getDataList()
+      getLabelList().then(res => {
+        this.labelList = res
+      })
     },
     // 新增数据集
     addDataset () {
