@@ -33,7 +33,7 @@
       >
         <el-input-number
           v-model.number="paddingValue[3]"
-          class="bs-el-input-number input-left input-item db-el-input"
+          class="bs-el-input-number input-left input-item"
           size="mini"
           :min="0"
           :step="1"
@@ -58,38 +58,38 @@
 </template>
 
 <script>
-  export default {
-    name: 'PaddingSetting',
-    model: {
-      prop: 'padding',
-      event: 'input'
-    },
-    props: {
-      padding: {
-        type: Array,
-        default: () => []
-      }
-    },
-    data () {
-      return {
-        position: 0
-      }
-    },
-    computed: {
-      paddingValue () {
-        return this.padding
-      }
-    },
-    methods: {
-      paddingChange () {
-        this.$emit('input', this.paddingValue)
-      }
+export default {
+  name: 'PaddingSetting',
+  model: {
+    prop: 'padding',
+    event: 'input'
+  },
+  props: {
+    padding: {
+      type: Array,
+      default: () => []
+    }
+  },
+  data () {
+    return {
+      position: 0
+    }
+  },
+  computed: {
+    paddingValue () {
+      return this.padding
+    }
+  },
+  methods: {
+    paddingChange () {
+      this.$emit('input', this.paddingValue)
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  .db-padding-setting{
+  .bs-padding-setting{
     .padding-box{
       width: 160px;
       height: 190px;
@@ -102,7 +102,7 @@
       transform: translate(-50%,-50%);
       width: 30%;
       height: 30%;
-      background-color: var(--db-background-1);
+      background-color: var(--bs-background-1);
     }
   }
 </style>

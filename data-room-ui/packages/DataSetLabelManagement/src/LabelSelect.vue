@@ -17,6 +17,7 @@
     >
       <el-button
         circle
+        class="bs-el-button-default"
         icon="el-icon-plus"
         style="margin-left: 10px"
         @click="addLabel"
@@ -24,6 +25,7 @@
     </el-tooltip>
     <!-- 标签列表弹窗 -->
     <el-dialog
+      class="bs-dialog-wrap bs-el-dialog"
       :append-to-body="true"
       :before-close="handleClose"
       :visible.sync="dialogFormVisible"
@@ -33,19 +35,22 @@
       <div v-loading="labelCheckLoading">
         <el-form
           :inline="true"
-          class="filter-container"
+          class="bs-el-form filter-container"
         >
-          <el-form-item label="标签名称">
+          <el-form-item label="">
             <el-input
               v-model="searchForm.labelName"
               clearable
+              class="bs-el-input"
               placeholder="请输入标签名称"
             />
           </el-form-item>
 
-          <el-form-item label="标签类型">
+          <el-form-item label="">
             <el-select
               v-model="searchForm.labelType"
+              class="bs-el-select"
+              popper-class="bs-el-select"
               clearable
               filterable
               placeholder="请选择标签类型"
@@ -109,13 +114,17 @@
                 v-else
                 :label="label.id"
                 @change="labelCheckChange(label)"
-              >{{label.labelName}}</el-checkbox>
+              >
+                {{ label.labelName }}
+              </el-checkbox>
             </el-col>
           </el-row>
         </el-checkbox-group>
 
-        <div class="page-container">
+        <div class="bs-pagination">
           <el-pagination
+            class="bs-el-pagination"
+            popper-class="bs-el-pagination"
             :current-page="current"
             :page-size="sizeLabel"
             :page-sizes="[20, 40, 60, 80]"
@@ -127,7 +136,7 @@
           />
         </div>
 
-        <div align="center">
+        <div class="el-dialog__footer">
           <el-button @click="handleClose">
             取消
           </el-button>
@@ -141,8 +150,6 @@
       </div>
     </el-dialog>
   </div>
-
-
 </template>
 
 <script>
@@ -173,7 +180,7 @@ export default {
       idListCopy: this.idList,
       selectLabelList: [],
       // 初始选中的标签列表
-      selectLabelListInitial : [],
+      selectLabelListInitial: [],
       labelList: [],
       dialogFormVisible: false,
       searchForm: {
@@ -186,7 +193,7 @@ export default {
       labelCheckLoading: false
     }
   },
-  mounted() {
+  mounted () {
     // 根据数据集id获取关联的标签列表
     if (this.datasetId) {
       getLabelListByDatasetId(this.datasetId).then((data) => {
@@ -246,7 +253,7 @@ export default {
      */
     getDataList () {
       this.labelCheckLoading = true
-      let params = {
+      const params = {
         current: this.current,
         size: this.sizeLabel,
         labelName: this.searchForm.labelName,
@@ -263,7 +270,7 @@ export default {
     /**
      * 标签选项组选中事件
      */
-    labelCheckChange(label) {
+    labelCheckChange (label) {
       // 如果selectLabelList中包含id相同的项，则从selectLabelList中移除
       if (this.selectLabelList.some(item => item.id === label.id)) {
         this.selectLabelList = this.selectLabelList.filter(item => item.id !== label.id)
@@ -323,10 +330,10 @@ export default {
       if ((!str && typeof (str) !== 'undefined')) {
         return ''
       }
-      var num = 0
-      var str1 = str
+      let num = 0
+      const str1 = str
       var str = ''
-      for (var i = 0, lens = str1.length; i < lens; i++) {
+      for (let i = 0, lens = str1.length; i < lens; i++) {
         num += ((str1.charCodeAt(i) > 255) ? 2 : 1)
         if (num > len - 3) {
           break
@@ -335,11 +342,17 @@ export default {
         }
       }
       return str + '...'
-    },
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
+@import '../../assets/style/bsTheme.scss';
+.bs-pagination {
+  ::v-deep .el-input__inner {
+    border: none;
+    background: var(--bs-el-background-1);
+  }
+}
 </style>

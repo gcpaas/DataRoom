@@ -1,5 +1,5 @@
 <template>
-  <div class="db-container">
+  <div class="bs-container">
     <div
       v-if="labelVisible"
       class="inner-container"
@@ -13,9 +13,9 @@
           class="filter-item"
           prop="labelName"
         >
-          标签名称
           <el-input
             v-model="queryForm.labelName"
+            class="bs-el-input"
             clearable
             placeholder="请输入标签名称"
             @clear="reSearch()"
@@ -26,11 +26,12 @@
           class="filter-item"
           prop="labelType"
         >
-          标签类型
           <el-select
             v-model="queryForm.labelType"
             clearable
             filterable
+            class="bs-el-select"
+            popper-class="bs-el-select"
             placeholder="请选择标签类型"
             @change="reSearch()"
           >
@@ -50,11 +51,13 @@
               </span>
               <span style="float: right;padding-right: 20px">
                 <el-button
+                  class="bs-el-button-default"
                   icon="el-icon-edit"
                   type="text"
                   @click.stop="editLabelType(labelType)"
                 />
                 <el-button
+                  class="bs-el-button-default"
                   icon="el-icon-delete"
                   type="text"
                   @click.stop="deleteLabelType(labelType)"
@@ -78,19 +81,20 @@
         >
           <el-button
             type="primary"
+            class="bs-el-button-default"
             @click="addOrUpdateLabel(undefined)"
           >
             新增
           </el-button>
         </el-form-item>
       </el-form>
-      <div class="db-table-box">
+      <div class="bs-table-box">
         <el-table
           v-table
           v-loading="dataListLoading"
           height="0"
           :data="tableData"
-          class="db-el-table db-scrollbar"
+          class="bs-el-table bs-scrollbar"
           :element-loading-text="loadingText"
           :header-cell-style="sortStyle"
           @sort-change="reSort"
@@ -117,15 +121,20 @@
             width="200"
           >
             <template slot-scope="scope">
-              <el-button @click="getDetail(scope.row)">
+              <el-button
+                class="bs-el-button-default"
+                @click="getDetail(scope.row)"
+              >
                 详情
               </el-button>
               <el-button
+                class="bs-el-button-default"
                 @click="addOrUpdateLabel(scope.row)"
               >
                 编辑
               </el-button>
               <el-button
+                class="bs-el-button-default"
                 @click="handleDelete(scope.row.id)"
               >
                 删除
@@ -134,10 +143,10 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="db-pagination">
+      <div class="bs-pagination">
         <el-pagination
-          class="db-el-pagination"
-          popper-class="db-el-pagination"
+          class="bs-el-pagination"
+          popper-class="bs-el-pagination"
           :current-page="current"
           :next-text="nextText"
           :page-size="size"
@@ -161,8 +170,7 @@
     />
     <label-config-details
       ref="LabelConfigDetails"
-    >
-    </label-config-details>
+    />
   </div>
 </template>
 
@@ -291,7 +299,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-::v-deep .el-table{
-  border-color: var(--db-el-border) !important;
-}
+@import '../../assets/style/bsTheme.scss';
+
+.bs-pagination {
+    ::v-deep .el-input__inner {
+      width: 110px !important;
+      border: none;
+      background: var(--bs-el-background-1);
+    }
+  }
 </style>

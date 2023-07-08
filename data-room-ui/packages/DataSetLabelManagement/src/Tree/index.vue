@@ -1,6 +1,7 @@
 <template>
   <el-tree
     :ref="treeRef"
+    class="bs-el-tree"
     :data="treeData"
     :default-expand-all="expandAll"
     :expand-on-click-node="false"
@@ -21,20 +22,24 @@
       @mouseleave="mouseLeave(data)"
     >
       <span :style="data.children && data.children.length ? {} : {'padding-left': '12px'}">
-        <i :class="data.children && data.children.length ? 'el-icon el-icon-folder': 'el-icon el-icon-document'"
-           style="margin-right: 8px;"></i>
+        <i
+          :class="data.children && data.children.length ? 'el-icon el-icon-folder': 'el-icon el-icon-document'"
+          style="margin-right: 8px;"
+        />
         <span class="nodeText">{{ data.name }}</span>
       </span>
-      <span v-if="optionShow" class="options">
+      <span
+        v-if="optionShow"
+        class="options"
+      >
         <el-dropdown @command="(command) => { treeCommand(command, data) }">
-          <i class="el-icon-more"></i>
+          <i class="el-icon-more" />
           <el-dropdown-menu slot="dropdown">
-            <slot name="options"></slot>
+            <slot name="options" />
           </el-dropdown-menu>
         </el-dropdown>
       </span>
     </span>
-
   </el-tree>
 </template>
 
@@ -67,7 +72,7 @@ export default {
       default: false
     }
   },
-  data() {
+  data () {
     return {
       defaultProps: {
         children: 'children',
@@ -76,35 +81,35 @@ export default {
     }
   },
   watch: {
-    'treeData': function (val) {
+    treeData: function (val) {
       // console.log('valx', val)
     },
-    filterText(val) {
+    filterText (val) {
       this.$refs[this.treeRef].filter(val)
     }
   },
   methods: {
-    treeCommand(command, nodeData) {
+    treeCommand (command, nodeData) {
       this.$emit('treeCommand', command, nodeData)
     },
-    filterNode(value, data) {
+    filterNode (value, data) {
       if (!value) return true
       return data.name.indexOf(value) !== -1
     },
     // 节点点击
-    handleNodeClick(row, value) {
+    handleNodeClick (row, value) {
       this.$emit('handleNodeClick', row, value)
     },
     // 节点右键
-    rihgtClick(event, object, value, element) {
+    rihgtClick (event, object, value, element) {
       this.$emit('rihgtClick', event, object, value, element)
     },
-    mouseEnter(data) {
+    mouseEnter (data) {
       // this.$set(data, 'show', true)
       // 弹射节点数据
       this.$emit('mouseEnter', data)
     },
-    mouseLeave(data) {
+    mouseLeave (data) {
       // this.$set(data, 'show', false)
     }
   }

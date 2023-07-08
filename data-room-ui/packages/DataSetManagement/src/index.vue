@@ -78,8 +78,9 @@
             prop="labelIds"
           >
             <el-select
-              class="bs-el-select"
               v-model="queryForm.labelIds"
+              class="bs-el-select"
+              popper-class="bs-el-select"
               clearable
               filterable
               multiple
@@ -92,7 +93,7 @@
                 :key="labelItem.id"
                 :label="labelItem.labelName"
                 :value="labelItem.id"
-              ></el-option>
+              />
             </el-select>
           </el-form-item>
           <el-form-item class="filter-item">
@@ -276,9 +277,9 @@ export default {
       type: [Array, Object],
       default: null
     },
-    dataSetList:{
-      type:[Array, Object],
-      default:()=>[]
+    dataSetList: {
+      type: [Array, Object],
+      default: () => []
     },
     appCode: {
       type: String,
@@ -328,9 +329,9 @@ export default {
       }
     }
   },
-  computed:{
-    allType(){
-      return this.datasetTypeList.map(item=>item.datasetType).filter(item=>item!='')
+  computed: {
+    allType () {
+      return this.datasetTypeList.map(item => item.datasetType).filter(item => item != '')
     }
   },
   watch: {
@@ -489,18 +490,18 @@ export default {
         }
       }
       this.current = 1
-      const list=[
-          { name: '全部', datasetType: '' },
-          { name: '原始数据集', datasetType: 'original', componentName: 'OriginalEditForm' },
-          { name: '自助数据集', datasetType: 'custom', componentName: 'CustomEditForm' },
-          { name: '存储过程数据集', datasetType: 'storedProcedure', componentName: 'StoredProcedureEditForm' },
-          { name: 'JSON数据集', datasetType: 'json', componentName: 'JsonEditForm' },
-          { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' },
-          { name: 'JS数据集', datasetType: 'js', componentName: 'JsDataSet' }
-        ]
-      if(this.dataSetList.length!=0){
-        this.datasetTypeList=[{ name: '全部', datasetType: '' },...list.filter(item=>this.dataSetList.findIndex(x=>x===item.datasetType)!==-1)]
-      }else{
+      const list = [
+        { name: '全部', datasetType: '' },
+        { name: '原始数据集', datasetType: 'original', componentName: 'OriginalEditForm' },
+        { name: '自助数据集', datasetType: 'custom', componentName: 'CustomEditForm' },
+        { name: '存储过程数据集', datasetType: 'storedProcedure', componentName: 'StoredProcedureEditForm' },
+        { name: 'JSON数据集', datasetType: 'json', componentName: 'JsonEditForm' },
+        { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' },
+        { name: 'JS数据集', datasetType: 'js', componentName: 'JsDataSet' }
+      ]
+      if (this.dataSetList.length != 0) {
+        this.datasetTypeList = [{ name: '全部', datasetType: '' }, ...list.filter(item => this.dataSetList.findIndex(x => x === item.datasetType) !== -1)]
+      } else {
         this.datasetTypeList = [
           ...list
         ]
@@ -534,7 +535,7 @@ export default {
         size: this.size,
         moduleCode: this.appCode,
         ...this.queryForm,
-        datasetType:this.queryForm.datasetType===''?[...this.allType]:[this.queryForm.datasetType]
+        datasetType: this.queryForm.datasetType === '' ? [...this.allType] : [this.queryForm.datasetType]
       }).then((data) => {
         this.tableData = data.list
         if (this.isDialog) {
@@ -730,5 +731,9 @@ export default {
 .layout {
   width: 100%;
   height: 100%;
+}
+
+::v-deep .el-table__body-wrapper{
+  max-height: unset !important;
 }
 </style>

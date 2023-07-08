@@ -124,7 +124,10 @@
       关联数据集信息
     </el-divider>
 
-    <div style="width:90%" id="container" />
+    <div
+      id="container"
+      style="width:90%"
+    />
   </div>
 </template>
 

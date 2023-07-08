@@ -59,7 +59,7 @@
           >
             <el-input-number
               v-model="config.customize.opacity"
-              class="bs-el-input-number db-el-input-number"
+              class="bs-el-input-number"
               placeholder="请输入不透明度"
               :min="0.01"
               :max="1"

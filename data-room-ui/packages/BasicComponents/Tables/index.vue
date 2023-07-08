@@ -262,7 +262,7 @@ export default {
 }
 
 ::v-deep .el-table {
-  height: 100%;
+  // height: 100%;
   background-color: transparent;
 }
 ::v-deep .el-table tr {

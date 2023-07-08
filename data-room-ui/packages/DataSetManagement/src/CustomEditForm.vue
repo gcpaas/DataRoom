@@ -160,8 +160,7 @@
                     :dataset-id="datasetId"
                     :id-list="dataForm.labelIds"
                     @commit="(ids) =>{dataForm.labelIds = ids}"
-                  >
-                  </label-select>
+                  />
                 </el-form-item>
               </el-col>
             </el-row>
