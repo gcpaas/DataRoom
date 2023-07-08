@@ -29,6 +29,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'texts',
   root: {
+    version : '0.0.1',
     url: 'https://www.runoob.com/'
   },
   customize: {

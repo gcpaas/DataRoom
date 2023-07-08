@@ -11,6 +11,9 @@ export const settingConfig = {
 }
 const customConfig = {
   type: 'video',
+  root: {
+    version: 0
+  },
   customize: {
     videoType: 'application/x-mpegURL',
     videoUrl: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',

@@ -11,8 +11,10 @@ export const settingConfig = {
 }
 const customConfig = {
   type: 'input',
+  root: {
+    version: 0
+  },
   // 自定义属性
-  // 输入框的值
   customize: {
     value: '',
     // 是否显示标题

@@ -3,7 +3,8 @@
  * @Date: 2023-03-27 14:38:23
  * @Author: xing.heng
  */
-
+// 配置版本号
+const version = '0.0.1'
 // 分类
 const category = 'Line'
 // 标题
@@ -16,7 +17,7 @@ const name = 'JiChuZheXianTu'
 // 右侧配置项
 const setting = [
   {
-    label: '维度',
+    label: '横坐标',
     // 设置组件类型， select / input / colorPicker
     type: 'select',
     // 字段
@@ -582,6 +583,7 @@ const option = {
 }
 export default {
   category,
+  version,
   title,
   chartType,
   name,

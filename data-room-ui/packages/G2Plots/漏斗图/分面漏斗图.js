@@ -1,4 +1,6 @@
 
+// 配置版本号
+const version = '0.0.1'
 // 分类
 const category = 'Funnel'
 // 标题
@@ -288,6 +290,7 @@ const option = {
 
 export default {
   category,
+  version,
   title,
   chartType,
   name,

@@ -16,6 +16,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'decoration10',
   root: {
+    version : '0.0.1',
     contribution: false
   },
   customize: {
