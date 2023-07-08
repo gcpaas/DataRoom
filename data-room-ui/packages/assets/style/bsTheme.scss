@@ -317,10 +317,10 @@
 
     &:after {
       content: "" !important;
-      height: 14px !important;
+      height: 16px !important;
       position: absolute !important;
       left: 0 !important;
-      top: 50% !important;
+      top: calc(50% - 4px) !important;
       transform: translateY(-50%) !important;
       border-left: 4px solid var(--bs-el-color-primary) !important;
     }
@@ -509,7 +509,6 @@
 
   &::-webkit-scrollbar-track {
     border-radius: 6px !important;
-    // background-color: transparent;
   }
 
   &:hover {
@@ -641,5 +640,5 @@
     .el-divider__text.is-left{
       background-color: var(--bs-background-1) !important;
       color: var(--bs-el-text) !important;
-    }  // background-color: var(--bs-background-2);
+    }  
 }

@@ -3,131 +3,192 @@
     v-if="dialogFormVisible"
     class="inner-container"
   >
-    <el-page-header
-      style="padding-top: 8px"
-      @back="goBack"
-    />
+    <el-scrollbar class="data-set-scrollbar">
+      <!-- <el-page-header
+        class="bs-el-page-header"
+        @back="goBack"
+      /> -->
+      <el-page-header class="bs-el-page-header">
+        <template slot="content">
+          <div class="page-header">
+            <div class="page-header-left">
+              标签详情
+            </div>
+            <div class="page-header-right">
+              <el-button
+                class="back bs-el-button-default"
+                @click="goBack"
+              >
+                返回
+              </el-button>
+            </div>
+          </div>
+        </template>
+      </el-page-header>
+      <el-divider
+        class="bs-el-divider"
+        content-position="left"
+      >
+        属性信息
+      </el-divider>
 
-    <el-divider content-position="left">
-      属性信息
-    </el-divider>
+      <el-row
+        style="width: 100%;"
+        :gutter="5"
+      >
+        <el-col
+          :span="8"
+          class="attrInfo"
+        >
+          <el-tooltip
+            v-if="dataForm.labelName.length > 20"
+            :content="dataForm.labelName"
+            class="item"
+            effect="dark"
+            placement="bottom-start"
+          >
+            <span class="text-style">标签名称： {{ ellipsis(dataForm.labelName, 20) }}</span>
+          </el-tooltip>
+          <span
+            v-else
+            class="text-style"
+          >
+            标签名称： {{ ellipsis(dataForm.labelName, 20) }}
+          </span>
+        </el-col>
+        <el-col
+          :span="8"
+          class="attrInfo"
+        >
+          <el-tooltip
+            v-if="dataForm.labelType.length > 20"
+            :content="dataForm.labelType"
+            class="item"
+            effect="dark"
+            placement="bottom-start"
+          >
+            <span class="text-style">标签类型： {{ ellipsis(dataForm.labelType, 20) }}</span>
+          </el-tooltip>
+          <span
+            v-else
+            class="text-style"
+          >
+            标签类型： {{ ellipsis(dataForm.labelType, 20) }}
+          </span>
+        </el-col>
+        <el-col
+          :span="8"
+          class="attrInfo"
+        >
+          <el-tooltip
+            v-if="dataForm.labelDesc.length > 20"
+            :content="dataForm.labelDesc"
+            class="item"
+            effect="dark"
+            placement="bottom-start"
+          >
+            <span class="text-style">标签说明： {{ ellipsis(dataForm.labelDesc, 20) }}</span>
+          </el-tooltip>
+          <span
+            v-else
+            class="text-style"
+          >
+            标签说明： {{ ellipsis(dataForm.labelDesc, 20) }}
+          </span>
+        </el-col>
+        <el-col
+          :span="8"
+          class="attrInfo"
+        >
+          <el-tooltip
+            v-if="dataForm.createBy && dataForm.createBy.length > 20"
+            :content="dataForm.createBy"
+            class="item"
+            effect="dark"
+            placement="bottom-start"
+          >
+            <span class="text-style">创建人： {{ ellipsis(dataForm.createBy, 20) }}</span>
+          </el-tooltip>
+          <span
+            v-else
+            class="text-style"
+          >
+            创建人： {{ ellipsis(dataForm.createBy, 20) }}
+          </span>
+        </el-col>
+        <el-col
+          :span="16"
+          class="attrInfo"
+        >
+          <el-tooltip
+            v-if="dataForm.createDate.length > 20"
+            :content="dataForm.createDate"
+            class="item"
+            effect="dark"
+            placement="bottom-start"
+          >
+            <span class="text-style">创建时间： {{ ellipsis(dataForm.createDate, 20) }}</span>
+          </el-tooltip>
+          <span
+            v-else
+            class="text-style"
+          >
+            创建时间： {{ ellipsis(dataForm.createDate, 20) }}
+          </span>
+        </el-col>
+        <el-col
+          :span="8"
+          class="attrInfo"
+        >
+          <el-tooltip
+            v-if="dataForm.updateBy && dataForm.updateBy.length > 20"
+            :content="dataForm.updateBy"
+            class="item"
+            effect="dark"
+            placement="bottom-start"
+          >
+            <span class="text-style">
+              修改人： {{ ellipsis(dataForm.updateBy, 20) }}
+            </span>
+          </el-tooltip>
+          <span
+            v-else
+            class="text-style"
+          >
+            修改人： {{ ellipsis(dataForm.updateBy, 20) }}
+          </span>
+        </el-col>
+        <el-col
+          :span="8"
+          class="attrInfo"
+        >
+          <el-tooltip
+            v-if="dataForm.updateDate.length > 20"
+            :content="dataForm.updateDate"
+            class="item"
+            effect="dark"
+            placement="bottom-start"
+          >
+            <span class="text-style">修改时间： {{ ellipsis(dataForm.updateDate, 20) }}</span>
+          </el-tooltip>
+          <span
+            v-else
+            class="text-style"
+          >
+            修改时间： {{ ellipsis(dataForm.updateDate, 20) }}
+          </span>
+        </el-col>
+      </el-row>
 
-    <el-row :gutter="5">
-      <el-col
-        :span="8"
-        class="attrInfo"
+      <el-divider
+        class="bs-el-divider"
+        content-position="left"
       >
-        <el-tooltip
-          v-if="dataForm.labelName.length > 20"
-          :content="dataForm.labelName"
-          class="item"
-          effect="dark"
-          placement="bottom-start"
-        >
-          <span>标签名称： {{ ellipsis(dataForm.labelName, 20) }}</span>
-        </el-tooltip>
-        <span v-else>标签名称： {{ ellipsis(dataForm.labelName, 20) }}</span>
-      </el-col>
-      <el-col
-        :span="8"
-        class="attrInfo"
-      >
-        <el-tooltip
-          v-if="dataForm.labelType.length > 20"
-          :content="dataForm.labelType"
-          class="item"
-          effect="dark"
-          placement="bottom-start"
-        >
-          <span>标签类型： {{ ellipsis(dataForm.labelType, 20) }}</span>
-        </el-tooltip>
-        <span v-else>标签类型： {{ ellipsis(dataForm.labelType, 20) }}</span>
-      </el-col>
-      <el-col
-        :span="8"
-        class="attrInfo"
-      >
-        <el-tooltip
-          v-if="dataForm.labelDesc.length > 20"
-          :content="dataForm.labelDesc"
-          class="item"
-          effect="dark"
-          placement="bottom-start"
-        >
-          <span>标签说明： {{ ellipsis(dataForm.labelDesc, 20) }}</span>
-        </el-tooltip>
-        <span v-else>标签说明： {{ ellipsis(dataForm.labelDesc, 20) }}</span>
-      </el-col>
-      <el-col
-        :span="8"
-        class="attrInfo"
-      >
-        <el-tooltip
-          v-if="dataForm.createBy && dataForm.createBy.length > 20"
-          :content="dataForm.createBy"
-          class="item"
-          effect="dark"
-          placement="bottom-start"
-        >
-          <span>创建人： {{ ellipsis(dataForm.createBy, 20) }}</span>
-        </el-tooltip>
-        <span v-else>创建人： {{ ellipsis(dataForm.createBy, 20) }}</span>
-      </el-col>
-      <el-col
-        :span="16"
-        class="attrInfo"
-      >
-        <el-tooltip
-          v-if="dataForm.createDate.length > 20"
-          :content="dataForm.createDate"
-          class="item"
-          effect="dark"
-          placement="bottom-start"
-        >
-          <span>创建时间： {{ ellipsis(dataForm.createDate, 20) }}</span>
-        </el-tooltip>
-        <span v-else>创建时间： {{ ellipsis(dataForm.createDate, 20) }}</span>
-      </el-col>
-      <el-col
-        :span="8"
-        class="attrInfo"
-      >
-        <el-tooltip
-          v-if="dataForm.updateBy && dataForm.updateBy.length > 20"
-          :content="dataForm.updateBy"
-          class="item"
-          effect="dark"
-          placement="bottom-start"
-        >
-          <span>修改人： {{ ellipsis(dataForm.updateBy, 20) }}</span>
-        </el-tooltip>
-        <span v-else>修改人： {{ ellipsis(dataForm.updateBy, 20) }}</span>
-      </el-col>
-      <el-col
-        :span="8"
-        class="attrInfo"
-      >
-        <el-tooltip
-          v-if="dataForm.updateDate.length > 20"
-          :content="dataForm.updateDate"
-          class="item"
-          effect="dark"
-          placement="bottom-start"
-        >
-          <span>修改时间： {{ ellipsis(dataForm.updateDate, 20) }}</span>
-        </el-tooltip>
-        <span v-else>修改时间： {{ ellipsis(dataForm.updateDate, 20) }}</span>
-      </el-col>
-    </el-row>
+        关联数据集信息
+      </el-divider>
 
-    <el-divider content-position="left">
-      关联数据集信息
-    </el-divider>
-
-    <div
-      id="container"
-      style="width:90%"
-    />
+      <div id="container" />
+    </el-scrollbar>
   </div>
 </template>
 
@@ -289,6 +350,14 @@ export default {
 </script>
 
 <style scoped>
+
+@import '../../assets/style/bsTheme.scss';
+.data-set-scrollbar {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: none;
+}
 .inner-container{
   overflow-x: hidden;
 }
@@ -298,5 +367,19 @@ export default {
 
 .attrInfo {
   padding-left: 20px !important;
+}
+
+.text-style{
+  color: var(--bs-el-title);
+}
+
+.page-header {
+  display: flex;
+  position: relative;
+
+  .page-header-right {
+    position: absolute;
+    right: 16px;
+  }
 }
 </style>

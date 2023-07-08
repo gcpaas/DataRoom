@@ -305,8 +305,18 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
       .el-dialog__title {
         display: inline-block;
         font-size: 16px;
-        border-left: 4px solid var(--bs-el-color-primary);
-        padding-left: 16px;
+        position: relative;
+        padding-left: 20px;
       }
+      
+      .el-dialog__title::before {
+          content: "" !important;
+          height: 16px !important;
+          position: absolute !important;
+          left: 0 !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          border-left: 4px solid var(--bs-el-color-primary) !important;
+        }
     }
 
