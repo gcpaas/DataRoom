@@ -17,7 +17,7 @@ const name = 'JiChuZheXianTu'
 // 右侧配置项
 const setting = [
   {
-    label: '横坐标',
+    label: '维度',
     // 设置组件类型， select / input / colorPicker
     type: 'select',
     // 字段
