@@ -1,182 +1,184 @@
 <template>
   <div class="bs-overall-wrap">
     <SettingTitle>整体布局</SettingTitle>
-    <div class="bs-overall-setting-wrap">
-      <el-form
-        ref="form"
-        v-model="form"
-        label-width="100px"
-        label-position="left"
-        class="setting-body bs-el-form"
-      >
-        <el-form-item label="推荐分辨率">
-          <el-select
-            v-model="resolutionRatioValue"
-            class="bs-el-select select"
-            popper-class="bs-el-select"
-            placeholder="请选择分辨率"
-            clearable
-            @change="resolutionRatioValueHandel"
-          >
-            <el-option
-              v-for="resolutionRatio in resolutionRatioOptions"
-              :key="resolutionRatio.value"
-              :label="resolutionRatio.label"
-              :value="resolutionRatio.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="大屏宽度">
-          <el-input-number
-            v-model="form.w"
-            class="bs-el-input-number"
-            :min="100"
-            :max="8000"
-          />
-        </el-form-item>
-        <el-form-item label="大屏高度">
-          <el-input-number
-            v-model="form.h"
-            class="bs-el-input-number"
-            :min="100"
-            :max="8000"
-          />
-        </el-form-item>
-        <el-form-item label="自适应模式">
-          <el-select
-            v-model="form.fitMode"
-            class="bs-el-select"
-            popper-class="bs-el-select"
-            placeholder="自适应模式"
-            clearable
-          >
-            <el-option
-              v-for="mode in autoModeOptions"
-              :key="mode.value"
-              :label="mode.label"
-              :value="mode.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="主题">
-          <el-select
-            v-model="form.customTheme"
-            class="bs-el-select select"
-            popper-class="bs-el-select"
-            placeholder="请选择主题"
-            clearable
-          >
-            <el-option
-              v-for="themeItem in themeOptions"
-              :key="themeItem.value"
-              :label="themeItem.label"
-              :value="themeItem.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="背景图">
-          <el-button
-            v-if="!form.bg"
-            type="primary"
-            @click="$refs.bgImg.init()"
-          >
-            选择背景图
-          </el-button>
-          <el-image
-            v-show="form.bg"
-            class="bg-img bs-el-img"
-            :src="form.bg"
-            fit="cover"
-            @click="$refs.bgImg.init()"
-          />
-          <div
-            v-show="form.bg"
-            @click="form.bg = ''"
-          >
-            <i class="el-icon-circle-close close-icon" />
-          </div>
-          <span
-            v-if="form.bg"
-            class="description"
-          >（背景图优先级高于背景色，设置后将覆盖背景色）</span>
-          <BgImg
-            ref="bgImg"
-            :form="form"
-            @imgUrl="form.bg = $event"
-          />
-        </el-form-item>
-        <el-form-item label="背景色">
-          <ColorPicker
-            v-model="form.bgColor"
-            :placeholder="form.bg ? '' : '请选择背景色'"
-            :predefine-colors="predefineColors"
-          />
-        </el-form-item>
-      </el-form>
-    </div>
-    <div>
-      <SettingTitle>定时器</SettingTitle>
-      <!-- 定时器空数据 -->
-      <el-empty
-        v-if="timerEmptyState()"
-        description="请添加图表，并绑定数据集"
-      />
-      <div
-        v-else
-        class="bs-overall-setting-wrap"
-      >
-        <div class="title">
-          <span>时间（秒）</span>
-          <span>图表</span>
-          <span />
-        </div>
-        <div
-          v-for="(timer, index) in pageInfo.pageConfig.refreshConfig"
-          :key="index"
-          class="bs-timer-item"
+    <el-scrollbar class="side-catalog-box">
+      <div class="bs-overall-setting-wrap">
+        <el-form
+          ref="form"
+          v-model="form"
+          label-width="100px"
+          label-position="left"
+          class="setting-body bs-el-form"
         >
-          <el-input-number
-            v-model="timer.time"
-            class="bs-el-input-number"
-            :min="0"
-            :max="999999"
-            :step="1"
-            placeholder="请输入定时器时间"
-            style="margin-right: 8px;"
-          />
-          <el-select
-            v-model="timer.code"
-            class="bs-el-select"
-            popper-class="bs-el-select"
-            placeholder="请选择需要刷新的图表"
-            @change="chartChange"
-          >
-            <el-option
-              v-for="chart in chartOptions"
-              :key="chart.code"
-              :label="chart.title"
-              :value="chart.code"
-              :disabled="chart.disabled"
+          <el-form-item label="推荐分辨率">
+            <el-select
+              v-model="resolutionRatioValue"
+              class="bs-el-select select"
+              popper-class="bs-el-select"
+              placeholder="请选择分辨率"
+              clearable
+              @change="resolutionRatioValueHandel"
+            >
+              <el-option
+                v-for="resolutionRatio in resolutionRatioOptions"
+                :key="resolutionRatio.value"
+                :label="resolutionRatio.label"
+                :value="resolutionRatio.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="大屏宽度">
+            <el-input-number
+              v-model="form.w"
+              class="bs-el-input-number"
+              :min="100"
+              :max="8000"
             />
-          </el-select>
-          <el-button
-            style="margin-left: 8px;"
-            class="bs-el-button-default"
-            @click="deleteTimer(index)"
-          >
-            删除
-          </el-button>
-        </div>
-        <el-button
-          v-if="pageInfo.chartList.length !== pageInfo.pageConfig.refreshConfig.length"
-          type="primary"
-          style="width: 100%;"
-          @click="createTimer"
-        >
-          新建
-        </el-button>
+          </el-form-item>
+          <el-form-item label="大屏高度">
+            <el-input-number
+              v-model="form.h"
+              class="bs-el-input-number"
+              :min="100"
+              :max="8000"
+            />
+          </el-form-item>
+          <el-form-item label="自适应模式">
+            <el-select
+              v-model="form.fitMode"
+              class="bs-el-select"
+              popper-class="bs-el-select"
+              placeholder="自适应模式"
+              clearable
+            >
+              <el-option
+                v-for="mode in autoModeOptions"
+                :key="mode.value"
+                :label="mode.label"
+                :value="mode.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="主题">
+            <el-select
+              v-model="form.customTheme"
+              class="bs-el-select select"
+              popper-class="bs-el-select"
+              placeholder="请选择主题"
+              clearable
+            >
+              <el-option
+                v-for="themeItem in themeOptions"
+                :key="themeItem.value"
+                :label="themeItem.label"
+                :value="themeItem.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="背景图">
+            <el-button
+              v-if="!form.bg"
+              type="primary"
+              @click="$refs.bgImg.init()"
+            >
+              选择背景图
+            </el-button>
+            <el-image
+              v-show="form.bg"
+              class="bg-img bs-el-img"
+              :src="form.bg"
+              fit="cover"
+              @click="$refs.bgImg.init()"
+            />
+            <div
+              v-show="form.bg"
+              @click="form.bg = ''"
+            >
+              <i class="el-icon-circle-close close-icon" />
+            </div>
+            <span
+              v-if="form.bg"
+              class="description"
+            >（背景图优先级高于背景色，设置后将覆盖背景色）</span>
+            <BgImg
+              ref="bgImg"
+              :form="form"
+              @imgUrl="form.bg = $event"
+            />
+          </el-form-item>
+          <el-form-item label="背景色">
+            <ColorPicker
+              v-model="form.bgColor"
+              :placeholder="form.bg ? '' : '请选择背景色'"
+              :predefine-colors="predefineColors"
+            />
+          </el-form-item>
+        </el-form>
       </div>
-    </div>
+      <div>
+        <SettingTitle>定时器</SettingTitle>
+        <!-- 定时器空数据 -->
+        <el-empty
+          v-if="timerEmptyState()"
+          description="请添加图表，并绑定数据集"
+        />
+        <div
+          v-else
+          class="bs-overall-setting-wrap"
+        >
+          <div class="title">
+            <span>时间（秒）</span>
+            <span>图表</span>
+            <span />
+          </div>
+          <div
+            v-for="(timer, index) in pageInfo.pageConfig.refreshConfig"
+            :key="index"
+            class="bs-timer-item"
+          >
+            <el-input-number
+              v-model="timer.time"
+              class="bs-el-input-number"
+              :min="0"
+              :max="999999"
+              :step="1"
+              placeholder="请输入定时器时间"
+              style="margin-right: 8px;"
+            />
+            <el-select
+              v-model="timer.code"
+              class="bs-el-select"
+              popper-class="bs-el-select"
+              placeholder="请选择需要刷新的图表"
+              @change="chartChange"
+            >
+              <el-option
+                v-for="chart in chartOptions"
+                :key="chart.code"
+                :label="chart.title"
+                :value="chart.code"
+                :disabled="chart.disabled"
+              />
+            </el-select>
+            <el-button
+              style="margin-left: 8px;"
+              class="bs-el-button-default"
+              @click="deleteTimer(index)"
+            >
+              删除
+            </el-button>
+          </div>
+          <el-button
+            v-if="pageInfo.chartList.length !== pageInfo.pageConfig.refreshConfig.length"
+            type="primary"
+            style="width: 100%;"
+            @click="createTimer"
+          >
+            新建
+          </el-button>
+        </div>
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -474,7 +476,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/style/bsTheme.scss';
+@import '../../assets/style/bsTheme.scss';
+
 .bs-overall-wrap {
   position: relative;
   height: 100%;
@@ -482,12 +485,14 @@ export default {
 
   .bs-overall-setting-wrap {
     padding: 16px;
-    .title{
+
+    .title {
       display: flex;
       justify-content: space-around;
       margin-bottom: 18px;
     }
-    .bs-timer-item{
+
+    .bs-timer-item {
       display: flex;
       margin-bottom: 18px;
     }
@@ -525,8 +530,8 @@ export default {
     border-color: var(--bs-el-text) !important;
   }
 
-  /deep/ .el-input__inner{
-    &:placeholder{
+  /deep/ .el-input__inner {
+    &:placeholder {
       color: var(--bs-el-text);
     }
   }
@@ -659,5 +664,8 @@ export default {
   }
 }
 
-// 颜色选择器
+.side-catalog-box {
+  height: calc(100% - 50px);
+  overflow-y: auto;
+}
 </style>
