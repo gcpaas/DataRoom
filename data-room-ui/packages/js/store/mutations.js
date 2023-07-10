@@ -11,6 +11,7 @@ import _ from 'lodash'
 import { defaultData } from './state'
 import moment from 'moment'
 import { randomString } from 'packages/js/utils'
+import { EventBus } from 'packages/js/utils/eventBus'
 export default {
   // 改变页面基本信息，后端请求的页面信息存储到此处
   changePageInfo (state, pageInfo) {
@@ -100,6 +101,8 @@ export default {
     // 删除后，清空当前选中组件
     state.activeItemConfig = null
     state.activeCode = null
+    // 发送事件，关闭配置面板
+    EventBus.$emit('closeRightPanel')
   },
   changePageConfig (state, pageConfig) {
     Vue.set(state.pageInfo, 'pageConfig', _.cloneDeep(pageConfig))
