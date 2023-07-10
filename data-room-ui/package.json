@@ -82,7 +82,8 @@
     "vue-video-player": "^5.0.1",
     "vuedraggable": "^2.24.3",
     "vuex": "3.1.0",
-    "ztree": "3.5.24"
+    "ztree": "3.5.24",
+    "@antv/g6": "^4.7.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
