@@ -15,6 +15,7 @@ const customConfig = {
 
   type: 'currentTime',
   root: {
+    version : '0.0.1',
     dateFormat: 'YYYY-MM-DD HH:mm:ss'
   },
   customize: {

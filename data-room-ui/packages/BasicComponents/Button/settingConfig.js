@@ -36,6 +36,9 @@ const customConfig = {
   type: 'button',
   // 名称
   title: '查询',
+  root: {
+    version: 0
+  },
   // 自定义属性
   customize: {
     bindComponents: [],

@@ -129,8 +129,8 @@
         <div class="left-tab-box">
           <ul>
             <li
-              v-for="_type in datasetTypeList"
-              :key="_type.name"
+              v-for="(_type,index) in datasetTypeList"
+              :key="index"
               :class="{ 'tab-style': true, 'tab-active': _type.datasetType == curType }"
               @click="getTypeData(_type.datasetType)"
             >

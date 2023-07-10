@@ -33,6 +33,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'tables',
   root: {
+    version: '0.0.1',
     contribution: false
   },
   customize: {

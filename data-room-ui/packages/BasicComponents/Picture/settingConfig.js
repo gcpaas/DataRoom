@@ -16,6 +16,9 @@ export const settingConfig = {
 }
 const customConfig = {
   type: 'picture',
+  root: {
+    version: 0
+  },
   customize: {
     url: '',
     radius: 0,
