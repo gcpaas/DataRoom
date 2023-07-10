@@ -97,6 +97,9 @@ export default {
     }
     // 存储删除后的状态
     saveTimeLineFunc(state, '删除组件')
+    // 删除后，清空当前选中组件
+    state.activeItemConfig = null
+    state.activeCode = null
   },
   changePageConfig (state, pageConfig) {
     Vue.set(state.pageInfo, 'pageConfig', _.cloneDeep(pageConfig))
@@ -108,7 +111,7 @@ export default {
     // state.settingJson = _.cloneDeep(activeItem.settingConfig) || {}
   },
   // 改变当前组件的xywh
-  changeActiveItemWH(state, chart) {
+  changeActiveItemWH (state, chart) {
     if (chart.code === state.activeItemConfig.code) {
       state.activeItemConfig = {
         ...state.activeItemConfig,
