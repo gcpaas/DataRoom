@@ -437,7 +437,7 @@ export default {
           // this.initLazyOrgTree()
           const removeNode = this.ztreeObj.getNodeByParam('id', org.id, null)
           this.ztreeObj.removeNode(removeNode)
-          this.getData()
+          this.redrawTree()
           // 刷新右侧表格
           this.$emit('refreshData', org)
         })
@@ -451,7 +451,6 @@ export default {
     // 新增或修改节点
     addOrUpdateNode (params, isAdd) {
       if (!isAdd) {
-        console.log(1)
         const editNode = this.ztreeObj.getNodeByParam('id', params.id, null)
         editNode.name = params.name
         this.ztreeObj.editName(editNode)
