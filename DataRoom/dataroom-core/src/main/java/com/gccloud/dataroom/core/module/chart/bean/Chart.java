@@ -17,6 +17,9 @@ import java.util.List;
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "className")
 public class Chart {
 
+    @ApiModelProperty(notes = "版本")
+    private String version;
+
     @ApiModelProperty(notes = "图表唯一标识")
     private String code;
 
