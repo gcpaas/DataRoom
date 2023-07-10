@@ -300,6 +300,7 @@ export default {
       }
       /*菜单激活时的样式*/
       .active-catalog{
+        position: relative;
         background-color: rgba(var(--bs-el-color-primary-active), 0.4);
         color: var(--bs-el-text);
         &::after{
