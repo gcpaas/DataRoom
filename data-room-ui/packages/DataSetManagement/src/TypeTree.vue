@@ -139,10 +139,11 @@
           </ul>
         </div>
       </div>
-      <org-edit-form
+      <CategroyEditForm
         v-if="editFormVisible"
-        ref="editForm"
+        ref="categroyEditForm"
         :app-code="appCode"
+        @addOrUpdateNode="addOrUpdateNode"
       />
     </div>
   </div>
@@ -158,11 +159,11 @@ import 'packages/assets/style/zTree/metroStyle.css'
 import 'packages/assets/style/zTree/zTree.scss'
 import 'packages/assets/style/zTree/zTreeSelect.scss'
 import { getCategoryTree, categoryRemove } from 'packages/js/utils/datasetConfigService'
-import OrgEditForm from './CategroyEditForm.vue'
+import CategroyEditForm from './CategroyEditForm.vue'
 export default {
   name: 'DatasetTypeTreeIndex',
   components: {
-    OrgEditForm
+    CategroyEditForm
   },
   props: {
     datasetTypeList: {
@@ -231,11 +232,11 @@ export default {
     addRootNode () {
       this.editFormVisible = true
       this.$nextTick(() => {
-        this.$refs.editForm.tableName = 'r_dataset'
-        this.$refs.editForm.dialogFormVisible = true
-        this.$refs.editForm.init({ parentId: 0 }, true)
-        this.$refs.editForm.radio = 0
-        this.$refs.editForm.title = '分组新增'
+        this.$refs.categroyEditForm.tableName = 'r_dataset'
+        this.$refs.categroyEditForm.dialogFormVisible = true
+        this.$refs.categroyEditForm.init({ parentId: 0 }, true)
+        this.$refs.categroyEditForm.radio = 0
+        this.$refs.categroyEditForm.title = '分组新增'
       })
     },
     addDiyDom (treeId, treeNode) {
@@ -379,32 +380,32 @@ export default {
       this.editFormVisible = true
       if (editType === this.editTypeConstant.editOrg) {
         this.$nextTick(() => {
-          this.$refs.editForm.type = 'dataset'
-          this.$refs.editForm.dialogFormVisible = true
-          this.$refs.editForm.init(this.rightClickForm.org, false)
-          this.$refs.editForm.title = '分组编辑'
+          this.$refs.categroyEditForm.type = 'dataset'
+          this.$refs.categroyEditForm.dialogFormVisible = true
+          this.$refs.categroyEditForm.init(this.rightClickForm.org, false)
+          this.$refs.categroyEditForm.title = '分组编辑'
         })
         return
       }
       // 新增同级节点
       if (editType === this.editTypeConstant.addSiblingOrg) {
         this.$nextTick(() => {
-          this.$refs.editForm.type = 'dataset'
-          this.$refs.editForm.dialogFormVisible = true
-          this.$refs.editForm.init(this.rightClickForm.org, true)
-          this.$refs.editForm.radio = 0
-          this.$refs.editForm.title = '分组新增'
+          this.$refs.categroyEditForm.type = 'dataset'
+          this.$refs.categroyEditForm.dialogFormVisible = true
+          this.$refs.categroyEditForm.init(this.rightClickForm.org, true, editType)
+          this.$refs.categroyEditForm.radio = 0
+          this.$refs.categroyEditForm.title = '分组新增'
         })
         return
       }
       // 新增子节点
       if (editType === this.editTypeConstant.addChildOrg) {
         this.$nextTick(() => {
-          this.$refs.editForm.type = 'dataset'
-          this.$refs.editForm.dialogFormVisible = true
-          this.$refs.editForm.init(this.rightClickForm.org, true)
-          this.$refs.editForm.radio = 1
-          this.$refs.editForm.title = '分组新增'
+          this.$refs.categroyEditForm.type = 'dataset'
+          this.$refs.categroyEditForm.dialogFormVisible = true
+          this.$refs.categroyEditForm.init(this.rightClickForm.org, true, editType)
+          this.$refs.categroyEditForm.radio = 1
+          this.$refs.categroyEditForm.title = '分组新增'
         })
       }
     },
@@ -433,7 +434,10 @@ export default {
         categoryRemove(org.id).then((data) => {
           this.$message.success('操作成功')
           // this.ztreeObj.removeNode(org)
-          this.initLazyDatasetTypeTree()
+          // this.initLazyOrgTree()
+          const removeNode = this.ztreeObj.getNodeByParam('id', org.id, null)
+          this.ztreeObj.removeNode(removeNode)
+          this.getData()
           // 刷新右侧表格
           this.$emit('refreshData', org)
         })
@@ -443,6 +447,35 @@ export default {
     refreshData (cbObj) {
       // 刷新右侧表格
       this.$emit('refreshData', cbObj)
+    },
+    // 新增或修改节点
+    addOrUpdateNode (params, isAdd) {
+      if (!isAdd) {
+        console.log(1)
+        const editNode = this.ztreeObj.getNodeByParam('id', params.id, null)
+        editNode.name = params.name
+        this.ztreeObj.editName(editNode)
+        this.ztreeObj.setEditable(false)
+      } else {
+        // 新增
+        const parentNode = params.parentId === 0 ? null : this.ztreeObj.getNodeByParam('id', params.parentId, null)
+        this.ztreeObj.addNodes(parentNode, params)
+      }
+      this.redrawTree()
+    },
+    // 重新绘制树
+    redrawTree () {
+      // 重新绘制ztree
+      getCategoryTree({ type: 'dataset', moduleCode: this.appCode }).then((res) => {
+        this.categoryData = res.map((item) => {
+          return { isParent: item.hasChildren, ...item }
+        })
+        this.categoryData.unshift({ name: '全部', id: '', parentId: '0' })
+      }).then((e) => {
+        this.loading = false
+      }).catch((e) => {
+        this.loading = false
+      })
     }
   }
 }
