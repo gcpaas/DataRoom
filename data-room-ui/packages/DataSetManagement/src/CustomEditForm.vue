@@ -974,7 +974,7 @@ export default {
      */
     save (formName, noCheckToSave = false) {
       if (this.passTest === false) {
-        this.$message.error('请确保数据集SQL加工脚本不为空且测试通过')
+        this.$message.error('请确保数据集SQL加工脚本不为空且运行通过')
         return
       }
       if (!this.structurePreviewList.length) {
@@ -1190,7 +1190,7 @@ export default {
           this.$message.warning('参数名称不可以与字段名相同！')
           this.passTest = false
         } else {
-          if (val) this.$message.success('测试成功')
+          if (val) this.$message.success('运行成功')
           this.exception = ''
           this.msg = ''
           this.passTest = true

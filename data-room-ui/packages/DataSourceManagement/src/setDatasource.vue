@@ -32,13 +32,13 @@
             popper-class="bs-el-select"
             clearable
             filterable
-            @change="sourceEdit"
+            @change="sourceTypeChange"
           >
             <el-option
               v-for="sourceType in sourceTypeList"
               :key="sourceType.id"
               :label="sourceType.name"
-              :value="sourceType.name"
+              :value="sourceType.code"
             />
           </el-select>
         </el-form-item>
@@ -358,20 +358,15 @@ export default {
       })
     },
     // 数据源类型选择
-    sourceEdit (name) {
-      this.dataForm.coding = '自动'
-      if (!this.dataForm.id && name) {
-        let type = ''
-        type = name
-        this.sourceTypeList.forEach(r => {
-          if (type === r.name) {
-            const code = r.code + 'Driver'
-            this.driverCLassList.forEach(r => {
-              if (code === r.code) {
-                this.dataForm.driverClassName = r.name
-                this.queryDriverTemp(r.name)
-              }
-            })
+    sourceTypeChange (code) {
+      if (!this.dataForm.id && code) {
+        let driverName = ''
+        driverName = code + 'Driver'
+        // 从驱动列表中获取驱动的对应的jdbcUrl
+        this.driverCLassList.forEach(driver => {
+          if (driverName === driver.code) {
+            this.dataForm.driverClassName = driver.name
+            this.queryDriverTemp(driver.name)
           }
         })
       }
