@@ -137,7 +137,8 @@ export default {
       currentCatalog: { // 选中目录
         name: '',
         id: '',
-        code: ''
+        code: '',
+        orderNum: 0
       },
       formRules: {
         name: [
@@ -208,7 +209,8 @@ export default {
       this.currentCatalog = { // 选中目录
         name: '',
         id: '',
-        code: ''
+        code: '',
+        orderNum: 0
       }
     },
     // 编辑目录
