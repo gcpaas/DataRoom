@@ -37,7 +37,7 @@ const customConfig = {
   // 名称
   title: '查询',
   root: {
-    version: 0
+    version: '2023071001'
   },
   // 自定义属性
   customize: {

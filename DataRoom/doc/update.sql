@@ -1,10 +1,9 @@
 
--- 更新大屏配置的类名
+#20230621 配置表中的类名替换
 UPDATE big_screen_page SET config = REPLACE(config, '"className":"com.gccloud.bigscreen', '"className":"com.gccloud.dataroom');
 UPDATE big_screen_page SET config = REPLACE(config, '"className":"com.gccloud.dataroom.core.module.manage.dto.BigScreenPageDTO', '"className":"com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO');
 
--- 新增数据集相关的表
-
+#20230621 新增数据集相关的表
 DROP TABLE IF EXISTS `ds_category_tree`;
 CREATE TABLE `ds_category_tree` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -78,3 +77,30 @@ ALTER TABLE `ds_dataset` ADD COLUMN `create_by` bigint(64) NULL DEFAULT 2 COMMEN
 ALTER TABLE `ds_dataset` ADD COLUMN `update_by` bigint(64) NULL DEFAULT 2 COMMENT '更新人' AFTER `create_by`;
 ALTER TABLE `ds_category_tree` ADD COLUMN `create_by` bigint(64) NULL DEFAULT 2 COMMENT '创建人' AFTER `del_flag`;
 ALTER TABLE `ds_category_tree` ADD COLUMN `update_by` bigint(64) NULL DEFAULT 2 COMMENT '更新人' AFTER `create_by`;
+
+
+# 20230710 添加数据集标签表
+DROP TABLE IF EXISTS `ds_label`;
+CREATE TABLE `ds_label` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `label_name` varchar(255) DEFAULT NULL COMMENT '标签名称',
+  `label_type` varchar(255) DEFAULT NULL COMMENT '标签类型',
+  `label_desc` varchar(255) DEFAULT NULL COMMENT '标签描述',
+  `update_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by`    bigint(64)  null default 2 comment '创建人',
+  `update_by`    bigint(64)  null default 2 comment '更新人',
+  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB   DEFAULT CHARSET=utf8 COLLATE=utf8_general_mysql500_ci COMMENT='标签';
+
+DROP TABLE IF EXISTS `ds_dataset_label`;
+CREATE TABLE `ds_dataset_label` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `dataset_id` bigint(32) DEFAULT NULL COMMENT '数据集ID',
+  `label_id` bigint(32) DEFAULT NULL COMMENT '标签ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB   DEFAULT CHARSET=utf8 COLLATE=utf8_general_mysql500_ci COMMENT='数据集与标签关联表';
+
+# 20230710 数据源新增字段
+ALTER TABLE `ds_datasource` ADD COLUMN `table_name` varchar(255) DEFAULT NULL COMMENT '表名' AFTER `module_code`;

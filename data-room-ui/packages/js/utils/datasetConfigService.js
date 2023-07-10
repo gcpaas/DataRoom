@@ -12,6 +12,14 @@ import { get, post } from 'packages/js/utils/http'
 const datasetPage = (params = {}, flag = false) => get('/dataset/page', params, flag)
 
 /**
+ * 数据集列表查询
+ * @param params
+ * @param flag
+ * @returns {*}
+ */
+const datasetList = (params = {}, flag = false) => get('/dataset/list', params, flag)
+
+/**
  * 数据集名称校验
  * @param params
  * @param flag
@@ -98,6 +106,7 @@ const categoryRemove = (id = '-1', flag = false) => post(`/category/delete/${id}
 
 export {
   datasetPage,
+  datasetList,
   datasetAdd,
   datasetUpdate,
   datasetRemove,

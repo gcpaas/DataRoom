@@ -12,7 +12,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'horizontalLine',
   root: {
-    version: 0
+    version: '2023071001'
   },
   customize: {
     // 边框线颜色
