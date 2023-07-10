@@ -139,6 +139,7 @@ export default {
           }
           if (id) {
             categoryUpdate(params).then((r) => {
+              params.id = r
               this.$message.success('保存成功')
               this.cancel()
               try {
