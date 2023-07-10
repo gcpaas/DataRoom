@@ -17,7 +17,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'picture',
   root: {
-    version: 0
+    version: '2023071001'
   },
   customize: {
     url: '',

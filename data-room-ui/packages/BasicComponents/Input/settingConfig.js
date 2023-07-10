@@ -12,7 +12,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'input',
   root: {
-    version: 0
+    version: '2023071001'
   },
   // 自定义属性
   customize: {

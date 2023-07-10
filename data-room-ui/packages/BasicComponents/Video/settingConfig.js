@@ -12,7 +12,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'video',
   root: {
-    version: 0
+    version: '2023071001'
   },
   customize: {
     videoType: 'application/x-mpegURL',
