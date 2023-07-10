@@ -100,7 +100,7 @@ export default {
   padding-left: 16px !important;
 }
 .data-set-wrap {
-  /deep/ .el-dialog__body {
+  ::v-deep .el-dialog__body {
     position: relative;
     padding: 0 !important;
     min-height: 535px;

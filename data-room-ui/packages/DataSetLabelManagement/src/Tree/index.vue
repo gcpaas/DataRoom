@@ -117,7 +117,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ .el-tree-node {
+::v-deep .el-tree-node {
   display: block;
   min-width: 270px;
 
@@ -161,7 +161,7 @@ export default {
   }
 }
 
-// /deep/ .is-current .options{
+// ::v-deep .is-current .options{
 //   background: #fff;
 // }
 </style>

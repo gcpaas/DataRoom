@@ -76,13 +76,13 @@ export default {
 }
 
 /*滚动条样式*/
-/deep/::-webkit-scrollbar {
+::v-deep ::-webkit-scrollbar {
   width: 4px;
   border-radius: 4px;
   height: 4px;
 }
 
-/deep/::-webkit-scrollbar-thumb {
+::v-deep ::-webkit-scrollbar-thumb {
   background: #dddddd !important;
   border-radius: 10px;
 }

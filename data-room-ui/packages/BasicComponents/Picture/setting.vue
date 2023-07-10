@@ -239,7 +239,7 @@ export default {
     display: none !important;
   }
 
-  ::v-deep.el-upload-list__item {
+  ::v-deep .el-upload-list__item {
     transition: none !important;
   }
 

@@ -726,12 +726,12 @@ export default {
   overflow: auto;
 }
 
-/deep/ .jsoneditor-poweredBy,
-/deep/ .jsoneditor-modes {
+::v-deep .jsoneditor-poweredBy,
+::v-deep .jsoneditor-modes {
   display: none;
 }
 
-/deep/ .ace_editor.ace-jsoneditor {
+::v-deep .ace_editor.ace-jsoneditor {
   min-height: 250px;
 }
 
@@ -772,7 +772,7 @@ export default {
   }
 }
 
-/deep/ .fieldDescCheck {
+::v-deep .fieldDescCheck {
   .el-dialog__body {
     height: fit-content !important;
     min-height: unset !important;
@@ -799,16 +799,16 @@ export default {
   }
 }
 
-/deep/ .ace_layer.ace_gutter-layer.ace_folding-enabled {
+::v-deep .ace_layer.ace_gutter-layer.ace_folding-enabled {
   background: #f6f7fb;
 }
 
-/deep/ .jsoneditor-menu {
+::v-deep .jsoneditor-menu {
   background: var(--bs-el-color-primary);
   border-color: var(--bs-el-color-primary);
 }
 
-/deep/ .jsoneditor-mode-code {
+::v-deep .jsoneditor-mode-code {
   border-color: var(--bs-el-color-primary);
 }
 
@@ -816,7 +816,7 @@ export default {
   margin-bottom: 0;
 }
 
-/deep/ .bs-table-box.is-Edit .el-table {
+::v-deep .bs-table-box.is-Edit .el-table {
   max-height: unset !important;
 
   .el-table__body-wrapper {

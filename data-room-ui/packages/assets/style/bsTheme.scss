@@ -574,11 +574,11 @@
 
 //img
 .bs-el-img {
-  /deep/.el-image__error {
+  ::v-deep .el-image__error {
     background-color: var(--bs-background-1) !important;
   }
 
-  /deep/.close-icon {
+  ::v-deep .close-icon {
     color: var(--bs-el-title);
   }
 }

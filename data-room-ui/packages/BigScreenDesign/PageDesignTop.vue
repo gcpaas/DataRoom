@@ -502,7 +502,7 @@ export default {
     cursor: pointer;
   }
 
-  /deep/.el-radio__label {
+  ::v-deep .el-radio__label {
     display: none;
   }
 }

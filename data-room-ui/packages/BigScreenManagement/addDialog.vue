@@ -436,7 +436,7 @@ export default {
   height: 300px;
   overflow-x: hidden;
 
-  /deep/ .el-scrollbar__view {
+  ::v-deep .el-scrollbar__view {
     overflow-x: hidden;
   }
 }
@@ -569,19 +569,19 @@ export default {
     cursor: pointer;
   }
 
-  /deep/.el-radio__label {
+  ::v-deep .el-radio__label {
     display: none;
   }
 }
 
 /*滚动条样式*/
-/deep/::-webkit-scrollbar {
+::v-deep ::-webkit-scrollbar {
   width: 6px;
   border-radius: 4px;
   height: 4px;
 }
 
-/deep/::-webkit-scrollbar-thumb {
+::v-deep ::-webkit-scrollbar-thumb {
   background: #dddddd !important;
   border-radius: 10px;
 }
