@@ -14,10 +14,10 @@
 <script>
 import DvScrollBoard from '@jiaminghi/data-view/lib/components/scrollBoard/src/main.vue'
 import '@jiaminghi/data-view/lib/components/scrollBoard/src/main.css'
-import { refreshComponentMixin } from 'packages/js/mixins/refreshComponent'
-import commonMixins from 'packages/js/mixins/commonMixins'
-import paramsMixins from 'packages/js/mixins/paramsMixins'
-import linkageMixins from 'packages/js/mixins/linkageMixins'
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
+import commonMixins from 'data-room-ui/js/mixins/commonMixins'
+import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
+import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 export default {
   name: 'ScrollBoard',
   components: {

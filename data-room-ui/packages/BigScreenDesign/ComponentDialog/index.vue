@@ -340,11 +340,11 @@
   </el-dialog>
 </template>
 <script>
-import { get } from 'packages/js/utils/http'
-import { pageMixins } from 'packages/js/mixins/page'
+import { get } from 'data-room-ui/js/utils/http'
+import { pageMixins } from 'data-room-ui/js/mixins/page'
 import _ from 'lodash'
-import innerRemoteComponents, { getRemoteComponents, getRemoteComponentConfig } from 'packages/RemoteComponents/remoteComponentsList'
-import { getBizComponentPage } from 'packages/js/api/bigScreenApi'
+import innerRemoteComponents, { getRemoteComponents, getRemoteComponentConfig } from 'data-room-ui/RemoteComponents/remoteComponentsList'
+import { getBizComponentPage } from 'data-room-ui/js/api/bigScreenApi'
 export default {
   name: 'ComponentDialog',
   mixins: [pageMixins],

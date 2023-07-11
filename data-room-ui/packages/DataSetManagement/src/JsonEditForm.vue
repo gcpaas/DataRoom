@@ -336,12 +336,12 @@
 </template>
 
 <script>
-import LabelSelect from 'packages/DataSetLabelManagement/src/LabelSelect.vue'
+import LabelSelect from 'data-room-ui/DataSetLabelManagement/src/LabelSelect.vue'
 import vueJsonEditor from 'vue-json-editor'
 import vueJsonViewer from 'vue-json-viewer'
-import { getCategoryTree, datasetAdd, datasetUpdate, getDataset, nameCheckRepeat } from 'packages/js/utils/datasetConfigService'
+import { getCategoryTree, datasetAdd, datasetUpdate, getDataset, nameCheckRepeat } from 'data-room-ui/js/utils/datasetConfigService'
 import _ from 'lodash'
-import { datasetMixins } from 'packages/js/mixins/datasetMixin'
+import { datasetMixins } from 'data-room-ui/js/mixins/datasetMixin'
 export default {
   name: 'JsonEditForm',
   components: {

@@ -15,8 +15,8 @@
 <script>
 import remoteVueLoader from 'remote-vue2-loader'
 import _ from 'lodash'
-import { getBizComponentInfo } from 'packages/js/api/bigScreenApi'
-import innerRemoteComponents, { getRemoteComponents } from 'packages/RemoteComponents/remoteComponentsList'
+import { getBizComponentInfo } from 'data-room-ui/js/api/bigScreenApi'
+import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
 export default {
   name: 'BsComponentPreview',
   props: {

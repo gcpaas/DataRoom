@@ -5,7 +5,7 @@
  */
 import _ from 'lodash'
 import { mapMutations, mapState } from 'vuex'
-import { EventBus } from 'packages/js/utils/eventBus'
+import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import { getChatInfo, getUpdateChartInfo } from '../api/bigScreenApi'
 export default {
   data () {

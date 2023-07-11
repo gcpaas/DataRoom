@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import SourceList from 'packages/SourceList'
+import SourceList from 'data-room-ui/SourceList'
 export default {
   name: '',
   props: {

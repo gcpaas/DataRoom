@@ -19,7 +19,7 @@ function importComponentSettingConfig (files) {
     dataModules[moduleName] = files(key).dataConfig
   })
 }
-importComponentSettingConfig(require.context('packages/BasicComponents', true, /\.js$/))
-importComponentSettingConfig(require.context('packages/Borders', true, /\.js$/))
-importComponentSettingConfig(require.context('packages/Decorations', true, /\.js$/))
+importComponentSettingConfig(require.context('data-room-ui/BasicComponents', true, /\.js$/))
+importComponentSettingConfig(require.context('data-room-ui/Borders', true, /\.js$/))
+importComponentSettingConfig(require.context('data-room-ui/Decorations', true, /\.js$/))
 export { setModules, dataModules }

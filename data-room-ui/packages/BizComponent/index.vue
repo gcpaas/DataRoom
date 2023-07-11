@@ -108,10 +108,10 @@
 </template>
 <script>
 import { toJpeg, toPng } from 'html-to-image'
-import CusBtn from 'packages/BigScreenDesign/BtnLoading'
-// import MonacoEditor from 'packages/MonacoEditor'
+import CusBtn from 'data-room-ui/BigScreenDesign/BtnLoading'
+// import MonacoEditor from 'data-room-ui/MonacoEditor'
 import BizComponentPreview from './Preview'
-import { getBizComponentInfo, updateBizComponent } from 'packages/js/api/bigScreenApi'
+import { getBizComponentInfo, updateBizComponent } from 'data-room-ui/js/api/bigScreenApi'
 import { defaultSettingContent, defaultVueContent } from './config/defaultBizConfig'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -123,7 +123,7 @@ import {
   showSize,
   dataURLtoBlob,
   translateBlobToBase64
-} from 'packages/js/utils/compressImg'
+} from 'data-room-ui/js/utils/compressImg'
 import * as imageConversion from 'image-conversion'
 
 export default {

@@ -132,12 +132,12 @@
 </template>
 
 <script>
-import table from 'packages/js/utils/table.js'
+import table from 'data-room-ui/js/utils/table.js'
 import '../style/index.scss'
-import { sourceLinkTest, datasourcePage, sourceRemove } from 'packages/js/utils/dataSourceService'
+import { sourceLinkTest, datasourcePage, sourceRemove } from 'data-room-ui/js/utils/dataSourceService'
 import setDatasource from './setDatasource.vue'
 import _ from 'lodash'
-import { pageMixins } from 'packages/js/mixins/page'
+import { pageMixins } from 'data-room-ui/js/mixins/page'
 export default {
   name: 'DataSource',
   directives: {

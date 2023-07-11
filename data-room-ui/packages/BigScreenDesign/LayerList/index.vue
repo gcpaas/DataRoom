@@ -42,7 +42,7 @@
 import { mapMutations, mapState } from 'vuex'
 import draggable from 'vuedraggable'
 
-import chartContextMenu from 'packages/js/mixins/chartContextMenu'
+import chartContextMenu from 'data-room-ui/js/mixins/chartContextMenu'
 export default {
   name: 'LayerList',
   components: {

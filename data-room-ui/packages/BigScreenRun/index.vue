@@ -32,13 +32,13 @@
   </div>
 </template>
 <script>
-import { get } from 'packages/js/utils/http'
-import RenderCard from 'packages/Render/RenderCard.vue'
+import { get } from 'data-room-ui/js/utils/http'
+import RenderCard from 'data-room-ui/Render/RenderCard.vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
-import { getThemeConfig } from 'packages/js/api/bigScreenApi'
+import { getThemeConfig } from 'data-room-ui/js/api/bigScreenApi'
 import { compile } from 'tiny-sass-compiler/dist/tiny-sass-compiler.esm-browser.prod.js'
 import { G2 } from '@antv/g2plot'
-import NotPermission from 'packages/NotPermission'
+import NotPermission from 'data-room-ui/NotPermission'
 export default {
   name: 'BigScreenRun',
   components: {

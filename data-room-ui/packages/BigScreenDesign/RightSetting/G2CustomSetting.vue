@@ -165,14 +165,14 @@
   </div>
 </template>
 <script>
-import ElDragSelect from 'packages/BigScreenDesign/RightSetting/ElDragSelect.vue'
-import SettingTitle from 'packages/SettingTitle/index.vue'
-import { chartSettingMixins } from 'packages/js/mixins/chartSettingMixins'
-import ColorSelect from 'packages/ColorMultipleSelect/index.vue'
-// import ColorPicker from 'packages/ColorPicker/index.vue'
-import PaddingSetting from 'packages/BigScreenDesign/RightSetting/PaddingSetting/index.vue'
-import GradualSetting from 'packages/BigScreenDesign/RightSetting/GradualSetting/index.vue'
-import PosWhSetting from 'packages/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import ElDragSelect from 'data-room-ui/BigScreenDesign/RightSetting/ElDragSelect.vue'
+import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
+import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
+// import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
+import PaddingSetting from 'data-room-ui/BigScreenDesign/RightSetting/PaddingSetting/index.vue'
+import GradualSetting from 'data-room-ui/BigScreenDesign/RightSetting/GradualSetting/index.vue'
+import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import _ from 'lodash'
 export default {
   name: 'CustomComponentSetting',

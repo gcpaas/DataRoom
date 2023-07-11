@@ -1,7 +1,7 @@
 import _ from 'lodash'
-import getComponentConfig from 'packages/js/utils/getBorderComponentsConfig'
+import getComponentConfig from 'data-room-ui/js/utils/getBorderComponentsConfig'
 // 批量引入配置文件
-import { setModules, dataModules } from 'packages/js/utils/configImport'
+import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
 const typeLIst = [
   'border1',
   'border2',

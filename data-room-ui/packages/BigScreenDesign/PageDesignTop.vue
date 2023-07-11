@@ -87,20 +87,20 @@
 <script>
 import { toJpeg, toPng } from 'html-to-image'
 import { mapMutations, mapActions, mapState } from 'vuex'
-import { saveScreen } from 'packages/js/api/bigScreenApi'
-import ChooseTemplateDialog from 'packages/BigScreenManagement/ChooseTemplateDialog.vue'
+import { saveScreen } from 'data-room-ui/js/api/bigScreenApi'
+import ChooseTemplateDialog from 'data-room-ui/BigScreenManagement/ChooseTemplateDialog.vue'
 import _ from 'lodash'
-import { stringifyObjectFunctions } from 'packages/js/utils/evalFunctions'
-import AssignDialog from 'packages/BigScreenDesign/AssignDialog/index.vue'
-import HistoryList from 'packages/BigScreenDesign/HistoryList/index.vue'
+import { stringifyObjectFunctions } from 'data-room-ui/js/utils/evalFunctions'
+import AssignDialog from 'data-room-ui/BigScreenDesign/AssignDialog/index.vue'
+import HistoryList from 'data-room-ui/BigScreenDesign/HistoryList/index.vue'
 import CusBtn from './BtnLoading'
-import icons from 'packages/assets/images/alignIcon/export'
-import IconSvg from 'packages/SvgIcon'
+import icons from 'data-room-ui/assets/images/alignIcon/export'
+import IconSvg from 'data-room-ui/SvgIcon'
 import {
   showSize,
   dataURLtoBlob,
   translateBlobToBase64
-} from 'packages/js/utils/compressImg'
+} from 'data-room-ui/js/utils/compressImg'
 import * as imageConversion from 'image-conversion'
 export default {
   name: 'PageTopSetting',

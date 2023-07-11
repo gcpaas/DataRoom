@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { categoryAdd, categoryUpdate } from 'packages/js/utils/datasetConfigService'
+import { categoryAdd, categoryUpdate } from 'data-room-ui/js/utils/datasetConfigService'
 export default {
   name: 'CategroyEditForm',
   props: {

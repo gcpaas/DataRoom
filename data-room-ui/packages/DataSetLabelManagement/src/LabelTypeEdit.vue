@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { updateLabelType } from 'packages/js/utils/LabelConfigService'
+import { updateLabelType } from 'data-room-ui/js/utils/LabelConfigService'
 
 export default {
   name: 'LabelTypeEdit',

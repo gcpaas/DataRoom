@@ -530,20 +530,20 @@
 </template>
 
 <script>
-import LabelSelect from 'packages/DataSetLabelManagement/src/LabelSelect.vue'
+import LabelSelect from 'data-room-ui/DataSetLabelManagement/src/LabelSelect.vue'
 import {
   nameCheckRepeat,
   getCategoryTree,
   getDataset,
   datasetExecuteTest,
   datasetAdd, datasetUpdate
-} from 'packages/js/utils/datasetConfigService'
+} from 'data-room-ui/js/utils/datasetConfigService'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/groovy/groovy'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/nord.css'
 import _ from 'lodash'
-import { datasetMixins } from 'packages/js/mixins/datasetMixin'
+import { datasetMixins } from 'data-room-ui/js/mixins/datasetMixin'
 export default {
   name: 'ScriptEditForm',
   components: {

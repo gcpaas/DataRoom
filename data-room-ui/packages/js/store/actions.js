@@ -1,10 +1,10 @@
 // 组件配置转化
 import _ from 'lodash'
-import { setModules, dataModules } from 'packages/js/utils/configImport'
+import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
 import { getScreenInfo, getDataSetDetails, getDataByDataSetId } from '../api/bigScreenApi'
 import { stringToFunction } from '../utils/evalFunctions'
 import { EventBus } from '../utils/eventBus'
-import plotList from 'packages/G2Plots/plotList'
+import plotList from 'data-room-ui/G2Plots/plotList'
 export default {
   // 初始化页面数据
   initLayout ({ commit, dispatch }, code) {

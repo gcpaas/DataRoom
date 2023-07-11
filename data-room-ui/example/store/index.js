@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import bigScreen from 'packages/js/store/index.js'
+import bigScreen from 'data-room-ui/js/store/index.js'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({

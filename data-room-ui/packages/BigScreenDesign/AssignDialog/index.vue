@@ -65,7 +65,7 @@
   </el-dialog>
 </template>
 <script>
-import { pageMixins } from 'packages/js/mixins/page'
+import { pageMixins } from 'data-room-ui/js/mixins/page'
 export default {
   name: 'ComponentDialog',
   mixins: [pageMixins],
