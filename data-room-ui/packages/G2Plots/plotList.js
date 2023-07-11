@@ -26,6 +26,7 @@ function getPlotList (files) {
     const config = configMapList[configMapKey]
 
     plotList[index] = {
+      version: config.version,
       category: configMapKey,
       name: config.name,
       title: config.title,

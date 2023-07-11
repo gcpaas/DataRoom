@@ -68,9 +68,14 @@ export function handleResData (data) {
   let originalConfig = {}
   pageInfo.chartList.forEach((chart) => {
     if (!['customComponent', 'remoteComponent'].includes(chart.type)) {
-      // chart.option = _.cloneDeep(setModules[chart.type])
       originalConfig = { option: { ...setModules[chart.type] }, ...dataModules[chart.type] }
-      chart = compatibility(chart, originalConfig)
+      // 如果没有版本号，或者版本号修改了则需要进行旧数据兼容
+      if ((!chart.version) || chart.version !== originalConfig.version) {
+        chart = compatibility(chart, originalConfig)
+      } else {
+        console.log(chart)
+        chart.option = _.cloneDeep(setModules[chart.type])
+      }
     } else {
       originalConfig = plotList?.find(plot => plot.name === chart.name)
       chart.option = stringToFunction(chart.option)
@@ -78,7 +83,10 @@ export function handleResData (data) {
       if (!chart?.dataSource?.businessKey) {
         chart.option.data = plotList?.find(plot => plot.name === chart.name)?.option?.data
       }
-      chart = compatibility(chart, originalConfig)
+      // 如果没有版本号，或者版本号修改了则需要进行旧数据兼容
+      if ((!chart.version) || chart.version !== originalConfig.version) {
+        chart = compatibility(chart, originalConfig)
+      }
     }
     chart.key = chart.code
   })
@@ -87,6 +95,7 @@ export function handleResData (data) {
 // 组件属性兼容
 function compatibility (config, originalConfig) {
   const newConfig = config
+  newConfig.version = originalConfig.version
   newConfig.dataSource = objCompare(newConfig.dataSource, originalConfig.dataSource)
   newConfig.customize = objCompare(newConfig.customize, originalConfig.customize)
   newConfig.option = { ...objCompare(newConfig.option, originalConfig.option), displayOption: originalConfig.option.displayOption }
