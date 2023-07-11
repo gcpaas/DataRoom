@@ -18,7 +18,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'iframeChart',
   root: {
-    version : '0.0.1',
+    version: '2023071001',
     url: 'https://www.runoob.com/'
   },
   customize: {
