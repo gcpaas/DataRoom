@@ -496,17 +496,15 @@ export default {
         { name: '自助数据集', datasetType: 'custom', componentName: 'CustomEditForm' },
         { name: '存储过程数据集', datasetType: 'storedProcedure', componentName: 'StoredProcedureEditForm' },
         { name: 'JSON数据集', datasetType: 'json', componentName: 'JsonEditForm' },
-        { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' },
-        { name: 'JS数据集', datasetType: 'js', componentName: 'JsDataSet' }
+        { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' }
       ]
-      if (this.dataSetList.length != 0) {
+      if (this.dataSetList.length !== 0) {
         this.datasetTypeList = [{ name: '全部', datasetType: '' }, ...list.filter(item => this.dataSetList.findIndex(x => x === item.datasetType) !== -1)]
       } else {
         this.datasetTypeList = [
           ...list
         ]
       }
-
       if (window.BS_CONFIG?.customDatasetComponents && window.BS_CONFIG?.customDatasetComponents.length > 0) {
         // 将获得到的远程数据集进行组装
         window.BS_CONFIG?.customDatasetComponents.forEach((item) => {
