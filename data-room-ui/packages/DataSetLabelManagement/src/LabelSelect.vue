@@ -5,6 +5,7 @@
       :key="label.id"
       :closable="isEdit"
       :disable-transitions="false"
+      style="margin-right: 2px;margin-left: 2px;background-color: #2f3440;border-color: #313640;"
       @close="handleCloseTag(label)"
     >
       {{ label.labelName }}
@@ -13,7 +14,7 @@
       class="item"
       content="添加关联标签"
       effect="dark"
-      placement="right"
+      placement="bottom"
     >
       <el-button
         circle
@@ -47,8 +48,10 @@
               placeholder="请输入标签名称"
             />
           </el-form-item>
-
-          <el-form-item label="">
+          <el-form-item
+            class="filter-item"
+            prop="labelType"
+          >
             <el-select
               v-model="searchForm.labelType"
               class="bs-el-select"
@@ -59,15 +62,34 @@
               @change="selectLabelType"
             >
               <el-option
+                key="all"
                 label="全部"
                 value=""
               />
               <el-option
-                v-for="(item, index) in labelTypeList"
+                v-for="(type, index) in labelTypeList"
                 :key="index"
-                :label="item"
-                :value="item"
-              />
+                :label="type"
+                :value="type"
+              >
+              <span>
+                {{ type }}
+              </span>
+                <span style="float: right;padding-right: 20px">
+                <el-button
+                  v-show="isManage"
+                  icon="el-icon-edit"
+                  type="text"
+                  @click.stop="editLabelType(type)"
+                />
+                <el-button
+                  v-if="isManage"
+                  icon="el-icon-delete"
+                  type="text"
+                  @click.stop="deleteLabelType(type)"
+                />
+              </span>
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -190,6 +212,11 @@
           @afterEdit="afterEdit"
           ref="labelEdit"
         />
+        <label-type-edit
+          v-if="labelTypeEditVisible"
+          @afterEdit="afterEdit(true)"
+          ref="labelTypeEdit"
+        />
       </div>
     </el-dialog>
   </div>
@@ -197,13 +224,15 @@
 
 <script>
 import LabelEdit from './LabelConfigEdit'
+import LabelTypeEdit from './LabelTypeEdit.vue'
 import { pageMixins } from 'packages/js/mixins/page'
-import {getLabelType, labelList, getLabelListByDatasetId, removeLabel} from 'packages/js/utils/LabelConfigService'
+import {getLabelType, labelList, getLabelListByDatasetId, removeLabel, removeLabelByType} from 'packages/js/utils/LabelConfigService'
 
 export default {
   name: 'LabelSelect',
   components: {
-    LabelEdit
+    LabelEdit,
+    LabelTypeEdit
   },
   mixins: [pageMixins],
   props: {
@@ -233,6 +262,8 @@ export default {
       dialogFormVisible: false,
       // 编辑弹窗可见性
       editFormVisible: false,
+      // 标签类型编辑弹窗可见性
+      labelTypeEditVisible: false,
       searchForm: {
         labelName: '',
         labelType: ''
@@ -351,7 +382,8 @@ export default {
       this.$confirm('确定删除当前标签吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
+        customClass: 'bs-el-message-box'
       }).then(() => {
         removeLabel(id).then(() => {
           this.getDataList()
@@ -412,6 +444,35 @@ export default {
       this.getDataList()
     },
     /**
+     * 标签类型编辑
+     */
+    editLabelType (type) {
+      this.labelTypeEditVisible = true
+      this.$nextTick(() => {
+        this.$refs.labelTypeEdit.dialogFormVisible = true
+        this.$refs.labelTypeEdit.init(type)
+      })
+    },
+    /**
+     * 标签类型删除
+     */
+    deleteLabelType (type) {
+      this.$confirm('是否删除当前标签类型? ', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        customClass: 'bs-el-message-box'
+      }).then(() => {
+        removeLabelByType({ labelType: type }).then(() => {
+          this.$nextTick(() => {
+            this.getDataList()
+            this.getLabelType()
+            this.$message.success('删除成功')
+          })
+        })
+      })
+    },
+    /**
      * 弹窗关闭
      */
     handleClose () {
@@ -428,9 +489,12 @@ export default {
       this.$emit('commit', this.idListCopy)
     },
     /**
-     * 标签编辑/新增后回调
+     * 标签编辑/新增、标签类型编辑 后回调
      */
-    afterEdit () {
+    afterEdit (cleanType) {
+      if (cleanType) {
+        this.searchForm.labelType = ''
+      }
       this.getDataList()
       this.getLabelType()
     }
