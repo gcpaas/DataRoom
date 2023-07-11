@@ -11,15 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 public interface IDataRoomPermissionService {
 
     /**
-     * 校验接口权限
-     * @param request
-     * @param permission
-     * @return
-     */
-    boolean verifyApiPermission(HttpServletRequest request, String... permission);
-
-
-    /**
      * 校验大屏页面数据访问权限
      * @param request
      * @param pageCode

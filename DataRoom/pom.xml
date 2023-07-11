@@ -50,16 +50,17 @@
         <hanlp.version>portable-1.7.8</hanlp.version>
         <hutool.version>5.3.1</hutool.version>
         <guava.version>20.0</guava.version>
-        <jackson.core.version>2.13.3</jackson.core.version>
+        <jackson.version.core>2.13.3</jackson.version.core>
         <json.version>20220320</json.version>
         <druid.version>1.2.11</druid.version>
         <p6spy.version>3.9.0</p6spy.version>
-        <ojdbc8.version>12.2.0.1</ojdbc8.version>
+        <oracle-database.version>12.2.0.1</oracle-database.version>
         <mysql.version>5.1.49</mysql.version>
         <postgresql.version>42.3.3</postgresql.version>
         <clickhouse.version>0.3.2</clickhouse.version>
         <commons-io.version>2.2</commons-io.version>
-        <dataset.core.version>0.0.1.2023071001.Alpha</dataset.core.version>
+        <okhttp3.version>4.9.1</okhttp3.version>
+        <dataset.core.version>0.0.1.2023071101.Alpha</dataset.core.version>
     </properties>
 
     <dependencyManagement>

@@ -8,7 +8,7 @@ import com.gccloud.dataroom.core.module.manage.dto.DataRoomSearchDTO;
 import com.gccloud.dataroom.core.module.manage.service.IDataRoomPageService;
 import com.gccloud.dataroom.core.module.manage.vo.StaticFileVO;
 import com.gccloud.dataroom.core.permission.Permission;
-import com.gccloud.dataroom.core.permission.ScreenPermission;
+import com.gccloud.common.permission.ApiPermission;
 import com.gccloud.dataroom.core.utils.Webjars;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.BeanConvertUtils;
@@ -45,7 +45,7 @@ public class DataRoomPageController {
     @Resource
     private DataRoomConfig bigScreenConfig;
 
-    @ScreenPermission(permissions = {Permission.Screen.VIEW})
+    @ApiPermission(permissions = {Permission.DataRoom.VIEW})
     @GetMapping("/info/code/{code}")
     @ApiOperation(value = "大屏页/组件详情", position = 10, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixinsResp<DataRoomPageDTO> info(@PathVariable("code") String code) {
@@ -57,7 +57,7 @@ public class DataRoomPageController {
         return resp;
     }
 
-    @ScreenPermission(permissions = {Permission.Screen.VIEW})
+    @ApiPermission(permissions = {Permission.DataRoom.VIEW})
     @GetMapping("/page")
     @ApiOperation(value = "大屏/组件分页列表", position = 10, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixinsResp<PageVO<PageEntity>> page(DataRoomSearchDTO searchDTO) {
@@ -68,7 +68,7 @@ public class DataRoomPageController {
     }
 
 
-    @ScreenPermission(permissions = {Permission.Screen.EDIT})
+    @ApiPermission(permissions = {Permission.DataRoom.ADD})
     @PostMapping("/add")
     @ApiOperation(value = "从空白新增大屏/组件", position = 20, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> add(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
@@ -80,7 +80,7 @@ public class DataRoomPageController {
         return R.success(bigScreenPageDTO.getCode());
     }
 
-    @ScreenPermission(permissions = {Permission.Screen.EDIT})
+    @ApiPermission(permissions = {Permission.DataRoom.UPDATE})
     @PostMapping("/update")
     @ApiOperation(value = "修改大屏/组件", position = 30, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> update(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
@@ -92,7 +92,7 @@ public class DataRoomPageController {
         return R.success(bigScreenPageDTO.getCode());
     }
 
-    @ScreenPermission(permissions = {Permission.Screen.DELETE})
+    @ApiPermission(permissions = {Permission.DataRoom.DELETE})
     @PostMapping("/delete/{code}")
     @ApiOperation(value = "删除大屏/组件", position = 40, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Void> delete(@PathVariable String code) {
@@ -104,7 +104,7 @@ public class DataRoomPageController {
         return R.success();
     }
 
-    @ScreenPermission(permissions = {Permission.Screen.EDIT})
+    @ApiPermission(permissions = {Permission.DataRoom.ADD})
     @PostMapping("/copy/{code}")
     @ApiOperation(value = "复制大屏/组件", position = 50, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> copy(@PathVariable String code) {
@@ -116,7 +116,7 @@ public class DataRoomPageController {
         return R.success(newCode);
     }
 
-    @ScreenPermission(permissions = {Permission.Screen.EDIT})
+    @ApiPermission(permissions = {Permission.DataRoom.ADD})
     @PostMapping("/add/template")
     @ApiOperation(value = "从模板新增大屏页", position = 20, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> addByTemplate(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
@@ -127,7 +127,6 @@ public class DataRoomPageController {
         return R.success(code);
     }
 
-    @ScreenPermission(permissions = {Permission.Screen.TEMPLATE_VIEW})
     @PostMapping("/get/template")
     @ApiOperation(value = "根据模板获取配置", position = 20, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixinsResp<DataRoomPageDTO> getByTemplate(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
@@ -138,7 +137,7 @@ public class DataRoomPageController {
     }
 
 
-    @ScreenPermission
+    @ApiPermission
     @GetMapping("/bg/list")
     @ApiOperation(value = "背景图片列表", position = 60, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<List<StaticFileVO>> getBgList() {
@@ -154,7 +153,7 @@ public class DataRoomPageController {
         return R.success(bgList);
     }
 
-    @ScreenPermission
+    @ApiPermission
     @GetMapping("/map/list/{level}")
     @ApiOperation(value = "地图数据列表", position = 60, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<List<StaticFileVO>> getMapJsonList(@PathVariable("level") String level) {
