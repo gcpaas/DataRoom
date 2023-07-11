@@ -272,7 +272,7 @@ export default {
     // 判断页面权限
     permission () {
       get(`/bigScreen/permission/check/${this.$route.query.code}`).then(res => {
-        this.hasPermission = !res
+        this.hasPermission = res
         if (res) {
           this.init()
         }
