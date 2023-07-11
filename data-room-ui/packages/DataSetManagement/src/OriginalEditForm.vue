@@ -253,7 +253,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item
-                  label="关联标签"
+                  label="标签"
                   prop="labelIds"
                 >
                   <label-select
