@@ -38,13 +38,13 @@ function registerRouters (config, router) {
     {
       path: config?.routers?.pageManagementUrl || '/management',
       redirect: config?.routers?.pageListUrl || '/big-screen-list',
-      component: () => import('packages/Layout/BigScreenHomeLayout'),
+      component: () => import('data-room-ui/Layout/BigScreenHomeLayout'),
       children: [
         {
           path: config?.routers?.pageListUrl || '/big-screen-list',
           name: 'BigScreenList',
           component: () =>
-            require.ensure([], () => require('packages/BigScreenMag')),
+            require.ensure([], () => require('data-room-ui/BigScreenMag')),
           meta: {
             title: '大屏管理'
           }
@@ -53,35 +53,35 @@ function registerRouters (config, router) {
           path: config?.routers?.templateListUrl || '/big-screen-template',
           name: 'Template',
           component: () =>
-            require.ensure([], () => require('packages/BigScreenTempMag')),
+            require.ensure([], () => require('data-room-ui/BigScreenTempMag')),
           meta: {
             title: '模版管理'
           }
         },
         {
           path: config?.routers?.dataSourceUrl || '/big-screen-dataSource',
-          component: () => import('packages/DataSourceManagement'),
+          component: () => import('data-room-ui/DataSourceManagement'),
           meta: {
             title: '数据源管理'
           }
         },
         {
           path: config?.routers?.dataSetUrl || '/big-screen-dataSet',
-          component: () => import('packages/DataSetManagement'),
+          component: () => import('data-room-ui/DataSetManagement'),
           meta: {
             title: '数据集管理'
           }
         },
         {
           path: config?.routers?.SourceUrl || '/big-screen-source',
-          component: () => import('packages/SourceManagement'),
+          component: () => import('data-room-ui/SourceManagement'),
           meta: {
             title: '资源库'
           }
         },
         {
           path: config?.routers?.componentUrl || '/big-screen-components',
-          component: () => import('packages/BigScreenComponentMag'),
+          component: () => import('data-room-ui/BigScreenComponentMag'),
           meta: {
             title: '资源管理'
           }
@@ -92,24 +92,24 @@ function registerRouters (config, router) {
       path: config?.routers?.designUrl || '/big-screen/design',
       name: 'Design',
       component: () =>
-        require.ensure([], () => require('packages/BigScreenDesign'))
+        require.ensure([], () => require('data-room-ui/BigScreenDesign'))
     },
     {
       path: config?.routers?.previewUrl || '/big-screen/preview',
       name: 'Preview',
       component: () =>
-        require.ensure([], () => require('packages/BigScreenRun'))
+        require.ensure([], () => require('data-room-ui/BigScreenRun'))
     },
     {
       path: config?.routers?.bizComponentDesignUrl || '/big-screen-biz-component-design',
-      component: () => import('packages/BizComponent'),
+      component: () => import('data-room-ui/BizComponent'),
       meta: {
         title: '业务组件'
       }
     },
     {
       path: config?.routers?.bizComponentPreviewUrl || '/big-screen-biz-component-preview',
-      component: () => import('packages/BizComponent/Preview.vue'),
+      component: () => import('data-room-ui/BizComponent/Preview.vue'),
       meta: {
         title: '业务组件预览'
       }

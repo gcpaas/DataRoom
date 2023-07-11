@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import BorderSetting from 'packages/BigScreenDesign/BorderSetting.vue'
+import BorderSetting from 'data-room-ui/BigScreenDesign/BorderSetting.vue'
 export default {
   name: 'Border6Setting',
   components: {

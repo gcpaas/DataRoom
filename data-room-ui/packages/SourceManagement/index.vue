@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import SourceMag from 'packages/SourceMag'
+import SourceMag from 'data-room-ui/SourceMag'
 export default {
   name: '',
   props: {},

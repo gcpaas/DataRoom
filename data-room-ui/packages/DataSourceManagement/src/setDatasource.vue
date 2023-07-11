@@ -208,7 +208,7 @@
 </template>
 
 <script>
-import { checkRepeat, sourceLinkTest, add, update } from 'packages/js/utils/dataSourceService'
+import { checkRepeat, sourceLinkTest, add, update } from 'data-room-ui/js/utils/dataSourceService'
 export default {
   props: {
     appCode: {

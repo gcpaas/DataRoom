@@ -240,15 +240,15 @@
 <script>
 import TypeTree from './TypeTree.vue'
 import JsonEditForm from './JsonEditForm.vue'
-import table from 'packages/js/utils/table.js'
+import table from 'data-room-ui/js/utils/table.js'
 import ScriptEditForm from './ScriptEditForm.vue'
 import CustomEditForm from './CustomEditForm.vue'
-import { pageMixins } from 'packages/js/mixins/page'
+import { pageMixins } from 'data-room-ui/js/mixins/page'
 import OriginalEditForm from './OriginalEditForm.vue'
 import DatasetTypeDialog from './DatasetTypeDialog.vue'
 import StoredProcedureEditForm from './StoredProcedureEditForm.vue'
-import { datasetPage, datasetRemove } from 'packages/js/utils/datasetConfigService'
-import { getLabelList } from 'packages/js/utils/LabelConfigService'
+import { datasetPage, datasetRemove } from 'data-room-ui/js/utils/datasetConfigService'
+import { getLabelList } from 'data-room-ui/js/utils/LabelConfigService'
 export default {
   name: 'DataSetManagement',
   directives: {

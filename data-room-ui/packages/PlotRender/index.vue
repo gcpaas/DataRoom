@@ -13,8 +13,8 @@
 <script>
 import 'insert-css'
 import _ from 'lodash'
-import linkageMixins from 'packages/js/mixins/linkageMixins'
-import commonMixins from 'packages/js/mixins/commonMixins'
+import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
+import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import { mapState, mapMutations } from 'vuex'
 import * as g2Plot from '@antv/g2plot'
 import plotList, { getCustomPlots } from '../G2Plots/plotList'

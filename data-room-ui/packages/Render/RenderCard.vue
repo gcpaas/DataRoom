@@ -16,14 +16,14 @@
   </div>
 </template>
 <script>
-// import commonMixins from 'packages/js/mixins/commonMixins'
+// import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import { mapMutations } from 'vuex'
-import { resolveComponentType } from 'packages/js/utils'
-import pcComponent from 'packages/js/utils/componentImport'
-import { dataInit, destroyedEvent } from 'packages/js/utils/eventBus'
+import { resolveComponentType } from 'data-room-ui/js/utils'
+import pcComponent from 'data-room-ui/js/utils/componentImport'
+import { dataInit, destroyedEvent } from 'data-room-ui/js/utils/eventBus'
 import CustomComponent from '../PlotRender/index.vue'
 import Svgs from '../Svgs/index.vue'
-import RemoteComponent from 'packages/RemoteComponents/index.vue'
+import RemoteComponent from 'data-room-ui/RemoteComponents/index.vue'
 const components = {}
 for (const key in pcComponent) {
   if (Object.hasOwnProperty.call(pcComponent, key)) {

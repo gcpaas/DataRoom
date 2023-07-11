@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import Icon from 'packages/assets/images/dataSourceIcon/export'
-import IconSvg from 'packages/SvgIcon'
+import Icon from 'data-room-ui/assets/images/dataSourceIcon/export'
+import IconSvg from 'data-room-ui/SvgIcon'
 export default {
   name: 'DataSourceManagement',
   components: {

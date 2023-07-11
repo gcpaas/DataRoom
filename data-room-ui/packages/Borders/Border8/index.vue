@@ -15,8 +15,8 @@
 </template>
 <script>
 import Vue from 'vue'
-import { refreshComponentMixin } from 'packages/js/mixins/refreshComponent'
-import { dataVMixins } from 'packages/js/mixins/dataVMixins'
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
+import { dataVMixins } from 'data-room-ui/js/mixins/dataVMixins'
 import { borderBox8 } from '@jiaminghi/data-view'
 Vue.use(borderBox8)
 export default {

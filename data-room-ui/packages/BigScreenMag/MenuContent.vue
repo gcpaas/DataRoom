@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import BigScreenList from 'packages/BigScreenList'
+import BigScreenList from 'data-room-ui/BigScreenList'
 export default {
   name: '',
   props: {

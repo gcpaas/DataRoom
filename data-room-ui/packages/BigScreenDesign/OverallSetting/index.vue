@@ -183,11 +183,11 @@
 </template>
 
 <script>
-import SettingTitle from 'packages/SettingTitle/index.vue'
-import ColorPicker from 'packages/ColorPicker/index.vue'
+import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BgImg from './BgImgDialog.vue'
 import { mapState, mapMutations } from 'vuex'
-import { getThemeConfig } from 'packages/js/api/bigScreenApi'
+import { getThemeConfig } from 'data-room-ui/js/api/bigScreenApi'
 import _ from 'lodash'
 import { G2 } from '@antv/g2plot'
 export default {

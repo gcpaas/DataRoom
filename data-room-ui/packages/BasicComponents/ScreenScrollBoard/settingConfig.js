@@ -1,4 +1,4 @@
-import { commonConfig, displayOption } from 'packages/js/config'
+import { commonConfig, displayOption } from 'data-room-ui/js/config'
 
 export const settingConfig = {
   padding: [30, 30, 30, 60],
@@ -31,7 +31,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'screenScrollBoard',
   root: {
-    version : '0.0.1',
+    version: '0.0.1',
     contribution: false
   },
   customize: {

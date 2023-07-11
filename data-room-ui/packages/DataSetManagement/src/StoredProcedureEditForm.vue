@@ -570,7 +570,7 @@
 </template>
 
 <script>
-import LabelSelect from 'packages/DataSetLabelManagement/src/LabelSelect.vue'
+import LabelSelect from 'data-room-ui/DataSetLabelManagement/src/LabelSelect.vue'
 import {
   nameCheckRepeat,
   datasetAdd,
@@ -578,14 +578,14 @@ import {
   getCategoryTree,
   datasetExecuteTest,
   getDataset
-} from 'packages/js/utils/datasetConfigService'
-import { datasourceList } from 'packages/js/utils/dataSourceService'
+} from 'data-room-ui/js/utils/datasetConfigService'
+import { datasourceList } from 'data-room-ui/js/utils/dataSourceService'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/nord.css'
 import 'codemirror/mode/sql/sql.js'
 import _ from 'lodash'
-import { datasetMixins } from 'packages/js/mixins/datasetMixin'
+import { datasetMixins } from 'data-room-ui/js/mixins/datasetMixin'
 
 export default {
   name: 'StoredProcedureEditForm',

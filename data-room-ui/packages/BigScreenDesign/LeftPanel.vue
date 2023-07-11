@@ -141,13 +141,13 @@
 </template>
 <script>
 import _ from 'lodash'
-import basicComponents from 'packages/js/config/basicComponentsConfig'
+import basicComponents from 'data-room-ui/js/config/basicComponentsConfig'
 import g2PlotComponents, { getCustomPlots } from '../G2Plots/plotList'
-import borderComponents from 'packages/js/config/borderComponentsConfig'
-import decorationComponents from 'packages/js/config/decorationComponentsConfig'
+import borderComponents from 'data-room-ui/js/config/borderComponentsConfig'
+import decorationComponents from 'data-room-ui/js/config/decorationComponentsConfig'
 import LayerList from './LayerList/index.vue'
 import { mapMutations } from 'vuex'
-import IconSvg from 'packages/SvgIcon'
+import IconSvg from 'data-room-ui/SvgIcon'
 export default {
   name: 'PageLeftPanel',
   components: {

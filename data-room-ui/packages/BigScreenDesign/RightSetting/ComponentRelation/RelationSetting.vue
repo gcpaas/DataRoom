@@ -127,7 +127,7 @@
   </el-dialog>
 </template>
 <script>
-import { operatorList } from 'packages/js/dict/chartDict'
+import { operatorList } from 'data-room-ui/js/dict/chartDict'
 export default {
   name: 'RalationSetting',
   components: {

@@ -34,7 +34,7 @@ export default {
   },
   data () {
     return {
-      noImageUrl: require('packages/BasicComponents/Picture/images/noImage.png')
+      noImageUrl: require('data-room-ui/BasicComponents/Picture/images/noImage.png')
     }
   },
   computed: {},

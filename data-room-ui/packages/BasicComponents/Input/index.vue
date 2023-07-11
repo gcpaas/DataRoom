@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import commonMixins from 'packages/js/mixins/commonMixins'
-import linkageMixins from 'packages/js/mixins/linkageMixins'
+import commonMixins from 'data-room-ui/js/mixins/commonMixins'
+import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 export default {
   name: 'BasicComponentInput',
   mixins: [commonMixins, linkageMixins],

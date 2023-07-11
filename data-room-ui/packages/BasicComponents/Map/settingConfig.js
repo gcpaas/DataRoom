@@ -1,5 +1,5 @@
-import { commonConfig, displayOption } from 'packages/js/config'
-import Icon from 'packages/assets/images/bigScreenIcon/export'
+import { commonConfig, displayOption } from 'data-room-ui/js/config'
+import Icon from 'data-room-ui/assets/images/bigScreenIcon/export'
 import _ from 'lodash'
 
 export const settingConfig = {
@@ -37,7 +37,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'map',
   root: {
-    version : '0.0.1',
+    version: '0.0.1',
     contribution: false
   },
   customize: {

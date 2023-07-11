@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import ComponentList from 'packages/ComponentList'
+import ComponentList from 'data-room-ui/ComponentList'
 export default {
   name: '',
   props: {
