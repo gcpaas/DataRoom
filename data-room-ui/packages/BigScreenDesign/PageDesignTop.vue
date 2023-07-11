@@ -10,16 +10,24 @@
       <span class="logo-text name-span">{{ pageInfo.name }}</span>
     </div>
     <div class="head-btn-group">
-      <CusBtn
+      <el-tooltip
         v-for="(mode,index) in alignList"
         :key="mode.value"
-        class="align-btn"
-        @click="setAlign(mode.value)"
+        class="bs-el-tooltip"
+        effect="dark"
+        :content="mode.label"
+        placement="top"
       >
-        <icon-svg
-          :name="iconList[index]"
-        />
-      </CusBtn>
+        <CusBtn
+          class="align-btn"
+          @click="setAlign(mode.value)"
+        >
+          <icon-svg
+            :name="iconList[index]"
+          />
+        </CusBtn>
+      </el-tooltip>
+
       <CusBtn
         :loading="saveAndPreviewLoading"
         @click.native="designAssign()"

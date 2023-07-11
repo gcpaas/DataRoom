@@ -586,13 +586,13 @@
 // switch
 .bs-el-switch {
   .el-switch__core {
-   background: var(--bs-el-background-1);
+   background: var(--bs-el-background-1) !important;
  }
 }
 
 .bs-el-form {
   .el-form-item__label{
-    color: var(--bs-el-title);
+    color: var(--bs-el-title) !important;
   }
 }
 
