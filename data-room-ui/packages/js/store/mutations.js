@@ -250,6 +250,12 @@ export default {
         state.pageInfo.chartList = _.cloneDeep(currentStore?.chartList || [])
       }
     }
+    state.pageInfo.chartList = state.pageInfo.chartList.map(chart => {
+      return {
+        ...chart,
+        key: chart.code + new Date().getTime()
+      }
+    })
   },
   clearTimeline (state) {
     // 最后一个状态
