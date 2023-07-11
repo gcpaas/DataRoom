@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "packages/assets/style/bsTheme";
+  @import "../assets/style/bsTheme.scss";
   .not-permission-wrap {
     width: 100vw;
     height: 100vh;
