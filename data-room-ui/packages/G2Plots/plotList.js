@@ -31,7 +31,7 @@ function getPlotList (files) {
       name: config.name,
       title: config.title,
       icon: null,
-      img: require(`data-room-ui/G2Plots/images/componentLogo/${config.title}.png`),
+      img: require(`../G2Plots/images/componentLogo/${config.title}.png`),
       className:
         'com.gccloud.dataroom.core.module.chart.components.CustomComponentChart',
       w: config?.option?.width || 450,
