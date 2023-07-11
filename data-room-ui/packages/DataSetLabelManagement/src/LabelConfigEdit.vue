@@ -144,6 +144,11 @@ export default {
         this.dataForm.labelName = row.labelName
         this.dataForm.labelType = row.labelType
         this.dataForm.labelDesc = row.labelDesc
+      } else {
+        this.dataForm.id = ''
+        this.dataForm.labelName = ''
+        this.dataForm.labelType = ''
+        this.dataForm.labelDesc = ''
       }
     },
     /**
