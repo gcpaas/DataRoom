@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!pageLoading"
+    v-if="(!pageLoading) && hasPermission"
     class="bs-page-design-wrap"
   >
     <PageTopSetting
@@ -103,6 +103,7 @@
       />
     </div>
   </div>
+  <NotPermission v-else-if="!hasPermission" />
 </template>
 <script>
 import SourceDialog from './SourceDialog/index.vue'
@@ -128,6 +129,7 @@ import { randomString } from '../js/utils'
 import { isFirefox } from 'packages/js/utils/userAgent'
 import { handleResData } from 'packages/js/store/actions.js'
 import { EventBus } from 'packages/js/utils/eventBus'
+import NotPermission from 'packages/NotPermission'
 export default {
   name: 'BigScreenDesign',
   components: {
@@ -139,7 +141,8 @@ export default {
     SettingPanel,
     SourceDialog,
     ComponentDialog,
-    iframeDialog
+    iframeDialog,
+    NotPermission
   },
   mixins: [multipleSelectMixin],
   props: {
@@ -158,6 +161,7 @@ export default {
   },
   data () {
     return {
+      hasPermission: true,
       rightVisiable: false,
       pageInfoVisiable: false,
       ruleStartX: 100,
@@ -215,26 +219,26 @@ export default {
       }
     }
   },
-  beforeRouteEnter (to, from, next) {
-    // 判断进入设计页面前是否有访问权限
-    const code = to.query.code
-    get(`/bigScreen/permission/check/${code}`).then((res) => {
-      if (res) {
-        next((vm) => {
-          // 重置大屏的vuex store
-          vm.$store.commit('bigScreen/resetStoreData')
-        })
-      } else {
-        next('/notPermission')
-      }
-    })
-  },
+  // beforeRouteEnter (to, from, next) {
+  //   // 判断进入设计页面前是否有访问权限
+  //   const code = to.query.code
+  //   get(`/bigScreen/permission/check/${code}`).then((res) => {
+  //     if (res) {
+  //       next((vm) => {
+  //         // 重置大屏的vuex store
+  //         vm.$store.commit('bigScreen/resetStoreData')
+  //       })
+  //     } else {
+  //       next('/notPermission')
+  //     }
+  //   })
+  // },
   created () {
-    this.init()
+    this.permission()
     /**
-     * 以下是为了解决在火狐浏览器上推拽时弹出tab页到搜索问题
-     * @param event
-     */
+       * 以下是为了解决在火狐浏览器上推拽时弹出tab页到搜索问题
+       * @param event
+       */
     if (isFirefox()) {
       document.body.ondrop = function (event) {
         event.preventDefault()
@@ -265,6 +269,15 @@ export default {
       'saveTimeLine',
       'changeIframeDialog'
     ]),
+    // 判断页面权限
+    permission () {
+      get(`/bigScreen/permission/check/${this.$route.query.code}`).then(res => {
+        this.hasPermission = !res
+        if (res) {
+          this.init()
+        }
+      })
+    },
     // 添加资源弹窗初始化
     initDialog () {
       this.$refs.SourceDialog.init()
@@ -313,7 +326,7 @@ export default {
           name: val.originalName,
           icon: null,
           className:
-            'com.gccloud.dataroom.core.module.chart.components.ScreenPictureChart',
+              'com.gccloud.dataroom.core.module.chart.components.ScreenPictureChart',
           w: 300,
           h: 300,
           x: 0,
@@ -365,8 +378,8 @@ export default {
       this.pageInfoVisiable = false
     },
     /**
-     * @description: 清空页面
-     */
+       * @description: 清空页面
+       */
     empty () {
       this.$confirm('确定清空页面吗？', '提示', {
         confirmButtonText: '确定',
@@ -447,50 +460,50 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.bs-page-design-wrap {
-  overflow: hidden;
-
-  .drag-wrap {
-    display: flex;
-    background-color: #1d1e20;
-    height: calc(100vh - 40px);
+  .bs-page-design-wrap {
     overflow: hidden;
 
-    .grid-wrap-box {
-      flex: 1;
+    .drag-wrap {
+      display: flex;
+      background-color: #1d1e20;
+      height: calc(100vh - 40px);
       overflow: hidden;
-      position: relative;
-      margin: 8px 0 0 8px;
 
-      .footer-tools-bar {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 30px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        z-index: 1000;
-        background-color: var(--bs-background-2);
+      .grid-wrap-box {
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+        margin: 8px 0 0 8px;
 
-        .bs-select-wrap {
-          margin-right: 16px;
-        }
+        .footer-tools-bar {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 30px;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          z-index: 1000;
+          background-color: var(--bs-background-2);
 
-        .select-zoom-text {
-          color: var(--bs-el-title);
-          margin-right: 16px;
-        }
+          .bs-select-wrap {
+            margin-right: 16px;
+          }
 
-        ::v-deep .el-select {
-          width: 150px !important;
+          .select-zoom-text {
+            color: var(--bs-el-title);
+            margin-right: 16px;
+          }
+
+          /deep/ .el-select {
+            width: 150px !important;
+          }
         }
       }
-    }
 
-    ::v-deep .el-loading-mask {
-      background-color: transparent !important;
+      /deep/ .el-loading-mask {
+        background-color: transparent !important;
+      }
     }
   }
-}
 </style>
