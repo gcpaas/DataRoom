@@ -481,16 +481,16 @@
 </template>
 
 <script>
-import LabelSelect from 'packages/DataSetLabelManagement/src/LabelSelect.vue'
+import LabelSelect from 'data-room-ui/DataSetLabelManagement/src/LabelSelect.vue'
 import {
   getCategoryTree,
   nameCheckRepeat,
   datasetExecuteTest,
   getDataset, datasetUpdate, datasetAdd
-} from 'packages/js/utils/datasetConfigService'
-import { datasourceList, getSourceTable, getSourceView, getTableFieldList } from 'packages/js/utils/dataSourceService'
+} from 'data-room-ui/js/utils/datasetConfigService'
+import { datasourceList, getSourceTable, getSourceView, getTableFieldList } from 'data-room-ui/js/utils/dataSourceService'
 import _ from 'lodash'
-import { datasetMixins } from 'packages/js/mixins/datasetMixin'
+import { datasetMixins } from 'data-room-ui/js/mixins/datasetMixin'
 export default {
   name: 'OriginalEditForm',
   components: {

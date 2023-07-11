@@ -13,8 +13,8 @@
   </div>
 </template>
 <script>
-import { refreshComponentMixin } from 'packages/js/mixins/refreshComponent'
-import { dataVMixins } from 'packages/js/mixins/dataVMixins'
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
+import { dataVMixins } from 'data-room-ui/js/mixins/dataVMixins'
 import DvBorderBox4 from '@jiaminghi/data-view/lib/components/borderBox4/src/main.vue'
 import '@jiaminghi/data-view/lib/components/borderBox4/src/main.css'
 export default {

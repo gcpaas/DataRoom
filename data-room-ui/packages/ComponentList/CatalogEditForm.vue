@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import { get, post } from 'packages/js/utils/http'
+import { get, post } from 'data-room-ui/js/utils/http'
 export default {
   name: 'CatalogEditForm',
   components: {

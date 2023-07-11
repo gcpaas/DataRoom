@@ -67,7 +67,7 @@ module.exports = {
         '@': resolve('example'),
         vue$: 'vue/dist/vue.common',
         // 大屏工程路径别名
-        packages: resolve('packages'),
+        'data-room-ui': resolve('packages'),
         '@gcpaas/data-room-ui': resolve('packages/index.js')
       },
       fallback: {

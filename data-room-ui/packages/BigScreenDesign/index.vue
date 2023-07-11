@@ -108,28 +108,28 @@
 <script>
 import SourceDialog from './SourceDialog/index.vue'
 import ComponentDialog from './ComponentDialog/index.vue'
-import iframeDialog from 'packages/BasicComponents/LinkChart/iframeDialog'
+import iframeDialog from 'data-room-ui/BasicComponents/LinkChart/iframeDialog'
 import {
   dataConfig,
   settingConfig
-} from 'packages/BasicComponents/Picture/settingConfig'
+} from 'data-room-ui/BasicComponents/Picture/settingConfig'
 import LeftPanel from './LeftPanel.vue'
 import SettingPanel from './SettingPanel.vue'
 import PageTopSetting from './PageDesignTop.vue'
 import Render from '../Render'
 import { mapActions, mapMutations, mapState } from 'vuex'
-import SketchDesignRuler from 'packages/BigScreenDesign/RulerTool/SketchRuler.vue'
+import SketchDesignRuler from 'data-room-ui/BigScreenDesign/RulerTool/SketchRuler.vue'
 import { G2 } from '@antv/g2plot'
-import multipleSelectMixin from 'packages/js/mixins/multipleSelectMixin'
-import { getThemeConfig, getScreenInfo } from 'packages/js/api/bigScreenApi'
+import multipleSelectMixin from 'data-room-ui/js/mixins/multipleSelectMixin'
+import { getThemeConfig, getScreenInfo } from 'data-room-ui/js/api/bigScreenApi'
 import MouseSelect from './MouseSelect/index.vue'
 import _ from 'lodash'
-import { get } from 'packages/js/utils/http'
+import { get } from 'data-room-ui/js/utils/http'
 import { randomString } from '../js/utils'
-import { isFirefox } from 'packages/js/utils/userAgent'
-import { handleResData } from 'packages/js/store/actions.js'
-import { EventBus } from 'packages/js/utils/eventBus'
-import NotPermission from 'packages/NotPermission'
+import { isFirefox } from 'data-room-ui/js/utils/userAgent'
+import { handleResData } from 'data-room-ui/js/store/actions.js'
+import { EventBus } from 'data-room-ui/js/utils/eventBus'
+import NotPermission from 'data-room-ui/NotPermission'
 export default {
   name: 'BigScreenDesign',
   components: {

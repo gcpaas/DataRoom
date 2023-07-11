@@ -29,7 +29,7 @@
 
 <script>
 import moment from 'moment'
-import paramsMixins from 'packages/js/mixins/paramsMixins'
+import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 export default {
   name: 'CurrentTime',
   mixins: [paramsMixins],

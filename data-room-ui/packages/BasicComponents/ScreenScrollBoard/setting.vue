@@ -109,9 +109,9 @@
   </div>
 </template>
 <script>
-import SettingTitle from 'packages/SettingTitle/index.vue'
-import ColorPicker from 'packages/ColorPicker/index.vue'
-import PosWhSetting from 'packages/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
+import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 export default {
   name: 'BarSetting',
   components: {

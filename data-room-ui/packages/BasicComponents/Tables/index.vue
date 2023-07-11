@@ -29,9 +29,9 @@
   </div>
 </template>
 <script>
-import commonMixins from 'packages/js/mixins/commonMixins'
-import paramsMixins from 'packages/js/mixins/paramsMixins'
-import linkageMixins from 'packages/js/mixins/linkageMixins'
+import commonMixins from 'data-room-ui/js/mixins/commonMixins'
+import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
+import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import _ from 'lodash'
 export default {
   name: 'TableChart',

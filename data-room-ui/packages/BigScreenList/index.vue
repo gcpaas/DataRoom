@@ -161,8 +161,8 @@
   </div>
 </template>
 <script>
-import { get, post } from 'packages/js/utils/http'
-import { pageMixins } from 'packages/js/mixins/page'
+import { get, post } from 'data-room-ui/js/utils/http'
+import { pageMixins } from 'data-room-ui/js/mixins/page'
 import EditForm from './EditForm.vue'
 export default {
   name: 'BigScreenList',

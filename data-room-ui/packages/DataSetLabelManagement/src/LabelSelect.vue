@@ -225,8 +225,8 @@
 <script>
 import LabelEdit from './LabelConfigEdit'
 import LabelTypeEdit from './LabelTypeEdit.vue'
-import { pageMixins } from 'packages/js/mixins/page'
-import {getLabelType, labelList, getLabelListByDatasetId, removeLabel, removeLabelByType} from 'packages/js/utils/LabelConfigService'
+import { pageMixins } from 'data-room-ui/js/mixins/page'
+import {getLabelType, labelList, getLabelListByDatasetId, removeLabel, removeLabelByType} from 'data-room-ui/js/utils/LabelConfigService'
 
 export default {
   name: 'LabelSelect',

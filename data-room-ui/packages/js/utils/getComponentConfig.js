@@ -1,4 +1,4 @@
-import Icon from 'packages/assets/images/bigScreenIcon/export'
+import Icon from 'data-room-ui/assets/images/bigScreenIcon/export'
 // import _ from 'lodash'
 export default function getComponentConfig (type) {
   // const _type = _.upperFirst(type)
@@ -155,7 +155,7 @@ export default function getComponentConfig (type) {
         name: '翻牌器',
         title: '翻牌器',
         icon: null,
-        img: require('packages/BasicComponents/DigitalFlop/images/fanpaiqi.png'),
+        img: require('data-room-ui/BasicComponents/DigitalFlop/images/fanpaiqi.png'),
         className:
           'com.gccloud.dataroom.core.module.chart.components.ScreenDigitalFlopChart',
         w: 800,

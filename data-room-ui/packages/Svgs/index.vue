@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import IconSvg from 'packages/SvgIcon'
+import IconSvg from 'data-room-ui/SvgIcon'
 export default {
   name: 'Svgs',
   components: {

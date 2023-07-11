@@ -29,10 +29,10 @@
 </template>
 <script>
 import '@jiaminghi/data-view/lib/components/digitalFlop/src/main.css'
-import { refreshComponentMixin } from 'packages/js/mixins/refreshComponent'
-import commonMixins from 'packages/js/mixins/commonMixins'
-import paramsMixins from 'packages/js/mixins/paramsMixins'
-import linkageMixins from 'packages/js/mixins/linkageMixins'
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
+import commonMixins from 'data-room-ui/js/mixins/commonMixins'
+import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
+import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 function formatter (number, format) {
   const numbers = number.toString().split('').reverse()
   const segs = []

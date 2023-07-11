@@ -45,11 +45,11 @@
   </div>
 </template>
 <script>
-import { resolveComponentType } from 'packages/js/utils'
+import { resolveComponentType } from 'data-room-ui/js/utils'
 import DataSetting from './DataSetting.vue'
-import rightSetting from 'packages/js/utils/rightSettingImport'
+import rightSetting from 'data-room-ui/js/utils/rightSettingImport'
 import CustomComponent from './G2CustomSetting.vue'
-import Svgs from 'packages/Svgs/setting.vue'
+import Svgs from 'data-room-ui/Svgs/setting.vue'
 import { mapState, mapMutations } from 'vuex'
 import _ from 'lodash'
 // 整体动态导入右侧设置组件，不用手动注册

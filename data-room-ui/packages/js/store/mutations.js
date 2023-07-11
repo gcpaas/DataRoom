@@ -10,8 +10,8 @@ import Vue from 'vue'
 import _ from 'lodash'
 import { defaultData } from './state'
 import moment from 'moment'
-import { randomString } from 'packages/js/utils'
-import { EventBus } from 'packages/js/utils/eventBus'
+import { randomString } from 'data-room-ui/js/utils'
+import { EventBus } from 'data-room-ui/js/utils/eventBus'
 export default {
   // 改变页面基本信息，后端请求的页面信息存储到此处
   changePageInfo (state, pageInfo) {
@@ -250,6 +250,12 @@ export default {
         state.pageInfo.chartList = _.cloneDeep(currentStore?.chartList || [])
       }
     }
+    state.pageInfo.chartList = state.pageInfo.chartList.map(chart => {
+      return {
+        ...chart,
+        key: chart.code + new Date().getTime()
+      }
+    })
   },
   clearTimeline (state) {
     // 最后一个状态

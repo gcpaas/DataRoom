@@ -21,7 +21,7 @@
 </template>
 <script>
 import DvDecoration9 from '@jiaminghi/data-view/lib/components/decoration9/src/main.vue'
-import { refreshComponentMixin } from 'packages/js/mixins/refreshComponent'
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
 export default {
   name: 'Decoration9',
   components: {

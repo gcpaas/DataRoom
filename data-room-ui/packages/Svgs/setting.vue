@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import PosWhSetting from 'packages/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 export default {
   name: 'CurrentTimeSetting',
   components: {

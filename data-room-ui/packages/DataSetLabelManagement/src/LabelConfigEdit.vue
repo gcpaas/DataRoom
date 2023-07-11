@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { addOrUpdateLabel, checkRepeatLabel } from 'packages/js/utils/LabelConfigService'
+import { addOrUpdateLabel, checkRepeatLabel } from 'data-room-ui/js/utils/LabelConfigService'
 
 export default {
   name: 'LabelEdit',

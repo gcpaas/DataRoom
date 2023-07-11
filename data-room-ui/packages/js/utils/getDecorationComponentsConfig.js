@@ -9,7 +9,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰一',
         title: '装饰一',
-        img: require('packages/Decorations/images/01.png'),
+        img: require('data-room-ui/Decorations/images/01.png'),
         component: null,
         className,
         w: 350,
@@ -22,7 +22,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰三',
         title: '装饰三',
-        img: require('packages/Decorations/images/03.png'),
+        img: require('data-room-ui/Decorations/images/03.png'),
         component: null,
         className,
         w: 350,
@@ -35,7 +35,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰三(旋转)',
         title: '装饰三(旋转)',
-        img: require('packages/Decorations/images/03_reverse.png'),
+        img: require('data-room-ui/Decorations/images/03_reverse.png'),
         component: null,
         className,
         w: 20,
@@ -48,7 +48,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰二',
         title: '装饰二',
-        img: require('packages/Decorations/images/02.png'),
+        img: require('data-room-ui/Decorations/images/02.png'),
         component: null,
         className,
         w: 350,
@@ -61,7 +61,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰四',
         title: '装饰四',
-        img: require('packages/Decorations/images/04.png'),
+        img: require('data-room-ui/Decorations/images/04.png'),
         component: null,
         className,
         w: 30,
@@ -74,7 +74,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰四(旋转)',
         title: '装饰四(旋转)',
-        img: require('packages/Decorations/images/04_reverse.png'),
+        img: require('data-room-ui/Decorations/images/04_reverse.png'),
         component: null,
         className,
         w: 320,
@@ -87,7 +87,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰五',
         title: '装饰五',
-        img: require('packages/Decorations/images/05.png'),
+        img: require('data-room-ui/Decorations/images/05.png'),
         component: null,
         className,
         w: 350,
@@ -100,7 +100,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰六',
         title: '装饰六',
-        img: require('packages/Decorations/images/06.png'),
+        img: require('data-room-ui/Decorations/images/06.png'),
         component: null,
         className,
         w: 350,
@@ -113,7 +113,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰七',
         title: '装饰七',
-        img: require('packages/Decorations/images/07.png'),
+        img: require('data-room-ui/Decorations/images/07.png'),
         component: null,
         className,
         w: 350,
@@ -126,7 +126,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰七(旋转)',
         title: '装饰七(旋转)',
-        img: require('packages/Decorations/images/07_reverse.png'),
+        img: require('data-room-ui/Decorations/images/07_reverse.png'),
         component: null,
         className,
         w: 350,
@@ -139,7 +139,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰八',
         title: '装饰八',
-        img: require('packages/Decorations/images/08.png'),
+        img: require('data-room-ui/Decorations/images/08.png'),
         component: null,
         className,
         w: 150,
@@ -152,7 +152,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰九',
         title: '装饰九',
-        img: require('packages/Decorations/images/09.png'),
+        img: require('data-room-ui/Decorations/images/09.png'),
         component: null,
         className,
         w: 350,
@@ -165,7 +165,7 @@ export default function getComponentConfig (type, classNameType) {
       return {
         name: '装饰十',
         title: '装饰十',
-        img: require('packages/Decorations/images/10.png'),
+        img: require('data-room-ui/Decorations/images/10.png'),
         component: null,
         className,
         w: 350,

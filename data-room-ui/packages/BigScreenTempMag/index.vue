@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import BigScreenMag from 'packages/BigScreenMag'
+import BigScreenMag from 'data-room-ui/BigScreenMag'
 export default {
   name: '',
   props: {},

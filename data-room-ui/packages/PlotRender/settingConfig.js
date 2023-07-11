@@ -1,4 +1,4 @@
-import { commonConfig, displayOption } from 'packages/js/config'
+import { commonConfig, displayOption } from 'data-room-ui/js/config'
 export const settingConfig = {
   displayOption: { ...displayOption }
 }
