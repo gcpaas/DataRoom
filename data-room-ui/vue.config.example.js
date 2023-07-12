@@ -112,43 +112,43 @@ module.exports = {
           name: 'element-ui',
           test: /[\\/]element-ui[\\/]/,
           chunks: 'all',
-          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
         remotevue2loader: {
           name: 'remote-vue2-loader',
           test: /[\\/]remote-vue2-loader[\\/]/,
           chunks: 'all',
-          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
         echarts: {
           name: 'echarts',
           test: /[\\/]echarts[\\/]/,
           chunks: 'all',
-          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
         babel: {
           name: '@babel',
           test: /[\\/]@babel[\\/]/,
           chunks: 'all',
-          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
         vueJsonEditor: {
           name: 'vue-json-editor',
           test: /[\\/]vue-json-editor[\\/]/,
           chunks: 'all',
-          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
         moment: {
           name: 'moment',
           test: /[\\/]moment[\\/]/,
           chunks: 'all',
-          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
         antv: {
           name: '@antv',
           test: /[\\/]@antv[\\/]/,
           chunks: 'all',
-          priority: 10, // 优化将优先考虑具有更高 priority（优先级）的缓存组
+          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
         vendors: {
           name: 'chunk-vendors',
