@@ -239,6 +239,7 @@
 
 <script>
 import TypeTree from './TypeTree.vue'
+import JsEditForm from './JsEditForm.vue'
 import JsonEditForm from './JsonEditForm.vue'
 import table from 'data-room-ui/js/utils/table.js'
 import ScriptEditForm from './ScriptEditForm.vue'
@@ -261,7 +262,8 @@ export default {
     CustomEditForm,
     JsonEditForm,
     StoredProcedureEditForm,
-    ScriptEditForm
+    ScriptEditForm,
+    JsEditForm
   },
   mixins: [pageMixins],
   props: {
@@ -456,6 +458,8 @@ export default {
     },
     // 新增数据集-类型
     openAddForm (type, componentName) {
+      console.log('type', type)
+      console.log('componentName', componentName)
       this.datasetType = type
       this.componentData = this.getComponents(componentName)
       this.typeId = this.queryForm.typeId
@@ -465,16 +469,17 @@ export default {
       return this.getComponents(this.datasetTypeList.find(type => type.datasetType === datasetType)?.componentName)?.config?.showOperate ?? true
     },
     getComponents (componentName) {
+      const components = Object.values(this.$options.components)
+      let remoteComponentData = null
       if (window.BS_CONFIG?.customDatasetComponents && window.BS_CONFIG?.customDatasetComponents.length > 0) {
-        const components = Object.values(this.$options.components)
-        let remoteComponentData = null
         // 获取远程组件
         remoteComponentData = window.BS_CONFIG?.customDatasetComponents.find(item => item.config.componentName === componentName)
-        return {
-          component: components.find(component => component.name === componentName) || remoteComponentData?.vueFile,
-          config: remoteComponentData?.config || null,
-          key: new Date().getTime()
-        }
+      }
+
+      return {
+        component: components.find(component => component.name === componentName) || remoteComponentData?.vueFile,
+        config: remoteComponentData?.config || null,
+        key: new Date().getTime()
       }
     },
     // 初始化
@@ -496,7 +501,8 @@ export default {
         { name: '自助数据集', datasetType: 'custom', componentName: 'CustomEditForm' },
         { name: '存储过程数据集', datasetType: 'storedProcedure', componentName: 'StoredProcedureEditForm' },
         { name: 'JSON数据集', datasetType: 'json', componentName: 'JsonEditForm' },
-        { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' }
+        { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' },
+        { name: 'JS数据集', datasetType: 'js', componentName: 'JsEditForm' }
       ]
       if (this.dataSetList.length !== 0) {
         this.datasetTypeList = [{ name: '全部', datasetType: '' }, ...list.filter(item => this.dataSetList.findIndex(x => x === item.datasetType) !== -1)]

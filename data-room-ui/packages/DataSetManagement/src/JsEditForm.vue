@@ -352,16 +352,16 @@
 </template>
 
 <script>
-import ParamsSettingDialog from './ParamsSettingDialog.vue'
-import OutputFieldDialog from './OutputFieldDialog.vue'
-import FieldFillDialog from './FieldFillDialog.vue'
+import ParamsSettingDialog from './JsComponents/ParamsSettingDialog.vue'
+import OutputFieldDialog from './JsComponents/OutputFieldDialog.vue'
+import FieldFillDialog from './JsComponents/FieldFillDialog.vue'
 import { nameCheckRepeat, datasetAdd, datasetUpdate, getDataset, getCategoryTree } from 'data-room-ui/js/utils/datasetConfigService'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/nord.css'
 export default {
-  name: 'JsDataSet',
+  name: 'JsEditForm',
   components: {
     codemirror,
     FieldFillDialog,
@@ -742,7 +742,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../packages/assets/style/bsTheme.scss';
+@import '../../assets/style/bsTheme.scss';
 
 .data-set-scrollbar {
   height: 100%;
