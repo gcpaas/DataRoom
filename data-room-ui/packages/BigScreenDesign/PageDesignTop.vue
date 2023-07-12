@@ -13,7 +13,7 @@
       <el-tooltip
         v-for="(mode,index) in alignList"
         :key="mode.value"
-        class="bs-el-tooltip"
+        popper-class="bs-el-tooltip-dark"
         effect="dark"
         :content="mode.label"
         placement="top"
