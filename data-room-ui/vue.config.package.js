@@ -50,7 +50,7 @@ module.exports = {
     resolve: {
       alias: {
         '@': resolve('example'),
-        packages: resolve('packages')
+        'data-room-ui': resolve('packages')
       },
       fallback: {
         path: false,
