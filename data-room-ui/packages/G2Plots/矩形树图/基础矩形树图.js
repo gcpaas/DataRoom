@@ -84,6 +84,8 @@ const setting = [
     field: 'legendEnable', // 字段
     optionField: 'legendEnable', // 对应options中的字段
     value: false,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'legend'
   },

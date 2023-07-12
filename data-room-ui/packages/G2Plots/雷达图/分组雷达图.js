@@ -69,6 +69,8 @@ const setting = [
     field: 'smooth', // 字段
     optionField: 'smooth', // 对应options中的字段
     value: false,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -170,6 +172,8 @@ const setting = [
     field: 'legendEnable', // 字段
     optionField: 'legendEnable', // 对应options中的字段
     value: false,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'legend'
   },
