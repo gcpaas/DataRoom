@@ -212,6 +212,9 @@ export default {
       fitZoom: (state) => state.bigScreen.fitZoom,
       iframeDialog: (state) => state.bigScreen.iframeDialog
     }),
+    pageCode () {
+      return this.code || this.$route.query.code
+    },
     offset () {
       return {
         x: 220 + 50 - this.ruleStartX,
@@ -271,7 +274,7 @@ export default {
     ]),
     // 判断页面权限
     permission () {
-      get(`/bigScreen/permission/check/${this.$route.query.code}`).then(res => {
+      get(`/bigScreen/permission/check/${this.pageCode}`).then(res => {
         this.hasPermission = res
         if (res) {
           this.init()
@@ -349,7 +352,7 @@ export default {
     },
     init () {
       this.changePageLoading(true)
-      this.initLayout(this.$route.query.code || this.code)
+      this.initLayout(this.pageCode)
         .then(() => {
           const themeName = this.pageConfig.customTheme
           if (!['dark', 'light', 'auto'].includes(themeName)) {
