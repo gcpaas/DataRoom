@@ -48,12 +48,7 @@ export default {
       dialogVisible: false
     }
   },
-  created () {
-    // eslint-disable-next-line eqeqeq
-    // if (this.datasetTypeList.length == 1) this.spanNum = 24
-    // if ([2, 4].includes(this.datasetTypeList.length)) this.spanNum = 12
-    // if ([3, 5, 6].includes(this.datasetTypeList.length)) this.spanNum = 8
-  },
+  created () { },
   methods: {
     // 选择新增类型
     openAddForm (type, componentName) {

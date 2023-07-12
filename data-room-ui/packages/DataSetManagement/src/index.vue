@@ -458,8 +458,6 @@ export default {
     },
     // 新增数据集-类型
     openAddForm (type, componentName) {
-      console.log('type', type)
-      console.log('componentName', componentName)
       this.datasetType = type
       this.componentData = this.getComponents(componentName)
       this.typeId = this.queryForm.typeId
@@ -475,7 +473,6 @@ export default {
         // 获取远程组件
         remoteComponentData = window.BS_CONFIG?.customDatasetComponents.find(item => item.config.componentName === componentName)
       }
-
       return {
         component: components.find(component => component.name === componentName) || remoteComponentData?.vueFile,
         config: remoteComponentData?.config || null,

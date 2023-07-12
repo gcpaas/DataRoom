@@ -15,6 +15,7 @@
     >
       <el-form
         ref="dataForm"
+        class="bs-el-form"
         :model="dataForm"
         :rules="dataForm.id ? updateRules : rules"
         size="small"
