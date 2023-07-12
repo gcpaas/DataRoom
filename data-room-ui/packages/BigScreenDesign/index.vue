@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="(!pageLoading) && hasPermission"
+    v-if="hasPermission"
     class="bs-page-design-wrap"
   >
     <PageTopSetting
@@ -237,6 +237,7 @@ export default {
   //   })
   // },
   created () {
+    this.changePageLoading(true)
     this.permission()
     /**
        * 以下是为了解决在火狐浏览器上推拽时弹出tab页到搜索问题
