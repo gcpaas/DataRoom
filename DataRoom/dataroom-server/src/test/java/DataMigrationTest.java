@@ -308,6 +308,8 @@ public class DataMigrationTest {
                 jsonConfig.put("className", "com.gccloud.dataset.entity.config.CustomDataSetConfig");
             }
             String config = JSON.toJSONString(jsonConfig);
+            // 将 \\' 替换成 \'
+            config = config.replaceAll("\\\\\\\\'", "\\\\'");
             String insertSql = getInsertSql(dataset, config);
             insertSqlList.add(insertSql);
         }

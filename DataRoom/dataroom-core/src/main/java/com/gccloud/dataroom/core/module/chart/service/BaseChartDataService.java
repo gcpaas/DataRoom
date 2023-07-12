@@ -55,6 +55,9 @@ public class BaseChartDataService {
             return null;
         }
         DataSetDataSource dataSetDataSource = (DataSetDataSource) dataSource;
+        if (StringUtils.isBlank(dataSetDataSource.getBusinessKey())) {
+            return null;
+        }
         IBaseDataSetService dataSetService = dataSetServiceFactory.buildById(dataSetDataSource.getBusinessKey());
         DatasetEntity datasetEntity = dataSetService.getById(dataSetDataSource.getBusinessKey());
         if (datasetEntity == null) {
