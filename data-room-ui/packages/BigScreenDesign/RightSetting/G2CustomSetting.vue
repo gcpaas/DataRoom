@@ -46,7 +46,7 @@
                   :placeholder="`请输入${setting.label}`"
                   clearable
                 />
-                <el-drag-select
+                <el-select
                   v-else-if="setting.type === 'select'"
                   v-model="setting.value"
                   popper-class="bs-el-select"
@@ -61,7 +61,7 @@
                     :label="opt.label"
                     :value="opt.value"
                   />
-                </el-drag-select>
+                </el-select>
                 <template v-else-if="setting.type === 'colorSelect'">
                   <color-select
                     v-model="colorScheme"
@@ -165,7 +165,6 @@
   </div>
 </template>
 <script>
-import ElDragSelect from 'data-room-ui/BigScreenDesign/RightSetting/ElDragSelect.vue'
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
 import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
@@ -173,12 +172,10 @@ import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
 import PaddingSetting from 'data-room-ui/BigScreenDesign/RightSetting/PaddingSetting/index.vue'
 import GradualSetting from 'data-room-ui/BigScreenDesign/RightSetting/GradualSetting/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
-import _ from 'lodash'
 export default {
   name: 'CustomComponentSetting',
   components: {
     ColorSelect,
-    ElDragSelect,
     // ColorPicker,
     PaddingSetting,
     GradualSetting,
