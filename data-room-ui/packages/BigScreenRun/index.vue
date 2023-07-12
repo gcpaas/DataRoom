@@ -1,35 +1,37 @@
 <template>
-  <div
-    v-if="!pageLoading"
-    class="bs-preview-wrap"
-    :style="previewWrapStyle"
-  >
+  <div v-if="hasPermission">
     <div
-      v-if="hasPermission"
-      class="bs-render-wrap render-theme-wrap"
-      :style="renderStyle"
+      v-loading="pageLoading"
+      element-loading-background="#151A26"
+      class="bs-preview-wrap"
+      :style="previewWrapStyle"
     >
       <div
-        v-for="chart in chartList"
-        :key="chart.code"
-        :style="{
-          position: 'absolute',
-          width: chart.w + 'px',
-          height: chart.h + 'px',
-          left: chart.x + 'px',
-          top: chart.y + 'px',
-          zIndex: chart.z || 0
-        }"
+        class="bs-render-wrap render-theme-wrap"
+        :style="renderStyle"
       >
-        <RenderCard
-          ref="RenderCardRef"
-          :key="chart.key"
-          :config="chart"
-        />
+        <div
+          v-for="chart in chartList"
+          :key="chart.code"
+          :style="{
+            position: 'absolute',
+            width: chart.w + 'px',
+            height: chart.h + 'px',
+            left: chart.x + 'px',
+            top: chart.y + 'px',
+            zIndex: chart.z || 0
+          }"
+        >
+          <RenderCard
+            ref="RenderCardRef"
+            :key="chart.key"
+            :config="chart"
+          />
+        </div>
       </div>
     </div>
-    <NotPermission v-else />
   </div>
+  <NotPermission v-else />
 </template>
 <script>
 import { get } from 'data-room-ui/js/utils/http'
