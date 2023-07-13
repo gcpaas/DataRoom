@@ -143,20 +143,6 @@ export default {
       }
     }
   },
-  // beforeRouteEnter (to, from, next) {
-  //   // 判断进入预览页面前是否有访问权限
-  //   const code = to.query.code
-  //   get(`/bigScreen/permission/check/${code}`).then(res => {
-  //     if (res) {
-  //       next(vm => {
-  //         // 重置大屏的vuex store
-  //         vm.$store.commit('bigScreen/resetStoreData')
-  //       })
-  //     } else {
-  //       next('/notPermission')
-  //     }
-  //   })
-  // },
   beforeRouteLeave (to, from, next) {
     // 离开的时候 重置大屏的vuex store
     this.$store.commit('bigScreen/resetStoreData')
@@ -186,7 +172,7 @@ export default {
       'changeChartConfig'
     ]),
     permission () {
-      get(`/bigScreen/permission/check/${this.pageCode}`).then(res => {
+      this.$dataRoomAxios.get(`/bigScreen/permission/check/${this.pageCode}`).then(res => {
         this.hasPermission = res
         if (res) {
           this.init()

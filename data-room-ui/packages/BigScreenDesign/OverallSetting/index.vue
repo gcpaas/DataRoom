@@ -365,7 +365,6 @@ export default {
         this.pageInfo.pageConfig.refreshConfig = []
       }
       this.form = { ...this.pageInfo.pageConfig }
-      console.log('this.form', this.form)
       this.drawerVisible = true
       if (this.pageInfo.chartList.length === 0) {
         this.pageInfo.pageConfig.refreshConfig = []

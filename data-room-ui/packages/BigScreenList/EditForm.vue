@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { get, post } from 'data-room-ui/js/utils/http'
+// import { get, post } from 'data-room-ui/js/utils/http'
 import Icon from 'data-room-ui/assets/images/dataSourceIcon/export'
 export default {
   name: 'EditForm',
@@ -226,7 +226,7 @@ export default {
       this.formVisible = true
       this.$nextTick(() => {
         if (code) {
-          get(`/bigScreen/design/info/code/${code}`).then((resp) => {
+          this.$dataRoomAxios.get(`/bigScreen/design/info/code/${code}`).then((resp) => {
             this.$set(this, 'title', resp.name)
             this.$set(this.dataForm, 'name', resp.name)
             this.$set(this.dataForm, 'chartList', resp.chartList)
@@ -284,8 +284,8 @@ export default {
           return
         }
         const addOrUpdateHandel = !this.dataForm.code
-          ? (form) => post('/bigScreen/design/add', form)
-          : (form) => post('/bigScreen/design/update', form)
+          ? (form) => this.$dataRoomAxios.post('/bigScreen/design/add', form)
+          : (form) => this.$dataRoomAxios.post('/bigScreen/design/update', form)
         const form = {
           className: 'com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO',
           chartList: this.dataForm.chartList,

@@ -98,7 +98,7 @@ export default {
     // 得到模板列表
     getTemplateList (type) {
       this.type = type
-      get('/bigScreen/template/list', {
+      this.$dataRoomAxios.get('/bigScreen/template/list', {
         type
       }).then((list) => {
         this.templateList = list
@@ -126,7 +126,7 @@ export default {
         }).then(() => {
           const className = this.type === 'com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO'
           this.innerLoading = true
-          post(`/bigScreen/${this.type}/design/get/template`, {
+          this.$dataRoomAxios.post(`/bigScreen/${this.type}/design/get/template`, {
             pageTemplateId: id,
             name: this.pageInfo.name,
             code: this.pageInfo.code,

@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import { get, post } from 'data-room-ui/js/utils/http'
+// import { get, post } from 'data-room-ui/js/utils/http'
 export default {
   name: 'CatalogEditForm',
   components: {
@@ -180,7 +180,7 @@ export default {
     },
     // 获取分组列表
     getCatalogList () {
-      get(`/bigScreen/type/list/${this.catalogType}`)
+      this.$dataRoomAxios.get(`/bigScreen/type/list/${this.catalogType}`)
         .then((data) => {
           this.tableList = data
           this.dataList = data
@@ -195,7 +195,7 @@ export default {
           return
         }
         if (!this.currentCatalog.id) {
-          post('/bigScreen/type/add',
+          this.$dataRoomAxios.post('/bigScreen/type/add',
             {
               ...this.currentCatalog,
               type: this.catalogType
@@ -205,7 +205,7 @@ export default {
           }).catch(() => {
           })
         } else {
-          post('/bigScreen/type/update', { ...this.currentCatalog, type: this.catalogType }).then(data => {
+          this.$dataRoomAxios.post('/bigScreen/type/update', { ...this.currentCatalog, type: this.catalogType }).then(data => {
             this.catalogVisible = false
             this.getCatalogList()
           }).catch(() => {
@@ -233,7 +233,7 @@ export default {
         type: 'warning',
         customClass: 'bs-el-message-box'
       }).then(async () => {
-        post(`/bigScreen/type/delete/${catalog.id}`).then(() => {
+        this.$dataRoomAxios.post(`/bigScreen/type/delete/${catalog.id}`).then(() => {
           this.$message({
             type: 'success',
             message: '删除成功'

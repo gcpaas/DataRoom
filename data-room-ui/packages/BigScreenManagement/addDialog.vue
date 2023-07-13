@@ -268,7 +268,7 @@ export default {
     },
     // 获取所有的目录
     openCascader () {
-      post('/bigScreen/category/tree', { searchKey: '', typeList: ['catalog'], sort: false }).then(data => {
+      this.$dataRoomAxios.post('/bigScreen/category/tree', { searchKey: '', typeList: ['catalog'], sort: false }).then(data => {
         const list = [{ name: '根目录', code: '', children: data }]
         this.catalogList = list
       }).catch(() => {
@@ -290,7 +290,7 @@ export default {
       this.$nextTick(() => {
         if (this.dataForm.type === 'bigScreen') {
           if (code) {
-            get(`/${this.dataForm.type}/design/info/code/${code}`).then((resp) => {
+            this.$dataRoomAxios.get(`/${this.dataForm.type}/design/info/code/${code}`).then((resp) => {
               this.$set(this, 'title', resp.name)
               this.$set(this.dataForm, 'name', resp.name)
               this.$set(this.dataForm, 'chartList', resp.chartList)
@@ -347,8 +347,8 @@ export default {
           return
         }
         const addOrUpdateHandel = !this.dataForm.code
-          ? (form) => post('/bigScreen/design/add', form)
-          : (form) => post('/bigScreen/design/update', form)
+          ? (form) => this.$dataRoomAxios.post('/bigScreen/design/add', form)
+          : (form) => this.$dataRoomAxios.post('/bigScreen/design/update', form)
         const form = {
           className: 'com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO',
           chartList: this.dataForm.chartList,

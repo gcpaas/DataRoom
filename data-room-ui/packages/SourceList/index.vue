@@ -168,7 +168,7 @@
   </div>
 </template>
 <script>
-import { get, post, download } from 'data-room-ui/js/utils/http'
+// import { get, post, download } from 'data-room-ui/js/utils/http'
 import { pageMixins } from 'data-room-ui/js/mixins/page'
 import EditForm from './EditForm.vue'
 export default {
@@ -253,7 +253,7 @@ export default {
       }
     },
     getOptions () {
-      get('/bigScreen/file/getAllFileSuffix').then((data) => {
+      this.$dataRoomAxios.get('/bigScreen/file/getAllFileSuffix').then((data) => {
         this.options = []
         this.options.push({ label: '全部', value: '' })
         // 过滤data的空数据
@@ -263,7 +263,7 @@ export default {
     },
     getDataList () {
       this.loading = true
-      get('/bigScreen/file', {
+      this.$dataRoomAxios.get('/bigScreen/file', {
         module: this.catalogInfo.page.code,
         current: this.current,
         size: this.size,
@@ -282,7 +282,7 @@ export default {
       window.open(screen.url, '_blank')
     },
     downLoad (screen) {
-      download(`/bigScreen/file/download/${screen.id}`)
+      this.$dataRoomAxios.download(`/bigScreen/file/download/${screen.id}`)
     },
     del (screen) {
       this.$confirm('确定删除该资源？', '提示', {
@@ -292,7 +292,7 @@ export default {
         customClass: 'bs-el-message-box'
       })
         .then(async () => {
-          post(`/bigScreen/file/delete/${screen.id}`)
+          this.$dataRoomAxios.post(`/bigScreen/file/delete/${screen.id}`)
             .then(() => {
               this.$message({
                 type: 'success',

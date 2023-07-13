@@ -275,7 +275,7 @@ export default {
     ]),
     // 判断页面权限
     permission () {
-      get(`/bigScreen/permission/check/${this.pageCode}`).then(res => {
+      this.$dataRoomAxios.get(`/bigScreen/permission/check/${this.pageCode}`).then(res => {
         this.hasPermission = res
         if (res) {
           this.init()

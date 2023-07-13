@@ -186,7 +186,7 @@ export default {
     },
     getDataList () {
       this.loading = true
-      get('/bigScreen/file', {
+      this.$dataRoomAxios.get('/bigScreen/file', {
         module: this.code,
         current: this.current,
         size: this.size,
@@ -203,7 +203,7 @@ export default {
     },
     // 获取目录的列表
     getCatalogList () {
-      get('/bigScreen/type/list/resourceCatalog')
+      this.$dataRoomAxios.get('/bigScreen/type/list/resourceCatalog')
         .then((data) => {
           this.options = data
         })

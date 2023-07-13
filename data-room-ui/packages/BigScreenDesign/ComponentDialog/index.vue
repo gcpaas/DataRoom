@@ -423,7 +423,7 @@ export default {
     },
     getDataList () {
       this.loading = true
-      get('/bigScreen/design/page', {
+      this.$dataRoomAxios.get('/bigScreen/design/page', {
         parentCode: this.code || null,
         current: this.current,
         size: this.size,

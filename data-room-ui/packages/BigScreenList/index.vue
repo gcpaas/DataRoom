@@ -213,7 +213,7 @@ export default {
   methods: {
     getDataList () {
       this.loading = true
-      get('/bigScreen/design/page', {
+      this.$dataRoomAxios.get('/bigScreen/design/page', {
         parentCode: this.code || null,
         current: this.current,
         size: this.size,
@@ -265,7 +265,7 @@ export default {
         customClass: 'bs-el-message-box'
       })
         .then(async () => {
-          post(`/bigScreen/design/delete/${screen.code}`)
+          this.$dataRoomAxios.post(`/bigScreen/design/delete/${screen.code}`)
             .then(() => {
               this.$message({
                 type: 'success',
@@ -290,7 +290,7 @@ export default {
         customClass: 'bs-el-message-box'
       })
         .then(async () => {
-          post(`/bigScreen/design/copy/${screen.code}`)
+          this.$dataRoomAxios.post(`/bigScreen/design/copy/${screen.code}`)
             .then(() => {
               this.$message({
                 type: 'success',

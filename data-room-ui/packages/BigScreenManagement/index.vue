@@ -240,7 +240,7 @@ import Icon from 'data-room-ui/assets/images/pageIcon/export'
 import { getPageType } from './utils'
 import _ from 'lodash'
 // import axios from 'axios'
-import { post } from 'data-room-ui/js/utils/http'
+// import { post } from 'data-room-ui/js/utils/http'
 import IconSvg from 'data-room-ui/SvgIcon'
 let dashBoardPageCode = null
 export default {
@@ -363,7 +363,7 @@ export default {
     // 获取所有的目录
     openCascader (node) {
       const excludeCategory = node.type === 'catalog' && !this.isAdd ? node.code : undefined
-      post('/bigScreen/category/tree', { searchKey: '', typeList: ['catalog'], excludeCategory, sort: false }).then(data => {
+      this.$dataRoomAxios.post('/bigScreen/category/tree', { searchKey: '', typeList: ['catalog'], excludeCategory, sort: false }).then(data => {
         const list = [{ name: '根目录', code: '', children: data }]
         this.catalogList = list
       }).catch(() => {
@@ -476,7 +476,7 @@ export default {
     // 获取页面的列表(获取，搜索，排序)
     getDataList () {
       this.pageLoading = true
-      post('/bigScreen/category/tree', { searchKey: this.searchKey, sort: this.sort }).then(data => {
+      this.$dataRoomAxios.post('/bigScreen/category/tree', { searchKey: this.searchKey, sort: this.sort }).then(data => {
         this.pageDesignList = data
         // 如果有addModel这个参数，说明是从页面直接新增过来的，直接进入页面或者表单的填写状态
         if (this.$route.query.add) {
@@ -574,7 +574,7 @@ export default {
     // },
     // 复制页面
     copyPege (nodeData, node) {
-      post(`/${nodeData.type}/design/copy/${nodeData.code}`).then(() => {
+      this.$dataRoomAxios.post(`/${nodeData.type}/design/copy/${nodeData.code}`).then(() => {
         this.getDataList()
       })
     },
@@ -587,7 +587,7 @@ export default {
     useIt (pageTemplateId, parentNode, type) {
       this.templateLoading = true
       const className = 'com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO'
-      post(`/bigScreen/${type}/design/add/template`, {
+      this.$dataRoomAxios.post(`/bigScreen/${type}/design/add/template`, {
         pageTemplateId,
         parentCode: parentNode.code,
         type,
@@ -659,7 +659,7 @@ export default {
           return
         }
         if (this.isAdd) {
-          post('/bigScreen/category/add',
+          this.$dataRoomAxios.post('/bigScreen/category/add',
             {
               ...this.catalogData,
               id: '',
@@ -673,7 +673,7 @@ export default {
           }).catch(() => {
           })
         } else {
-          post('/bigScreen/category/update', { ...this.catalogData, excludeCategory: this.catalogData.code }).then(data => {
+          this.$dataRoomAxios.post('/bigScreen/category/update', { ...this.catalogData, excludeCategory: this.catalogData.code }).then(data => {
             this.catalogVisible = false
             this.getDataList()
           }).catch(() => {
@@ -691,7 +691,7 @@ export default {
         type: 'warning',
         customClass: 'bs-el-message-box'
       }).then(async () => {
-        post(url).then(() => {
+        this.$dataRoomAxios.post(url).then(() => {
           this.$message({
             type: 'success',
             message: '删除成功'

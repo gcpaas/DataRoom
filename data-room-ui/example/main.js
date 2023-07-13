@@ -9,11 +9,11 @@ import store from './store'
 import router from './router'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/styles/index.scss'
+import * as $dataRoomAxios from 'data-room-ui/js/utils/http.js'
 import { registerConfig } from '@gcpaas/data-room-ui'
 import remoteComponents from '@/remoteComponents/exports.js'
 import customDatasetComponents from '@/customDatasetComponents/exports.js'
 Vue.use(ElementUI, { size: 'mini' })
-
 registerConfig(
   {
     routers: {
@@ -62,6 +62,7 @@ registerConfig(
 promise.polyfill()
 // 自定义指令
 Vue.use(ElementUI, { size: 'mini' })
+Vue.prototype.$dataRoomAxios = $dataRoomAxios
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

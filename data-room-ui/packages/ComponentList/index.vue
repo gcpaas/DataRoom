@@ -283,7 +283,7 @@ export default {
     },
     // 获取分组列表
     getCatalogList () {
-      get(`/bigScreen/type/list/${this.catalogType}`)
+      this.$dataRoomAxios.get(`/bigScreen/type/list/${this.catalogType}`)
         .then((data) => {
           this.catalogList = data
         })
@@ -292,7 +292,7 @@ export default {
     getDataList () {
       this.loading = true
       if (this.catalogInfo === 'component') {
-        get('/bigScreen/design/page', {
+        this.$dataRoomAxios.get('/bigScreen/design/page', {
           parentCode: this.catalogCode || null,
           current: this.current,
           size: this.size,
@@ -307,7 +307,7 @@ export default {
             this.loading = false
           })
       } else {
-        get('/bigScreen/bizComponent/page', {
+        this.$dataRoomAxios.get('/bigScreen/bizComponent/page', {
           current: this.current,
           size: this.size,
           // searchKey: this.searchKey,

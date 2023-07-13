@@ -4,7 +4,7 @@ import 'data-room-ui/assets/style/common/index.scss'
 import 'data-room-ui/assets/style/bsTheme.scss'
 
 // 大屏 vuex store数据
-import bigScreenStore from 'data-room-ui/js/store'
+import dataRoomStore from 'data-room-ui/js/store'
 // 注册基础配置
 import registerConfig from 'data-room-ui/js/utils/registerConfig'
 // 更新主题
@@ -39,10 +39,6 @@ const components = [
   DataSourceManagement
 ]
 
-const $bigScreen = {
-  bigScreenStore
-}
-
 function install (Vue) {
   components.map(component => {
     Vue.component(component.name, component)
@@ -59,7 +55,7 @@ export {
   BigScreenDesign,
   DataSetManagement,
   DataSourceManagement,
-  $bigScreen,
+  dataRoomStore,
   registerConfig,
   updateTheme
 }
@@ -74,7 +70,7 @@ export default {
   BigScreenDesign,
   DataSetManagement,
   DataSourceManagement,
-  $bigScreen,
+  dataRoomStore,
   registerConfig,
   updateTheme
 }

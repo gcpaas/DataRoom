@@ -118,7 +118,7 @@
   </div>
 </template>
 <script>
-import { get, post } from '../../packages/js/utils/http'
+// import { get, post } from '../../packages/js/utils/http'
 import _ from 'lodash'
 
 export default {
@@ -208,7 +208,7 @@ export default {
           return
         }
         if (!this.currentCatalog.id) {
-          post('/bigScreen/type/add', {
+          this.$dataRoomAxios.post('/bigScreen/type/add', {
             ...this.currentCatalog,
             type: 'resourceCatalog'
           })
@@ -221,7 +221,7 @@ export default {
             })
             .catch(() => {})
         } else {
-          post('/bigScreen/type/update', {
+          this.$dataRoomAxios.post('/bigScreen/type/update', {
             ...this.currentCatalog,
             type: 'resourceCatalog'
           })
@@ -253,7 +253,7 @@ export default {
         customClass: 'bs-el-message-box'
       })
         .then(async () => {
-          post(`/bigScreen/type/delete/${catalog.id}`)
+          this.$dataRoomAxios.post(`/bigScreen/type/delete/${catalog.id}`)
             .then(() => {
               this.$message({
                 type: 'success',
@@ -273,7 +273,7 @@ export default {
     // 获取目录的列表
     getCatalogList () {
       this.pageLoading = true
-      get('/bigScreen/type/list/resourceCatalog')
+      this.$dataRoomAxios.get('/bigScreen/type/list/resourceCatalog')
         .then((data) => {
           this.catalogList = data
         })

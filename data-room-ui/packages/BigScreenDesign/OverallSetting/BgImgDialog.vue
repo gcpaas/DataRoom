@@ -122,7 +122,7 @@ export default {
           }]
         : []
       this.hideUploadImgBtn = this.fileList.length !== 0
-      get('/bigScreen/design/bg/list').then(list => {
+      this.$dataRoomAxios.get('/bigScreen/design/bg/list').then(list => {
         this.bgImgList = list
       })
     },

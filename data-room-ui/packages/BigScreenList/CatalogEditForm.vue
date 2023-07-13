@@ -134,8 +134,8 @@
 </template>
 
 <script>
-import { get, post } from 'data-room-ui/js/utils/http'
-import Icon from 'data-room-ui/assets/images/dataSourceIcon/export'
+// import { get, post } from 'data-room-ui/js/utils/http'
+// import Icon from 'data-room-ui/assets/images/dataSourceIcon/export'
 import _ from 'lodash'
 export default {
   name: 'CatalogEditForm',
@@ -185,7 +185,7 @@ export default {
     },
     // 获取分组列表
     getCatalogList () {
-      get(`/bigScreen/type/list/${this.catalogType}`)
+      this.$dataRoomAxios.get(`/bigScreen/type/list/${this.catalogType}`)
         .then((data) => {
           this.tableList = data
         })
@@ -198,7 +198,7 @@ export default {
           return
         }
         if (!this.currentCatalog.id) {
-          post('/bigScreen/type/add',
+          this.$dataRoomAxios.post('/bigScreen/type/add',
             {
               ...this.currentCatalog,
               type: this.catalogType
@@ -208,7 +208,7 @@ export default {
           }).catch(() => {
           })
         } else {
-          post('/bigScreen/type/update', { ...this.currentCatalog, type: this.type || 'bigScreenCatalog' }).then(data => {
+          this.$dataRoomAxios('/bigScreen/type/update', { ...this.currentCatalog, type: this.type || 'bigScreenCatalog' }).then(data => {
             this.catalogVisible = false
             this.getCatalogList()
           }).catch(() => {
@@ -236,7 +236,7 @@ export default {
         type: 'warning',
         customClass: 'bs-el-message-box'
       }).then(async () => {
-        post(`/bigScreen/type/delete/${catalog.id}`).then(() => {
+        this.$dataRoomAxios.post(`/bigScreen/type/delete/${catalog.id}`).then(() => {
           this.$message({
             type: 'success',
             message: '删除成功'

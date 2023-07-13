@@ -111,7 +111,7 @@
   </div>
 </template>
 <script>
-import { get, post } from '../../packages/js/utils/http'
+// import { get, post } from '../../packages/js/utils/http'
 import _ from 'lodash'
 
 export default {
@@ -182,7 +182,7 @@ export default {
           return
         }
         if (!this.currentCatalog.id) {
-          post('/bigScreen/type/add',
+          this.$dataRoomAxios.post('/bigScreen/type/add',
             {
               ...this.currentCatalog,
               type: this.type || 'bigScreenCatalog'
@@ -195,7 +195,7 @@ export default {
           }).catch(() => {
           })
         } else {
-          post('/bigScreen/type/update', { ...this.currentCatalog, type: this.type || 'bigScreenCatalog' }).then(data => {
+          this.$dataRoomAxios.post('/bigScreen/type/update', { ...this.currentCatalog, type: this.type || 'bigScreenCatalog' }).then(data => {
             this.catalogVisible = false
             this.getCatalogList()
           }).catch(() => {
@@ -225,7 +225,7 @@ export default {
         type: 'warning',
         customClass: 'bs-el-message-box'
       }).then(async () => {
-        post(`/bigScreen/type/delete/${catalog.id}`).then(() => {
+        this.$dataRoomAxios.post(`/bigScreen/type/delete/${catalog.id}`).then(() => {
           this.$message({
             type: 'success',
             message: '删除成功'
@@ -242,7 +242,7 @@ export default {
     // 获取目录的列表
     getCatalogList () {
       this.pageLoading = true
-      get(`/bigScreen/type/list/${this.type}`).then(data => {
+      this.$dataRoomAxios.get(`/bigScreen/type/list/${this.type}`).then(data => {
         this.catalogList = data
       }).catch(() => {
       }).finally(() => {

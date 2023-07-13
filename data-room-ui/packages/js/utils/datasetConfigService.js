@@ -1,7 +1,7 @@
 /*!
  * 数据集管理
  */
-import { get, post } from 'data-room-ui/js/utils/http'
+import Vue from 'vue'
 
 /**
  * 数据集分页查询
@@ -9,7 +9,7 @@ import { get, post } from 'data-room-ui/js/utils/http'
  * @param flag
  * @returns {*}
  */
-const datasetPage = (params = {}, flag = false) => get('/dataset/page', params, flag)
+const datasetPage = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.get('/dataset/page', params, flag)
 
 /**
  * 数据集列表查询
@@ -17,7 +17,7 @@ const datasetPage = (params = {}, flag = false) => get('/dataset/page', params, 
  * @param flag
  * @returns {*}
  */
-const datasetList = (params = {}, flag = false) => get('/dataset/list', params, flag)
+const datasetList = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.get('/dataset/list', params, flag)
 
 /**
  * 数据集名称校验
@@ -25,7 +25,7 @@ const datasetList = (params = {}, flag = false) => get('/dataset/list', params, 
  * @param flag
  * @returns {*}
  */
-const nameCheckRepeat = (params = {}, flag = false) => post('/dataset/checkRepeat', params, flag)
+const nameCheckRepeat = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/dataset/checkRepeat', params, flag)
 
 /**
  * 数据集新增
@@ -33,7 +33,7 @@ const nameCheckRepeat = (params = {}, flag = false) => post('/dataset/checkRepea
  * @param flag
  * @returns {*}
  */
-const datasetAdd = (params = {}, flag = false) => post('/dataset/add', params, flag)
+const datasetAdd = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/dataset/add', params, flag)
 
 /**
  * 数据集修改
@@ -41,7 +41,7 @@ const datasetAdd = (params = {}, flag = false) => post('/dataset/add', params, f
  * @param flag
  * @returns {*}
  */
-const datasetUpdate = (params = {}, flag = false) => post('/dataset/update', params, flag)
+const datasetUpdate = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/dataset/update', params, flag)
 
 /**
  * 删除数据集
@@ -49,7 +49,7 @@ const datasetUpdate = (params = {}, flag = false) => post('/dataset/update', par
  * @param flag
  * @returns {*}
  */
-const datasetRemove = (id = '-1', flag = false) => post(`/dataset/delete/${id}`, {}, flag)
+const datasetRemove = (id = '-1', flag = false) => Vue.prototype.$dataRoomAxios.post(`/dataset/delete/${id}`, {}, flag)
 
 /**
  * 数据集执行
@@ -57,7 +57,7 @@ const datasetRemove = (id = '-1', flag = false) => post(`/dataset/delete/${id}`,
  * @param flag
  * @returns {*}
  */
-const datasetExecuteTest = (params = {}, flag = false) => post('/dataset/execute/test', params, flag)
+const datasetExecuteTest = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/dataset/execute/test', params, flag)
 
 /**
  * 获取数据集详情
@@ -66,7 +66,7 @@ const datasetExecuteTest = (params = {}, flag = false) => post('/dataset/execute
  * @returns {*}
  */
 
-const getDataset = (id = '-1', flag = false) => get(`/dataset/info/${id}`, {}, flag)
+const getDataset = (id = '-1', flag = false) => Vue.prototype.$dataRoomAxios.get(`/dataset/info/${id}`, {}, flag)
 
 /**
  * 获取数据集分类
@@ -74,7 +74,7 @@ const getDataset = (id = '-1', flag = false) => get(`/dataset/info/${id}`, {}, f
  * @param flag
  * @returns {*}
  */
-const getCategoryTree = (params = {}, flag = false) => get('/category/queryTreeList', params, flag)
+const getCategoryTree = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.get('/category/queryTreeList', params, flag)
 
 /**
  * 新增分类树节点
@@ -82,7 +82,7 @@ const getCategoryTree = (params = {}, flag = false) => get('/category/queryTreeL
  * @param flag
  * @returns {*}
  */
-const categoryAdd = (params = {}, flag = false) => post('/category/add', params, flag)
+const categoryAdd = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/category/add', params, flag)
 
 /**
  * 编辑分类树节点
@@ -90,7 +90,7 @@ const categoryAdd = (params = {}, flag = false) => post('/category/add', params,
  * @param flag
  * @returns {*}
  */
-const categoryUpdate = (params = {}, flag = false) => post('/category/update', params, flag)
+const categoryUpdate = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/category/update', params, flag)
 
 /**
  * 删除分类树节点
@@ -98,7 +98,7 @@ const categoryUpdate = (params = {}, flag = false) => post('/category/update', p
  * @param flag
  * @returns {*}
  */
-const categoryRemove = (id = '-1', flag = false) => post(`/category/delete/${id}`, {}, flag)
+const categoryRemove = (id = '-1', flag = false) => Vue.prototype.$dataRoomAxios.post(`/category/delete/${id}`, {}, flag)
 
 export {
   datasetPage,

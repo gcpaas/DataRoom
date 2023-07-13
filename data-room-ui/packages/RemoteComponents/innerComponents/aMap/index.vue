@@ -61,6 +61,7 @@ export default {
         ]
       }).then(() => {
         // 创建地图
+        // eslint-disable-next-line no-undef
         this.map = new AMap.Map(`map-${this.config.code}`, {
           resizeEnable: true, // 是否监控地图容器尺寸变化
           lang: this.customize.lang,
@@ -72,12 +73,16 @@ export default {
           plugins: ['AMap.ToolBar', 'AMap.Scale', 'AMap.MapType', 'AMap.Geolocation']
         })
         this.loading = false
+        // eslint-disable-next-line no-undef
         this.map.addControl(new AMap.ToolBar())
         // 在图面添加比例尺控件，展示地图在当前层级和纬度下的比例尺
+        // eslint-disable-next-line no-undef
         this.map.addControl(new AMap.Scale())
         // 在图面添加类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+        // eslint-disable-next-line no-undef
         this.map.addControl(new AMap.MapType())
         // 在图面添加定位控件，用来获取和展示用户主机所在的经纬度位置
+        // eslint-disable-next-line no-undef
         this.map.addControl(new AMap.Geolocation())
         let marker = null // 用于存储标记对象的变量
         if (this.customize.markerSpan) {
@@ -104,9 +109,11 @@ export default {
             this.map.remove(marker)
           }
           // 创建自定义标记
+          // eslint-disable-next-line no-undef
           marker = new AMap.Marker({
             position: [this.customize.markerLng, this.customize.markerLat],
             content: markerContent,
+            // eslint-disable-next-line no-undef
             offset: new AMap.Pixel(0, 0) // 设置标记偏移，使其指向标记位置
           })
 
