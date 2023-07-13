@@ -172,7 +172,7 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
             queryWrapper.eq(PageEntity::getParentCode, searchDTO.getParentCode());
         }
         queryWrapper.eq(PageEntity::getType, searchDTO.getType());
-        queryWrapper.select(PageEntity::getId, PageEntity::getAppCode, PageEntity::getCode, PageEntity::getName, PageEntity::getParentCode, PageEntity::getCoverPicture, PageEntity::getUpdateDate);
+        queryWrapper.select(PageEntity::getId, PageEntity::getAppCode, PageEntity::getCode, PageEntity::getName, PageEntity::getParentCode, PageEntity::getOrderNum, PageEntity::getCoverPicture, PageEntity::getUpdateDate);
         queryWrapper.orderByDesc(PageEntity::getUpdateDate);
         PageVO<PageEntity> page = page(searchDTO, queryWrapper);
         List<PageEntity> list = page.getList();
