@@ -154,7 +154,7 @@ export default {
           })
         }
       })
-      layouts = layouts?.filter(item => item.code !== code && !['Tabs', 'titles', 'currentTime', 'timeCountDown', 'iframeChart', 'linkChart', 'carousel'].includes(item.type))
+      layouts = layouts?.filter(item => item.code !== code && item?.option?.displayOption?.dataAllocation?.enable)
       layouts = [...layouts, ...tabComponents]?.map(item => ({
         name: item.title,
         componentKey: item.code

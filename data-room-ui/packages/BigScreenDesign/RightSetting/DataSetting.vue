@@ -645,8 +645,8 @@ export default {
       return (
         list?.map(field => {
           return {
-            label: field.comment,
-            value: field.name
+            label: field.comment || field.fieldDesc,
+            value: field.name || field.fieldName
           }
         }) || []
       )

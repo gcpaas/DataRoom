@@ -83,7 +83,7 @@ export function handleResData (data) {
         chart.option.data = plotList?.find(plot => plot.name === chart.name)?.option?.data
       }
       // 如果没有版本号，或者版本号修改了则需要进行旧数据兼容
-      if ((!chart.version) || chart.version !== originalConfig.version) {
+      if ((!chart.version) || (originalConfig && chart.version !== originalConfig?.version)) {
         chart = compatibility(chart, originalConfig)
       }
     }
