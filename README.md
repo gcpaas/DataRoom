@@ -50,21 +50,17 @@
 
 ## 快速开始
 
-[👉前端开发者](./data-room-ui/README.md)
-
-[👉后端开发者](./DataRoom/README.md)
+[开始开始](https://www.yuque.com/chuinixiongkou/bigscreen/ofy1bqhqgua1fu0f)
 
 ## 演示DEMO
 
 <a href="http://gcpaas.gccloud.com/bigScreen" target="_blank"> http://gcpaas.gccloud.com/bigScreen </a>
-<span style="color: red">（请不要在演示环境中放入生产数据）</span>
+<span style="color: red;font-weight: bold;">（请不要在演示环境中放入生产数据）</span>
 
 ## 常见问题
 
 * [使用手册、二次开发、部署手册、常见问题](https://www.yuque.com/chuinixiongkou/bigscreen/index)
-* [前端代码仓库(GitHub)](https://github.com/gcpaas/DataRoom/tree/master/data-room-ui)、[前端代码仓库(码云)](https://gitee.com/gcpaas/gc-starter-bigscreen-ui)
-* [后端代码仓库(GitHub)](https://github.com/gcpaas/DataRoom/tree/master/DataRoom)、 [后端代码仓库(码云)](https://gitee.com/gcpaas/gc-starter-bigscreen)
-
+* [代码仓库(GitHub)](https://github.com/gcpaas/DataRoom)、[代码仓库(码云)](https://gitee.com/gcpaas/DataRoom)
 
 ## 联系我们
 
