@@ -114,20 +114,14 @@ export default {
     // 只更新样式部分，不调用接口
     configStyle: {
       handler (val, oldValue) {
-        if (!_.isEqual(val, oldValue)) {
-          this.$emit('updateSetting', { ...val, type: this.config.type, code: this.config.code })
-          this.saveTimeLine(`更新${val?.title}组件属性`)
-        }
+        this.handleConfigChange(val, oldValue, 'configStyle')
       },
       deep: true
     },
     // 更新数据源部分，需要调用接口
     configDataSource: {
       handler (val, oldValue) {
-        if (!_.isEqual(val, oldValue)) {
-          this.$emit('updateDataSetting', this.config)
-          this.saveTimeLine(`更新${val?.title}组件属性`)
-        }
+        this.handleConfigChange(val, oldValue, 'configDataSource')
       },
       deep: true
     }
@@ -137,6 +131,16 @@ export default {
     ...mapMutations('bigScreen', [
       'saveTimeLine'
     ]),
+    handleConfigChange (val, oldValue, type) {
+      if (!_.isEqual(val, oldValue)) {
+        if (type === 'configStyle') {
+          this.$emit('updateSetting', { ...val, type: this.config.type, code: this.config.code })
+        } else {
+          this.$emit('updateDataSetting', this.config)
+        }
+        this.saveTimeLine(`更新${val?.title ?? this.config.title}组件属性`)
+      }
+    },
     close () {
       this.$emit('closeRightPanel')
     },
