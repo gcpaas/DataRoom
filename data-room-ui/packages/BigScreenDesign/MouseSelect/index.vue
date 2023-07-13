@@ -120,7 +120,7 @@ export default {
         // this.changeActiveCodes([])
         // this.changeActiveCode('')
       }
-
+      // 鼠标按下，并开始选择
       if (event.button === 0 && this.isSelecting) {
         this.isSelecting = false
         if (newTime - time < 300) {
@@ -142,6 +142,19 @@ export default {
         this.startY = 0
         this.endX = 0
         this.endY = 0
+      } else if (!this.shiftKeyDown && !this.isSelecting) {
+        // 重置起始点和结束点的坐标
+        this.startX = 0
+        this.startY = 0
+        this.endX = 0
+        this.endY = 0
+        this.$emit('selectArea', {
+          startX: Math.min(this.startX, this.endX),
+          startY: Math.min(this.startY, this.endY),
+          endX: Math.max(this.startX, this.endX),
+          endY: Math.max(this.startY, this.endY)
+        })
+        this.changeActiveCodes([])
       }
     },
     handleMouseLeave () {

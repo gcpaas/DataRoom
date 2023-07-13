@@ -37,13 +37,24 @@ export default {
     state.activeItemConfig = _.cloneDeep(activeItem)
   },
   changeActiveCodes (state, codes) {
-    state.activeCodes = codes
-    state.pageInfo.chartList = state.pageInfo.chartList?.map(chart => {
-      return {
-        ...chart,
-        group: (codes.includes(chart.code) && !chart.group) ? 'tempGroup' : chart.group
-      }
-    })
+    // 传入codes，将codes中的组件的group改为tempGroup，不传入或者传入空数组，将所有组件的group改为''，即取消组合
+    if (codes.length !== 0) {
+      state.activeCodes = codes
+      state.pageInfo.chartList = state.pageInfo.chartList?.map(chart => {
+        return {
+          ...chart,
+          group: (codes.includes(chart.code) && !chart.group) ? 'tempGroup' : chart.group
+        }
+      })
+    } else {
+      state.activeCodes = codes
+      state.pageInfo.chartList = state.pageInfo.chartList?.map(chart => {
+        return {
+          ...chart,
+          group: ''
+        }
+      })
+    }
   },
   // 改变当前hover组件id
   changeHoverCode (state, code) {
