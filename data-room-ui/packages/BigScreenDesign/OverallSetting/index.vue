@@ -183,11 +183,11 @@
 </template>
 
 <script>
-import SettingTitle from 'packages/SettingTitle/index.vue'
-import ColorPicker from 'packages/ColorPicker/index.vue'
+import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BgImg from './BgImgDialog.vue'
 import { mapState, mapMutations } from 'vuex'
-import { getThemeConfig } from 'packages/js/api/bigScreenApi'
+import { getThemeConfig } from 'data-room-ui/js/api/bigScreenApi'
 import _ from 'lodash'
 import { G2 } from '@antv/g2plot'
 export default {
@@ -498,39 +498,39 @@ export default {
     }
   }
 
-  /deep/ .el-input__inner,
-  /deep/ .el-color-picker__color-inner,
-  /deep/ .el-radio__inner,
-  /deep/ .el-input-number--mini,
-  /deep/ .el-textarea__inner,
-  /deep/ .el-input-group__append,
-  /deep/ .el-radio__label {
+  ::v-deep .el-input__inner,
+  ::v-deep .el-color-picker__color-inner,
+  ::v-deep .el-radio__inner,
+  ::v-deep .el-input-number--mini,
+  ::v-deep .el-textarea__inner,
+  ::v-deep .el-input-group__append,
+  ::v-deep .el-radio__label {
     background: var(--bs-el-background-1);
     color: var(--bs-el-text);
     border: 0 !important;
   }
 
-  /deep/ .el-form-item__label {
+  ::v-deep .el-form-item__label {
     color: var(--bs-el-title);
     font-size: 12px;
   }
 
-  /deep/ .el-radio {
+  ::v-deep .el-radio {
     margin-right: 10px
   }
 
-  /deep/ .el-table {
+  ::v-deep .el-table {
     background: var(--bs-el-background-1);
     border-bottom: 1px solid var(--bs-el-title);
   }
 
-  /deep/ .el-table__cell {
+  ::v-deep .el-table__cell {
     background: var(--bs-el-background-1) !important;
     color: var(--bs-el-title) !important;
     border-color: var(--bs-el-text) !important;
   }
 
-  /deep/ .el-input__inner {
+  ::v-deep .el-input__inner {
     &:placeholder {
       color: var(--bs-el-text);
     }
@@ -580,7 +580,7 @@ export default {
   }
 }
 
-/deep/ .el-drawer__wrapper {
+::v-deep .el-drawer__wrapper {
   z-index: 2000 !important;
 
   .setting-body {
@@ -588,13 +588,13 @@ export default {
   }
 }
 
-/deep/ .el-drawer__body {
+::v-deep .el-drawer__body {
   padding: 0;
   margin-bottom: 0;
   overflow: hidden;
 }
 
-/deep/ .el-drawer__container {
+::v-deep .el-drawer__container {
   height: calc(100% - 40px) !important;
   top: 40px !important;
   position: relative;
@@ -619,7 +619,7 @@ export default {
     margin-right: 2px;
     color: #36474f;
 
-    /deep/.el-form-item {
+    ::v-deep.el-form-item {
       margin-bottom: 0 !important;
     }
 
@@ -652,7 +652,7 @@ export default {
   }
 }
 
-/deep/ .el-color-picker--mini .el-color-picker__trigger {
+::v-deep .el-color-picker--mini .el-color-picker__trigger {
   height: 32px;
   width: 32px;
   border: 1px solid var(--bs-el-background-1);

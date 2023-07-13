@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!pageLoading"
+    v-if="hasPermission"
     class="bs-page-design-wrap"
   >
     <PageTopSetting
@@ -103,31 +103,33 @@
       />
     </div>
   </div>
+  <NotPermission v-else-if="!hasPermission" />
 </template>
 <script>
 import SourceDialog from './SourceDialog/index.vue'
 import ComponentDialog from './ComponentDialog/index.vue'
-import iframeDialog from 'packages/BasicComponents/LinkChart/iframeDialog'
+import iframeDialog from 'data-room-ui/BasicComponents/LinkChart/iframeDialog'
 import {
   dataConfig,
   settingConfig
-} from 'packages/BasicComponents/Picture/settingConfig'
+} from 'data-room-ui/BasicComponents/Picture/settingConfig'
 import LeftPanel from './LeftPanel.vue'
 import SettingPanel from './SettingPanel.vue'
 import PageTopSetting from './PageDesignTop.vue'
 import Render from '../Render'
 import { mapActions, mapMutations, mapState } from 'vuex'
-import SketchDesignRuler from 'packages/BigScreenDesign/RulerTool/SketchRuler.vue'
+import SketchDesignRuler from 'data-room-ui/BigScreenDesign/RulerTool/SketchRuler.vue'
 import { G2 } from '@antv/g2plot'
-import multipleSelectMixin from 'packages/js/mixins/multipleSelectMixin'
-import { getThemeConfig, getScreenInfo } from 'packages/js/api/bigScreenApi'
+import multipleSelectMixin from 'data-room-ui/js/mixins/multipleSelectMixin'
+import { getThemeConfig, getScreenInfo } from 'data-room-ui/js/api/bigScreenApi'
 import MouseSelect from './MouseSelect/index.vue'
 import _ from 'lodash'
-import { get } from 'packages/js/utils/http'
+import { get } from 'data-room-ui/js/utils/http'
 import { randomString } from '../js/utils'
-import { isFirefox } from 'packages/js/utils/userAgent'
-import { handleResData } from 'packages/js/store/actions.js'
-import { EventBus } from 'packages/js/utils/eventBus'
+import { isFirefox } from 'data-room-ui/js/utils/userAgent'
+import { handleResData } from 'data-room-ui/js/store/actions.js'
+import { EventBus } from 'data-room-ui/js/utils/eventBus'
+import NotPermission from 'data-room-ui/NotPermission'
 export default {
   name: 'BigScreenDesign',
   components: {
@@ -139,7 +141,8 @@ export default {
     SettingPanel,
     SourceDialog,
     ComponentDialog,
-    iframeDialog
+    iframeDialog,
+    NotPermission
   },
   mixins: [multipleSelectMixin],
   props: {
@@ -158,6 +161,7 @@ export default {
   },
   data () {
     return {
+      hasPermission: true,
       rightVisiable: false,
       pageInfoVisiable: false,
       ruleStartX: 100,
@@ -208,6 +212,9 @@ export default {
       fitZoom: (state) => state.bigScreen.fitZoom,
       iframeDialog: (state) => state.bigScreen.iframeDialog
     }),
+    pageCode () {
+      return this.code || this.$route.query.code
+    },
     offset () {
       return {
         x: 220 + 50 - this.ruleStartX,
@@ -215,26 +222,27 @@ export default {
       }
     }
   },
-  beforeRouteEnter (to, from, next) {
-    // 判断进入设计页面前是否有访问权限
-    const code = to.query.code
-    get(`/bigScreen/permission/check/${code}`).then((res) => {
-      if (res) {
-        next((vm) => {
-          // 重置大屏的vuex store
-          vm.$store.commit('bigScreen/resetStoreData')
-        })
-      } else {
-        next('/notPermission')
-      }
-    })
-  },
+  // beforeRouteEnter (to, from, next) {
+  //   // 判断进入设计页面前是否有访问权限
+  //   const code = to.query.code
+  //   get(`/bigScreen/permission/check/${code}`).then((res) => {
+  //     if (res) {
+  //       next((vm) => {
+  //         // 重置大屏的vuex store
+  //         vm.$store.commit('bigScreen/resetStoreData')
+  //       })
+  //     } else {
+  //       next('/notPermission')
+  //     }
+  //   })
+  // },
   created () {
-    this.init()
+    this.changePageLoading(true)
+    this.permission()
     /**
-     * 以下是为了解决在火狐浏览器上推拽时弹出tab页到搜索问题
-     * @param event
-     */
+       * 以下是为了解决在火狐浏览器上推拽时弹出tab页到搜索问题
+       * @param event
+       */
     if (isFirefox()) {
       document.body.ondrop = function (event) {
         event.preventDefault()
@@ -265,6 +273,15 @@ export default {
       'saveTimeLine',
       'changeIframeDialog'
     ]),
+    // 判断页面权限
+    permission () {
+      get(`/bigScreen/permission/check/${this.pageCode}`).then(res => {
+        this.hasPermission = res
+        if (res) {
+          this.init()
+        }
+      })
+    },
     // 添加资源弹窗初始化
     initDialog () {
       this.$refs.SourceDialog.init()
@@ -313,7 +330,7 @@ export default {
           name: val.originalName,
           icon: null,
           className:
-            'com.gccloud.dataroom.core.module.chart.components.ScreenPictureChart',
+              'com.gccloud.dataroom.core.module.chart.components.ScreenPictureChart',
           w: 300,
           h: 300,
           x: 0,
@@ -336,7 +353,7 @@ export default {
     },
     init () {
       this.changePageLoading(true)
-      this.initLayout(this.$route.query.code || this.code)
+      this.initLayout(this.pageCode)
         .then(() => {
           const themeName = this.pageConfig.customTheme
           if (!['dark', 'light', 'auto'].includes(themeName)) {
@@ -365,8 +382,8 @@ export default {
       this.pageInfoVisiable = false
     },
     /**
-     * @description: 清空页面
-     */
+       * @description: 清空页面
+       */
     empty () {
       this.$confirm('确定清空页面吗？', '提示', {
         confirmButtonText: '确定',
@@ -447,50 +464,50 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.bs-page-design-wrap {
-  overflow: hidden;
-
-  .drag-wrap {
-    display: flex;
-    background-color: #1d1e20;
-    height: calc(100vh - 40px);
+  .bs-page-design-wrap {
     overflow: hidden;
 
-    .grid-wrap-box {
-      flex: 1;
+    .drag-wrap {
+      display: flex;
+      background-color: #1d1e20;
+      height: calc(100vh - 40px);
       overflow: hidden;
-      position: relative;
-      margin: 8px 0 0 8px;
 
-      .footer-tools-bar {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 30px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        z-index: 1000;
-        background-color: var(--bs-background-2);
+      .grid-wrap-box {
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+        margin: 8px 0 0 8px;
 
-        .bs-select-wrap {
-          margin-right: 16px;
-        }
+        .footer-tools-bar {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 30px;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          z-index: 1000;
+          background-color: var(--bs-background-2);
 
-        .select-zoom-text {
-          color: var(--bs-el-title);
-          margin-right: 16px;
-        }
+          .bs-select-wrap {
+            margin-right: 16px;
+          }
 
-        /deep/ .el-select {
-          width: 150px !important;
+          .select-zoom-text {
+            color: var(--bs-el-title);
+            margin-right: 16px;
+          }
+
+          /deep/ .el-select {
+            width: 150px !important;
+          }
         }
       }
-    }
 
-    /deep/ .el-loading-mask {
-      background-color: transparent !important;
+      /deep/ .el-loading-mask {
+        background-color: transparent !important;
+      }
     }
   }
-}
 </style>

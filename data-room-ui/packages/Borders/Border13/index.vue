@@ -12,8 +12,8 @@
   </div>
 </template>
 <script>
-import { refreshComponentMixin } from 'packages/js/mixins/refreshComponent'
-import { dataVMixins } from 'packages/js/mixins/dataVMixins'
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
+import { dataVMixins } from 'data-room-ui/js/mixins/dataVMixins'
 import DvBorderBox13 from '@jiaminghi/data-view/lib/components/borderBox13/src/main.vue'
 import '@jiaminghi/data-view/lib/components/borderBox13/src/main.css'
 
@@ -77,13 +77,13 @@ export default {
 }
 
 /*滚动条样式*/
-/deep/::-webkit-scrollbar {
+::v-deep ::-webkit-scrollbar {
   width: 4px;
   border-radius: 4px;
   height: 4px;
 }
 
-/deep/::-webkit-scrollbar-thumb {
+::v-deep ::-webkit-scrollbar-thumb {
   background: #dddddd !important;
   border-radius: 10px;
 }

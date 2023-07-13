@@ -115,9 +115,9 @@
   </div>
 </template>
 <script>
-import SettingTitle from 'packages/SettingTitle/index.vue'
-import TextGradient from 'packages/BigScreenDesign/RightSetting/TextGradient/index'
-import PosWhSetting from 'packages/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import TextGradient from 'data-room-ui/BigScreenDesign/RightSetting/TextGradient/index'
+import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 export default {
   name: 'LinkChartSetting',
   components: {

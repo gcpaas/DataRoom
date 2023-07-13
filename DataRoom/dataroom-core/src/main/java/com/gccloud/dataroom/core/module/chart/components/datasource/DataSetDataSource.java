@@ -51,35 +51,6 @@ public class DataSetDataSource extends BaseChartDataSource {
     private Integer pageSize;
 
     /**
-     * 树组件的配置
-     * 懒加载时，需要配置treeNodeField、
-     */
-
-    @ApiModelProperty(notes = "是否懒加载树")
-    private boolean lazy = false;
-
-    @ApiModelProperty(notes = "子级列表字段，非懒加载时使用")
-    private String childrenField;
-
-    @ApiModelProperty(notes = "树节点显示字段, 用于树组件，树表组件可不填")
-    private String treeNodeField;
-
-    @ApiModelProperty(notes = "父节点字段所存储的字段")
-    private String parentIdValueField;
-
-    @ApiModelProperty(notes = "父节点字段参数")
-    private String parentIdParam;
-
-    @ApiModelProperty(notes = "父节点字段")
-    private String parentIdField;
-
-    @ApiModelProperty(notes = "是否有子节点字段")
-    private String hasChildrenField;
-
-    @ApiModelProperty(notes = "默认根节点的父节点ID的值，如果不设置则默认为0")
-    private String rootNodeParentIdValue;
-
-    /**
      * 散点图特殊配置
      */
 

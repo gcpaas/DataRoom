@@ -253,7 +253,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item
-                  label="关联标签"
+                  label="标签"
                   prop="labelIds"
                 >
                   <label-select
@@ -481,16 +481,16 @@
 </template>
 
 <script>
-import LabelSelect from 'packages/DataSetLabelManagement/src/LabelSelect.vue'
+import LabelSelect from 'data-room-ui/DataSetLabelManagement/src/LabelSelect.vue'
 import {
   getCategoryTree,
   nameCheckRepeat,
   datasetExecuteTest,
   getDataset, datasetUpdate, datasetAdd
-} from 'packages/js/utils/datasetConfigService'
-import { datasourceList, getSourceTable, getSourceView, getTableFieldList } from 'packages/js/utils/dataSourceService'
+} from 'data-room-ui/js/utils/datasetConfigService'
+import { datasourceList, getSourceTable, getSourceView, getTableFieldList } from 'data-room-ui/js/utils/dataSourceService'
 import _ from 'lodash'
-import { datasetMixins } from 'packages/js/mixins/datasetMixin'
+import { datasetMixins } from 'data-room-ui/js/mixins/datasetMixin'
 export default {
   name: 'OriginalEditForm',
   components: {
@@ -928,7 +928,7 @@ export default {
 //   max-height: 270px;
 // }
 
-/deep/ .el-input__inner {
+::v-deep .el-input__inner {
   width: 100% !important;
 }
 
@@ -942,7 +942,7 @@ export default {
   }
 }
 
-/deep/ .fieldDescCheck {
+::v-deep .fieldDescCheck {
   .el-dialog__body {
     height: fit-content !important;
     min-height: unset !important;
@@ -980,7 +980,7 @@ export default {
   }
 }
 
-/deep/ .bs-table-box.is-Edit .el-table {
+::v-deep .bs-table-box.is-Edit .el-table {
   .el-table__body-wrapper {
     max-height: unset !important;
   }

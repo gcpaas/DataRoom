@@ -12,6 +12,11 @@
     // margin-bottom: 12px;
 
     .lc-field-title {
+      width: 308px;
+        // 文字溢出隐藏
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         position: relative;
         padding-left: 12px;
         line-height: 30px;

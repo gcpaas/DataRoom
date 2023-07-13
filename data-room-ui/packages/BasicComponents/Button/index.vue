@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import commonMixins from 'packages/js/mixins/commonMixins'
-import linkageMixins from 'packages/js/mixins/linkageMixins'
+import commonMixins from 'data-room-ui/js/mixins/commonMixins'
+import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import { mapState } from 'vuex'
 export default {
   name: 'BasicComponentButton',

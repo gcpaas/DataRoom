@@ -239,16 +239,17 @@
 
 <script>
 import TypeTree from './TypeTree.vue'
+import JsEditForm from './JsEditForm.vue'
 import JsonEditForm from './JsonEditForm.vue'
-import table from 'packages/js/utils/table.js'
+import table from 'data-room-ui/js/utils/table.js'
 import ScriptEditForm from './ScriptEditForm.vue'
 import CustomEditForm from './CustomEditForm.vue'
-import { pageMixins } from 'packages/js/mixins/page'
+import { pageMixins } from 'data-room-ui/js/mixins/page'
 import OriginalEditForm from './OriginalEditForm.vue'
 import DatasetTypeDialog from './DatasetTypeDialog.vue'
 import StoredProcedureEditForm from './StoredProcedureEditForm.vue'
-import { datasetPage, datasetRemove } from 'packages/js/utils/datasetConfigService'
-import { getLabelList } from 'packages/js/utils/LabelConfigService'
+import { datasetPage, datasetRemove } from 'data-room-ui/js/utils/datasetConfigService'
+import { getLabelList } from 'data-room-ui/js/utils/LabelConfigService'
 export default {
   name: 'DataSetManagement',
   directives: {
@@ -261,7 +262,8 @@ export default {
     CustomEditForm,
     JsonEditForm,
     StoredProcedureEditForm,
-    ScriptEditForm
+    ScriptEditForm,
+    JsEditForm
   },
   mixins: [pageMixins],
   props: {
@@ -465,16 +467,16 @@ export default {
       return this.getComponents(this.datasetTypeList.find(type => type.datasetType === datasetType)?.componentName)?.config?.showOperate ?? true
     },
     getComponents (componentName) {
+      const components = Object.values(this.$options.components)
+      let remoteComponentData = null
       if (window.BS_CONFIG?.customDatasetComponents && window.BS_CONFIG?.customDatasetComponents.length > 0) {
-        const components = Object.values(this.$options.components)
-        let remoteComponentData = null
         // 获取远程组件
         remoteComponentData = window.BS_CONFIG?.customDatasetComponents.find(item => item.config.componentName === componentName)
-        return {
-          component: components.find(component => component.name === componentName) || remoteComponentData?.vueFile,
-          config: remoteComponentData?.config || null,
-          key: new Date().getTime()
-        }
+      }
+      return {
+        component: components.find(component => component.name === componentName) || remoteComponentData?.vueFile,
+        config: remoteComponentData?.config || null,
+        key: new Date().getTime()
       }
     },
     // 初始化
@@ -497,16 +499,15 @@ export default {
         { name: '存储过程数据集', datasetType: 'storedProcedure', componentName: 'StoredProcedureEditForm' },
         { name: 'JSON数据集', datasetType: 'json', componentName: 'JsonEditForm' },
         { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' },
-        { name: 'JS数据集', datasetType: 'js', componentName: 'JsDataSet' }
+        { name: 'JS数据集', datasetType: 'js', componentName: 'JsEditForm' }
       ]
-      if (this.dataSetList.length != 0) {
+      if (this.dataSetList.length !== 0) {
         this.datasetTypeList = [{ name: '全部', datasetType: '' }, ...list.filter(item => this.dataSetList.findIndex(x => x === item.datasetType) !== -1)]
       } else {
         this.datasetTypeList = [
           ...list
         ]
       }
-
       if (window.BS_CONFIG?.customDatasetComponents && window.BS_CONFIG?.customDatasetComponents.length > 0) {
         // 将获得到的远程数据集进行组装
         window.BS_CONFIG?.customDatasetComponents.forEach((item) => {
@@ -667,7 +668,7 @@ export default {
 }
 
 .bs-container .inner-container .el-form .filter-item {
-  /deep/ .el-input__inner {
+  ::v-deep .el-input__inner {
     width: 200px;
   }
 }
@@ -694,11 +695,11 @@ export default {
       height: calc(90vh - 340px);
     }
 
-    /deep/ .ztree {
+    ::v-deep .ztree {
       max-height: calc(90vh - 325px) !important;
     }
 
-    /deep/ .el-tabs__item.is-active {
+    ::v-deep .el-tabs__item.is-active {
       border-bottom: none !important;
     }
 

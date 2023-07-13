@@ -16,15 +16,13 @@ public class DataRoomPermissionClient {
     @Autowired(required = false)
     private IDataRoomPermissionService tokenService;
 
-    public boolean verifyApiPermission(HttpServletRequest request, String... permissions) {
-        boolean verify = true;
-        if (tokenService != null) {
-            verify = tokenService.verifyApiPermission(request, permissions);
-        }
-        return verify;
-    }
 
-
+    /**
+     * 校验大屏页面访问权限
+     * @param request 请求
+     * @param pageCode 页面编码
+     * @return 是否有权限
+     */
     public boolean verifyDataPermission(HttpServletRequest request, String pageCode) {
         boolean verify = true;
         if (tokenService != null) {

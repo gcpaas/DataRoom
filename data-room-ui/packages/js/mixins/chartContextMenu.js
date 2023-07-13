@@ -1,6 +1,6 @@
 import { mapMutations, mapState } from 'vuex'
 import _ from 'lodash'
-import { randomString } from 'packages/js/utils'
+import { randomString } from 'data-room-ui/js/utils'
 import Contextmenu from 'vue-contextmenujs'
 import Vue from 'vue'
 Vue.use(Contextmenu)

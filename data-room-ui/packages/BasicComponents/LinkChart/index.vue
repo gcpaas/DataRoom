@@ -18,8 +18,8 @@
   </div>
 </template>
 <script>
-import commonMixins from 'packages/js/mixins/commonMixins'
-import paramsMixins from 'packages/js/mixins/paramsMixins'
+import commonMixins from 'data-room-ui/js/mixins/commonMixins'
+import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import { mapMutations } from 'vuex'
 import iframeDialogPreview from './iframeDialogPreview'
 export default {

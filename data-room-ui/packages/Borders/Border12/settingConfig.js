@@ -20,7 +20,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'border12',
   root: {
-    version : '0.0.1',
+    version: '2023071001',
     contribution: false
   },
   customize: {

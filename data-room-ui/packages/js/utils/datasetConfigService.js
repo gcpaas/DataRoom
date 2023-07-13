@@ -1,7 +1,7 @@
 /*!
  * 数据集管理
  */
-import { get, post } from 'packages/js/utils/http'
+import { get, post } from 'data-room-ui/js/utils/http'
 
 /**
  * 数据集分页查询
@@ -51,7 +51,6 @@ const datasetUpdate = (params = {}, flag = false) => post('/dataset/update', par
  */
 const datasetRemove = (id = '-1', flag = false) => post(`/dataset/delete/${id}`, {}, flag)
 
-
 /**
  * 数据集执行
  * @param params
@@ -68,8 +67,6 @@ const datasetExecuteTest = (params = {}, flag = false) => post('/dataset/execute
  */
 
 const getDataset = (id = '-1', flag = false) => get(`/dataset/info/${id}`, {}, flag)
-
-
 
 /**
  * 获取数据集分类
@@ -102,7 +99,6 @@ const categoryUpdate = (params = {}, flag = false) => post('/category/update', p
  * @returns {*}
  */
 const categoryRemove = (id = '-1', flag = false) => post(`/category/delete/${id}`, {}, flag)
-
 
 export {
   datasetPage,

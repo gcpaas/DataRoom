@@ -24,9 +24,9 @@
   <!-- </transition> -->
 </template>
 <script>
-import SettingTitle from 'packages/SettingTitle/index.vue'
-import RightSetting from 'packages/BigScreenDesign/RightSetting/index.vue'
-import OverallSetting from 'packages/BigScreenDesign/OverallSetting/index.vue'
+import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import RightSetting from 'data-room-ui/BigScreenDesign/RightSetting/index.vue'
+import OverallSetting from 'data-room-ui/BigScreenDesign/OverallSetting/index.vue'
 import { mapState } from 'vuex'
 export default {
   name: '',
@@ -209,7 +209,7 @@ export default {
   transform: translateX(10px);
   opacity: 0;
 }
-/deep/ .el-scrollbar__view{
+::v-deep .el-scrollbar__view{
   height: calc(100vh - 80px);
   overflow-x: unset;
 }

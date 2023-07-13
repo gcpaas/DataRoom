@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import { get, post } from 'packages/js/utils/http'
+import { get, post } from 'data-room-ui/js/utils/http'
 export default {
   name: 'CatalogEditForm',
   components: {
@@ -272,7 +272,7 @@ export default {
     .el-input {
       width: 200px;
       margin-right: 20px;
-      /deep/.el-input__inner {
+      ::v-deep.el-input__inner {
         background-color: #151A26 !important;
       }
     }

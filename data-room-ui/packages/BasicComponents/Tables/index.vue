@@ -29,9 +29,9 @@
   </div>
 </template>
 <script>
-import commonMixins from 'packages/js/mixins/commonMixins'
-import paramsMixins from 'packages/js/mixins/paramsMixins'
-import linkageMixins from 'packages/js/mixins/linkageMixins'
+import commonMixins from 'data-room-ui/js/mixins/commonMixins'
+import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
+import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import _ from 'lodash'
 export default {
   name: 'TableChart',
@@ -341,14 +341,14 @@ export default {
   display: table-cell !important;
 }
 
-/deep/ .el-table__body-wrapper::-webkit-scrollbar {
+::v-deep .el-table__body-wrapper::-webkit-scrollbar {
   width: 10px; // 横向滚动条
   height: 10px; // 纵向滚动条 必写
   background-color: transparent;
 }
 
 // 滚动条的滑块
-/deep/ .el-table__body-wrapper::-webkit-scrollbar-thumb {
+::v-deep .el-table__body-wrapper::-webkit-scrollbar-thumb {
   background-color: #9093994D;
   border-radius: 5px;
 

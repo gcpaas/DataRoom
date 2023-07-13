@@ -46,7 +46,7 @@
                   :placeholder="`请输入${setting.label}`"
                   clearable
                 />
-                <el-drag-select
+                <el-select
                   v-else-if="setting.type === 'select'"
                   v-model="setting.value"
                   popper-class="bs-el-select"
@@ -61,7 +61,7 @@
                     :label="opt.label"
                     :value="opt.value"
                   />
-                </el-drag-select>
+                </el-select>
                 <template v-else-if="setting.type === 'colorSelect'">
                   <color-select
                     v-model="colorScheme"
@@ -131,19 +131,21 @@
                 <el-switch
                   v-else-if="setting.type === 'switch'"
                   v-model="setting.value"
-                />
-                <el-switch
-                  v-else-if="setting.type === 'switchNumber'"
-                  v-model="setting.value"
-                  :active-value="1"
-                  :inactive-value="0"
-                />
-                <el-switch
-                  v-else-if="setting.type === 'switchCustom'"
-                  v-model="setting.value"
                   :active-value="setting.active"
                   :inactive-value="setting.inactive"
                 />
+<!--                <el-switch-->
+<!--                  v-else-if="setting.type === 'switchNumber'"-->
+<!--                  v-model="setting.value"-->
+<!--                  :active-value="1"-->
+<!--                  :inactive-value="0"-->
+<!--                />-->
+<!--                <el-switch-->
+<!--                  v-else-if="setting.type === 'switch,'"-->
+<!--                  v-model="setting.value"-->
+<!--                  :active-value="setting.active"-->
+<!--                  :inactive-value="setting.inactive"-->
+<!--                />-->
                 <el-slider
                   v-else-if="setting.type === 'slider'"
                   v-model="setting.value"
@@ -165,20 +167,17 @@
   </div>
 </template>
 <script>
-import ElDragSelect from 'packages/BigScreenDesign/RightSetting/ElDragSelect.vue'
-import SettingTitle from 'packages/SettingTitle/index.vue'
-import { chartSettingMixins } from 'packages/js/mixins/chartSettingMixins'
-import ColorSelect from 'packages/ColorMultipleSelect/index.vue'
-// import ColorPicker from 'packages/ColorPicker/index.vue'
-import PaddingSetting from 'packages/BigScreenDesign/RightSetting/PaddingSetting/index.vue'
-import GradualSetting from 'packages/BigScreenDesign/RightSetting/GradualSetting/index.vue'
-import PosWhSetting from 'packages/BigScreenDesign/RightSetting/PosWhSetting.vue'
-import _ from 'lodash'
+import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
+import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
+// import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
+import PaddingSetting from 'data-room-ui/BigScreenDesign/RightSetting/PaddingSetting/index.vue'
+import GradualSetting from 'data-room-ui/BigScreenDesign/RightSetting/GradualSetting/index.vue'
+import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 export default {
   name: 'CustomComponentSetting',
   components: {
     ColorSelect,
-    ElDragSelect,
     // ColorPicker,
     PaddingSetting,
     GradualSetting,

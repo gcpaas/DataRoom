@@ -1,5 +1,5 @@
 
-import { get, post } from 'packages/js/utils/http'
+import { get, post } from 'data-room-ui/js/utils/http'
 
 // 大屏详情
 export function getScreenInfo (code) {

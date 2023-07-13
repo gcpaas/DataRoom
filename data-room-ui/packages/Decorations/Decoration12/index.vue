@@ -13,7 +13,7 @@
 </template>
 <script>
 import DvDecoration12 from '@jiaminghi/data-view/lib/components/decoration12/src/main.vue'
-import { refreshComponentMixin } from 'packages/js/mixins/refreshComponent'
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
 export default {
   name: 'Decoration12',
   components: {
@@ -88,12 +88,12 @@ export default {
   }
 }
 /*滚动条样式*/
-/deep/::-webkit-scrollbar {
+::v-deep ::-webkit-scrollbar {
   width: 4px;
   border-radius: 4px;
   height: 4px;
 }
-/deep/::-webkit-scrollbar-thumb {
+::v-deep ::-webkit-scrollbar-thumb {
   background: #dddddd !important;
   border-radius: 10px;
 }

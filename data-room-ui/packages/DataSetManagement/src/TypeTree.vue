@@ -155,10 +155,10 @@ import $ from 'jquery'
 import 'ztree/js/jquery.ztree.core'
 import 'ztree/js/jquery.ztree.exedit'
 import 'ztree/js/jquery.ztree.exhide'
-import 'packages/assets/style/zTree/metroStyle.css'
-import 'packages/assets/style/zTree/zTree.scss'
-import 'packages/assets/style/zTree/zTreeSelect.scss'
-import { getCategoryTree, categoryRemove } from 'packages/js/utils/datasetConfigService'
+import 'data-room-ui/assets/style/zTree/metroStyle.css'
+import 'data-room-ui/assets/style/zTree/zTree.scss'
+import 'data-room-ui/assets/style/zTree/zTreeSelect.scss'
+import { getCategoryTree, categoryRemove } from 'data-room-ui/js/utils/datasetConfigService'
 import CategroyEditForm from './CategroyEditForm.vue'
 export default {
   name: 'DatasetTypeTreeIndex',
@@ -482,7 +482,7 @@ export default {
 <style lang="scss" scoped>
 @import '../../assets/style/bsTheme.scss';
 
-/deep/ .el-tabs {
+::v-deep .el-tabs {
   .el-tabs__header {
     margin: 0;
 
@@ -526,7 +526,7 @@ export default {
       background-color: var(--bs-el-background-3) !important;
     }
   }
-/deep/ .el-tabs__nav-wrap::after {
+::v-deep .el-tabs__nav-wrap::after {
   display: none !important;
 }
 

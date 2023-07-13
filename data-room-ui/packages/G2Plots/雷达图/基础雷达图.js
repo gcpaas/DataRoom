@@ -52,10 +52,12 @@ const setting = [
   },
   {
     label: '面积填充',
-    type: 'switchNumber', // 设置组件类型
+    type: 'switch', // 设置组件类型
     field: 'area', // 字段
     optionField: 'area', // 对应options中的字段
     value: 1,
+    active: 1,
+    inactive: 0,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -65,6 +67,8 @@ const setting = [
     field: 'smooth', // 字段
     optionField: 'smooth', // 对应options中的字段
     value: false,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'graph'
   },

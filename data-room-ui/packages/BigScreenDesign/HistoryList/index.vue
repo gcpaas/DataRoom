@@ -111,7 +111,7 @@ export default {
 @import '../../BigScreenDesign/fonts/iconfont.css';
 @import '../../assets/style/bsTheme.scss';
 .layer-list-wrap {
-  /deep/ .choosed-row {
+  ::v-deep .choosed-row {
     .bs-el-table-column {
       border-color: var(--bs-el-border) !important;
       background: var(--bs-background-2) !important;

@@ -141,13 +141,13 @@
 </template>
 <script>
 import _ from 'lodash'
-import basicComponents from 'packages/js/config/basicComponentsConfig'
+import basicComponents from 'data-room-ui/js/config/basicComponentsConfig'
 import g2PlotComponents, { getCustomPlots } from '../G2Plots/plotList'
-import borderComponents from 'packages/js/config/borderComponentsConfig'
-import decorationComponents from 'packages/js/config/decorationComponentsConfig'
+import borderComponents from 'data-room-ui/js/config/borderComponentsConfig'
+import decorationComponents from 'data-room-ui/js/config/decorationComponentsConfig'
 import LayerList from './LayerList/index.vue'
 import { mapMutations } from 'vuex'
-import IconSvg from 'packages/SvgIcon'
+import IconSvg from 'data-room-ui/SvgIcon'
 export default {
   name: 'PageLeftPanel',
   components: {
@@ -391,7 +391,7 @@ export default {
         height: 100%;
       }
 
-      /deep/.el-tabs__content {
+      ::v-deep.el-tabs__content {
         height: 100%;
         width: 160px;
 
@@ -488,13 +488,13 @@ export default {
       }
     }
 
-    /deep/.el-tabs__header {
+    ::v-deep.el-tabs__header {
       width: 45px;
       height: 100%;
       margin-right: 0 !important;
     }
 
-    /deep/.el-tabs--left .el-tabs__nav-wrap.is-left::after {
+    ::v-deep.el-tabs--left .el-tabs__nav-wrap.is-left::after {
       width: 0 !important;
     }
 
@@ -512,7 +512,7 @@ export default {
       /* border-right: 1px solid #ccc; */
     }
 
-    /deep/ .el-tabs__nav-scroll {
+    ::v-deep .el-tabs__nav-scroll {
       background-color: var(--bs-background-2);
     }
   }
@@ -527,7 +527,7 @@ export default {
     }
   }
   .left-tabs-box {
-    /deep/.el-tabs__item {
+    ::v-deep.el-tabs__item {
       height: 70px !important;
       .menu-slot {
         height: 100%;
@@ -565,7 +565,7 @@ export default {
   opacity: 0;
 }
 
-/deep/ .el-tabs__item.is-left {
+::v-deep .el-tabs__item.is-left {
   text-align: center;
   padding: 0;
 }

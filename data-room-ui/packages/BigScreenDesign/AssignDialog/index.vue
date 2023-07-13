@@ -65,7 +65,7 @@
   </el-dialog>
 </template>
 <script>
-import { pageMixins } from 'packages/js/mixins/page'
+import { pageMixins } from 'data-room-ui/js/mixins/page'
 export default {
   name: 'ComponentDialog',
   mixins: [pageMixins],
@@ -140,7 +140,7 @@ export default {
   background-color: #3f3f3f;
 }
 
-/deep/ .el-dialog__body {
+::v-deep .el-dialog__body {
   padding: 0 !important;
   max-height: 100vh !important;
 }

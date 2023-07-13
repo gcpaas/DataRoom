@@ -15,6 +15,7 @@
     >
       <el-form
         ref="dataForm"
+        class="bs-el-form"
         :model="dataForm"
         :rules="dataForm.id ? updateRules : rules"
         size="small"
@@ -208,7 +209,7 @@
 </template>
 
 <script>
-import { checkRepeat, sourceLinkTest, add, update } from 'packages/js/utils/dataSourceService'
+import { checkRepeat, sourceLinkTest, add, update } from 'data-room-ui/js/utils/dataSourceService'
 export default {
   props: {
     appCode: {
@@ -467,5 +468,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~packages/assets/style/bsTheme.scss';
+@import '../../assets//style/bsTheme.scss';
 </style>

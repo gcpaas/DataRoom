@@ -15,7 +15,7 @@
 import { videoPlayer } from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import 'videojs-contrib-hls'
-import { refreshComponentMixin } from 'packages/js/mixins/refreshComponent'
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
 export default {
   name: 'Video',
   components: { videoPlayer },
@@ -107,17 +107,17 @@ export default {
 }
 
 /*滚动条样式*/
-/deep/::-webkit-scrollbar {
+::v-deep ::-webkit-scrollbar {
   width: 4px;
   border-radius: 4px;
   height: 4px;
 }
 
-/deep/::-webkit-scrollbar-thumb {
+::v-deep ::-webkit-scrollbar-thumb {
   background: #dddddd !important;
   border-radius: 10px;
 }
-/deep/ .video-js .vjs-big-play-button {
+::v-deep .video-js .vjs-big-play-button {
   z-index: 100;
   left: 50%;
   top: 50%;

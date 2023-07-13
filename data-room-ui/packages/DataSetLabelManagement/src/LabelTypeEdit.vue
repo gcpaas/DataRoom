@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { updateLabelType } from 'packages/js/utils/LabelConfigService'
+import { updateLabelType } from 'data-room-ui/js/utils/LabelConfigService'
 
 export default {
   name: 'LabelTypeEdit',
@@ -79,20 +79,14 @@ export default {
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          updateLabelType(this.dataForm).then(() => {
-            if (this.$parent.queryForm.labelType !== '') {
-              this.$parent.queryForm.labelType = this.dataForm.labelType
-            }
-            this.$parent.reSearch()
-            this.$parent.getLabelType()
-
-            this.cancel()
-            this.$message.success('保存成功')
-          })
-        } else {
+        if (!valid) {
           return false
         }
+        updateLabelType(this.dataForm).then(() => {
+          this.$emit('afterEdit')
+          this.cancel()
+          this.$message.success('保存成功')
+        })
       })
     }
   }

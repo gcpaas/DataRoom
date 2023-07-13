@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { EventBus } from 'packages/js/utils/eventBus'
+import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import { mapMutations } from 'vuex'
 import { getUpdateChartInfo } from '../api/bigScreenApi'
 

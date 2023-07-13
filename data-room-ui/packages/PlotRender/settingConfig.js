@@ -1,10 +1,9 @@
-import { commonConfig, displayOption } from 'packages/js/config'
+import { commonConfig, displayOption } from 'data-room-ui/js/config'
 export const settingConfig = {
   displayOption: { ...displayOption }
 }
 const customConfig = {
   root: {
-    version: '2023071001',
     contribution: false
   },
   customize: {

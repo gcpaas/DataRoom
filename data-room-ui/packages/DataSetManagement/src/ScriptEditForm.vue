@@ -127,7 +127,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item
-                  label="关联标签"
+                  label="标签"
                   prop="labelIds"
                 >
                   <label-select
@@ -530,20 +530,20 @@
 </template>
 
 <script>
-import LabelSelect from 'packages/DataSetLabelManagement/src/LabelSelect.vue'
+import LabelSelect from 'data-room-ui/DataSetLabelManagement/src/LabelSelect.vue'
 import {
   nameCheckRepeat,
   getCategoryTree,
   getDataset,
   datasetExecuteTest,
   datasetAdd, datasetUpdate
-} from 'packages/js/utils/datasetConfigService'
+} from 'data-room-ui/js/utils/datasetConfigService'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/groovy/groovy'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/nord.css'
 import _ from 'lodash'
-import { datasetMixins } from 'packages/js/mixins/datasetMixin'
+import { datasetMixins } from 'data-room-ui/js/mixins/datasetMixin'
 export default {
   name: 'ScriptEditForm',
   components: {
@@ -867,7 +867,7 @@ export default {
 //   max-height: 270px;
 // }
 
-/deep/ .el-input__inner {
+::v-deep .el-input__inner {
   width: 100% !important;
 }
 
@@ -886,7 +886,7 @@ export default {
 }
 
 .operation {
-  /deep/ .el-select {
+  ::v-deep .el-select {
     width: 200px !important;
     margin-right: 16px;
   }
@@ -897,7 +897,7 @@ export default {
 // .codeStyle {
 //   border: 1px solid #EBEEF5;
 // }
-/deep/ .CodeMirror {
+::v-deep .CodeMirror {
   height: 180px !important;
   font-family: Helvetica, Tahoma;
   // .CodeMirror-scroll {
@@ -912,7 +912,7 @@ export default {
   border: 0;
 }
 
-/deep/ .fieldDescCheck {
+::v-deep .fieldDescCheck {
   .el-dialog__body {
     height: fit-content !important;
     min-height: unset !important;
@@ -994,7 +994,7 @@ export default {
   }
 }
 
-/deep/ .bs-table-box.is-Edit .el-table {
+::v-deep .bs-table-box.is-Edit .el-table {
   max-height: unset !important;
 
   .el-table__body-wrapper {

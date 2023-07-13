@@ -119,7 +119,7 @@ const setting = [
   // 网格线 grid
   {
     label: '虚线',
-    type: 'switchCustom',
+    type: 'switch,',
     field: 'yAxis_grid_line_style_lineDash',
     optionField: 'yAxis.grid.line.style.lineDash',
     value: 0,
@@ -153,6 +153,8 @@ const setting = [
     field: 'legendEnable', // 字段
     optionField: 'legendEnable', // 对应options中的字段
     value: false,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'legend'
   },
@@ -337,6 +339,8 @@ const setting = [
     field: 'xAxis_label_autoHide',
     optionField: 'xAxis.label.autoHide',
     value: false,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -346,6 +350,8 @@ const setting = [
     field: 'xAxis_label_autoEllipsis',
     optionField: 'xAxis.label.autoEllipsis',
     value: false,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -403,10 +409,12 @@ const setting = [
   },
   {
     label: '显示标签',
-    type: 'switchNumber',
+    type: 'switch',
     field: 'yAxis_label_style_opacity',
     optionField: 'yAxis.label.style.opacity',
     value: 1,
+    active: 1,
+    inactive: 0,
     tabName: 'custom',
     groupName: 'yAxis'
   },

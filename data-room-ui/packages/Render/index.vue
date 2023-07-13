@@ -414,7 +414,7 @@ export default {
     cursor: move;
   }
 
-  /deep/ .vdr {
+  ::v-deep .vdr {
     border: none;
   }
   .h-line {

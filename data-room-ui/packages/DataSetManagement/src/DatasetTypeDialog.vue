@@ -30,87 +30,6 @@
             </div>
           </el-card>
         </el-col>
-
-        <!-- <el-col
-          v-if="datasetTypeList.includes('original')"
-          :span="spanNum"
-        >
-          <el-card
-            class="bs-el-card"
-            shadow="hover"
-          >
-            <div
-              class="type-item"
-              @click="openAddForm('original')"
-            >
-              原始数据集
-            </div>
-          </el-card>
-        </el-col> -->
-        <!-- <el-col
-          v-if="datasetTypeList.includes('custom')"
-          :span="spanNum"
-        >
-          <el-card
-            class="bs-el-card"
-            shadow="hover"
-          >
-            <div
-              class="type-item"
-              @click="openAddForm('custom')"
-            >
-              自助数据集
-            </div>
-          </el-card>
-        </el-col> -->
-        <!-- <el-col
-          v-if="datasetTypeList.includes('storedProcedure')"
-          :span="spanNum"
-        >
-          <el-card
-            class="bs-el-card"
-            shadow="hover"
-          >
-            <div
-              class="type-item"
-              @click="openAddForm('storedProcedure')"
-            >
-              存储过程数据集
-            </div>
-          </el-card>
-        </el-col> -->
-        <!-- <el-col
-          v-if="datasetTypeList.includes('json')"
-          :span="spanNum"
-        >
-          <el-card
-            class="bs-el-card"
-            shadow="hover"
-          >
-            <div
-              class="type-item"
-              @click="openAddForm('json')"
-            >
-              JSON数据集
-            </div>
-          </el-card>
-        </el-col> -->
-        <!-- <el-col
-          v-if="datasetTypeList.includes('script')"
-          :span="spanNum"
-        >
-          <el-card
-            class="bs-el-card"
-            shadow="hover"
-          >
-            <div
-              class="type-item"
-              @click="openAddForm('script')"
-            >
-              脚本数据集
-            </div>
-          </el-card>
-        </el-col> -->
       </el-row>
     </div>
   </el-dialog>
@@ -129,12 +48,7 @@ export default {
       dialogVisible: false
     }
   },
-  created () {
-    // eslint-disable-next-line eqeqeq
-    // if (this.datasetTypeList.length == 1) this.spanNum = 24
-    // if ([2, 4].includes(this.datasetTypeList.length)) this.spanNum = 12
-    // if ([3, 5, 6].includes(this.datasetTypeList.length)) this.spanNum = 8
-  },
+  created () { },
   methods: {
     // 选择新增类型
     openAddForm (type, componentName) {
@@ -167,7 +81,7 @@ export default {
       color: var(--bs-el-color-primary);
     }
 }
-/deep/ .el-dialog__body {
+::v-deep .el-dialog__body {
   min-height: 130px !important;
 }
 .el-col {

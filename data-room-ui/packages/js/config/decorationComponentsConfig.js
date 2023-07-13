@@ -1,7 +1,7 @@
 import _ from 'lodash'
-import getComponentConfig from 'packages/js/utils/getDecorationComponentsConfig'
+import getComponentConfig from 'data-room-ui/js/utils/getDecorationComponentsConfig'
 // 批量引入配置文件
-import { setModules, dataModules } from 'packages/js/utils/configImport'
+import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
 const typeLIst = ['decoration1', 'decoration3', 'decoration2', 'decoration2Reverse', 'decoration4', 'decoration4Reverse', 'decoration5', 'decoration6', 'decoration8', 'decoration8Reverse', 'decoration9', 'decoration10', 'decoration11']
 let basicConfigList = []
 basicConfigList = typeLIst.map(type => {

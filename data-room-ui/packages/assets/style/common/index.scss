@@ -307,6 +307,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         font-size: 16px;
         position: relative;
         padding-left: 20px;
+        border-left: none !important;
       }
       
       .el-dialog__title::before {

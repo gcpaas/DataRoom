@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import Icon from 'packages/assets/images/dataSourceIcon/export'
-import IconSvg from 'packages/SvgIcon'
+import Icon from 'data-room-ui/assets/images/dataSourceIcon/export'
+import IconSvg from 'data-room-ui/SvgIcon'
 export default {
   name: 'DataSourceManagement',
   components: {
@@ -150,12 +150,12 @@ export default {
         }
       }
 
-      /deep/ .el-tabs__item {
+      ::v-deep .el-tabs__item {
         text-align: left;
         width: 290px;
       }
 
-      /deep/ .el-tabs__nav-wrap::after {
+      ::v-deep .el-tabs__nav-wrap::after {
         background-color: #fff !important;
       }
     }
@@ -172,7 +172,7 @@ export default {
       height: 100%;
       box-sizing: border-box;
     }
-    /deep/.el-scrollbar__view{
+    ::v-deep.el-scrollbar__view{
       height: 100%;
       .inner-router-view-wrap{
         height: 100%;

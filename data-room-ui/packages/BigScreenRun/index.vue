@@ -1,45 +1,51 @@
 <template>
-  <div
-    v-if="!pageLoading"
-    class="bs-preview-wrap"
-    :style="previewWrapStyle"
-  >
+  <div v-if="hasPermission">
     <div
-      class="bs-render-wrap render-theme-wrap"
-      :style="renderStyle"
+      v-loading="pageLoading"
+      element-loading-background="#151A26"
+      class="bs-preview-wrap"
+      :style="previewWrapStyle"
     >
       <div
-        v-for="chart in chartList"
-        :key="chart.code"
-        :style="{
-          position: 'absolute',
-          width: chart.w + 'px',
-          height: chart.h + 'px',
-          left: chart.x + 'px',
-          top: chart.y + 'px',
-          zIndex: chart.z || 0
-        }"
+        class="bs-render-wrap render-theme-wrap"
+        :style="renderStyle"
       >
-        <RenderCard
-          ref="RenderCardRef"
-          :key="chart.key"
-          :config="chart"
-        />
+        <div
+          v-for="chart in chartList"
+          :key="chart.code"
+          :style="{
+            position: 'absolute',
+            width: chart.w + 'px',
+            height: chart.h + 'px',
+            left: chart.x + 'px',
+            top: chart.y + 'px',
+            zIndex: chart.z || 0
+          }"
+        >
+          <RenderCard
+            ref="RenderCardRef"
+            :key="chart.key"
+            :config="chart"
+          />
+        </div>
       </div>
     </div>
   </div>
+  <NotPermission v-else />
 </template>
 <script>
-import { get } from 'packages/js/utils/http'
-import RenderCard from 'packages/Render/RenderCard.vue'
+import { get } from 'data-room-ui/js/utils/http'
+import RenderCard from 'data-room-ui/Render/RenderCard.vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
-import { getThemeConfig } from 'packages/js/api/bigScreenApi'
+import { getThemeConfig } from 'data-room-ui/js/api/bigScreenApi'
 import { compile } from 'tiny-sass-compiler/dist/tiny-sass-compiler.esm-browser.prod.js'
 import { G2 } from '@antv/g2plot'
+import NotPermission from 'data-room-ui/NotPermission'
 export default {
   name: 'BigScreenRun',
   components: {
-    RenderCard
+    RenderCard,
+    NotPermission
   },
   props: {
     config: {
@@ -55,7 +61,8 @@ export default {
     return {
       innerHeight: window.innerHeight,
       innerWidth: window.innerWidth,
-      timer: null
+      timer: null,
+      hasPermission: true
     }
   },
   computed: {
@@ -70,8 +77,8 @@ export default {
       const iframeCode = this.getIframeCode()
       // 兼容外部网页上的code,iframe上的code以及传入的code
       return this.$route.query.code ||
-             iframeCode ||
-             this.config.code
+          iframeCode ||
+          this.config.code
     },
     fitMode () {
       return this.config.fitMode || this.stateFitMode
@@ -128,35 +135,35 @@ export default {
         this.init()
       }
     },
-    'pageInfo.pageConfig.refreshConfig.length':{
-      handler(val){
-        if (val){
+    'pageInfo.pageConfig.refreshConfig.length': {
+      handler (val) {
+        if (val) {
           this.startTimer()
         }
       }
     }
   },
-  beforeRouteEnter (to, from, next) {
-    // 判断进入预览页面前是否有访问权限
-    const code = to.query.code
-    get(`/bigScreen/permission/check/${code}`).then(res => {
-      if (res) {
-        next(vm => {
-          // 重置大屏的vuex store
-          vm.$store.commit('bigScreen/resetStoreData')
-        })
-      } else {
-        next('/notPermission')
-      }
-    })
-  },
+  // beforeRouteEnter (to, from, next) {
+  //   // 判断进入预览页面前是否有访问权限
+  //   const code = to.query.code
+  //   get(`/bigScreen/permission/check/${code}`).then(res => {
+  //     if (res) {
+  //       next(vm => {
+  //         // 重置大屏的vuex store
+  //         vm.$store.commit('bigScreen/resetStoreData')
+  //       })
+  //     } else {
+  //       next('/notPermission')
+  //     }
+  //   })
+  // },
   beforeRouteLeave (to, from, next) {
     // 离开的时候 重置大屏的vuex store
     this.$store.commit('bigScreen/resetStoreData')
     next()
   },
   created () {
-    this.init()
+    this.permission()
     this.getParentWH()
     this.windowSize()
   },
@@ -178,6 +185,14 @@ export default {
       'changePageConfig',
       'changeChartConfig'
     ]),
+    permission () {
+      get(`/bigScreen/permission/check/${this.pageCode}`).then(res => {
+        this.hasPermission = res
+        if (res) {
+          this.init()
+        }
+      })
+    },
     init () {
       if (!this.pageCode) { return }
       this.changePageLoading(true)
@@ -356,15 +371,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.bs-preview-wrap {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
+  .bs-preview-wrap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
 
-  .bs-render-wrap {
-    position: relative;
-    background-size: cover;
+    .bs-render-wrap {
+      position: relative;
+      background-size: cover;
+    }
   }
-}
 </style>

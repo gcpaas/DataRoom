@@ -1,14 +1,14 @@
 
 // 大屏列表管理页面
-import 'packages/assets/style/common/index.scss'
-import 'packages/assets/style/bsTheme.scss'
+import 'data-room-ui/assets/style/common/index.scss'
+import 'data-room-ui/assets/style/bsTheme.scss'
 
 // 大屏 vuex store数据
-import bigScreenStore from 'packages/js/store'
+import bigScreenStore from 'data-room-ui/js/store'
 // 注册基础配置
-import registerConfig from 'packages/js/utils/registerConfig'
+import registerConfig from 'data-room-ui/js/utils/registerConfig'
 // 更新主题
-import updateTheme from 'packages/js/utils/updateTheme'
+import updateTheme from 'data-room-ui/js/utils/updateTheme'
 
 // 布局组件
 const BigScreenTopLayout = () => import('./Layout/ApplicationCreateTop/index.vue')
@@ -26,8 +26,6 @@ const BigScreenDesign = () => import('./BigScreenDesign')
 const DataSetManagement = () => import('./DataSetManagement')
 // 数据源管理页面
 const DataSourceManagement = () => import('./DataSourceManagement')
-// 数据集标签管理页面
-import DataSetLabelManagement from 'packages/DataSetLabelManagement'
 
 // 存储组件列表
 const components = [
@@ -38,8 +36,7 @@ const components = [
   BigScreenRun,
   BigScreenDesign,
   DataSetManagement,
-  DataSourceManagement,
-  DataSetLabelManagement
+  DataSourceManagement
 ]
 
 const $bigScreen = {
@@ -62,7 +59,6 @@ export {
   BigScreenDesign,
   DataSetManagement,
   DataSourceManagement,
-  DataSetLabelManagement,
   $bigScreen,
   registerConfig,
   updateTheme
@@ -78,7 +74,6 @@ export default {
   BigScreenDesign,
   DataSetManagement,
   DataSourceManagement,
-  DataSetLabelManagement,
   $bigScreen,
   registerConfig,
   updateTheme

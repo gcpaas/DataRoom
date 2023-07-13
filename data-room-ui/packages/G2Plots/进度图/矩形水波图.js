@@ -29,10 +29,12 @@ const setting = [
   // 图表 graph
   {
     label: '贴图',
-    type: 'switchNumber', // 设置组件类型
+    type: 'switch', // 设置组件类型
     field: 'pattern_cfg_fillOpacity', // 字段
     optionField: 'pattern.cfg.fillOpacity', // 对应options中的字段
     value: 0,
+    active: 1,
+    inactive: 0,
     tabName: 'custom',
     groupName: 'graph'
   },

@@ -29,10 +29,10 @@
 </template>
 <script>
 import '@jiaminghi/data-view/lib/components/digitalFlop/src/main.css'
-import { refreshComponentMixin } from 'packages/js/mixins/refreshComponent'
-import commonMixins from 'packages/js/mixins/commonMixins'
-import paramsMixins from 'packages/js/mixins/paramsMixins'
-import linkageMixins from 'packages/js/mixins/linkageMixins'
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
+import commonMixins from 'data-room-ui/js/mixins/commonMixins'
+import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
+import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 function formatter (number, format) {
   const numbers = number.toString().split('').reverse()
   const segs = []
@@ -185,12 +185,12 @@ export default {
   }
 }
 /*滚动条样式*/
-/deep/::-webkit-scrollbar {
+::v-deep ::-webkit-scrollbar {
   width: 4px;
   border-radius: 4px;
   height: 4px;
 }
-/deep/::-webkit-scrollbar-thumb {
+::v-deep ::-webkit-scrollbar-thumb {
   background: #dddddd !important;
   border-radius: 10px;
 }

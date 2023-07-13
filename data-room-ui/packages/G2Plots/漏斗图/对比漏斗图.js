@@ -60,6 +60,8 @@ const setting = [
     field: 'isTransposed', // 字段
     optionField: 'isTransposed', // 对应options中的字段
     value: false,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     options: [
       {
@@ -147,6 +149,8 @@ const setting = [
     field: 'legendEnable', // 字段
     optionField: 'legendEnable', // 对应options中的字段
     value: false,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'legend'
   },

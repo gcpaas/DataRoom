@@ -133,7 +133,7 @@
     font-weight: bold;
     color: #fff;
   }
-  /deep/ .el-button.item  {
+  ::v-deep .el-button.item  {
     border-width: 0;
     &:hover, &:focus {
       outline: none;
@@ -152,7 +152,7 @@
     .el-table {
       max-height: calc(90vh - 340px);
     }
-    /deep/ .ztree {
+    ::v-deep .ztree {
       max-height: calc(90vh - 325px) !important;
     }
   }

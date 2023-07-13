@@ -7,9 +7,9 @@
  */
 
 import _ from 'lodash'
-import getComponentConfig from 'packages/js/utils/getComponentConfig'
+import getComponentConfig from 'data-room-ui/js/utils/getComponentConfig'
 // 批量引入配置文件
-import { setModules, dataModules } from 'packages/js/utils/configImport'
+import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
 const typeList = [
   'texts',
   'linkChart',

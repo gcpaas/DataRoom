@@ -194,11 +194,11 @@
   </div>
 </template>
 <script>
-import { get, post } from 'packages/js/utils/http'
-import { pageMixins } from 'packages/js/mixins/page'
+import { get, post } from 'data-room-ui/js/utils/http'
+import { pageMixins } from 'data-room-ui/js/mixins/page'
 import EditForm from './EditForm.vue'
 import CatalogEditForm from './CatalogEditForm'
-import innerRemoteComponents, { getRemoteComponents } from 'packages/RemoteComponents/remoteComponentsList'
+import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
 export default {
   name: 'BigScreenList',
   mixins: [pageMixins],
@@ -445,14 +445,14 @@ export default {
     .el-input {
       width: 200px;
       margin-right: 20px;
-      /deep/.el-input__inner {
+      ::v-deep.el-input__inner {
         background-color: var(--bs-background-1) !important;
       }
     }
 
     .el-select {
       margin-right: 20px;
-      /deep/.el-input__inner {
+      ::v-deep.el-input__inner {
         background-color: var(--bs-background-1) !important;
       }
     }
@@ -470,7 +470,7 @@ export default {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 15px;
     padding-bottom: 10px;
-    // /deep/ .el-loading-mask {
+    // ::v-deep .el-loading-mask {
     //   display: flex;
     //   align-items: center;
     //   justify-content: center;
@@ -573,14 +573,14 @@ export default {
             object-fit: cover;
           }
 
-          /deep/.image-slot {
+          ::v-deep.image-slot {
             height: 100%;
             background-color: var(--bs-background-2);
             display: flex;
             align-items: center;
             justify-content: center;
           }
-          /deep/.el-image__error {
+          ::v-deep.el-image__error {
             background-color: #1d1d1d;
           }
         }

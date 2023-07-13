@@ -4,7 +4,7 @@
  * @Date: 2022-10-13 11:18:03
  * @LastEditTime: 2022-10-13 13:55:11
  */
-import { commonConfig, displayOption } from 'packages/js/config'
+import { commonConfig, displayOption } from 'data-room-ui/js/config'
 
 export const settingConfig = {
   theme: 'dark',
@@ -29,7 +29,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'linkChart',
   root: {
-    version : '0.0.1',
+    version: '2023071001',
     url: 'https://www.runoob.com/'
   },
   customize: {

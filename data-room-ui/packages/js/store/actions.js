@@ -1,10 +1,10 @@
 // 组件配置转化
 import _ from 'lodash'
-import { setModules, dataModules } from 'packages/js/utils/configImport'
+import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
 import { getScreenInfo, getDataSetDetails, getDataByDataSetId } from '../api/bigScreenApi'
 import { stringToFunction } from '../utils/evalFunctions'
 import { EventBus } from '../utils/eventBus'
-import plotList from 'packages/G2Plots/plotList'
+import plotList from 'data-room-ui/G2Plots/plotList'
 export default {
   // 初始化页面数据
   initLayout ({ commit, dispatch }, code) {
@@ -68,9 +68,13 @@ export function handleResData (data) {
   let originalConfig = {}
   pageInfo.chartList.forEach((chart) => {
     if (!['customComponent', 'remoteComponent'].includes(chart.type)) {
-      // chart.option = _.cloneDeep(setModules[chart.type])
       originalConfig = { option: { ...setModules[chart.type] }, ...dataModules[chart.type] }
-      chart = compatibility(chart, originalConfig)
+      // 如果没有版本号，或者版本号修改了则需要进行旧数据兼容
+      if ((!chart.version) || chart.version !== originalConfig.version) {
+        chart = compatibility(chart, originalConfig)
+      } else {
+        chart.option = _.cloneDeep(setModules[chart.type])
+      }
     } else {
       originalConfig = plotList?.find(plot => plot.name === chart.name)
       chart.option = stringToFunction(chart.option)
@@ -78,15 +82,21 @@ export function handleResData (data) {
       if (!chart?.dataSource?.businessKey) {
         chart.option.data = plotList?.find(plot => plot.name === chart.name)?.option?.data
       }
-      chart = compatibility(chart, originalConfig)
+      // 如果没有版本号，或者版本号修改了则需要进行旧数据兼容
+      if ((!chart.version) || chart.version !== originalConfig.version) {
+        chart = compatibility(chart, originalConfig)
+      }
     }
     chart.key = chart.code
   })
+  // 存储修改后的配置
+  localStorage.setItem('pageInfo', JSON.stringify(pageInfo))
   return pageInfo
 }
 // 组件属性兼容
 function compatibility (config, originalConfig) {
   const newConfig = config
+  newConfig.version = originalConfig.version
   newConfig.dataSource = objCompare(newConfig.dataSource, originalConfig.dataSource)
   newConfig.customize = objCompare(newConfig.customize, originalConfig.customize)
   newConfig.option = { ...objCompare(newConfig.option, originalConfig.option), displayOption: originalConfig.option.displayOption }
@@ -118,7 +128,6 @@ function arrCompare (list1, list2) {
     // 如果存在交集
     if (fieldList.includes(item.field)) {
       // 保留旧数据的value
-      // console.log(list1.filter(j => j.field === item.field))
       value = (list1.filter(j => {
         return j.field === item.field
       }))[0].value
