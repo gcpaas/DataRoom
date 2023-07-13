@@ -84,7 +84,7 @@
               选择背景图
             </el-button>
             <el-image
-              v-show="form.bg"
+              v-if="form.bg"
               class="bg-img bs-el-img"
               :src="form.bg"
               fit="cover"
@@ -365,6 +365,7 @@ export default {
         this.pageInfo.pageConfig.refreshConfig = []
       }
       this.form = { ...this.pageInfo.pageConfig }
+      console.log('this.form', this.form)
       this.drawerVisible = true
       if (this.pageInfo.chartList.length === 0) {
         this.pageInfo.pageConfig.refreshConfig = []
@@ -538,14 +539,14 @@ export default {
 }
 
 .bg-img {
-  width: 200px;
+  width: 180px;
   height: 150px;
   cursor: pointer;
   position: relative;
 }
 
 .close-icon {
-  left: 170px;
+  left: 150px;
   top: 10px;
   font-size: 24px;
   cursor: pointer;
