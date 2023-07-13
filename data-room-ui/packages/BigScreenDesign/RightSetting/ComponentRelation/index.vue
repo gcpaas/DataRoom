@@ -204,7 +204,7 @@ export default {
           })
         }
       })
-      layouts = layouts?.filter(item => !['Tabs', 'titles', 'currentTime', 'timeCountDown', 'iframeChart', 'linkChart', 'carousel'].includes(item.type))
+      layouts = layouts?.filter(item => item?.option?.displayOption?.dataAllocation?.enable)
       layouts = [...layouts, ...tabComponents]
       this.targetFieldList = layouts.find(
         item => item.code === configMap.componentKey
