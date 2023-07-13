@@ -279,6 +279,11 @@ export default {
       getLabelListByDatasetId(this.datasetId).then((data) => {
         this.selectLabelListInitial = _.cloneDeep(data)
         this.selectLabelList = _.cloneDeep(data)
+        let idList = []
+        data.forEach((item) => {
+          idList.push(item.id)
+        })
+        this.$emit('commit', idList)
       })
     }
   },
