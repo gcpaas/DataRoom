@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`bs-indexCard-${customTheme}`"
+    :class="`bs-indexCard`"
     style="width: 100%;height: 100%;position: relative;"
   >
     <div
@@ -35,13 +35,13 @@
   </div>
 </template>
 <script>
-import commonMixins from '../../../js/mixins/commonMixins'
-import paramsMixins from '../../../js/mixins/paramsMixins'
+// import commonMixins from '../../../js/mixins/commonMixins'
+// import paramsMixins from '../../../js/mixins/paramsMixins'
 
 export default {
   name: 'Card',
   components: {},
-  mixins: [paramsMixins, commonMixins],
+  // mixins: [paramsMixins, commonMixins],
   props: {
     // 卡片的属性
     config: {
@@ -56,7 +56,7 @@ export default {
   },
   watch: {},
   mounted () {
-    this.chartInit()
+    // this.chartInit()
   },
   computed: {
     option () {

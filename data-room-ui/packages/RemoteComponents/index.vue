@@ -136,17 +136,17 @@ export default {
      * 组件的配置
      * @returns {Promise<unknown>}
      */
-    dataFormatting (config, data) {
-      config = _.cloneDeep(config)
-      // 遍历config.setting，将config.setting中的值赋值给config.option中对应的optionField
+    // 将config.setting的配置转化为option里的配置，这里之所以将转化的方法提出来，是因为在改变维度指标和样式的时候都需要转化
+    transformSettingToOption (config, type) {
+      let option = null
       config.setting.forEach(set => {
         if (set.optionField) {
           const optionField = set.optionField.split('.')
-          let option = config.option
+          option = config.option
           optionField.forEach((field, index) => {
             if (index === optionField.length - 1) {
               // 数据配置时，必须有值才更新
-              if ((set.tabName === 'data' && set.value) || set.tabName === 'custom') {
+              if ((set.tabName === type && type === 'data' && set.value) || (set.tabName === type && type === 'custom')) {
                 option[field] = set.value
               }
             } else {
@@ -155,16 +155,51 @@ export default {
           })
         }
       })
-      // eslint-disable-next-line no-unused-vars
-      const option = config.option
-      // eslint-disable-next-line no-unused-vars
-      const setting = config.setting
-
-      if (data?.success) {
+      config.option = { ...config.option, ...option }
+      return config
+    },
+    dataFormatting (config, data) {
+      // 数据返回成功则赋值
+      if (data.success) {
         data = data.data
-        config.option = option
+        config = this.transformSettingToOption(config, 'data')
+        // 获取到后端返回的数据，有则赋值
+        const option = config.option
+        const setting = config.setting
+        if (config.dataHandler) {
+          try {
+            // 此处函数处理data
+            eval(config.dataHandler)
+          } catch (e) {
+            console.error(e)
+          }
+        }
         config.option.data = data
+      } else {
+        // 数据返回失败则赋前端的模拟数据
+        config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data
       }
+      return config
+    },
+    // 组件的样式改变，返回改变后的config
+    changeStyle (config) {
+      config = { ...this.config, ...config }
+      config = this.transformSettingToOption(config, 'custom')
+      // 这里定义了option和setting是为了保证在执行eval时,optionHandler、dataHandler里面可能会用到，
+      const option = config.option
+      const setting = config.setting
+      if (this.config.optionHandler) {
+        try {
+          // 此处函数处理config
+          eval(this.config.optionHandler)
+        } catch (e) {
+          console.error(e)
+        }
+      }
+      if (this.chart) {
+        this.chart.update(config.option)
+      }
+      this.changeChartConfig(config)
       return config
     },
     // 同步配置
