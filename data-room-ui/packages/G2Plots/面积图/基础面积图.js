@@ -48,7 +48,7 @@ const setting = [
   // 图表 graph
   {
     label: '折线点',
-    type: 'switch,',
+    type: 'switch',
     field: 'point_size',
     optionField: 'point.size',
     value: 0,
@@ -193,7 +193,7 @@ const setting = [
   // 网格线 grid
   {
     label: '虚线',
-    type: 'switch,',
+    type: 'switch',
     field: 'yAxis_grid_line_style_lineDash',
     optionField: 'yAxis.grid.line.style.lineDash',
     value: 0,

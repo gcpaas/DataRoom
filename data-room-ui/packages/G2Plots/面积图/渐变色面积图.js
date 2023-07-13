@@ -97,7 +97,7 @@ const setting = [
   // 网格线 grid
   {
     label: '虚线',
-    type: 'switch,',
+    type: 'switch',
     field: 'yAxis_grid_line_style_lineDash',
     optionField: 'yAxis.grid.line.style.lineDash',
     value: 0,
