@@ -11,9 +11,7 @@
         flexDirection: 'column',
         boxSizing: 'border-box',
         backgroundColor: customize.backgroundColor,
-        border:`${customize.border}px`,
-        borderStyle: customize.borderStyle,
-        borderColor: `${customize.borderColor}`
+        border:`${customize.border}px` + ' ' + customize.borderStyle + ' ' + customize.borderColor,
       }"
     >
       <header
