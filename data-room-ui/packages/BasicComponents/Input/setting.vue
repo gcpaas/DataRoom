@@ -72,39 +72,6 @@
           <div class="lc-field-body">
             <PosWhSetting :config="config" />
           </div>
-
-          <!-- <el-form-item label="输入框类型">
-            <el-select
-              v-model="config.customize.type"
-              popper-class="bs-el-select"
-              class="bs-el-select"
-            >
-              <el-option
-                v-for="typeItem in typeOptions"
-                :key="typeItem.value"
-                :label="typeItem.label"
-                :value="typeItem.value"
-              />
-            </el-select>
-          </el-form-item> -->
-
-          <!-- <el-form-item
-            v-if="config.customize.showTitle"
-            label="标题位置"
-          >
-            <el-select
-              v-model="config.customize.titlePosition"
-              popper-class="bs-el-select"
-              class="bs-el-select"
-            >
-              <el-option
-                v-for="titlePosition in titlePositionOptions"
-                :key="titlePosition.value"
-                :label="titlePosition.label"
-                :value="titlePosition.value"
-              />
-            </el-select>
-          </el-form-item> -->
           <SettingTitle>基础</SettingTitle>
           <div class="lc-field-body">
             <el-form-item label="输入值字体大小">

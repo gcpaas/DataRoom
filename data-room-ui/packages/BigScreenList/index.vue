@@ -2,39 +2,21 @@
   <div class="big-screen-list-wrap">
     <div class="internal-box">
       <div class="top-search-wrap">
-        <el-input
-          v-model="searchKey"
-          class="bs-el-input bs-el-input-search"
-          :placeholder="type === 'bigScreenCatalog' ?'请输入大屏名称':'请输入组件名称'"
-          prefix-icon="el-icon-search"
-          clearable
-          @clear="reSearch"
-          @keyup.enter.native="reSearch"
-        />
-        <el-button
-          type="primary"
-          @click="reSearch"
-        >
+        <el-input v-model="searchKey" class="bs-el-input bs-el-input-search"
+          :placeholder="type === 'bigScreenCatalog' ? '请输入大屏名称' : '请输入组件名称'" prefix-icon="el-icon-search" clearable
+          @clear="reSearch" @keyup.enter.native="reSearch" />
+        <el-button type="primary" @click="reSearch">
           搜索
         </el-button>
       </div>
-      <div
-        v-loading="loading"
-        class="list-wrap bs-scrollbar"
-        element-loading-text="加载中"
-        :style="{
-          display: gridComputed ? 'grid' : 'flex',
-          justifyContent: gridComputed ? 'space-around' : 'flex-start'
-        }"
-      >
+      <div v-loading="loading" class="list-wrap bs-scrollbar" element-loading-text="加载中" :style="{
+        display: gridComputed ? 'grid' : 'flex',
+        justifyContent: gridComputed ? 'space-around' : 'flex-start'
+      }">
         <!-- 第一个是新增大屏卡片 -->
-        <div
-          class="big-screen-card-wrap"
-          :style="{
-            width: gridComputed ? 'auto' : '290px'
-          }"
-          @click="add"
-        >
+        <div class="big-screen-card-wrap" :style="{
+          width: gridComputed ? 'auto' : '290px'
+        }" @click="add">
           <div class="big-screen-card-inner big-screen-card-inner-add">
             <div class="add-big-screen-card">
               <div class="add-big-screen-card-inner">
@@ -46,68 +28,37 @@
           </div>
         </div>
         <!-- 后面遍历 list -->
-        <div
-          v-for="screen in list"
-          :key="screen.id"
-          class="big-screen-card-wrap"
-          :style="{
-            width: gridComputed ? 'auto' : '290px'
-          }"
-        >
+        <div v-for="screen in list" :key="screen.id" class="big-screen-card-wrap" :style="{
+          width: gridComputed ? 'auto' : '290px'
+        }">
           <div class="big-screen-card-inner">
             <div class="screen-card__hover">
               <div class="screen-card__hover-box">
                 <div class="preview">
-                  <div
-                    class="screen-card__oper-label circle"
-                    @click="preview(screen)"
-                  >
+                  <div class="screen-card__oper-label circle" @click="preview(screen)">
                     <span>预览</span>
                   </div>
-                  <div
-                    class="circle"
-                    @click="design(screen)"
-                  >
+                  <div class="circle" @click="design(screen)">
                     <span>设计</span>
                   </div>
-                  <div
-                    class="circle"
-                    @click="edit(screen)"
-                  >
+                  <div class="circle" @click="edit(screen)">
                     <span>编辑</span>
                   </div>
-                  <div
-                    class="circle"
-                    @click="copy(screen)"
-                  >
+                  <div class="circle" @click="copy(screen)">
                     <span>复制</span>
                   </div>
-                  <div
-                    class="circle"
-                    @click="del(screen)"
-                  >
+                  <div class="circle" @click="del(screen)">
                     <span>删除</span>
                   </div>
                 </div>
               </div>
             </div>
             <div class="big-screen-card-img">
-              <el-image
-                :src="screen.coverPicture"
-                fit="fill"
-                style="width: 100%; height: 100%"
-              >
-                <div
-                  slot="placeholder"
-                  class="image-slot"
-                >
+              <el-image :src="screen.coverPicture" fit="fill" style="width: 100%; height: 100%">
+                <div slot="placeholder" class="image-slot">
                   加载中···
                 </div>
-                <div
-                  slot="error"
-                  class="image-slot"
-                  style="font-size: 20px"
-                >
+                <div slot="error" class="image-slot" style="font-size: 20px">
                   <div class="error-img-text">
                     {{ screen.name }}
                   </div>
@@ -115,15 +66,12 @@
               </el-image>
             </div>
             <div class="big-screen-bottom">
-              <div
-                class="left-bigscreen-title"
-                :title="screen.name"
-              >
+              <div class="left-bigscreen-title" :title="screen.name">
                 {{ screen.name }}
               </div>
-            <!--            <div class="right-bigscreen-time-title">-->
-            <!--              {{ screen.updateDate || '-' }}-->
-            <!--            </div>-->
+              <!--            <div class="right-bigscreen-time-title">-->
+              <!--              {{ screen.updateDate || '-' }}-->
+              <!--            </div>-->
             </div>
           </div>
         </div>
@@ -134,30 +82,16 @@
         总共 {{ totalCount }} 个项目
       </div> -->
         <div class="bs-pagination">
-          <el-pagination
-            class="bs-el-pagination"
-            popper-class="bs-el-pagination"
-            background
-            layout="total, prev, pager, next, sizes"
-            :page-size="size"
-            prev-text="上一页"
-            next-text="下一页"
-            :total="totalCount"
-            :page-sizes="[10, 20, 50, 100]"
-            :current-page="current"
-            @current-change="currentChangeHandle"
-            @size-change="sizeChangeHandle"
-          />
+          <el-pagination class="bs-el-pagination" popper-class="bs-el-pagination" background
+            layout="total, prev, pager, next, sizes" :page-size="size" prev-text="上一页" next-text="下一页" :total="totalCount"
+            :page-sizes="[10, 20, 50, 100]" :current-page="current" @current-change="currentChangeHandle"
+            @size-change="sizeChangeHandle" />
         </div>
       </div>
     </div>
 
     <!-- 新增或编辑弹窗 -->
-    <EditForm
-      ref="EditForm"
-      :type="pageType"
-      @refreshData="reSearch"
-    />
+    <EditForm ref="EditForm" :type="pageType" @refreshData="reSearch" />
   </div>
 </template>
 <script>
@@ -174,11 +108,11 @@ export default {
     },
     catalogInfo: {
       type: Object,
-      default: () => {}
+      default: () => { }
     }
   },
   components: { EditForm },
-  data () {
+  data() {
     return {
       templateLoading: false,
       searchKey: '',
@@ -188,30 +122,30 @@ export default {
     }
   },
   computed: {
-    hint () {
+    hint() {
       return this.pageType === 'bigScreen' ? '大屏' : '组件'
     },
-    code () {
+    code() {
       return this.catalogInfo?.page?.code
     },
-    gridComputed () {
+    gridComputed() {
       return this.list.length > 2
     },
-    pageType () {
+    pageType() {
       return this.type === 'bigScreenCatalog' ? 'bigScreen' : 'component'
     }
   },
   watch: {
-    code (value) {
+    code(value) {
       this.current = 1
       this.getDataList()
     }
   },
-  mounted () {
+  mounted() {
     this.getDataList()
   },
   methods: {
-    getDataList () {
+    getDataList() {
       this.loading = true
       this.$dataRoomAxios.get('/bigScreen/design/page', {
         parentCode: this.code || null,
@@ -228,7 +162,7 @@ export default {
           this.loading = false
         })
     },
-    preview (screen) {
+    preview(screen) {
       const { href } = this.$router.resolve({
         path: window.BS_CONFIG?.routers?.previewUrl || '/big-screen/preview', // 这里写的是要跳转的路由地址
         query: {
@@ -237,7 +171,7 @@ export default {
       })
       window.open(href, '_blank')
     },
-    design (screen) {
+    design(screen) {
       const path = window.BS_CONFIG?.routers?.designUrl || '/big-screen/design'
       const { href } = this.$router.resolve({
         path,
@@ -247,17 +181,17 @@ export default {
       })
       window.open(href, '_self')
     },
-    add () {
+    add() {
       const page = {
         code: '',
         type: 'bigScreen'
       }
       this.$refs.EditForm.init(page, this.catalogInfo.page)
     },
-    edit (screen) {
+    edit(screen) {
       this.$refs.EditForm.init(screen, this.catalogInfo.page)
     },
-    del (screen) {
+    del(screen) {
       this.$confirm(`确定删除该${this.hint}？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -282,7 +216,7 @@ export default {
         })
         .catch()
     },
-    copy (screen) {
+    copy(screen) {
       this.$confirm(`确定复制该${this.hint}？`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -315,7 +249,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/style/bsTheme.scss';
+
 .big-screen-list-wrap {
+  .el-select {
+    display: inline-block !important;
+    position: relative !important;
+    width: auto !important;
+  }
+
   position: relative;
   height: 100%;
   // margin:0 16px;
@@ -323,10 +264,12 @@ export default {
   // padding: 16px;
   color: #9ea9b2;
   background-color: var(--bs-background-2) !important;
-  .internal-box{
+
+  .internal-box {
     height: calc(100% - 32px);
     padding: 16px;
   }
+
   .top-search-wrap {
     display: flex;
     align-items: center;
@@ -336,6 +279,7 @@ export default {
     .el-input {
       width: 200px;
       margin-right: 20px;
+
       ::v-deep.el-input__inner {
         background-color: var(--bs-background-1) !important;
       }
@@ -387,6 +331,7 @@ export default {
         height: 0;
         transition: height 0.4s;
         background: #00000099;
+
         .screen-card__hover-box {
           position: absolute;
           width: 100%;
@@ -397,6 +342,7 @@ export default {
           align-items: center;
           justify-content: center;
         }
+
         .preview {
           display: flex;
           flex-direction: row;
@@ -436,6 +382,7 @@ export default {
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
         color: var(--bs-el-title);
         border: 1px solid var(--bs-background-1);
+
         &:hover {
           color: var(--bs-el-text);
           border: 1px solid var(--bs-el-color-primary);
@@ -464,6 +411,7 @@ export default {
             align-items: center;
             justify-content: center;
           }
+
           ::v-deep.el-image__error {
             background-color: #1d1d1d;
           }
@@ -513,12 +461,13 @@ export default {
         justify-content: center;
       }
     }
-    .error-img-text{
-      overflow:hidden;
-      padding:0 10px;
+
+    .error-img-text {
+      overflow: hidden;
+      padding: 0 10px;
       white-space: nowrap;
       text-overflow: ellipsis;
-      -o-text-overflow:ellipsis;
+      -o-text-overflow: ellipsis;
     }
   }
 
@@ -540,6 +489,7 @@ export default {
     // padding: 0 16px;
   }
 }
+
 .bs-pagination {
   ::v-deep .el-input__inner {
     width: 110px !important;

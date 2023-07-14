@@ -1,96 +1,37 @@
 <template>
-  <el-dialog
-    title="组件库"
-    :visible.sync="dialogVisible"
-    width="80%"
-    :modal="true"
-    :modal-append-to-body="false"
-    :appen-to-body="true"
-    class="bs-dialog-wrap bs-el-dialog"
-    @closed="close"
-  >
+  <el-dialog title="组件库" :visible.sync="dialogVisible" width="80%" :modal="true" :modal-append-to-body="false"
+    :appen-to-body="true" class="bs-dialog-wrap bs-el-dialog" @closed="close">
     <div class="content">
       <el-tabs v-model="activeName">
-        <el-tab-pane
-          label="自定义组件"
-          name="combination"
-        >
+        <el-tab-pane label="自定义组件" name="combination">
           <div class="big-screen-list-wrap">
             <div class="top-search-wrap">
-              <el-input
-                v-model="searchKey"
-                class="bs-el-input"
-                placeholder="请输入组件名称"
-                prefix-icon="el-icon-search"
-                clearable
-                @clear="reSearch"
-                @keyup.enter.native="reSearch"
-              />
-              <el-select
-                v-model="code"
-                class="bs-el-select"
-                popper-class="bs-el-select"
-                placeholder="请选择分组"
-                clearable
-                @change="reSearch"
-              >
-                <el-option
-                  v-for="item in options"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code"
-                />
+              <el-input v-model="searchKey" class="bs-el-input" placeholder="请输入组件名称" prefix-icon="el-icon-search"
+                clearable @clear="reSearch" @keyup.enter.native="reSearch" />
+              <el-select v-model="code" class="bs-el-select" popper-class="bs-el-select" placeholder="请选择分组" clearable
+                @change="reSearch">
+                <el-option v-for="item in options" :key="item.code" :label="item.name" :value="item.code" />
               </el-select>
-              <el-button
-                size="small"
-                style="margin-right: 20px"
-                type="primary"
-                @click="reSearch"
-              >
+              <el-button size="small" style="margin-right: 20px" type="primary" @click="reSearch">
                 搜索
               </el-button>
             </div>
-            <div
-              v-if="list.length !== 0"
-              v-loading="loading"
-              class="list-wrap bs-scrollbar"
-              element-loading-text="加载中"
+            <div v-if="list.length !== 0" v-loading="loading" class="list-wrap bs-scrollbar" element-loading-text="加载中"
               :style="{
                 display: gridComputed ? 'grid' : 'flex',
                 justifyContent: gridComputed ? 'space-around' : 'flex-start'
-              }"
-            >
+              }">
               <!-- <div v-if="list.length !== 0"> -->
-              <div
-                v-for="screen in list"
-                :key="screen.id"
-                class="big-screen-card-wrap"
-                :style="{
-                  width: gridComputed ? 'auto' : '290px'
-                }"
-                @click="chooseComponent(screen)"
-              >
-                <div
-                  :class="focus.id == screen.id ? 'focus' : ''"
-                  class="big-screen-card-inner"
-                >
+              <div v-for="screen in list" :key="screen.id" class="big-screen-card-wrap" :style="{
+                width: gridComputed ? 'auto' : '290px'
+              }" @click="chooseComponent(screen)">
+                <div :class="focus.id == screen.id ? 'focus' : ''" class="big-screen-card-inner">
                   <div class="big-screen-card-img">
-                    <el-image
-                      :src="screen.coverPicture"
-                      fit="contain"
-                      style="width: 100%; height: 100%"
-                    >
-                      <div
-                        slot="placeholder"
-                        class="image-slot"
-                      >
+                    <el-image :src="screen.coverPicture" fit="contain" style="width: 100%; height: 100%">
+                      <div slot="placeholder" class="image-slot">
                         加载中···
                       </div>
-                      <div
-                        slot="error"
-                        class="image-slot"
-                        style="font-size: 20px"
-                      >
+                      <div slot="error" class="image-slot" style="font-size: 20px">
                         <div class="error-img-text">
                           {{ screen.name }}
                         </div>
@@ -98,122 +39,55 @@
                     </el-image>
                   </div>
                   <div class="big-screen-bottom">
-                    <div
-                      class="left-bigscreen-title"
-                      :title="screen.name"
-                    >
+                    <div class="left-bigscreen-title" :title="screen.name">
                       {{ screen.name }}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div
-              v-else
-              class="empty"
-            >
+            <div v-else class="empty">
               暂无数据
             </div>
             <div class="footer-pagination-wrap">
               <div class="bs-pagination">
-                <el-pagination
-                  class="bs-el-pagination"
-                  popper-class="bs-el-pagination"
-                  background
-                  layout="total, prev, pager, next, sizes"
-                  :page-size="size"
-                  prev-text="上一页"
-                  next-text="下一页"
-                  :total="totalCount"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :current-page="current"
-                  @current-change="currentChangeHandle"
-                  @size-change="sizeChangeHandle"
-                />
+                <el-pagination class="bs-el-pagination" popper-class="bs-el-pagination" background
+                  layout="total, prev, pager, next, sizes" :page-size="size" prev-text="上一页" next-text="下一页"
+                  :total="totalCount" :page-sizes="[10, 20, 50, 100]" :current-page="current"
+                  @current-change="currentChangeHandle" @size-change="sizeChangeHandle" />
               </div>
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane
-          label="业务组件"
-          name="bizComponent"
-        >
+        <el-tab-pane label="业务组件" name="bizComponent">
           <div class="big-screen-list-wrap">
             <div class="top-search-wrap">
-              <el-input
-                v-model="name"
-                class="bs-el-input"
-                placeholder="请输入组件名称"
-                prefix-icon="el-icon-search"
-                clearable
-                @clear="reSearch"
-                @keyup.enter.native="reSearch"
-              />
-              <el-select
-                v-model="code"
-                class="bs-el-select"
-                popper-class="bs-el-select"
-                placeholder="请选择分组"
-                clearable
-                @change="reSearch"
-              >
-                <el-option
-                  v-for="item in options"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code"
-                />
+              <el-input v-model="name" class="bs-el-input" placeholder="请输入组件名称" prefix-icon="el-icon-search" clearable
+                @clear="reSearch" @keyup.enter.native="reSearch" />
+              <el-select v-model="code" class="bs-el-select" popper-class="bs-el-select" placeholder="请选择分组" clearable
+                @change="reSearch">
+                <el-option v-for="item in options" :key="item.code" :label="item.name" :value="item.code" />
               </el-select>
-              <el-button
-                size="small"
-                style="margin-right: 20px"
-                type="primary"
-                @click="reSearch"
-              >
+              <el-button size="small" style="margin-right: 20px" type="primary" @click="reSearch">
                 搜索
               </el-button>
             </div>
-            <div
-              v-if="bizComponentList.length !== 0"
-              v-loading="loading"
-              class="list-wrap bs-scrollbar"
-              element-loading-text="加载中"
-              :style="{
+            <div v-if="bizComponentList.length !== 0" v-loading="loading" class="list-wrap bs-scrollbar"
+              element-loading-text="加载中" :style="{
                 display: bizFridComputed ? 'grid' : 'flex',
                 justifyContent: bizFridComputed ? 'space-around' : 'flex-start'
-              }"
-            >
+              }">
               <!-- <div v-if="list.length !== 0"> -->
-              <div
-                v-for="screen in bizComponentList"
-                :key="screen.id"
-                class="big-screen-card-wrap"
-                :style="{
-                  width: bizFridComputed ? 'auto' : '290px'
-                }"
-                @click="chooseComponent(screen)"
-              >
-                <div
-                  :class="focus.id == screen.id ? 'focus' : ''"
-                  class="big-screen-card-inner"
-                >
+              <div v-for="screen in bizComponentList" :key="screen.id" class="big-screen-card-wrap" :style="{
+                width: bizFridComputed ? 'auto' : '290px'
+              }" @click="chooseComponent(screen)">
+                <div :class="focus.id == screen.id ? 'focus' : ''" class="big-screen-card-inner">
                   <div class="big-screen-card-img">
-                    <el-image
-                      :src="screen.coverPicture"
-                      fit="contain"
-                      style="width: 100%; height: 100%"
-                    >
-                      <div
-                        slot="placeholder"
-                        class="image-slot"
-                      >
+                    <el-image :src="screen.coverPicture" fit="contain" style="width: 100%; height: 100%">
+                      <div slot="placeholder" class="image-slot">
                         加载中···
                       </div>
-                      <div
-                        slot="error"
-                        class="image-slot"
-                        style="font-size: 20px"
-                      >
+                      <div slot="error" class="image-slot" style="font-size: 20px">
                         <div class="error-img-text">
                           {{ screen.name }}
                         </div>
@@ -221,119 +95,64 @@
                     </el-image>
                   </div>
                   <div class="big-screen-bottom">
-                    <div
-                      class="left-bigscreen-title"
-                      :title="screen.name"
-                    >
+                    <div class="left-bigscreen-title" :title="screen.name">
                       {{ screen.name }}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div
-              v-else
-              class="empty"
-            >
+            <div v-else class="empty">
               暂无数据
             </div>
             <div class="footer-pagination-wrap">
               <div class="bs-pagination">
-                <el-pagination
-                  class="bs-el-pagination"
-                  popper-class="bs-el-pagination"
-                  background
-                  layout="total, prev, pager, next, sizes"
-                  :page-size="size"
-                  prev-text="上一页"
-                  next-text="下一页"
-                  :total="totalCount"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :current-page="current"
-                  @current-change="currentChangeHandle"
-                  @size-change="sizeChangeHandle"
-                />
+                <el-pagination class="bs-el-pagination" popper-class="bs-el-pagination" background
+                  layout="total, prev, pager, next, sizes" :page-size="size" prev-text="上一页" next-text="下一页"
+                  :total="totalCount" :page-sizes="[10, 20, 50, 100]" :current-page="current"
+                  @current-change="currentChangeHandle" @size-change="sizeChangeHandle" />
               </div>
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane
-          label="系统组件"
-          name="remote"
-        >
+        <el-tab-pane label="系统组件" name="remote">
           <div class="big-screen-list-wrap">
-            <div
-              v-if="remoteComponentlist.length !== 0"
-              v-loading="loading"
-              class="list-wrap bs-scrollbar"
-              element-loading-text="加载中"
-              :style="{
+            <div v-if="remoteComponentlist.length !== 0" v-loading="loading" class="list-wrap bs-scrollbar"
+              element-loading-text="加载中" :style="{
                 display: remoteComponentsGridComputed ? 'grid' : 'flex',
                 justifyContent: remoteComponentsGridComputed ? 'space-around' : 'flex-start'
-              }"
-            >
-              <div
-                v-for="component in remoteComponentlist"
-                :key="component.title"
-                class="big-screen-card-wrap"
-                :style="{
-                  width: remoteComponentsGridComputed ? 'auto' : '290px'
-                }"
-                @click="chooseComponent(component)"
-              >
-                <div
-                  :class="component.title == focus.title ? 'focus' : ''"
-                  class="big-screen-card-inner"
-                >
+              }">
+              <div v-for="component in remoteComponentlist" :key="component.title" class="big-screen-card-wrap" :style="{
+                width: remoteComponentsGridComputed ? 'auto' : '290px'
+              }" @click="chooseComponent(component)">
+                <div :class="component.title == focus.title ? 'focus' : ''" class="big-screen-card-inner">
                   <div class="big-screen-card-img">
-                    <el-image
-                      :src="component.img"
-                      fit="contain"
-                      style="width: 100%; height: 100%"
-                    >
-                      <div
-                        slot="placeholder"
-                        class="image-slot"
-                      >
+                    <el-image :src="component.img" fit="contain" style="width: 100%; height: 100%">
+                      <div slot="placeholder" class="image-slot">
                         加载中···
                       </div>
                     </el-image>
                   </div>
                   <div class="big-screen-bottom">
-                    <div
-                      class="left-bigscreen-title"
-                      :title="component.title"
-                    >
+                    <div class="left-bigscreen-title" :title="component.title">
                       {{ component.title }}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div
-              v-else
-              class="empty"
-            >
+            <div v-else class="empty">
               暂无数据
             </div>
           </div>
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div
-      slot="footer"
-      class="dialog-footer"
-    >
-      <el-button
-        class="bs-el-button-default"
-        @click="dialogVisible = false"
-      >
+    <div slot="footer" class="dialog-footer">
+      <el-button class="bs-el-button-default" @click="dialogVisible = false">
         取消
       </el-button>
-      <el-button
-        type="primary"
-        @click="confirm"
-      >
+      <el-button type="primary" @click="confirm">
         确定
       </el-button>
     </div>
@@ -349,7 +168,7 @@ export default {
   name: 'ComponentDialog',
   mixins: [pageMixins],
   props: {},
-  data () {
+  data() {
     return {
       dialogVisible: false,
       loading: false,
@@ -366,30 +185,30 @@ export default {
     }
   },
   computed: {
-    gridComputed () {
+    gridComputed() {
       return this.list.length > 3
     },
-    remoteComponentsGridComputed () {
+    remoteComponentsGridComputed() {
       return this.remoteComponentlist.length > 3
     },
-    bizFridComputed () {
+    bizFridComputed() {
       return this.bizComponentList.length > 3
     }
   },
   watch: {
-    activeName () {
+    activeName() {
       this.getCatalogList()
     }
   },
-  mounted () {
+  mounted() {
     this.remoteComponentlist = [...innerRemoteComponents, ...getRemoteComponents()]
   },
   methods: {
-    chooseComponent (component) {
+    chooseComponent(component) {
       this.focus = _.cloneDeep(component)
     },
-    close () {},
-    init () {
+    close() { },
+    init() {
       this.dialogVisible = true
       this.current = 1
       this.searchKey = ''
@@ -399,7 +218,7 @@ export default {
       this.getCatalogList()
     },
     // 点击确定
-    confirm () {
+    confirm() {
       this.dialogVisible = false
       if (this.activeName === 'combination') {
         if (Object.keys(this.focus).length) {
@@ -421,7 +240,7 @@ export default {
         this.$emit('setRemoteComponent', config)
       }
     },
-    getDataList () {
+    getDataList() {
       this.loading = true
       this.$dataRoomAxios.get('/bigScreen/design/page', {
         parentCode: this.code || null,
@@ -451,227 +270,242 @@ export default {
       })
     },
     // 获取目录的列表
-    getCatalogList () {
+    getCatalogList() {
       const url = this.activeName === 'combination' ? '/bigScreen/type/list/componentCatalog' : '/bigScreen/type/list/bizComponentCatalog'
       get(url)
         .then((data) => {
           this.options = data
         })
-        .catch(() => {})
+        .catch(() => { })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/style/bsTheme.scss';
-  .big-screen-list-wrap {
-    position: relative;
-    height: 100%;
-    // margin:0 16px;
-    // padding: 16px;
-    margin-bottom: 56px;
-    color: #9ea9b2;
-    background-color: var(--bs-background-2) !important;
+@import '../../assets/style/bsTheme.scss';
 
-    .top-search-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      margin-bottom: 12px;
+.big-screen-list-wrap {
+  .el-select {
+    display: inline-block !important;
+    position: relative !important;
+    width: auto !important;
+  }
 
-      .el-input {
-        width: 200px;
-        margin-right: 20px;
-        ::v-deep.el-input__inner {
-          background-color: var(--bs-background-1) !important;
-        }
-      }
+  position: relative;
+  height: 100%;
+  // margin:0 16px;
+  // padding: 16px;
+  margin-bottom: 56px;
+  color: #9ea9b2;
+  background-color: var(--bs-background-2) !important;
 
-      .el-select {
-        margin-right: 20px;
-        ::v-deep.el-input__inner {
-          background-color: var(--bs-background-1) !important;
-        }
+  .top-search-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+
+    .el-input {
+      width: 200px;
+      margin-right: 20px;
+
+      ::v-deep.el-input__inner {
+        background-color: var(--bs-background-1) !important;
       }
     }
 
-    .list-wrap {
-      /* display: grid; */
-      overflow: auto;
-      // 间隙自适应
-      justify-content: space-around;
-      // max-height: calc(100vh - 270px);
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      grid-gap: 15px;
+    .el-select {
+      margin-right: 20px;
 
-      // ::v-deep .el-loading-mask {
-      //   display: flex;
-      //   align-items: center;
-      //   justify-content: center;
-      //   height: calc(100vh - 260px) !important;
-      //   z-index: 999;
-      //   top: 50px;
-      // }
-      .big-screen-card-wrap {
-        position: relative;
-        height: 230px;
+      ::v-deep.el-input__inner {
+        background-color: var(--bs-background-1) !important;
+      }
+    }
+  }
+
+  .list-wrap {
+    /* display: grid; */
+    overflow: auto;
+    // 间隙自适应
+    justify-content: space-around;
+    // max-height: calc(100vh - 270px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 15px;
+
+    // ::v-deep .el-loading-mask {
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: center;
+    //   height: calc(100vh - 260px) !important;
+    //   z-index: 999;
+    //   top: 50px;
+    // }
+    .big-screen-card-wrap {
+      position: relative;
+      height: 230px;
+      cursor: pointer;
+
+      &:hover {
+        .screen-card__hover {
+          height: 180px;
+        }
+      }
+
+      .screen-card__hover {
+        position: absolute;
+        z-index: 999;
+        top: 0;
+        right: 0;
+        left: 0;
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+        height: 0;
+        transition: height 0.4s;
+        background: #00000099;
+      }
+
+      .focus {
+        color: var(--bs-el-text) !important;
+        border: 1px solid var(--bs-el-color-primary) !important;
+      }
+
+      .big-screen-card-inner {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
         cursor: pointer;
+        background-color: var(--bs-background-2);
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+        color: var(--bs-el-title);
+        border: 1px solid var(--bs-background-1);
 
         &:hover {
-          .screen-card__hover {
-            height: 180px;
-          }
+          color: var(--bs-el-text);
+          border: 1px solid var(--bs-el-color-primary);
         }
 
-        .screen-card__hover {
-          position: absolute;
-          z-index: 999;
-          top: 0;
-          right: 0;
-          left: 0;
-          display: flex;
-          overflow: hidden;
-          align-items: center;
-          justify-content: center;
-          height: 0;
-          transition: height 0.4s;
-          background: #00000099;
+        .add-big-screen-card-text {
+          color: var(--bs-el-color-primary);
+          font-size: 24px;
         }
 
-        .focus {
-          color: var(--bs-el-text) !important;
-          border: 1px solid var(--bs-el-color-primary) !important;
-        }
-
-        .big-screen-card-inner {
-          overflow: hidden;
+        .big-screen-card-img {
           width: 100%;
-          height: 100%;
-          cursor: pointer;
-          background-color: var(--bs-background-2);
-          box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-          color: var(--bs-el-title);
-          border: 1px solid var(--bs-background-1);
-          &:hover {
-            color: var(--bs-el-text);
-            border: 1px solid var(--bs-el-color-primary);
-          }
+          height: 180px;
 
-          .add-big-screen-card-text {
-            color: var(--bs-el-color-primary);
-            font-size: 24px;
-          }
-
-          .big-screen-card-img {
+          img {
             width: 100%;
-            height: 180px;
+            height: 100%;
 
-            img {
-              width: 100%;
-              height: 100%;
-
-              object-fit: cover;
-            }
-
-            ::v-deep.image-slot {
-              height: 100%;
-              background-color: var(--bs-background-2);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-            ::v-deep.el-image__error {
-              background-color: #1d1d1d;
-            }
+            object-fit: cover;
           }
 
-          .big-screen-bottom {
+          ::v-deep.image-slot {
+            height: 100%;
+            background-color: var(--bs-background-2);
             display: flex;
             align-items: center;
-            flex-direction: row;
-            justify-content: space-between;
-            box-sizing: border-box;
-            width: 100%;
-            /*height: 26px;*/
-            padding: 0 10px;
-            height: calc(100% - 180px);
-            color: var(--bs-el-title);
-            background-color: var(--bs-background-2);
-
-            .left-bigscreen-title {
-              font-size: 14px;
-              overflow: hidden;
-              width: 120px;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            }
-
-            .right-bigscreen-time-title {
-              font-size: 14px;
-              overflow: hidden;
-              width: 140px;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            }
+            justify-content: center;
           }
 
-          .big-screen-card-text {
-            font-size: 14px;
-            padding: 10px;
-            text-align: center;
-            color: #333;
+          ::v-deep.el-image__error {
+            background-color: #1d1d1d;
           }
         }
 
-        .big-screen-card-inner-add {
+        .big-screen-bottom {
           display: flex;
           align-items: center;
-          justify-content: center;
+          flex-direction: row;
+          justify-content: space-between;
+          box-sizing: border-box;
+          width: 100%;
+          /*height: 26px;*/
+          padding: 0 10px;
+          height: calc(100% - 180px);
+          color: var(--bs-el-title);
+          background-color: var(--bs-background-2);
+
+          .left-bigscreen-title {
+            font-size: 14px;
+            overflow: hidden;
+            width: 120px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+
+          .right-bigscreen-time-title {
+            font-size: 14px;
+            overflow: hidden;
+            width: 140px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+
+        .big-screen-card-text {
+          font-size: 14px;
+          padding: 10px;
+          text-align: center;
+          color: #333;
         }
       }
-    }
 
-    .el-loading-parent--relative {
-      position: unset !important;
-    }
-
-    .footer-pagination-wrap {
-      margin-top: 16px;
-      position: absolute;
-      width: 100%;
+      .big-screen-card-inner-add {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
   }
-  .bs-pagination {
-    ::v-deep .el-input__inner {
-      width: 110px !important;
-      border: none;
-      background: var(--bs-el-background-1);
-    }
+
+  .el-loading-parent--relative {
+    position: unset !important;
   }
-  .empty {
+
+  .footer-pagination-wrap {
+    margin-top: 16px;
+    position: absolute;
     width: 100%;
-    height: 70%;
-    min-height: 300px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
-  ::v-deep .el-tabs__item {
-    color: var(--bs-el-text);
-  }
-  .error-img-text{
-    overflow:hidden;
-    padding:0 10px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    -o-text-overflow:ellipsis;
-  }
+}
 
-  ::v-deep .el-tabs__nav-wrap{
-    &:after{
-      display: none;
-    }
+.bs-pagination {
+  ::v-deep .el-input__inner {
+    width: 110px !important;
+    border: none;
+    background: var(--bs-el-background-1);
   }
+}
+
+.empty {
+  width: 100%;
+  height: 70%;
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::v-deep .el-tabs__item {
+  color: var(--bs-el-text);
+}
+
+.error-img-text {
+  overflow: hidden;
+  padding: 0 10px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+}
+
+::v-deep .el-tabs__nav-wrap {
+  &:after {
+    display: none;
+  }
+}
 </style>

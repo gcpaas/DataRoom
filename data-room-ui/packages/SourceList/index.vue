@@ -181,7 +181,7 @@ export default {
     },
     catalogInfo: {
       type: Object,
-      default: () => {}
+      default: () => { }
     }
   },
   components: { EditForm },
@@ -328,7 +328,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/style/bsTheme.scss';
+
 .big-screen-list-wrap {
+  .el-select {
+    display: inline-block !important;
+    position: relative !important;
+    width: auto !important;
+  }
+
   position: relative;
   height: calc(100%);
   // height: calc(100% - 16px);
@@ -337,10 +344,12 @@ export default {
   // margin:0 16px;
   margin-left: 16px;
   background-color: var(--bs-background-2) !important;
-  .internal-box{
+
+  .internal-box {
     height: calc(100% - 32px);
     padding: 16px;
   }
+
   .top-search-wrap {
     display: flex;
     align-items: center;
@@ -350,6 +359,7 @@ export default {
     .el-input {
       width: 200px;
       margin-right: 20px;
+
       ::v-deep.el-input__inner {
         background-color: var(--bs-background-1) !important;
       }
@@ -357,6 +367,7 @@ export default {
 
     .el-select {
       margin-right: 20px;
+
       ::v-deep.el-input__inner {
         background-color: var(--bs-background-1) !important;
       }
@@ -408,6 +419,7 @@ export default {
         height: 0;
         transition: height 0.4s;
         background: #00000099;
+
         .screen-card__hover-box {
           position: absolute;
           width: 100%;
@@ -418,6 +430,7 @@ export default {
           align-items: center;
           justify-content: center;
         }
+
         .preview {
           display: flex;
           flex-direction: row;
@@ -457,6 +470,7 @@ export default {
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
         color: var(--bs-el-title);
         border: 1px solid var(--bs-background-1);
+
         &:hover {
           color: var(--bs-el-text);
           border: 1px solid var(--bs-el-color-primary);
@@ -485,6 +499,7 @@ export default {
             align-items: center;
             justify-content: center;
           }
+
           ::v-deep.el-image__error {
             background-color: #1d1d1d;
           }
@@ -553,6 +568,7 @@ export default {
     // padding: 0 16px;
   }
 }
+
 .bs-pagination {
   ::v-deep .el-input__inner {
     width: 110px !important;
@@ -560,6 +576,7 @@ export default {
     background: var(--bs-el-background-1);
   }
 }
+
 .empty {
   width: 100%;
   height: 70%;

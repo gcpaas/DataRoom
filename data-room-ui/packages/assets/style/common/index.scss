@@ -264,17 +264,21 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
     // dialog设置
     .bs-dialog-wrap {
+      .el-select{
+        display: inline-block !important;
+        position: relative !important;
+        width: auto !important;
+      }
+      .el-dialog{
+        margin-top: 13vh !important;
+      }
       .el-dialog__wrapper {
         overflow: hidden !important;
       }
 
-      // .el-dialog {
-      //   margin-bottom: 100px !important;
-      // }
-
       .el-dialog__body {
         padding: 18px 24px !important;
-        max-height: calc(90vh - 200px) !important;
+        max-height: calc(90vh - 250px) !important;
         min-height: 200px;
         overflow-y: auto;
       }

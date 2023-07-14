@@ -1,139 +1,62 @@
 <template>
-  <el-dialog
-    title="资源库"
-    :visible.sync="dialogVisible"
-    width="80%"
-    :modal="true"
-    :modal-append-to-body="false"
-    :appen-to-body="true"
-    class="bs-dialog-wrap bs-el-dialog"
-    @closed="close"
-  >
+  <el-dialog title="资源库" :visible.sync="dialogVisible" width="80%" :modal="true" :modal-append-to-body="false"
+    :appen-to-body="true" class="bs-dialog-wrap bs-el-dialog" @closed="close">
     <div class="content">
       <div class="big-screen-list-wrap">
         <div class="top-search-wrap">
-          <el-input
-            v-model="searchKey"
-            class="bs-el-input"
-            placeholder="请输入图片名称"
-            prefix-icon="el-icon-search"
-            clearable
-            @clear="reSearch"
-            @keyup.enter.native="reSearch"
-          />
-          <el-select
-            v-model="code"
-            class="bs-el-select"
-            popper-class="bs-el-select"
-            placeholder="请选择类型"
-            clearable
-            @change="reSearch"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.name"
-              :value="item.code"
-            />
+          <el-input v-model="searchKey" class="bs-el-input" placeholder="请输入图片名称" prefix-icon="el-icon-search" clearable
+            @clear="reSearch" @keyup.enter.native="reSearch" />
+          <el-select v-model="code" class="bs-el-select" popper-class="bs-el-select" placeholder="请选择类型" clearable
+            @change="reSearch">
+            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.code" />
           </el-select>
-          <el-button
-            size="small"
-            style="margin-right: 20px"
-            type="primary"
-            @click="reSearch"
-          >
+          <el-button size="small" style="margin-right: 20px" type="primary" @click="reSearch">
             搜索
           </el-button>
         </div>
-        <div
-          v-if="list.length !== 0"
-          v-loading="loading"
-          class="list-wrap bs-scrollbar"
-          element-loading-text="加载中"
+        <div v-if="list.length !== 0" v-loading="loading" class="list-wrap bs-scrollbar" element-loading-text="加载中"
           :style="{
             display: gridComputed ? 'grid' : 'flex',
             justifyContent: gridComputed ? 'space-around' : 'flex-start'
-          }"
-        >
+          }">
           <!-- <div v-if="list.length !== 0"> -->
-          <div
-            v-for="screen in list"
-            :key="screen.id"
-            class="big-screen-card-wrap"
-            :style="{
-              width: gridComputed ? 'auto' : '290px'
-            }"
-            @click="chooseImg(screen)"
-          >
-            <div
-              :class="focus.id == screen.id ? 'focus' : ''"
-              class="big-screen-card-inner"
-            >
+          <div v-for="screen in list" :key="screen.id" class="big-screen-card-wrap" :style="{
+            width: gridComputed ? 'auto' : '290px'
+          }" @click="chooseImg(screen)">
+            <div :class="focus.id == screen.id ? 'focus' : ''" class="big-screen-card-inner">
               <div class="big-screen-card-img">
-                <el-image
-                  :src="screen.url"
-                  fit="contain"
-                  style="width: 100%; height: 100%"
-                >
-                  <div
-                    slot="placeholder"
-                    class="image-slot"
-                  >
+                <el-image :src="screen.url" fit="contain" style="width: 100%; height: 100%">
+                  <div slot="placeholder" class="image-slot">
                     加载中···
                   </div>
                 </el-image>
               </div>
               <div class="big-screen-bottom">
-                <div
-                  class="left-bigscreen-title"
-                  :title="screen.originalName"
-                >
+                <div class="left-bigscreen-title" :title="screen.originalName">
                   {{ screen.originalName }}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div
-          v-else
-          class="empty"
-        >
+        <div v-else class="empty">
           暂无数据
         </div>
         <div class="footer-pagination-wrap">
           <div class="bs-pagination">
-            <el-pagination
-              class="bs-el-pagination"
-              popper-class="bs-el-pagination"
-              background
-              layout="total, prev, pager, next, sizes"
-              :page-size="size"
-              prev-text="上一页"
-              next-text="下一页"
-              :total="totalCount"
-              :page-sizes="[10, 20, 50, 100]"
-              :current-page="current"
-              @current-change="currentChangeHandle"
-              @size-change="sizeChangeHandle"
-            />
+            <el-pagination class="bs-el-pagination" popper-class="bs-el-pagination" background
+              layout="total, prev, pager, next, sizes" :page-size="size" prev-text="上一页" next-text="下一页"
+              :total="totalCount" :page-sizes="[10, 20, 50, 100]" :current-page="current"
+              @current-change="currentChangeHandle" @size-change="sizeChangeHandle" />
           </div>
         </div>
       </div>
     </div>
-    <div
-      slot="footer"
-      class="dialog-footer"
-    >
-      <el-button
-        class="bs-el-button-default"
-        @click="dialogVisible = false"
-      >
+    <div slot="footer" class="dialog-footer">
+      <el-button class="bs-el-button-default" @click="dialogVisible = false">
         取消
       </el-button>
-      <el-button
-        type="primary"
-        @click="confirm"
-      >
+      <el-button type="primary" @click="confirm">
         确定
       </el-button>
     </div>
@@ -147,7 +70,7 @@ export default {
   name: 'SourceDialog',
   mixins: [pageMixins],
   props: {},
-  data () {
+  data() {
     return {
       dialogVisible: false,
       loading: false,
@@ -159,17 +82,17 @@ export default {
     }
   },
   computed: {
-    gridComputed () {
+    gridComputed() {
       return this.list.length > 3
     }
   },
-  mounted () {},
+  mounted() { },
   methods: {
-    chooseImg (img) {
+    chooseImg(img) {
       this.focus = _.cloneDeep(img)
     },
-    close () {},
-    init () {
+    close() { },
+    init() {
       this.dialogVisible = true
       this.current = 1
       this.searchKey = ''
@@ -178,13 +101,13 @@ export default {
       this.getDataList()
       this.getCatalogList()
     },
-    confirm () {
+    confirm() {
       this.dialogVisible = false
       if (this.focus !== -1) {
         this.$emit('getImg', this.focus)
       }
     },
-    getDataList () {
+    getDataList() {
       this.loading = true
       this.$dataRoomAxios.get('/bigScreen/file', {
         module: this.code,
@@ -202,12 +125,12 @@ export default {
         })
     },
     // 获取目录的列表
-    getCatalogList () {
+    getCatalogList() {
       this.$dataRoomAxios.get('/bigScreen/type/list/resourceCatalog')
         .then((data) => {
           this.options = data
         })
-        .catch(() => {})
+        .catch(() => { })
     }
   }
 }
@@ -215,7 +138,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/style/bsTheme.scss';
+
 .big-screen-list-wrap {
+  .el-select {
+    display: inline-block !important;
+    position: relative !important;
+    width: auto !important;
+  }
+
   position: relative;
   height: 100%;
   // margin:0 16px;
@@ -232,6 +162,7 @@ export default {
     .el-input {
       width: 200px;
       margin-right: 20px;
+
       ::v-deep.el-input__inner {
         background-color: var(--bs-background-1) !important;
       }
@@ -239,6 +170,7 @@ export default {
 
     .el-select {
       margin-right: 20px;
+
       ::v-deep.el-input__inner {
         background: var(--bs-background-1) !important;
         background-color: var(--bs-background-1) !important;
@@ -305,6 +237,7 @@ export default {
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
         color: var(--bs-el-title);
         border: 1px solid var(--bs-background-2);
+
         &:hover {
           color: var(--bs-el-text);
           border: 1px solid var(--bs-el-color-primary);
@@ -333,6 +266,7 @@ export default {
             align-items: center;
             justify-content: center;
           }
+
           ::v-deep.el-image__error {
             background-color: #1d1d1d;
           }
@@ -394,6 +328,7 @@ export default {
     margin-top: 16px;
   }
 }
+
 .bs-pagination {
   ::v-deep .el-input__inner {
     width: 110px !important;
@@ -401,6 +336,7 @@ export default {
     background: var(--bs-el-background-1);
   }
 }
+
 .empty {
   width: 100%;
   height: 70%;

@@ -26,7 +26,7 @@
     }
   }
 }
-.bs-setting-wrap{
+.bs-setting-wrap {
   position: relative;
   height: 100%;
 
@@ -36,15 +36,14 @@
   ::v-deep .el-collapse-item__wrap {
     border: none !important;
   }
-
   /*overflow-y: auto;*/
-.table-header{
-  border-bottom: 2px solid var(--bs-el-color-primary);
-}
+  .table-header {
+    border-bottom: 2px solid var(--bs-el-color-primary);
+  }
   ::v-deep .el-form-item {
     margin-bottom: 6px;
   }
-  .toolbar{
+  .toolbar {
     width: 320px;
     height: 50px;
     bottom: 0;
@@ -56,15 +55,15 @@
     justify-content: center;
     background: var(--bs-background-1);
 
-    .el-button{
+    .el-button {
       margin-right: 10px;
     }
   }
-  ::v-deep .CodeMirror{
-    height: 150px!important;
+  ::v-deep .CodeMirror {
+    height: 150px !important;
   }
- ::v-deep .CodeMirror-scroll{
-    height: 150px!important;
+  ::v-deep .CodeMirror-scroll {
+    height: 150px !important;
   }
 }
 ::v-deep .el-tabs__nav-scroll {
@@ -80,11 +79,11 @@
   background: var(--bs-background-2);
   height: 32px;
   padding: 0 12px;
-  border:none
+  border: none;
 }
 
 ::v-deep .el-collapse-item__content {
-  padding-bottom: 0
+  padding-bottom: 0;
 }
 
 ::v-deep .lc-field-title {
@@ -95,14 +94,14 @@
   padding: 12px;
   background: var(--bs-background-2);
 
-  input, textarea {
+  input,
+  textarea {
     background-color: var(--bs-el-background-1) !important;
     color: var(--bs-el-text) !important;
     border-color: var(--bs-el-text) !important;
   }
-
 }
-.data-form-item{
+.data-form-item {
   padding: 12px;
 }
 
@@ -120,10 +119,10 @@
   height: 0;
 }
 
-  .design-tab-warp{
-    padding: 10px;
-  }
-::v-deep.el-tabs--top{
+.design-tab-warp {
+  padding: 10px;
+}
+::v-deep.el-tabs--top {
   height: 100%;
 }
 ::v-deep .el-tabs__content {
@@ -155,15 +154,15 @@
   font-size: 12px;
 }
 
-.setting-body{
+.setting-body {
   height: 100%;
 }
-.el-icon-circle-plus-outline{
-  &:hover{
+.el-icon-circle-plus-outline {
+  &:hover {
     cursor: pointer;
   }
 }
-.analysisSql-box{
+.analysisSql-box {
   text-align: right;
 }
 
@@ -172,21 +171,21 @@
 }
 
 // 筛选条件的按钮样式
-.add-filter-box{
+.add-filter-box {
   position: relative;
-  .add-filter{
+  .add-filter {
     margin-left: 80px;
     margin-bottom: 10px;
   }
-  .add-filter-btn{
+  .add-filter-btn {
     position: absolute;
     top: 0;
   }
 }
-.source-key-option{
+.source-key-option {
   display: flex;
   justify-content: space-between;
-  .option-txt{
+  .option-txt {
     color: rgb(132, 146, 166);
   }
 }
@@ -202,52 +201,46 @@
 }
 
 // 参数配置
-.params-config{
-  ::v-deep .el-form-item__content{
-    display:flex;
+.params-config {
+  ::v-deep .el-form-item__content {
+    display: flex;
     align-items: center;
     margin-left: 0 !important;
   }
-  .el-tooltip{
+  .el-tooltip {
     margin-left: 4px;
   }
 }
 ::v-deep .el-form-item__label,
 ::v-deep .el-tabs__item,
-::v-deep .el-collapse-item__arrow
-{
-  color: var(--bs-el-title) !important
+::v-deep .el-collapse-item__arrow {
+  color: var(--bs-el-title) !important;
 }
 ::v-deep .el-collapse-item__wrap {
   background: var(--bs-background-1);
   color: var(--bs-el-title);
 }
 
-
 ::v-deep .el-input__inner,
 ::v-deep .el-color-picker__color-inner,
 ::v-deep .el-radio__inner,
 ::v-deep .el-input-number--mini,
 ::v-deep .el-textarea__inner,
-::v-deep .el-input-group__append
-{
+::v-deep .el-input-group__append {
   background: var(--bs-el-background-1);
   color: var(--bs-el-text);
   border: 0 !important;
 }
 
-::v-deep .el-radio__label
-{
+::v-deep .el-radio__label {
   font-size: 12px;
   background: var(--bs-el-background-1-1);
   color: var(--bs-el-title);
   border: 0 !important;
 }
 
-
-
 ::v-deep .el-radio {
-  margin-right: 10px
+  margin-right: 10px;
 }
 
 ::v-deep .el-table {
@@ -261,3 +254,8 @@
   border-color: var(--bs-el-text) !important;
 }
 
+::v-deep .el-select {
+  display: inline-block;
+  position: relative;
+  width: auto;
+}
