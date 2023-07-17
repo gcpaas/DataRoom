@@ -15,7 +15,11 @@
         <DataSetting
           ref="dataSetting"
           :key="config.code"
-        />
+        >
+          <template #dataSetSelect>
+            <slot name="dataSetSelect" />
+          </template>
+        </DataSetting>
       </el-tab-pane>
       <el-tab-pane
         label="样式"
@@ -131,7 +135,7 @@ export default {
     ...mapMutations('bigScreen', [
       'saveTimeLine'
     ]),
-    debounce (delay,obj) {
+    debounce (delay, obj) {
       if (this.timeout) {
         clearTimeout(this.timeout)
       }
@@ -142,9 +146,9 @@ export default {
     handleConfigChange (val, oldValue, type) {
       if (!_.isEqual(val, oldValue)) {
         if (type === 'configStyle') {
-          if(this.config.type==='iframeChart'){
-            this.debounce(500,{ ...val, type: this.config.type, code: this.config.code })
-          }else{
+          if (this.config.type === 'iframeChart') {
+            this.debounce(500, { ...val, type: this.config.type, code: this.config.code })
+          } else {
             this.$emit('updateSetting', { ...val, type: this.config.type, code: this.config.code })
           }
         } else {

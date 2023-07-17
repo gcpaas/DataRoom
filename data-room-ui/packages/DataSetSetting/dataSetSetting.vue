@@ -7,10 +7,32 @@
     width="80%"
     class="bs-dialog-wrap data-set-wrap bs-el-dialog"
   >
+    <el-tabs
+      v-if="isUseSlot"
+      v-model="tabsActiveName"
+      class="bs-el-tabs"
+      @tab-click="handleClickTabs"
+    >
+      <el-tab-pane
+        label="数据集"
+        name="dataSet"
+      >
+        <DataSetManagement
+          ref="dataSetSetting"
+          class="bs-data-set-management"
+          :is-border="true"
+          :is-dialog="true"
+          :ds-id="dataSetId"
+          :multiple="multiple"
+          :ds-value="DataDsValue"
+        />
+      </el-tab-pane>
+      <slot name="dataSetSelect" />
+    </el-tabs>
     <DataSetManagement
+      v-else
       ref="dataSetSetting"
       class="bs-data-set-management"
-      theme-class="bs-"
       :is-border="true"
       :is-dialog="true"
       :ds-id="dataSetId"
@@ -30,7 +52,9 @@
       <el-button
         type="primary"
         @click="sure"
-      >确定</el-button>
+      >
+        确定
+      </el-button>
     </span>
   </el-dialog>
 </template>
@@ -61,7 +85,12 @@ export default {
   data () {
     return {
       dataSetVisible: false,
-      dataSetId: null
+      dataSetId: null,
+      tabsActiveName: 'dataSet',
+      // 组件实例
+      componentInstance: null,
+      // 是否使用了插槽
+      isUseSlot: false
     }
   },
   computed: {
@@ -77,11 +106,23 @@ export default {
   },
   mounted () {
     this.dataSetId = this.dsId
+    // 将内置的组件实例赋值给componentInstance
+    this.componentInstance = this.$refs.dataSetSetting
+    // 判断是否使用了插槽
+    if (this.$scopedSlots && this.$scopedSlots.dataSetSelect && this.$scopedSlots.dataSetSelect()) {
+      this.isUseSlot = true
+    } else {
+      this.isUseSlot = false
+    }
   },
   methods: {
+    handleClickTabs (vueComponent, event) {
+      this.componentInstance = vueComponent.$children[0]
+    },
     sure () {
       this.dataSetVisible = false
-      const getSelectDs = this.$refs.dataSetSetting.getSelectDs()
+      const getSelectDs = this.componentInstance.getSelectDs()
+      console.log('getSelectDs', getSelectDs)
       if (Object.prototype.hasOwnProperty.call(getSelectDs, 'id')) {
         this.dataSetId = getSelectDs.id
       }
@@ -96,9 +137,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/style/bsTheme.scss';
-::v-deep .big-screen-router-view-wrap{
+
+::v-deep .big-screen-router-view-wrap {
   padding-left: 16px !important;
 }
+::v-deep .el-tabs__header{
+  margin-bottom: 0;
+}
+
 .data-set-wrap {
   ::v-deep .el-dialog__body {
     position: relative;
@@ -125,12 +171,14 @@ export default {
   }
 
   .bs-data-set-management {
-    ::v-deep .bs-container{
+    ::v-deep .bs-container {
       margin-left: 0 !important;
     }
-    ::v-deep  .layout {
-        position: absolute !important;
-      }
+
+    ::v-deep .layout {
+      position: absolute !important;
+    }
+
     ::v-deep .ztree {
       height: auto !important;
     }
@@ -144,7 +192,7 @@ export default {
     }
 
     ::v-deep .data-set-scrollbar {
-        height: 515px !important;
+      height: 515px !important;
     }
   }
 }

@@ -12,22 +12,26 @@
         @click="openDataSetDialog"
       />
     </el-input>
-    <data-set-dialog
+    <DataSetDialog
       ref="dataSetDialog"
       v-bind="$attrs"
       :multiple="multiple"
       :ds-value="dsValue"
       @getDsId="getDsId"
       @getSelectDs="getSelectDs"
-    />
+    >
+      <template #dataSetSelect>
+        <slot name="dataSetSelect" />
+      </template>
+    </DataSetDialog>
   </div>
 </template>
 
 <script>
-import dataSetDialog from './dataSetSetting.vue'
+import DataSetDialog from './DataSetSetting.vue'
 export default {
   name: 'Index',
-  components: { dataSetDialog },
+  components: { DataSetDialog },
   props: {
     config: {
       type: Object,

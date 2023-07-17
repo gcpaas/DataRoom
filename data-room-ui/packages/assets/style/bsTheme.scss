@@ -639,3 +639,17 @@
     }
   }
 }
+
+.bs-el-tabs{
+  .el-tabs__item{
+    color: var(--bs-el-text) !important;
+  }
+  .is-active{
+    color: var(--bs-el-color-primary) !important;
+  }
+  .el-tabs__nav-wrap{
+    &:after{
+      background-color: var(--bs-background-1) !important;
+    }
+  }
+}

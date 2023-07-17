@@ -13,7 +13,11 @@
         @closeRightPanel="close"
         @updateSetting="updateSetting"
         @updateDataSetting="updateDataSetting"
-      />
+      >
+        <template #dataSetSelect>
+          <slot name="dataSetSelect" />
+        </template>
+      </RightSetting>
       <OverallSetting
         v-if="!chartSettingShow"
         ref="OverallSetting"

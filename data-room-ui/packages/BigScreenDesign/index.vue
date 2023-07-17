@@ -86,7 +86,11 @@
         @updateSetting="updateSetting"
         @updateDataSetting="updateDataSetting"
         @updatePage="updatePage"
-      />
+      >
+        <template #dataSetSelect>
+          <slot name="dataSetSelect" />
+        </template>
+      </SettingPanel>
       <!-- 添加资源面板 -->
       <SourceDialog
         ref="SourceDialog"
@@ -124,7 +128,6 @@ import multipleSelectMixin from 'data-room-ui/js/mixins/multipleSelectMixin'
 import { getThemeConfig, getScreenInfo } from 'data-room-ui/js/api/bigScreenApi'
 import MouseSelect from './MouseSelect/index.vue'
 import _ from 'lodash'
-import { get } from 'data-room-ui/js/utils/http'
 import { randomString } from '../js/utils'
 import { isFirefox } from 'data-room-ui/js/utils/userAgent'
 import { handleResData } from 'data-room-ui/js/store/actions.js'
