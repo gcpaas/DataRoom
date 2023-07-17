@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import DataSetDialog from './DataSetSetting.vue'
+import DataSetDialog from './dataSetSetting.vue'
 export default {
   name: 'Index',
   components: { DataSetDialog },

@@ -14,7 +14,7 @@
       @tab-click="handleClickTabs"
     >
       <el-tab-pane
-        label="数据集"
+        label="数据集选择"
         name="dataSet"
       >
         <DataSetManagement
