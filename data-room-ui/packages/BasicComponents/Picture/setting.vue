@@ -127,7 +127,6 @@ export default {
       hideUpload: false,
       rules: {
         'customize.url': [
-          { required: true, message: '请输入URL地址', trigger: 'blur' },
           // 地址校验
           {
             validator: (rule, value, callback) => {
