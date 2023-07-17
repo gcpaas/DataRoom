@@ -16,20 +16,6 @@ public interface DataRoomConst {
     }
 
     /**
-     * 删除标志位
-     */
-    interface DelFlag {
-        /**
-         * 删除
-         */
-        int DELETE = 1;
-        /**
-         * 未删除
-         */
-        int NOAMAL = 0;
-    }
-
-    /**
      * 响应
      */
     interface Response {
