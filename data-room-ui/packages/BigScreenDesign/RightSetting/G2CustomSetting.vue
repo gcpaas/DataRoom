@@ -131,21 +131,10 @@
                 <el-switch
                   v-else-if="setting.type === 'switch'"
                   v-model="setting.value"
+                  class="bs-el-switch"
                   :active-value="setting.active"
                   :inactive-value="setting.inactive"
                 />
-<!--                <el-switch-->
-<!--                  v-else-if="setting.type === 'switchNumber'"-->
-<!--                  v-model="setting.value"-->
-<!--                  :active-value="1"-->
-<!--                  :inactive-value="0"-->
-<!--                />-->
-<!--                <el-switch-->
-<!--                  v-else-if="setting.type === 'switch,'"-->
-<!--                  v-model="setting.value"-->
-<!--                  :active-value="setting.active"-->
-<!--                  :inactive-value="setting.inactive"-->
-<!--                />-->
                 <el-slider
                   v-else-if="setting.type === 'slider'"
                   v-model="setting.value"
