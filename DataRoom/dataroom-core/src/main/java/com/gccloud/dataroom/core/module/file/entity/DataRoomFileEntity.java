@@ -22,7 +22,7 @@ public class DataRoomFileEntity extends SuperEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(notes = "业务所属模块，从业务字典FILE_MODULE获取值")
+    @ApiModelProperty(notes = "业务所属模块，非必须，提供给业务作为分类标识使用")
     private String module;
 
     @ApiModelProperty(notes = "原文件名")
@@ -34,7 +34,7 @@ public class DataRoomFileEntity extends SuperEntity implements Serializable {
     @ApiModelProperty(notes = "后缀名(如: txt、png、doc、java等)")
     private String extension;
 
-    @ApiModelProperty(notes = "路径")
+    @ApiModelProperty(notes = "存储路径")
     private String path;
 
     @ApiModelProperty(notes = "访问地址")
@@ -49,7 +49,7 @@ public class DataRoomFileEntity extends SuperEntity implements Serializable {
     @ApiModelProperty(notes = "上传用户")
     private String userName;
 
-    @ApiModelProperty(notes = "桶名")
+    @ApiModelProperty(notes = "桶名, 用于存储在云存储中的桶名")
     private String bucket;
 
 }

@@ -208,7 +208,7 @@ export default {
           }).catch(() => {
           })
         } else {
-          this.$dataRoomAxios('/bigScreen/type/update', { ...this.currentCatalog, type: this.type || 'bigScreenCatalog' }).then(data => {
+          this.$dataRoomAxios.post('/bigScreen/type/update', { ...this.currentCatalog, type: this.type || 'bigScreenCatalog' }).then(data => {
             this.catalogVisible = false
             this.getCatalogList()
           }).catch(() => {
