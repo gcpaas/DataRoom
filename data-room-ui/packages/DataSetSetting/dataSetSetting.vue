@@ -6,6 +6,7 @@
     :visible.sync="dataSetVisible"
     width="80%"
     class="bs-dialog-wrap data-set-wrap bs-el-dialog"
+    @opened="openedInit"
   >
     <el-tabs
       v-if="isUseSlot"
@@ -27,7 +28,10 @@
           :ds-value="DataDsValue"
         />
       </el-tab-pane>
-      <slot name="dataSetSelect" />
+      <slot
+        name="dataSetSelect"
+        :value="DataDsValue"
+      />
     </el-tabs>
     <DataSetManagement
       v-else
@@ -86,6 +90,7 @@ export default {
     return {
       dataSetVisible: false,
       dataSetId: null,
+      newDataDsValue: '',
       tabsActiveName: 'dataSet',
       // 组件实例
       componentInstance: null,
@@ -106,8 +111,6 @@ export default {
   },
   mounted () {
     this.dataSetId = this.dsId
-    // 将内置的组件实例赋值给componentInstance
-    this.componentInstance = this.$refs.dataSetSetting
     // 判断是否使用了插槽
     if (this.$scopedSlots && this.$scopedSlots.dataSetSelect && this.$scopedSlots.dataSetSelect()) {
       this.isUseSlot = true
@@ -116,6 +119,11 @@ export default {
     }
   },
   methods: {
+    openedInit () {
+      // 将内置的组件实例赋值给componentInstance
+      this.componentInstance = this.$refs.dataSetSetting
+      this.newDataDsValue = this.DataDsValue
+    },
     handleClickTabs (vueComponent, event) {
       this.componentInstance = vueComponent.$children[0]
     },
@@ -140,7 +148,8 @@ export default {
 ::v-deep .big-screen-router-view-wrap {
   padding-left: 16px !important;
 }
-::v-deep .el-tabs__header{
+
+::v-deep .el-tabs__header {
   margin-bottom: 0;
 }
 

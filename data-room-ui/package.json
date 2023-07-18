@@ -2,14 +2,16 @@
   "name": "@gcpaas/data-room-ui",
   "version": "1.0.1-2023071801-Alpha",
   "description": "自定义大屏",
-  "author": "gc-starter",
+  "author": "gcpaas",
   "license": "MIT",
   "main": "packages/index.js",
   "keywords": [
     "dataRoom",
+    "bigScreen",
+    "low code",
+    "自定义大屏",
     "大屏设计器",
-    "低代码",
-    "low code"
+    "低代码"
   ],
   "repository": {
     "type": "github",

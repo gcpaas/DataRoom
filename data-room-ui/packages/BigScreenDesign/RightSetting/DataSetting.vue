@@ -30,8 +30,11 @@
                 :ds-id="config.dataSource.businessKey"
                 @getDsId="dsId => { getDataSetDetailsById(dsId, 'treeTable');}"
               >
-                <template #dataSetSelect>
-                  <slot name="dataSetSelect" />
+                <template #dataSetSelect="{value}">
+                  <slot
+                    name="dataSetSelect"
+                    :value="value"
+                  />
                 </template>
               </data-set-select>
             </el-form-item>

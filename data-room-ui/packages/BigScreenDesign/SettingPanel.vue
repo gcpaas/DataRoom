@@ -14,8 +14,11 @@
         @updateSetting="updateSetting"
         @updateDataSetting="updateDataSetting"
       >
-        <template #dataSetSelect>
-          <slot name="dataSetSelect" />
+        <template #dataSetSelect="{value}">
+          <slot
+            name="dataSetSelect"
+            :value="value"
+          />
         </template>
       </RightSetting>
       <OverallSetting

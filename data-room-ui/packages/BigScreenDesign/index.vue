@@ -87,8 +87,11 @@
         @updateDataSetting="updateDataSetting"
         @updatePage="updatePage"
       >
-        <template #dataSetSelect>
-          <slot name="dataSetSelect" />
+        <template #dataSetSelect="{ value }">
+          <slot
+            name="dataSetSelect"
+            :value="value"
+          />
         </template>
       </SettingPanel>
       <!-- 添加资源面板 -->

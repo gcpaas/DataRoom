@@ -20,8 +20,11 @@
       @getDsId="getDsId"
       @getSelectDs="getSelectDs"
     >
-      <template #dataSetSelect>
-        <slot name="dataSetSelect" />
+      <template #dataSetSelect="{value}">
+        <slot
+          name="dataSetSelect"
+          :value="value"
+        />
       </template>
     </DataSetDialog>
   </div>

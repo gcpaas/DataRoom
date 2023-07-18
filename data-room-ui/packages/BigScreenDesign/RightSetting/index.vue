@@ -16,8 +16,11 @@
           ref="dataSetting"
           :key="config.code"
         >
-          <template #dataSetSelect>
-            <slot name="dataSetSelect" />
+          <template #dataSetSelect="{value}">
+            <slot
+              name="dataSetSelect"
+              :value="value"
+            />
           </template>
         </DataSetting>
       </el-tab-pane>
