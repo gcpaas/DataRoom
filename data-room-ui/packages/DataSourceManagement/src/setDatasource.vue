@@ -99,6 +99,7 @@
             class="bs-el-input"
             type="textarea"
             rows="4"
+            maxlength="200"
             @keydown.enter.native="textareaKeydown"
           />
         </el-form-item>

@@ -107,6 +107,8 @@
                 clearable
                 class="bs-el-input"
                 placeholder="请输入备注"
+                rows="4"
+                maxlength="200"
               />
             </template>
           </el-table-column>

@@ -137,8 +137,6 @@
 </template>
 
 <script>
-// import { get, post } from 'data-room-ui/js/utils/http'
-// import Icon from 'data-room-ui/assets/images/dataSourceIcon/export'
 import { cloneDeep } from 'lodash'
 export default {
   name: 'CatalogEditForm',
