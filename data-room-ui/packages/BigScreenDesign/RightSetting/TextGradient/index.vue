@@ -9,14 +9,10 @@
         v-model="position"
         class="bs-radio-wrap"
       >
-        <el-radio
-          label="top"
-        >
+        <el-radio label="top">
           上下
         </el-radio>
-        <el-radio
-          label="left"
-        >
+        <el-radio label="left">
           左右
         </el-radio>
       </el-radio-group>
@@ -26,7 +22,7 @@
       label-width="100px"
     >
       <div class="color-picker-box">
-        <el-color-picker v-model="startColor" /> <div class="el-icon-right"/> <el-color-picker v-model="endColor" />
+        <el-color-picker v-model="startColor" /> <div class="el-icon-right" /> <el-color-picker v-model="endColor" />
       </div>
     </el-form-item>
   </div>
@@ -76,7 +72,7 @@ export default {
   },
   methods: {
     init () {
-      const arr = this.newColors.split(',') || []
+      const arr = this.newColors.split(',').map(data => data.trim()) || []
       this.position = arr[0] || 'left'
       const s = arr[1] || '#ffffff'
       const e = arr[2] || '#ffffff'
