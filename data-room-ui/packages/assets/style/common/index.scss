@@ -1,7 +1,7 @@
 /* theme color */
 
 /* icon font path, required */
-$--font-path: '~element-ui/lib/theme-chalk/fonts';
+$--font-path: "~element-ui/lib/theme-chalk/fonts";
 
 @import "~element-ui/packages/theme-chalk/src/index";
 // 布局样式
@@ -85,7 +85,6 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
       font-size: 12px;
     }
   }
-
 }
 //表格样式
 
@@ -98,7 +97,6 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     overflow-y: auto !important;
     background-color: transparent !important;
     border: 1px solid #e4e4e4 !important;
-
 
     th > .cell {
       padding-left: 14px !important;
@@ -141,188 +139,190 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
       background: #f5f5f5;
     }
 
-    .el-table th, .el-table td {
+    .el-table th,
+    .el-table td {
       padding: 8px 0 !important;
     }
 
-        // th.is-leaf {
-        //   border-bottom: 2px solid var(--bs-el-color-primary) !important;
-        // }
+    // th.is-leaf {
+    //   border-bottom: 2px solid var(--bs-el-color-primary) !important;
+    // }
 
-        /* 滚动条样式设置*/
-        .el-table__body-wrapper::-webkit-scrollbar {
-          width: 12px !important;
-          height: 12px !important;
-        }
-
-        .el-table__body-wrapper::-webkit-scrollbar-corner {
-          background: transparent !important;
-        }
-
-        .el-table__body-wrapper::-webkit-scrollbar-track {
-          border-radius: 10px !important;
-        }
-
-        .el-table__body-wrapper::-webkit-scrollbar-thumb {
-          min-height: 20px !important;
-          background-clip: content-box !important;
-          border: 2px solid transparent !important;
-          border-radius: 10px !important;
-          // background-color: #ddd;
-        }
-
-        .el-table__fixed::before,
-        .el-table__fixed-right::before {
-          display: none !important;
-        }
-      }
-
-      // 全局表格内部button行样式
-
-      .el-table .cell {
-        line-height: 22px;
-      }
-
-      .cell .el-button {
-        padding: 5px 8px !important;
-      }
-
-    }
-    //分页样式
-    .bs-pagination {
-      .el-pagination.is-background .btn-prev,
-      .el-pagination.is-background .btn-next,
-      .el-pagination.is-background .el-pager li {
-        color: #bfbfbf;
-        background-color: var(--bs-el-background-2);
-
-        &:hover {
-          color: var(--bs-el-text);
-          background-color: var(--bs-el-color-primary);
-        }
-      }
-
-      .el-pagination.is-background .btn-prev:disabled,
-      .el-pagination.is-background .btn-next:disabled {
-        color: #bfbfbf;
-        background-color: var(--bs-el-background-2);
-      }
-
-      .el-pagination__total {
-        color: #bfbfbf;
-      }
-
-      .el-pagination .el-select .el-input .el-input__inner {
-        color: #bfbfbf;
-
-        &:hover {
-          color: var(--bs-el-color-primary);
-        }
-      }
-
-      .el-pagination {
-        text-align: right !important;
-        font-weight: normal !important;
-      }
-
-      .el-pager li {
-        padding: 0 !important;
-        min-width: 32px !important;
-        height: 32px !important;
-        line-height: 32px !important;
-        border-radius: 2px !important;
-      }
-
-      .el-pager li:not(.disabled).active {
-        background-color: var(--bs-el-color-primary) !important;
-      }
-
-      .el-pagination span:not([class*=suffix]), .el-pagination button {
-        font-size: 14px !important;
-        min-width: 0 !important;
-        height: 32px !important;
-        line-height: 32px !important;
-      }
-
-      .el-pagination .el-input--mini .el-input__inner {
-        height: 32px !important;
-        line-height: 32px !important;
-      }
-
-      .el-pagination__editor.el-input .el-input__inner {
-        height: 32px !important;
-      }
-
+    /* 滚动条样式设置*/
+    .el-table__body-wrapper::-webkit-scrollbar {
+      width: 12px !important;
+      height: 12px !important;
     }
 
-    /*解决el-scroll底部出现空白滚动条*/
-    .el-scrollbar__wrap {
-      overflow-x: hidden !important;
+    .el-table__body-wrapper::-webkit-scrollbar-corner {
+      background: transparent !important;
     }
 
-
-
-    // dialog设置
-    .bs-dialog-wrap {
-      .el-select{
-        display: inline-block !important;
-        position: relative !important;
-        width: auto !important;
-      }
-      .el-dialog{
-        margin-top: 13vh !important;
-        margin-bottom: 0 !important;
-      }
-      .el-dialog__wrapper {
-        overflow: hidden !important;
-      }
-
-      .el-dialog__body {
-        padding: 18px 24px !important;
-        max-height: calc(90vh - 170px) !important;
-        min-height: 200px;
-        overflow-y: auto;
-      }
-
-      // dialog头部
-      .el-dialog__header {
-        background: #f5f5f5;
-        background-color: #F5F5F5;
-        padding: 0 !important;
-        height: 40px;
-        line-height: 40px;
-        font-size: 15px;
-        font-weight: 700;
-
-        .el-dialog__headerbtn {
-          position: absolute;
-          top: 10px;
-          right: 20px;
-          padding: 0;
-          background: 0 0;
-          border: none;
-          outline: 0;
-          cursor: pointer;
-          font-size: 16px;
-        }
-      }
-
-      .el-dialog__title {
-        display: inline-block;
-        font-size: 16px;
-        position: relative;
-        padding-left: 20px;
-        border-left: none !important;
-      }
-      
-      .el-dialog__title::before {
-          content: "" !important;
-          height: 16px !important;
-          position: absolute !important;
-          left: 0 !important;
-          top: 50% !important;
-          transform: translateY(-50%) !important;
-          border-left: 4px solid var(--bs-el-color-primary) !important;
-        }
+    .el-table__body-wrapper::-webkit-scrollbar-track {
+      border-radius: 10px !important;
     }
 
+    .el-table__body-wrapper::-webkit-scrollbar-thumb {
+      min-height: 20px !important;
+      background-clip: content-box !important;
+      border: 2px solid transparent !important;
+      border-radius: 10px !important;
+      // background-color: #ddd;
+    }
+
+    .el-table__fixed::before,
+    .el-table__fixed-right::before {
+      display: none !important;
+    }
+  }
+
+  // 全局表格内部button行样式
+
+  .el-table .cell {
+    line-height: 22px;
+  }
+
+  .cell .el-button {
+    padding: 5px 8px !important;
+  }
+}
+//分页样式
+.bs-pagination {
+  .el-pagination.is-background .btn-prev,
+  .el-pagination.is-background .btn-next,
+  .el-pagination.is-background .el-pager li {
+    color: #bfbfbf;
+    background-color: var(--bs-el-background-2);
+
+    &:hover {
+      color: var(--bs-el-text);
+      background-color: var(--bs-el-color-primary);
+    }
+  }
+
+  .el-pagination.is-background .btn-prev:disabled,
+  .el-pagination.is-background .btn-next:disabled {
+    color: #bfbfbf;
+    background-color: var(--bs-el-background-2);
+  }
+
+  .el-pagination__total {
+    color: #bfbfbf;
+  }
+
+  .el-pagination .el-select .el-input .el-input__inner {
+    color: #bfbfbf;
+
+    &:hover {
+      color: var(--bs-el-color-primary);
+    }
+  }
+
+  .el-pagination {
+    text-align: right !important;
+    font-weight: normal !important;
+  }
+
+  .el-pager li {
+    padding: 0 !important;
+    min-width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+    border-radius: 2px !important;
+  }
+
+  .el-pager li:not(.disabled).active {
+    background-color: var(--bs-el-color-primary) !important;
+  }
+
+  .el-pagination span:not([class*="suffix"]),
+  .el-pagination button {
+    font-size: 14px !important;
+    min-width: 0 !important;
+    height: 32px !important;
+    line-height: 32px !important;
+  }
+
+  .el-pagination .el-input--mini .el-input__inner {
+    height: 32px !important;
+    line-height: 32px !important;
+  }
+
+  .el-pagination__editor.el-input .el-input__inner {
+    height: 32px !important;
+  }
+}
+
+/*解决el-scroll底部出现空白滚动条*/
+.el-scrollbar__wrap {
+  overflow-x: hidden !important;
+}
+
+// dialog设置
+.bs-dialog-wrap {
+  .el-select {
+    display: inline-block !important;
+    position: relative !important;
+    width: auto !important;
+  }
+  .el-dialog {
+    margin-top: 13vh !important;
+    margin-bottom: 0 !important;
+  }
+  .el-dialog__wrapper {
+    overflow: hidden !important;
+  }
+
+  .el-dialog__body {
+    padding: 18px 24px !important;
+    max-height: calc(90vh - 170px) !important;
+    min-height: 200px;
+    overflow-y: auto;
+  }
+
+  // dialog头部
+  .el-dialog__header {
+    background: #f5f5f5;
+    background-color: #f5f5f5;
+    padding: 0 !important;
+    height: 40px;
+    line-height: 40px;
+    font-size: 15px;
+    font-weight: 700;
+
+    .el-dialog__headerbtn {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      padding: 0;
+      background: 0 0;
+      border: none;
+      outline: 0;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  }
+
+  .el-dialog__title {
+    display: inline-block;
+    font-size: 16px;
+    position: relative;
+    padding-left: 20px;
+    border-left: none !important;
+  }
+
+  .el-dialog__title::before {
+    content: "" !important;
+    height: 16px !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    border-left: 4px solid var(--bs-el-color-primary) !important;
+  }
+}
+
+.el-scrollbar__thumb {
+  background: rgba(144, 147, 153, 0.3) !important;
+  background-color: rgba(144, 147, 153, 0.3) !important;
+}

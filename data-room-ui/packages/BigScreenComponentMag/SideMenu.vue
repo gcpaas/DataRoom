@@ -117,7 +117,7 @@ export default {
         position: relative;
         background-color: rgba(var(--bs-el-color-primary-active), 0.4);
         color: var(--bs-el-text);
-        &::after{
+        &::before{
           content: '';
           position: absolute;
           left: 0;

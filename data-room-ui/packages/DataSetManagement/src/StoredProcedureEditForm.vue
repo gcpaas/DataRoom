@@ -159,7 +159,7 @@
                   <label-select
                     :dataset-id="datasetId"
                     :id-list="dataForm.labelIds"
-                    @commit="(ids) =>{dataForm.labelIds = ids}"
+                    @commit="(ids) => { dataForm.labelIds = ids }"
                   />
                 </el-form-item>
               </el-col>
@@ -178,9 +178,7 @@
               />
               <div class="bs-codemirror-bottom-text">
                 示例：
-                <strong>call 存储过程名称(<span
-                  style="color: red;"
-                >${参数名称}</span>,?)</strong>
+                <strong>call 存储过程名称(<span style="color: red;">${参数名称}</span>,?)</strong>
               </div>
             </div>
             <div style="text-align: center; padding: 16px 0;">
@@ -219,8 +217,9 @@
                   <span>{{ param.name }}</span>&nbsp;<span
                     v-show="param.remark"
                     style="color: #909399;"
-                  >({{ param.remark
-                  }})</span>
+                  >
+                    ({{ param.remark }})
+                  </span>
                   <el-button
                     class="edit_field"
                     type="text"
