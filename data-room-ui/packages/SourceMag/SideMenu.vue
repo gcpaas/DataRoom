@@ -43,7 +43,7 @@
               slot="dropdown"
               class="dropdown-menu-box bs-el-dropdown-menu"
             >
-              <el-dropdown-item @click.native="catalogEdit(catalog)">
+              <el-dropdown-item @click.native="catalogEdit()">
                 编辑
               </el-dropdown-item>
               <el-dropdown-item
@@ -66,7 +66,7 @@
     </div>
     <!-- 新增或编辑目录弹窗 -->
     <el-dialog
-      :title="currentCatalog.code ? '编辑分组' : '新建分组'"
+      :title="groupForm.code ? '编辑分组' : '新建分组'"
       :visible.sync="catalogVisible"
       custom-class="bs-el-dialog"
       width="30%"
@@ -75,7 +75,7 @@
     >
       <el-form
         ref="form"
-        :model="currentCatalog"
+        :model="groupForm"
         label-width="80px"
         :rules="formRules"
         class="bs-el-form"
@@ -85,14 +85,14 @@
           prop="name"
         >
           <el-input
-            v-model.trim="currentCatalog.name"
+            v-model.trim="groupForm.name"
             class="bs-el-input"
             clearable
           />
         </el-form-item>
         <el-form-item label="排序">
           <el-input-number
-            v-model="currentCatalog.orderNum"
+            v-model="groupForm.orderNum"
             :min="0"
             :max="30000"
             controls-position="right"
@@ -119,9 +119,7 @@
   </div>
 </template>
 <script>
-// import { get, post } from '../../packages/js/utils/http'
-import _ from 'lodash'
-
+import { cloneDeep } from 'lodash'
 export default {
   components: {},
   data () {
@@ -163,6 +161,11 @@ export default {
         name: '',
         id: '',
         code: ''
+      },
+      groupForm: {
+        code: '',
+        name: '',
+        orderNum: ''
       },
       formRules: {
         name: [{ required: true, message: '分组名称不能为空', trigger: 'blur' }]
@@ -208,6 +211,10 @@ export default {
         if (!valid) {
           return
         }
+        this.currentCatalog = {
+          ...this.currentCatalog,
+          ...this.groupForm
+        }
         if (!this.currentCatalog.id) {
           this.$dataRoomAxios.post('/bigScreen/type/add', {
             ...this.currentCatalog,
@@ -236,13 +243,14 @@ export default {
     },
     // 点击目录
     clickCatalog (catalog) {
-      this.currentCatalog = _.cloneDeep(catalog)
-      this.activeCatalog = _.cloneDeep(catalog)
+      this.currentCatalog = cloneDeep(catalog)
+      this.activeCatalog = cloneDeep(catalog)
       this.isAll = false
       this.$emit('getPageInfo', { isAll: false, page: catalog })
     },
     // 编辑目录
     catalogEdit () {
+      this.groupForm = cloneDeep(this.currentCatalog)
       this.catalogVisible = true
     },
     // 删除目录

@@ -79,7 +79,7 @@
     </el-dialog>
     <!-- 新增或编辑目录弹窗 -->
     <el-dialog
-      :title="currentCatalog.code ? '编辑分组':'新建分组'"
+      :title="groupForm.code ? '编辑分组':'新建分组'"
       :visible.sync="catalogVisible"
       custom-class="bs-el-dialog"
       width="30%"
@@ -88,7 +88,7 @@
     >
       <el-form
         ref="form"
-        :model="currentCatalog"
+        :model="groupForm"
         label-width="80px"
         :rules="formRules"
         class="bs-el-form"
@@ -98,7 +98,7 @@
           prop="name"
         >
           <el-input
-            v-model.trim="currentCatalog.name"
+            v-model.trim="groupForm.name"
             class="bs-el-input"
             clearable
           />
@@ -107,7 +107,7 @@
           label="排序"
         >
           <el-input-number
-            v-model="currentCatalog.orderNum"
+            v-model="groupForm.orderNum"
             :min="0"
             :max="30000"
             controls-position="right"
@@ -128,7 +128,9 @@
         <el-button
           type="primary"
           @click="addOrEditCatalog"
-        >确定</el-button>
+        >
+          确定
+        </el-button>
       </span>
     </el-dialog>
   </div>
@@ -137,7 +139,7 @@
 <script>
 // import { get, post } from 'data-room-ui/js/utils/http'
 // import Icon from 'data-room-ui/assets/images/dataSourceIcon/export'
-import _ from 'lodash'
+import { cloneDeep } from 'lodash'
 export default {
   name: 'CatalogEditForm',
   components: {
@@ -157,6 +159,11 @@ export default {
       searchKey: '', // 分组查询
       catalogVisible: false,
       currentCatalog: {},
+      groupForm: {
+        code: '',
+        name: '',
+        orderNum: ''
+      },
       formVisible: false,
       formRules: {
         name: [
@@ -168,7 +175,7 @@ export default {
   computed: {
     tableList: {
       get () {
-        return _.cloneDeep(this.catalogList)
+        return cloneDeep(this.catalogList)
       },
       set () {
 
@@ -198,6 +205,10 @@ export default {
         if (!valid) {
           return
         }
+        this.currentCatalog = {
+          ...this.currentCatalog,
+          ...this.groupForm
+        }
         if (!this.currentCatalog.id) {
           this.$dataRoomAxios.post('/bigScreen/type/add',
             {
@@ -226,7 +237,7 @@ export default {
       this.catalogVisible = true
     },
     editCatalog (row) {
-      this.currentCatalog = row
+      this.groupForm = cloneDeep(row)
       this.catalogVisible = true
     },
     // 删除目录

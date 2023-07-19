@@ -5,6 +5,7 @@
       title="分组管理"
       :visible.sync="formVisible"
       :append-to-body="true"
+      custom-class="bs-el-dialog"
       destroy-on-close
       class="bs-dialog-wrap bs-el-dialog catalog-edit-wrap"
     >
@@ -82,7 +83,7 @@
     </el-dialog>
     <!-- 新增或编辑目录弹窗 -->
     <el-dialog
-      :title="currentCatalog.code ? '编辑分组':'新建分组'"
+      :title="groupForm.code ? '编辑分组':'新建分组'"
       :visible.sync="catalogVisible"
       custom-class="bs-el-dialog"
       width="30%"
@@ -91,16 +92,17 @@
     >
       <el-form
         ref="form"
-        :model="currentCatalog"
+        :model="groupForm"
         label-width="80px"
         :rules="formRules"
+        class="bs-el-form"
       >
         <el-form-item
           label="分组名称"
           prop="name"
         >
           <el-input
-            v-model.trim="currentCatalog.name"
+            v-model.trim="groupForm.name"
             class="bs-el-input"
             clearable
           />
@@ -109,7 +111,7 @@
           label="排序"
         >
           <el-input-number
-            v-model="currentCatalog.orderNum"
+            v-model="groupForm.orderNum"
             :min="0"
             :max="30000"
             controls-position="right"
@@ -130,13 +132,16 @@
         <el-button
           type="primary"
           @click="addOrEditCatalog"
-        >确定</el-button>
+        >
+          确定
+        </el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 // import { get, post } from 'data-room-ui/js/utils/http'
 export default {
   name: 'CatalogEditForm',
@@ -161,6 +166,11 @@ export default {
         name: [
           { required: true, message: '分组名称不能为空', trigger: 'blur' }
         ]
+      },
+      groupForm: {
+        code: '',
+        name: '',
+        orderNum: 0
       }
     }
   },
@@ -195,6 +205,10 @@ export default {
         if (!valid) {
           return
         }
+        this.currentCatalog = {
+          ...this.currentCatalog,
+          ...this.groupForm
+        }
         if (!this.currentCatalog.id) {
           this.$dataRoomAxios.post('/bigScreen/type/add',
             {
@@ -223,7 +237,7 @@ export default {
       this.catalogVisible = true
     },
     editCatalog (row) {
-      this.currentCatalog = row
+      this.groupForm = cloneDeep(row)
       this.catalogVisible = true
     },
     // 删除目录
@@ -260,6 +274,9 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/style/bsTheme.scss';
 .catalog-edit-wrap{
+ ::v-deep .el-dialog__body{
+    min-height: 500px !important;
+  }
   .el-input {
     width: 200px;
     margin-right: 20px;
