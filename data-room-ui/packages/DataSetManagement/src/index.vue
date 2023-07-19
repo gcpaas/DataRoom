@@ -170,7 +170,7 @@
               show-overflow-tooltip
             >
               <template slot-scope="scope">
-                <span>{{getLabels(scope.row.labelIds).join(',')}}</span>
+                <span>{{ getLabels(scope.row.labelIds).join(',') }}</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -368,10 +368,10 @@ export default {
     }
   },
   methods: {
-    getLabels(list){
-      const arr=[]
-      list?.forEach((item)=>{
-        arr.push(this.labelList.filter(x=>x.id==item)[0]?.labelName)
+    getLabels (list) {
+      const arr = []
+      list?.forEach((item) => {
+        arr.push(this.labelList.filter(x => x.id === item)[0]?.labelName)
       })
       return arr
     },

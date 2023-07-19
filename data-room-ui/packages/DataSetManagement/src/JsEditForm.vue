@@ -124,6 +124,18 @@
                   />
                 </el-form-item>
               </el-col>
+              <el-col :span="12">
+                <el-form-item
+                  label="标签"
+                  prop="labelIds"
+                >
+                  <LabelSelect
+                    :dataset-id="datasetId"
+                    :id-list="dataForm.labelIds"
+                    @commit="(ids) =>{dataForm.labelIds = ids}"
+                  />
+                </el-form-item>
+              </el-col>
             </el-row>
           </el-form>
           <div
@@ -352,6 +364,7 @@
 </template>
 
 <script>
+import LabelSelect from 'data-room-ui/DataSetLabelManagement/src/LabelSelect.vue'
 import ParamsSettingDialog from './JsComponents/ParamsSettingDialog.vue'
 import OutputFieldDialog from './JsComponents/OutputFieldDialog.vue'
 import FieldFillDialog from './JsComponents/FieldFillDialog.vue'
@@ -366,7 +379,8 @@ export default {
     codemirror,
     FieldFillDialog,
     ParamsSettingDialog,
-    OutputFieldDialog
+    OutputFieldDialog,
+    LabelSelect
   },
   props: {
     config: {
@@ -410,6 +424,7 @@ export default {
         name: '',
         typeId: '',
         remark: '',
+        labelIds: [],
         config: {
           script: '',
           paramsList: []
@@ -474,9 +489,9 @@ export default {
       }
       if (this.datasetId) {
         getDataset(this.datasetId).then(res => {
-          const { id, name, typeId, remark, config } = res
+          const { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config } = res
           const { script, paramsList, fieldDesc, fieldList } = config
-          this.dataForm = { id, name, typeId, remark, config: { script, paramsList } }
+          this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { script, paramsList } }
           this.fieldDesc = fieldDesc
           this.outputFieldList = fieldList
           this.scriptExecute(true)
@@ -507,17 +522,18 @@ export default {
         if (valid) {
           this.saveloading = true
           this.saveText = '正在保存...'
-          const { datasetId, dataForm, config, appCode, fieldDesc, outputFieldList } = this
+          const { datasetId, dataForm, appCode, fieldDesc, outputFieldList } = this
           const form = {
             id: datasetId,
             name: dataForm.name,
             typeId: dataForm.typeId,
             remark: dataForm.remark,
-            datasetType: config.datasetType,
+            datasetType: 'js',
             moduleCode: appCode,
             editable: appCode ? 1 : 0,
+            labelIds: dataForm.labelIds,
             config: {
-              className: config.className,
+              className: 'com.gccloud.dataset.entity.config.JsDataSetConfig',
               script: dataForm.config.script,
               fieldDesc,
               paramsList: dataForm.config.paramsList,

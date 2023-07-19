@@ -156,7 +156,7 @@
                   label="标签"
                   prop="labelIds"
                 >
-                  <label-select
+                  <LabelSelect
                     :dataset-id="datasetId"
                     :id-list="dataForm.labelIds"
                     @commit="(ids) =>{dataForm.labelIds = ids}"

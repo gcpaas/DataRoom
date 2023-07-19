@@ -130,12 +130,11 @@
                   label="标签"
                   prop="labelIds"
                 >
-                  <label-select
+                  <LabelSelect
                     :dataset-id="datasetId"
                     :id-list="dataForm.labelIds"
                     @commit="(ids) =>{dataForm.labelIds = ids}"
-                  >
-                  </label-select>
+                  />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -383,7 +382,7 @@ export default {
           { validator: validateName, trigger: 'blur' }
         ]
       },
-      passTest: false, // 通过测试
+      passTest: false // 通过测试
     }
   },
   mounted () {
