@@ -100,6 +100,7 @@
                   v-else-if="setting.type === 'colorPicker'"
                   v-model="setting.value"
                   popper-class="bs-el-color-picker"
+                  class="bs-el-color-picker"
                   show-alpha
                 />
                 <!-- 渐变色设置 -->
@@ -281,6 +282,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/style/settingWrap.scss';
+@import '../../assets/style/bsTheme.scss';
 
 // 筛选条件的按钮样式
 .add-filter-box {

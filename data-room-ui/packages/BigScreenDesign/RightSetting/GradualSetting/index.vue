@@ -1,7 +1,17 @@
 /** * @Description: 渐变色配置 * @author liu.shiyi * @date 2023/4/13 16:01 */
 <template>
   <div class="bs-gradual-wrap">
-    <el-color-picker v-model="startColor" /> <div class="el-icon-right" /> <el-color-picker v-model="endColor" />
+    <el-color-picker
+      v-model="startColor"
+      class="bs-el-color-picker"
+      popper-class="bs-el-color-picker"
+    />
+    <div class="el-icon-right" />
+    <el-color-picker
+      v-model="endColor"
+      class="bs-el-color-picker"
+      popper-class="bs-el-color-picker"
+    />
   </div>
 </template>
 
@@ -58,6 +68,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
   .bs-gradual-wrap{
     width: 100%;
     display: flex;

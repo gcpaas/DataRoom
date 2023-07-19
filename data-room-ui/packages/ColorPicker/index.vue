@@ -2,6 +2,7 @@
   <div class="border-color">
     <el-input
       v-model="localValue"
+      class="bs-el-input"
       :placeholder="placeholder"
       clearable
     />
@@ -10,6 +11,7 @@
       v-model="localValue"
       popper-class="bs-el-color-picker"
       show-alpha
+      class="bs-el-color-picker"
       :predefine="predefineColors"
     />
   </div>
@@ -61,9 +63,9 @@ export default {
 <style lang="scss"></style>
 
 <style lang="scss" scoped>
+@import "../assets/style/bsTheme.scss";
 .border-color {
   display: flex;
-
   ::v-deep .el-input {
     width: auto;
     position: relative;

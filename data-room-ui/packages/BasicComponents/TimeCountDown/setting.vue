@@ -54,7 +54,11 @@
           label="字体颜色"
           label-width="100px"
         >
-          <el-color-picker v-model="config.customize.color" />
+          <el-color-picker
+            v-model="config.customize.color"
+            popper-class="bs-el-color-picker"
+            class="bs-el-color-picker"
+          />
         </el-form-item>
         <el-form-item
           label="结束日期"
@@ -62,8 +66,10 @@
         >
           <el-date-picker
             v-model="config.endTime"
-            popper-class="bs-date-popper-class"
+            popper-class="bs-el-date-picker"
             type="datetime"
+            align="left"
+            size="mini"
             placeholder="请选择结束日期"
             :picker-options="pickerOptions"
             value-format="timestamp"

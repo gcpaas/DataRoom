@@ -55,7 +55,11 @@
           label="字体颜色"
           label-width="100px"
         >
-          <el-color-picker v-model="config.customize.color" />
+          <el-color-picker
+            v-model="config.customize.color"
+            class="bs-el-color-picker"
+            popper-class="bs-el-color-picker"
+          />
         </el-form-item>
         <el-form-item
           label="时间格式"
@@ -125,6 +129,7 @@ export default {
 
 <style lang="scss" scoped>
  @import "../../assets/style/settingWrap.scss";
+ @import "../../assets/style/bsTheme.scss";
 .setting-wrap{
   padding: 12px 16px;
 }

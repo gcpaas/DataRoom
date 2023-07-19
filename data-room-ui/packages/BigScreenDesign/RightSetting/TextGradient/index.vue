@@ -22,7 +22,17 @@
       label-width="100px"
     >
       <div class="color-picker-box">
-        <el-color-picker v-model="startColor" /> <div class="el-icon-right" /> <el-color-picker v-model="endColor" />
+        <el-color-picker
+          v-model="startColor"
+          class="bs-el-color-picker"
+          popper-class="bs-el-color-picker"
+        />
+        <div class="el-icon-right" />
+        <el-color-picker
+          v-model="endColor"
+          class="bs-el-color-picker"
+          popper-class="bs-el-color-picker"
+        />
       </div>
     </el-form-item>
   </div>
@@ -96,6 +106,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../../assets/style/bsTheme.scss";
 .color-picker-box{
   width: 100%;
   display: flex;

@@ -537,9 +537,20 @@
 }
 
 .bs-el-color-picker {
-  border-color: var(--bs-el-border) !important;
-  background-color: var(--bs-background-1) !important;
-
+  background: var(--bs-background-2) !important;
+  border-color: var(--bs-background-1) !important;
+  background-color: var(--bs-background-2) !important;
+  .el-button--default{
+    color: var(--bs-el-text) !important;
+    border-color: var(--bs-background-1) !important;
+    background-color: var(--bs-background-2) !important;
+  }
+  .el-color-picker__trigger{
+    border-color:   var(--bs-background-1) !important;
+  }
+  .el-color-picker__panel{
+    border-color: var(--bs-background-1) !important;
+  }
   .el-input__inner {
     color: var(--bs-el-text) !important;
     border-color: var(--bs-el-border) !important;
