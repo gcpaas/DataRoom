@@ -164,6 +164,16 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="labelIds"
+              label="标签"
+              align="center"
+              show-overflow-tooltip
+            >
+              <template slot-scope="scope">
+                <span>{{getLabels(scope.row.labelIds).join(',')}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="remark"
               label="备注"
               align="left"
@@ -358,6 +368,13 @@ export default {
     }
   },
   methods: {
+    getLabels(list){
+      const arr=[]
+      list?.forEach((item)=>{
+        arr.push(this.labelList.filter(x=>x.id==item)[0]?.labelName)
+      })
+      return arr
+    },
     toggleRowSelection () {
       this.$nextTick(() => {
         const dsIds = this.multipleSelection.map(ds => ds.id)
@@ -515,9 +532,9 @@ export default {
         })
       }
       this.getDataList()
-      getLabelList().then(res => {
-        this.labelList = res
-      })
+      // getLabelList().then(res => {
+      //   this.labelList = res
+      // })
     },
     // 新增数据集
     addDataset () {
@@ -530,6 +547,9 @@ export default {
     },
     // 获取表格数据
     getDataList () {
+      getLabelList().then(res => {
+        this.labelList = res
+      })
       this.dataListLoading = true
       datasetPage({
         current: this.current,
