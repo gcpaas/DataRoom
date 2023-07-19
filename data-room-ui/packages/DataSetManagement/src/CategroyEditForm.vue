@@ -21,7 +21,7 @@
           prop="name"
         >
           <el-input
-            v-model="dataForm.name"
+            v-model.trim="dataForm.name"
             class="bs-el-input"
             clearable
           />

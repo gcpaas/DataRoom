@@ -76,8 +76,9 @@
           prop="name"
         >
           <el-input
-            v-model="currentCatalog.name"
+            v-model.trim="currentCatalog.name"
             class="bs-el-input"
+            clearable
           />
         </el-form-item>
         <el-form-item
