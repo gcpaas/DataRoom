@@ -233,8 +233,8 @@
     />
     <checkDatasource
       ref="checkDatasource"
-      :reasonList="reasonList"
-      />
+      :reason-list="reasonList"
+    />
     <component
       :is="componentData.component"
       v-if="datasetType"
@@ -311,7 +311,7 @@ export default {
   },
   data () {
     return {
-      reasonList:[],
+      reasonList: [],
       datasetType: null,
       isEdit: false,
       categoryData: [],
@@ -446,9 +446,9 @@ export default {
     },
     // 删除数据集
     delDataset (id) {
-      datasetCheck(id).then((res)=>{
+      datasetCheck(id).then((res) => {
         console.log(res)
-        if(res.canDelete){
+        if (res.canDelete) {
           this.$confirm('确定删除当前数据集吗?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -461,12 +461,11 @@ export default {
             })
           }).catch(() => {
           })
-        }else{
-          this.reasonList=res.reasons
+        } else {
+          this.reasonList = res.reasons
           this.$refs.checkDatasource.checkDatasourceVisible = true
         }
       })
-
     },
     // 详情
     toPreview (id, type, name, typeId) {

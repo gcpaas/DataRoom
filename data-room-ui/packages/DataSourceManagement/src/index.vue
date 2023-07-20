@@ -128,10 +128,10 @@
       :app-code="appCode"
       @refreshTable="init"
     />
-     <checkDatasource
+    <checkDatasource
       ref="checkDatasource"
-      :reasonList="reasonList"
-      />
+      :reason-list="reasonList"
+    />
   </div>
 </template>
 
@@ -185,7 +185,7 @@ export default {
   },
   data () {
     return {
-      reasonList:[],
+      reasonList: [],
       testBtnLoading: [],
       loadingText: '',
       searchLoading: false,
@@ -279,25 +279,24 @@ export default {
     handleDelete (row) {
       // eslint-disable-next-line eqeqeq
       if (row.editable == 1 && !this.appCode) return
-      dataSourceCheck(row.id).then((res)=>{
-        if(res.canDelete){
+      dataSourceCheck(row.id).then((res) => {
+        if (res.canDelete) {
           this.$confirm('确定删除当前数据源吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          customClass: 'bs-el-message-box'
-        }).then(() => {
-          sourceRemove(row.id).then((r) => {
-            this.$message.success('删除成功')
-            this.init()
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            customClass: 'bs-el-message-box'
+          }).then(() => {
+            sourceRemove(row.id).then((r) => {
+              this.$message.success('删除成功')
+              this.init()
+            })
           })
-        })
-        }else{
-          this.reasonList=res.reasons
+        } else {
+          this.reasonList = res.reasons
           this.$refs.checkDatasource.checkDatasourceVisible = true
         }
       })
-
     },
     sourceLinkTest (row) {
       this.testBtnLoading.push(row.id)
