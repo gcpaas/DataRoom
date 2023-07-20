@@ -63,7 +63,7 @@
         type='primary'
         @click="jumpto"
       >
-        组件管理
+        资源管理
       </el-button>
     </div>
   </el-dialog>
