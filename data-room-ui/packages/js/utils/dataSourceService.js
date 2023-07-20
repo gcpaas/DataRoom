@@ -11,6 +11,14 @@ import Vue from 'vue'
 const add = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/datasource/add', params, flag)
 
 /**
+ * 删除数据源前查询是否使用
+ * @param params
+ * @param flag
+ * @returns {*}
+ */
+const dataSourceCheck = (id='-1', flag = false) => Vue.prototype.$dataRoomAxios.post(`/datasource/deleteCheck/${id}`, {}, flag)
+
+/**
  * 修改数据源
  * @param params
  * @param flag
@@ -103,5 +111,6 @@ export {
   getSourceTable,
   getSourceView,
   getTableFieldList,
-  getViewFieldList
+  getViewFieldList,
+  dataSourceCheck
 }

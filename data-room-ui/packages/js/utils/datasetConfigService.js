@@ -12,6 +12,15 @@ import Vue from 'vue'
 const datasetPage = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.get('/dataset/page', params, flag)
 
 /**
+ * 删除数据源前查询是否使用
+ * @param params
+ * @param flag
+ * @returns {*}
+ */
+const dataSourceCheck = (id='-1', flag = false) => Vue.prototype.$dataRoomAxios.post(`/datasource/deleteCheck/${id}`, {}, flag)
+
+
+/**
  * 数据集列表查询
  * @param params
  * @param flag
@@ -113,5 +122,6 @@ export {
   getCategoryTree,
   categoryAdd,
   categoryUpdate,
-  categoryRemove
+  categoryRemove,
+  dataSourceCheck
 }
