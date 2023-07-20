@@ -18,7 +18,7 @@
     </properties>
 
     <dependencies>
-        <!--  数据集插件 -->
+        <!--  数据集插件 开源地址：https://github.com/gcpaas/dataset -->
         <dependency>
             <groupId>com.gccloud</groupId>
             <artifactId>dataset-core</artifactId>
