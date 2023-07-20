@@ -234,8 +234,8 @@
     />
     <checkDatasource
       ref="checkDatasource"
-      :reasonList="reasonList"
-      />
+      :reason-list="reasonList"
+    />
     <component
       :is="componentData.component"
       v-if="datasetType"
@@ -312,7 +312,7 @@ export default {
   },
   data () {
     return {
-      reasonList:[],
+      reasonList: [],
       datasetType: null,
       isEdit: false,
       categoryData: [],
@@ -463,12 +463,11 @@ export default {
             })
           }).catch(() => {
           })
-        }else{
-          this.reasonList=res.reasons
+        } else {
+          this.reasonList = res.reasons
           this.$refs.checkDatasource.checkDatasourceVisible = true
         }
       })
-
     },
     // 详情
     toPreview (id, type, name, typeId) {

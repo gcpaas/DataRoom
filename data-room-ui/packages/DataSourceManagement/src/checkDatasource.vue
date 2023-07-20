@@ -8,11 +8,13 @@
     :before-close="handleClose"
     class="bs-dialog-wrap bs-el-dialog"
   >
-    <div
-      style="padding-right: 80px;"
-    >
-      <div class="item" v-for="(item,index) in reasonList" :key="index">
-        <span v-if="reasonList.length>1"> {{index+1}}、</span>{{item}}
+    <div class="text-style">
+      <div
+        v-for="(item,index) in reasonList"
+        :key="index"
+        class="item"
+      >
+        <span v-if="reasonList.length>1"> {{ index+1 }}、</span>{{ item }}
       </div>
     </div>
     <span
@@ -34,21 +36,21 @@ export default {
   props: {
     reasonList: {
       type: Array,
-      default: ()=>[]
+      default: () => []
     }
   },
   data () {
     return {
-      checkDatasourceVisible: false,
+      checkDatasourceVisible: false
     }
   },
   methods: {
-    handleClose(){
-      this.checkDatasourceVisible=false
+    handleClose () {
+      this.checkDatasourceVisible = false
     }
 
-    }
   }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -58,5 +60,9 @@ export default {
 }
 .item{
   padding: 8px 0;
+}
+.text-style{
+  padding-right: 80px;
+  color: var(--bs-el-text);
 }
 </style>

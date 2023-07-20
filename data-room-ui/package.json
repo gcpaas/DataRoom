@@ -1,6 +1,6 @@
 {
   "name": "@gcpaas/data-room-ui",
-  "version": "1.0.1-2023071901-Alpha",
+  "version": "1.0.1-2023072001-Alpha",
   "description": "自定义大屏",
   "author": "gcpaas",
   "license": "MIT",
@@ -53,6 +53,7 @@
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@antv/g2plot": "2.4.0",
     "@jiaminghi/data-view": "2.10.0",
+    "@wjjj/utils": "^0.1.2",
     "axios": "0.18.1",
     "babel-polyfill": "6.26.0",
     "echarts": "^5.2.2",
