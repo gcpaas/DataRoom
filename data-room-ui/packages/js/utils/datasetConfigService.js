@@ -17,7 +17,7 @@ const datasetPage = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.
  * @param flag
  * @returns {*}
  */
-const dataSourceCheck = (id='-1', flag = false) => Vue.prototype.$dataRoomAxios.post(`/datasource/deleteCheck/${id}`, {}, flag)
+const datasetCheck = (id='-1', flag = false) => Vue.prototype.$dataRoomAxios.post(`/dataset/deleteCheck/${id}`, {}, flag)
 
 
 /**
@@ -123,5 +123,5 @@ export {
   categoryAdd,
   categoryUpdate,
   categoryRemove,
-  dataSourceCheck
+  datasetCheck
 }

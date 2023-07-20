@@ -280,7 +280,6 @@ export default {
       // eslint-disable-next-line eqeqeq
       if (row.editable == 1 && !this.appCode) return
       dataSourceCheck(row.id).then((res)=>{
-        console.log(res)
         if(res.canDelete){
           this.$confirm('确定删除当前数据源吗?', '提示', {
           confirmButtonText: '确定',

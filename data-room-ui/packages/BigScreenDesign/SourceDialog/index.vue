@@ -59,6 +59,12 @@
       <el-button type="primary" @click="confirm">
         确定
       </el-button>
+      <el-button
+        type='primary'
+        @click="jumpto"
+      >
+        组件管理
+      </el-button>
     </div>
   </el-dialog>
 </template>
@@ -88,6 +94,10 @@ export default {
   },
   mounted() { },
   methods: {
+    jumpto(){
+      let {href} = this.$router.resolve(`/big-screen-source?edit=1`)
+      window.open(href,'_blank')
+    },
     chooseImg(img) {
       this.focus = _.cloneDeep(img)
     },
