@@ -34,7 +34,6 @@
   <NotPermission v-else />
 </template>
 <script>
-import { get } from 'data-room-ui/js/utils/http'
 import RenderCard from 'data-room-ui/Render/RenderCard.vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
 import { getThemeConfig } from 'data-room-ui/js/api/bigScreenApi'

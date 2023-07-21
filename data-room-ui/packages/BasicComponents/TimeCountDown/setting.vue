@@ -66,6 +66,7 @@
         >
           <el-date-picker
             v-model="config.endTime"
+            style="position: relative;"
             popper-class="bs-el-date-picker"
             type="datetime"
             align="left"

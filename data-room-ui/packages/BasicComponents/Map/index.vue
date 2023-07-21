@@ -15,7 +15,6 @@ import * as echarts from 'echarts'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins.js'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
-import { get } from 'data-room-ui/js/utils/http'
 export default {
   name: 'MapCharts',
   mixins: [paramsMixins, commonMixins, linkageMixins],
@@ -60,7 +59,7 @@ export default {
   },
   methods: {
     chartInit () {
-      let config = this.config
+      const config = this.config
       // key和code相等，说明是一进来刷新，调用list接口
       if (this.config.code === this.config.key || this.isPreview) {
         // 改变数据
@@ -255,20 +254,9 @@ export default {
         }
       }
       const mapUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/${config.customize.level}/${config.customize.dataMap}`
-      const map = await get(decodeURI(mapUrl), {}, true)
+      const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, true)
       echarts.registerMap(config.customize.scope, map)
       this.charts.setOption(option)
-      // this.charts.on('click', (params) => {
-      //   get(
-      //     `${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/province/${params.name}.json`,
-      //     {},
-      //     true
-      //   ).then((res) => {
-      //     option.geo.map = params.name
-      //     echarts.registerMap(params.name, res)
-      //     this.charts.setOption(option, true)
-      //   })
-      // })
     }
   }
 }
