@@ -14,7 +14,7 @@
     @change="handleChange"
   >
     <div slot="prefix">
-      <span style="float: left">&nbsp; </span>
+      <span style="float: left"></span>
       <span
         v-for="(item, index) in colorValue"
         :key="index"
@@ -27,7 +27,6 @@
           v-if="index <= 14"
           style="float: left"
         >
-          &nbsp;
         </span>
         <span
           v-if="index === 15"
