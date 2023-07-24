@@ -53,7 +53,6 @@
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@antv/g2plot": "2.4.0",
     "@jiaminghi/data-view": "2.10.0",
-    "@wjjj/utils": "^0.1.5",
     "axios": "0.18.1",
     "babel-polyfill": "6.26.0",
     "echarts": "^5.2.2",
