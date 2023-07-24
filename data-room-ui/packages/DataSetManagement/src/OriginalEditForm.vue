@@ -143,6 +143,8 @@
                 >
                   <el-select
                     v-model="dataForm.tableName"
+                    v-loading="selectorLoading"
+                    element-loading-spinner="el-icon-loading"
                     class="bs-el-select"
                     popper-class="bs-el-select"
                     clearable
@@ -551,7 +553,8 @@ export default {
       fieldList: [],
       isSelectAll: false,
       activeName: 'data',
-      currentCount: 0
+      currentCount: 0,
+      selectorLoading: false
     }
   },
   watch: {
@@ -781,10 +784,13 @@ export default {
       }).catch(() => {
         this.tableList = []
       })
+      this.selectorLoading = true
       getSourceView(this.dataForm.sourceId).then(res => {
         this.viewList = res
+        this.selectorLoading = false
       }).catch(() => {
         this.viewList = []
+        this.selectorLoading = false
       })
     },
     /**
@@ -1020,5 +1026,10 @@ export default {
     border: none;
     background: var(--bs-el-background-1);
   }
+}
+
+// 修改el-select样式 loading 位置
+::v-deep .el-loading-spinner{
+  top: 75%;
 }
 </style>
