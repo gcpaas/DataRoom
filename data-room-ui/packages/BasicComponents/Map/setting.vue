@@ -283,6 +283,7 @@ export default {
       }
     },
     delColor () {
+      this.colors = []
       this.config.customize.rangeColor = []
     },
     addColor () {
