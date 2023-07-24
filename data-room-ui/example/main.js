@@ -51,6 +51,7 @@ registerConfig(
       '--bs-el-color-primary-active': '64, 158, 255', // 主要激活 => rgba(64, 158, 255, 1) = #409EFF
       '--bs-el-border': 'transparent' // 边框颜色
     },
+    // datasetTypeList: ['original','custom'],
     customPlots: [],
     // 远程组件列表
     remoteComponents,

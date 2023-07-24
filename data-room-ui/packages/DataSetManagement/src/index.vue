@@ -296,10 +296,6 @@ export default {
       type: [Array, Object],
       default: null
     },
-    dataSetList: {
-      type: [Array, Object],
-      default: () => []
-    },
     appCode: {
       type: String,
       default: ''
@@ -535,8 +531,8 @@ export default {
         { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' },
         { name: 'JS数据集', datasetType: 'js', componentName: 'JsEditForm' }
       ]
-      if (this.dataSetList.length !== 0) {
-        this.datasetTypeList = [{ name: '全部', datasetType: '' }, ...list.filter(item => this.dataSetList.findIndex(x => x === item.datasetType) !== -1)]
+      if (window.BS_CONFIG?.datasetTypeList&&window.BS_CONFIG?.datasetTypeList?.length!=0) {
+        this.datasetTypeList = [{ name: '全部', datasetType: '' }, ...list.filter(item => window.BS_CONFIG?.datasetTypeList.findIndex(x => x === item.datasetType) !== -1)]
       } else {
         this.datasetTypeList = [
           ...list
