@@ -228,10 +228,10 @@
                     class="bs-radio-wrap"
                     :disabled="!isEdit"
                   >
-                    <el-radio :label="0">
+                    <el-radio :label="1">
                       是
                     </el-radio>
-                    <el-radio :label="1">
+                    <el-radio :label="0">
                       否
                     </el-radio>
                   </el-radio-group>
@@ -665,7 +665,7 @@ export default {
      */
     getSql () {
       let sql = 'SELECT '
-      if (this.dataForm.repeatStatus === 0) {
+      if (this.dataForm.repeatStatus === 1) {
         sql += ' DISTINCT '
       }
       if (this.dataForm.fieldInfo.length > 0) {
@@ -754,6 +754,7 @@ export default {
         moduleCode: this.appCode
       }
       datasourceList(params).then(res => {
+        console.log(res)
         this.sourceList = res
       })
     },
