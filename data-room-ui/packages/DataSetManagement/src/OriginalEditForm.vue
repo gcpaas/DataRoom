@@ -803,6 +803,7 @@ export default {
       getTableFieldList(this.dataForm.sourceId, this.dataForm.tableName).then((data) => {
         const fieldDescMap = {}
         this.fieldList = data.map(field => {
+          field.columnName="`"+field.columnName+"`"
           fieldDescMap[field.columnName] = field.columnComment
           field.isCheck = false
           if (this.dataForm.fieldInfo.includes(field.columnName)) {

@@ -158,7 +158,7 @@ import 'ztree/js/jquery.ztree.exhide'
 import 'data-room-ui/assets/style/zTree/metroStyle.css'
 import 'data-room-ui/assets/style/zTree/zTree.scss'
 import 'data-room-ui/assets/style/zTree/zTreeSelect.scss'
-import { getCategoryTree, categoryRemove } from 'data-room-ui/js/utils/datasetConfigService'
+import { getCategoryTree, categoryRemove,categoryDele } from 'data-room-ui/js/utils/datasetConfigService'
 import CategroyEditForm from './CategroyEditForm.vue'
 export default {
   name: 'DatasetTypeTreeIndex',
@@ -373,7 +373,13 @@ export default {
     menuClick (editType) {
       // 删除节点
       if (editType === this.editTypeConstant.deleteOrg) {
-        this.deleteOrg(this.rightClickForm.org)
+         categoryDele(this.rightClickForm.org.id).then((res)=>{
+          if(res==0){
+            this.deleteOrg(this.rightClickForm.org)
+          }else{
+            this.$message.error('当前节点下存在已定义数据集，无法删除')
+          }
+        })
         return
       }
       // 编辑节点

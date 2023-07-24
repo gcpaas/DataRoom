@@ -17,7 +17,15 @@ const datasetPage = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.
  * @param flag
  * @returns {*}
  */
-const datasetCheck = (id='-1', flag = false) => Vue.prototype.$dataRoomAxios.post(`/dataset/deleteCheck/${id}`, {}, flag)
+const datasetCheck = (id = '-1', flag = false) => Vue.prototype.$dataRoomAxios.post(`/dataset/deleteCheck/${id}`, {}, flag)
+
+/**
+ * 验证节点是否可删除
+ * @param params
+ * @param flag
+ * @returns {*}
+ */
+const categoryDele = (id = '-1', flag = false) => Vue.prototype.$dataRoomAxios.get(`/dataset/getCountByType/${id}`, {}, flag)
 
 
 /**
@@ -118,6 +126,7 @@ export {
   nameCheckRepeat,
   datasetExecuteTest,
   getDataset,
+  categoryDele,
 
   getCategoryTree,
   categoryAdd,
