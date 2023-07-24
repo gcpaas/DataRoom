@@ -57,7 +57,7 @@
     </div>
     <!-- 新增或编辑目录弹窗 -->
     <el-dialog
-      :title="groupForm.code ? '编辑分组':'新建分组'"
+      :title="currentCatalog.code ? '编辑分组':'新建分组'"
       :visible.sync="catalogVisible"
       custom-class="bs-el-dialog"
       width="30%"
@@ -66,7 +66,7 @@
     >
       <el-form
         ref="form"
-        :model="groupForm"
+        :model="currentCatalog"
         label-width="80px"
         :rules="formRules"
         class="bs-el-form"
@@ -76,7 +76,7 @@
           prop="name"
         >
           <el-input
-            v-model.trim="groupForm.name"
+            v-model.trim="currentCatalog.name"
             class="bs-el-input"
             clearable
           />
@@ -85,7 +85,7 @@
           label="排序"
         >
           <el-input-number
-            v-model="groupForm.orderNum"
+            v-model="currentCatalog.orderNum"
             :min="0"
             :max="30000"
             controls-position="right"
@@ -141,11 +141,6 @@ export default {
         code: '',
         orderNum: 0
       },
-      groupForm: {
-        code: '',
-        name: '',
-        orderNum: 0
-      },
       formRules: {
         name: [
           { required: true, message: '分组名称不能为空', trigger: 'blur' }
@@ -187,10 +182,6 @@ export default {
         if (!valid) {
           return
         }
-        this.currentCatalog = {
-          ...this.currentCatalog,
-          ...this.groupForm
-        }
         if (!this.currentCatalog.id) {
           this.$dataRoomAxios.post('/bigScreen/type/add',
             {
@@ -225,7 +216,7 @@ export default {
     },
     // 编辑目录
     catalogEdit () {
-      this.groupForm = cloneDeep(this.currentCatalog)
+      this.currentCatalog = cloneDeep(this.currentCatalog)
       this.catalogVisible = true
     },
     // 删除目录
