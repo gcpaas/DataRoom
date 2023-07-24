@@ -71,6 +71,7 @@
               数据配置
             </div>
           </div>
+          <!--  基础组件数据配置  -->
           <template v-if="!['customComponent', 'remoteComponent'].includes(config.type)">
             <!--维度多选-->
             <el-form-item
@@ -160,6 +161,7 @@
               </el-select>
             </el-form-item>
           </template>
+          <!--  g2plot和远程组件数据配置  -->
           <template v-else>
             <template
               v-for="(setting, index) in config.setting.filter(set => set.tabName === 'data')"
@@ -177,7 +179,7 @@
                   clearable
                   :multiple="setting.multiple"
                   :placeholder="`请选择${setting.label}`"
-                  @change="changeCustomProps(...arguments, index)"
+                  @change="changeCustomProps(...arguments, setting)"
                 >
                   <el-option
                     v-for="(field, fieldIndex) in dataSourceDataList"
@@ -199,7 +201,7 @@
                   v-else
                   :value="setting.value"
                   :placeholder="`请输入${setting.label}`"
-                  @change="changeCustomProps(...arguments, index)"
+                  @change="changeCustomProps(...arguments, setting)"
                 />
               </el-form-item>
             </template>
@@ -801,8 +803,13 @@ export default {
       this.config.customize.columnConfig = cloneDeep(this.headerList)
       this.$store.commit('bigScreen/changeActiveItemConfig', this.config)
     },
-    changeCustomProps (value, index) {
-      this.$set(this.config.setting[index], 'value', value)
+    changeCustomProps (value, setting) {
+      this.config.setting = this.config.setting.map(item => {
+        if (item.field === setting.field) {
+          item.value = value
+        }
+        return item
+      })
     }
     // 改变缓存数据集key
     // changeCacheBusinessKey (id) {
