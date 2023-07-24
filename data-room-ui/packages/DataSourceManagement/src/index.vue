@@ -96,6 +96,7 @@
               </el-button>
               <el-button
                 class="bs-el-button-default"
+                :loading="scope.row.loading"
                 :disabled="scope.row.editable == 1 && !appCode"
                 @click="handleDelete(scope.row)"
               >
@@ -128,14 +129,19 @@
       :app-code="appCode"
       @refreshTable="init"
     />
+    <checkDatasource
+      ref="checkDatasource"
+      :reason-list="reasonList"
+    />
   </div>
 </template>
 
 <script>
 import table from 'data-room-ui/js/utils/table.js'
 import '../style/index.scss'
-import { sourceLinkTest, datasourcePage, sourceRemove } from 'data-room-ui/js/utils/dataSourceService'
+import { sourceLinkTest, datasourcePage, sourceRemove, dataSourceCheck } from 'data-room-ui/js/utils/dataSourceService'
 import setDatasource from './setDatasource.vue'
+import checkDatasource from './checkDatasource.vue'
 import _ from 'lodash'
 import { pageMixins } from 'data-room-ui/js/mixins/page'
 export default {
@@ -144,7 +150,8 @@ export default {
     table // 注册自定义指令
   },
   components: {
-    setDatasource
+    setDatasource,
+    checkDatasource
   },
   // 路由守卫-离开页面
   beforeRouteLeave (to, from, next) {
@@ -179,8 +186,10 @@ export default {
   },
   data () {
     return {
+      reasonList: [],
       testBtnLoading: [],
       loadingText: '',
+      deling:false,
       searchLoading: false,
       dataSourceList: [],
       searchForm: {
@@ -248,6 +257,7 @@ export default {
         this.dataSourceList = data.list
         this.dataSourceList.forEach(r => {
           r.status = 0
+          this.$set(r, 'loading', false)
           if (r.id === this.sourceId) {
             this.curRow = r
           }
@@ -272,16 +282,25 @@ export default {
     handleDelete (row) {
       // eslint-disable-next-line eqeqeq
       if (row.editable == 1 && !this.appCode) return
-      this.$confirm('确定删除当前数据源吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        customClass: 'bs-el-message-box'
-      }).then(() => {
-        sourceRemove(row.id).then((r) => {
-          this.$message.success('删除成功')
-          this.init()
-        })
+      row.loading=true
+      dataSourceCheck(row.id).then((res)=>{
+        row.loading=false
+        if(res.canDelete){
+          this.$confirm('确定删除当前数据源吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            customClass: 'bs-el-message-box'
+          }).then(() => {
+            sourceRemove(row.id).then((r) => {
+              this.$message.success('删除成功')
+              this.init()
+            })
+          })
+        } else {
+          this.reasonList = res.reasons
+          this.$refs.checkDatasource.checkDatasourceVisible = true
+        }
       })
     },
     sourceLinkTest (row) {

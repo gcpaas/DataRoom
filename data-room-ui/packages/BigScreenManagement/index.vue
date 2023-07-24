@@ -239,8 +239,6 @@ import BigScreenRun from 'data-room-ui/BigScreenRun/index.vue'
 import Icon from 'data-room-ui/assets/images/pageIcon/export'
 import { getPageType } from './utils'
 import _ from 'lodash'
-// import axios from 'axios'
-// import { post } from 'data-room-ui/js/utils/http'
 import IconSvg from 'data-room-ui/SvgIcon'
 let dashBoardPageCode = null
 export default {
