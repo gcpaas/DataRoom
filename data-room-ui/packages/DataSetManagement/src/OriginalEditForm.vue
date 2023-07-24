@@ -71,6 +71,7 @@
                     v-model="dataForm.typeId"
                     class="bs-el-select"
                     popper-class="bs-el-select"
+                    placeholder="请选择分组"
                     clearable
                     :disabled="!isEdit"
                     @clear="clearType"
@@ -541,6 +542,9 @@ export default {
         ],
         repeatStatus: [
           { required: true, message: '请选择是否去重', trigger: 'blur' }
+        ],
+        typeId: [
+          { required: true, message: '请选择分组', trigger: 'blur' }
         ]
       },
       // 数据源列表
@@ -810,7 +814,7 @@ export default {
       getTableFieldList(this.dataForm.sourceId, this.dataForm.tableName).then((data) => {
         const fieldDescMap = {}
         this.fieldList = data.map(field => {
-          field.columnName="`"+field.columnName+"`"
+          field.columnName = '`' + field.columnName + '`'
           fieldDescMap[field.columnName] = field.columnComment
           field.isCheck = false
           if (this.dataForm.fieldInfo.includes(field.columnName)) {

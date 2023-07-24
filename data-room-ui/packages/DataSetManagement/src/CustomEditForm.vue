@@ -72,6 +72,7 @@
                     v-model="dataForm.typeId"
                     popper-class="bs-el-select"
                     class="bs-el-select"
+                    placeholder="请选择分组"
                     clearable
                     :disabled="!isEdit"
                     @clear="clearType"
@@ -811,6 +812,9 @@ export default {
         ],
         sourceId: [
           { required: true, message: '请选择数据源', trigger: 'blur' }
+        ],
+        typeId: [
+          { required: true, message: '请选择分组', trigger: 'blur' }
         ]
       },
       cOptions: {
