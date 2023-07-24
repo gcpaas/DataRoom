@@ -4,7 +4,7 @@
       <div class="ztree-filter-container filter-container">
         <el-input
           v-model="queryForm.searchKey"
-          placeholder="请输入数据集分类"
+          placeholder="请输入数据集分组"
           clearable
           class="ztree-input bs-el-input"
           @keyup.enter.native="reSearch()"

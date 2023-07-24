@@ -82,7 +82,6 @@
   </el-dialog>
 </template>
 <script>
-import { get } from 'data-room-ui/js/utils/http'
 export default {
   name: 'BgImgDialog',
   props: {

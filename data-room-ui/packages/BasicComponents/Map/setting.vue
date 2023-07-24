@@ -227,7 +227,6 @@ import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
 import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
-import { get } from 'data-room-ui/js/utils/http'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 export default {
   name: 'BarSetting',
@@ -271,9 +270,7 @@ export default {
   },
   methods: {
     getMapList () {
-      get(
-        `${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/design/map/list/${this.config.customize.level}`
-      ).then((res) => {
+      this.$dataRoomAxios.get(`${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/design/map/list/${this.config.customize.level}`).then((res) => {
         this.mapList = res
       })
     },
@@ -286,6 +283,7 @@ export default {
       }
     },
     delColor () {
+      this.colors = []
       this.config.customize.rangeColor = []
     },
     addColor () {

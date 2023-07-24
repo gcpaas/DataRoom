@@ -1,37 +1,96 @@
 <template>
-  <el-dialog title="组件库" :visible.sync="dialogVisible" width="80%" :modal="true" :modal-append-to-body="false"
-    :appen-to-body="true" class="bs-dialog-wrap bs-el-dialog" @closed="close">
+  <el-dialog
+    title="组件库"
+    :visible.sync="dialogVisible"
+    width="80%"
+    :modal="true"
+    :modal-append-to-body="false"
+    :appen-to-body="true"
+    class="bs-dialog-wrap bs-el-dialog"
+    @closed="close"
+  >
     <div class="content">
       <el-tabs v-model="activeName">
-        <el-tab-pane label="自定义组件" name="combination">
+        <el-tab-pane
+          label="自定义组件"
+          name="combination"
+        >
           <div class="big-screen-list-wrap">
             <div class="top-search-wrap">
-              <el-input v-model="searchKey" class="bs-el-input" placeholder="请输入组件名称" prefix-icon="el-icon-search"
-                clearable @clear="reSearch" @keyup.enter.native="reSearch" />
-              <el-select v-model="code" class="bs-el-select" popper-class="bs-el-select" placeholder="请选择分组" clearable
-                @change="reSearch">
-                <el-option v-for="item in options" :key="item.code" :label="item.name" :value="item.code" />
+              <el-input
+                v-model="searchKey"
+                class="bs-el-input"
+                placeholder="请输入组件名称"
+                prefix-icon="el-icon-search"
+                clearable
+                @clear="reSearch"
+                @keyup.enter.native="reSearch"
+              />
+              <el-select
+                v-model="code"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                placeholder="请选择分组"
+                clearable
+                @change="reSearch"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code"
+                />
               </el-select>
-              <el-button size="small" style="margin-right: 20px" type="primary" @click="reSearch">
+              <el-button
+                size="small"
+                style="margin-right: 20px"
+                type="primary"
+                @click="reSearch"
+              >
                 搜索
               </el-button>
             </div>
-            <div v-if="list.length !== 0" v-loading="loading" class="list-wrap bs-scrollbar" element-loading-text="加载中"
+            <div
+              v-if="list.length !== 0"
+              v-loading="loading"
+              class="list-wrap bs-scrollbar"
+              element-loading-text="加载中"
               :style="{
                 display: gridComputed ? 'grid' : 'flex',
                 justifyContent: gridComputed ? 'space-around' : 'flex-start'
-              }">
+              }"
+            >
               <!-- <div v-if="list.length !== 0"> -->
-              <div v-for="screen in list" :key="screen.id" class="big-screen-card-wrap" :style="{
-                width: gridComputed ? 'auto' : '290px'
-              }" @click="chooseComponent(screen)">
-                <div :class="focus.id == screen.id ? 'focus' : ''" class="big-screen-card-inner">
+              <div
+                v-for="screen in list"
+                :key="screen.id"
+                class="big-screen-card-wrap"
+                :style="{
+                  width: gridComputed ? 'auto' : '290px'
+                }"
+                @click="chooseComponent(screen)"
+              >
+                <div
+                  :class="focus.id == screen.id ? 'focus' : ''"
+                  class="big-screen-card-inner"
+                >
                   <div class="big-screen-card-img">
-                    <el-image :src="screen.coverPicture" fit="contain" style="width: 100%; height: 100%">
-                      <div slot="placeholder" class="image-slot">
+                    <el-image
+                      :src="screen.coverPicture"
+                      fit="contain"
+                      style="width: 100%; height: 100%"
+                    >
+                      <div
+                        slot="placeholder"
+                        class="image-slot"
+                      >
                         加载中···
                       </div>
-                      <div slot="error" class="image-slot" style="font-size: 20px">
+                      <div
+                        slot="error"
+                        class="image-slot"
+                        style="font-size: 20px"
+                      >
                         <div class="error-img-text">
                           {{ screen.name }}
                         </div>
@@ -39,55 +98,122 @@
                     </el-image>
                   </div>
                   <div class="big-screen-bottom">
-                    <div class="left-bigscreen-title" :title="screen.name">
+                    <div
+                      class="left-bigscreen-title"
+                      :title="screen.name"
+                    >
                       {{ screen.name }}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div v-else class="empty">
+            <div
+              v-else
+              class="empty"
+            >
               暂无数据
             </div>
             <div class="footer-pagination-wrap">
               <div class="bs-pagination">
-                <el-pagination class="bs-el-pagination" popper-class="bs-el-pagination" background
-                  layout="total, prev, pager, next, sizes" :page-size="size" prev-text="上一页" next-text="下一页"
-                  :total="totalCount" :page-sizes="[10, 20, 50, 100]" :current-page="current"
-                  @current-change="currentChangeHandle" @size-change="sizeChangeHandle" />
+                <el-pagination
+                  class="bs-el-pagination"
+                  popper-class="bs-el-pagination"
+                  background
+                  layout="total, prev, pager, next, sizes"
+                  :page-size="size"
+                  prev-text="上一页"
+                  next-text="下一页"
+                  :total="totalCount"
+                  :page-sizes="[10, 20, 50, 100]"
+                  :current-page="current"
+                  @current-change="currentChangeHandle"
+                  @size-change="sizeChangeHandle"
+                />
               </div>
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="业务组件" name="bizComponent">
+        <el-tab-pane
+          label="业务组件"
+          name="bizComponent"
+        >
           <div class="big-screen-list-wrap">
             <div class="top-search-wrap">
-              <el-input v-model="name" class="bs-el-input" placeholder="请输入组件名称" prefix-icon="el-icon-search" clearable
-                @clear="reSearch" @keyup.enter.native="reSearch" />
-              <el-select v-model="code" class="bs-el-select" popper-class="bs-el-select" placeholder="请选择分组" clearable
-                @change="reSearch">
-                <el-option v-for="item in options" :key="item.code" :label="item.name" :value="item.code" />
+              <el-input
+                v-model="name"
+                class="bs-el-input"
+                placeholder="请输入组件名称"
+                prefix-icon="el-icon-search"
+                clearable
+                @clear="reSearch"
+                @keyup.enter.native="reSearch"
+              />
+              <el-select
+                v-model="code"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                placeholder="请选择分组"
+                clearable
+                @change="reSearch"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code"
+                />
               </el-select>
-              <el-button size="small" style="margin-right: 20px" type="primary" @click="reSearch">
+              <el-button
+                size="small"
+                style="margin-right: 20px"
+                type="primary"
+                @click="reSearch"
+              >
                 搜索
               </el-button>
             </div>
-            <div v-if="bizComponentList.length !== 0" v-loading="loading" class="list-wrap bs-scrollbar"
-              element-loading-text="加载中" :style="{
+            <div
+              v-if="bizComponentList.length !== 0"
+              v-loading="loading"
+              class="list-wrap bs-scrollbar"
+              element-loading-text="加载中"
+              :style="{
                 display: bizFridComputed ? 'grid' : 'flex',
                 justifyContent: bizFridComputed ? 'space-around' : 'flex-start'
-              }">
+              }"
+            >
               <!-- <div v-if="list.length !== 0"> -->
-              <div v-for="screen in bizComponentList" :key="screen.id" class="big-screen-card-wrap" :style="{
-                width: bizFridComputed ? 'auto' : '290px'
-              }" @click="chooseComponent(screen)">
-                <div :class="focus.id == screen.id ? 'focus' : ''" class="big-screen-card-inner">
+              <div
+                v-for="screen in bizComponentList"
+                :key="screen.id"
+                class="big-screen-card-wrap"
+                :style="{
+                  width: bizFridComputed ? 'auto' : '290px'
+                }"
+                @click="chooseComponent(screen)"
+              >
+                <div
+                  :class="focus.id == screen.id ? 'focus' : ''"
+                  class="big-screen-card-inner"
+                >
                   <div class="big-screen-card-img">
-                    <el-image :src="screen.coverPicture" fit="contain" style="width: 100%; height: 100%">
-                      <div slot="placeholder" class="image-slot">
+                    <el-image
+                      :src="screen.coverPicture"
+                      fit="contain"
+                      style="width: 100%; height: 100%"
+                    >
+                      <div
+                        slot="placeholder"
+                        class="image-slot"
+                      >
                         加载中···
                       </div>
-                      <div slot="error" class="image-slot" style="font-size: 20px">
+                      <div
+                        slot="error"
+                        class="image-slot"
+                        style="font-size: 20px"
+                      >
                         <div class="error-img-text">
                           {{ screen.name }}
                         </div>
@@ -95,68 +221,123 @@
                     </el-image>
                   </div>
                   <div class="big-screen-bottom">
-                    <div class="left-bigscreen-title" :title="screen.name">
+                    <div
+                      class="left-bigscreen-title"
+                      :title="screen.name"
+                    >
                       {{ screen.name }}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div v-else class="empty">
+            <div
+              v-else
+              class="empty"
+            >
               暂无数据
             </div>
             <div class="footer-pagination-wrap">
               <div class="bs-pagination">
-                <el-pagination class="bs-el-pagination" popper-class="bs-el-pagination" background
-                  layout="total, prev, pager, next, sizes" :page-size="size" prev-text="上一页" next-text="下一页"
-                  :total="totalCount" :page-sizes="[10, 20, 50, 100]" :current-page="current"
-                  @current-change="currentChangeHandle" @size-change="sizeChangeHandle" />
+                <el-pagination
+                  class="bs-el-pagination"
+                  popper-class="bs-el-pagination"
+                  background
+                  layout="total, prev, pager, next, sizes"
+                  :page-size="size"
+                  prev-text="上一页"
+                  next-text="下一页"
+                  :total="totalCount"
+                  :page-sizes="[10, 20, 50, 100]"
+                  :current-page="current"
+                  @current-change="currentChangeHandle"
+                  @size-change="sizeChangeHandle"
+                />
               </div>
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="系统组件" name="remote">
+        <el-tab-pane
+          label="系统组件"
+          name="remote"
+        >
           <div class="big-screen-list-wrap">
-            <div v-if="remoteComponentlist.length !== 0" v-loading="loading" class="list-wrap bs-scrollbar"
-              element-loading-text="加载中" :style="{
+            <div
+              v-if="remoteComponentlist.length !== 0"
+              v-loading="loading"
+              class="list-wrap bs-scrollbar"
+              element-loading-text="加载中"
+              :style="{
                 display: remoteComponentsGridComputed ? 'grid' : 'flex',
                 justifyContent: remoteComponentsGridComputed ? 'space-around' : 'flex-start'
-              }">
-              <div v-for="component in remoteComponentlist" :key="component.title" class="big-screen-card-wrap" :style="{
-                width: remoteComponentsGridComputed ? 'auto' : '290px'
-              }" @click="chooseComponent(component)">
-                <div :class="component.title == focus.title ? 'focus' : ''" class="big-screen-card-inner">
+              }"
+            >
+              <div
+                v-for="component in remoteComponentlist"
+                :key="component.title"
+                class="big-screen-card-wrap"
+                :style="{
+                  width: remoteComponentsGridComputed ? 'auto' : '290px'
+                }"
+                @click="chooseComponent(component)"
+              >
+                <div
+                  :class="component.title == focus.title ? 'focus' : ''"
+                  class="big-screen-card-inner"
+                >
                   <div class="big-screen-card-img">
-                    <el-image :src="component.img" fit="contain" style="width: 100%; height: 100%">
-                      <div slot="placeholder" class="image-slot">
+                    <el-image
+                      :src="component.img"
+                      fit="contain"
+                      style="width: 100%; height: 100%"
+                    >
+                      <div
+                        slot="placeholder"
+                        class="image-slot"
+                      >
                         加载中···
                       </div>
                     </el-image>
                   </div>
                   <div class="big-screen-bottom">
-                    <div class="left-bigscreen-title" :title="component.title">
+                    <div
+                      class="left-bigscreen-title"
+                      :title="component.title"
+                    >
                       {{ component.title }}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div v-else class="empty">
+            <div
+              v-else
+              class="empty"
+            >
               暂无数据
             </div>
           </div>
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div slot="footer" class="dialog-footer">
-      <el-button class="bs-el-button-default" @click="dialogVisible = false">
+    <div
+      slot="footer"
+      class="dialog-footer"
+    >
+      <el-button
+        class="bs-el-button-default"
+        @click="dialogVisible = false"
+      >
         取消
       </el-button>
-      <el-button type="primary" @click="confirm">
+      <el-button
+        type="primary"
+        @click="confirm"
+      >
         确定
       </el-button>
       <el-button
-        type='primary'
+        type="primary"
         @click="jumpto"
       >
         组件管理
@@ -165,7 +346,6 @@
   </el-dialog>
 </template>
 <script>
-import { get } from 'data-room-ui/js/utils/http'
 import { pageMixins } from 'data-room-ui/js/mixins/page'
 import _ from 'lodash'
 import innerRemoteComponents, { getRemoteComponents, getRemoteComponentConfig } from 'data-room-ui/RemoteComponents/remoteComponentsList'
@@ -174,7 +354,7 @@ export default {
   name: 'ComponentDialog',
   mixins: [pageMixins],
   props: {},
-  data() {
+  data () {
     return {
       dialogVisible: false,
       loading: false,
@@ -191,34 +371,34 @@ export default {
     }
   },
   computed: {
-    gridComputed() {
+    gridComputed () {
       return this.list.length > 3
     },
-    remoteComponentsGridComputed() {
+    remoteComponentsGridComputed () {
       return this.remoteComponentlist.length > 3
     },
-    bizFridComputed() {
+    bizFridComputed () {
       return this.bizComponentList.length > 3
     }
   },
   watch: {
-    activeName() {
+    activeName () {
       this.getCatalogList()
     }
   },
-  mounted() {
+  mounted () {
     this.remoteComponentlist = [...innerRemoteComponents, ...getRemoteComponents()]
   },
   methods: {
-    jumpto(){
-      let {href} = this.$router.resolve(`/big-screen-components?edit=1`)
-      window.open(href,'_blank')
+    jumpto () {
+      const { href } = this.$router.resolve('/big-screen-components?edit=1')
+      window.open(href, '_blank')
     },
-    chooseComponent(component) {
+    chooseComponent (component) {
       this.focus = _.cloneDeep(component)
     },
-    close() { },
-    init() {
+    close () { },
+    init () {
       this.dialogVisible = true
       this.current = 1
       this.searchKey = ''
@@ -228,7 +408,7 @@ export default {
       this.getCatalogList()
     },
     // 点击确定
-    confirm() {
+    confirm () {
       this.dialogVisible = false
       if (this.activeName === 'combination') {
         if (Object.keys(this.focus).length) {
@@ -250,7 +430,7 @@ export default {
         this.$emit('setRemoteComponent', config)
       }
     },
-    getDataList() {
+    getDataList () {
       this.loading = true
       this.$dataRoomAxios.get('/bigScreen/design/page', {
         parentCode: this.code || null,
@@ -280,9 +460,9 @@ export default {
       })
     },
     // 获取目录的列表
-    getCatalogList() {
+    getCatalogList () {
       const url = this.activeName === 'combination' ? '/bigScreen/type/list/componentCatalog' : '/bigScreen/type/list/bizComponentCatalog'
-      get(url)
+      this.$dataRoomAxios.get(url)
         .then((data) => {
           this.options = data
         })

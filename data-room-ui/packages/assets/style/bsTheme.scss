@@ -596,9 +596,9 @@
 }
 
 //el-date-picker
-.bs-date-popper-class {
-  background-color: var(--bs-background-1) !important;
+.bs-el-date-picker {
   left: -115px !important;
+  background-color: var(--bs-background-1) !important;
   .el-picker-panel__footer {
     background-color: var(--bs-background-1) !important;
     border-top: 1px solid var(--bs-background-2);

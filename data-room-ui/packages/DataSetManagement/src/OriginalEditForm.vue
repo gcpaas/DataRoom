@@ -143,6 +143,8 @@
                 >
                   <el-select
                     v-model="dataForm.tableName"
+                    v-loading="selectorLoading"
+                    element-loading-spinner="el-icon-loading"
                     class="bs-el-select"
                     popper-class="bs-el-select"
                     clearable
@@ -228,10 +230,10 @@
                     class="bs-radio-wrap"
                     :disabled="!isEdit"
                   >
-                    <el-radio :label="0">
+                    <el-radio :label="1">
                       是
                     </el-radio>
-                    <el-radio :label="1">
+                    <el-radio :label="0">
                       否
                     </el-radio>
                   </el-radio-group>
@@ -551,7 +553,8 @@ export default {
       fieldList: [],
       isSelectAll: false,
       activeName: 'data',
-      currentCount: 0
+      currentCount: 0,
+      selectorLoading: false
     }
   },
   watch: {
@@ -665,7 +668,7 @@ export default {
      */
     getSql () {
       let sql = 'SELECT '
-      if (this.dataForm.repeatStatus === 0) {
+      if (this.dataForm.repeatStatus === 1) {
         sql += ' DISTINCT '
       }
       if (this.dataForm.fieldInfo.length > 0) {
@@ -754,6 +757,7 @@ export default {
         moduleCode: this.appCode
       }
       datasourceList(params).then(res => {
+        console.log(res)
         this.sourceList = res
       })
     },
@@ -780,10 +784,13 @@ export default {
       }).catch(() => {
         this.tableList = []
       })
+      this.selectorLoading = true
       getSourceView(this.dataForm.sourceId).then(res => {
         this.viewList = res
+        this.selectorLoading = false
       }).catch(() => {
         this.viewList = []
+        this.selectorLoading = false
       })
     },
     /**
@@ -1020,5 +1027,10 @@ export default {
     border: none;
     background: var(--bs-el-background-1);
   }
+}
+
+// 修改el-select样式 loading 位置
+::v-deep .el-loading-spinner{
+  top: 75%;
 }
 </style>
