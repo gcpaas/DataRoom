@@ -5,6 +5,7 @@ import { getScreenInfo, getDataSetDetails, getDataByDataSetId } from '../api/big
 import { stringToFunction } from '../utils/evalFunctions'
 import { EventBus } from '../utils/eventBus'
 import plotList from 'data-room-ui/G2Plots/plotList'
+import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
 export default {
   // 初始化页面数据
   initLayout ({ commit, dispatch }, code) {
@@ -84,7 +85,10 @@ export function handleResData (data) {
       }
       // 如果没有版本号，或者版本号修改了则需要进行旧数据兼容
       if ((!chart.version) || (originalConfig && chart.version !== originalConfig?.version)) {
-        chart = compatibility(chart, originalConfig)
+        // TODO 远程组件需要重新写处理函数
+        if (chart.type === 'customComponent') {
+          chart = compatibility(chart, originalConfig)
+        }
       }
     }
     chart.key = chart.code
