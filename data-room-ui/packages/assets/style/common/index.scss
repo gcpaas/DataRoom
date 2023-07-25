@@ -219,8 +219,12 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
   }
 
   .el-pagination {
+    padding: 0 !important;
     text-align: right !important;
     font-weight: normal !important;
+    .el-pagination__sizes{
+      margin: 0 !important;
+    }
   }
 
   .el-pager li {
@@ -274,7 +278,7 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
   }
 
   .el-dialog__body {
-    padding: 18px 24px !important;
+    padding: 16px !important;
     max-height: calc(90vh - 170px) !important;
     min-height: 200px;
     overflow-y: auto;

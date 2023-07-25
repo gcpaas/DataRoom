@@ -194,7 +194,6 @@
   </div>
 </template>
 <script>
-import { get, post } from 'data-room-ui/js/utils/http'
 import { pageMixins } from 'data-room-ui/js/mixins/page'
 import EditForm from './EditForm.vue'
 import CatalogEditForm from './CatalogEditForm'

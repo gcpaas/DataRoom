@@ -113,7 +113,6 @@
 </template>
 
 <script>
-// import { get, post } from 'data-room-ui/js/utils/http'
 import Icon from 'data-room-ui/assets/images/dataSourceIcon/export'
 export default {
   name: 'EditForm',

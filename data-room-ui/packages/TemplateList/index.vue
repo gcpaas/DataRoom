@@ -56,7 +56,6 @@
 </template>
 
 <script>
-import { get, post } from 'data-room-ui/js/utils/http'
 export default {
   name: 'TemplateList',
   model: {

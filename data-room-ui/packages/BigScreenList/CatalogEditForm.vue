@@ -221,7 +221,8 @@ export default {
       this.currentCatalog = {
         name: '',
         id: '',
-        code: ''
+        code: '',
+        orderNum: 0
       }
       this.catalogVisible = true
     },

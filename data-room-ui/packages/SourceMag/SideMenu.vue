@@ -162,7 +162,8 @@ export default {
         // 选中目录
         name: '',
         id: '',
-        code: ''
+        code: '',
+        orderNum: 0
       },
       formRules: {
         name: [{ required: true, message: '分组名称不能为空', trigger: 'blur' }]
@@ -179,7 +180,8 @@ export default {
         // 选中目录
         name: '',
         id: '',
-        code: ''
+        code: '',
+        orderNum: 0
       }
     },
     mouseenter (code) {
