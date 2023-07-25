@@ -68,5 +68,13 @@ public class TypeController {
         return R.success();
     }
 
+    @PostMapping("/nameRepeat")
+    @ApiOperation(value = "分类名称重复校验", position = 40, produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<Boolean> nameRepeat(@RequestBody TypeDTO typeDTO) {
+        ValidatorUtils.validateEntity(typeDTO, Update.class);
+        Boolean flag = typeService.checkNameRepeat(typeDTO.getId(), typeDTO.getType(), typeDTO.getName());
+        return R.success(flag);
+    }
+
 
 }

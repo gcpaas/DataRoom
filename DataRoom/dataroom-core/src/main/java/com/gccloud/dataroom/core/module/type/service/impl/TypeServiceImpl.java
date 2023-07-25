@@ -40,7 +40,7 @@ public class TypeServiceImpl extends ServiceImpl<DataRoomTypeDao, TypeEntity> im
             }
         }
         if (this.checkNameRepeat(null, typeDTO.getType(), entity.getName())) {
-            throw new GlobalException("分类名称重复");
+            throw new GlobalException("分组名称已存在");
         }
         this.save(entity);
         return entity.getId();
@@ -50,7 +50,7 @@ public class TypeServiceImpl extends ServiceImpl<DataRoomTypeDao, TypeEntity> im
     public void update(TypeDTO typeDTO) {
         TypeEntity entity = BeanConvertUtils.convert(typeDTO, TypeEntity.class);
         if (this.checkNameRepeat(typeDTO.getId(), typeDTO.getType(), entity.getName())) {
-            throw new GlobalException("分类名称重复");
+            throw new GlobalException("分组名称已存在");
         }
         this.updateById(entity);
     }
@@ -71,6 +71,7 @@ public class TypeServiceImpl extends ServiceImpl<DataRoomTypeDao, TypeEntity> im
         LambdaQueryWrapper<TypeEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(TypeEntity::getType, type);
         queryWrapper.orderByAsc(TypeEntity::getOrderNum);
+        queryWrapper.orderByDesc(TypeEntity::getCreateDate);
         return this.list(queryWrapper);
     }
 

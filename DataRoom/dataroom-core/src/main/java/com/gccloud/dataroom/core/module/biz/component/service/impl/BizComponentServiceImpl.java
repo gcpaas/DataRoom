@@ -39,6 +39,8 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
         LambdaQueryWrapper<BizComponentEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(searchDTO.getName()), BizComponentEntity::getName, searchDTO.getName());
         queryWrapper.eq(StringUtils.isNotBlank(searchDTO.getType()), BizComponentEntity::getType, searchDTO.getType());
+        queryWrapper.orderByAsc(BizComponentEntity::getOrderNum);
+        queryWrapper.orderByDesc(BizComponentEntity::getCreateDate);
         PageVO<BizComponentEntity> page = this.page(searchDTO, queryWrapper);
         List<BizComponentEntity> list = page.getList();
         String urlPrefix = bigScreenConfig.getFile().getUrlPrefix();

@@ -173,6 +173,8 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         }
         queryWrapper.eq(PageEntity::getType, searchDTO.getType());
         queryWrapper.select(PageEntity::getId, PageEntity::getAppCode, PageEntity::getCode, PageEntity::getName, PageEntity::getParentCode, PageEntity::getOrderNum, PageEntity::getCoverPicture, PageEntity::getUpdateDate);
+        // 优先序号升序，其次更新时间降序
+        queryWrapper.orderByAsc(PageEntity::getOrderNum);
         queryWrapper.orderByDesc(PageEntity::getUpdateDate);
         PageVO<PageEntity> page = page(searchDTO, queryWrapper);
         List<PageEntity> list = page.getList();
