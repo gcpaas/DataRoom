@@ -168,7 +168,6 @@
   </div>
 </template>
 <script>
-// import { get, post, download } from 'data-room-ui/js/utils/http'
 import { pageMixins } from 'data-room-ui/js/mixins/page'
 import EditForm from './EditForm.vue'
 export default {

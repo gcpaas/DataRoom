@@ -1,7 +1,6 @@
 /*!
  * 标签管理
  */
-// import { get, post } from 'data-room-ui/js/utils/http'
 import Vue from 'vue'
 
 /**
