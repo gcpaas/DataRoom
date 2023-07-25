@@ -48,7 +48,7 @@
           <el-empty />
           <el-table-column
             show-overflow-tooltip
-            label="名称"
+            label="分组名称"
             prop="name"
             align="center"
           />
