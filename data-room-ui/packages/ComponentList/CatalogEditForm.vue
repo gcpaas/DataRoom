@@ -41,8 +41,8 @@
         </div>
         <el-table
           :key="randomKey"
+          max-height="450"
           class="bs-el-table"
-          height="100%"
           :data="tableList"
         >
           <el-empty />
