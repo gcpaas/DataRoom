@@ -125,6 +125,18 @@ import { cloneDeep } from 'lodash'
 export default {
   components: {},
   data () {
+    const validateName = (rule, value, callback) => {
+      this.$dataRoomAxios.post('/bigScreen/type/nameRepeat', {
+        name: value,
+        type: 'resourceCatalog'
+      }, true).then((r) => {
+        if (r.data) {
+          callback(new Error('分组名称已存在'))
+        } else {
+          callback()
+        }
+      })
+    }
     return {
       showDropdown: false,
       hoverItem: null,
@@ -166,7 +178,10 @@ export default {
         orderNum: 0
       },
       formRules: {
-        name: [{ required: true, message: '分组名称不能为空', trigger: 'blur' }]
+        name: [
+          { required: true, message: '分组名称不能为空', trigger: 'blur' },
+          { validator: validateName, trigger: 'blur' }
+        ]
       }
     }
   },

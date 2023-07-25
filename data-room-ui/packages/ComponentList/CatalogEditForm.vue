@@ -153,6 +153,19 @@ export default {
     }
   },
   data () {
+    // 检验分组名称是否重复
+    const validateName = (rule, value, callback) => {
+      this.$dataRoomAxios.post('/bigScreen/type/nameRepeat', {
+        name: value,
+        type: this.catalogType
+      }, true).then((r) => {
+        if (r.data) {
+          callback(new Error('分组名称已存在'))
+        } else {
+          callback()
+        }
+      })
+    }
     return {
       dataList: [], // 模糊查询时用来给数据备份
       tableList: [],
@@ -163,7 +176,8 @@ export default {
       formVisible: false,
       formRules: {
         name: [
-          { required: true, message: '分组名称不能为空', trigger: 'blur' }
+          { required: true, message: '分组名称不能为空', trigger: 'blur' },
+          { validator: validateName, trigger: 'blur' }
         ]
       }
     }

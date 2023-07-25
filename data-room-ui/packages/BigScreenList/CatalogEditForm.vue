@@ -153,6 +153,18 @@ export default {
     }
   },
   data () {
+    const validateName = (rule, value, callback) => {
+      this.$dataRoomAxios.post('/bigScreen/type/nameRepeat', {
+        name: value,
+        type: this.catalogType
+      }, true).then((r) => {
+        if (r.data) {
+          callback(new Error('分组名称已存在'))
+        } else {
+          callback()
+        }
+      })
+    }
     return {
       searchKey: '', // 分组查询
       catalogVisible: false,
@@ -160,7 +172,8 @@ export default {
       formVisible: false,
       formRules: {
         name: [
-          { required: true, message: '分组名称不能为空', trigger: 'blur' }
+          { required: true, message: '分组名称不能为空', trigger: 'blur' },
+          { validator: validateName, trigger: 'blur' }
         ]
       }
     }

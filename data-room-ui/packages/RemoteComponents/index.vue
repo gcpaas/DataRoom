@@ -201,7 +201,7 @@ export default {
         this.chart.update(config.option)
       }
       this.changeChartConfig(config)
-      this.$refs['remoteComponent' + config.code]?.customStyle(config)
+      // this.$refs['remoteComponent' + config.code]?.customStyle(config)
       return config
     },
     // 同步配置
