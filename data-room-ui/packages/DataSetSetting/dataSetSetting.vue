@@ -207,7 +207,7 @@ export default {
     background-color: var(--bs-background-2) !important;
 
     .el-table {
-      max-height: calc(90vh - 350px);
+      max-height: calc(90vh - 380px);
     }
 
     .bs-table-box {
