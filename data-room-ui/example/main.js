@@ -13,7 +13,7 @@ import * as $dataRoomAxios from 'data-room-ui/js/utils/http.js'
 import { registerConfig } from '@gcpaas/data-room-ui'
 import remoteComponents from '@/remoteComponents/exports.js'
 import customDatasetComponents from '@/customDatasetComponents/exports.js'
-import customPlots from '@/customPlots/exports'
+// import customPlots from '@/customPlots/exports'
 Vue.use(ElementUI, { size: 'mini' })
 registerConfig(
   {

@@ -114,12 +114,12 @@ module.exports = {
           chunks: 'all',
           priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
-        remotevue2loader: {
-          name: 'remote-vue2-loader',
-          test: /[\\/]remote-vue2-loader[\\/]/,
-          chunks: 'all',
-          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
-        },
+        // remotevue2loader: {
+        //   name: 'remote-vue2-loader',
+        //   test: /[\\/]remote-vue2-loader[\\/]/,
+        //   chunks: 'all',
+        //   priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        // },
         echarts: {
           name: 'echarts',
           test: /[\\/]echarts[\\/]/,

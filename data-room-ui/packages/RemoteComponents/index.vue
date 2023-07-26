@@ -15,7 +15,7 @@
 <script>
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
-import remoteVueLoader from 'remote-vue2-loader'
+import remoteVueLoader from 'remote-vue-loader'
 import { mapMutations, mapState } from 'vuex'
 import _ from 'lodash'
 import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'

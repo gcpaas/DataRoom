@@ -68,7 +68,7 @@
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
     "qs": "^6.9.6",
-    "remote-vue2-loader": "1.0.3",
+    "remote-vue-loader": "1.0.0",
     "sortablejs": "^1.15.0",
     "tiny-sass-compiler": "^0.12.2",
     "videojs-contrib-hls": "^5.15.0",

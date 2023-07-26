@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import remoteVueLoader from 'remote-vue2-loader'
+import remoteVueLoader from 'remote-vue-loader'
 import _ from 'lodash'
 import { getBizComponentInfo } from 'data-room-ui/js/api/bigScreenApi'
 import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
