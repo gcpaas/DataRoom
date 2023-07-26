@@ -23,6 +23,9 @@
           class="bs-data-set-management"
           :is-border="true"
           :is-dialog="true"
+          :ToAdd='isAdd'
+          :doEdit='doEdit'
+          :isDelete='isDelete'
           :ds-id="dataSetId"
           :multiple="multiple"
           :ds-value="DataDsValue"
@@ -39,6 +42,9 @@
       class="bs-data-set-management"
       :is-border="true"
       :is-dialog="true"
+      :ToAdd='isAdd'
+      :doEdit='doEdit'
+      :isDelete='isDelete'
       :ds-id="dataSetId"
       :multiple="multiple"
       :ds-value="DataDsValue"
@@ -107,7 +113,41 @@ export default {
           id: this.dsId
         }
       }
+    },
+    isAdd(){
+      let a=-1
+      if(window.BS_CONFIG?.datasetAuth) {
+       a=window.BS_CONFIG?.datasetAuth.findIndex(item=>item=='unAdd')
+      }
+      if(a==-1){
+        return true
+      }else{
+        return false
+      }
+    },
+    doEdit(){
+      let a=-1
+      if(window.BS_CONFIG?.datasetAuth) {
+       a=window.BS_CONFIG?.datasetAuth.findIndex(item=>item=='unEdit')
+      }
+      if(a==-1){
+        return true
+      }else{
+        return false
+      }
+    },
+    isDelete(){
+      let a=-1
+      if(window.BS_CONFIG?.datasetAuth) {
+       a=window.BS_CONFIG?.datasetAuth.findIndex(item=>item=='unDelete')
+      }
+      if(a==-1){
+        return true
+      }else{
+        return false
+      }
     }
+
   },
   mounted () {
     this.dataSetId = this.dsId
