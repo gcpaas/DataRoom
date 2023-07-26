@@ -57,7 +57,7 @@
               :style="{
                 display: gridComputed ? 'grid' : 'flex',
                 justifyContent: gridComputed ? 'space-around' : 'flex-start',
-                height: '410px'
+                height: 'calc(100vh - 430px)'
               }"
             >
               <!-- <div v-if="list.length !== 0"> -->
@@ -180,7 +180,7 @@
               :style="{
                 display: bizFridComputed ? 'grid' : 'flex',
                 justifyContent: bizFridComputed ? 'space-around' : 'flex-start',
-                height: '410px'
+                height: 'calc(100vh - 430px)'
               }"
             >
               <!-- <div v-if="list.length !== 0"> -->
@@ -270,7 +270,7 @@
               :style="{
                 display: remoteComponentsGridComputed ? 'grid' : 'flex',
                 justifyContent: remoteComponentsGridComputed ? 'space-around' : 'flex-start',
-                height: '410px'
+                height: 'calc(100vh - 430px)'
               }"
             >
               <div
@@ -475,7 +475,9 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/style/bsTheme.scss';
-
+.content{
+  height: calc(100vh - 290px);
+}
 .big-screen-list-wrap {
   .el-select {
     display: inline-block !important;
