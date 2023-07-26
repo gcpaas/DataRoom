@@ -67,7 +67,7 @@
   border-color: var(--bs-el-border) !important;
   background: var(--bs-background-2) !important;
   background-color: var(--bs-background-2) !important;
-  th.el-table__cell.is-leaf{
+  th.el-table__cell.is-leaf {
     border-color: var(--bs-el-border) !important;
   }
 
@@ -543,15 +543,15 @@
   background: var(--bs-background-2) !important;
   border-color: var(--bs-background-1) !important;
   background-color: var(--bs-background-2) !important;
-  .el-button--default{
+  .el-button--default {
     color: var(--bs-el-text) !important;
     border-color: var(--bs-background-1) !important;
     background-color: var(--bs-background-2) !important;
   }
-  .el-color-picker__trigger{
-    border-color:   var(--bs-background-1) !important;
+  .el-color-picker__trigger {
+    border-color: var(--bs-background-1) !important;
   }
-  .el-color-picker__panel{
+  .el-color-picker__panel {
     border-color: var(--bs-background-1) !important;
   }
   .el-input__inner {
@@ -602,31 +602,78 @@
 .bs-el-date-picker {
   left: -115px !important;
   background-color: var(--bs-background-1) !important;
-  .el-date-picker__time-header{
+  .el-date-picker__time-header {
     border-color: var(--bs-el-border) !important;
   }
-  .el-picker-panel{
-     .el-date-picker__header{
+
+  .popper__arrow::after {
+    border-bottom-color: var(--bs-background-1) !important;
+    border-top-color: var(--bs-background-1) !important;
+  }
+  .el-date-picker__header {
+    background: var(--bs-el-background-1) !important;
+    background-color: var(--bs-el-background-1) !important;
+    .el-date-picker__header-label {
+      color: var(--bs-el-text) !important;
+    }
+    .el-picker-panel__icon-btn {
+      color: var(--bs-el-text) !important;
+    }
+  }
+  .el-date-table {
+    background: var(--bs-el-background-1) !important;
+    background-color: var(--bs-el-background-1) !important;
+    th {
+      color: var(--bs-el-text) !important;
+      border-color: var(--bs-el-border) !important;
+    }
+    .el-button--text {
       color: var(--bs-el-text) !important;
       background: var(--bs-background-2) !important;
       background-color: var(--bs-background-2) !important;
-     }
-     .el-date-table{
-      background: var(--bs-background-2) !important;
-      background-color: var(--bs-background-2) !important;
-      th{
-        border-color: var(--bs-el-border) !important;
-      }
-      .el-button--text{
-        color: var(--bs-el-text) !important;
-        background: var(--bs-background-2) !important;
+    }
+  }
+  .el-year-table {
+    background: var(--bs-el-background-1) !important;
+    background-color: var(--bs-el-background-1) !important;
+    .disabled {
+      .cell {
         background-color: var(--bs-background-2) !important;
       }
-     }
+    }
+    td {
+      .cell {
+        color: var(--bs-el-text) !important;
+      }
+    }
+  }
+  .el-month-table {
+    background: var(--bs-el-background-1) !important;
+    background-color: var(--bs-el-background-1) !important;
+    .disabled {
+      .cell {
+        background-color: var(--bs-background-2) !important;
+      }
+    }
+    td {
+      .cell {
+        color: var(--bs-el-text) !important;
+      }
+    }
+  }
+  .el-date-table {
+    .available {
+      color: var(--bs-el-text) !important;
+    }
   }
   .el-picker-panel__footer {
     background-color: var(--bs-background-1) !important;
     border-top: 1px solid var(--bs-el-border) !important;
+  }
+  .el-picker-panel {
+    .el-button--text {
+      color: var(--bs-el-text) !important;
+    }
   }
   .el-date-table td.disabled div {
     background-color: var(--bs-background-2) !important;
@@ -676,15 +723,15 @@
   }
 }
 
-.bs-el-tabs{
-  .el-tabs__item{
+.bs-el-tabs {
+  .el-tabs__item {
     color: var(--bs-el-text) !important;
   }
-  .is-active{
+  .is-active {
     color: var(--bs-el-color-primary) !important;
   }
-  .el-tabs__nav-wrap{
-    &:after{
+  .el-tabs__nav-wrap {
+    &:after {
       background-color: var(--bs-background-1) !important;
     }
   }
