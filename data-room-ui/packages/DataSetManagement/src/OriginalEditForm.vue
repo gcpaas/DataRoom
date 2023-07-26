@@ -561,7 +561,9 @@ export default {
       isSelectAll: false,
       activeName: 'data',
       currentCount: 0,
-      selectorLoading: false
+      selectorLoading: false,
+      oldStructurePreviewList: [],
+      isInit: false
     }
   },
   watch: {
@@ -630,6 +632,7 @@ export default {
         this.dataForm.repeatStatus = res.config.repeatStatus
         this.dataForm.fieldList = res.config.fieldList
         this.dataForm.fieldDesc = res.config.fieldDesc
+        this.oldStructurePreviewList = _.cloneDeep(res.config.fieldList)
         // 字段信息，转为数组
         this.dataForm.fieldInfo = res.config.fieldInfo ? res.config.fieldInfo.split(',') : []
         if (this.dataForm.typeId) {
@@ -641,6 +644,7 @@ export default {
             }
           })
         }
+        this.isInit = true
         this.queryAllTable()
         this.queryAllField()
       })
@@ -824,7 +828,7 @@ export default {
           }
           return field
         })
-        this.getPreViewData(fieldDescMap)
+        // this.getPreViewData(fieldDescMap)
       }).catch(() => {
         this.fieldList = []
       })
@@ -835,7 +839,6 @@ export default {
      */
     setFields (values) {
       if (values.includes('全选')) {
-        // 说明已经全选了，所以全不选
         if (values.length > this.fieldList.length) {
           this.dataForm.fieldInfo = []
         } else {
@@ -882,21 +885,35 @@ export default {
       datasetExecuteTest(executeParams).then((data) => {
         this.dataPreviewList = data.data.list
         this.structurePreviewList = data.structure
-        this.structurePreviewList.forEach(item => {
-          if (!item.hasOwnProperty('orderNum')) {
-            this.$set(item, 'orderNum', 0)
-          }
-          if (!item.hasOwnProperty('sourceTable')) {
-            this.$set(item, 'sourceTable', this.dataForm.tableName)
-          }
-          if (!item.hasOwnProperty('fieldDesc')) {
-            let fieldDesc = ''
-            if (fieldDescMap && fieldDescMap[item.fieldName]) {
-              fieldDesc = fieldDescMap[item.fieldName]
+        // 如果是初始化
+        if (this.isInit) {
+          this.structurePreviewList = this.dataForm.fieldList
+          this.isInit = false
+        } else {
+          this.structurePreviewList.forEach(item => {
+            if (!item.hasOwnProperty('orderNum')) {
+              this.$set(item, 'orderNum', 0)
             }
-            this.$set(item, 'fieldDesc', fieldDesc)
-          }
-        })
+            if (!item.hasOwnProperty('sourceTable')) {
+              this.$set(item, 'sourceTable', this.dataForm.tableName)
+            }
+            if (!item.hasOwnProperty('fieldDesc')) {
+              let fieldDesc = ''
+              if (fieldDescMap && fieldDescMap[item.fieldName]) {
+                fieldDesc = fieldDescMap[item.fieldName]
+              }
+              this.$set(item, 'fieldDesc', fieldDesc)
+              // this.structurePreviewList 和 this.oldStructurePreviewList 比较，如果旧的数据里fieldDesc有值则重新赋值给新的数据
+              this.structurePreviewList.forEach(item => {
+                const oldItem = this.oldStructurePreviewList.find(oldItem => oldItem.fieldName === item.fieldName)
+                if (oldItem && oldItem.fieldDesc) {
+                  item.fieldDesc = oldItem.fieldDesc
+                }
+              })
+            }
+          })
+        }
+
         this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
         this.totalCount = data.data.totalCount
         this.currentCount = data.data.currentCount
@@ -927,6 +944,11 @@ export default {
     treeFilter (value, data) {
       if (!value) return true
       return data.name.indexOf(value) !== -1
+    },
+    setField () {
+      this.structurePreviewList = _.cloneDeep(this.structurePreviewListCopy)
+      this.oldStructurePreviewList = _.cloneDeep(this.structurePreviewListCopy)
+      this.fieldsetVisible = false
     }
   }
 }

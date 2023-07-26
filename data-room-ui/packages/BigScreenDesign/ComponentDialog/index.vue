@@ -165,7 +165,6 @@
               </el-select>
               <el-button
                 size="small"
-                style="margin-right: 20px"
                 type="primary"
                 @click="reSearch"
               >

@@ -917,6 +917,7 @@ export default {
       } else {
         // 如果是后端代理，则将配置传到后端
         const script = JSON.stringify(this.dataForm.config)
+        console.log(this.dataForm.config)
         const executeParams = {
           script,
           params: this.dataForm.paramsList,

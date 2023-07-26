@@ -23,9 +23,9 @@
           class="bs-data-set-management"
           :is-border="true"
           :is-dialog="true"
-          :ToAdd='isAdd'
-          :doEdit='doEdit'
-          :isDelete='isDelete'
+          :to-add="isAdd"
+          :do-edit="doEdit"
+          :is-delete="isDelete"
           :ds-id="dataSetId"
           :multiple="multiple"
           :ds-value="DataDsValue"
@@ -42,9 +42,9 @@
       class="bs-data-set-management"
       :is-border="true"
       :is-dialog="true"
-      :ToAdd='isAdd'
-      :doEdit='doEdit'
-      :isDelete='isDelete'
+      :to-add="isAdd"
+      :do-edit="doEdit"
+      :is-delete="isDelete"
       :ds-id="dataSetId"
       :multiple="multiple"
       :ds-value="DataDsValue"
@@ -114,36 +114,36 @@ export default {
         }
       }
     },
-    isAdd(){
-      let a=-1
-      if(window.BS_CONFIG?.datasetAuth) {
-       a=window.BS_CONFIG?.datasetAuth.findIndex(item=>item=='unAdd')
+    isAdd () {
+      let a = -1
+      if (window.BS_CONFIG?.datasetAuth) {
+        a = window.BS_CONFIG?.datasetAuth.findIndex(item => item === 'unAdd')
       }
-      if(a==-1){
+      if (a === -1) {
         return true
-      }else{
+      } else {
         return false
       }
     },
-    doEdit(){
-      let a=-1
-      if(window.BS_CONFIG?.datasetAuth) {
-       a=window.BS_CONFIG?.datasetAuth.findIndex(item=>item=='unEdit')
+    doEdit () {
+      let a = -1
+      if (window.BS_CONFIG?.datasetAuth) {
+        a = window.BS_CONFIG?.datasetAuth.findIndex(item => item === 'unEdit')
       }
-      if(a==-1){
+      if (a === -1) {
         return true
-      }else{
+      } else {
         return false
       }
     },
-    isDelete(){
-      let a=-1
-      if(window.BS_CONFIG?.datasetAuth) {
-       a=window.BS_CONFIG?.datasetAuth.findIndex(item=>item=='unDelete')
+    isDelete () {
+      let a = -1
+      if (window.BS_CONFIG?.datasetAuth) {
+        a = window.BS_CONFIG?.datasetAuth.findIndex(item => item === 'unDelete')
       }
-      if(a==-1){
+      if (a === -1) {
         return true
-      }else{
+      } else {
         return false
       }
     }
@@ -204,6 +204,7 @@ export default {
   ::v-deep .bs-container {
     padding: 0;
     min-height: 550px;
+    background-color: var(--bs-background-2) !important;
 
     .el-table {
       max-height: calc(90vh - 350px);
