@@ -56,7 +56,8 @@
               element-loading-text="加载中"
               :style="{
                 display: gridComputed ? 'grid' : 'flex',
-                justifyContent: gridComputed ? 'space-around' : 'flex-start'
+                justifyContent: gridComputed ? 'space-around' : 'flex-start',
+                height: '410px'
               }"
             >
               <!-- <div v-if="list.length !== 0"> -->
@@ -178,7 +179,8 @@
               element-loading-text="加载中"
               :style="{
                 display: bizFridComputed ? 'grid' : 'flex',
-                justifyContent: bizFridComputed ? 'space-around' : 'flex-start'
+                justifyContent: bizFridComputed ? 'space-around' : 'flex-start',
+                height: '410px'
               }"
             >
               <!-- <div v-if="list.length !== 0"> -->
@@ -267,7 +269,8 @@
               element-loading-text="加载中"
               :style="{
                 display: remoteComponentsGridComputed ? 'grid' : 'flex',
-                justifyContent: remoteComponentsGridComputed ? 'space-around' : 'flex-start'
+                justifyContent: remoteComponentsGridComputed ? 'space-around' : 'flex-start',
+                height: '410px'
               }"
             >
               <div
@@ -521,15 +524,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 15px;
-
-    // ::v-deep .el-loading-mask {
-    //   display: flex;
-    //   align-items: center;
-    //   justify-content: center;
-    //   height: calc(100vh - 260px) !important;
-    //   z-index: 999;
-    //   top: 50px;
-    // }
     .big-screen-card-wrap {
       position: relative;
       height: 230px;
