@@ -63,7 +63,6 @@
               <el-col :span="12">
                 <el-form-item
                   label="分组"
-                  prop="typeId"
                 >
                   <el-select
                     ref="selectParentName"
@@ -128,7 +127,7 @@
               <el-col :span="12">
                 <el-form-item
                   label="调用方式"
-                  prop="labelIds"
+                  prop="config.requestType"
                 >
                   <el-select
                     v-model="dataForm.config.requestType"
@@ -673,7 +672,7 @@ export default {
         labelIds: [],
         config: {
           className: 'com.gccloud.dataset.entity.config.HttpDataSetConfig',
-          requestType: '',
+          requestType: 'back',
           method: 'get',
           url: '',
           headers: [],
@@ -688,8 +687,8 @@ export default {
           { required: true, message: '请输入数据集名称', trigger: 'blur' },
           { validator: validateName, trigger: 'blur' }
         ],
-        typeId: [
-          { required: true, message: '请选择分组', trigger: 'blur' }
+        'config.requestType': [
+          { required: true, message: '请选择调用方式', trigger: 'change' }
         ],
         key: [{ required: true, message: '键不能为空', trigger: 'blur' }],
         type: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
@@ -754,7 +753,7 @@ export default {
         getDataset(this.datasetId).then(res => {
           const { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config } = res
           const { script, paramsList, fieldDesc, fieldList } = config
-          this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { script, paramsList } }
+          this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { ...config } }
           this.fieldDesc = fieldDesc
           this.outputFieldList = fieldList
           this.scriptExecute(true)
@@ -805,6 +804,7 @@ export default {
               body: dataForm.config.body,
               requestScript: dataForm.config.requestScript,
               responseScript: dataForm.config.responseScript,
+              requestType: dataForm.config.requestType,
               fieldDesc,
               paramsList: dataForm.config.paramsList,
               fieldList: outputFieldList
