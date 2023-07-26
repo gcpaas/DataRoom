@@ -262,6 +262,7 @@ import checkDatasource from 'data-room-ui/DataSourceManagement/src/checkDatasour
 import CustomEditForm from './CustomEditForm.vue'
 import { pageMixins } from 'data-room-ui/js/mixins/page'
 import OriginalEditForm from './OriginalEditForm.vue'
+import HttpEditForm from './HttpEditForm.vue'
 import DatasetTypeDialog from './DatasetTypeDialog.vue'
 import StoredProcedureEditForm from './StoredProcedureEditForm.vue'
 import { datasetPage, datasetRemove, datasetCheck } from 'data-room-ui/js/utils/datasetConfigService'
@@ -280,7 +281,8 @@ export default {
     StoredProcedureEditForm,
     ScriptEditForm,
     JsEditForm,
-    checkDatasource
+    checkDatasource,
+    HttpEditForm
   },
   mixins: [pageMixins],
   props: {
@@ -529,7 +531,8 @@ export default {
         { name: '存储过程数据集', datasetType: 'storedProcedure', componentName: 'StoredProcedureEditForm' },
         { name: 'JSON数据集', datasetType: 'json', componentName: 'JsonEditForm' },
         { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' },
-        { name: 'JS数据集', datasetType: 'js', componentName: 'JsEditForm' }
+        { name: 'JS数据集', datasetType: 'js', componentName: 'JsEditForm' },
+        { name: 'HTTP数据集', datasetType: 'http', componentName: 'HttpEditForm' }
       ]
       if (window.BS_CONFIG?.datasetTypeList&&window.BS_CONFIG?.datasetTypeList?.length!=0) {
         this.datasetTypeList = [{ name: '全部', datasetType: '' }, ...list.filter(item => window.BS_CONFIG?.datasetTypeList.findIndex(x => x === item.datasetType) !== -1)]

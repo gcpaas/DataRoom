@@ -678,9 +678,9 @@ export default {
           url: '',
           headers: [],
           params: [],
-          body: null,
-          requestScript: null,
-          responseScript: null
+          body: '',
+          requestScript: '',
+          responseScript: ''
         }
       },
       rules: {
@@ -798,7 +798,7 @@ export default {
             labelIds: dataForm.labelIds,
             config: {
               className: 'com.gccloud.dataset.entity.config.HttpDataSetConfig',
-              method: dataForm.config.headers,
+              method: dataForm.config.method,
               url: dataForm.config.url,
               headers: dataForm.config.headers,
               params: dataForm.config.params,
