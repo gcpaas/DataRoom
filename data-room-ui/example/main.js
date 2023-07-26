@@ -13,7 +13,7 @@ import * as $dataRoomAxios from 'data-room-ui/js/utils/http.js'
 import { registerConfig } from '@gcpaas/data-room-ui'
 import remoteComponents from '@/remoteComponents/exports.js'
 import customDatasetComponents from '@/customDatasetComponents/exports.js'
-import customPlots from '@/customPlots/exports'
+// import customPlots from '@/customPlots/exports'
 Vue.use(ElementUI, { size: 'mini' })
 registerConfig(
   {
@@ -52,8 +52,9 @@ registerConfig(
       '--bs-el-color-primary-active': '64, 158, 255', // 主要激活 => rgba(64, 158, 255, 1) = #409EFF
       '--bs-el-border': 'transparent' // 边框颜色
     },
+    datasetAuth: ['unAdd', 'unEdit', 'unDelete'], // 数据集按钮权限 新增 编辑 删除
     // datasetTypeList: ['original','custom'],
-    customPlots: [],
+    // customPlots: [],
     // 远程组件列表
     remoteComponents,
     customDatasetComponents
