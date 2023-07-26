@@ -56,7 +56,7 @@
           />
           <el-table-column
             label="操作"
-            width="105"
+            width="150"
             align="center"
           >
             <template slot-scope="scope">

@@ -67,6 +67,9 @@
   border-color: var(--bs-el-border) !important;
   background: var(--bs-background-2) !important;
   background-color: var(--bs-background-2) !important;
+  th.el-table__cell.is-leaf{
+    border-color: var(--bs-el-border) !important;
+  }
 
   th.gutter {
     background-color: var(--bs-el-background-3) !important;
@@ -599,9 +602,31 @@
 .bs-el-date-picker {
   left: -115px !important;
   background-color: var(--bs-background-1) !important;
+  .el-date-picker__time-header{
+    border-color: var(--bs-el-border) !important;
+  }
+  .el-picker-panel{
+     .el-date-picker__header{
+      color: var(--bs-el-text) !important;
+      background: var(--bs-background-2) !important;
+      background-color: var(--bs-background-2) !important;
+     }
+     .el-date-table{
+      background: var(--bs-background-2) !important;
+      background-color: var(--bs-background-2) !important;
+      th{
+        border-color: var(--bs-el-border) !important;
+      }
+      .el-button--text{
+        color: var(--bs-el-text) !important;
+        background: var(--bs-background-2) !important;
+        background-color: var(--bs-background-2) !important;
+      }
+     }
+  }
   .el-picker-panel__footer {
     background-color: var(--bs-background-1) !important;
-    border-top: 1px solid var(--bs-background-2);
+    border-top: 1px solid var(--bs-el-border) !important;
   }
   .el-date-table td.disabled div {
     background-color: var(--bs-background-2) !important;

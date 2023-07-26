@@ -73,7 +73,9 @@
                     popper-class="bs-el-select"
                     placeholder="请选择分组"
                     clearable
+                    filterable
                     :disabled="!isEdit"
+                    :filter-method="selectorFilter"
                     @clear="clearType"
                     @visible-change="setCurrentNode"
                   >
@@ -93,6 +95,7 @@
                           :highlight-current="true"
                           :expand-on-click-node="false"
                           class="bs-el-tree"
+                          :filter-node-method="treeFilter"
                           @node-click="selectParentCategory"
                         >
                           <span
@@ -761,7 +764,6 @@ export default {
         moduleCode: this.appCode
       }
       datasourceList(params).then(res => {
-        console.log(res)
         this.sourceList = res
       })
     },
@@ -918,6 +920,13 @@ export default {
     currentChangeHandle (value) {
       this.current = value
       this.getData()
+    },
+    selectorFilter (value) {
+      this.$refs.categorySelectTree.filter(value)
+    },
+    treeFilter (value, data) {
+      if (!value) return true
+      return data.name.indexOf(value) !== -1
     }
   }
 }
