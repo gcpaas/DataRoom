@@ -13,6 +13,7 @@ import * as $dataRoomAxios from 'data-room-ui/js/utils/http.js'
 import { registerConfig } from '@gcpaas/data-room-ui'
 import remoteComponents from '@/remoteComponents/exports.js'
 import customDatasetComponents from '@/customDatasetComponents/exports.js'
+import customPlots from '@/customPlots/exports'
 Vue.use(ElementUI, { size: 'mini' })
 registerConfig(
   {
@@ -65,7 +66,10 @@ promise.polyfill()
 Vue.use(ElementUI, { size: 'mini' })
 Vue.prototype.$dataRoomAxios = $dataRoomAxios
 Vue.config.productionTip = false
-
+// 兼容ie下双向绑定事件
+Vue.prototype.inputChange = function (e) {
+  return e.target.value
+}
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
