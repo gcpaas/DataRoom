@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     title () {
-       if (this.$route.query.edit) return '智能报表平台'
+       if (this.$route.query.edit) return '大屏设计器'
       return window?.BS_CONFIG?.starter?.title
     },
     logo () {
