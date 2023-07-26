@@ -108,8 +108,8 @@
           </el-form-item>
           <el-form-item class="filter-item">
             <el-button
-              class="bs-el-button-default"
               v-if="ToAdd"
+              class="bs-el-button-default"
               @click="addDataset"
             >
               新增
@@ -182,7 +182,7 @@
             />
             <!--操作栏-->
             <el-table-column
-            v-if="doEdit||isDelete"
+              v-if="doEdit||isDelete"
               label="操作"
               width="200"
               align="center"
@@ -192,7 +192,7 @@
                 slot-scope="scope"
               >
                 <el-button
-                 v-if="doEdit"
+                  v-if="doEdit"
                   class="bs-el-button-default"
                   :disabled="scope.row.editable === 1 && !appCode"
                   @click="toEdit(scope.row.id, scope.row.datasetType, scope.row.name, scope.row.typeId)"
@@ -200,7 +200,7 @@
                   编辑
                 </el-button>
                 <el-button
-                 v-if="isDelete"
+                  v-if="isDelete"
                   class="bs-el-button-default"
                   :loading="scope.row.loading"
                   :disabled="scope.row.editable === 1 && !appCode"
@@ -310,15 +310,15 @@ export default {
       type: Boolean,
       default: false
     },
-    ToAdd:{
+    ToAdd: {
       type: Boolean,
       default: true
     },
-    doEdit:{
+    doEdit: {
       type: Boolean,
       default: true
     },
-    isDelete:{
+    isDelete: {
       type: Boolean,
       default: true
     }
@@ -461,10 +461,10 @@ export default {
     },
     // 删除数据集
     delDataset (row) {
-      row.loading=true
-      datasetCheck(row.id).then((res)=>{
-        row.loading=false
-        if(res.canDelete){
+      row.loading = true
+      datasetCheck(row.id).then((res) => {
+        row.loading = false
+        if (res.canDelete) {
           this.$confirm('确定删除当前数据集吗?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -550,7 +550,7 @@ export default {
         { name: 'JS数据集', datasetType: 'js', componentName: 'JsEditForm' },
         { name: 'HTTP数据集', datasetType: 'http', componentName: 'HttpEditForm' }
       ]
-      if (window.BS_CONFIG?.datasetTypeList&&window.BS_CONFIG?.datasetTypeList?.length!=0) {
+      if (window.BS_CONFIG?.datasetTypeList && window.BS_CONFIG?.datasetTypeList?.length != 0) {
         this.datasetTypeList = [{ name: '全部', datasetType: '' }, ...list.filter(item => window.BS_CONFIG?.datasetTypeList.findIndex(x => x === item.datasetType) !== -1)]
       } else {
         this.datasetTypeList = [
