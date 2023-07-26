@@ -207,7 +207,7 @@
                 <el-col :span="5">
                   <el-form-item
                     label="键"
-                    :prop="'headers.'+index+'.key'"
+                    :prop="'config.headers.'+index+'.key'"
                     label-width="50px"
                     :rules="rules.key"
                   >
@@ -221,33 +221,10 @@
                 </el-col>
                 <el-col :span="5">
                   <el-form-item
-                    label="类型"
-                    :prop="'headers.'+index+'.type'"
-                    label-width="60px"
-                    :rules="rules.type"
-                  >
-                    <el-select
-                      v-model="dataForm.config.headers[index].type"
-                      filterable
-                      clearable
-                      allow-create
-                      default-first-option
-                      placeholder="请选择类型"
-                    >
-                      <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item
                     label="值"
-                    :prop="dataForm.config.headers[index].value"
+                    :prop="'config.headers.'+index+'.value'"
                     label-width="50px"
+                    :rules="rules.value"
                   >
                     <el-input
                       v-model="dataForm.config.headers[index].value"
@@ -290,7 +267,7 @@
                 <el-col :span="7">
                   <el-form-item
                     label="键"
-                    :prop="'params.'+index+'.key'"
+                    :prop="'config.params.'+index+'.key'"
                     label-width="50px"
                     :rules="rules.key"
                   >
@@ -305,8 +282,9 @@
                 <el-col :span="7">
                   <el-form-item
                     label="值"
-                    :prop="dataForm.config.params[index].value"
+                    :prop="'config.params.'+index+'.value'"
                     label-width="50px"
+                    :rules="rules.value"
                   >
                     <el-input
                       v-model="dataForm.config.params[index].value"
@@ -678,6 +656,7 @@ export default {
           headers: [],
           params: [],
           body: '',
+          paramsList:[],
           requestScript: '',
           responseScript: ''
         }
@@ -691,7 +670,7 @@ export default {
           { required: true, message: '请选择调用方式', trigger: 'change' }
         ],
         key: [{ required: true, message: '键不能为空', trigger: 'blur' }],
-        type: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
+        value: [{ required: true, message: '值不能为空', trigger: 'blur' }],
         'config.method': [{ required: true, message: '请求类型不能为空', trigger: 'blur' }],
         'config.url': [
           { required: true, message: '请求地址不能为空', trigger: 'blur' },
@@ -755,7 +734,9 @@ export default {
           const { script, paramsList, fieldDesc, fieldList } = config
           this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { ...config } }
           this.fieldDesc = fieldDesc
+          console.log(fieldList)
           this.outputFieldList = fieldList
+          console.log(this.outputFieldList)
           this.scriptExecute(true)
         })
       }
@@ -766,20 +747,20 @@ export default {
       //   this.$message.error('请确保脚本不为空且执行通过')
       //   return
       // }
-      // if (!this.outputFieldList.length) {
-      //   this.$message.warning('该执行脚本未生成输出字段，请重新检查')
-      //   return
-      // }
-      // if (!nochecktosave) {
-      //   const temp = this.outputFieldList.some(item => {
-      //     return item.fieldDesc === '' || !item.hasOwnProperty('fieldDesc')
-      //   }) // true-存在为空
-      //   if (temp) {
-      //     this.$refs.fieldFillDialog.open()
-      //     // this.fieldDescVisible = true
-      //     return
-      //   }
-      // }
+      if (!this.outputFieldList.length) {
+        this.$message.warning('该执行脚本未生成输出字段，请重新检查')
+        return
+      }
+      if (!nochecktosave) {
+        const temp = this.outputFieldList.some(item => {
+          return item.fieldDesc === '' || !item.hasOwnProperty('fieldDesc')
+        }) // true-存在为空
+        if (temp) {
+          this.$refs.fieldFillDialog.open()
+          // this.fieldDescVisible = true
+          return
+        }
+      }
       requestType: '',
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -807,7 +788,7 @@ export default {
               requestType: dataForm.config.requestType,
               fieldDesc,
               paramsList: dataForm.config.paramsList,
-              fieldList: outputFieldList
+              fieldList: this.outputFieldList
             }
           }
           const datasetSave = this.dataForm.id === '' ? datasetAdd : datasetUpdate
@@ -907,24 +888,78 @@ export default {
       })
       this.fieldDesc = fieldDesc
     },
+    // 获取请求地址、请求头、请求参数、请求体中所有的变量，在动态参数中进行变量
+    getPramsList(){
+      const reg = /\${(.*?)}/g
+      const paramNames1 = this.getValName(this.dataForm.config.url)
+      const paramNames2 = this.dataForm.config?.headers.map(item=>{
+        const nameList = this.getValName(item.value)
+        if (nameList && nameList.length){
+          return nameList[0]
+        }
+      })
+      const paramNames3 = this.dataForm.config?.params.map(item=>{
+        const nameList = this.getValName(item.value)
+        if (nameList && nameList.length){
+          return nameList[0]
+        }
+      })
+      const paramNames4=this.getValName(this.dataForm.config.body)
+      const paramNames = new Set([...paramNames1,...paramNames2,...paramNames3,...paramNames4])
+      const names = this.dataForm.config?.paramsList?.map(item => item.name)
+      const params = []
+      paramNames.forEach(name => {
+        if (names.includes(name)) {
+          const param = this.dataForm.config?.paramsList?.find(item => item.name === name)
+          params.push(param)
+        } else {
+          params.push({
+            name: name,
+            type: 'String',
+            value: '',
+            status: 1,
+            require: 0,
+            remark: ''
+          })
+        }
+      })
+      this.dataForm.config.paramsList = _.cloneDeep(params)
+
+    },
+    // 获取字符串中${变量名}中的变量名
+    getValName(str){
+      const reg = /\$\{(.+?)\}/;
+      const reg_g = /\$\{(.+?)\}/g;
+      const result = str.match(reg_g);
+      const list = []
+      if (result){
+        for (let i = 0; i < result.length; i++) {
+          const item = result[i]
+          list.push(item.match(reg)[1])
+        }
+      }
+      return list
+    },
     // 执行配置好的接口
     scriptExecute (isInit = false) {
+      this.getPramsList()
       // 如果是前端代理，则自行组装接口及参数并调接口
       if (this.dataForm.config.requestType === 'front') {
+        if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length){
+        }
         axiosFormatting({ ...this.dataForm.config }).then((res) => {
-          console.log(res)
+          this.dataPreviewList = res.list
         })
       } else {
         // 如果是后端代理，则将配置传到后端
         const script = JSON.stringify(this.dataForm.config)
-        console.log(this.dataForm.config)
         const executeParams = {
           script,
           params: this.dataForm.paramsList,
           dataSetType: 'http'
         }
         datasetExecuteTest(executeParams).then(res => {
-
+          this.dataPreviewList = res
         }).catch((e) => {
 
         })
