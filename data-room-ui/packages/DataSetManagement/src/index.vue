@@ -109,6 +109,7 @@
           <el-form-item class="filter-item">
             <el-button
               class="bs-el-button-default"
+              v-if="ToAdd"
               @click="addDataset"
             >
               新增
@@ -181,6 +182,7 @@
             />
             <!--操作栏-->
             <el-table-column
+            v-if="doEdit||isDelete"
               label="操作"
               width="200"
               align="center"
@@ -190,6 +192,7 @@
                 slot-scope="scope"
               >
                 <el-button
+                 v-if="doEdit"
                   class="bs-el-button-default"
                   :disabled="scope.row.editable === 1 && !appCode"
                   @click="toEdit(scope.row.id, scope.row.datasetType, scope.row.name, scope.row.typeId)"
@@ -197,6 +200,7 @@
                   编辑
                 </el-button>
                 <el-button
+                 v-if="isDelete"
                   class="bs-el-button-default"
                   :loading="scope.row.loading"
                   :disabled="scope.row.editable === 1 && !appCode"
@@ -303,6 +307,18 @@ export default {
     isBorder: {
       type: Boolean,
       default: false
+    },
+    ToAdd:{
+      type: Boolean,
+      default: true
+    },
+    doEdit:{
+      type: Boolean,
+      default: true
+    },
+    isDelete:{
+      type: Boolean,
+      default: true
     }
 
   },
