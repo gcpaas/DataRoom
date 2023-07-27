@@ -542,6 +542,7 @@
         ref="paramsSettingDialog"
         :params-list="dataForm.config.paramsList"
         @saveParams="saveParams"
+        @replaceParams="replaceParams"
       />
       <OutputFieldDialog
         ref="outputFieldDialog"
@@ -642,6 +643,7 @@ export default {
         value: 'date',
         label: '日期'
       }],
+      newDataForm: {}, // 替换完参数后的配置
       dataForm: {
         id: '',
         name: '',
@@ -656,7 +658,7 @@ export default {
           headers: [],
           params: [],
           body: '',
-          paramsList:[],
+          paramsList: [],
           requestScript: '',
           responseScript: ''
         }
@@ -734,9 +736,8 @@ export default {
           const { script, paramsList, fieldDesc, fieldList } = config
           this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { ...config } }
           this.fieldDesc = fieldDesc
-          console.log(fieldList)
           this.outputFieldList = fieldList
-          console.log(this.outputFieldList)
+          this.replaceParams(paramsList)
           this.scriptExecute(true)
         })
       }
@@ -761,7 +762,6 @@ export default {
           return
         }
       }
-      requestType: '',
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.saveloading = true
@@ -809,7 +809,6 @@ export default {
     // 增加header
     addHeader () {
       const header = { key: '', type: 'string', value: '', remark: '' }
-      console.log(this.dataForm)
       this.dataForm.config.headers.push(_.cloneDeep(header))
     },
     // 移除header
@@ -888,24 +887,73 @@ export default {
       })
       this.fieldDesc = fieldDesc
     },
+    // 配置完参数后，将参数的值放入到对应的请求位置进行替换
+    replaceParams (paramsList) {
+      this.newDataForm = _.cloneDeep(this.dataForm)
+      this.newDataForm.config.url = this.evalStrFunc(paramsList, this.newDataForm.config.url)
+      this.newDataForm.config.headers = this.evalArrFunc(paramsList, this.newDataForm.config.headers)
+      this.newDataForm.config.params = this.evalArrFunc(paramsList, this.newDataForm.config.params)
+      this.newDataForm.config.body = this.evalStrFunc(paramsList, this.newDataForm.config.body)
+    },
+    evalStrFunc (paramsList, string) {
+      // 取name作为变量名, value作为变量值 { name: '站三', token: '123'}
+      const params = paramsList.reduce((acc, cur) => {
+        acc[cur.name] = cur.value
+        return acc
+      }, {})
+
+      // 将url中 ${xxx} 替换成 ${params.xxx}
+      const str = string.replace(/\$\{(\w+)\}/g, (match, p1) => {
+        return '${params.' + p1 + '}'
+      })
+
+      const transformStr = ''
+      // 将字符串中的${}替换为变量, 使用eval执行
+      eval('transformStr = `' + str + '`')
+      return transformStr
+    },
+    evalArrFunc (paramsList, arr) {
+      // 取name作为变量名, value作为变量值 { name: '站三', token: '123'}
+      const params = paramsList.reduce((acc, cur) => {
+        acc[cur.name] = cur.value
+        return acc
+      }, {})
+
+      // 取name作为变量名, value作为变量值 { _name: '${name}', _token: '${token}'}
+      const paramsListObj = arr.reduce((acc, cur) => {
+        acc[cur.key] = cur.value
+        return acc
+      }, {})
+      // 转成字符串
+      const paramsListStr = JSON.stringify(paramsListObj)
+
+      // 将url中 ${xxx} 替换成 ${params.xxx}
+      const str = paramsListStr.replace(/\$\{(\w+)\}/g, (match, p1) => {
+        return '${params.' + p1 + '}'
+      })
+      const transformStr = ''
+      // 将字符串中的${}替换为变量, 使用eval执行
+      eval('transformStr = `' + str + '`')
+      const obj = JSON.parse(transformStr)
+      return obj
+    },
     // 获取请求地址、请求头、请求参数、请求体中所有的变量，在动态参数中进行变量
-    getPramsList(){
-      const reg = /\${(.*?)}/g
+    getPramsList () {
       const paramNames1 = this.getValName(this.dataForm.config.url)
-      const paramNames2 = this.dataForm.config?.headers.map(item=>{
+      const paramNames2 = this.dataForm.config?.headers.map(item => {
         const nameList = this.getValName(item.value)
-        if (nameList && nameList.length){
+        if (nameList && nameList.length) {
           return nameList[0]
         }
       })
-      const paramNames3 = this.dataForm.config?.params.map(item=>{
+      const paramNames3 = this.dataForm.config?.params.map(item => {
         const nameList = this.getValName(item.value)
-        if (nameList && nameList.length){
+        if (nameList && nameList.length) {
           return nameList[0]
         }
       })
-      const paramNames4=this.getValName(this.dataForm.config.body)
-      const paramNames = new Set([...paramNames1,...paramNames2,...paramNames3,...paramNames4])
+      const paramNames4 = this.getValName(this.dataForm.config.body)
+      const paramNames = new Set([...paramNames1, ...paramNames2, ...paramNames3, ...paramNames4])
       const names = this.dataForm.config?.paramsList?.map(item => item.name)
       const params = []
       paramNames.forEach(name => {
@@ -918,21 +966,20 @@ export default {
             type: 'String',
             value: '',
             status: 1,
-            require: 0,
+            require: 1,
             remark: ''
           })
         }
       })
       this.dataForm.config.paramsList = _.cloneDeep(params)
-
     },
     // 获取字符串中${变量名}中的变量名
-    getValName(str){
-      const reg = /\$\{(.+?)\}/;
-      const reg_g = /\$\{(.+?)\}/g;
-      const result = str.match(reg_g);
+    getValName (str) {
+      const reg = /\$\{(.+?)\}/
+      const reg_g = /\$\{(.+?)\}/g
+      const result = str.match(reg_g)
       const list = []
-      if (result){
+      if (result) {
         for (let i = 0; i < result.length; i++) {
           const item = result[i]
           list.push(item.match(reg)[1])
@@ -943,26 +990,31 @@ export default {
     // 执行配置好的接口
     scriptExecute (isInit = false) {
       this.getPramsList()
-      // 如果是前端代理，则自行组装接口及参数并调接口
-      if (this.dataForm.config.requestType === 'front') {
-        if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length){
-        }
-        axiosFormatting({ ...this.dataForm.config }).then((res) => {
-          this.dataPreviewList = res.list
-        })
+      // 如果动态参数未配置，则直接打开配置弹窗
+      const flag = this.dataForm.config.paramsList.some(item => !item.value)
+      if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && flag) {
+        this.$refs.paramsSettingDialog.open()
       } else {
-        // 如果是后端代理，则将配置传到后端
-        const script = JSON.stringify(this.dataForm.config)
-        const executeParams = {
-          script,
-          params: this.dataForm.paramsList,
-          dataSetType: 'http'
-        }
-        datasetExecuteTest(executeParams).then(res => {
-          this.dataPreviewList = res
-        }).catch((e) => {
+        // 如果动态参数已配置则调接口
+        // 如果是前端代理，则自行组装接口及参数并调接口
+        if (this.dataForm.config.requestType === 'front') {
+          axiosFormatting({ ...this.newDataForm.config }).then((res) => {
+            this.dataPreviewList = res.list
+          })
+        } else {
+          // 如果是后端代理，则将配置传到后端
+          const script = JSON.stringify(this.dataForm.config)
+          const executeParams = {
+            script,
+            params: this.dataForm.paramsList,
+            dataSetType: 'http'
+          }
+          datasetExecuteTest(executeParams).then(res => {
+            this.dataPreviewList = res
+          }).catch((e) => {
 
-        })
+          })
+        }
       }
     },
     // 清空分类

@@ -1,13 +1,13 @@
 import axios from 'axios'
 import { Loading, Message } from 'element-ui'
 export default function axiosFormatting (customConfig) {
-  //将请求头和请求参数的值转化为对象形式
-  const headers = arrToObject(customConfig.headers)
-  const params = arrToObject(customConfig.params)
+  // 将请求头和请求参数的值转化为对象形式
+  // const headers = arrToObject(customConfig.headers)
+  // const params = arrToObject(customConfig.params)
   const httpConfig = {
     timeout: 1000 * 30,
     baseURL: '',
-    headers
+    headers: customConfig.headers
   }
   // let loadingInstance = null // 加载全局的loading
   const instance = axios.create(httpConfig)
@@ -44,12 +44,14 @@ export default function axiosFormatting (customConfig) {
       return Promise.reject(response.data.message)
     }
   })
+  const body = {}
+  eval(customConfig.body)
   return new Promise((resolve, reject) => {
     instance({
       method: customConfig.method,
       url: customConfig.url,
-      params,
-      data: customConfig.method === 'post' ? customConfig.body : undefined
+      params: customConfig.params,
+      data: customConfig.method === 'post' ? body : undefined
     }).then(response => {
       resolve(response)
     }).catch(error => {
@@ -58,9 +60,9 @@ export default function axiosFormatting (customConfig) {
   })
 }
 // 数组转化为对象
-function arrToObject(list) {
+function arrToObject (list) {
   const obj = {}
-  list.forEach(item=>{
+  list.forEach(item => {
     obj[item.key] = item.value
   })
   return obj
