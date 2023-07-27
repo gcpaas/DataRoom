@@ -136,11 +136,11 @@
                   >
                     <el-option
                       label="前台代理"
-                      value="front"
+                      value="frontend"
                     />
                     <el-option
                       label="后台代理"
-                      value="back"
+                      value="backend"
                     />
                   </el-select>
                 </el-form-item>
@@ -542,7 +542,6 @@
         ref="paramsSettingDialog"
         :params-list="dataForm.config.paramsList"
         @saveParams="saveParams"
-        @replaceParams="replaceParams"
       />
       <OutputFieldDialog
         ref="outputFieldDialog"
@@ -652,7 +651,7 @@ export default {
         labelIds: [],
         config: {
           className: 'com.gccloud.dataset.entity.config.HttpDataSetConfig',
-          requestType: 'back',
+          requestType: 'backend',
           method: 'get',
           url: '',
           headers: [],
@@ -737,7 +736,7 @@ export default {
           this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { ...config } }
           this.fieldDesc = fieldDesc
           this.outputFieldList = fieldList
-          this.replaceParams(paramsList)
+          // this.replaceParams(paramsList)
           this.scriptExecute(true)
         })
       }
@@ -879,54 +878,54 @@ export default {
       })
       this.fieldDesc = fieldDesc
     },
-    // 配置完参数后，将参数的值放入到对应的请求位置进行替换
-    replaceParams (paramsList) {
-      this.newDataForm = _.cloneDeep(this.dataForm)
-      this.newDataForm.config.url = this.evalStrFunc(paramsList, this.newDataForm.config.url)
-      this.newDataForm.config.headers = this.evalArrFunc(paramsList, this.newDataForm.config.headers)
-      this.newDataForm.config.params = this.evalArrFunc(paramsList, this.newDataForm.config.params)
-      this.newDataForm.config.body = this.evalStrFunc(paramsList, this.newDataForm.config.body)
-    },
-    evalStrFunc (paramsList, string) {
-      // 取name作为变量名, value作为变量值 { name: '站三', token: '123'}
-      const params = paramsList.reduce((acc, cur) => {
-        acc[cur.name] = cur.value
-        return acc
-      }, {})
-      // 将url中 ${xxx} 替换成 ${params.xxx}
-      const str = string.replace(/\$\{(\w+)\}/g, (match, p1) => {
-        return '${params.' + p1 + '}'
-      })
-      const transformStr = ''
-      // 将字符串中的${}替换为变量, 使用eval执行
-      eval('transformStr = `' + str + '`')
-      return transformStr
-    },
-    evalArrFunc (paramsList, arr) {
-      // 取name作为变量名, value作为变量值 { name: '站三', token: '123'}
-      const params = paramsList.reduce((acc, cur) => {
-        acc[cur.name] = cur.value
-        return acc
-      }, {})
-
-      // 取name作为变量名, value作为变量值 { _name: '${name}', _token: '${token}'}
-      const paramsListObj = arr.reduce((acc, cur) => {
-        acc[cur.key] = cur.value
-        return acc
-      }, {})
-      // 转成字符串
-      const paramsListStr = JSON.stringify(paramsListObj)
-
-      // 将url中 ${xxx} 替换成 ${params.xxx}
-      const str = paramsListStr.replace(/\$\{(\w+)\}/g, (match, p1) => {
-        return '${params.' + p1 + '}'
-      })
-      const transformStr = ''
-      // 将字符串中的${}替换为变量, 使用eval执行
-      eval('transformStr = `' + str + '`')
-      const obj = JSON.parse(transformStr)
-      return obj
-    },
+    // // 配置完参数后，将参数的值放入到对应的请求位置进行替换
+    // replaceParams (paramsList) {
+    //   this.newDataForm = _.cloneDeep(this.dataForm)
+    //   this.newDataForm.config.url = this.evalStrFunc(paramsList, this.newDataForm.config.url)
+    //   this.newDataForm.config.headers = this.evalArrFunc(paramsList, this.newDataForm.config.headers)
+    //   this.newDataForm.config.params = this.evalArrFunc(paramsList, this.newDataForm.config.params)
+    //   this.newDataForm.config.body = this.evalStrFunc(paramsList, this.newDataForm.config.body)
+    // },
+    // evalStrFunc (paramsList, string) {
+    //   // 取name作为变量名, value作为变量值 { name: '站三', token: '123'}
+    //   const params = paramsList.reduce((acc, cur) => {
+    //     acc[cur.name] = cur.value
+    //     return acc
+    //   }, {})
+    //   // 将url中 ${xxx} 替换成 ${params.xxx}
+    //   const str = string.replace(/\$\{(\w+)\}/g, (match, p1) => {
+    //     return '${params.' + p1 + '}'
+    //   })
+    //   const transformStr = ''
+    //   // 将字符串中的${}替换为变量, 使用eval执行
+    //   eval('transformStr = `' + str + '`')
+    //   return transformStr
+    // },
+    // evalArrFunc (paramsList, arr) {
+    //   // 取name作为变量名, value作为变量值 { name: '站三', token: '123'}
+    //   const params = paramsList.reduce((acc, cur) => {
+    //     acc[cur.name] = cur.value
+    //     return acc
+    //   }, {})
+    //
+    //   // 取name作为变量名, value作为变量值 { _name: '${name}', _token: '${token}'}
+    //   const paramsListObj = arr.reduce((acc, cur) => {
+    //     acc[cur.key] = cur.value
+    //     return acc
+    //   }, {})
+    //   // 转成字符串
+    //   const paramsListStr = JSON.stringify(paramsListObj)
+    //
+    //   // 将url中 ${xxx} 替换成 ${params.xxx}
+    //   const str = paramsListStr.replace(/\$\{(\w+)\}/g, (match, p1) => {
+    //     return '${params.' + p1 + '}'
+    //   })
+    //   const transformStr = ''
+    //   // 将字符串中的${}替换为变量, 使用eval执行
+    //   eval('transformStr = `' + str + '`')
+    //   const obj = JSON.parse(transformStr)
+    //   return obj
+    // },
     // 获取请求地址、请求头、请求参数、请求体中所有的变量，在动态参数中进行变量
     getPramsList () {
       const paramNames1 = this.getValName(this.dataForm.config.url)
@@ -975,10 +974,10 @@ export default {
       } else {
         // 如果动态参数已配置则调接口
         // 如果是前端代理，则自行组装接口及参数并调接口
-        if (this.dataForm.config.requestType === 'front') {
-          this.replaceParams(this.dataForm.config.paramsList)
-          axiosFormatting({ ...this.newDataForm.config }).then((res) => {
-            this.dataPreviewList = res.data.list
+        if (this.dataForm.config.requestType === 'frontend') {
+          // this.replaceParams(this.dataForm.config.paramsList)
+          axiosFormatting({ ...this.dataForm.config }).then((res) => {
+            this.dataPreviewList = res.data
             // 获取数据后更新输出字段
             this.updateOoutputFieldList(this.dataPreviewList)
             console.log(res)
@@ -992,7 +991,7 @@ export default {
             dataSetType: 'http'
           }
           datasetExecuteTest(executeParams).then(res => {
-            this.dataPreviewList = res.data.data.list
+            this.dataPreviewList = res
             // 获取数据后更新输出字段
             this.updateOoutputFieldList(this.dataPreviewList)
             this.$message.success('解析并执行成功')

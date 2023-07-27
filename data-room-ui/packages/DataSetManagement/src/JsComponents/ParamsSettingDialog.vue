@@ -211,7 +211,6 @@ export default {
     },
     confirm () {
       this.$emit('saveParams', cloneDeep(this.paramsList))
-      this.$emit('replaceParams', cloneDeep(this.paramsList))
       this.dialogVisible = false
     }
   }

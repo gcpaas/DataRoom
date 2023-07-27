@@ -7,6 +7,7 @@ import _ from 'lodash'
 import { mapMutations, mapState } from 'vuex'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import { getChatInfo, getUpdateChartInfo } from '../api/bigScreenApi'
+import axiosFormatting from '../../js/utils/httpParamsFormatting'
 export default {
   data () {
     return {
@@ -71,7 +72,14 @@ export default {
           size: size,
           type: config.type
         }).then((data) => {
-          if (data.executionByFrontend) {
+          // 如果是http数据集的前端代理，则需要调封装的axios请求
+          // if (data.executionByFrontend) {
+          //   axiosFormatting(data.data).then(res => {
+          //     config = this.dataFormatting(config, res)
+          //     this.changeChartConfig(config)
+          //   })
+          // }
+          if (data.datasetType !== 'http' && data.executionByFrontend) {
             try {
               const scriptAfterReplacement = data.data.replace(/\${(.*?)}/g, (match, p) => {
                 // 根据parmas的key获取value
@@ -110,6 +118,13 @@ export default {
       }
       return new Promise((resolve, reject) => {
         getUpdateChartInfo(params).then((data) => {
+          // 如果是http数据集的前端代理，则需要调封装的axios请求
+          // if (data.executionByFrontend) {
+          //   axiosFormatting(data.data).then(res => {
+          //     config = this.dataFormatting(config, res)
+          //     this.changeChartConfig(config)
+          //   })
+          // }
           if (data.executionByFrontend) {
             try {
               const scriptAfterReplacement = data.data.replace(/\${(.*?)}/g, (match, p) => {
@@ -124,7 +139,7 @@ export default {
             }
           }
           config = this.dataFormatting(config, data)
-          // this.changeChartConfig(config)
+          this.changeChartConfig(config)
           if (this.chart) {
             // 单指标组件和多指标组件的changeData传参不同
             if (['Liquid', 'Gauge', 'RingProgress'].includes(config.chartType)) {
