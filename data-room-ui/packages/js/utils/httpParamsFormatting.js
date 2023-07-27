@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Loading, Message } from 'element-ui'
+import _ from 'lodash'
 export default function axiosFormatting (customConfig) {
   // 将请求头和请求参数的值转化为对象形式
   // const headers = arrToObject(customConfig.headers)
@@ -25,7 +26,6 @@ export default function axiosFormatting (customConfig) {
       customConfig.url = replaceUrlParam(customConfig.url, key, req.urlKey[key])
     }
     config = { ...config, ...req, url: customConfig.url }
-    console.log(config.url)
     return config
   }, error => {
     // 对请求错误做些什么
@@ -36,13 +36,14 @@ export default function axiosFormatting (customConfig) {
   instance.interceptors.response.use(response => {
     if (response.data.code === 200) {
       // 执行响应脚本
-      const data = response.data.data
+      const resp = _.cloneDeep(response.data)
       eval(customConfig.responseScript)
       Message({
         message: '执行成功',
         type: 'success'
       })
-      return Promise.resolve(data)
+      console.log(resp.data.list[0])
+      return Promise.resolve(resp)
     } else {
       Message({
         message: response.data.message,

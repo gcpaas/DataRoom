@@ -998,7 +998,8 @@ export default {
         if (this.dataForm.config.requestType === 'front') {
           this.replaceParams(this.dataForm.config.paramsList)
           axiosFormatting({ ...this.newDataForm.config }).then((res) => {
-            this.dataPreviewList = res.list
+            this.dataPreviewList = res.data.list
+            console.log(res)
           })
         } else {
           // 如果是后端代理，则将配置传到后端
