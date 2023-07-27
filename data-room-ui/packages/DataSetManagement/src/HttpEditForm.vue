@@ -938,18 +938,8 @@ export default {
     // 获取请求地址、请求头、请求参数、请求体中所有的变量，在动态参数中进行变量
     getPramsList () {
       const paramNames1 = this.getValName(this.dataForm.config.url)
-      const paramNames2 = this.dataForm.config?.headers.map(item => {
-        const nameList = this.getValName(item.value)
-        if (nameList && nameList.length) {
-          return nameList[0]
-        }
-      })
-      const paramNames3 = this.dataForm.config?.params.map(item => {
-        const nameList = this.getValName(item.value)
-        if (nameList && nameList.length) {
-          return nameList[0]
-        }
-      })
+      const paramNames2 = this.dataForm.config?.headers.map(obj => obj.value.match(/\$\{(.+?)\}/)?.[1]).filter(Boolean)
+      const paramNames3 = this.dataForm.config?.params.map(obj => obj.value.match(/\$\{(.+?)\}/)?.[1]).filter(Boolean)
       const paramNames4 = this.getValName(this.dataForm.config.body)
       const paramNames = new Set([...paramNames1, ...paramNames2, ...paramNames3, ...paramNames4])
       const names = this.dataForm.config?.paramsList?.map(item => item.name)
@@ -973,17 +963,15 @@ export default {
     },
     // 获取字符串中${变量名}中的变量名
     getValName (str) {
-      const reg = /\$\{(.+?)\}/
-      const reg_g = /\$\{(.+?)\}/g
-      const result = str.match(reg_g)
-      const list = []
-      if (result) {
-        for (let i = 0; i < result.length; i++) {
-          const item = result[i]
-          list.push(item.match(reg)[1])
-        }
+      // 定义正则表达式模式
+      const pattern = /\${(.*?)\}/g
+      // 使用正则表达式提取变量名
+      const variables = []
+      let match
+      while (match = pattern.exec(str)) {
+        variables.push(match[1])
       }
-      return list
+      return variables
     },
     // 执行配置好的接口
     scriptExecute (isInit = false) {
