@@ -744,14 +744,6 @@ export default {
     },
     // 保存数据集
     save (formName, nochecktosave = false) {
-      // if (this.passTest === false) {
-      //   this.$message.error('请确保脚本不为空且执行通过')
-      //   return
-      // }
-      if (!this.outputFieldList.length) {
-        this.$message.warning('该执行脚本未生成输出字段，请重新检查')
-        return
-      }
       if (!nochecktosave) {
         const temp = this.outputFieldList.some(item => {
           return item.fieldDesc === '' || !item.hasOwnProperty('fieldDesc')
@@ -998,7 +990,8 @@ export default {
             dataSetType: 'http'
           }
           datasetExecuteTest(executeParams).then(res => {
-            this.dataPreviewList = res
+            this.dataPreviewList = res.data.data.list
+            this.$message.success('解析并执行成功')
           }).catch((e) => {
 
           })
