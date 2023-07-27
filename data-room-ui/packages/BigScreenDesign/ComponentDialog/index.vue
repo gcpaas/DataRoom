@@ -698,4 +698,7 @@ export default {
     display: none;
   }
 }
+.empty{
+  height: calc(100vh - 430px);
+}
 </style>
