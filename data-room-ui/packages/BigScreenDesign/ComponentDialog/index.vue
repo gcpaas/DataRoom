@@ -179,7 +179,7 @@
               element-loading-text="加载中"
               :style="{
                 display: bizFridComputed ? 'grid' : 'flex',
-                justifyContent: bizFridComputed ? 'space-around' : 'flex-start',
+                justifyContent: 'space-around',
                 height: 'calc(100vh - 430px)'
               }"
             >
