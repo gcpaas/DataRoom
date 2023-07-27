@@ -979,6 +979,8 @@ export default {
           this.replaceParams(this.dataForm.config.paramsList)
           axiosFormatting({ ...this.newDataForm.config }).then((res) => {
             this.dataPreviewList = res.data.list
+            // 获取数据后更新输出字段
+            this.updateOoutputFieldList(this.dataPreviewList)
             console.log(res)
           })
         } else {
@@ -991,12 +993,54 @@ export default {
           }
           datasetExecuteTest(executeParams).then(res => {
             this.dataPreviewList = res.data.data.list
+            // 获取数据后更新输出字段
+            this.updateOoutputFieldList(this.dataPreviewList)
             this.$message.success('解析并执行成功')
           }).catch((e) => {
 
           })
         }
       }
+    },
+    updateOoutputFieldList (dataList) {
+      if (dataList && dataList.length) {
+        const newList = Object.keys(dataList?.[0])?.map(key => {
+          return {
+            fieldName: key,
+            fieldDesc: ''
+          }
+        })
+        this.outputFieldList = this.compareArr(newList, this.outputFieldList)
+      } else {
+        this.outputFieldList = []
+      }
+    },
+    // 用来对两个数组进行对比
+    compareArr (newList, oldList) {
+      // 创建一个空数组，用于存储最终的结果
+      const result = []
+
+      // 遍历A数组中的每个对象
+      for (const objA of newList) {
+        let found = false // 标志变量，用于表示是否在B数组中找到对应的属性
+
+        // 遍历B数组中的每个对象
+        for (const objB of oldList) {
+          if (objA.fieldName === objB.fieldName) {
+            // 如果A和B中的fieldName相同，则将B中该属性的属性值赋值给A，并将该对象添加到结果数组中
+            objA.fieldDesc = objB.fieldDesc
+            result.push(objA)
+            found = true
+            break
+          }
+        }
+
+        // 如果在B数组中没有找到对应的属性，则直接将该对象添加到结果数组中
+        if (!found) {
+          result.push(objA)
+        }
+      }
+      return result
     },
     // 清空分类
     clearType () {
