@@ -436,7 +436,6 @@ export default {
       }
     },
     getDataList () {
-      console.log(this.activeName)
       this.loading = true
       if (this.activeName === 'combination') {
         this.$dataRoomAxios.get('/bigScreen/design/page', {
@@ -447,7 +446,6 @@ export default {
           type: 'component'
         })
           .then((data) => {
-            console.log('1', data)
             this.list = data.list
             this.totalCount = data.totalCount
           })
@@ -462,7 +460,6 @@ export default {
           searchKey: this.searchKey,
           name: this.name
         }).then((data) => {
-          console.log('2', data)
           this.bizComponentList = data.list
           this.bizComponenTotalCount = data.totalCount
           this.loading = false
