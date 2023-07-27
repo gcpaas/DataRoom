@@ -189,7 +189,7 @@ export default {
       reasonList: [],
       testBtnLoading: [],
       loadingText: '',
-      deling:false,
+      deling: false,
       searchLoading: false,
       dataSourceList: [],
       searchForm: {
@@ -269,23 +269,23 @@ export default {
     },
     addSource () {
       this.$refs.setDatasource.setDatasourceVisible = true
-      this.$refs.setDatasource.title = '新增'
+      this.$refs.setDatasource.title = '新增数据源'
       this.$refs.setDatasource.init()
     },
     viewSource (row) {
       // eslint-disable-next-line eqeqeq
       if (row.editable == 1 && !this.appCode) return
       this.$refs.setDatasource.setDatasourceVisible = true
-      this.$refs.setDatasource.title = '编辑'
+      this.$refs.setDatasource.title = '编辑编剧源'
       this.$refs.setDatasource.init(_.cloneDeep(row))
     },
     handleDelete (row) {
       // eslint-disable-next-line eqeqeq
       if (row.editable == 1 && !this.appCode) return
-      row.loading=true
-      dataSourceCheck(row.id).then((res)=>{
-        row.loading=false
-        if(res.canDelete){
+      row.loading = true
+      dataSourceCheck(row.id).then((res) => {
+        row.loading = false
+        if (res.canDelete) {
           this.$confirm('确定删除当前数据源吗?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
