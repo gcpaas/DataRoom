@@ -247,7 +247,7 @@
                   :page-size="size"
                   prev-text="上一页"
                   next-text="下一页"
-                  :total="totalCount"
+                  :total="bizComponenTotalCount"
                   :page-sizes="[10, 20, 50, 100]"
                   :current-page="current"
                   @current-change="currentChangeHandle"
@@ -368,7 +368,8 @@ export default {
       activeName: 'combination',
       remoteComponentlist: [],
       // 业务组件列表
-      bizComponentList: []
+      bizComponentList: [],
+      bizComponenTotalCount: 0
     }
   },
   computed: {
@@ -385,6 +386,9 @@ export default {
   watch: {
     activeName () {
       this.getCatalogList()
+      this.current = 1
+      this.size = 10
+      this.getDataList()
     }
   },
   mounted () {
@@ -432,33 +436,38 @@ export default {
       }
     },
     getDataList () {
+      console.log(this.activeName)
       this.loading = true
-      this.$dataRoomAxios.get('/bigScreen/design/page', {
-        parentCode: this.code || null,
-        current: this.current,
-        size: this.size,
-        searchKey: this.searchKey,
-        type: 'component'
-      })
-        .then((data) => {
-          this.list = data.list
-          this.totalCount = data.totalCount
+      if (this.activeName === 'combination') {
+        this.$dataRoomAxios.get('/bigScreen/design/page', {
+          parentCode: this.code || null,
+          current: this.current,
+          size: this.size,
+          searchKey: this.searchKey,
+          type: 'component'
         })
-        .finally(() => {
+          .then((data) => {
+            console.log('1', data)
+            this.list = data.list
+            this.totalCount = data.totalCount
+          })
+          .finally(() => {
+            this.loading = false
+          })
+      } else if (this.activeName === 'bizComponent') {
+        getBizComponentPage({
+          parentCode: this.code || null,
+          current: this.current,
+          size: this.size,
+          searchKey: this.searchKey,
+          name: this.name
+        }).then((data) => {
+          console.log('2', data)
+          this.bizComponentList = data.list
+          this.bizComponenTotalCount = data.totalCount
           this.loading = false
         })
-
-      getBizComponentPage({
-        parentCode: this.code || null,
-        current: this.current,
-        size: this.size,
-        searchKey: this.searchKey,
-        name: this.name
-      }).then((data) => {
-        this.bizComponentList = data.list
-        this.totalCount = data.totalCount
-        this.loading = false
-      })
+      }
     },
     // 获取目录的列表
     getCatalogList () {
