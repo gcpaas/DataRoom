@@ -71,7 +71,7 @@ export default {
           pageCode: this.pageCode,
           size: size,
           type: config.type
-        }).then((data) => {
+        }).then((res) => {
           // 如果是http数据集的前端代理，则需要调封装的axios请求
           // if (data.executionByFrontend) {
           //   axiosFormatting(data.data).then(res => {
@@ -79,23 +79,38 @@ export default {
           //     this.changeChartConfig(config)
           //   })
           // }
-          if (data.datasetType !== 'http' && data.executionByFrontend) {
-            try {
-              const scriptAfterReplacement = data.data.replace(/\${(.*?)}/g, (match, p) => {
+          // if (data.datasetType !== 'http' && data.executionByFrontend) {
+          //   try {
+          //     const scriptAfterReplacement = data.data.replace(/\${(.*?)}/g, (match, p) => {
+          //       // 根据parmas的key获取value
+          //       return `'${this.config.dataSource?.params[p]}' || '${p}'`
+          //     })
+          //     // eslint-disable-next-line no-new-func
+          //     const scriptMethod = new Function(scriptAfterReplacement)
+          //     data.data = scriptMethod()
+          //   } catch (error) {
+          //     console.error('数据集脚本执行失败', error)
+          //   }
+          // }
+          if (res.executionByFrontend) {
+            if (res.data.datasetType === 'js') {
+              try {
+                const scriptAfterReplacement = res.data.script.replace(/\${(.*?)}/g, (match, p) => {
                 // 根据parmas的key获取value
-                return `'${this.config.dataSource?.params[p]}' || '${p}'`
-              })
-              // eslint-disable-next-line no-new-func
-              const scriptMethod = new Function(scriptAfterReplacement)
-              data.data = scriptMethod()
-            } catch (error) {
-              console.error('数据集脚本执行失败', error)
+                  return `'${this.config.dataSource?.params[p]}' || '${p}'`
+                })
+                // eslint-disable-next-line no-new-func
+                const scriptMethod = new Function(scriptAfterReplacement)
+                res.data = scriptMethod()
+              } catch (error) {
+                console.error('JS数据集脚本执行失败', error)
+              }
             }
           }
-          config = this.dataFormatting(config, data)
+          config = this.dataFormatting(config, res)
           this.changeChartConfig(config)
         }).catch((err) => {
-          console.log(err)
+          console.error(err)
         }).finally(() => {
           resolve(config)
         })
@@ -117,7 +132,7 @@ export default {
         filterList: filterList || this.filterList
       }
       return new Promise((resolve, reject) => {
-        getUpdateChartInfo(params).then((data) => {
+        getUpdateChartInfo(params).then((res) => {
           // 如果是http数据集的前端代理，则需要调封装的axios请求
           // if (data.executionByFrontend) {
           //   axiosFormatting(data.data).then(res => {
@@ -125,20 +140,22 @@ export default {
           //     this.changeChartConfig(config)
           //   })
           // }
-          if (data.executionByFrontend) {
-            try {
-              const scriptAfterReplacement = data.data.replace(/\${(.*?)}/g, (match, p) => {
+          if (res.executionByFrontend) {
+            if (res.data.datasetType === 'js') {
+              try {
+                const scriptAfterReplacement = res.data.script.replace(/\${(.*?)}/g, (match, p) => {
                 // 根据parmas的key获取value
-                return `'${this.config.dataSource?.params[p]}' || '${p}'`
-              })
-              // eslint-disable-next-line no-new-func
-              const scriptMethod = new Function(scriptAfterReplacement)
-              data.data = scriptMethod()
-            } catch (error) {
-              console.error('数据集脚本执行失败', error)
+                  return `'${this.config.dataSource?.params[p]}' || '${p}'`
+                })
+                // eslint-disable-next-line no-new-func
+                const scriptMethod = new Function(scriptAfterReplacement)
+                res.data = scriptMethod()
+              } catch (error) {
+                console.error('JS数据集脚本执行失败', error)
+              }
             }
           }
-          config = this.dataFormatting(config, data)
+          config = this.dataFormatting(config, res)
           this.changeChartConfig(config)
           if (this.chart) {
             // 单指标组件和多指标组件的changeData传参不同
@@ -149,7 +166,7 @@ export default {
             }
           }
         }).catch(err => {
-          console.log(err)
+          console.error(err)
         }).finally(() => {
           resolve(config)
         })
