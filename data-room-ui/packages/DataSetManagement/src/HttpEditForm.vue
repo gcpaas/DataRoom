@@ -308,16 +308,6 @@
               </el-row>
             </el-form-item>
             <el-form-item
-              label="请求脚本"
-              prop="requestScript"
-            >
-              <codemirror
-                v-model.trim="dataForm.config.requestScript"
-                :options="codemirrorOption"
-                class="code"
-              />
-            </el-form-item>
-            <el-form-item
               v-if="dataForm.config.method === 'post'"
               label="请求体"
               prop="requestScript"
@@ -328,6 +318,16 @@
                 type="textarea"
                 :autosize="{ minRows: 10, maxRows: 10}"
                 clearable
+              />
+            </el-form-item>
+            <el-form-item
+              label="请求脚本"
+              prop="requestScript"
+            >
+              <codemirror
+                v-model.trim="dataForm.config.requestScript"
+                :options="codemirrorOption"
+                class="code"
               />
             </el-form-item>
             <el-form-item
@@ -901,12 +901,10 @@ export default {
         acc[cur.name] = cur.value
         return acc
       }, {})
-
       // 将url中 ${xxx} 替换成 ${params.xxx}
       const str = string.replace(/\$\{(\w+)\}/g, (match, p1) => {
         return '${params.' + p1 + '}'
       })
-
       const transformStr = ''
       // 将字符串中的${}替换为变量, 使用eval执行
       eval('transformStr = `' + str + '`')
@@ -998,6 +996,7 @@ export default {
         // 如果动态参数已配置则调接口
         // 如果是前端代理，则自行组装接口及参数并调接口
         if (this.dataForm.config.requestType === 'front') {
+          this.replaceParams(this.dataForm.config.paramsList)
           axiosFormatting({ ...this.newDataForm.config }).then((res) => {
             this.dataPreviewList = res.list
           })
