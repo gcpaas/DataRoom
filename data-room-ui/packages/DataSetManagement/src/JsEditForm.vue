@@ -154,6 +154,10 @@
                 style="margin-top: 2px"
               />
             </div>
+            <div class="bs-codemirror-bottom-text">
+              <strong>动态参数使用： 使用${}将动态参数包裹，例如：let name = <span style="color: red;">${name}。</span>
+              </strong>
+            </div>
             <div style="text-align: center; padding: 16px 0;">
               <el-button
                 type="primary"
