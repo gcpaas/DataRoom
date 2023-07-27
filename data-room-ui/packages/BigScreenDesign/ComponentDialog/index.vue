@@ -264,9 +264,7 @@
           <div class="big-screen-list-wrap">
             <div
               v-if="remoteComponentlist.length !== 0"
-              v-loading="loading"
               class="list-wrap bs-scrollbar"
-              element-loading-text="加载中"
               :style="{
                 display: remoteComponentsGridComputed ? 'grid' : 'flex',
                 justifyContent: remoteComponentsGridComputed ? 'space-around' : 'flex-start',
@@ -436,8 +434,8 @@ export default {
       }
     },
     getDataList () {
-      this.loading = true
       if (this.activeName === 'combination') {
+        this.loading = true
         this.$dataRoomAxios.get('/bigScreen/design/page', {
           parentCode: this.code || null,
           current: this.current,
@@ -446,24 +444,30 @@ export default {
           type: 'component'
         })
           .then((data) => {
+            this.loading = false
             this.list = data.list
             this.totalCount = data.totalCount
           })
-          .finally(() => {
+          .catch(() => {
             this.loading = false
           })
       } else if (this.activeName === 'bizComponent') {
+        this.loading = true
         getBizComponentPage({
           parentCode: this.code || null,
           current: this.current,
           size: this.size,
           searchKey: this.searchKey,
           name: this.name
-        }).then((data) => {
-          this.bizComponentList = data.list
-          this.bizComponenTotalCount = data.totalCount
-          this.loading = false
         })
+          .then((data) => {
+            this.loading = false
+            this.bizComponentList = data.list
+            this.bizComponenTotalCount = data.totalCount
+          })
+          .catch(() => {
+            this.loading = false
+          })
       }
     },
     // 获取目录的列表
