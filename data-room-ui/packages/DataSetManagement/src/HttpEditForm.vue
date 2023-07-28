@@ -360,6 +360,7 @@
                   label-width="0px"
                 >
                   <codemirror
+                    v-if="activeName==='reqScript'"
                     v-model.trim="dataForm.config.requestScript"
                     :options="codemirrorOption"
                     class="code"
@@ -381,6 +382,7 @@
                   label-width="0px"
                 >
                   <codemirror
+                    v-if="activeName==='respScript'"
                     v-model.trim="dataForm.config.responseScript"
                     :options="codemirrorOption"
                     class="code"
@@ -523,7 +525,9 @@
         v-if="!isEdit"
         class="dataPreView"
       >
-        <el-tabs v-model="activeName">
+        <el-tabs
+          v-model="activeName"
+        >
           <el-tab-pane
             v-loading="tableLoading"
             label="数据预览"
