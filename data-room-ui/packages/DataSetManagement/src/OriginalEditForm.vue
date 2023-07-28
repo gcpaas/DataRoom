@@ -668,6 +668,9 @@ export default {
       }
       this.tableLoading = true
       datasetExecuteTest(executeParams).then((data) => {
+         if (this.dataForm.fieldList == null) {
+          this.dataForm.fieldList = _.cloneDeep(res.structure)
+        }
         this.dataPreviewList = data.data.list
         this.totalCount = data.data.totalCount
         this.tableLoading = false
