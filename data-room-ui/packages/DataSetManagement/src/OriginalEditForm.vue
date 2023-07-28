@@ -655,7 +655,11 @@ export default {
     getData () {
       const executeParams = {
         dataSourceId: this.dataForm.sourceId,
-        script: this.dataForm.fieldInfo.join(','),
+        script:JSON.stringify({
+           fieldInfo: this.dataForm.fieldInfo,// 未选中字段就传空数组
+          tableName: this.dataForm.tableName,
+          repeatStatus: this.dataForm.repeatStatus
+        }) ,
         // 原始表数据集没有数据集参数
         params: [],
         dataSetType: 'original',
@@ -856,7 +860,11 @@ export default {
       if (!this.dataForm.sourceId || !this.dataForm.tableName) return
       const executeParams = {
         dataSourceId: this.dataForm.sourceId,
-        script: this.dataForm.fieldInfo.join(','),
+         script:JSON.stringify({
+           fieldInfo: this.dataForm.fieldInfo,// 未选中字段就传空数组
+          tableName: this.dataForm.tableName,
+          repeatStatus: this.dataForm.repeatStatus
+        }) ,
         // 原始表数据集没有数据集参数
         params: [],
         dataSetType: 'original',

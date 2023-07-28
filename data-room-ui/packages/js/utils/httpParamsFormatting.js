@@ -35,12 +35,10 @@ export default function axiosFormatting (customConfig) {
   instance.interceptors.response.use(response => {
     if (response.data.code === 200) {
       // 执行响应脚本
-      const resp = _.cloneDeep(response.data)
-      eval(newCustomConfig.responseScript)
-      Message({
-        message: '执行成功',
-        type: 'success'
-      })
+      // eslint-disable-next-line no-new-func
+      const getResp = new Function('response', newCustomConfig.responseScript)
+      const resp = getResp(response)
+      console.log(resp)
       return Promise.resolve(resp)
     } else {
       Message({
@@ -80,7 +78,7 @@ function replaceUrlParam (url, paramName, paramValue) {
 }
 // 将参数的值替换掉其他配置中对应属性的值
 function replaceParams (customConfig) {
-  let newConfig = _.cloneDeep(customConfig)
+  const newConfig = _.cloneDeep(customConfig)
   newConfig.url = evalStrFunc(newConfig.paramsList, newConfig.url)
   newConfig.headers = evalArrFunc(newConfig.paramsList, newConfig.headers)
   newConfig.params = evalArrFunc(newConfig.paramsList, newConfig.params)
