@@ -229,6 +229,7 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import LabelEdit from './LabelConfigEdit'
 import LabelTypeEdit from './LabelTypeEdit.vue'
 import { pageMixins } from 'data-room-ui/js/mixins/page'
@@ -283,8 +284,8 @@ export default {
     // 根据数据集id获取关联的标签列表
     if (this.datasetId) {
       getLabelListByDatasetId(this.datasetId).then((data) => {
-        this.selectLabelListInitial = _.cloneDeep(data)
-        this.selectLabelList = _.cloneDeep(data)
+        this.selectLabelListInitial = cloneDeep(data)
+        this.selectLabelList = cloneDeep(data)
         const idList = []
         data.forEach((item) => {
           idList.push(item.id)
@@ -403,7 +404,7 @@ export default {
           if (this.selectLabelList.some(item => item.id === id)) {
             this.selectLabelList = this.selectLabelList.filter(item => item.id !== id)
           }
-          this.selectLabelListInitial = _.cloneDeep(this.selectLabelList)
+          this.selectLabelListInitial = cloneDeep(this.selectLabelList)
         })
       }).catch(() => {
       })
@@ -487,7 +488,7 @@ export default {
      * 弹窗关闭
      */
     handleClose () {
-      this.selectLabelList = _.cloneDeep(this.selectLabelListInitial)
+      this.selectLabelList = cloneDeep(this.selectLabelListInitial)
       this.dialogFormVisible = false
     },
     /**
@@ -496,7 +497,7 @@ export default {
     commitLabel () {
       this.labelCheckLoading = false
       this.dialogFormVisible = false
-      this.selectLabelListInitial = _.cloneDeep(this.selectLabelList)
+      this.selectLabelListInitial = cloneDeep(this.selectLabelList)
       this.$emit('commit', this.idListCopy)
     },
     /**
