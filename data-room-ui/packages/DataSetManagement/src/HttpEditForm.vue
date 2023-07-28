@@ -520,6 +520,7 @@
           >
             <div class="bs-table-box">
               <el-table
+                v-if="dataPreviewList && dataPreviewList.length"
                 align="center"
                 :data="dataPreviewList"
                 max-height="400"
@@ -539,6 +540,7 @@
                   </template>
                 </el-table-column>
               </el-table>
+              <el-empty v-else />
             </div>
           </el-tab-pane>
           <el-tab-pane
@@ -970,9 +972,10 @@ export default {
         if (this.dataForm.config.requestType === 'frontend') {
           // this.replaceParams(this.dataForm.config.paramsList)
           axiosFormatting({ ...this.dataForm.config }).then((res) => {
-            this.dataPreviewList = res.data
+            this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
             // 获取数据后更新输出字段
             this.updateOoutputFieldList(this.dataPreviewList)
+            this.$message.success('解析并执行成功')
           })
         } else {
           // 如果是后端代理，则将配置传到后端
@@ -983,7 +986,7 @@ export default {
             dataSetType: 'http'
           }
           datasetExecuteTest(executeParams).then(res => {
-            this.dataPreviewList = res.data
+            this.dataPreviewList =  res.data && Array.isArray(res.data) ? res.data : []
             // 获取数据后更新输出字段
             this.updateOoutputFieldList(this.dataPreviewList)
             this.$message.success('解析并执行成功')
