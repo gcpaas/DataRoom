@@ -15,10 +15,10 @@
 ## 效果图
 
 #### 管理页
-<img alt="logo" src="../doc/images/home.png">
+<img alt="logo" src="packages/assets/images/doc/images/home.png">
 
 #### 设计器
-<img alt="logo" src="../doc/images/design01.png">
+<img alt="logo" src="packages/assets/images/doc/images/design01.png">
 
 ## 快速开始
 
@@ -35,7 +35,7 @@
 <img alt="QQ群" src="https://img.shields.io/badge/QQ群-322302395-blue.svg">
 
 <p>
-    <img alt="logo" width="200" src="../doc/images/qq.png">
+    <img alt="logo" width="200" src="packages/assets/images/doc/logo.png">
 </p>
 
 ## License

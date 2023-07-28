@@ -56,7 +56,8 @@
               element-loading-text="加载中"
               :style="{
                 display: gridComputed ? 'grid' : 'flex',
-                justifyContent: gridComputed ? 'space-around' : 'flex-start'
+                justifyContent: gridComputed ? 'space-around' : 'flex-start',
+                height: 'calc(100vh - 430px)'
               }"
             >
               <!-- <div v-if="list.length !== 0"> -->
@@ -178,7 +179,8 @@
               element-loading-text="加载中"
               :style="{
                 display: bizFridComputed ? 'grid' : 'flex',
-                justifyContent: bizFridComputed ? 'space-around' : 'flex-start'
+                justifyContent: bizFridComputed ? 'space-around' : 'flex-start',
+                height: 'calc(100vh - 430px)'
               }"
             >
               <!-- <div v-if="list.length !== 0"> -->
@@ -245,7 +247,7 @@
                   :page-size="size"
                   prev-text="上一页"
                   next-text="下一页"
-                  :total="totalCount"
+                  :total="bizComponenTotalCount"
                   :page-sizes="[10, 20, 50, 100]"
                   :current-page="current"
                   @current-change="currentChangeHandle"
@@ -262,12 +264,11 @@
           <div class="big-screen-list-wrap">
             <div
               v-if="remoteComponentlist.length !== 0"
-              v-loading="loading"
               class="list-wrap bs-scrollbar"
-              element-loading-text="加载中"
               :style="{
                 display: remoteComponentsGridComputed ? 'grid' : 'flex',
-                justifyContent: remoteComponentsGridComputed ? 'space-around' : 'flex-start'
+                justifyContent: remoteComponentsGridComputed ? 'space-around' : 'flex-start',
+                height: 'calc(100vh - 430px)'
               }"
             >
               <div
@@ -365,7 +366,8 @@ export default {
       activeName: 'combination',
       remoteComponentlist: [],
       // 业务组件列表
-      bizComponentList: []
+      bizComponentList: [],
+      bizComponenTotalCount: 0
     }
   },
   computed: {
@@ -382,6 +384,9 @@ export default {
   watch: {
     activeName () {
       this.getCatalogList()
+      this.current = 1
+      this.size = 10
+      this.getDataList()
     }
   },
   mounted () {
@@ -429,33 +434,41 @@ export default {
       }
     },
     getDataList () {
-      this.loading = true
-      this.$dataRoomAxios.get('/bigScreen/design/page', {
-        parentCode: this.code || null,
-        current: this.current,
-        size: this.size,
-        searchKey: this.searchKey,
-        type: 'component'
-      })
-        .then((data) => {
-          this.list = data.list
-          this.totalCount = data.totalCount
+      if (this.activeName === 'combination') {
+        this.loading = true
+        this.$dataRoomAxios.get('/bigScreen/design/page', {
+          parentCode: this.code || null,
+          current: this.current,
+          size: this.size,
+          searchKey: this.searchKey,
+          type: 'component'
         })
-        .finally(() => {
-          this.loading = false
+          .then((data) => {
+            this.loading = false
+            this.list = data.list
+            this.totalCount = data.totalCount
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      } else if (this.activeName === 'bizComponent') {
+        this.loading = true
+        getBizComponentPage({
+          parentCode: this.code || null,
+          current: this.current,
+          size: this.size,
+          searchKey: this.searchKey,
+          name: this.name
         })
-
-      getBizComponentPage({
-        parentCode: this.code || null,
-        current: this.current,
-        size: this.size,
-        searchKey: this.searchKey,
-        name: this.name
-      }).then((data) => {
-        this.bizComponentList = data.list
-        this.totalCount = data.totalCount
-        this.loading = false
-      })
+          .then((data) => {
+            this.loading = false
+            this.bizComponentList = data.list
+            this.bizComponenTotalCount = data.totalCount
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      }
     },
     // 获取目录的列表
     getCatalogList () {
@@ -472,7 +485,9 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/style/bsTheme.scss';
-
+.content{
+  height: calc(100vh - 290px);
+}
 .big-screen-list-wrap {
   .el-select {
     display: inline-block !important;
@@ -521,15 +536,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 15px;
-
-    // ::v-deep .el-loading-mask {
-    //   display: flex;
-    //   align-items: center;
-    //   justify-content: center;
-    //   height: calc(100vh - 260px) !important;
-    //   z-index: 999;
-    //   top: 50px;
-    // }
     .big-screen-card-wrap {
       position: relative;
       height: 230px;
@@ -695,5 +701,8 @@ export default {
   &:after {
     display: none;
   }
+}
+.empty{
+  height: calc(100vh - 430px);
 }
 </style>

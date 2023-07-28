@@ -186,8 +186,7 @@ export default {
   components: { EditForm },
   data () {
     return {
-      upLoadUrl:
-        window.BS_CONFIG?.httpConfigs?.baseURL + '/bigScreen/file/upload',
+      upLoadUrl: window.BS_CONFIG?.httpConfigs?.baseURL + '/bigScreen/file/upload',
       searchKey: '',
       extend: '',
       options: [],

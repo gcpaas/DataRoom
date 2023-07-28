@@ -136,11 +136,11 @@
                   >
                     <el-option
                       label="前台代理"
-                      value="front"
+                      value="frontend"
                     />
                     <el-option
                       label="后台代理"
-                      value="back"
+                      value="backend"
                     />
                   </el-select>
                 </el-form-item>
@@ -207,7 +207,7 @@
                 <el-col :span="5">
                   <el-form-item
                     label="键"
-                    :prop="'headers.'+index+'.key'"
+                    :prop="'config.headers.'+index+'.key'"
                     label-width="50px"
                     :rules="rules.key"
                   >
@@ -221,33 +221,10 @@
                 </el-col>
                 <el-col :span="5">
                   <el-form-item
-                    label="类型"
-                    :prop="'headers.'+index+'.type'"
-                    label-width="60px"
-                    :rules="rules.type"
-                  >
-                    <el-select
-                      v-model="dataForm.config.headers[index].type"
-                      filterable
-                      clearable
-                      allow-create
-                      default-first-option
-                      placeholder="请选择类型"
-                    >
-                      <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item
                     label="值"
-                    :prop="dataForm.config.headers[index].value"
+                    :prop="'config.headers.'+index+'.value'"
                     label-width="50px"
+                    :rules="rules.value"
                   >
                     <el-input
                       v-model="dataForm.config.headers[index].value"
@@ -290,7 +267,7 @@
                 <el-col :span="7">
                   <el-form-item
                     label="键"
-                    :prop="'params.'+index+'.key'"
+                    :prop="'config.params.'+index+'.key'"
                     label-width="50px"
                     :rules="rules.key"
                   >
@@ -305,8 +282,9 @@
                 <el-col :span="7">
                   <el-form-item
                     label="值"
-                    :prop="dataForm.config.params[index].value"
+                    :prop="'config.params.'+index+'.value'"
                     label-width="50px"
+                    :rules="rules.value"
                   >
                     <el-input
                       v-model="dataForm.config.params[index].value"
@@ -330,16 +308,6 @@
               </el-row>
             </el-form-item>
             <el-form-item
-              label="请求脚本"
-              prop="requestScript"
-            >
-              <codemirror
-                v-model.trim="dataForm.config.requestScript"
-                :options="codemirrorOption"
-                class="code"
-              />
-            </el-form-item>
-            <el-form-item
               v-if="dataForm.config.method === 'post'"
               label="请求体"
               prop="requestScript"
@@ -350,6 +318,16 @@
                 type="textarea"
                 :autosize="{ minRows: 10, maxRows: 10}"
                 clearable
+              />
+            </el-form-item>
+            <el-form-item
+              label="请求脚本"
+              prop="requestScript"
+            >
+              <codemirror
+                v-model.trim="dataForm.config.requestScript"
+                :options="codemirrorOption"
+                class="code"
               />
             </el-form-item>
             <el-form-item
@@ -664,6 +642,7 @@ export default {
         value: 'date',
         label: '日期'
       }],
+      newDataForm: {}, // 替换完参数后的配置
       dataForm: {
         id: '',
         name: '',
@@ -672,12 +651,13 @@ export default {
         labelIds: [],
         config: {
           className: 'com.gccloud.dataset.entity.config.HttpDataSetConfig',
-          requestType: 'back',
+          requestType: 'backend',
           method: 'get',
           url: '',
           headers: [],
           params: [],
           body: '',
+          paramsList: [],
           requestScript: '',
           responseScript: ''
         }
@@ -691,7 +671,7 @@ export default {
           { required: true, message: '请选择调用方式', trigger: 'change' }
         ],
         key: [{ required: true, message: '键不能为空', trigger: 'blur' }],
-        type: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
+        value: [{ required: true, message: '值不能为空', trigger: 'blur' }],
         'config.method': [{ required: true, message: '请求类型不能为空', trigger: 'blur' }],
         'config.url': [
           { required: true, message: '请求地址不能为空', trigger: 'blur' },
@@ -756,31 +736,23 @@ export default {
           this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { ...config } }
           this.fieldDesc = fieldDesc
           this.outputFieldList = fieldList
+          // this.replaceParams(paramsList)
           this.scriptExecute(true)
         })
       }
     },
     // 保存数据集
     save (formName, nochecktosave = false) {
-      // if (this.passTest === false) {
-      //   this.$message.error('请确保脚本不为空且执行通过')
-      //   return
-      // }
-      // if (!this.outputFieldList.length) {
-      //   this.$message.warning('该执行脚本未生成输出字段，请重新检查')
-      //   return
-      // }
-      // if (!nochecktosave) {
-      //   const temp = this.outputFieldList.some(item => {
-      //     return item.fieldDesc === '' || !item.hasOwnProperty('fieldDesc')
-      //   }) // true-存在为空
-      //   if (temp) {
-      //     this.$refs.fieldFillDialog.open()
-      //     // this.fieldDescVisible = true
-      //     return
-      //   }
-      // }
-      requestType: '',
+      if (!nochecktosave) {
+        const temp = this.outputFieldList.some(item => {
+          return item.fieldDesc === '' || !item.hasOwnProperty('fieldDesc')
+        }) // true-存在为空
+        if (temp) {
+          this.$refs.fieldFillDialog.open()
+          // this.fieldDescVisible = true
+          return
+        }
+      }
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.saveloading = true
@@ -807,7 +779,7 @@ export default {
               requestType: dataForm.config.requestType,
               fieldDesc,
               paramsList: dataForm.config.paramsList,
-              fieldList: outputFieldList
+              fieldList: this.outputFieldList
             }
           }
           const datasetSave = this.dataForm.id === '' ? datasetAdd : datasetUpdate
@@ -828,7 +800,6 @@ export default {
     // 增加header
     addHeader () {
       const header = { key: '', type: 'string', value: '', remark: '' }
-      console.log(this.dataForm)
       this.dataForm.config.headers.push(_.cloneDeep(header))
     },
     // 移除header
@@ -907,28 +878,168 @@ export default {
       })
       this.fieldDesc = fieldDesc
     },
+    // // 配置完参数后，将参数的值放入到对应的请求位置进行替换
+    // replaceParams (paramsList) {
+    //   this.newDataForm = _.cloneDeep(this.dataForm)
+    //   this.newDataForm.config.url = this.evalStrFunc(paramsList, this.newDataForm.config.url)
+    //   this.newDataForm.config.headers = this.evalArrFunc(paramsList, this.newDataForm.config.headers)
+    //   this.newDataForm.config.params = this.evalArrFunc(paramsList, this.newDataForm.config.params)
+    //   this.newDataForm.config.body = this.evalStrFunc(paramsList, this.newDataForm.config.body)
+    // },
+    // evalStrFunc (paramsList, string) {
+    //   // 取name作为变量名, value作为变量值 { name: '站三', token: '123'}
+    //   const params = paramsList.reduce((acc, cur) => {
+    //     acc[cur.name] = cur.value
+    //     return acc
+    //   }, {})
+    //   // 将url中 ${xxx} 替换成 ${params.xxx}
+    //   const str = string.replace(/\$\{(\w+)\}/g, (match, p1) => {
+    //     return '${params.' + p1 + '}'
+    //   })
+    //   const transformStr = ''
+    //   // 将字符串中的${}替换为变量, 使用eval执行
+    //   eval('transformStr = `' + str + '`')
+    //   return transformStr
+    // },
+    // evalArrFunc (paramsList, arr) {
+    //   // 取name作为变量名, value作为变量值 { name: '站三', token: '123'}
+    //   const params = paramsList.reduce((acc, cur) => {
+    //     acc[cur.name] = cur.value
+    //     return acc
+    //   }, {})
+    //
+    //   // 取name作为变量名, value作为变量值 { _name: '${name}', _token: '${token}'}
+    //   const paramsListObj = arr.reduce((acc, cur) => {
+    //     acc[cur.key] = cur.value
+    //     return acc
+    //   }, {})
+    //   // 转成字符串
+    //   const paramsListStr = JSON.stringify(paramsListObj)
+    //
+    //   // 将url中 ${xxx} 替换成 ${params.xxx}
+    //   const str = paramsListStr.replace(/\$\{(\w+)\}/g, (match, p1) => {
+    //     return '${params.' + p1 + '}'
+    //   })
+    //   const transformStr = ''
+    //   // 将字符串中的${}替换为变量, 使用eval执行
+    //   eval('transformStr = `' + str + '`')
+    //   const obj = JSON.parse(transformStr)
+    //   return obj
+    // },
+    // 获取请求地址、请求头、请求参数、请求体中所有的变量，在动态参数中进行变量
+    getPramsList () {
+      const paramNames1 = this.getValName(this.dataForm.config.url)
+      const paramNames2 = this.dataForm.config?.headers.map(obj => obj.value.match(/\$\{(.+?)\}/)?.[1]).filter(Boolean)
+      const paramNames3 = this.dataForm.config?.params.map(obj => obj.value.match(/\$\{(.+?)\}/)?.[1]).filter(Boolean)
+      const paramNames4 = this.getValName(this.dataForm.config.body)
+      const paramNames = new Set([...paramNames1, ...paramNames2, ...paramNames3, ...paramNames4])
+      const names = this.dataForm.config?.paramsList?.map(item => item.name)
+      const params = []
+      paramNames.forEach(name => {
+        if (names.includes(name)) {
+          const param = this.dataForm.config?.paramsList?.find(item => item.name === name)
+          params.push(param)
+        } else {
+          params.push({
+            name: name,
+            type: 'String',
+            value: '',
+            status: 1,
+            require: 1,
+            remark: ''
+          })
+        }
+      })
+      this.dataForm.config.paramsList = _.cloneDeep(params)
+    },
+    // 获取字符串中${变量名}中的变量名
+    getValName (str) {
+      // 定义正则表达式模式
+      const pattern = /\${(.*?)\}/g
+      // 使用正则表达式提取变量名
+      const variables = []
+      let match
+      while (match = pattern.exec(str)) {
+        variables.push(match[1])
+      }
+      return variables
+    },
     // 执行配置好的接口
     scriptExecute (isInit = false) {
-      // 如果是前端代理，则自行组装接口及参数并调接口
-      if (this.dataForm.config.requestType === 'front') {
-        axiosFormatting({ ...this.dataForm.config }).then((res) => {
-          console.log(res)
-        })
+      this.getPramsList()
+      // 如果动态参数未配置，则直接打开配置弹窗
+      const flag = this.dataForm.config.paramsList.some(item => !item.value)
+      if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && flag) {
+        this.$refs.paramsSettingDialog.open()
       } else {
-        // 如果是后端代理，则将配置传到后端
-        const script = JSON.stringify(this.dataForm.config)
-        console.log(this.dataForm.config)
-        const executeParams = {
-          script,
-          params: this.dataForm.paramsList,
-          dataSetType: 'http'
+        // 如果动态参数已配置则调接口
+        // 如果是前端代理，则自行组装接口及参数并调接口
+        if (this.dataForm.config.requestType === 'frontend') {
+          // this.replaceParams(this.dataForm.config.paramsList)
+          axiosFormatting({ ...this.dataForm.config }).then((res) => {
+            this.dataPreviewList = res.data
+            // 获取数据后更新输出字段
+            this.updateOoutputFieldList(this.dataPreviewList)
+            console.log(res)
+          })
+        } else {
+          // 如果是后端代理，则将配置传到后端
+          const script = JSON.stringify(this.dataForm.config)
+          const executeParams = {
+            script,
+            params: this.dataForm.paramsList,
+            dataSetType: 'http'
+          }
+          datasetExecuteTest(executeParams).then(res => {
+            this.dataPreviewList = res
+            // 获取数据后更新输出字段
+            this.updateOoutputFieldList(this.dataPreviewList)
+            this.$message.success('解析并执行成功')
+          }).catch((e) => {
+
+          })
         }
-        datasetExecuteTest(executeParams).then(res => {
-
-        }).catch((e) => {
-
-        })
       }
+    },
+    updateOoutputFieldList (dataList) {
+      if (dataList && dataList.length) {
+        const newList = Object.keys(dataList?.[0])?.map(key => {
+          return {
+            fieldName: key,
+            fieldDesc: ''
+          }
+        })
+        this.outputFieldList = this.compareArr(newList, this.outputFieldList)
+      } else {
+        this.outputFieldList = []
+      }
+    },
+    // 用来对两个数组进行对比
+    compareArr (newList, oldList) {
+      // 创建一个空数组，用于存储最终的结果
+      const result = []
+
+      // 遍历A数组中的每个对象
+      for (const objA of newList) {
+        let found = false // 标志变量，用于表示是否在B数组中找到对应的属性
+
+        // 遍历B数组中的每个对象
+        for (const objB of oldList) {
+          if (objA.fieldName === objB.fieldName) {
+            // 如果A和B中的fieldName相同，则将B中该属性的属性值赋值给A，并将该对象添加到结果数组中
+            objA.fieldDesc = objB.fieldDesc
+            result.push(objA)
+            found = true
+            break
+          }
+        }
+
+        // 如果在B数组中没有找到对应的属性，则直接将该对象添加到结果数组中
+        if (!found) {
+          result.push(objA)
+        }
+      }
+      return result
     },
     // 清空分类
     clearType () {
