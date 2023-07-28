@@ -37,10 +37,6 @@ export default function axiosFormatting (customConfig) {
       // 执行响应脚本
       const resp = _.cloneDeep(response.data)
       eval(newCustomConfig.responseScript)
-      Message({
-        message: '执行成功',
-        type: 'success'
-      })
       return Promise.resolve(resp)
     } else {
       Message({

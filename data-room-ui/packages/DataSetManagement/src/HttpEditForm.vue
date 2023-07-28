@@ -980,7 +980,6 @@ export default {
             this.dataPreviewList = res.data
             // 获取数据后更新输出字段
             this.updateOoutputFieldList(this.dataPreviewList)
-            console.log(res)
           })
         } else {
           // 如果是后端代理，则将配置传到后端
@@ -991,7 +990,7 @@ export default {
             dataSetType: 'http'
           }
           datasetExecuteTest(executeParams).then(res => {
-            this.dataPreviewList = res
+            this.dataPreviewList = res.data
             // 获取数据后更新输出字段
             this.updateOoutputFieldList(this.dataPreviewList)
             this.$message.success('解析并执行成功')
