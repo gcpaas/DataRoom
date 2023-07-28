@@ -345,6 +345,10 @@
                     :autosize="{ minRows: 10, maxRows: 10}"
                     clearable
                   />
+                  <div class="bs-codemirror-bottom-text">
+                    <strong>请求体设置规则： 请求体已经内置参数body，如需添加请求体参数，可直接加入到body对象中。<br> 例如：<span style="color: red;">body.test='test'</span>
+                    </strong>
+                  </div>
                 </el-form-item>
               </el-tab-pane>
               <el-tab-pane
@@ -360,6 +364,12 @@
                     :options="codemirrorOption"
                     class="code"
                   />
+                  <div class="bs-codemirror-bottom-text">
+                    <strong>请求脚本设置规则： 请求脚本已经内置参数req，可参考请求拦截的回调参数config直接使用(修改url中的参数例外),
+                      <br> 如修改请求头中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.headers.name='tom'</span>
+                      <br> 如修改url中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.urlKey.age=17</span>
+                    </strong>
+                  </div>
                 </el-form-item>
               </el-tab-pane>
               <el-tab-pane
@@ -375,6 +385,10 @@
                     :options="codemirrorOption"
                     class="code"
                   />
+                  <div class="bs-codemirror-bottom-text">
+                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数response中，可直接使用,但是必须要返回设置后的数据。<br> 例如：<span style="color: red;">let data =response.data;         return data;</span>
+                    </strong>
+                  </div>
                 </el-form-item>
               </el-tab-pane>
             </el-tabs>
