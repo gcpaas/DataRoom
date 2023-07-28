@@ -147,6 +147,40 @@
               </el-col>
             </el-row>
             <el-row :gutter="20">
+              <el-col :span="21">
+                <el-form-item
+                  label="请求地址"
+                  prop="config.url"
+                >
+                  <el-input
+                    v-model="dataForm.config.url"
+                    autocomplete="off"
+                    class="bs-el-input"
+                    placeholder="请输入静态请求地址或动态请求地址，动态请求地址必须以${baseUrl}开头"
+                    clearable
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item
+                  label="请求类型"
+                  prop="config.method"
+                >
+                  <el-radio-group
+                    v-model="dataForm.config.method"
+                    class="bs-radio-wrap"
+                  >
+                    <el-radio-button label="get">
+                      GET
+                    </el-radio-button>
+                    <el-radio-button label="post">
+                      POST
+                    </el-radio-button>
+                  </el-radio-group>
+                </el-form-item>
+              </el-col>
               <el-col :span="12">
                 <el-form-item
                   label="标签"
@@ -160,186 +194,190 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item
-              label="请求类型"
-              prop="config.method"
+            <el-tabs
+              v-model="activeName"
+              class="bs-el-tabs tabs-box"
             >
-              <el-radio-group
-                v-model="dataForm.config.method"
-                class="bs-radio-wrap"
+              <el-tab-pane
+                label="请求头"
+                name="head"
               >
-                <el-radio-button label="get">
-                  GET
-                </el-radio-button>
-                <el-radio-button label="post">
-                  POST
-                </el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item
-              label="请求地址"
-              prop="config.url"
-            >
-              <el-input
-                v-model="dataForm.config.url"
-                autocomplete="off"
-                class="bs-el-input"
-                placeholder="请输入静态请求地址或动态请求地址，动态请求地址必须以${baseUrl}开头"
-                clearable
-              />
-            </el-form-item>
-            <el-form-item
-              label="请求头"
-              prop="config.headers"
-            >
-              <el-button
-                type="primary"
-                @click="addHeader"
-              >
-                增加
-              </el-button>
-              <el-row
-                v-for="(item,index) in dataForm.config.headers"
-                :key="index"
-                :gutter="10"
-                :span="21"
-              >
-                <el-col :span="5">
-                  <el-form-item
-                    label="键"
-                    :prop="'config.headers.'+index+'.key'"
-                    label-width="50px"
-                    :rules="rules.key"
-                  >
-                    <el-input
-                      v-model="dataForm.config.headers[index].key"
-                      placeholder="请输入键"
-                      clearable
-                      @blur="dataForm.config.headers[index].key = inputChange($event)"
-                    />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item
-                    label="值"
-                    :prop="'config.headers.'+index+'.value'"
-                    label-width="50px"
-                    :rules="rules.value"
-                  >
-                    <el-input
-                      v-model="dataForm.config.headers[index].value"
-                      placeholder="请输入值"
-                      clearable
-                      @blur="dataForm.config.headers[index].value = inputChange($event)"
-                    />
-                  </el-form-item>
-                </el-col>
-                <el-col
-                  :span="2"
-                  style="text-align: center"
+                <el-form-item
+                  prop="config.headers"
+                  label-width="0px"
                 >
                   <el-button
                     type="primary"
-                    @click="delHeader(index)"
+                    @click="addHeader"
                   >
-                    移除
+                    增加
                   </el-button>
-                </el-col>
-              </el-row>
-            </el-form-item>
-            <el-form-item
-              label="请求参数"
-              prop="config.params"
-              :rules="dataForm.config.method==='get'?rules.params:[{ required: false}]"
-            >
-              <el-button
-                type="primary"
-                @click="addParam"
-              >
-                增加
-              </el-button>
-              <el-row
-                v-for="(item,index) in dataForm.config.params"
-                :key="index"
-                :gutter="10"
-                :span="21"
-              >
-                <el-col :span="7">
-                  <el-form-item
-                    label="键"
-                    :prop="'config.params.'+index+'.key'"
-                    label-width="50px"
-                    :rules="rules.key"
+                  <el-row
+                    v-for="(item,index) in dataForm.config.headers"
+                    :key="index"
+                    :gutter="10"
+                    :span="21"
+                    style="margin-top: 10px"
                   >
-                    <el-input
-                      v-model="dataForm.config.params[index].key"
-                      placeholder="请输入键"
-                      clearable
-                      @blur="dataForm.config.params[index].key = inputChange($event)"
-                    />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="7">
-                  <el-form-item
-                    label="值"
-                    :prop="'config.params.'+index+'.value'"
-                    label-width="50px"
-                    :rules="rules.value"
-                  >
-                    <el-input
-                      v-model="dataForm.config.params[index].value"
-                      placeholder="请输入值"
-                      clearable
-                      @blur="dataForm.config.params[index].value = inputChange($event)"
-                    />
-                  </el-form-item>
-                </el-col>
-                <el-col
-                  :span="2"
-                  style="text-align: center"
+                    <el-col :span="5">
+                      <el-form-item
+                        label="键"
+                        :prop="'config.headers.'+index+'.key'"
+                        label-width="50px"
+                        :rules="rules.key"
+                      >
+                        <el-input
+                          v-model="dataForm.config.headers[index].key"
+                          placeholder="请输入键"
+                          clearable
+                          @blur="dataForm.config.headers[index].key = inputChange($event)"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="5">
+                      <el-form-item
+                        label="值"
+                        :prop="'config.headers.'+index+'.value'"
+                        label-width="50px"
+                        :rules="rules.value"
+                      >
+                        <el-input
+                          v-model="dataForm.config.headers[index].value"
+                          placeholder="请输入值"
+                          clearable
+                          @blur="dataForm.config.headers[index].value = inputChange($event)"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col
+                      :span="2"
+                      style="text-align: center"
+                    >
+                      <el-button
+                        type="primary"
+                        @click="delHeader(index)"
+                      >
+                        移除
+                      </el-button>
+                    </el-col>
+                  </el-row>
+                </el-form-item>
+              </el-tab-pane>
+              <el-tab-pane
+                label="请求参数"
+                name="param"
+              >
+                <el-form-item
+                  prop="config.params"
+                  label-width="0px"
+                  :rules="dataForm.config.method==='get'?rules.params:[{ required: false}]"
                 >
                   <el-button
                     type="primary"
-                    @click="delParam(index)"
+                    @click="addParam"
                   >
-                    移除
+                    增加
                   </el-button>
-                </el-col>
-              </el-row>
-            </el-form-item>
-            <el-form-item
-              v-if="dataForm.config.method === 'post'"
-              label="请求体"
-              prop="requestScript"
-            >
-              <el-input
-                v-model="dataForm.config.body"
-                class="bs-el-input"
-                type="textarea"
-                :autosize="{ minRows: 10, maxRows: 10}"
-                clearable
-              />
-            </el-form-item>
-            <el-form-item
-              label="请求脚本"
-              prop="requestScript"
-            >
-              <codemirror
-                v-model.trim="dataForm.config.requestScript"
-                :options="codemirrorOption"
-                class="code"
-              />
-            </el-form-item>
-            <el-form-item
-              label="响应脚本"
-              prop="responseScript"
-            >
-              <codemirror
-                v-model.trim="dataForm.config.responseScript"
-                :options="codemirrorOption"
-                class="code"
-              />
-            </el-form-item>
+                  <el-row
+                    v-for="(item,index) in dataForm.config.params"
+                    :key="index"
+                    :gutter="10"
+                    :span="21"
+                    style="margin-top: 10px"
+                  >
+                    <el-col :span="7">
+                      <el-form-item
+                        label="键"
+                        :prop="'config.params.'+index+'.key'"
+                        label-width="50px"
+                        :rules="rules.key"
+                      >
+                        <el-input
+                          v-model="dataForm.config.params[index].key"
+                          placeholder="请输入键"
+                          clearable
+                          @blur="dataForm.config.params[index].key = inputChange($event)"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="7">
+                      <el-form-item
+                        label="值"
+                        :prop="'config.params.'+index+'.value'"
+                        label-width="50px"
+                        :rules="rules.value"
+                      >
+                        <el-input
+                          v-model="dataForm.config.params[index].value"
+                          placeholder="请输入值"
+                          clearable
+                          @blur="dataForm.config.params[index].value = inputChange($event)"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col
+                      :span="2"
+                      style="text-align: center"
+                    >
+                      <el-button
+                        type="primary"
+                        @click="delParam(index)"
+                      >
+                        移除
+                      </el-button>
+                    </el-col>
+                  </el-row>
+                </el-form-item>
+              </el-tab-pane>
+              <el-tab-pane
+                v-if="dataForm.config.method === 'post'"
+                label="请求体"
+                name="second"
+              >
+                <el-form-item
+                  prop="requestScript"
+                  label-width="0px"
+                >
+                  <el-input
+                    v-model="dataForm.config.body"
+                    class="bs-el-input"
+                    type="textarea"
+                    :autosize="{ minRows: 10, maxRows: 10}"
+                    clearable
+                  />
+                </el-form-item>
+              </el-tab-pane>
+              <el-tab-pane
+                label="请求脚本"
+                name="reqScript"
+              >
+                <el-form-item
+                  prop="requestScript"
+                  label-width="0px"
+                >
+                  <codemirror
+                    v-model.trim="dataForm.config.requestScript"
+                    :options="codemirrorOption"
+                    class="code"
+                  />
+                </el-form-item>
+              </el-tab-pane>
+              <el-tab-pane
+                label="响应脚本"
+                name="respScript"
+              >
+                <el-form-item
+                  prop="responseScript"
+                  label-width="0px"
+                >
+                  <codemirror
+                    v-model.trim="dataForm.config.responseScript"
+                    :options="codemirrorOption"
+                    class="code"
+                  />
+                </el-form-item>
+              </el-tab-pane>
+            </el-tabs>
           </el-form>
           <div
             v-if="isEdit"
@@ -479,6 +517,7 @@
           >
             <div class="bs-table-box">
               <el-table
+                v-if="dataPreviewList && dataPreviewList.length"
                 align="center"
                 :data="dataPreviewList"
                 max-height="400"
@@ -498,6 +537,7 @@
                   </template>
                 </el-table-column>
               </el-table>
+              <el-empty v-else />
             </div>
           </el-tab-pane>
           <el-tab-pane
@@ -629,6 +669,7 @@ export default {
       }
     }
     return {
+      activeName: 'head',
       options: [{
         value: 'string',
         label: '字符串'
@@ -688,7 +729,6 @@ export default {
           completeSingle: true
         }
       },
-      activeName: 'data',
       dataPreviewList: [],
       outputFieldList: [],
       structurePreviewListCopy: [],
@@ -878,54 +918,6 @@ export default {
       })
       this.fieldDesc = fieldDesc
     },
-    // // 配置完参数后，将参数的值放入到对应的请求位置进行替换
-    // replaceParams (paramsList) {
-    //   this.newDataForm = _.cloneDeep(this.dataForm)
-    //   this.newDataForm.config.url = this.evalStrFunc(paramsList, this.newDataForm.config.url)
-    //   this.newDataForm.config.headers = this.evalArrFunc(paramsList, this.newDataForm.config.headers)
-    //   this.newDataForm.config.params = this.evalArrFunc(paramsList, this.newDataForm.config.params)
-    //   this.newDataForm.config.body = this.evalStrFunc(paramsList, this.newDataForm.config.body)
-    // },
-    // evalStrFunc (paramsList, string) {
-    //   // 取name作为变量名, value作为变量值 { name: '站三', token: '123'}
-    //   const params = paramsList.reduce((acc, cur) => {
-    //     acc[cur.name] = cur.value
-    //     return acc
-    //   }, {})
-    //   // 将url中 ${xxx} 替换成 ${params.xxx}
-    //   const str = string.replace(/\$\{(\w+)\}/g, (match, p1) => {
-    //     return '${params.' + p1 + '}'
-    //   })
-    //   const transformStr = ''
-    //   // 将字符串中的${}替换为变量, 使用eval执行
-    //   eval('transformStr = `' + str + '`')
-    //   return transformStr
-    // },
-    // evalArrFunc (paramsList, arr) {
-    //   // 取name作为变量名, value作为变量值 { name: '站三', token: '123'}
-    //   const params = paramsList.reduce((acc, cur) => {
-    //     acc[cur.name] = cur.value
-    //     return acc
-    //   }, {})
-    //
-    //   // 取name作为变量名, value作为变量值 { _name: '${name}', _token: '${token}'}
-    //   const paramsListObj = arr.reduce((acc, cur) => {
-    //     acc[cur.key] = cur.value
-    //     return acc
-    //   }, {})
-    //   // 转成字符串
-    //   const paramsListStr = JSON.stringify(paramsListObj)
-    //
-    //   // 将url中 ${xxx} 替换成 ${params.xxx}
-    //   const str = paramsListStr.replace(/\$\{(\w+)\}/g, (match, p1) => {
-    //     return '${params.' + p1 + '}'
-    //   })
-    //   const transformStr = ''
-    //   // 将字符串中的${}替换为变量, 使用eval执行
-    //   eval('transformStr = `' + str + '`')
-    //   const obj = JSON.parse(transformStr)
-    //   return obj
-    // },
     // 获取请求地址、请求头、请求参数、请求体中所有的变量，在动态参数中进行变量
     getPramsList () {
       const paramNames1 = this.getValName(this.dataForm.config.url)
@@ -977,9 +969,10 @@ export default {
         if (this.dataForm.config.requestType === 'frontend') {
           // this.replaceParams(this.dataForm.config.paramsList)
           axiosFormatting({ ...this.dataForm.config }).then((res) => {
-            this.dataPreviewList = res.data
+            this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
             // 获取数据后更新输出字段
             this.updateOoutputFieldList(this.dataPreviewList)
+            this.$message.success('解析并执行成功')
           })
         } else {
           // 如果是后端代理，则将配置传到后端
@@ -990,7 +983,7 @@ export default {
             dataSetType: 'http'
           }
           datasetExecuteTest(executeParams).then(res => {
-            this.dataPreviewList = res.data
+            this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
             // 获取数据后更新输出字段
             this.updateOoutputFieldList(this.dataPreviewList)
             this.$message.success('解析并执行成功')
@@ -1221,5 +1214,8 @@ export default {
 
 .tree-box {
   padding: 0;
+}
+.tabs-box{
+  margin-left: 45px;
 }
 </style>
