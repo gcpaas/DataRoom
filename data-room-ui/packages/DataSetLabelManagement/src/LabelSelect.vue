@@ -25,7 +25,12 @@
       />
     </el-tooltip>
     <!--  配置按钮  -->
-    <el-button type="text" @click="manageLabel">管理</el-button>
+    <el-button
+      type="text"
+      @click="manageLabel"
+    >
+      管理
+    </el-button>
     <!-- 标签列表弹窗 -->
     <el-dialog
       class="bs-dialog-wrap bs-el-dialog"
@@ -72,23 +77,23 @@
                 :label="type"
                 :value="type"
               >
-              <span>
-                {{ type }}
-              </span>
+                <span>
+                  {{ type }}
+                </span>
                 <span style="float: right;padding-right: 20px">
-                <el-button
-                  v-show="isManage"
-                  icon="el-icon-edit"
-                  type="text"
-                  @click.stop="editLabelType(type)"
-                />
-                <el-button
-                  v-if="isManage"
-                  icon="el-icon-delete"
-                  type="text"
-                  @click.stop="deleteLabelType(type)"
-                />
-              </span>
+                  <el-button
+                    v-show="isManage"
+                    icon="el-icon-edit"
+                    type="text"
+                    @click.stop="editLabelType(type)"
+                  />
+                  <el-button
+                    v-if="isManage"
+                    icon="el-icon-delete"
+                    type="text"
+                    @click.stop="deleteLabelType(type)"
+                  />
+                </span>
               </el-option>
             </el-select>
           </el-form-item>
@@ -118,13 +123,14 @@
           element-loading-text="正在加载中..."
           :data="labelList"
           row-key="id"
+          height="calc(100vh - 450px)"
           @select="labelCheckChange"
           @select-all="selectAll"
         >
           <el-empty slot="empty" />
           <el-table-column
-            key="selection"
             v-if="!isManage"
+            key="selection"
             type="selection"
             width="55"
           />
@@ -147,11 +153,11 @@
             show-overflow-tooltip
           />
           <el-table-column
+            v-if="isManage"
             key="opt"
             align="center"
             label="操作"
             width="200"
-            v-if="isManage"
           >
             <template slot-scope="scope">
               <el-button
@@ -209,13 +215,13 @@
         </div>
         <label-edit
           v-if="editFormVisible"
-          @afterEdit="afterEdit"
           ref="labelEdit"
+          @afterEdit="afterEdit"
         />
         <label-type-edit
           v-if="labelTypeEditVisible"
-          @afterEdit="afterEdit(true)"
           ref="labelTypeEdit"
+          @afterEdit="afterEdit(true)"
         />
       </div>
     </el-dialog>
@@ -226,7 +232,7 @@
 import LabelEdit from './LabelConfigEdit'
 import LabelTypeEdit from './LabelTypeEdit.vue'
 import { pageMixins } from 'data-room-ui/js/mixins/page'
-import {getLabelType, labelList, getLabelListByDatasetId, removeLabel, removeLabelByType} from 'data-room-ui/js/utils/LabelConfigService'
+import { getLabelType, labelList, getLabelListByDatasetId, removeLabel, removeLabelByType } from 'data-room-ui/js/utils/LabelConfigService'
 
 export default {
   name: 'LabelSelect',
@@ -279,7 +285,7 @@ export default {
       getLabelListByDatasetId(this.datasetId).then((data) => {
         this.selectLabelListInitial = _.cloneDeep(data)
         this.selectLabelList = _.cloneDeep(data)
-        let idList = []
+        const idList = []
         data.forEach((item) => {
           idList.push(item.id)
         })
@@ -439,7 +445,7 @@ export default {
     /**
      * 标签管理按钮
      */
-    manageLabel() {
+    manageLabel () {
       this.init(true)
     },
     /**
@@ -509,10 +515,15 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/style/bsTheme.scss';
+
 .bs-pagination {
   ::v-deep .el-input__inner {
     border: none;
     background: var(--bs-el-background-1);
   }
+}
+::v-deep .el-dialog__footer{
+  padding: 0;
+  margin-top: 16px;
 }
 </style>

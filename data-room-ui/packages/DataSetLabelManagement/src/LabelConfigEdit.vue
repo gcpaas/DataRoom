@@ -12,7 +12,7 @@
       :rules="rules"
       label-position="right"
       label-width="90px"
-      class="form-container"
+      class="form-container bs-el-form"
     >
       <el-form-item
         label="标签名称"
