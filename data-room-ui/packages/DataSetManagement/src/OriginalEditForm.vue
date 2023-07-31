@@ -461,6 +461,8 @@
               prop="sourceTable"
               label="字段来源"
             />
+            <!-- 添加一个插槽，供其他人可扩展表格列，并把表格列的数据返回出去 -->
+            <slot name="output-field-table-column" />
           </el-table>
         </div>
         <span
@@ -655,11 +657,11 @@ export default {
     getData () {
       const executeParams = {
         dataSourceId: this.dataForm.sourceId,
-        script:JSON.stringify({
-           fieldInfo: this.dataForm.fieldInfo,// 未选中字段就传空数组
+        script: JSON.stringify({
+          fieldInfo: this.dataForm.fieldInfo, // 未选中字段就传空数组
           tableName: this.dataForm.tableName,
           repeatStatus: this.dataForm.repeatStatus
-        }) ,
+        }),
         // 原始表数据集没有数据集参数
         params: [],
         dataSetType: 'original',
@@ -668,7 +670,7 @@ export default {
       }
       this.tableLoading = true
       datasetExecuteTest(executeParams).then((data) => {
-         if (this.dataForm.fieldList == null) {
+        if (this.dataForm.fieldList == null) {
           this.dataForm.fieldList = _.cloneDeep(res.structure)
         }
         this.dataPreviewList = data.data.list
@@ -735,12 +737,12 @@ export default {
         this.saveText = '正在保存...'
         const saveOriginal = this.dataForm.id ? datasetUpdate : datasetAdd
         saveOriginal(datasetParams).then(res => {
+          this.goBack()
           this.$message.success('保存成功')
           this.$parent.init(false)
           this.$parent.setType = null
           this.saveLoading = false
           this.saveText = ''
-          this.goBack()
         }).catch(() => {
           this.$message.error('保存失败')
           this.saveLoading = false
@@ -863,11 +865,11 @@ export default {
       if (!this.dataForm.sourceId || !this.dataForm.tableName) return
       const executeParams = {
         dataSourceId: this.dataForm.sourceId,
-         script:JSON.stringify({
-           fieldInfo: this.dataForm.fieldInfo,// 未选中字段就传空数组
+        script: JSON.stringify({
+          fieldInfo: this.dataForm.fieldInfo, // 未选中字段就传空数组
           tableName: this.dataForm.tableName,
           repeatStatus: this.dataForm.repeatStatus
-        }) ,
+        }),
         // 原始表数据集没有数据集参数
         params: [],
         dataSetType: 'original',

@@ -108,7 +108,7 @@
           </el-form-item>
           <el-form-item class="filter-item">
             <el-button
-              v-if="ToAdd"
+              v-if="toAdd"
               class="bs-el-button-default"
               @click="addDataset"
             >
@@ -310,7 +310,7 @@ export default {
       type: Boolean,
       default: false
     },
-    ToAdd: {
+    toAdd: {
       type: Boolean,
       default: true
     },
@@ -365,7 +365,7 @@ export default {
   },
   computed: {
     allType () {
-      return this.datasetTypeList.map(item => item.datasetType).filter(item => item != '')
+      return this.datasetTypeList.map(item => item.datasetType).filter(item => item !== '')
     }
   },
   watch: {
