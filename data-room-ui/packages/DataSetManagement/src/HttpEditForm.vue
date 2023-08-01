@@ -504,6 +504,7 @@
             :data="dataPreviewList"
             max-height="400"
             :border="true"
+            height="500px"
             class="bs-el-table bs-scrollbar"
           >
             <el-table-column
@@ -987,7 +988,12 @@ export default {
         if (this.dataForm.config.requestType === 'frontend') {
           // this.replaceParams(this.dataForm.config.paramsList)
           axiosFormatting({ ...this.dataForm.config }).then((res) => {
-            this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
+            const { resp, response } = res
+            // this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
+            this.dataPreviewList = [{}]
+            for (const item in response.data) {
+              this.dataPreviewList[0][item] = response.data[item]
+            }
             // 获取数据后更新输出字段
             this.updateOoutputFieldList(this.dataPreviewList)
             this.$message.success('解析并执行成功')

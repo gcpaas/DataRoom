@@ -33,19 +33,18 @@ export default function axiosFormatting (customConfig) {
 
   /** 添加响应拦截器  **/
   instance.interceptors.response.use(response => {
-    if (response.data.code === 200) {
-      // 执行响应脚本
-      // eslint-disable-next-line no-new-func
+    console.log('response', response)
+    // 执行响应脚本
+    // eslint-disable-next-line no-new-func
+    if (newCustomConfig.responseScript) {
       const getResp = new Function('response', newCustomConfig.responseScript)
       const resp = getResp(response)
-      console.log(resp)
-      return Promise.resolve(resp)
+      console.log('resp', resp)
+      return Promise.resolve({ resp, response })
     } else {
-      Message({
-        message: response.data.message,
-        type: 'error'
-      })
-      return Promise.reject(response.data.message)
+      console.log(response.data)
+      const resp = response
+      return Promise.resolve({ resp, response })
     }
   })
   const body = {}
