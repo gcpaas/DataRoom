@@ -189,42 +189,45 @@
             @current-change="currentChangeHandle"
           />
         </div>
-
-        <div class="el-dialog__footer">
-          <el-button
-            v-show="!isManage"
-            class="bs-el-button-default"
-            @click="handleClose"
-          >
-            取消
-          </el-button>
-          <el-button
-            v-show="!isManage"
-            type="primary"
-            @click="commitLabel"
-          >
-            确定
-          </el-button>
-          <el-button
-            v-show="isManage"
-            class="bs-el-button-default"
-            @click="handleClose"
-          >
-            返回
-          </el-button>
-        </div>
-        <label-edit
-          v-if="editFormVisible"
-          ref="labelEdit"
-          @afterEdit="afterEdit"
-        />
-        <label-type-edit
-          v-if="labelTypeEditVisible"
-          ref="labelTypeEdit"
-          @afterEdit="afterEdit(true)"
-        />
       </div>
+
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          v-show="!isManage"
+          class="bs-el-button-default"
+          @click="handleClose"
+        >
+          取消
+        </el-button>
+        <el-button
+          v-show="!isManage"
+          type="primary"
+          @click="commitLabel"
+        >
+          确定
+        </el-button>
+        <el-button
+          v-show="isManage"
+          class="bs-el-button-default"
+          @click="handleClose"
+        >
+          返回
+        </el-button>
+      </span>
     </el-dialog>
+    <label-edit
+      v-if="editFormVisible"
+      ref="labelEdit"
+      @afterEdit="afterEdit"
+    />
+    <label-type-edit
+      v-if="labelTypeEditVisible"
+      ref="labelTypeEdit"
+      @afterEdit="afterEdit(true)"
+    />
   </div>
 </template>
 
@@ -522,9 +525,5 @@ export default {
     border: none;
     background: var(--bs-el-background-1);
   }
-}
-::v-deep .el-dialog__footer{
-  padding: 0;
-  margin-top: 16px;
 }
 </style>
