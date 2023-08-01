@@ -19,10 +19,10 @@ export default function axiosFormatting (customConfig) {
      */
     // 执行请求脚本
     // https://mock.presstime.cn/mock/64bf8a00ce1b0ea640809069/test_copy_copy_copy/httpData?token=123&ss=ss
-    const req = { ...config, urlKey: {} }
+    const req = { ...config, url: {} }
     eval(newCustomConfig.requestScript)
-    for (const key in req.urlKey) {
-      newCustomConfig.url = replaceUrlParam(newCustomConfig.url, key, req.urlKey[key])
+    for (const key in req.url) {
+      newCustomConfig.url = replaceUrlParam(newCustomConfig.url, key, req.url[key])
     }
     config = { ...config, ...req, url: newCustomConfig.url }
     return config

@@ -133,6 +133,7 @@
                     v-model="dataForm.config.requestType"
                     class="bs-el-select"
                     popper-class="bs-el-select"
+                    @change="changeRequestType($event)"
                   >
                     <el-option
                       label="前台代理"
@@ -206,20 +207,14 @@
                   prop="config.headers"
                   label-width="0px"
                 >
-                  <el-button
-                    type="primary"
-                    @click="addHeader"
-                  >
-                    增加
-                  </el-button>
                   <el-row
                     v-for="(item,index) in dataForm.config.headers"
                     :key="index"
                     :gutter="10"
-                    :span="21"
+                    :span="24"
                     style="margin-top: 10px"
                   >
-                    <el-col :span="5">
+                    <el-col :span="11">
                       <el-form-item
                         label="键"
                         :prop="'config.headers.'+index+'.key'"
@@ -234,7 +229,7 @@
                         />
                       </el-form-item>
                     </el-col>
-                    <el-col :span="5">
+                    <el-col :span="11">
                       <el-form-item
                         label="值"
                         :prop="'config.headers.'+index+'.value'"
@@ -253,12 +248,22 @@
                       :span="2"
                       style="text-align: center"
                     >
-                      <el-button
-                        type="primary"
+                      <span
+                        class="delete-btn"
                         @click="delHeader(index)"
                       >
                         移除
-                      </el-button>
+                      </span>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="24">
+                      <div
+                        class="add-btn"
+                        @click="addHeader"
+                      >
+                        增加
+                      </div>
                     </el-col>
                   </el-row>
                 </el-form-item>
@@ -272,20 +277,14 @@
                   label-width="0px"
                   :rules="dataForm.config.method==='get'?rules.params:[{ required: false}]"
                 >
-                  <el-button
-                    type="primary"
-                    @click="addParam"
-                  >
-                    增加
-                  </el-button>
                   <el-row
                     v-for="(item,index) in dataForm.config.params"
                     :key="index"
                     :gutter="10"
-                    :span="21"
+                    :span="24"
                     style="margin-top: 10px"
                   >
-                    <el-col :span="7">
+                    <el-col :span="11">
                       <el-form-item
                         label="键"
                         :prop="'config.params.'+index+'.key'"
@@ -300,7 +299,7 @@
                         />
                       </el-form-item>
                     </el-col>
-                    <el-col :span="7">
+                    <el-col :span="11">
                       <el-form-item
                         label="值"
                         :prop="'config.params.'+index+'.value'"
@@ -319,12 +318,22 @@
                       :span="2"
                       style="text-align: center"
                     >
-                      <el-button
-                        type="primary"
+                      <span
+                        class="delete-btn"
                         @click="delParam(index)"
                       >
                         移除
-                      </el-button>
+                      </span>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="24">
+                      <div
+                        class="add-btn"
+                        @click="addParam"
+                      >
+                        增加
+                      </div>
                     </el-col>
                   </el-row>
                 </el-form-item>
@@ -365,7 +374,10 @@
                     :options="codemirrorOption"
                     class="code"
                   />
-                  <div class="bs-codemirror-bottom-text">
+                  <div
+                    v-if="dataForm.config.requestType === 'frontend'"
+                    class="bs-codemirror-bottom-text"
+                  >
                     <strong>请求脚本设置规则： 请求脚本已经内置参数req，可参考请求拦截的回调参数config直接使用(修改url中的参数例外),
                       <br> 如修改请求头中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.headers.name='tom'</span>
                       <br> 如修改url中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.urlKey.age=17</span>
@@ -387,7 +399,10 @@
                     :options="codemirrorOption"
                     class="code"
                   />
-                  <div class="bs-codemirror-bottom-text">
+                  <div
+                    v-if="dataForm.config.requestType === 'frontend'"
+                    class="bs-codemirror-bottom-text"
+                  >
                     <strong>响应脚本设置规则： 接口返回数据已经内置到参数response中，可直接使用,但是必须要返回设置后的数据。<br> 例如：<span style="color: red;">let data =response.data;         return data;</span>
                     </strong>
                   </div>
@@ -601,6 +616,7 @@
         ref="paramsSettingDialog"
         :params-list="dataForm.config.paramsList"
         @saveParams="saveParams"
+        @getData="getData"
       />
       <OutputFieldDialog
         ref="outputFieldDialog"
@@ -739,7 +755,7 @@ export default {
         ]
       },
       codemirrorOption: {
-        mode: 'text/javascript',
+        mode: 'text/x-groovy',
         lineNumbers: true,
         lineWrapping: true,
         theme: 'nord',
@@ -795,6 +811,7 @@ export default {
           this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { ...config } }
           this.fieldDesc = fieldDesc
           this.outputFieldList = fieldList
+          this.codemirrorOption.mode = this.dataForm.config.requestType === 'frontend' ? 'text/javascript' : 'text/x-groovy'
           // this.replaceParams(paramsList)
           this.scriptExecute(true)
         })
@@ -855,6 +872,13 @@ export default {
           })
         }
       })
+    },
+    changeRequestType (value) {
+      if (value === 'frontend') {
+        this.$set(this.codemirrorOption, 'mode', 'text/javascript')
+      } else {
+        this.$set(this.codemirrorOption, 'mode', 'text/x-groovy')
+      }
     },
     // 增加header
     addHeader () {
@@ -975,46 +999,46 @@ export default {
       }
       return variables
     },
-    // 执行配置好的接口
+    // 点击解析按钮
     scriptExecute (isInit = false) {
       this.getPramsList()
       // 如果动态参数未配置，则直接打开配置弹窗
-      const flag = this.dataForm.config.paramsList.some(item => !item.value)
-      if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && flag) {
-        this.$refs.paramsSettingDialog.open()
-      } else {
-        // 如果动态参数已配置则调接口
-        // 如果是前端代理，则自行组装接口及参数并调接口
-        if (this.dataForm.config.requestType === 'frontend') {
-          // this.replaceParams(this.dataForm.config.paramsList)
-          axiosFormatting({ ...this.dataForm.config }).then((res) => {
-            const { resp, response } = res
-            // this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
-            this.dataPreviewList = [{}]
-            for (const item in response.data) {
-              this.dataPreviewList[0][item] = response.data[item]
-            }
-            // 获取数据后更新输出字段
-            this.updateOoutputFieldList(this.dataPreviewList)
-            this.$message.success('解析并执行成功')
-          })
-        } else {
-          // 如果是后端代理，则将配置传到后端
-          const script = JSON.stringify(this.dataForm.config)
-          const executeParams = {
-            script,
-            params: this.dataForm.paramsList,
-            dataSetType: 'http'
+      // const flag = this.dataForm.config.paramsList.some(item => !item.value)
+      // 每次执行时只要有动态参数就会打开参数配置的弹窗进行设置
+      this.$refs.paramsSettingDialog.open()
+    },
+    // 调接口
+    getData () {
+      // 如果是前端代理，则自行组装接口及参数并调接口
+      if (this.dataForm.config.requestType === 'frontend') {
+        // this.replaceParams(this.dataForm.config.paramsList)
+        axiosFormatting({ ...this.dataForm.config }).then((res) => {
+          const { resp, response } = res
+          // this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
+          this.dataPreviewList = [{}]
+          for (const item in response.data) {
+            this.dataPreviewList[0][item] = response.data[item]
           }
-          datasetExecuteTest(executeParams).then(res => {
-            this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
-            // 获取数据后更新输出字段
-            this.updateOoutputFieldList(this.dataPreviewList)
-            this.$message.success('解析并执行成功')
-          }).catch((e) => {
-
-          })
+          // 获取数据后更新输出字段
+          this.updateOoutputFieldList(this.dataPreviewList)
+          this.$message.success('解析并执行成功')
+        })
+      } else {
+        // 如果是后端代理，则将配置传到后端
+        const script = JSON.stringify(this.dataForm.config)
+        const executeParams = {
+          script,
+          params: this.dataForm.paramsList,
+          dataSetType: 'http'
         }
+        datasetExecuteTest(executeParams).then(res => {
+          this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
+          // 获取数据后更新输出字段
+          this.updateOoutputFieldList(this.dataPreviewList)
+          this.$message.success('解析并执行成功')
+        }).catch((e) => {
+
+        })
       }
     },
     updateOoutputFieldList (dataList) {
@@ -1241,5 +1265,22 @@ export default {
 }
 .tabs-box{
   margin-left: 45px;
+}
+.add-btn{
+  width: 100%;
+  text-align: center;
+  border: 1px dashed #696A6E;
+  color: #fff;
+  &:hover{
+    cursor: pointer;
+    border: 1px dashed var(--bs-el-color-primary);
+    color: var(--bs-el-color-primary);
+  }
+}
+.delete-btn{
+  color: rgb(228, 116, 112);
+  &:hover{
+    cursor: pointer;
+  }
 }
 </style>

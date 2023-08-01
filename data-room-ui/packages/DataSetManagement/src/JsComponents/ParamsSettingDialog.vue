@@ -112,32 +112,32 @@
               />
             </template>
           </el-table-column>
-          <el-table-column
-            label="操作"
-            width="105"
-            align="center"
-          >
-            <template slot="header">
-              <el-button
-                icon="el-icon-plus"
-                type="text"
-                class="no-border"
-                @click="addParam"
-              >
-                添加
-              </el-button>
-            </template>
-            <template slot-scope="scope">
-              <el-button
-                type="text"
-                style="color: #e47470;"
-                class="no-border"
-                @click="delRow(scope.$index)"
-              >
-                删除
-              </el-button>
-            </template>
-          </el-table-column>
+<!--          <el-table-column-->
+<!--            label="操作"-->
+<!--            width="105"-->
+<!--            align="center"-->
+<!--          >-->
+<!--            <template slot="header">-->
+<!--              <el-button-->
+<!--                icon="el-icon-plus"-->
+<!--                type="text"-->
+<!--                class="no-border"-->
+<!--                @click="addParam"-->
+<!--              >-->
+<!--                添加-->
+<!--              </el-button>-->
+<!--            </template>-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-button-->
+<!--                type="text"-->
+<!--                style="color: #e47470;"-->
+<!--                class="no-border"-->
+<!--                @click="delRow(scope.$index)"-->
+<!--              >-->
+<!--                删除-->
+<!--              </el-button>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
         </el-table>
       </div>
       <span
@@ -211,6 +211,7 @@ export default {
     },
     confirm () {
       this.$emit('saveParams', cloneDeep(this.paramsList))
+      this.$emit('getData')
       this.dialogVisible = false
     }
   }
