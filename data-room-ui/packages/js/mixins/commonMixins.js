@@ -77,6 +77,7 @@ export default {
           if (res.executionByFrontend) {
             if (res.data.datasetType === 'http') {
               _res = await axiosFormatting(res.data)
+              _res = _res.resp
             }
             if (res.data.datasetType === 'js') {
               try {
@@ -123,6 +124,7 @@ export default {
           if (res.executionByFrontend) {
             if (res.data.datasetType === 'http') {
               _res = await axiosFormatting(res.data)
+              _res = _res.resp
             }
             if (res.data.datasetType === 'js') {
               try {
