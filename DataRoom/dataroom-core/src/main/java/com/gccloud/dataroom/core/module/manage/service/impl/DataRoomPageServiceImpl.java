@@ -10,6 +10,7 @@ import com.gccloud.dataroom.core.module.chart.bean.Chart;
 import com.gccloud.dataroom.core.module.chart.components.datasource.DataSetDataSource;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomSearchDTO;
+import com.gccloud.dataroom.core.module.manage.extend.DataRoomExtendClient;
 import com.gccloud.dataroom.core.module.manage.service.IDataRoomPageService;
 import com.gccloud.dataroom.core.module.template.entity.PageTemplateEntity;
 import com.gccloud.dataroom.core.module.template.service.IPageTemplateService;
@@ -49,6 +50,9 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
 
     @Resource
     private DataRoomConfig bigScreenConfig;
+
+    @Resource
+    private DataRoomExtendClient dataRoomExtendClient;
 
     @Override
     public String add(DataRoomPageDTO bigScreenPageDTO) {
@@ -245,5 +249,7 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         LambdaQueryWrapper<PageEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PageEntity::getCode, code);
         this.remove(queryWrapper);
+        // 调用拓展接口
+        dataRoomExtendClient.deleteByCode(code);
     }
 }
