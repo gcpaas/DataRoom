@@ -554,16 +554,9 @@ export default {
   }
 
   .footer-pagination-wrap {
-    // position: absolute;
-    // bottom: 10px;
-    // display: flex;
-    // align-items: center;
-    // justify-content: flex-end;
-    // width: 100%;
-    position: absolute;
+    right: 16px;
     bottom: 16px;
-    right: 12px;
-    // padding: 0 16px;
+    position: absolute;
   }
 }
 

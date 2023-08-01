@@ -9,7 +9,10 @@
     class="bs-dialog-wrap bs-el-dialog"
     @close="close"
   >
-    <div class="el-dialog-div" :style="{height: dialogH}">
+    <div
+      class="el-dialog-div"
+      :style="{height: dialogH}"
+    >
       <iframe
         :src="url"
         width="100%"

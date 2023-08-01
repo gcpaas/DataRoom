@@ -330,3 +330,7 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
   background: rgba(144, 147, 153, 0.3) !important;
   background-color: rgba(144, 147, 153, 0.3) !important;
 }
+
+.el-dialog__footer{
+  padding: 16px !important;
+}

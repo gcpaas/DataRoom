@@ -1374,9 +1374,10 @@ export default {
 }
 
 .bs-pagination {
-  position: relative !important;
-  bottom: 0 !important;
-  padding: 0 12px 16px 16px !important;
+  padding: 0 !important;
+  right: 16px !important;
+  bottom: 16px !important;
+  position: absolute !important;
   ::v-deep .el-input__inner {
     width: 110px !important;
     border: none;

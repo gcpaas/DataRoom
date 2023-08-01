@@ -52,7 +52,7 @@ registerConfig(
       '--bs-el-color-primary-active': '64, 158, 255', // 主要激活 => rgba(64, 158, 255, 1) = #409EFF
       '--bs-el-border': 'transparent' // 边框颜色
     },
-    datasetAuth: ['unAdd', 'unEdit', 'unDelete'], // 数据集按钮权限 新增 编辑 删除
+    // datasetAuth: ['unAdd', 'unEdit', 'unDelete'], // 数据集按钮权限 新增 编辑 删除
     // datasetTypeList: ['original','custom'],
     // customPlots: [],
     // 远程组件列表
@@ -65,8 +65,8 @@ registerConfig(
 promise.polyfill()
 // 自定义指令
 Vue.use(ElementUI, { size: 'mini' })
-Vue.prototype.$dataRoomAxios = $dataRoomAxios
 Vue.config.productionTip = false
+Vue.prototype.$dataRoomAxios = $dataRoomAxios
 // 兼容ie下双向绑定事件
 Vue.prototype.inputChange = function (e) {
   return e.target.value

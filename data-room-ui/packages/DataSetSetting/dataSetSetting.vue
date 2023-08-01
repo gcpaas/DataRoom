@@ -207,7 +207,7 @@ export default {
     background-color: var(--bs-background-2) !important;
 
     .el-table {
-      max-height: calc(90vh - 380px);
+      max-height: calc(90vh - 340px);
     }
 
     .bs-table-box {
@@ -243,6 +243,16 @@ export default {
     ::v-deep .data-set-scrollbar {
       height: 515px !important;
     }
+  }
+}
+
+::v-deep .bs-pagination {
+  bottom: 5px !important;
+}
+
+::v-deep .left-box {
+  .el-scrollbar {
+    height: calc(100vh - 405px) !important;
   }
 }
 </style>
