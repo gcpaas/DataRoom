@@ -53,7 +53,7 @@ registerConfig(
       '--bs-el-border': 'transparent' // 边框颜色
     },
     // datasetAuth: ['unAdd', 'unEdit', 'unDelete'], // 数据集按钮权限 新增 编辑 删除
-    // datasetTypeList: ['original','custom'],
+    datasetTypeList: ['original', 'custom', 'http'],
     // customPlots: [],
     // 远程组件列表
     remoteComponents,
