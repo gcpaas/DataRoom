@@ -40,11 +40,9 @@ export default function axiosFormatting (customConfig) {
       const getResp = new Function('response', newCustomConfig.responseScript)
       const resp = getResp(response)
       console.log('resp', resp)
-      return Promise.resolve({ resp, response })
+      return Promise.resolve(resp)
     } else {
-      console.log(response.data)
-      const resp = response
-      return Promise.resolve({ resp, response })
+      return Promise.resolve(response.data)
     }
   })
   const body = {}

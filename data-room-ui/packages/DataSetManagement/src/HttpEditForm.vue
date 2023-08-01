@@ -257,7 +257,10 @@
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :span="24">
+                    <el-col
+                      :span="12"
+                      :offset="6"
+                    >
                       <div
                         class="add-btn"
                         @click="addHeader"
@@ -327,7 +330,10 @@
                     </el-col>
                   </el-row>
                   <el-row>
-                    <el-col :span="24">
+                    <el-col
+                      :span="12"
+                      :offset="6"
+                    >
                       <div
                         class="add-btn"
                         @click="addParam"
@@ -517,10 +523,9 @@
           <el-table
             align="center"
             :data="dataPreviewList"
-            max-height="400"
+            max-height="300"
             :border="true"
-            height="500px"
-            class="bs-el-table bs-scrollbar"
+            class="bs-el-table bs-scrollba preview-table"
           >
             <el-table-column
               v-for="(value, key) in dataPreviewList[0]"
@@ -615,7 +620,9 @@
       <ParamsSettingDialog
         ref="paramsSettingDialog"
         :params-list="dataForm.config.paramsList"
+        :newParamsList="newParamsList"
         @saveParams="saveParams"
+        @saveNewParams="saveNewParams"
         @getData="getData"
       />
       <OutputFieldDialog
@@ -704,6 +711,7 @@ export default {
       }
     }
     return {
+      newParamsList: [], // 存放临时的动态参数值
       activeName: 'head',
       options: [{
         value: 'string',
@@ -811,6 +819,7 @@ export default {
           this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { ...config } }
           this.fieldDesc = fieldDesc
           this.outputFieldList = fieldList
+          this.newParamsList = _.cloneDeep(paramsList)
           this.codemirrorOption.mode = this.dataForm.config.requestType === 'frontend' ? 'text/javascript' : 'text/x-groovy'
           // this.replaceParams(paramsList)
           this.scriptExecute(true)
@@ -899,7 +908,12 @@ export default {
       this.dataForm.config.params.splice(index, 1)
     },
     saveParams (val) {
+      debugger
       this.dataForm.config.paramsList = val
+    },
+    saveNewParams (val) {
+      console.log(val)
+      this.newParamsList = val
     },
     // 取消操作
     // cancelField () {
@@ -1005,19 +1019,22 @@ export default {
       // 如果动态参数未配置，则直接打开配置弹窗
       // const flag = this.dataForm.config.paramsList.some(item => !item.value)
       // 每次执行时只要有动态参数就会打开参数配置的弹窗进行设置
-      this.$refs.paramsSettingDialog.open()
+      if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length) {
+        this.$refs.paramsSettingDialog.open(true)
+      } else {
+        this.getData()
+      }
     },
     // 调接口
     getData () {
       // 如果是前端代理，则自行组装接口及参数并调接口
       if (this.dataForm.config.requestType === 'frontend') {
         // this.replaceParams(this.dataForm.config.paramsList)
-        axiosFormatting({ ...this.dataForm.config }).then((res) => {
-          const { resp, response } = res
+        axiosFormatting({ ...this.dataForm.config, paramsList: this.newParamsList }).then((res) => {
           // this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
           this.dataPreviewList = [{}]
-          for (const item in response.data) {
-            this.dataPreviewList[0][item] = response.data[item]
+          for (const item in res) {
+            this.dataPreviewList[0][item] = res[item]
           }
           // 获取数据后更新输出字段
           this.updateOoutputFieldList(this.dataPreviewList)
@@ -1246,13 +1263,13 @@ export default {
   }
 }
 
-::v-deep .bs-table-box.is-Edit .el-table {
-  max-height: unset !important;
-
-  .el-table__body-wrapper {
-    max-height: unset !important;
-  }
-}
+//::v-deep .bs-table-box.is-Edit .el-table {
+//  max-height: unset !important;
+//
+//  .el-table__body-wrapper {
+//    max-height: unset !important;
+//  }
+//}
 
 .bs-table-box {
   padding: 0;
@@ -1282,5 +1299,8 @@ export default {
   &:hover{
     cursor: pointer;
   }
+}
+.preview-table{
+  max-height: 300px!important;
 }
 </style>

@@ -12,7 +12,7 @@
       <div class="bs-table-box">
         <el-table
           ref="singleTable"
-          :data="paramsList"
+          :data="params"
           :border="true"
           align="center"
           class="bs-el-table"
@@ -112,32 +112,32 @@
               />
             </template>
           </el-table-column>
-<!--          <el-table-column-->
-<!--            label="操作"-->
-<!--            width="105"-->
-<!--            align="center"-->
-<!--          >-->
-<!--            <template slot="header">-->
-<!--              <el-button-->
-<!--                icon="el-icon-plus"-->
-<!--                type="text"-->
-<!--                class="no-border"-->
-<!--                @click="addParam"-->
-<!--              >-->
-<!--                添加-->
-<!--              </el-button>-->
-<!--            </template>-->
-<!--            <template slot-scope="scope">-->
-<!--              <el-button-->
-<!--                type="text"-->
-<!--                style="color: #e47470;"-->
-<!--                class="no-border"-->
-<!--                @click="delRow(scope.$index)"-->
-<!--              >-->
-<!--                删除-->
-<!--              </el-button>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            label="操作"-->
+          <!--            width="105"-->
+          <!--            align="center"-->
+          <!--          >-->
+          <!--            <template slot="header">-->
+          <!--              <el-button-->
+          <!--                icon="el-icon-plus"-->
+          <!--                type="text"-->
+          <!--                class="no-border"-->
+          <!--                @click="addParam"-->
+          <!--              >-->
+          <!--                添加-->
+          <!--              </el-button>-->
+          <!--            </template>-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <el-button-->
+          <!--                type="text"-->
+          <!--                style="color: #e47470;"-->
+          <!--                class="no-border"-->
+          <!--                @click="delRow(scope.$index)"-->
+          <!--              >-->
+          <!--                删除-->
+          <!--              </el-button>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
         </el-table>
       </div>
       <span
@@ -169,15 +169,27 @@ export default {
     paramsList: {
       type: Array,
       default: () => []
+    },
+    newParamsList: {
+      type: Array,
+      default: () => []
     }
   },
   data () {
     return {
+      params: [],
+      isUpdate: false,
       dialogVisible: false
     }
   },
   methods: {
-    open () {
+    open (isUpdate = false) {
+      if (isUpdate) {
+        this.params = cloneDeep(this.newParamsList)
+      } else {
+        this.params = cloneDeep(this.paramsList)
+      }
+      this.isUpdate = isUpdate
       this.dialogVisible = true
     },
     close () {
@@ -186,21 +198,8 @@ export default {
     handleClose () {
       this.dialogVisible = false
     },
-    addParam () {
-      this.paramsList.push({
-        name: '',
-        type: '',
-        value: '',
-        status: 1,
-        require: 0,
-        remark: ''
-      })
-    },
-    delRow (index) {
-      this.paramsList.splice(index, 1)
-    },
     checkParamsName (value) {
-      const checkList = this.paramsList.filter(item => item.fieldName === value.name)
+      const checkList = this.params.filter(item => item.fieldName === value.name)
       if (checkList.length) {
         this.$message.warning('参数名称不可以与字段名相同！')
         value.name = ''
@@ -210,7 +209,12 @@ export default {
       this.dialogVisible = false
     },
     confirm () {
-      this.$emit('saveParams', cloneDeep(this.paramsList))
+      if (!this.isUpdate) {
+        this.$emit('saveParams', cloneDeep(this.params))
+      } else {
+        console.log(this.params)
+        this.$emit('saveNewParams', cloneDeep(this.params))
+      }
       this.$emit('getData')
       this.dialogVisible = false
     }
