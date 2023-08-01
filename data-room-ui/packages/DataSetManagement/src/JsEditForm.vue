@@ -360,7 +360,11 @@
         ref="outputFieldDialog"
         :output-field-list="outputFieldList"
         @setFieldList="(list) => { outputFieldList = list }"
-      />
+      >
+        <template #output-field-table-column>
+          <slot name="output-field-table-column" />
+        </template>
+      </OutputFieldDialog>
     </el-scrollbar>
     <FieldFillDialog
       ref="fieldFillDialog"

@@ -348,6 +348,8 @@
                 <span v-else>{{ scope.row.fieldDesc }}</span>
               </template>
             </el-table-column>
+            <!-- 添加一个插槽，供其他人可扩展表格列，并把表格列的数据返回出去 -->
+            <slot name="output-field-table-column" />
           </el-table>
         </div>
         <span

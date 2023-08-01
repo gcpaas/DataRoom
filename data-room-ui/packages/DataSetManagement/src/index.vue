@@ -252,7 +252,11 @@
       :is-edit="isEdit"
       :app-code="appCode"
       @back="back"
-    />
+    >
+      <template #output-field-table-column>
+        <slot name="output-field-table-column" />
+      </template>
+    </component>
   </div>
 </template>
 
