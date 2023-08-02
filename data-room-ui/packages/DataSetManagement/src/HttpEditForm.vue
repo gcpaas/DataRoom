@@ -425,7 +425,7 @@
                 type="primary"
                 @click="scriptExecute()"
               >
-                解析并执行
+                解析并运行
               </el-button>
             </div>
           </div>
@@ -620,7 +620,7 @@
       <ParamsSettingDialog
         ref="paramsSettingDialog"
         :params-list="dataForm.config.paramsList"
-        :newParamsList="newParamsList"
+        :new-params-list="newParamsList"
         @saveParams="saveParams"
         @saveNewParams="saveNewParams"
         @getData="getData"
