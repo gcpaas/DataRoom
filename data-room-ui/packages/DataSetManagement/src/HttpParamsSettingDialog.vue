@@ -166,9 +166,11 @@ export default {
       this.dialogVisible = true
     },
     close () {
+      this.$refs.form.clearValidate()// 清空校验信息
       this.dialogVisible = false
     },
     handleClose () {
+      this.$refs.form.clearValidate() // 清空校验信息
       this.dialogVisible = false
     },
     checkParamsName (value) {
@@ -179,6 +181,7 @@ export default {
       }
     },
     cancel () {
+      this.$refs.form.clearValidate() // 清空校验信息
       this.dialogVisible = false
     },
     confirm () {
