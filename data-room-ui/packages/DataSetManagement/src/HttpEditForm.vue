@@ -425,7 +425,7 @@
                 type="primary"
                 @click="scriptExecute()"
               >
-                解析并执行
+                解析并运行
               </el-button>
             </div>
           </div>

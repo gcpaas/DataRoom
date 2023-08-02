@@ -22,12 +22,11 @@
 
 ## 快速开始
 
-[开始开始](https://www.yuque.com/chuinixiongkou/bigscreen/xd78cw7t12q7kfbl#norVs)
-
+<a href="https://www.yuque.com/chuinixiongkou/bigscreen/xd78cw7t12q7kfbl#norVs" target="_blank">快速开始 </a>
 
 ## 演示DEMO
 
-<a href="http://gcpaas.gccloud.com/bigScreen"> http://gcpaas.gccloud.com/bigScreen </a>
+<a href="http://gcpaas.gccloud.com/bigScreen" target="_blank"> http://gcpaas.gccloud.com/bigScreen </a>
 
 ## 联系我们
 <img alt="Email" src="https://img.shields.io/badge/Email-tech@ustcinfo.com-blue.svg">
