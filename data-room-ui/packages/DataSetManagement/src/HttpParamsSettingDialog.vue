@@ -190,10 +190,9 @@ export default {
           if (!this.isUpdate) {
             this.$emit('saveParams', cloneDeep(this.form.params))
           } else {
-            console.log(this.form.params)
             this.$emit('saveNewParams', cloneDeep(this.form.params))
+            this.$emit('getData')
           }
-          this.$emit('getData')
           this.dialogVisible = false
         }
       })

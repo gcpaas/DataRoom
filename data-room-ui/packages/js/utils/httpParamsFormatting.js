@@ -45,11 +45,10 @@ export default function axiosFormatting (customConfig) {
       return Promise.resolve(response.data)
     }
   })
-  const body = {}
   const pattern = /(body\.\w+)=(\w+)/g
   const replacement = "$1='$2'"
   newCustomConfig.body = newCustomConfig.body.replace(pattern, replacement)
-  eval(newCustomConfig.body)
+  const body = stringToObject(newCustomConfig.body)
   return new Promise((resolve, reject) => {
     instance({
       method: newCustomConfig.method,
@@ -62,6 +61,22 @@ export default function axiosFormatting (customConfig) {
       reject(error)
     })
   })
+}
+function stringToObject(inputString) {
+  const lines = inputString.split('\n');
+  const result = {};
+
+  lines.forEach(line => {
+    // Use regular expressions to extract property name and value
+    const propertyMatch = line.match(/^(.*?)=(.*)$/);
+    if (propertyMatch) {
+      const propertyName = propertyMatch[1].trim();
+      const propertyValue = propertyMatch[2].trim().replace(/'/g, ""); // Remove single quotes from the value
+      result[propertyName] = propertyValue;
+    }
+  });
+
+  return { body: result };
 }
 // 动态替换url后面参数的值
 function replaceUrlParam (url, paramName, paramValue) {

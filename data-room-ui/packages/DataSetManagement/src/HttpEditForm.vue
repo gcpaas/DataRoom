@@ -432,7 +432,7 @@
                     v-else
                     class="bs-codemirror-bottom-text"
                   >
-                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数responseString(已转为字符串)中，,如果需要处理成JSON格式推荐使用JsoonSlurper类。
+                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数responseString(已转为字符串)中，,如果需要处理成JSON格式推荐使用JsonSlurper类。
                       <br> 例如：<span style="color: red;" />
                     </strong>
                   </div>
@@ -505,7 +505,10 @@
                   配置
                 </el-button>
               </div>
-              <div class="field-wrap bs-field-wrap bs-scrollbar">
+              <div
+                v-if="outputFieldList && outputFieldList.length"
+                class="field-wrap bs-field-wrap bs-scrollbar"
+              >
                 <div
                   v-for="(field, key) in outputFieldList"
                   :key="key"
@@ -527,6 +530,12 @@
                     配置
                   </el-button>
                 </div>
+              </div>
+              <div
+                v-else
+                style="color: red;padding: 16px"
+              >
+                数据为空或数据类型不符合规范，建议返回的数据res结构为{data:[],...},输出字段类型将从res.data中解析
               </div>
             </div>
           </div>
@@ -1097,7 +1106,8 @@ export default {
             this.dataPreviewList[0][item] = res[item]
           }
           // 获取数据后更新输出字段
-          this.updateOoutputFieldList(this.dataPreviewList)
+          console.log(res)
+          this.updateOoutputFieldList(res?.data)
           this.$message.success('解析并执行成功')
         })
       } else {
