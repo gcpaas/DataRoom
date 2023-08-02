@@ -441,7 +441,7 @@
                 <el-button
                   type="text"
                   style="float: right;border: none;margin-top: -4px;"
-                  @click="$refs.paramsSettingDialog.open()"
+                  @click="openParamsSetDialog(false)"
                 >
                   配置
                 </el-button>
@@ -451,7 +451,7 @@
                   v-for="param in dataForm.config.paramsList"
                   :key="param.name"
                   class="field-item"
-                  @click="$refs.paramsSettingDialog.open()"
+                  @click="openParamsSetDialog(false)"
                 >
                   <span>{{ param.name }}</span>&nbsp;<span
                     v-show="param.remark"
@@ -463,7 +463,7 @@
                     class="edit_field"
                     type="text"
                     style="float: right;border: none;margin-top: 2px;"
-                    @click="$refs.paramsSettingDialog.open()"
+                    @click="openParamsSetDialog(false)"
                   >
                     配置
                   </el-button>
@@ -620,10 +620,11 @@
       <ParamsSettingDialog
         ref="paramsSettingDialog"
         :params-list="dataForm.config.paramsList"
-        :newParamsList="newParamsList"
+        :new-params-list="newParamsList"
         @saveParams="saveParams"
         @saveNewParams="saveNewParams"
         @getData="getData"
+        @getPramsList="getPramsList"
       />
       <OutputFieldDialog
         ref="outputFieldDialog"
@@ -908,7 +909,6 @@ export default {
       this.dataForm.config.params.splice(index, 1)
     },
     saveParams (val) {
-      debugger
       this.dataForm.config.paramsList = val
     },
     saveNewParams (val) {
@@ -975,6 +975,14 @@ export default {
       })
       this.fieldDesc = fieldDesc
     },
+    // 打开动态参数设置弹窗
+    async openParamsSetDialog (isUpdate) {
+      this.getPramsList()
+      const oldList = _.cloneDeep(this.dataForm.config.paramsList)
+      this.newParamsList = this.compareParamsList(this.newParamsList, oldList)
+      await this.$nextTick()
+      this.$refs.paramsSettingDialog.open(isUpdate)
+    },
     // 获取请求地址、请求头、请求参数、请求体中所有的变量，在动态参数中进行变量
     getPramsList () {
       const paramNames1 = this.getValName(this.dataForm.config.url)
@@ -994,12 +1002,39 @@ export default {
             type: 'String',
             value: '',
             status: 1,
-            require: 1,
+            require: 0,
             remark: ''
           })
         }
       })
       this.dataForm.config.paramsList = _.cloneDeep(params)
+    },
+    // 用来对两个数组进行对比
+    compareParamsList (newList, oldList) {
+      // 创建一个空数组，用于存储最终的结果
+      const result = []
+
+      // 遍历A数组中的每个对象
+      for (const objA of oldList) {
+        let found = false // 标志变量，用于表示是否在B数组中找到对应的属性
+
+        // 遍历B数组中的每个对象
+        for (const objB of newList) {
+          if (objA.name === objB.name) {
+            // 如果A和B中的fieldName相同，则将B中该属性的属性值赋值给A，并将该对象添加到结果数组中
+            objA.value = objB.value
+            result.push(objA)
+            found = true
+            break
+          }
+        }
+
+        // 如果在B数组中没有找到对应的属性，则直接将该对象添加到结果数组中
+        if (!found) {
+          result.push(objA)
+        }
+      }
+      return result
     },
     // 获取字符串中${变量名}中的变量名
     getValName (str) {
@@ -1015,12 +1050,13 @@ export default {
     },
     // 点击解析按钮
     scriptExecute (isInit = false) {
-      this.getPramsList()
+      // this.getPramsList()
+      // this.newParamsList = this.compareParamsList(this.newParamsList, this.dataForm.config.paramsList)
       // 如果动态参数未配置，则直接打开配置弹窗
       // const flag = this.dataForm.config.paramsList.some(item => !item.value)
       // 每次执行时只要有动态参数就会打开参数配置的弹窗进行设置
       if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && !isInit) {
-        this.$refs.paramsSettingDialog.open(true)
+        this.openParamsSetDialog(true)
       } else {
         this.getData()
       }
@@ -1098,6 +1134,7 @@ export default {
       }
       return result
     },
+
     // 清空分类
     clearType () {
       this.typeName = ''

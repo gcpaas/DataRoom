@@ -29,6 +29,7 @@
                 class="bs-el-input"
                 placeholder="请输入名称"
                 clearable
+                readonly
                 @change="checkParamsName(scope.row)"
               />
             </template>
@@ -64,7 +65,10 @@
             filterable
           >
             <template slot-scope="scope">
-              <el-radio-group v-model="scope.row.require">
+              <el-radio-group
+                v-model="scope.row.require"
+                :disabled="isUpdate"
+              >
                 <el-radio :label="1">
                   是
                 </el-radio>
@@ -108,6 +112,7 @@
                 class="bs-el-input"
                 placeholder="请输入备注"
                 rows="2"
+                :readonly="isUpdate"
                 maxlength="200"
               />
             </template>
@@ -184,8 +189,9 @@ export default {
   },
   methods: {
     open (isUpdate = false) {
+      this.$emit('getPramsList')
       if (isUpdate) {
-        this.params = cloneDeep(this.newParamsList)
+        this.params = this.newParamsList
       } else {
         this.params = cloneDeep(this.paramsList)
       }
@@ -219,7 +225,6 @@ export default {
       this.dialogVisible = false
     }
   }
-
 }
 </script>
 
