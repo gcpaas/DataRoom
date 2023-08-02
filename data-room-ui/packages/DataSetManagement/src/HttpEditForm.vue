@@ -173,12 +173,12 @@
                     v-model="dataForm.config.method"
                     class="bs-radio-wrap"
                   >
-                    <el-radio-button label="get">
+                    <el-radio label="get">
                       GET
-                    </el-radio-button>
-                    <el-radio-button label="post">
+                    </el-radio>
+                    <el-radio label="post">
                       POST
-                    </el-radio-button>
+                    </el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>
@@ -433,7 +433,7 @@
                     class="bs-codemirror-bottom-text"
                   >
                     <strong>响应脚本设置规则： 接口返回数据已经内置到参数responseString(已转为字符串)中，,如果需要处理成JSON格式推荐使用JsoonSlurper类。
-                      <br> 例如：<span style="color: red;"></span>
+                      <br> 例如：<span style="color: red;" />
                     </strong>
                   </div>
                 </el-form-item>
@@ -1046,7 +1046,10 @@ export default {
         for (const objB of newList) {
           if (objA.name === objB.name) {
             // 如果A和B中的fieldName相同，则将B中该属性的属性值赋值给A，并将该对象添加到结果数组中
-            objA.value = objB.value
+            // 如果参数必填但是新的参数没有值那么需要保留默认值
+            if (!(objA.require && !objB.value)) {
+              objA.value = objB.value
+            }
             result.push(objA)
             found = true
             break
@@ -1074,10 +1077,7 @@ export default {
     },
     // 点击解析按钮
     scriptExecute (isInit = false) {
-      // this.getPramsList()
-      // this.newParamsList = this.compareParamsList(this.newParamsList, this.dataForm.config.paramsList)
-      // 如果动态参数未配置，则直接打开配置弹窗
-      // const flag = this.dataForm.config.paramsList.some(item => !item.value)
+      this.getPramsList()
       // 每次执行时只要有动态参数就会打开参数配置的弹窗进行设置
       if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && !isInit) {
         this.openParamsSetDialog(true)
