@@ -511,7 +511,7 @@
             >
               <el-radio-group
                 v-model="config.dataSource.serverPagination"
-                class="status-radio"
+                class="bs-el-radio-group"
                 size="mini"
                 @change="serverPaginationChange"
               >

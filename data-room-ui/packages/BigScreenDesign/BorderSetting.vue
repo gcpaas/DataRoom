@@ -45,7 +45,10 @@
             />
           </el-form-item>
           <el-form-item label="背景色类型">
-            <el-radio-group v-model="config.customize.colorType">
+            <el-radio-group
+              v-model="config.customize.colorType"
+              class="bs-el-radio-group"
+            >
               <el-radio label="single">
                 纯色
               </el-radio>
@@ -194,6 +197,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/style/bsTheme.scss';
 .lc-field-body {
   padding: 12px 16px;
 }

@@ -231,7 +231,7 @@
                 >
                   <el-radio-group
                     v-model="dataForm.repeatStatus"
-                    class="bs-radio-wrap"
+                    class="bs-el-radio-group"
                     :disabled="!isEdit"
                   >
                     <el-radio :label="1">
@@ -949,8 +949,6 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
-
 <style lang="scss" scoped>
 @import '../../assets/style/bsTheme.scss';
 
@@ -959,11 +957,6 @@ export default {
   overflow-y: auto;
   overflow-x: none;
 }
-
-// .tree-box {
-//   padding: 0;
-//   max-height: 270px;
-// }
 
 ::v-deep .el-input__inner {
   width: 100% !important;

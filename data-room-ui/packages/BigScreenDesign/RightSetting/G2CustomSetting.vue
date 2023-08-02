@@ -119,6 +119,7 @@
                 <el-radio-group
                   v-else-if="setting.type === 'radio'"
                   v-model="setting.value"
+                  class="bs-el-radio-group"
                 >
                   <template v-for="(opt, optIndex) in setting.options">
                     <el-radio-button

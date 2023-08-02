@@ -500,7 +500,6 @@ export default {
 
   ::v-deep .el-input__inner,
   ::v-deep .el-color-picker__color-inner,
-  ::v-deep .el-radio__inner,
   ::v-deep .el-input-number--mini,
   ::v-deep .el-textarea__inner,
   ::v-deep .el-input-group__append,

@@ -171,7 +171,7 @@
                 >
                   <el-radio-group
                     v-model="dataForm.config.method"
-                    class="bs-radio-wrap"
+                    class="bs-el-radio-group"
                   >
                     <el-radio-button label="get">
                       GET

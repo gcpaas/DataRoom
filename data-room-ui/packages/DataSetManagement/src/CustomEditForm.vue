@@ -661,7 +661,10 @@
               filterable
             >
               <template slot-scope="scope">
-                <el-radio-group v-model="scope.row.require">
+                <el-radio-group
+                  v-model="scope.row.require"
+                  class="bs-el-radio-group"
+                >
                   <el-radio :label="1">
                     是
                   </el-radio>
