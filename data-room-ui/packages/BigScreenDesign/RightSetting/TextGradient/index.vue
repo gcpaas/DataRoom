@@ -7,7 +7,7 @@
     >
       <el-radio-group
         v-model="position"
-        class="bs-radio-wrap"
+        class="bs-el-radio-group"
       >
         <el-radio label="top">
           上下

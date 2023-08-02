@@ -68,6 +68,7 @@
               <el-radio-group
                 v-model="scope.row.require"
                 :disabled="isUpdate"
+                class="bs-el-radio-group"
               >
                 <el-radio :label="1">
                   是

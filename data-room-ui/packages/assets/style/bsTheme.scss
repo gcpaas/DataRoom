@@ -526,9 +526,20 @@
 }
 
 // radio
-.bs-radio-wrap {
+.bs-el-radio-group {
+  .el-radio__label{
+    color: var(--bs-el-text) !important;
+  }
+  .el-radio__input.is-checked + .el-radio__label{
+    color: var(--bs-el-color-primary) !important;
+  }
   .el-radio__inner {
     border: 1px solid #dcdfe6 !important;
+    background: var(--bs-background-1) !important;
+    background-color: var(--bs-background-1) !important;
+  }
+  .el-radio__input.is-checked .el-radio__inner::after{
+    background-color: var(--bs-el-color-primary) !important;
   }
 }
 
