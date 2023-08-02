@@ -10,7 +10,6 @@
     <img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.gccloud/gc-starter-bigscreen-core">
     <img alt="Company" src="https://img.shields.io/badge/Author-科大国创云网科技有限公司-blue.svg">
 </p>
--------------------------------------------------------------------------------
 
 ## 效果图
 
