@@ -15,14 +15,14 @@
 ## 效果图
 
 #### 管理页
-<img alt="logo" src="packages/assets/images/doc/images/home.png">
+<img alt="logo" src="https://gitee.com/gcpaas/DataRoom/raw/master/doc/images/home.png">
 
 #### 设计器
-<img alt="logo" src="packages/assets/images/doc/images/design01.png">
+<img alt="logo" src="https://gitee.com/gcpaas/DataRoom/raw/master/doc/images/design01.png">
 
 ## 快速开始
 
-[开始开始](https://www.yuque.com/chuinixiongkou/bigscreen/xd78cw7t12q7kfbl#ff0RA)
+[开始开始](https://www.yuque.com/chuinixiongkou/bigscreen/xd78cw7t12q7kfbl#norVs)
 
 
 ## 演示DEMO
@@ -35,10 +35,9 @@
 <img alt="QQ群" src="https://img.shields.io/badge/QQ群-322302395-blue.svg">
 
 <p>
-    <img alt="logo" width="200" src="packages/assets/images/doc/logo.png">
+    <img alt="logo" width="200" src="https://gitee.com/gcpaas/DataRoom/raw/master/doc/images/qq.png">
 </p>
 
 ## License
 
 Apache License 2.0
-
