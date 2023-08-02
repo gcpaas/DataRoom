@@ -223,6 +223,7 @@
                       >
                         <el-input
                           v-model="dataForm.config.headers[index].key"
+                          class="bs-el-input"
                           placeholder="请输入键"
                           clearable
                           @blur="dataForm.config.headers[index].key = inputChange($event)"
@@ -239,6 +240,7 @@
                         <el-input
                           v-model="dataForm.config.headers[index].value"
                           placeholder="请输入值"
+                          class="bs-el-input"
                           clearable
                           @blur="dataForm.config.headers[index].value = inputChange($event)"
                         />
@@ -296,6 +298,7 @@
                       >
                         <el-input
                           v-model="dataForm.config.params[index].key"
+                          class="bs-el-input"
                           placeholder="请输入键"
                           clearable
                           @blur="dataForm.config.params[index].key = inputChange($event)"
@@ -312,6 +315,7 @@
                         <el-input
                           v-model="dataForm.config.params[index].value"
                           placeholder="请输入值"
+                          class="bs-el-input"
                           clearable
                           @blur="dataForm.config.params[index].value = inputChange($event)"
                         />
@@ -384,9 +388,21 @@
                     v-if="dataForm.config.requestType === 'frontend'"
                     class="bs-codemirror-bottom-text"
                   >
-                    <strong>请求脚本设置规则： 请求脚本已经内置参数req，可参考请求拦截的回调参数config直接使用(修改url中的参数例外),
+                    <strong>请求脚本设置规则： 请求脚本已经内置参数req，可参考下面的示例进行配置:
+                      <br> 如修改url中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.url.age=17</span>
                       <br> 如修改请求头中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.headers.name='tom'</span>
-                      <br> 如修改url中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.urlKey.age=17</span>
+                      <br> 如修改请求参数中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.params.age=17</span>
+                      <br> 如修改请求体中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.data.test='test'</span>
+                    </strong>
+                  </div>
+                  <div
+                    v-else
+                    class="bs-codemirror-bottom-text"
+                  >
+                    <strong>请求脚本设置规则： 请求脚本已经内置参数:请求头：headers（对象类型），请求参数params（对象类型），请求体body（字符串类型），注意：如果body有修改，必须在脚本最后将字符串body返回，可参考下面的示例进行配置:
+                      <br> 如修改请求头中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">headers.name='tom'</span>
+                      <br> 如修改请求参数中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">params.age=17</span>
+                      <br> 如修改请求体中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">body='XXXX'</span>
                     </strong>
                   </div>
                 </el-form-item>
@@ -410,6 +426,14 @@
                     class="bs-codemirror-bottom-text"
                   >
                     <strong>响应脚本设置规则： 接口返回数据已经内置到参数response中，可直接使用,但是必须要返回设置后的数据。<br> 例如：<span style="color: red;">let data =response.data;         return data;</span>
+                    </strong>
+                  </div>
+                  <div
+                    v-else
+                    class="bs-codemirror-bottom-text"
+                  >
+                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数responseString(已转为字符串)中，,如果需要处理成JSON格式推荐使用JsoonSlurper类。
+                      <br> 例如：<span style="color: red;"></span>
                     </strong>
                   </div>
                 </el-form-item>
@@ -441,7 +465,7 @@
                 <el-button
                   type="text"
                   style="float: right;border: none;margin-top: -4px;"
-                  @click="$refs.paramsSettingDialog.open()"
+                  @click="openParamsSetDialog(false)"
                 >
                   配置
                 </el-button>
@@ -451,7 +475,7 @@
                   v-for="param in dataForm.config.paramsList"
                   :key="param.name"
                   class="field-item"
-                  @click="$refs.paramsSettingDialog.open()"
+                  @click="openParamsSetDialog(false)"
                 >
                   <span>{{ param.name }}</span>&nbsp;<span
                     v-show="param.remark"
@@ -463,7 +487,7 @@
                     class="edit_field"
                     type="text"
                     style="float: right;border: none;margin-top: 2px;"
-                    @click="$refs.paramsSettingDialog.open()"
+                    @click="openParamsSetDialog(false)"
                   >
                     配置
                   </el-button>
@@ -624,6 +648,7 @@
         @saveParams="saveParams"
         @saveNewParams="saveNewParams"
         @getData="getData"
+        @getPramsList="getPramsList"
       />
       <OutputFieldDialog
         ref="outputFieldDialog"
@@ -642,7 +667,7 @@
 
 <script>
 import LabelSelect from 'data-room-ui/DataSetLabelManagement/src/LabelSelect.vue'
-import ParamsSettingDialog from './JsComponents/ParamsSettingDialog.vue'
+import ParamsSettingDialog from './HttpParamsSettingDialog.vue'
 import OutputFieldDialog from './JsComponents/OutputFieldDialog.vue'
 import FieldFillDialog from './JsComponents/FieldFillDialog.vue'
 import { nameCheckRepeat, datasetAdd, datasetUpdate, getDataset, getCategoryTree, datasetExecuteTest } from 'data-room-ui/js/utils/datasetConfigService'
@@ -908,7 +933,6 @@ export default {
       this.dataForm.config.params.splice(index, 1)
     },
     saveParams (val) {
-      debugger
       this.dataForm.config.paramsList = val
     },
     saveNewParams (val) {
@@ -975,6 +999,14 @@ export default {
       })
       this.fieldDesc = fieldDesc
     },
+    // 打开动态参数设置弹窗
+    async openParamsSetDialog (isUpdate) {
+      this.getPramsList()
+      const oldList = _.cloneDeep(this.dataForm.config.paramsList)
+      this.newParamsList = this.compareParamsList(this.newParamsList, oldList)
+      await this.$nextTick()
+      this.$refs.paramsSettingDialog.open(isUpdate)
+    },
     // 获取请求地址、请求头、请求参数、请求体中所有的变量，在动态参数中进行变量
     getPramsList () {
       const paramNames1 = this.getValName(this.dataForm.config.url)
@@ -994,12 +1026,39 @@ export default {
             type: 'String',
             value: '',
             status: 1,
-            require: 1,
+            require: 0,
             remark: ''
           })
         }
       })
       this.dataForm.config.paramsList = _.cloneDeep(params)
+    },
+    // 用来对两个数组进行对比
+    compareParamsList (newList, oldList) {
+      // 创建一个空数组，用于存储最终的结果
+      const result = []
+
+      // 遍历A数组中的每个对象
+      for (const objA of oldList) {
+        let found = false // 标志变量，用于表示是否在B数组中找到对应的属性
+
+        // 遍历B数组中的每个对象
+        for (const objB of newList) {
+          if (objA.name === objB.name) {
+            // 如果A和B中的fieldName相同，则将B中该属性的属性值赋值给A，并将该对象添加到结果数组中
+            objA.value = objB.value
+            result.push(objA)
+            found = true
+            break
+          }
+        }
+
+        // 如果在B数组中没有找到对应的属性，则直接将该对象添加到结果数组中
+        if (!found) {
+          result.push(objA)
+        }
+      }
+      return result
     },
     // 获取字符串中${变量名}中的变量名
     getValName (str) {
@@ -1015,12 +1074,13 @@ export default {
     },
     // 点击解析按钮
     scriptExecute (isInit = false) {
-      this.getPramsList()
+      // this.getPramsList()
+      // this.newParamsList = this.compareParamsList(this.newParamsList, this.dataForm.config.paramsList)
       // 如果动态参数未配置，则直接打开配置弹窗
       // const flag = this.dataForm.config.paramsList.some(item => !item.value)
       // 每次执行时只要有动态参数就会打开参数配置的弹窗进行设置
       if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && !isInit) {
-        this.$refs.paramsSettingDialog.open(true)
+        this.openParamsSetDialog(true)
       } else {
         this.getData()
       }
@@ -1098,6 +1158,7 @@ export default {
       }
       return result
     },
+
     // 清空分类
     clearType () {
       this.typeName = ''
@@ -1302,5 +1363,59 @@ export default {
 }
 .preview-table{
   max-height: 300px!important;
+}
+///* 修改表格的滚动条样式 */
+///deep/.el-table__body-wrapper::-webkit-scrollbar {
+//  width: 4px; /* 设置滚动条宽度 */
+//}
+//
+///deep/.el-table__body-wrapper::-webkit-scrollbar-thumb {
+//  background-color: #000; /* 设置滚动条滑块的背景颜色 */
+//}
+//
+///deep/.el-table__body-wrapper::-webkit-scrollbar-thumb:hover {
+//  background-color: #555; /* 设置鼠标悬停在滚动条滑块上时的背景颜色 */
+//}
+//
+///deep/.el-table__body-wrapper::-webkit-scrollbar-track {
+//  background-color: #000; /* 设置滚动条轨道的背景颜色 */
+//}
+// 滚动条的宽度
+// .el-table__body-wrapper::-webkit-scrollbar {
+//  width: 6px!important; // 横向滚动条
+//  height: 6px!important; // 纵向滚动条 必写
+//}
+//// 滚动条的滑块
+// .el-table__body-wrapper::-webkit-scrollbar-thumb {
+//  background-color: #ddd!important;
+//  border-radius: 3px!important;
+//}
+.el-table__body-wrapper::-webkit-scrollbar {
+  display: block;
+  width: 16px; /*滚动条宽度*/
+  height: 16px; /*滚动条高度*/
+}
+/*定义滚动条轨道 内阴影+圆角*/
+//.el-table__body-wrapper::-webkit-scrollbar-track {
+//  box-shadow: 0px 1px 3px #292c34 inset; /*滚动条的背景区域的内阴影*/
+//  // border-radius: 10px; /*滚动条的背景区域的圆角*/
+//  background-color: #292c34; /*滚动条的背景颜色*/
+//}
+///*定义滑块 内阴影+圆角*/
+//.el-table__body-wrapper::-webkit-scrollbar-thumb {
+//  box-shadow: 0px 1px 3px #494d5b inset; /*滚动条的内阴影*/
+//  border-radius: 10px; /*滚动条的圆角*/
+//  background-color: #494d5b; /*滚动条的背景颜色*/
+//  border: 5px solid #292c34;
+//}
+/*滚动条样式*/
+::v-deep ::-webkit-scrollbar {
+  width: 4px;
+  border-radius: 4px;
+  height: 4px;
+}
+::v-deep ::-webkit-scrollbar-thumb {
+  background: #fff !important;
+  border-radius: 10px;
 }
 </style>
