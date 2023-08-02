@@ -643,7 +643,7 @@
 
 <script>
 import LabelSelect from 'data-room-ui/DataSetLabelManagement/src/LabelSelect.vue'
-import ParamsSettingDialog from './JsComponents/ParamsSettingDialog.vue'
+import ParamsSettingDialog from './HttpParamsSettingDialog.vue'
 import OutputFieldDialog from './JsComponents/OutputFieldDialog.vue'
 import FieldFillDialog from './JsComponents/FieldFillDialog.vue'
 import { nameCheckRepeat, datasetAdd, datasetUpdate, getDataset, getCategoryTree, datasetExecuteTest } from 'data-room-ui/js/utils/datasetConfigService'

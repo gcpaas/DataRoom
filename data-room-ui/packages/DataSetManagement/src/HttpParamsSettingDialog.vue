@@ -169,7 +169,7 @@
 <script>
 import { cloneDeep } from 'lodash'
 export default {
-  name: 'ParamsSettingDialog',
+  name: 'HttpParamsSettingDialog.vue',
   props: {
     paramsList: {
       type: Array,
@@ -215,7 +215,13 @@ export default {
       this.dialogVisible = false
     },
     confirm () {
-      this.$emit('saveParams', cloneDeep(this.params))
+      if (!this.isUpdate) {
+        this.$emit('saveParams', cloneDeep(this.params))
+      } else {
+        console.log(this.params)
+        this.$emit('saveNewParams', cloneDeep(this.params))
+      }
+      this.$emit('getData')
       this.dialogVisible = false
     }
   }
@@ -223,5 +229,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../assets/style/bsTheme.scss';
+@import '../../assets/style/bsTheme.scss';
 </style>
