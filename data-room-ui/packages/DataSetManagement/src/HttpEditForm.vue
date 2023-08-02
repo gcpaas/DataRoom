@@ -1019,7 +1019,7 @@ export default {
       // 如果动态参数未配置，则直接打开配置弹窗
       // const flag = this.dataForm.config.paramsList.some(item => !item.value)
       // 每次执行时只要有动态参数就会打开参数配置的弹窗进行设置
-      if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length) {
+      if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && !isInit) {
         this.$refs.paramsSettingDialog.open(true)
       } else {
         this.getData()
