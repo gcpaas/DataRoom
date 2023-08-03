@@ -41,7 +41,7 @@
         </div>
         <el-table
           :key="randomKey"
-          max-height="450"
+          max-height="400"
           class="bs-el-table"
           :data="tableList"
         >
@@ -83,7 +83,7 @@
     </el-dialog>
     <!-- 新增或编辑目录弹窗 -->
     <el-dialog
-      :title="currentCatalog.code ? '编辑分组':'新建分组'"
+      :title="currentCatalog.code ? '编辑分组' : '新建分组'"
       :visible.sync="catalogVisible"
       custom-class="bs-el-dialog"
       width="30%"
@@ -107,9 +107,7 @@
             clearable
           />
         </el-form-item>
-        <el-form-item
-          label="排序"
-        >
+        <el-form-item label="排序">
           <el-input-number
             v-model="currentCatalog.orderNum"
             :min="0"
@@ -205,7 +203,7 @@ export default {
           this.dataList = data
           this.$emit('updateCatalogList', data)
         })
-        .catch(() => {})
+        .catch(() => { })
     },
     // 新增编辑目录（点击确定）
     addOrEditCatalog () {
@@ -280,12 +278,14 @@ export default {
 @import '../assets/style/bsTheme.scss';
 .catalog-edit-wrap{
  ::v-deep .el-dialog__body{
-    min-height: 500px !important;
+    min-height: 300px !important;
   }
+
   .el-input {
     width: 200px;
     margin-right: 20px;
   }
+
   .top-search-wrap {
     display: flex;
     align-items: center;
@@ -295,6 +295,7 @@ export default {
     .el-input {
       width: 200px;
       margin-right: 20px;
+
       ::v-deep.el-input__inner {
         background-color: #151A26 !important;
       }

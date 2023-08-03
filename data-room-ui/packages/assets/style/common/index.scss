@@ -186,6 +186,9 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
 }
 //分页样式
 .bs-pagination {
+  .el-pagination .el-select .el-input{
+    margin: 0 10px;
+  }
   .el-pagination.is-background .btn-prev,
   .el-pagination.is-background .btn-next,
   .el-pagination.is-background .el-pager li {

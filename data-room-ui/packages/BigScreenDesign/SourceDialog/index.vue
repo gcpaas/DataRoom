@@ -38,7 +38,6 @@
           </el-select>
           <el-button
             size="small"
-            style="margin-right: 20px"
             type="primary"
             @click="reSearch"
           >
@@ -52,7 +51,9 @@
           element-loading-text="加载中"
           :style="{
             display: gridComputed ? 'grid' : 'flex',
-            justifyContent: gridComputed ? 'space-around' : 'flex-start'
+            justifyContent: gridComputed ? 'space-around' : 'flex-start',
+            height: 'calc(100vh - 400px)',
+            marginBottom: '38px'
           }"
         >
           <!-- <div v-if="list.length !== 0"> -->
@@ -100,23 +101,23 @@
         >
           暂无数据
         </div>
-        <div class="footer-pagination-wrap">
-          <div class="bs-pagination">
-            <el-pagination
-              class="bs-el-pagination"
-              popper-class="bs-el-pagination"
-              background
-              layout="total, prev, pager, next, sizes"
-              :page-size="size"
-              prev-text="上一页"
-              next-text="下一页"
-              :total="totalCount"
-              :page-sizes="[10, 20, 50, 100]"
-              :current-page="current"
-              @current-change="currentChangeHandle"
-              @size-change="sizeChangeHandle"
-            />
-          </div>
+      </div>
+      <div class="footer-pagination-wrap">
+        <div class="bs-pagination">
+          <el-pagination
+            class="bs-el-pagination"
+            popper-class="bs-el-pagination"
+            background
+            layout="total, prev, pager, next, sizes"
+            :page-size="size"
+            prev-text="上一页"
+            next-text="下一页"
+            :total="totalCount"
+            :page-sizes="[10, 20, 50, 100]"
+            :current-page="current"
+            @current-change="currentChangeHandle"
+            @size-change="sizeChangeHandle"
+          />
         </div>
       </div>
     </div>
@@ -224,7 +225,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/style/bsTheme.scss';
-
+::v-deep .el-dialog__body{
+  position: relative;
+  min-height: 500px;
+  padding: 0 16px 16px 16px !important;
+}
 .big-screen-list-wrap {
   .el-select {
     display: inline-block !important;
@@ -243,7 +248,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin-bottom: 12px;
+    position: sticky;
+    top: 0px;
+    z-index: 999;
+    padding: 16px 0;
+    background-color: var(--bs-background-2);
 
     .el-input {
       width: 200px;
@@ -273,15 +282,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 15px;
-
-    // ::v-deep .el-loading-mask {
-    //   display: flex;
-    //   align-items: center;
-    //   justify-content: center;
-    //   height: calc(100vh - 260px) !important;
-    //   z-index: 999;
-    //   top: 50px;
-    // }
 
     .big-screen-card-wrap {
       position: relative;
@@ -407,14 +407,15 @@ export default {
   .el-loading-parent--relative {
     position: unset !important;
   }
-
-  .footer-pagination-wrap {
-    width: 100%;
-    position: absolute;
-    margin-top: 16px;
-  }
 }
 
+.footer-pagination-wrap {
+    bottom: 5px;
+    right: 16px;
+    width: 100%;
+    margin-top: 16px;
+    position: absolute;
+  }
 .bs-pagination {
   ::v-deep .el-input__inner {
     width: 110px !important;
