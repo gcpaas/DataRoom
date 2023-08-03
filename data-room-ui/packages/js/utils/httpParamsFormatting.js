@@ -33,22 +33,21 @@ export default function axiosFormatting (customConfig) {
 
   /** 添加响应拦截器  **/
   instance.interceptors.response.use(response => {
-    console.log('response', response)
+    const resp = response.data
+    console.log('resp', resp)
     // 执行响应脚本
     // eslint-disable-next-line no-new-func
     if (newCustomConfig.responseScript) {
-      const getResp = new Function('response', newCustomConfig.responseScript)
-      const resp = getResp(response)
-      console.log('resp', resp)
-      return Promise.resolve(resp)
+      const getResp = new Function('resp', newCustomConfig.responseScript)
+      const res = getResp(resp)
+      console.log('resp', res)
+      return Promise.resolve(res)
     } else {
-      return Promise.resolve(response.data)
+      return Promise.resolve(resp)
     }
   })
-  const pattern = /(body\.\w+)=(\w+)/g
-  const replacement = "$1='$2'"
-  newCustomConfig.body = newCustomConfig.body.replace(pattern, replacement)
-  const body = stringToObject(newCustomConfig.body)
+  const body = newCustomConfig?.body.replace(/: ,/g, ':undefined,').replace(/, }/g, ',undefined}')
+  console.log('body', body)
   return new Promise((resolve, reject) => {
     instance({
       method: newCustomConfig.method,
@@ -62,22 +61,22 @@ export default function axiosFormatting (customConfig) {
     })
   })
 }
-function stringToObject(inputString) {
-  const lines = inputString.split('\n');
-  const result = {};
-
-  lines.forEach(line => {
-    // Use regular expressions to extract property name and value
-    const propertyMatch = line.match(/^(.*?)=(.*)$/);
-    if (propertyMatch) {
-      const propertyName = propertyMatch[1].trim();
-      const propertyValue = propertyMatch[2].trim().replace(/'/g, ""); // Remove single quotes from the value
-      result[propertyName] = propertyValue;
-    }
-  });
-
-  return { body: result };
-}
+// function stringToObject (inputString) {
+//   const lines = inputString.split('\n')
+//   const result = {}
+//
+//   lines.forEach(line => {
+//     // Use regular expressions to extract property name and value
+//     const propertyMatch = line.match(/^(.*?)=(.*)$/)
+//     if (propertyMatch) {
+//       const propertyName = propertyMatch[1].trim()
+//       const propertyValue = propertyMatch[2].trim().replace(/'/g, '') // Remove single quotes from the value
+//       result[propertyName] = propertyValue
+//     }
+//   })
+//
+//   return { body: result }
+// }
 // 动态替换url后面参数的值
 function replaceUrlParam (url, paramName, paramValue) {
   const regex = new RegExp(`([?&])${paramName}=.*?(&|$)`, 'i')

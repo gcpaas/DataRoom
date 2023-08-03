@@ -365,7 +365,7 @@
                     clearable
                   />
                   <div class="bs-codemirror-bottom-text">
-                    <strong>请求体设置规则： 请求体已经内置参数body，如需添加请求体参数，可直接加入到body对象中。<br> 例如：<span style="color: red;">body.test='test'</span>
+                    <strong>请求体设置规则： 请在脚本中直接输入请求体内容，如涉及变量，请按照${XX}格式进行设置<br> 例如：<span style="color: red;">{"name":${name}}</span>
                     </strong>
                   </div>
                 </el-form-item>
@@ -392,7 +392,7 @@
                       <br> 如修改url中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.url.age=17</span>
                       <br> 如修改请求头中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.headers.name='tom'</span>
                       <br> 如修改请求参数中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.params.age=17</span>
-                      <br> 如修改请求体中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.data.test='test'</span>
+                      <br> 如修改请求体中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.data='{"name":"223"}'</span>
                     </strong>
                   </div>
                   <div
@@ -425,7 +425,7 @@
                     v-if="dataForm.config.requestType === 'frontend'"
                     class="bs-codemirror-bottom-text"
                   >
-                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数response中，可直接使用,但是必须要返回设置后的数据。<br> 例如：<span style="color: red;">let data =response.data;         return data;</span>
+                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数resp中，可直接使用,但是必须要返回设置后的数据。<br> 例如：<span style="color: red;">return resp.data</span>
                     </strong>
                   </div>
                   <div
@@ -433,7 +433,12 @@
                     class="bs-codemirror-bottom-text"
                   >
                     <strong>响应脚本设置规则： 接口返回数据已经内置到参数responseString(已转为字符串)中，,如果需要处理成JSON格式推荐使用JsonSlurper类。
-                      <br> 例如：<span style="color: red;" />
+                      <br> 例如： <br>
+                      <span style="color: red;" >
+                        import com.gccloud.common.utils.JSON <br>
+                        def respone = JSON.parseObject(responseString) <br>
+                        return respone.data
+                      </span>
                     </strong>
                   </div>
                 </el-form-item>
@@ -506,7 +511,6 @@
                 </el-button>
               </div>
               <div
-                v-if="outputFieldList && outputFieldList.length"
                 class="field-wrap bs-field-wrap bs-scrollbar"
               >
                 <div
@@ -530,12 +534,6 @@
                     配置
                   </el-button>
                 </div>
-              </div>
-              <div
-                v-else
-                style="color: red;padding: 16px"
-              >
-                数据为空或数据类型不符合规范，建议返回的数据res结构为{data:[],...},输出字段类型将从res.data中解析
               </div>
             </div>
           </div>
@@ -1100,11 +1098,7 @@ export default {
       if (this.dataForm.config.requestType === 'frontend') {
         // this.replaceParams(this.dataForm.config.paramsList)
         axiosFormatting({ ...this.dataForm.config, paramsList: this.newParamsList }).then((res) => {
-          // this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
-          this.dataPreviewList = [{}]
-          for (const item in res) {
-            this.dataPreviewList[0][item] = res[item]
-          }
+          this.dataPreviewList = res && Array.isArray(res) ? res : [{ ...res }]
           // 获取数据后更新输出字段
           console.log(res)
           this.updateOoutputFieldList(res?.data)
@@ -1119,7 +1113,7 @@ export default {
           dataSetType: 'http'
         }
         datasetExecuteTest(executeParams).then(res => {
-          this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : []
+          this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : [{ ...res.data }]
           // 获取数据后更新输出字段
           this.updateOoutputFieldList(this.dataPreviewList)
           this.$message.success('解析并执行成功')
