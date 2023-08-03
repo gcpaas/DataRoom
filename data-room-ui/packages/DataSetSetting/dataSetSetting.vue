@@ -15,7 +15,7 @@
       @tab-click="handleClickTabs"
     >
       <el-tab-pane
-        label="数据集选择"
+        label="数据集"
         name="dataSet"
       >
         <DataSetManagement
@@ -197,13 +197,13 @@ export default {
   ::v-deep .el-dialog__body {
     position: relative;
     padding: 0 !important;
-    min-height: 550px;
+    // min-height: 550px;
     overflow: hidden;
   }
 
   ::v-deep .bs-container {
     padding: 0;
-    min-height: 550px;
+    min-height: 500px;
     background-color: var(--bs-background-2) !important;
 
     .el-table {
