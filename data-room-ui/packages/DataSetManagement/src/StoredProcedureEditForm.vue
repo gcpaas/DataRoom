@@ -190,7 +190,7 @@
                 type="primary"
                 @click="buildParamsAndRun"
               >
-                解析并运行
+                运行并解析
               </el-button>
             </div>
           </div>

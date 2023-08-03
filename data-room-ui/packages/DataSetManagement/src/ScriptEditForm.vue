@@ -160,7 +160,7 @@
                 type="primary"
                 @click="toExecute"
               >
-                解析并运行
+                运行并解析
               </el-button>
             </div>
           </div>

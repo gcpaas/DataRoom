@@ -166,7 +166,7 @@
               type="primary"
               @click="analysisJSON"
             >
-              解析并运行
+              运行并解析
             </el-button>
           </div>
         </el-col>
