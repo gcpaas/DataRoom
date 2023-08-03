@@ -434,7 +434,7 @@
                   >
                     <strong>响应脚本设置规则： 接口返回数据已经内置到参数responseString(已转为字符串)中，,如果需要处理成JSON格式推荐使用JsonSlurper类。
                       <br> 例如： <br>
-                      <span style="color: red;" >
+                      <span style="color: red;">
                         import com.gccloud.common.utils.JSON <br>
                         def respone = JSON.parseObject(responseString) <br>
                         return respone.data
@@ -454,7 +454,7 @@
                 type="primary"
                 @click="scriptExecute()"
               >
-                解析并运行
+                运行并解析
               </el-button>
             </div>
           </div>
