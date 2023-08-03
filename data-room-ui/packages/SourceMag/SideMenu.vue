@@ -265,7 +265,7 @@ export default {
     },
     // 删除目录
     catalogDel (catalog) {
-      this.$confirm('确定删除该目录？', '提示', {
+      this.$confirm('确定删除该分组？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
