@@ -434,7 +434,7 @@
                   >
                     <strong>响应脚本设置规则： 接口返回数据已经内置到参数responseString(已转为字符串)中，,如果需要处理成JSON格式推荐使用JsonSlurper类。
                       <br> 例如： <br>
-                      <span style="color: red;" >
+                      <span style="color: red;">
                         import com.gccloud.common.utils.JSON <br>
                         def respone = JSON.parseObject(responseString) <br>
                         return respone.data
@@ -1084,12 +1084,26 @@ export default {
     },
     // 点击解析按钮
     scriptExecute (isInit = false) {
-      this.getPramsList()
-      // 每次执行时只要有动态参数就会打开参数配置的弹窗进行设置
-      if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && !isInit) {
-        this.openParamsSetDialog(true)
+      if (isInit) {
+        this.getPramsList()
+        // 每次执行时只要有动态参数就会打开参数配置的弹窗进行设置
+        if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && !isInit) {
+          this.openParamsSetDialog(true)
+        } else {
+          this.getData()
+        }
       } else {
-        this.getData()
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            this.getPramsList()
+            // 每次执行时只要有动态参数就会打开参数配置的弹窗进行设置
+            if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && !isInit) {
+              this.openParamsSetDialog(true)
+            } else {
+              this.getData()
+            }
+          }
+        })
       }
     },
     // 调接口
@@ -1368,50 +1382,7 @@ export default {
 .preview-table{
   max-height: 300px!important;
 }
-///* 修改表格的滚动条样式 */
-///deep/.el-table__body-wrapper::-webkit-scrollbar {
-//  width: 4px; /* 设置滚动条宽度 */
-//}
-//
-///deep/.el-table__body-wrapper::-webkit-scrollbar-thumb {
-//  background-color: #000; /* 设置滚动条滑块的背景颜色 */
-//}
-//
-///deep/.el-table__body-wrapper::-webkit-scrollbar-thumb:hover {
-//  background-color: #555; /* 设置鼠标悬停在滚动条滑块上时的背景颜色 */
-//}
-//
-///deep/.el-table__body-wrapper::-webkit-scrollbar-track {
-//  background-color: #000; /* 设置滚动条轨道的背景颜色 */
-//}
-// 滚动条的宽度
-// .el-table__body-wrapper::-webkit-scrollbar {
-//  width: 6px!important; // 横向滚动条
-//  height: 6px!important; // 纵向滚动条 必写
-//}
-//// 滚动条的滑块
-// .el-table__body-wrapper::-webkit-scrollbar-thumb {
-//  background-color: #ddd!important;
-//  border-radius: 3px!important;
-//}
-.el-table__body-wrapper::-webkit-scrollbar {
-  display: block;
-  width: 16px; /*滚动条宽度*/
-  height: 16px; /*滚动条高度*/
-}
-/*定义滚动条轨道 内阴影+圆角*/
-//.el-table__body-wrapper::-webkit-scrollbar-track {
-//  box-shadow: 0px 1px 3px #292c34 inset; /*滚动条的背景区域的内阴影*/
-//  // border-radius: 10px; /*滚动条的背景区域的圆角*/
-//  background-color: #292c34; /*滚动条的背景颜色*/
-//}
-///*定义滑块 内阴影+圆角*/
-//.el-table__body-wrapper::-webkit-scrollbar-thumb {
-//  box-shadow: 0px 1px 3px #494d5b inset; /*滚动条的内阴影*/
-//  border-radius: 10px; /*滚动条的圆角*/
-//  background-color: #494d5b; /*滚动条的背景颜色*/
-//  border: 5px solid #292c34;
-//}
+
 /*滚动条样式*/
 ::v-deep ::-webkit-scrollbar {
   width: 4px;
