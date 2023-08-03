@@ -101,6 +101,11 @@ function registerRouters (config, router) {
         require.ensure([], () => require('data-room-ui/BigScreenRun'))
     },
     {
+      path: '/dataRoom-redirect',
+      name: 'Redirect',
+      component: () =>import('data-room-ui/Layout/Redirect/index.vue'),
+    },
+    {
       path: config?.routers?.bizComponentDesignUrl || '/big-screen-biz-component-design',
       component: () => import('data-room-ui/BizComponent'),
       meta: {
