@@ -12,7 +12,7 @@
       <div class="bs-table-box">
         <el-table
           ref="singleTable"
-          :data="params"
+          :data="paramsList"
           :border="true"
           align="center"
           class="bs-el-table"
@@ -29,7 +29,6 @@
                 class="bs-el-input"
                 placeholder="请输入名称"
                 clearable
-                readonly
                 @change="checkParamsName(scope.row)"
               />
             </template>
@@ -65,11 +64,7 @@
             filterable
           >
             <template slot-scope="scope">
-              <el-radio-group
-                v-model="scope.row.require"
-                :disabled="isUpdate"
-                class="bs-el-radio-group"
-              >
+              <el-radio-group v-model="scope.row.require">
                 <el-radio :label="1">
                   是
                 </el-radio>
@@ -113,37 +108,36 @@
                 class="bs-el-input"
                 placeholder="请输入备注"
                 rows="2"
-                :readonly="isUpdate"
                 maxlength="200"
               />
             </template>
           </el-table-column>
-          <!--          <el-table-column-->
-          <!--            label="操作"-->
-          <!--            width="105"-->
-          <!--            align="center"-->
-          <!--          >-->
-          <!--            <template slot="header">-->
-          <!--              <el-button-->
-          <!--                icon="el-icon-plus"-->
-          <!--                type="text"-->
-          <!--                class="no-border"-->
-          <!--                @click="addParam"-->
-          <!--              >-->
-          <!--                添加-->
-          <!--              </el-button>-->
-          <!--            </template>-->
-          <!--            <template slot-scope="scope">-->
-          <!--              <el-button-->
-          <!--                type="text"-->
-          <!--                style="color: #e47470;"-->
-          <!--                class="no-border"-->
-          <!--                @click="delRow(scope.$index)"-->
-          <!--              >-->
-          <!--                删除-->
-          <!--              </el-button>-->
-          <!--            </template>-->
-          <!--          </el-table-column>-->
+          <el-table-column
+            label="操作"
+            width="105"
+            align="center"
+          >
+            <template slot="header">
+              <el-button
+                icon="el-icon-plus"
+                type="text"
+                class="no-border"
+                @click="addParam"
+              >
+                添加
+              </el-button>
+            </template>
+            <template slot-scope="scope">
+              <el-button
+                type="text"
+                style="color: #e47470;"
+                class="no-border"
+                @click="delRow(scope.$index)"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
       <span
@@ -175,28 +169,15 @@ export default {
     paramsList: {
       type: Array,
       default: () => []
-    },
-    newParamsList: {
-      type: Array,
-      default: () => []
     }
   },
   data () {
     return {
-      params: [],
-      isUpdate: false,
       dialogVisible: false
     }
   },
   methods: {
-    open (isUpdate = false) {
-      this.$emit('getPramsList')
-      if (isUpdate) {
-        this.params = this.newParamsList
-      } else {
-        this.params = cloneDeep(this.paramsList)
-      }
-      this.isUpdate = isUpdate
+    open () {
       this.dialogVisible = true
     },
     close () {
@@ -205,8 +186,21 @@ export default {
     handleClose () {
       this.dialogVisible = false
     },
+    addParam () {
+      this.paramsList.push({
+        name: '',
+        type: '',
+        value: '',
+        status: 1,
+        require: 0,
+        remark: ''
+      })
+    },
+    delRow (index) {
+      this.paramsList.splice(index, 1)
+    },
     checkParamsName (value) {
-      const checkList = this.params.filter(item => item.fieldName === value.name)
+      const checkList = this.paramsList.filter(item => item.fieldName === value.name)
       if (checkList.length) {
         this.$message.warning('参数名称不可以与字段名相同！')
         value.name = ''
@@ -216,10 +210,11 @@ export default {
       this.dialogVisible = false
     },
     confirm () {
-      this.$emit('saveParams', cloneDeep(this.params))
+      this.$emit('saveParams', cloneDeep(this.paramsList))
       this.dialogVisible = false
     }
   }
+
 }
 </script>
 
