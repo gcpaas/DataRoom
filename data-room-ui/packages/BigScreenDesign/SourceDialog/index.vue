@@ -172,7 +172,7 @@ export default {
   mounted () { },
   methods: {
     jumpto () {
-      const { href } = this.$router.resolve('/big-screen-source?edit=1')
+      const { href } = this.$router.resolve('/dataRoom-redirect?edit=source')
       window.open(href, '_blank')
     },
     chooseImg (img) {

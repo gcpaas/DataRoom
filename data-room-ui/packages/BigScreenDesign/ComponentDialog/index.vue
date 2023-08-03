@@ -394,7 +394,7 @@ export default {
   },
   methods: {
     jumpto () {
-      const { href } = this.$router.resolve('/big-screen-components?edit=1')
+      const { href } = this.$router.resolve('/dataRoom-redirect?edit=component')
       window.open(href, '_blank')
     },
     chooseComponent (component) {
