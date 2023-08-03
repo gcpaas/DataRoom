@@ -7,7 +7,7 @@ export default function axiosFormatting (customConfig) {
   const httpConfig = {
     timeout: 1000 * 30,
     baseURL: '',
-    headers: newCustomConfig.headers
+    headers: { 'Content-Type': 'application/json', ...newCustomConfig.headers }
   }
   // let loadingInstance = null // 加载全局的loading
   const instance = axios.create(httpConfig)
@@ -47,7 +47,7 @@ export default function axiosFormatting (customConfig) {
     }
   })
   const body = newCustomConfig?.body.replace(/: ,/g, ':undefined,').replace(/, }/g, ',undefined}')
-  console.log('body', body)
+  /** 发送请求  **/
   return new Promise((resolve, reject) => {
     instance({
       method: newCustomConfig.method,
@@ -61,22 +61,6 @@ export default function axiosFormatting (customConfig) {
     })
   })
 }
-// function stringToObject (inputString) {
-//   const lines = inputString.split('\n')
-//   const result = {}
-//
-//   lines.forEach(line => {
-//     // Use regular expressions to extract property name and value
-//     const propertyMatch = line.match(/^(.*?)=(.*)$/)
-//     if (propertyMatch) {
-//       const propertyName = propertyMatch[1].trim()
-//       const propertyValue = propertyMatch[2].trim().replace(/'/g, '') // Remove single quotes from the value
-//       result[propertyName] = propertyValue
-//     }
-//   })
-//
-//   return { body: result }
-// }
 // 动态替换url后面参数的值
 function replaceUrlParam (url, paramName, paramValue) {
   const regex = new RegExp(`([?&])${paramName}=.*?(&|$)`, 'i')
