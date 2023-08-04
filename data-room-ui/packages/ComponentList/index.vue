@@ -344,6 +344,7 @@ export default {
       window.open(href, '_blank')
     },
     design (screen) {
+      console.log(222)
       const path = this.catalogInfo === 'component' ? (window.BS_CONFIG?.routers?.designUrl || '/big-screen/design') : (window.BS_CONFIG?.routers?.bizComponentDesignUrl || 'big-screen-biz-component-design')
       const { href } = this.$router.resolve({
         path,
@@ -351,7 +352,8 @@ export default {
           code: screen.code
         }
       })
-      window.open(href, '_self')
+      // 新窗口打开
+      window.open(href, '_blank')
     },
     add () {
       const page = {

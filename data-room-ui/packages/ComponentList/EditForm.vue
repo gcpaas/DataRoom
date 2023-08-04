@@ -426,7 +426,8 @@ export default {
           code: form.code
         }
       })
-      window.open(bigScreenHref, '_self')
+      // 新窗口打开
+      window.open(bigScreenHref, '_blank')
     }
   }
 }
