@@ -298,7 +298,6 @@
             :data="dataPreviewList"
             max-height="400"
             class="bs-el-table bs-scrollbar"
-            :border="true"
           >
             <el-table-column
               v-for="(value, key) in dataPreviewList[0]"

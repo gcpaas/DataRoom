@@ -285,7 +285,6 @@
             align="center"
             :data="dataPreviewList"
             max-height="400"
-            :border="true"
             class="bs-el-table bs-scrollbar"
           >
             <el-table-column
