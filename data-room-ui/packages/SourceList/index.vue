@@ -280,7 +280,7 @@ export default {
       window.open(screen.url, '_blank')
     },
     downLoad (screen) {
-      this.$dataRoomAxios.download(`/bigScreen/file/download/${screen.id}`)
+      this.$dataRoomAxios.download(`/bigScreen/file/download/${screen.id}`, true)
     },
     del (screen) {
       this.$confirm('确定删除该资源？', '提示', {

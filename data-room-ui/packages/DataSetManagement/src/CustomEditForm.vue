@@ -203,7 +203,7 @@
                 type="primary"
                 @click="buildParamsAndRun"
               >
-                运行并解析
+                解析并运行
               </el-button>
             </div>
           </div>
@@ -1094,7 +1094,7 @@ export default {
       })
     },
     /**
-     * 运行并解析数据集
+     * 解析并运行数据集
      */
     buildParamsAndRun () {
       this.isTest = true
