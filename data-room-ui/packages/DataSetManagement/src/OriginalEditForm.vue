@@ -297,8 +297,9 @@
                 <span>{{ field.fieldName }}</span>&nbsp;<span
                   v-show="field.fieldDesc"
                   style="color: #909399;"
-                >({{
-                  field.fieldDesc }})</span>
+                >
+                  ({{ field.fieldDesc }})
+                </span>
                 <el-button
                   class="edit_field"
                   type="text"
@@ -332,7 +333,7 @@
             class="bs-el-table bs-scrollbar"
           >
             <el-table-column
-              v-for="(value, key) in dataPreviewList[0]"
+              v-for="(value, key) in dataPreviewList[0] ? dataPreviewList[0] : noDataTableDisplayFields"
               :key="key"
               :label="key"
               align="center"
@@ -568,6 +569,16 @@ export default {
       isInit: false
     }
   },
+  computed: {
+    noDataTableDisplayFields () {
+      // 表格列对象
+      const tableColumnObject = {}
+      this.structurePreviewList.forEach(item => {
+        tableColumnObject[item.fieldName] = ''
+      })
+      return tableColumnObject
+    }
+  },
   watch: {
     'dataForm.fieldInfo': {
       handler (value) {
@@ -588,6 +599,7 @@ export default {
       deep: true,
       immediate: true
     }
+
   },
   mounted () {
     this.init()
@@ -671,9 +683,10 @@ export default {
       this.tableLoading = true
       datasetExecuteTest(executeParams).then((data) => {
         if (this.dataForm.fieldList == null) {
-          this.dataForm.fieldList = _.cloneDeep(res.structure)
+          this.dataForm.fieldList = _.cloneDeep(data.structure)
         }
         this.dataPreviewList = data.data.list
+        console.log(this.dataPreviewList)
         this.totalCount = data.data.totalCount
         this.tableLoading = false
       }).catch(() => {
@@ -810,6 +823,7 @@ export default {
      */
     queryAllField () {
       getTableFieldList(this.dataForm.sourceId, this.dataForm.tableName).then((data) => {
+        console.log('data', data)
         const fieldDescMap = {}
         this.fieldList = data.map(field => {
           fieldDescMap[field.columnName] = field.columnComment
