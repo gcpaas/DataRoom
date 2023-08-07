@@ -428,6 +428,7 @@ export default {
      * 移除选中的标签
      */
     handleCloseTag (label) {
+      this.idListCopy = []
       this.selectLabelListInitial.forEach((item, index) => {
         if (item.id === label.id) {
           this.selectLabelListInitial.splice(index, 1)
@@ -438,6 +439,10 @@ export default {
           this.selectLabelList.splice(index, 1)
         }
       })
+      this.selectLabelList.forEach(item => {
+        this.idListCopy.push(item.id)
+      })
+      this.$emit('commit', this.idListCopy)
     },
     /**
      * 点击添加标签关联按钮
