@@ -385,24 +385,13 @@
                     class="code"
                   />
                   <div
-                    v-if="dataForm.config.requestType === 'frontend'"
                     class="bs-codemirror-bottom-text"
                   >
                     <strong>请求脚本设置规则： 请求脚本已经内置参数req，可参考下面的示例进行配置:
-                      <br> 如修改url中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.url.age=17</span>
+                      <br> 如修改请求地址中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.url.age=17</span>
                       <br> 如修改请求头中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.headers.name='tom'</span>
                       <br> 如修改请求参数中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.params.age=17</span>
                       <br> 如修改请求体中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.data='{"name":"223"}'</span>
-                    </strong>
-                  </div>
-                  <div
-                    v-else
-                    class="bs-codemirror-bottom-text"
-                  >
-                    <strong>请求脚本设置规则： 请求脚本已经内置参数:请求头：headers（对象类型），请求参数params（对象类型），请求体body（字符串类型），注意：如果body有修改，必须在脚本最后将字符串body返回，可参考下面的示例进行配置:
-                      <br> 如修改请求头中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">headers.name='tom'</span>
-                      <br> 如修改请求参数中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">params.age=17</span>
-                      <br> 如修改请求体中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">body='XXXX'</span>
                     </strong>
                   </div>
                 </el-form-item>
@@ -1123,7 +1112,7 @@ export default {
         const script = JSON.stringify(this.dataForm.config)
         const executeParams = {
           script,
-          params: this.dataForm.paramsList,
+          params: this.dataForm.config.paramsList,
           dataSetType: 'http'
         }
         datasetExecuteTest(executeParams).then(res => {
