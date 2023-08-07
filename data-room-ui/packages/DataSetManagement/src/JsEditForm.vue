@@ -165,7 +165,7 @@
                 type="primary"
                 @click="scriptExecute()"
               >
-                运行并解析
+                解析并运行
               </el-button>
             </div>
           </div>
@@ -297,7 +297,6 @@
                 align="center"
                 :data="dataPreviewList"
                 max-height="400"
-                :border="true"
                 class="bs-el-table"
               >
                 <el-table-column

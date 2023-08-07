@@ -210,8 +210,16 @@ export function download (url, headers = {}, params = {}, body = {}) {
     }).catch(e => {
       const status = e?.response?.status
       if (status === 404) {
+        Message({
+          message: '文件不存在或已被删除',
+          type: 'error'
+        })
         return
       }
+      Message({
+        message: '服务异常',
+        type: 'error'
+      })
       console.error('服务异常')
     })
   })

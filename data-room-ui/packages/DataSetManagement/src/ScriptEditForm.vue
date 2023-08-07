@@ -160,7 +160,7 @@
                 type="primary"
                 @click="toExecute"
               >
-                运行并解析
+                解析并运行
               </el-button>
             </div>
           </div>
@@ -257,11 +257,10 @@
             align="center"
             :data="dataPreviewList"
             max-height="400"
-            :border="true"
             class="bs-el-table bs-scrollbar"
           >
             <el-table-column
-              v-for="(value, key) in dataPreviewList[0]"
+              v-for="(value, key) in dataPreviewList[0] ? dataPreviewList[0] : noDataTableDisplayFields"
               :key="key"
               :label="key"
               align="center"
@@ -613,6 +612,16 @@ export default {
       fieldDesc: null // 字段描述
     }
   },
+  computed: {
+    noDataTableDisplayFields () {
+      // 表格列对象
+      const tableColumnObject = {}
+      this.structurePreviewList.forEach(item => {
+        tableColumnObject[item.fieldName] = ''
+      })
+      return tableColumnObject
+    }
+  },
   watch: {
     'dataForm.script' () {
       this.passTest = false
@@ -879,11 +888,6 @@ export default {
     height: 100%;
   }
 }
-
-// .tree-box {
-//   padding: 0;
-//   max-height: 270px;
-// }
 
 ::v-deep .el-input__inner {
   width: 100% !important;

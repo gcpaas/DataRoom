@@ -166,7 +166,7 @@
               type="primary"
               @click="analysisJSON"
             >
-              运行并解析
+              解析并运行
             </el-button>
           </div>
         </el-col>
@@ -223,7 +223,6 @@
             align="center"
             :data="dataPreviewList"
             max-height="400"
-            :border="true"
             class="bs-el-table"
           >
             <el-table-column

@@ -203,7 +203,7 @@
                 type="primary"
                 @click="buildParamsAndRun"
               >
-                运行并解析
+                解析并运行
               </el-button>
             </div>
           </div>
@@ -298,10 +298,9 @@
             :data="dataPreviewList"
             max-height="400"
             class="bs-el-table bs-scrollbar"
-            :border="true"
           >
             <el-table-column
-              v-for="(value, key) in dataPreviewList[0]"
+              v-for="(value, key) in dataPreviewList[0] ? dataPreviewList[0] : noDataTableDisplayFields"
               :key="key"
               :label="key"
               align="center"
@@ -853,6 +852,14 @@ export default {
         script: this.dataForm.script,
         paramsList: this.dataForm.paramsList
       }
+    },
+    noDataTableDisplayFields () {
+      // 表格列对象
+      const tableColumnObject = {}
+      this.structurePreviewList.forEach(item => {
+        tableColumnObject[item.fieldName] = ''
+      })
+      return tableColumnObject
     }
   },
   watch: {
@@ -1094,7 +1101,7 @@ export default {
       })
     },
     /**
-     * 运行并解析数据集
+     * 解析并运行数据集
      */
     buildParamsAndRun () {
       this.isTest = true
@@ -1377,10 +1384,8 @@ export default {
 }
 
 .bs-pagination {
-  padding: 0 !important;
-  right: 16px !important;
-  bottom: 16px !important;
-  position: absolute !important;
+  padding: 16px !important;
+  position: unset !important;
   ::v-deep .el-input__inner {
     width: 110px !important;
     border: none;
