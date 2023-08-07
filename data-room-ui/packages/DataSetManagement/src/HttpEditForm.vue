@@ -157,7 +157,7 @@
                     v-model="dataForm.config.url"
                     autocomplete="off"
                     class="bs-el-input"
-                    placeholder="请输入静态请求地址或动态请求地址，动态请求地址必须以${baseUrl}开头"
+                    placeholder="请输入请求地址"
                     clearable
                   />
                 </el-form-item>
@@ -414,14 +414,14 @@
                     v-if="dataForm.config.requestType === 'frontend'"
                     class="bs-codemirror-bottom-text"
                   >
-                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数resp中，可直接使用,但是必须要返回设置后的数据。<br> 例如：<span style="color: red;">return resp.data</span>
+                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数resp中，可直接使用，但是必须要返回设置后的数据。<br> 例如：<span style="color: red;">return resp.data</span>
                     </strong>
                   </div>
                   <div
                     v-else
                     class="bs-codemirror-bottom-text"
                   >
-                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数responseString(已转为字符串)中，,如果需要处理成JSON格式推荐使用JsonSlurper类。
+                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数responseString(已转为字符串)中，如果需要处理成JSON格式推荐使用JsonSlurper类。
                       <br> 例如： <br>
                       <span style="color: red;">
                         import groovy.json.JsonSlurper<br>
@@ -726,7 +726,7 @@ export default {
       const reg = /(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/
       if (!reg.test(value)) {
         // eslint-disable-next-line no-template-curly-in-string
-        callback(new Error('请输入正确的静态请求地址或动态请求地址，动态请求地址必须以${baseUrl}/开头'))
+        callback(new Error('请输入请求地址'))
       } else {
         callback()
       }
