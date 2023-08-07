@@ -1115,7 +1115,7 @@ export default {
           this.dataPreviewList = res && Array.isArray(res) ? res : [{ ...res }]
           // 获取数据后更新输出字段
           console.log(res)
-          this.updateOoutputFieldList(res?.data)
+          this.updateOoutputFieldList(this.dataPreviewList)
           this.$message.success('解析并执行成功')
         })
       } else {
