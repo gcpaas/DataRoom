@@ -971,8 +971,7 @@ export default {
     // 进入编辑
     fieldDescEdit () {
       this.$refs.fieldFillDialog.close()
-      // this.fieldDescVisible = false
-      this.fieldsetVisible = true
+      this.$refs.outputFieldDialog.open()
     },
     // 继续保存
     toSave () {
