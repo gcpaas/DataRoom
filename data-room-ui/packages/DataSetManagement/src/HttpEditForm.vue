@@ -1106,6 +1106,10 @@ export default {
           console.log(res)
           this.updateOoutputFieldList(this.dataPreviewList)
           this.$message.success('解析并执行成功')
+        }).catch((e) => {
+          // 未成功获取数据时，清空数据预览和输出字段
+          this.dataPreviewList = []
+          this.updateOoutputFieldList(this.dataPreviewList)
         })
       } else {
         // 如果是后端代理，则将配置传到后端
@@ -1121,7 +1125,9 @@ export default {
           this.updateOoutputFieldList(this.dataPreviewList)
           this.$message.success('解析并执行成功')
         }).catch((e) => {
-
+          // 未成功获取数据时，清空数据预览和输出字段
+          this.dataPreviewList = []
+          this.updateOoutputFieldList(this.dataPreviewList)
         })
       }
     },
