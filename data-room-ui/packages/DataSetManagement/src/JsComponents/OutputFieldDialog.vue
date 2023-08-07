@@ -88,7 +88,7 @@ export default {
       this.dialogVisible = false
     },
     handleClose () {
-      this.fieldsetVisible = false
+      this.dialogVisible = false
     },
     cancelField () {
       this.dialogVisible = false

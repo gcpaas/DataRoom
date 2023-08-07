@@ -75,6 +75,7 @@
                 />
                 <el-form-item
                   v-else
+                  style="margin-bottom: 0"
                   :prop="'params.' + scope.$index + '.value'"
                   :rules="scope.row.require ?formRules.value:null"
                 >
