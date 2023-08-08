@@ -641,7 +641,12 @@ export default {
         let scriptMethod = null
         try {
           const scriptAfterReplacement = javascript.replace(/\${(.*?)}/g, (match, p) => {
-            return `'${this.dataForm.config.paramsList.find(param => param.name === p).value}'`
+            const value = this.dataForm.config.paramsList.find(param => param.name === p).value
+            if (!isNaN(value)) {
+              return value
+            } else {
+              return `'${value}'`
+            }
           })
           // eslint-disable-next-line no-new-func
           scriptMethod = new Function(scriptAfterReplacement)
