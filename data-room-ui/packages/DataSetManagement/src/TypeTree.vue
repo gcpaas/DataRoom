@@ -268,7 +268,7 @@ export default {
             /* 菜单定位基于鼠标点击位置 */
             menu.style.display = ''
             menu.style.left = nodeElObj.right - 92 + 'px'
-            menu.style.top = hieght + 16 + 25 + 'px'
+            menu.style.top = hieght + 20 + 25 + 'px'
             menu.style.position = 'fixed' // 为新创建的DIV指定绝对定位
             menu.style.width = 110 + 'px'
           } else {
