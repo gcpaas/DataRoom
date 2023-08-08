@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     title () {
-       if (this.$route.query.edit) return '大屏设计器'
+      if (this.$route.query.edit) return '大屏设计器'
       return window?.BS_CONFIG?.starter?.title
     },
     logo () {
@@ -112,10 +112,10 @@ export default {
           path: tab.path,
           query: { edit: 1 }
         })
-      }else{
-      this.$router.push({
-        path: tab.path
-      })
+      } else {
+        this.$router.push({
+          path: tab.path
+        })
       }
     }
   }
@@ -140,6 +140,8 @@ export default {
     background-position: center right;
 
     .logo-title {
+      // 禁用可选
+      user-select: none;
       font-size: 30px;
       position: absolute;
       z-index: 23;
