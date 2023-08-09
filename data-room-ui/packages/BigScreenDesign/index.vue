@@ -406,7 +406,7 @@ export default {
     },
     // 自定义属性更新
     updateSetting (config) {
-      if (config.type === 'map'||config.type === 'video') {
+      if (config.type === 'map' || config.type === 'video') {
         config.key = new Date().getTime()
       }
       this.changeChartConfig(_.cloneDeep(config))
@@ -505,13 +505,13 @@ export default {
             margin-right: 16px;
           }
 
-          /deep/ .el-select {
+          ::v-deep .el-select {
             width: 150px !important;
           }
         }
       }
 
-      /deep/ .el-loading-mask {
+      ::v-deep .el-loading-mask {
         background-color: transparent !important;
       }
     }
