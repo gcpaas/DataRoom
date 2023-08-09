@@ -95,10 +95,9 @@
                     <div
                       v-for="element in menu.components"
                       :key="element.type + element.name"
-                      :class="
-                        element.component
-                          ? 'item menu-component drag-node'
-                          : 'item drag-node'
+                      :class="element.component
+                        ? 'item menu-component drag-node'
+                        : 'item drag-node'
                       "
                       draggable="true"
                       :data-type="element.type"
@@ -111,11 +110,18 @@
                         class="img_dispaly chooseDragNode"
                         @click.stop="addComponent(element)"
                       >
-                        <icon-svg
+                        <svg
+                          v-if="element.icon"
+                          class="icon-svg"
+                          aria-hidden="true"
+                        >
+                          <use :xlink:href="`#icon-a-${element.icon}`" />
+                        </svg>
+                        <!-- <icon-svg
                           v-if="element.icon"
                           :name="element.icon"
                           class="page-opt-list-icon"
-                        />
+                        /> -->
                         <img
                           v-else-if="element.img"
                           :src="element.img"
@@ -140,6 +146,8 @@
   </transition>
 </template>
 <script>
+
+import './data-room-ui-icon/iconfont.js'
 import _ from 'lodash'
 import basicComponents from 'data-room-ui/js/config/basicComponentsConfig'
 import g2PlotComponents, { getCustomPlots } from '../G2Plots/plotList'
@@ -284,14 +292,14 @@ export default {
       // this.$emit('onStart', e)
     },
     // 拖拽组件时触发
-    onEnd (e) {},
+    onEnd (e) { },
     // 点击左侧组件时触发
     addComponent (element) {
       this.$store.commit('bigScreen/changeActiveItem', element)
       this.$emit('addComponent', element)
     },
     // 初始化
-    initList () {},
+    initList () { },
     // 点击tab标签
     tabClick (tab) {
       this.nodeDrag()
@@ -327,6 +335,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../BigScreenDesign/fonts/iconfont.css';
+
 .bs-left-panel {
   display: flex;
   background-color: var(--bs-background-1);
@@ -354,7 +363,7 @@ export default {
   .page-left {
     box-sizing: border-box;
 
-    > * {
+    >* {
       color: #fff;
     }
 
@@ -378,6 +387,7 @@ export default {
         .iconfont-bigscreen {
           color: var(--bs-el-color-primary);
         }
+
         .menu-title-span {
           color: var(--bs-el-color-primary);
         }
@@ -406,6 +416,7 @@ export default {
             /*border-left: 4px solid #007aff;*/
             position: relative;
             padding-left: 12px;
+
             &:after {
               position: absolute;
               left: 0;
@@ -418,9 +429,11 @@ export default {
             }
           }
         }
+
         .el-scrollbar__view {
           height: calc(100vh - 55px);
         }
+
         .page-left-content-components {
           width: 100%;
           text-align: center;
@@ -448,6 +461,7 @@ export default {
                 padding: 4px 8px;
                 text-align: left;
               }
+
               .sampleImg {
                 margin: 0 auto;
                 width: 102px;
@@ -464,6 +478,9 @@ export default {
                 .icon-svg {
                   width: 60px !important;
                   height: 60px !important;
+                  vertical-align: -0.15em;
+                  fill: currentColor;
+                  overflow: hidden;
                 }
 
                 img {
@@ -479,6 +496,7 @@ export default {
                 height: 75px;
                 margin: 0 auto;
               }
+
               .img_dispaly {
                 height: 80px;
               }
@@ -526,9 +544,11 @@ export default {
       border: none;
     }
   }
+
   .left-tabs-box {
     ::v-deep.el-tabs__item {
       height: 70px !important;
+
       .menu-slot {
         height: 100%;
         display: flex;
@@ -536,9 +556,11 @@ export default {
         align-items: center;
         flex-wrap: wrap;
         color: #bcc9d4;
+
         .menu-icon {
           height: 20px;
         }
+
         .menu-title-span {
           display: block;
           width: 100%;
@@ -560,7 +582,8 @@ export default {
 .slide-fade-enter,
 .slide-fade-leave-to
 
-/* .slide-fade-leave-active for below version 2.1.8 */ {
+/* .slide-fade-leave-active for below version 2.1.8 */
+  {
   transform: translateX(10px);
   opacity: 0;
 }
