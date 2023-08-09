@@ -147,7 +147,7 @@
 </template>
 <script>
 
-import './data-room-ui-icon/iconfont.js'
+import 'data-room-ui/assets/symbols/bigScreenIcon/iconfont.js'
 import _ from 'lodash'
 import basicComponents from 'data-room-ui/js/config/basicComponentsConfig'
 import g2PlotComponents, { getCustomPlots } from '../G2Plots/plotList'
