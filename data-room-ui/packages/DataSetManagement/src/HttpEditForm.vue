@@ -837,7 +837,7 @@ export default {
         getDataset(this.datasetId).then(res => {
           const { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config } = res
           const { script, paramsList, fieldDesc, fieldList } = config
-          this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { ...config } }
+          this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { ...config }, labelIds: this.dataForm.labelIds }
           this.fieldDesc = fieldDesc
           this.outputFieldList = fieldList
           this.newParamsList = _.cloneDeep(paramsList)
