@@ -3,7 +3,8 @@
  * @Date: 2023-03-24 17:10:43
  * @Author: xing.heng
  */
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { mapMutations, mapState } from 'vuex'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import { getChatInfo, getUpdateChartInfo } from '../api/bigScreenApi'
@@ -72,7 +73,7 @@ export default {
           size: size,
           type: config.type
         }).then(async (res) => {
-          let _res = _.cloneDeep(res)
+          let _res = cloneDeep(res)
           // 如果是http数据集的前端代理，则需要调封装的axios请求
           if (res.executionByFrontend) {
             if (res.data.datasetType === 'http') {
@@ -124,7 +125,7 @@ export default {
       }
       return new Promise((resolve, reject) => {
         getUpdateChartInfo(params).then(async (res) => {
-          let _res = _.cloneDeep(res)
+          let _res = cloneDeep(res)
           // 如果是http数据集的前端代理，则需要调封装的axios请求
           if (res.executionByFrontend) {
             if (res.data.datasetType === 'http') {

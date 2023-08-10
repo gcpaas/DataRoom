@@ -6,7 +6,8 @@
  * @LastEditTime: 2023-06-01 15:55:48
  */
 
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import getComponentConfig from 'data-room-ui/js/utils/getComponentConfig'
 // 批量引入配置文件
 import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
@@ -38,8 +39,8 @@ basicConfigList = basicConfigList.map((item) => {
 export function basicComponentsConfig (item) {
   return {
     ...item,
-    option: _.cloneDeep(setModules[item.type]),
-    ..._.cloneDeep(dataModules[item.type])
+    option: cloneDeep(setModules[item.type]),
+    ...cloneDeep(dataModules[item.type])
   }
 }
 export default basicConfigList

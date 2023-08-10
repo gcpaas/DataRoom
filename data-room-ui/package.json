@@ -1,6 +1,6 @@
 {
   "name": "@gcpaas/data-room-ui",
-  "version": "1.0.1-2023080902-Alpha",
+  "version": "1.0.1-2023081004-Alpha",
   "description": "自定义大屏",
   "author": "gcpaas",
   "license": "MIT",
@@ -8,10 +8,11 @@
   "keywords": [
     "dataRoom",
     "bigScreen",
-    "low code",
+    "lowCode",
     "自定义大屏",
     "大屏设计器",
-    "低代码"
+    "低代码",
+    "报表"
   ],
   "repository": {
     "type": "github",
@@ -54,36 +55,33 @@
     "@antv/g2plot": "2.4.0",
     "@jiaminghi/data-view": "2.10.0",
     "axios": "0.18.1",
-    "babel-polyfill": "6.26.0",
     "echarts": "^5.2.2",
     "element-ui": "2.15.6",
     "es6-promise": "4.2.8",
     "html-to-image": "1.11.11",
     "image-conversion": "^2.1.1",
-    "increase-memory-limit": "^1.0.7",
     "insert-css": "^2.0.0",
     "jquery": "^3.6.4",
     "lodash": "4.17.21",
+    "lodash-es": "4.17.21",
     "moment": "^2.29.1",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
     "qs": "^6.9.6",
     "remote-vue-loader": "1.0.0",
     "sortablejs": "^1.15.0",
-    "tiny-sass-compiler": "^0.12.2",
     "videojs-contrib-hls": "^5.15.0",
-    "vue": "2.6.10",
     "vue-codemirror": "^4.0.6",
-    "vue-contextmenujs": "^1.4.9",
     "vue-draggable-resizable-gorkys": "^2.4.8",
+    "vue-router": "3.0.6",
+    "vue-video-player": "^5.0.1",
+    "vuex": "3.1.0",
+    "ztree": "3.5.24",
+    "vue-contextmenujs": "^1.4.9",
     "vue-json-editor": "^1.4.3",
     "vue-json-viewer": "^2.2.22",
-    "vue-router": "3.0.6",
     "vue-sketch-ruler": "^1.0.3",
-    "vue-video-player": "^5.0.1",
-    "vuedraggable": "^2.24.3",
-    "vuex": "3.1.0",
-    "ztree": "3.5.24"
+    "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -130,7 +128,11 @@
     "svgo": "1.2.2",
     "url-loader": "^4.1.1",
     "vue-template-compiler": "2.6.10",
-    "webpack-bundle-analyzer": "^4.9.0"
+    "webpack-bundle-analyzer": "^4.9.0",
+    "vue": "2.6.10",
+    "babel-polyfill": "6.26.0",
+    "increase-memory-limit": "^1.0.7",
+    "tiny-sass-compiler": "^0.12.2"
   },
   "engines": {
     "node": ">=8.9",

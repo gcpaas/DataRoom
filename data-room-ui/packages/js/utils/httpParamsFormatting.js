@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { Loading, Message } from 'element-ui'
-import _ from 'lodash'
+// import { Loading, Message } from 'element-ui'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 export default function axiosFormatting (customConfig) {
   const newCustomConfig = replaceParams(customConfig)
   // 将请求头和请求参数的值转化为对象形式
@@ -36,8 +37,8 @@ export default function axiosFormatting (customConfig) {
     const resp = response.data
     console.log('resp', resp)
     // 执行响应脚本
-    // eslint-disable-next-line no-new-func
     if (newCustomConfig.responseScript) {
+      // eslint-disable-next-line no-new-func
       const getResp = new Function('resp', newCustomConfig.responseScript)
       const res = getResp(resp)
       console.log('resp', res)
@@ -73,7 +74,7 @@ function replaceUrlParam (url, paramName, paramValue) {
 }
 // 将参数的值替换掉其他配置中对应属性的值
 function replaceParams (customConfig) {
-  const newConfig = _.cloneDeep(customConfig)
+  const newConfig = cloneDeep(customConfig)
   newConfig.url = evalStrFunc(newConfig.paramsList, newConfig.url)
   newConfig.headers = evalArrFunc(newConfig.paramsList, newConfig.headers)
   newConfig.params = evalArrFunc(newConfig.paramsList, newConfig.params)

@@ -1,4 +1,5 @@
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 const datasetMixins = {
   props: {
@@ -45,7 +46,7 @@ const datasetMixins = {
         { value: 'Double' },
         { value: 'Long' },
         { value: 'Date' }
-      ],
+      ]
     }
   },
   methods: {
@@ -79,14 +80,14 @@ const datasetMixins = {
      * 取消编辑字段
      */
     cancelField () {
-      this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
+      this.structurePreviewListCopy = cloneDeep(this.structurePreviewList)
       this.fieldsetVisible = false
     },
     /**
      * 保存字段设置
      */
     setField () {
-      this.structurePreviewList = _.cloneDeep(this.structurePreviewListCopy)
+      this.structurePreviewList = cloneDeep(this.structurePreviewListCopy)
       this.fieldsetVisible = false
     },
     /**

@@ -5,7 +5,8 @@
  */
 import { dataConfig, settingConfig } from '../PlotRender/settingConfig'
 import { mapData } from 'data-room-ui/BasicComponents/Map/settingConfig'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import sortList from './plotListSort'
 // 遍历 当前文件夹下的所有文件，找到中文.js文件，然后导出
 const files = require.context('./', true, /[\u4e00-\u9fa5]+.js$/)
@@ -42,12 +43,12 @@ function getPlotList (files) {
       chartType: config.chartType,
       option: {
         ...config.option,
-        ..._.cloneDeep(settingConfig)
+        ...cloneDeep(settingConfig)
       },
       setting: config.setting, // 右侧面板自定义配置
       dataHandler: config.dataHandler, // 数据自定义处理js脚本
       optionHandler: config.optionHandler, // 配置自定义处理js脚本
-      ..._.cloneDeep(dataConfig)
+      ...cloneDeep(dataConfig)
     }
   }
   return plotList
@@ -73,12 +74,12 @@ export function getCustomPlots () {
       chartType: config.chartType,
       option: {
         ...config.option,
-        ..._.cloneDeep(settingConfig)
+        ...cloneDeep(settingConfig)
       },
       setting: config.setting, // 右侧面板自定义配置
       dataHandler: config.dataHandler, // 数据自定义处理js脚本
       optionHandler: config.optionHandler, // 配置自定义处理js脚本
-      ..._.cloneDeep(dataConfig)
+      ...cloneDeep(dataConfig)
     })
   })
   return list

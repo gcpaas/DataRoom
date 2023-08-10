@@ -1,6 +1,6 @@
 import { commonConfig, displayOption } from 'data-room-ui/js/config'
 import Icon from 'data-room-ui/assets/images/bigScreenIcon/export'
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 export const settingConfig = {
   padding: [30, 30, 50, 80],
@@ -99,9 +99,9 @@ export const mapData = {
   y: 0,
   type: 'map',
   option: {
-    ..._.cloneDeep(settingConfig)
+    ...cloneDeep(settingConfig)
   },
   setting: undefined, // 右侧面板自定义配置
   dataHandler: {}, // 数据自定义处理js脚本
-  ..._.cloneDeep(dataConfig)
+  ...cloneDeep(dataConfig)
 }

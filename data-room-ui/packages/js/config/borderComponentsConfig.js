@@ -1,4 +1,5 @@
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import getComponentConfig from 'data-room-ui/js/utils/getBorderComponentsConfig'
 // 批量引入配置文件
 import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
@@ -29,11 +30,11 @@ basicConfigList = basicConfigList.map((item) => {
 })
 // 生成基本配置
 export function basicComponentsConfig (item) {
-  // let type = `${_.upperFirst(item.type)}`
+  // let type = `${upperFirst(item.type)}`
   return {
     ...item,
-    option: _.cloneDeep(setModules[item.type]),
-    ..._.cloneDeep(dataModules[item.type])
+    option: cloneDeep(setModules[item.type]),
+    ...cloneDeep(dataModules[item.type])
   }
 }
 export default basicConfigList

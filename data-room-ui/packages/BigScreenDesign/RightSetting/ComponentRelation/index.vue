@@ -87,7 +87,7 @@
 </template>
 <script>
 import RelationSetting from './RelationSetting.vue'
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { mapState } from 'vuex'
 export default {
   name: 'ComponentRelation',

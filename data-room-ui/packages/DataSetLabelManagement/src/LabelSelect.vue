@@ -232,7 +232,7 @@
 </template>
 
 <script>
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import LabelEdit from './LabelConfigEdit'
 import LabelTypeEdit from './LabelTypeEdit.vue'
 import { pageMixins } from 'data-room-ui/js/mixins/page'

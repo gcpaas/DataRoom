@@ -1,6 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
-import _ from 'lodash'
+// import _ from 'lodash'
+import merge from 'lodash/merge'
 import { Message } from 'element-ui'
 /**
  * 统一进行异常输出
@@ -38,7 +39,7 @@ function EipException (message, code) {
 http.interceptors.request.use(config => {
   return {
     ...config,
-    ..._.merge(httpConfig, window.BS_CONFIG?.httpConfigs)
+    ...merge(httpConfig, window.BS_CONFIG?.httpConfigs)
   }
 }, error => {
   return Promise.reject(error)

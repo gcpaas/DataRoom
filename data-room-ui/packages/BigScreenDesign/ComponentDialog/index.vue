@@ -346,7 +346,9 @@
 </template>
 <script>
 import { pageMixins } from 'data-room-ui/js/mixins/page'
-import _ from 'lodash'
+// import _ from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import cloneDeep from 'lodash/cloneDeep'
 import innerRemoteComponents, { getRemoteComponents, getRemoteComponentConfig } from 'data-room-ui/RemoteComponents/remoteComponentsList'
 import { getBizComponentPage } from 'data-room-ui/js/api/bigScreenApi'
 export default {
@@ -398,7 +400,7 @@ export default {
       window.open(href, '_blank')
     },
     chooseComponent (component) {
-      this.focus = _.cloneDeep(component)
+      this.focus = cloneDeep(component)
     },
     close () { },
     init () {
@@ -418,13 +420,13 @@ export default {
           this.$emit('setComponent', this.focus)
         }
       } else if (['remote'].includes(this.activeName)) {
-        if (_.isEmpty(this.focus)) {
+        if (isEmpty(this.focus)) {
           return
         }
         this.$emit('setRemoteComponent', this.focus)
       } if (['bizComponent'].includes(this.activeName)) {
         let config = {}
-        if (_.isEmpty(this.focus)) {
+        if (isEmpty(this.focus)) {
           return
         }
         config.code = this.focus.code

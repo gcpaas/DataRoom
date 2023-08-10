@@ -1,11 +1,12 @@
 // 组件配置转化
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
 import { getScreenInfo, getDataSetDetails, getDataByDataSetId } from '../api/bigScreenApi'
 import { stringToFunction } from '../utils/evalFunctions'
 import { EventBus } from '../utils/eventBus'
 import plotList from 'data-room-ui/G2Plots/plotList'
-import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
+// import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
 export default {
   // 初始化页面数据
   initLayout ({ commit, dispatch }, code) {
@@ -74,7 +75,7 @@ export function handleResData (data) {
       if ((!chart.version) || chart.version !== originalConfig.version) {
         chart = compatibility(chart, originalConfig)
       } else {
-        chart.option = _.cloneDeep(setModules[chart.type])
+        chart.option = cloneDeep(setModules[chart.type])
       }
     } else {
       originalConfig = plotList?.find(plot => plot.name === chart.name)

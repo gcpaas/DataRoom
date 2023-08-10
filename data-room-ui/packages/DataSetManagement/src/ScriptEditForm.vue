@@ -566,7 +566,8 @@ import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/groovy/groovy'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/nord.css'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { datasetMixins } from 'data-room-ui/js/mixins/datasetMixin'
 export default {
   name: 'ScriptEditForm',
@@ -686,7 +687,7 @@ export default {
         this.dataForm.fieldDesc = res.config.fieldDesc
         this.dataForm.fieldList = res.config.fieldList
 
-        this.paramsListCopy = _.cloneDeep(this.dataForm.paramsList)
+        this.paramsListCopy = cloneDeep(this.dataForm.paramsList)
         this.scriptExecute(true)
       })
     },
@@ -796,7 +797,7 @@ export default {
         if (this.structurePreviewList.length && this.dataForm.fieldDesc) {
           this.buildFieldDesc()
         }
-        this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
+        this.structurePreviewListCopy = cloneDeep(this.structurePreviewList)
         this.saveLoading = false
         this.passTest = true
       }).catch((e) => {
@@ -839,7 +840,7 @@ export default {
      * 取消编辑参数
      */
     cancelParam () {
-      this.paramsListCopy = _.cloneDeep(this.dataForm.paramsList)
+      this.paramsListCopy = cloneDeep(this.dataForm.paramsList)
       this.paramsVisible = false
     },
     /**
@@ -848,9 +849,9 @@ export default {
     setParam () {
       if (!this.isSet) {
         this.scriptExecute()
-        this.paramsListCopy = _.cloneDeep(this.dataForm.paramsList)
+        this.paramsListCopy = cloneDeep(this.dataForm.paramsList)
       } else {
-        this.dataForm.paramsList = _.cloneDeep(this.paramsListCopy)
+        this.dataForm.paramsList = cloneDeep(this.paramsListCopy)
       }
       this.paramsVisible = false
     },

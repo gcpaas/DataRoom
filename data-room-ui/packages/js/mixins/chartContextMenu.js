@@ -1,5 +1,7 @@
 import { mapMutations, mapState } from 'vuex'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
+import isEmpty from 'lodash/isEmpty'
 import { randomString } from 'data-room-ui/js/utils'
 import Contextmenu from 'vue-contextmenujs'
 import Vue from 'vue'
@@ -51,7 +53,7 @@ export default {
     },
     // 复制组件
     copyItem (config) {
-      const newConfig = _.cloneDeep(config)
+      const newConfig = cloneDeep(config)
       newConfig.code = randomString(8)
       newConfig.title = newConfig.title + '_副本'
       // 区分是从左侧添加还是复制的组件
@@ -84,7 +86,7 @@ export default {
       }).then(() => {
         // 找到和本组件group相同的组件 删除
         const codes = this.chartList.filter(_chart => _chart.group === config.group && config.group).map(_chart => _chart.code)
-        if (!_.isEmpty(codes)) {
+        if (!isEmpty(codes)) {
           this.delItem(codes)
         } else {
           this.delItem(config.code)
@@ -167,7 +169,7 @@ export default {
             label: '置于顶层',
             icon: 'el-icon-arrow-up',
             onClick: () => {
-              let chartList = _.cloneDeep(this.chartList)
+              let chartList = cloneDeep(this.chartList)
               // 将当前图表置底
               chartList = chartList.filter(item => item.code !== chart.code)
               chartList.unshift(chart)
@@ -179,7 +181,7 @@ export default {
             label: '置于底层',
             icon: 'el-icon-arrow-down',
             onClick: () => {
-              let chartList = _.cloneDeep(this.chartList)
+              let chartList = cloneDeep(this.chartList)
               // 将当前图表置顶
               chartList = chartList.filter(item => item.code !== chart.code)
               chartList.push(chart)

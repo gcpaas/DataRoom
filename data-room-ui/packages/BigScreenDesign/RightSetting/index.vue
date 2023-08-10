@@ -58,7 +58,9 @@ import rightSetting from 'data-room-ui/js/utils/rightSettingImport'
 import CustomComponent from './G2CustomSetting.vue'
 import Svgs from 'data-room-ui/Svgs/setting.vue'
 import { mapState, mapMutations } from 'vuex'
-import _ from 'lodash'
+// import _ from 'lodash'
+import isEqual from 'lodash/isEqual'
+import cloneDeep from 'lodash/cloneDeep'
 // 整体动态导入右侧设置组件，不用手动注册
 const components = {}
 for (const key in rightSetting) {
@@ -94,23 +96,23 @@ export default {
     },
     configDataSource () {
       return {
-        dataSource: _.cloneDeep(this.config.dataSource),
-        linkage: _.cloneDeep(this.config?.linkage),
+        dataSource: cloneDeep(this.config.dataSource),
+        linkage: cloneDeep(this.config?.linkage),
         dataHandler: this.config?.dataHandler,
-        dataSourceSetting: _.cloneDeep(this.config?.setting?.filter(item => item.tabName === 'data')) || []
+        dataSourceSetting: cloneDeep(this.config?.setting?.filter(item => item.tabName === 'data')) || []
       }
     },
     configStyle () {
       return {
         showTitle: this.config.showTitle,
-        title: _.cloneDeep(this.config?.title),
+        title: cloneDeep(this.config?.title),
         w: this.config?.w,
         h: this.config?.h,
         x: this.config?.x,
         y: this.config?.y,
         z: this.config?.z,
-        setting: _.cloneDeep(this.config?.setting),
-        customize: _.cloneDeep(this.config?.customize),
+        setting: cloneDeep(this.config?.setting),
+        customize: cloneDeep(this.config?.customize),
         url: this.config?.url,
         dateFormat: this.config?.dateFormat,
         endTime: this.config?.endTime
@@ -147,7 +149,7 @@ export default {
       }, delay)
     },
     handleConfigChange (val, oldValue, type) {
-      if (!_.isEqual(val, oldValue)) {
+      if (!isEqual(val, oldValue)) {
         if (type === 'configStyle') {
           if (this.config.type === 'iframeChart') {
             this.debounce(500, { ...val, type: this.config.type, code: this.config.code })

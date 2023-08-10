@@ -12,7 +12,8 @@
 </template>
 <script>
 import 'insert-css'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import { mapState, mapMutations } from 'vuex'
@@ -108,7 +109,7 @@ export default {
       // eslint-disable-next-line no-unused-vars
       this.chart.on('tooltip:change', (...args) => {
         formData = {}
-        formData = _.cloneDeep(args[0].data.items[0].data)
+        formData = cloneDeep(args[0].data.items[0].data)
       })
       // eslint-disable-next-line no-unused-vars
       this.chart.on('plot:click', (...args) => {
@@ -125,7 +126,7 @@ export default {
           optionField.forEach((field, index) => {
             if (index === optionField.length - 1) {
               // 数据配置时，必须有值才更新
-              if ((set.tabName === type && type === 'data' && set.value) || (set.tabName === type && type === 'custom'))  {
+              if ((set.tabName === type && type === 'data' && set.value) || (set.tabName === type && type === 'custom')) {
                 option[field] = set.value
               }
             } else {

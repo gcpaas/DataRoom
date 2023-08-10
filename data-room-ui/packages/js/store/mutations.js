@@ -7,7 +7,9 @@
  */
 
 import Vue from 'vue'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
+import uniq from 'lodash/uniq'
 import { defaultData } from './state'
 import moment from 'moment'
 import { randomString } from 'data-room-ui/js/utils'
@@ -30,11 +32,11 @@ export default {
     state.activeCode = code
     state.hoverCode = code
 
-    const activeItem = _.cloneDeep(state.pageInfo.chartList?.find(
+    const activeItem = cloneDeep(state.pageInfo.chartList?.find(
       item => item.code === code
     ))
     changeGroup(code, state)
-    state.activeItemConfig = _.cloneDeep(activeItem)
+    state.activeItemConfig = cloneDeep(activeItem)
   },
   changeActiveCodes (state, codes) {
     // 传入codes，将codes中的组件的group改为tempGroup，不传入或者传入空数组，将所有组件的group改为''，即取消组合
@@ -91,7 +93,7 @@ export default {
     ]
   },
   changeActiveItemConfig (state, config) {
-    state.activeItemConfig = _.cloneDeep(config)
+    state.activeItemConfig = cloneDeep(config)
   },
   // 新增一个组件
   addItem (state, itemConfig) {
@@ -116,13 +118,13 @@ export default {
     EventBus.$emit('closeRightPanel')
   },
   changePageConfig (state, pageConfig) {
-    Vue.set(state.pageInfo, 'pageConfig', _.cloneDeep(pageConfig))
+    Vue.set(state.pageInfo, 'pageConfig', cloneDeep(pageConfig))
     state.updateKey = new Date().getTime()
   },
   changeActiveItem (state, activeItem) {
-    state.activeItem = _.cloneDeep(activeItem)
+    state.activeItem = cloneDeep(activeItem)
     state.activeId = activeItem.code
-    // state.settingJson = _.cloneDeep(activeItem.settingConfig) || {}
+    // state.settingJson = cloneDeep(activeItem.settingConfig) || {}
   },
   // 改变当前组件的xywh
   changeActiveItemWH (state, chart) {
@@ -197,7 +199,7 @@ export default {
   // 初始化store中的数据，防止污染
   resetStoreData (state) {
     for (const stateKey in state) {
-      state[stateKey] = _.cloneDeep(defaultData[stateKey])
+      state[stateKey] = cloneDeep(defaultData[stateKey])
     }
   },
   changeZoom (state, zoom) {
@@ -248,7 +250,7 @@ export default {
         state.currentTimeLine = state.currentTimeLine - 1
         currentStore = state.timelineStore[state.currentTimeLine - 1]
         if (currentStore?.chartList) {
-          state.pageInfo.chartList = _.cloneDeep(currentStore?.chartList)
+          state.pageInfo.chartList = cloneDeep(currentStore?.chartList)
         }
       }
     }
@@ -258,7 +260,7 @@ export default {
         // 时间线往后推一个
         state.currentTimeLine = state.currentTimeLine + 1
         currentStore = state.timelineStore[state.currentTimeLine - 1]
-        state.pageInfo.chartList = _.cloneDeep(currentStore?.chartList || [])
+        state.pageInfo.chartList = cloneDeep(currentStore?.chartList || [])
       }
     }
     state.pageInfo.chartList = state.pageInfo.chartList.map(chart => {
@@ -283,12 +285,12 @@ export default {
   },
   // 回退到指定时间线
   rollbackTimeline (state, index) {
-    state.pageInfo.chartList = _.cloneDeep(state.timelineStore[index]?.chartList || [])
+    state.pageInfo.chartList = cloneDeep(state.timelineStore[index]?.chartList || [])
     state.currentTimeLine = index + 1
   },
   // 复制组件
   copyCharts (state) {
-    state.copyChartCodes = _.cloneDeep(state.activeCodes)
+    state.copyChartCodes = cloneDeep(state.activeCodes)
   },
   // 粘贴组件
   pasteCharts (state) {
@@ -298,7 +300,7 @@ export default {
     const additionCode = randomString(5)
     const copyCharts = copyChartCodes.map(code => {
       const chart = chartList.find(item => item.code === code)
-      const copyChart = _.cloneDeep(chart)
+      const copyChart = cloneDeep(chart)
       copyChart.code = `${copyChart.code}_${additionCode}`
       copyChart.key = `${copyChart.key}_${additionCode}`
       copyChart.group = (copyChart.group && copyChart.group !== 'tempGroup') ? `${copyChart.group}_${additionCode}` : ''
@@ -336,7 +338,7 @@ function changeGroup (code, state) {
       state.activeCodes = state.pageInfo.chartList?.filter(chart => chart.group === group && chart.group).map(item => item.code)
     }
     if (state.shiftKeyDown) {
-      state.activeCodes = _.uniq([...state.activeCodes, code])
+      state.activeCodes = uniq([...state.activeCodes, code])
       // eslint-disable-next-line no-unused-expressions
       state.pageInfo.chartList?.forEach(chart => {
         if (state.activeCodes.includes(chart.code)) {
@@ -360,7 +362,7 @@ function changeGroup (code, state) {
 function saveTimeLineFunc (state, title, time) {
   // 最多保存10个状态
   const MAX_TIME_LINE = 10
-  const stateCopy = _.cloneDeep(state.pageInfo)
+  const stateCopy = cloneDeep(state.pageInfo)
   const date = new Date()
   time = time || moment(date).format('HH:mm:ss')
   stateCopy.timelineTitle = title

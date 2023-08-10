@@ -148,7 +148,8 @@
 </template>
 <script>
 import { pageMixins } from 'data-room-ui/js/mixins/page'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'SourceDialog',
   mixins: [pageMixins],
@@ -176,7 +177,7 @@ export default {
       window.open(href, '_blank')
     },
     chooseImg (img) {
-      this.focus = _.cloneDeep(img)
+      this.focus = cloneDeep(img)
     },
     close () { },
     init () {

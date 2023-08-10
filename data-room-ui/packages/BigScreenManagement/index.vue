@@ -238,7 +238,8 @@ import pageMenuDialog from './pageMenuDialog.vue'
 import BigScreenRun from 'data-room-ui/BigScreenRun/index.vue'
 import Icon from 'data-room-ui/assets/images/pageIcon/export'
 import { getPageType } from './utils'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import IconSvg from 'data-room-ui/SvgIcon'
 let dashBoardPageCode = null
 export default {
@@ -455,13 +456,13 @@ export default {
       this.currentTreeNode = treeNode
       // 点击的节点为目录，则当前父节点为目录
       if (treeNode.type === 'catalog') {
-        this.parentNode = _.cloneDeep(treeNode)
+        this.parentNode = cloneDeep(treeNode)
         this.isCatalog = true
       } else {
         this.isCatalog = false
         this.activePage = treeNode
         // 点击的节点非目录，则为当前节点的父节点
-        this.parentNode = (!treeNode.parentCode || treeNode.parentCode === '0') ? { code: '0', name: '根目录' } : _.cloneDeep(nodeObj.parent.data)
+        this.parentNode = (!treeNode.parentCode || treeNode.parentCode === '0') ? { code: '0', name: '根目录' } : cloneDeep(nodeObj.parent.data)
       }
       this.catalogData.parentCode = this.parentNode.code
       this.selectName = this.parentNode.name
@@ -643,7 +644,7 @@ export default {
         this.catalogData.id = nodeData.id
         this.catalogData.code = nodeData.code
         this.catalogData.orderNum = nodeData.orderNum
-        this.parentNode = (!nodeData.parentCode || nodeData.parentCode === '0') ? { code: '0', name: '根目录' } : _.cloneDeep(nodeObj.parent.data)
+        this.parentNode = (!nodeData.parentCode || nodeData.parentCode === '0') ? { code: '0', name: '根目录' } : cloneDeep(nodeObj.parent.data)
         this.catalogData.parentCode = this.parentNode.code
         this.selectName = this.parentNode.name
       } else {

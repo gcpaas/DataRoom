@@ -142,7 +142,8 @@ import '../style/index.scss'
 import { sourceLinkTest, datasourcePage, sourceRemove, dataSourceCheck } from 'data-room-ui/js/utils/dataSourceService'
 import setDatasource from './setDatasource.vue'
 import checkDatasource from './checkDatasource.vue'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { pageMixins } from 'data-room-ui/js/mixins/page'
 export default {
   name: 'DataSource',
@@ -277,7 +278,7 @@ export default {
       if (row.editable == 1 && !this.appCode) return
       this.$refs.setDatasource.setDatasourceVisible = true
       this.$refs.setDatasource.title = '编辑编剧源'
-      this.$refs.setDatasource.init(_.cloneDeep(row))
+      this.$refs.setDatasource.init(cloneDeep(row))
     },
     handleDelete (row) {
       // eslint-disable-next-line eqeqeq

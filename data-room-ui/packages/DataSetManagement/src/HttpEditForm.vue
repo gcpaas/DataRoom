@@ -689,7 +689,8 @@ import 'codemirror/mode/javascript/javascript'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/nord.css'
 import axiosFormatting from '../../js/utils/httpParamsFormatting'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'HttpEditForm',
   components: {
@@ -858,7 +859,7 @@ export default {
           this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, cache, config: { ...config }, labelIds: this.dataForm.labelIds }
           this.fieldDesc = fieldDesc
           this.outputFieldList = fieldList
-          this.newParamsList = _.cloneDeep(paramsList)
+          this.newParamsList = cloneDeep(paramsList)
           this.codemirrorOption.mode = this.dataForm.config.requestType === 'frontend' ? 'text/javascript' : 'text/x-groovy'
           // this.replaceParams(paramsList)
           this.scriptExecute(true)
@@ -932,7 +933,7 @@ export default {
     // 增加header
     addHeader () {
       const header = { key: '', type: 'string', value: '', remark: '' }
-      this.dataForm.config.headers.push(_.cloneDeep(header))
+      this.dataForm.config.headers.push(cloneDeep(header))
     },
     // 移除header
     delHeader (index) {
@@ -941,7 +942,7 @@ export default {
     // 增加请求参数
     addParam () {
       const param = { key: '', value: '', remark: '' }
-      this.dataForm.config.params.push(_.cloneDeep(param))
+      this.dataForm.config.params.push(cloneDeep(param))
     },
     // 移除请求参数
     delParam (index) {
@@ -951,7 +952,6 @@ export default {
       this.dataForm.config.paramsList = val
     },
     saveNewParams (val) {
-      console.log(val)
       this.newParamsList = val
     },
     // 取消操作
@@ -1016,7 +1016,7 @@ export default {
     // 打开动态参数设置弹窗
     async openParamsSetDialog (isUpdate) {
       this.getPramsList()
-      const oldList = _.cloneDeep(this.dataForm.config.paramsList)
+      const oldList = cloneDeep(this.dataForm.config.paramsList)
       this.newParamsList = this.compareParamsList(this.newParamsList, oldList)
       await this.$nextTick()
       this.$refs.paramsSettingDialog.open(isUpdate)
@@ -1045,7 +1045,7 @@ export default {
           })
         }
       })
-      this.dataForm.config.paramsList = _.cloneDeep(params)
+      this.dataForm.config.paramsList = cloneDeep(params)
     },
     // 用来对两个数组进行对比
     compareParamsList (newList, oldList) {
@@ -1121,7 +1121,6 @@ export default {
         axiosFormatting({ ...this.dataForm.config, paramsList: this.newParamsList }).then((res) => {
           this.dataPreviewList = res && Array.isArray(res) ? res : [{ ...res }]
           // 获取数据后更新输出字段
-          console.log(res)
           this.updateOoutputFieldList(this.dataPreviewList)
           this.$message.success('解析并执行成功')
         }).catch((e) => {

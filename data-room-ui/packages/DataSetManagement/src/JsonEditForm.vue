@@ -344,7 +344,8 @@ import LabelSelect from 'data-room-ui/DataSetLabelManagement/src/LabelSelect.vue
 import vueJsonEditor from 'vue-json-editor'
 import vueJsonViewer from 'vue-json-viewer'
 import { getCategoryTree, datasetAdd, datasetUpdate, getDataset, nameCheckRepeat } from 'data-room-ui/js/utils/datasetConfigService'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { datasetMixins } from 'data-room-ui/js/mixins/datasetMixin'
 export default {
   name: 'JsonEditForm',
@@ -533,7 +534,7 @@ export default {
      * 保存字段描述编辑
      */
     setField () {
-      this.structurePreviewList = _.cloneDeep(this.structurePreviewListCopy)
+      this.structurePreviewList = cloneDeep(this.structurePreviewListCopy)
       if (this.structurePreviewList.length) {
         this.dataForm.fieldDesc = {}
         this.structurePreviewList.forEach(key => {
@@ -562,7 +563,7 @@ export default {
             fieldDesc: ''
           }
         })
-        this.dataPreviewList = [_.cloneDeep(this.dataForm.json)]
+        this.dataPreviewList = [cloneDeep(this.dataForm.json)]
         this.passTest = true
       } else if (Object.prototype.toString.call(this.dataForm.json) === '[object Array]') {
         // 为数组
@@ -573,7 +574,7 @@ export default {
               fieldDesc: ''
             }
           })
-          this.dataPreviewList = _.cloneDeep(this.dataForm.json)
+          this.dataPreviewList = cloneDeep(this.dataForm.json)
           this.passTest = true
         } else {
           try {
@@ -604,7 +605,7 @@ export default {
                 fieldDesc: ''
               }
             })
-            this.dataPreviewList = [_.cloneDeep(json)]
+            this.dataPreviewList = [cloneDeep(json)]
             this.passTest = true
           } else if (Object.prototype.toString.call(json) === '[object Array]') {
             // 为数组
@@ -615,7 +616,7 @@ export default {
                   fieldDesc: ''
                 }
               })
-              this.dataPreviewList = _.cloneDeep(json)
+              this.dataPreviewList = cloneDeep(json)
               this.passTest = true
             } else {
               try {
@@ -647,7 +648,7 @@ export default {
       if (this.passTest && !initAnalysis) {
         this.$message.success('JSON解析通过')
       }
-      this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
+      this.structurePreviewListCopy = cloneDeep(this.structurePreviewList)
     },
     /**
      * 构建字段描述

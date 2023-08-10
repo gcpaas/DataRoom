@@ -146,9 +146,8 @@
   </transition>
 </template>
 <script>
-
+import cloneDeep from 'lodash/cloneDeep'
 import 'data-room-ui/assets/symbols/bigScreenIcon/iconfont.js'
-import _ from 'lodash'
 import basicComponents from 'data-room-ui/js/config/basicComponentsConfig'
 import g2PlotComponents, { getCustomPlots } from '../G2Plots/plotList'
 import borderComponents from 'data-room-ui/js/config/borderComponentsConfig'
@@ -286,7 +285,7 @@ export default {
       })
     },
     onClone (e) {
-      return _.cloneDeep(e)
+      return cloneDeep(e)
     },
     onStart (e) {
       // this.$emit('onStart', e)

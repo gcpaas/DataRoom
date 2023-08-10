@@ -1,7 +1,9 @@
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
+import uniqBy from 'lodash/uniqBy'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import { mapMutations } from 'vuex'
-import { getUpdateChartInfo } from '../api/bigScreenApi'
+// import { getUpdateChartInfo } from '../api/bigScreenApi'
 
 export default {
   data () {
@@ -49,7 +51,7 @@ export default {
      * @param {Boolean} isInner 是否是内部组件
      */
     combineFilterList (isInner = false) {
-      let filterList = isInner ? [] : _.cloneDeep(this.filterList)
+      let filterList = isInner ? [] : cloneDeep(this.filterList)
       // 如果内部组件的搜索条件不存在，则直接返回全局的filterList
       if (!this.$refs?.searchForm?.form) {
         return filterList
@@ -76,7 +78,7 @@ export default {
         .filter(field => ![undefined, ''].includes(field.value))
       // 合并去重
       filterList = [...filterList, ...innerFilterList]
-      filterList = _.uniqBy(filterList, 'column')
+      filterList = uniqBy(filterList, 'column')
       return filterList
     }
   }

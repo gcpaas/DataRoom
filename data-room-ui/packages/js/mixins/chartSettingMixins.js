@@ -1,4 +1,5 @@
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
 const chartSettingMixins = {
   components: {
@@ -22,8 +23,8 @@ const chartSettingMixins = {
     initColor () {
       const colorSetting = this.config?.setting?.find(item => item.type === 'colorSelect')
       if (colorSetting && colorSetting.value && colorSetting.value.length) {
-        this.colorScheme = _.cloneDeep(colorSetting.value)
-        this.colors = _.cloneDeep(colorSetting.value)
+        this.colorScheme = cloneDeep(colorSetting.value)
+        this.colors = cloneDeep(colorSetting.value)
       }
     },
     // 清空颜色

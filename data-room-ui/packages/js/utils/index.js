@@ -1,4 +1,5 @@
-import _ from 'lodash'
+// import _ from 'lodash'
+import upperFirst from 'lodash/upperFirst'
 export const randomString = e => {
   e = e || 32
   const t = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz'
@@ -9,7 +10,7 @@ export const randomString = e => {
 }
 
 export const resolveComponentType = type => {
-  return `${_.upperFirst(type)}`
+  return `${upperFirst(type)}`
 }
 export function deepCompare (obj1, obj2, excludeKeys = []) {
   // eslint-disable-next-line eqeqeq

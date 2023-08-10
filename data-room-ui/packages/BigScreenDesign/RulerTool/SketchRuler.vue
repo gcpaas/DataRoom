@@ -60,7 +60,7 @@
 <script>
 import SketchRule from 'vue-sketch-ruler'
 import { mapState, mapMutations } from 'vuex'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 export default {
   components: {
     SketchRule
