@@ -195,6 +195,23 @@
                 </el-form-item>
               </el-col>
             </el-row>
+            <el-row v-if="dataForm.config.requestType === 'backend'">
+              <el-col :span="12">
+                <el-form-item
+                  label="缓存"
+                  prop="cache"
+                >
+                  <el-switch
+                    v-model="dataForm.cache"
+                    class="bs-el-switch"
+                    active-color="#007aff"
+                    :active-value="1"
+                    :inactive-value="0"
+                    :disabled="!isEdit"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-tabs
               v-model="activeName"
               class="bs-el-tabs tabs-box"
@@ -753,6 +770,7 @@ export default {
         name: '',
         typeId: '',
         remark: '',
+        cache: 0,
         labelIds: [],
         config: {
           className: 'com.gccloud.dataset.entity.config.HttpDataSetConfig',
@@ -835,9 +853,9 @@ export default {
       }
       if (this.datasetId) {
         getDataset(this.datasetId).then(res => {
-          const { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config } = res
+          const { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, cache, config } = res
           const { script, paramsList, fieldDesc, fieldList } = config
-          this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, config: { ...config }, labelIds: this.dataForm.labelIds }
+          this.dataForm = { id, name, typeId, remark, datasetType, moduleCode, editable, sourceId, cache, config: { ...config }, labelIds: this.dataForm.labelIds }
           this.fieldDesc = fieldDesc
           this.outputFieldList = fieldList
           this.newParamsList = _.cloneDeep(paramsList)
@@ -869,6 +887,7 @@ export default {
             name: dataForm.name,
             typeId: dataForm.typeId,
             remark: dataForm.remark,
+            cache: dataForm.cache,
             datasetType: 'http',
             moduleCode: appCode,
             editable: appCode ? 1 : 0,

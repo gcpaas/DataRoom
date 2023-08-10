@@ -131,6 +131,23 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item
+                  label="缓存"
+                  prop="cache"
+                >
+                  <el-switch
+                    v-model="dataForm.cache"
+                    class="bs-el-switch"
+                    active-color="#007aff"
+                    :active-value="1"
+                    :inactive-value="0"
+                    :disabled="!isEdit"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item
                   label="标签"
                   prop="labelIds"
                 >
@@ -579,6 +596,7 @@ export default {
         typeId: '',
         datasetType: 'script',
         remark: '',
+        cache: 0,
         labelIds: [],
         // 以下为config配置
         script: '',
@@ -657,6 +675,7 @@ export default {
         this.dataForm.name = res.name
         this.dataForm.typeId = res.typeId
         this.dataForm.remark = res.remark
+        this.dataForm.cache = res.cache
         this.dataForm.datasetType = res.datasetType
         this.dataForm.moduleCode = res.moduleCode
         this.dataForm.editable = res.editable
@@ -724,6 +743,7 @@ export default {
           typeId: this.dataForm.typeId,
           datasetType: 'script',
           remark: this.dataForm.remark,
+          cache: this.dataForm.cache,
           sourceId: this.dataForm.sourceId,
           moduleCode: this.appCode,
           editable: this.appCode ? 1 : 0,

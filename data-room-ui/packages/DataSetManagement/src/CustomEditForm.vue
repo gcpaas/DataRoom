@@ -157,6 +157,21 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item
+                  label="缓存"
+                  prop="cache"
+                >
+                  <el-switch
+                    v-model="dataForm.cache"
+                    class="bs-el-switch"
+                    active-color="#007aff"
+                    :active-value="1"
+                    :inactive-value="0"
+                    :disabled="!isEdit"
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item
                   label="标签"
                   prop="labelIds"
                 >
@@ -805,6 +820,7 @@ export default {
         labelIds: [],
         // 以下为config配置
         sourceId: '',
+        cache: 0,
         sqlProcess: 'select ',
         paramsList: [],
         fieldDesc: {},
@@ -910,6 +926,7 @@ export default {
         this.dataForm.moduleCode = res.moduleCode
         this.dataForm.editable = res.editable
         this.dataForm.sourceId = res.sourceId
+        this.dataForm.cache = res.cache
         // config 配置
         this.dataForm.sqlProcess = res.config.sqlProcess
         this.dataForm.paramsList = res.config.paramsList ? res.config.paramsList : []
@@ -1073,6 +1090,7 @@ export default {
           datasetType: 'custom',
           remark: this.dataForm.remark,
           sourceId: this.dataForm.sourceId,
+          cache: this.dataForm.cache,
           moduleCode: this.appCode,
           editable: this.appCode ? 1 : 0,
           labelIds: this.dataForm.labelIds,
