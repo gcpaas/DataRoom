@@ -157,17 +157,31 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item
-                  label="缓存"
+                  label="数据缓存"
                   prop="cache"
                 >
-                  <el-switch
+                  <el-radio-group
                     v-model="dataForm.cache"
-                    class="bs-el-switch"
-                    active-color="#007aff"
-                    :active-value="1"
-                    :inactive-value="0"
-                    :disabled="!isEdit"
-                  />
+                    class="bs-el-radio-group"
+                  >
+                    <el-radio :label="1">
+                      开启
+                    </el-radio>
+                    <el-radio :label="0">
+                      关闭
+                    </el-radio>
+                  </el-radio-group>
+                  <el-tooltip
+                    class="item"
+                    effect="light"
+                    content="开启缓存:会在首次调用该数据集时，将结果缓存，在接下来的十分钟内，若再次被调用则直接返回缓存中的数据"
+                    placement="top"
+                  >
+                    <i
+                      class="el-icon-warning-outline"
+                      style="color: #E3C98C;margin-left: 16px;font-size:14px"
+                    />
+                  </el-tooltip>
                 </el-form-item>
               </el-col>
               <el-col :span="12">

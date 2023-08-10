@@ -198,22 +198,37 @@
             <el-row v-if="dataForm.config.requestType === 'backend'">
               <el-col :span="12">
                 <el-form-item
-                  label="缓存"
+                  label="数据缓存"
                   prop="cache"
                 >
-                  <el-switch
+                  <el-radio-group
                     v-model="dataForm.cache"
-                    class="bs-el-switch"
-                    active-color="#007aff"
-                    :active-value="1"
-                    :inactive-value="0"
-                    :disabled="!isEdit"
-                  />
+                    class="bs-el-radio-group"
+                  >
+                    <el-radio :label="1">
+                      开启
+                    </el-radio>
+                    <el-radio :label="0">
+                      关闭
+                    </el-radio>
+                  </el-radio-group>
+                  <el-tooltip
+                    class="item"
+                    effect="light"
+                    content="开启缓存:会在首次调用该数据集时，将结果缓存，在接下来的十分钟内，若再次被调用则直接返回缓存中的数据"
+                    placement="top"
+                  >
+                    <i
+                      class="el-icon-warning-outline"
+                      style="color: #E3C98C;margin-left: 16px;font-size:14px"
+                    />
+                  </el-tooltip>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-tabs
-              v-model="activeName"
+              v-model="
+                activeName"
               class="bs-el-tabs tabs-box"
             >
               <el-tab-pane
@@ -451,100 +466,105 @@
                 </el-form-item>
               </el-tab-pane>
             </el-tabs>
+            </span>
+            </el-form-item>
           </el-form>
-          <div
-            v-if="isEdit"
-            class="sql-config"
+        </el-col>
+      </el-row>
+      </el-form>
+      <div
+        v-if="isEdit"
+        class="sql-config"
+      >
+        <div style="text-align: center; padding: 16px 0;">
+          <el-button
+            type="primary"
+            @click="scriptExecute()"
           >
-            <div style="text-align: center; padding: 16px 0;">
+            解析并运行
+          </el-button>
+        </div>
+      </div>
+      </el-col>
+      <el-col
+        v-if="isEdit"
+        :span="8"
+      >
+        <div class="right-setting">
+          <div class="paramConfig">
+            <div class="title-style bs-title-style">
+              动态参数
               <el-button
-                type="primary"
-                @click="scriptExecute()"
+                type="text"
+                style="float: right;border: none;margin-top: -4px;"
+                @click="openParamsSetDialog(false)"
               >
-                解析并运行
+                配置
               </el-button>
             </div>
-          </div>
-        </el-col>
-        <el-col
-          v-if="isEdit"
-          :span="8"
-        >
-          <div class="right-setting">
-            <div class="paramConfig">
-              <div class="title-style bs-title-style">
-                动态参数
-                <el-button
-                  type="text"
-                  style="float: right;border: none;margin-top: -4px;"
-                  @click="openParamsSetDialog(false)"
-                >
-                  配置
-                </el-button>
-              </div>
-              <div class="field-wrap bs-field-wrap bs-scrollbar">
-                <div
-                  v-for="param in dataForm.config.paramsList"
-                  :key="param.name"
-                  class="field-item"
-                  @click="openParamsSetDialog(false)"
-                >
-                  <span>{{ param.name }}</span>&nbsp;<span
-                    v-show="param.remark"
-                    style="color: #909399;"
-                  >
-                    ({{ param.remark }})
-                  </span>
-                  <el-button
-                    class="edit_field"
-                    type="text"
-                    style="float: right;border: none;margin-top: 2px;"
-                    @click="openParamsSetDialog(false)"
-                  >
-                    配置
-                  </el-button>
-                </div>
-              </div>
-            </div>
-            <div class="structure">
-              <div class="title-style bs-title-style">
-                输出字段
-                <el-button
-                  type="text"
-                  style="float: right;border: none;margin-top: -4px;"
-                  @click="$refs.outputFieldDialog.open()"
-                >
-                  配置
-                </el-button>
-              </div>
+            <div class="field-wrap bs-field-wrap bs-scrollbar">
               <div
-                class="field-wrap bs-field-wrap bs-scrollbar"
+                v-for="param in dataForm.config.paramsList"
+                :key="param.name"
+                class="field-item"
+                @click="openParamsSetDialog(false)"
               >
-                <div
-                  v-for="(field, key) in outputFieldList"
-                  :key="key"
-                  class="field-item"
-                  @click="$refs.outputFieldDialog.open()"
+                <span>{{ param.name }}</span>&nbsp;<span
+                  v-show="param.remark"
+                  style="color: #909399;"
                 >
-                  <span>{{ field.fieldName }}</span>&nbsp;
-                  <span
-                    v-show="field.fieldDesc"
-                    style="color: #909399;"
-                  >
-                    ({{ field.fieldDesc }})</span>
-                  <el-button
-                    class="edit_field"
-                    type="text"
-                    style="float: right;border: none;margin-top: 2px;"
-                    @click="$refs.outputFieldDialog.open()"
-                  >
-                    配置
-                  </el-button>
-                </div>
+                  ({{ param.remark }})
+                </span>
+                <el-button
+                  class="edit_field"
+                  type="text"
+                  style="float: right;border: none;margin-top: 2px;"
+                  @click="openParamsSetDialog(false)"
+                >
+                  配置
+                </el-button>
               </div>
             </div>
           </div>
-        </el-col>
+          <div class="structure">
+            <div class="title-style bs-title-style">
+              输出字段
+              <el-button
+                type="text"
+                style="float: right;border: none;margin-top: -4px;"
+                @click="$refs.outputFieldDialog.open()"
+              >
+                配置
+              </el-button>
+            </div>
+            <div
+              class="field-wrap bs-field-wrap bs-scrollbar"
+            >
+              <div
+                v-for="(field, key) in outputFieldList"
+                :key="key"
+                class="field-item"
+                @click="$refs.outputFieldDialog.open()"
+              >
+                <span>{{ field.fieldName }}</span>&nbsp;
+                <span
+                  v-show="field.fieldDesc"
+                  style="color: #909399;"
+                >
+                  ({{ field.fieldDesc }})</span>
+                <el-button
+                  class="edit_field"
+                  type="text"
+                  style="float: right;border: none;margin-top: 2px;"
+                  @click="$refs.outputFieldDialog.open()"
+                >
+                  配置
+                </el-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </el-col>
       </el-row>
       <div
         v-if="isEdit"
