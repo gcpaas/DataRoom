@@ -97,7 +97,9 @@ import { toJpeg, toPng } from 'html-to-image'
 import { mapMutations, mapActions, mapState } from 'vuex'
 import { saveScreen } from 'data-room-ui/js/api/bigScreenApi'
 import ChooseTemplateDialog from 'data-room-ui/BigScreenManagement/ChooseTemplateDialog.vue'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
+import uniqBy from 'lodash/uniqBy'
 import { stringifyObjectFunctions } from 'data-room-ui/js/utils/evalFunctions'
 import AssignDialog from 'data-room-ui/BigScreenDesign/AssignDialog/index.vue'
 import HistoryList from 'data-room-ui/BigScreenDesign/HistoryList/index.vue'
@@ -207,7 +209,7 @@ export default {
       saveTimeLine: 'bigScreen/saveTimeLine'
     }),
     setAlign (command) {
-      const pageInfo = _.cloneDeep(this.pageInfo)
+      const pageInfo = cloneDeep(this.pageInfo)
       // 获取所有选中的组件
       let activeChartList = pageInfo.chartList.filter((chart) => {
         return this.activeCodes.some(code => (code === chart.code))
@@ -296,7 +298,7 @@ export default {
           break
       }
       pageInfo.chartList = [...pageInfo.chartList, ...activeChartList]
-      pageInfo.chartList = _.uniqBy(pageInfo.chartList, 'code')
+      pageInfo.chartList = uniqBy(pageInfo.chartList, 'code')
       this.changePageInfo(pageInfo)
     },
     compare (property) {
@@ -337,7 +339,7 @@ export default {
     },
     // 保存
     save (loadingType = 'saveLoading', hasPageTemplateId = false) {
-      const pageInfo = _.cloneDeep(this.handleSaveData())
+      const pageInfo = cloneDeep(this.handleSaveData())
       // 保存页面
       this[loadingType] = true
       return new Promise((resolve, reject) => {
@@ -410,8 +412,8 @@ export default {
     },
     // 处理保存数据
     handleSaveData () {
-      const pageInfo = _.cloneDeep(this.pageInfo)
-      const chartList = _.cloneDeep(this.pageInfo.chartList)
+      const pageInfo = cloneDeep(this.pageInfo)
+      const chartList = cloneDeep(this.pageInfo.chartList)
 
       pageInfo.pageConfig.cacheDataSets =
         pageInfo.pageConfig.cacheDataSets?.map((cache) => ({
@@ -427,7 +429,7 @@ export default {
         }
         return chart
       })
-      return _.cloneDeep({
+      return cloneDeep({
         ...this.pageInfo,
         chartList: newChartList
       })

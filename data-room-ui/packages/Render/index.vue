@@ -75,7 +75,8 @@
 import { mapState, mapMutations } from 'vuex'
 import RenderCard from './RenderCard.vue'
 import Configuration from './Configuration.vue'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import vdr from 'vue-draggable-resizable-gorkys'
 import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
 import { randomString } from '../js/utils'
@@ -247,7 +248,7 @@ export default {
       })
       if (chart.code === this.activeCode) {
         this.changeActiveItemWH({
-          code:chart.code,
+          code: chart.code,
           w: width,
           h: height
         })
@@ -256,7 +257,7 @@ export default {
       this.changeGridShow(false)
     },
     activated (chart) {
-      this.rawChart = _.cloneDeep(chart)
+      this.rawChart = cloneDeep(chart)
     },
     dragstop (left, top, chart) {
       if (!this.freeze) {
@@ -273,12 +274,12 @@ export default {
           })
           if (chart.code === this.activeCode) {
             this.changeActiveItemWH({
-              code:chart.code,
+              code: chart.code,
               x: left,
               y: top
             })
           }
-          this.rawChart = _.cloneDeep(chart)
+          this.rawChart = cloneDeep(chart)
         }
       } else {
         const index = this.chartList.findIndex(

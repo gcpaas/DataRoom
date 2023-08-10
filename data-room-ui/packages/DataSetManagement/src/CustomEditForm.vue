@@ -772,7 +772,8 @@ import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/sql/sql.js'
 import 'codemirror/theme/nord.css'
 import 'codemirror/lib/codemirror.css'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { datasetMixins } from 'data-room-ui/js/mixins/datasetMixin'
 export default {
   name: 'CustomEditForm',
@@ -918,7 +919,7 @@ export default {
         this.dataForm.cacheCoherence = res.config.cacheCoherence
         // 使用传入的数据集名称 ？
         this.dataForm.name = this.datasetName
-        this.paramsListCopy = _.cloneDeep(this.dataForm.paramsList)
+        this.paramsListCopy = cloneDeep(this.dataForm.paramsList)
         if (this.dataForm.typeId) {
           this.$nextTick(() => {
             try {
@@ -975,14 +976,14 @@ export default {
      * 取消编辑参数
      */
     cancelParam () {
-      this.paramsListCopy = _.cloneDeep(this.dataForm.paramsList)
+      this.paramsListCopy = cloneDeep(this.dataForm.paramsList)
       this.paramsVisible = false
     },
     /**
      * 保存参数设置
      */
     setParam () {
-      this.dataForm.paramsList = _.cloneDeep(this.paramsListCopy)
+      this.dataForm.paramsList = cloneDeep(this.paramsListCopy)
       if (this.isTest) {
         this.datasetTest()
       }
@@ -1124,8 +1125,8 @@ export default {
           })
         }
       })
-      this.dataForm.paramsList = _.cloneDeep(params)
-      this.paramsListCopy = _.cloneDeep(this.dataForm.paramsList)
+      this.dataForm.paramsList = cloneDeep(params)
+      this.paramsListCopy = cloneDeep(this.dataForm.paramsList)
       if (this.dataForm.paramsList.length) {
         this.paramsVisible = true
       } else {
@@ -1198,7 +1199,7 @@ export default {
             item.sourceTable = this.tableNameList[0]
           })
         }
-        this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
+        this.structurePreviewListCopy = cloneDeep(this.structurePreviewList)
         let paramsNameCheck = false
         this.dataForm.paramsList.forEach(param => {
           const checkList = this.structurePreviewList.filter(item => item.fieldName === param.name)

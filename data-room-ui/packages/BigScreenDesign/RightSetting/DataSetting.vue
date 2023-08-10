@@ -565,7 +565,9 @@
 </template>
 <script>
 import ElDragSelect from './ElDragSelect.vue'
-import { isEmpty, cloneDeep } from 'lodash'
+// import { isEmpty, cloneDeep } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import cloneDeep from 'lodash/cloneDeep'
 import ComponentRelation from 'data-room-ui/BigScreenDesign/RightSetting/ComponentRelation/index.vue'
 import ComponentBinding from 'data-room-ui/BigScreenDesign/RightSetting/ComponentBinding/index.vue'
 import dataSetSelect from 'data-room-ui/DataSetSetting/index.vue'

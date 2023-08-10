@@ -32,7 +32,7 @@
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'TableChart',
   mixins: [paramsMixins, commonMixins, linkageMixins],
@@ -131,7 +131,7 @@ export default {
       this.linkage(row)
     },
     changeStyle (oldConfig) {
-      const config = _.cloneDeep(oldConfig)
+      const config = cloneDeep(oldConfig)
       if (this.customTheme === 'custom') {
         this.headerCellStyleToObj()
         this.cellStyleToObj()

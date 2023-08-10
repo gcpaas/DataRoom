@@ -1,4 +1,5 @@
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 export const defaultData = {
   // 大屏信息
   pageInfo: {
@@ -70,5 +71,5 @@ export default () => ({
   // 当前的timeline 的index
   currentTimeLine: 0,
   // 具体信息
-  ..._.cloneDeep(defaultData)
+  ...cloneDeep(defaultData)
 })

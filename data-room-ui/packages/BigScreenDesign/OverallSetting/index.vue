@@ -188,7 +188,8 @@ import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BgImg from './BgImgDialog.vue'
 import { mapState, mapMutations } from 'vuex'
 import { getThemeConfig } from 'data-room-ui/js/api/bigScreenApi'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { G2 } from '@antv/g2plot'
 export default {
   name: 'OverallSetting',
@@ -418,7 +419,7 @@ export default {
       if (!['dark', 'light', 'auto'].includes(themeName)) {
         getThemeConfig().then(res => {
           this.form.themeJson = res
-          this.changePageConfig(_.cloneDeep(this.form))
+          this.changePageConfig(cloneDeep(this.form))
           // 统一注册主题
           const { registerTheme } = G2
           registerTheme(themeName, { ...res.chart })
@@ -433,7 +434,7 @@ export default {
     // 改变
     changeChart (themeName) {
       // 统一改变组件的主题
-      const newChartList = _.cloneDeep(this.pageInfo.chartList)
+      const newChartList = cloneDeep(this.pageInfo.chartList)
       const chartList = newChartList.map(chart => {
         chart.option.theme = themeName
         chart.key = new Date().getTime()

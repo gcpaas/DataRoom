@@ -497,7 +497,8 @@ import {
   getDataset, datasetUpdate, datasetAdd
 } from 'data-room-ui/js/utils/datasetConfigService'
 import { datasourceList, getSourceTable, getSourceView, getTableFieldList } from 'data-room-ui/js/utils/dataSourceService'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { datasetMixins } from 'data-room-ui/js/mixins/datasetMixin'
 export default {
   name: 'OriginalEditForm',
@@ -646,7 +647,7 @@ export default {
         this.dataForm.repeatStatus = res.config.repeatStatus
         this.dataForm.fieldList = res.config.fieldList
         this.dataForm.fieldDesc = res.config.fieldDesc
-        this.oldStructurePreviewList = _.cloneDeep(res.config.fieldList)
+        this.oldStructurePreviewList = cloneDeep(res.config.fieldList)
         // 字段信息，转为数组
         this.dataForm.fieldInfo = res.config.fieldInfo ? res.config.fieldInfo.split(',') : []
         if (this.dataForm.typeId) {
@@ -683,10 +684,9 @@ export default {
       this.tableLoading = true
       datasetExecuteTest(executeParams).then((data) => {
         if (this.dataForm.fieldList == null) {
-          this.dataForm.fieldList = _.cloneDeep(data.structure)
+          this.dataForm.fieldList = cloneDeep(data.structure)
         }
         this.dataPreviewList = data.data.list
-        console.log(this.dataPreviewList)
         this.totalCount = data.data.totalCount
         this.tableLoading = false
       }).catch(() => {
@@ -823,7 +823,6 @@ export default {
      */
     queryAllField () {
       getTableFieldList(this.dataForm.sourceId, this.dataForm.tableName).then((data) => {
-        console.log('data', data)
         const fieldDescMap = {}
         this.fieldList = data.map(field => {
           fieldDescMap[field.columnName] = field.columnComment
@@ -923,7 +922,7 @@ export default {
           })
         }
 
-        this.structurePreviewListCopy = _.cloneDeep(this.structurePreviewList)
+        this.structurePreviewListCopy = cloneDeep(this.structurePreviewList)
         this.totalCount = data.data.totalCount
         this.currentCount = data.data.currentCount
         this.tableLoading = false
@@ -955,8 +954,8 @@ export default {
       return data.name.indexOf(value) !== -1
     },
     setField () {
-      this.structurePreviewList = _.cloneDeep(this.structurePreviewListCopy)
-      this.oldStructurePreviewList = _.cloneDeep(this.structurePreviewListCopy)
+      this.structurePreviewList = cloneDeep(this.structurePreviewListCopy)
+      this.oldStructurePreviewList = cloneDeep(this.structurePreviewListCopy)
       this.fieldsetVisible = false
     }
   }

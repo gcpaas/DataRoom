@@ -39,7 +39,8 @@
 </template>
 
 <script>
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'TextGradient',
   model: {
@@ -63,7 +64,7 @@ export default {
   },
   computed: {
     newColors () {
-      return _.cloneDeep(this.colors)
+      return cloneDeep(this.colors)
     }
   },
   watch: {

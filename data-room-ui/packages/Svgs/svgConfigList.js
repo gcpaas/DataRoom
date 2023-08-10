@@ -4,7 +4,8 @@
  * @Author: xing.heng
  */
 import { dataConfig, settingConfig } from './settingConfig'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import icon from './export'
 const iconList = icon.getIconList()
 const svgList = getSvgList(iconList)
@@ -25,11 +26,11 @@ function getSvgList (iconList) {
       type: 'svgs',
       chartType: 'svg',
       option: {
-        ..._.cloneDeep(settingConfig)
+        ...cloneDeep(settingConfig)
       },
       setting: {}, // 右侧面板自定义配置
       dataHandler: {}, // 数据自定义处理js脚本
-      ..._.cloneDeep(dataConfig)
+      ...cloneDeep(dataConfig)
     }
   })
   return svgList

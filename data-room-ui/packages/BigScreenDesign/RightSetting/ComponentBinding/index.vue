@@ -58,7 +58,8 @@
 </template>
 
 <script>
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { mapState } from 'vuex'
 export default {
   name: 'ComponentBinding',
@@ -106,7 +107,7 @@ export default {
      * @description: 获取除自己之外的所有组件
      */
     allComponentsExpectSelf (code) {
-      let layouts = _.cloneDeep(this.chartList)
+      let layouts = cloneDeep(this.chartList)
       const tabComponents = []
       layouts?.map((ly) => {
         if (ly.type === 'Tabs') {

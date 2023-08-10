@@ -130,7 +130,7 @@ import { G2 } from '@antv/g2plot'
 import multipleSelectMixin from 'data-room-ui/js/mixins/multipleSelectMixin'
 import { getThemeConfig, getScreenInfo } from 'data-room-ui/js/api/bigScreenApi'
 import MouseSelect from './MouseSelect/index.vue'
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { randomString } from '../js/utils'
 import { isFirefox } from 'data-room-ui/js/utils/userAgent'
 import { handleResData } from 'data-room-ui/js/store/actions.js'
@@ -343,11 +343,11 @@ export default {
           y: 0,
           type: 'picture',
           option: {
-            ..._.cloneDeep(settingConfig)
+            ...cloneDeep(settingConfig)
           },
           setting: {}, // 右侧面板自定义配置
           dataHandler: {}, // 数据自定义处理js脚本
-          ..._.cloneDeep(dataConfig),
+          ...cloneDeep(dataConfig),
           customize: {
             url: val.url,
             radius: 0,
@@ -409,10 +409,10 @@ export default {
       if (config.type === 'map' || config.type === 'video') {
         config.key = new Date().getTime()
       }
-      this.changeChartConfig(_.cloneDeep(config))
+      this.changeChartConfig(cloneDeep(config))
       this.$refs.Render?.$refs['RenderCard' + config.code][0]?.$refs[
         config.code
-      ]?.changeStyle(_.cloneDeep(config))
+      ]?.changeStyle(cloneDeep(config))
     },
     // 动态属性更新
     updateDataSetting (config) {

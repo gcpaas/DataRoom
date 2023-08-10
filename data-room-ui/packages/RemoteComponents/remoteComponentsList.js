@@ -1,6 +1,7 @@
 // 得到用户自定义的远程组件列表
 import { dataConfig, settingConfig } from './settingConfig'
-import _ from 'lodash'
+// import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 const files = require.context('./innerComponents/', true, /index.vue$/)
 const innerRemoteComponents = []
@@ -39,12 +40,12 @@ export function getRemoteComponents (comList) {
       y: 0,
       type: 'remoteComponent',
       option: {
-        ..._.cloneDeep(settingConfig),
+        ...cloneDeep(settingConfig),
         ...config.option
       },
       // 右侧面板自定义配置
       setting: config.setting,
-      ..._.cloneDeep(dataConfig),
+      ...cloneDeep(dataConfig),
       // 自定义配置
       customize: {
         ...config.customize,
@@ -70,11 +71,11 @@ export function getRemoteComponentConfig (code, name) {
     y: 0,
     type: 'remoteComponent',
     option: {
-      ..._.cloneDeep(settingConfig)
+      ...cloneDeep(settingConfig)
     },
     // 右侧面板自定义配置
     setting: [],
-    ..._.cloneDeep(dataConfig),
+    ...cloneDeep(dataConfig),
     // 自定义配置
     customize: {
       // 文件路径
