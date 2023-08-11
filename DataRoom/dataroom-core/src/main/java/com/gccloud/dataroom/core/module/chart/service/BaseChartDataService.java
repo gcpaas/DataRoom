@@ -59,7 +59,7 @@ public class BaseChartDataService {
             return null;
         }
         IBaseDataSetService dataSetService = dataSetServiceFactory.buildById(dataSetDataSource.getBusinessKey());
-        DatasetEntity datasetEntity = dataSetService.getById(dataSetDataSource.getBusinessKey());
+        DatasetEntity datasetEntity = dataSetService.getByIdFromCache(dataSetDataSource.getBusinessKey());
         if (datasetEntity == null) {
             return null;
         }

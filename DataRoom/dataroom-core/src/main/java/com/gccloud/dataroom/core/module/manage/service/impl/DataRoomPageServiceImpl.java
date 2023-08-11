@@ -221,6 +221,7 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         AssertUtils.isTrue(!checkNameRepeat(bigScreenEntity), "名称重复");
         AssertUtils.isTrue(!checkCodeRepeat(bigScreenEntity), "编码重复");
         this.updateById(bigScreenEntity);
+        PAGE_ENTITY_CACHE.invalidate(bigScreenEntity.getCode());
     }
 
     @Override
@@ -249,6 +250,7 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         LambdaQueryWrapper<PageEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PageEntity::getCode, code);
         this.remove(queryWrapper);
+        PAGE_ENTITY_CACHE.invalidate(code);
         // 调用拓展接口
         dataRoomExtendClient.deleteByCode(code);
     }
