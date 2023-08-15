@@ -28,19 +28,24 @@
 
 采用拖拉拽可视化设计，支持20+种图表组件、15种边框组件、10多种修饰组件
 
+<br>
+
 <img  align="right" src="./doc/images/设计器.png" height="200">
 
 ### 3. 资源库
 
 支持资源自定义上传、在大屏设计器中直接引用资源，如：3D图片、边框图片、装饰条、背景图
 
-<img alt="logo" src="./doc/images/资源库.png" align="left"  height="200">
+<br>
 
+<img alt="logo" src="./doc/images/资源库.png" align="left"  height="200">
 
 
 ### 4. 数据源
 
 支持MySQL、PostgreSQL、Oracle 、ClickHouse数据库接入
+
+<br>
 
 <img alt="logo" src="./doc/images/数据源.png" align="right"  height="200">
 
@@ -48,9 +53,10 @@
 
 支持原始数据集、自助数据集、存储过程数据集、JSON数据集、脚本数据集、JS脚本数据集、HTTP数据集多种方式接入数据
 
+<br>
+
 <img alt="logo" src="./doc/images/数据集.png" align="left"  height="200">
 
-<br/>
 
 ## 优势
 
