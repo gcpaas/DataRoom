@@ -12,7 +12,7 @@
 
     <groupId>com.gccloud</groupId>
     <artifactId>dataroom</artifactId>
-    <version>1.0.1.2023080901.Alpha</version>
+    <version>1.0.1.2023081101.Alpha</version>
 
     <packaging>pom</packaging>
     <description>基于G2Plot、Echarts的大屏设计服务端，具备设计、预览能力，支持MySQL、Oracle、PostgreSQL、Groovy等数据集接入
@@ -62,6 +62,15 @@
         <okhttp3.version>4.9.1</okhttp3.version>
         <dataset.core.version>1.0.1.2023081101.Alpha</dataset.core.version>
     </properties>
+
+    <dependencies>
+        <!-- excel解析  -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>2.2.5</version>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
