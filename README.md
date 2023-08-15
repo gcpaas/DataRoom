@@ -22,7 +22,7 @@
 
 <br>
 
-<img  src="./doc/images/大屏管理.png" height="200" align="left">
+<img  src="./doc/images/大屏管理.png" height="200" >
 
 ### 2. 设计器
 
@@ -30,7 +30,7 @@
 
 <br>
 
-<img  src="./doc/images/设计器.png" height="200" align="left">
+<img  src="./doc/images/设计器.png" height="200" >
 
 ### 3. 资源库
 
@@ -38,7 +38,7 @@
 
 <br>
 
-<img alt="logo" src="./doc/images/资源库.png"   height="200" align="left">
+<img alt="logo" src="./doc/images/资源库.png"   height="200">
 
 
 ### 4. 数据源
@@ -47,7 +47,7 @@
 
 <br>
 
-<img alt="logo" src="./doc/images/数据源.png" height="200" align="left">
+<img alt="logo" src="./doc/images/数据源.png" height="200">
 
 ### 4. 数据集
 
@@ -55,7 +55,9 @@
 
 <br>
 
-<img alt="logo" src="./doc/images/数据集.png"   height="200" align="left">
+<img alt="logo" src="./doc/images/数据集.png"   height="200">
+<br>
+<img alt="logo" src="./doc/images/数据集2.png"   height="200">
 
 
 ## 优势
