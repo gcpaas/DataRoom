@@ -112,7 +112,7 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
       border-bottom: none !important;
     }
 
-    /ddeep/ .el-table::before {
+    ::v-deep .el-table::before {
       display: none !important;
     }
 
