@@ -1,6 +1,6 @@
 {
   "name": "@gcpaas/data-room-ui",
-  "version": "1.0.1-2023081004-Alpha",
+  "version": "1.0.1-2023081501-Alpha",
   "description": "自定义大屏",
   "author": "gcpaas",
   "license": "MIT",
@@ -118,7 +118,7 @@
     "husky": "^4.2.5",
     "jest": "^27.1.0",
     "lint-staged": "^10.2.11",
-    "node-sass": "^4.14.1",
+    "node-sass": "4.14.1",
     "runjs": "^4.3.2",
     "sass-loader": "7.1.0",
     "script-ext-html-webpack-plugin": "2.1.3",
