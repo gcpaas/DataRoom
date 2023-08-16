@@ -6,7 +6,6 @@ import { getScreenInfo, getDataSetDetails, getDataByDataSetId } from '../api/big
 import { stringToFunction } from '../utils/evalFunctions'
 import { EventBus } from '../utils/eventBus'
 import plotList from 'data-room-ui/G2Plots/plotList'
-// import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
 export default {
   // 初始化页面数据
   initLayout ({ commit, dispatch }, code) {

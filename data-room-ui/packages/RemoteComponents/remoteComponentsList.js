@@ -23,7 +23,7 @@ export default getRemoteComponents(innerRemoteComponents)
 
 // 抛出外部的用户系统组件
 export function getRemoteComponents (comList) {
-  const customList = comList || window.BS_CONFIG?.remoteComponents
+  const customList = (comList || window.BS_CONFIG?.remoteComponents) || []
 
   const list = []
   customList.forEach((config) => {

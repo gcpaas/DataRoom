@@ -42,7 +42,7 @@
               slot="label"
               class="menu-slot"
               name="layer"
-              @dbclick.native="toggleSidebar"
+              @dbclick="toggleSidebar"
             >
               <i
                 :class="['iconfont-bigscreen', 'icon-layer']"
@@ -75,7 +75,7 @@
             <div
               slot="label"
               class="menu-slot"
-              @dbclick.native="toggleSidebar"
+              @dbclick="toggleSidebar"
             >
               <i
                 :class="['iconfont-bigscreen', menu.icon]"
