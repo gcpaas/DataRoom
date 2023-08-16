@@ -77,7 +77,6 @@ export default {
             this.resolveStrSetting(settingContent)
             this.config = this.dataFormatting(this.config, { success: false })
           }
-
           this.remoteComponent = remoteVueLoader('data:text/plain,' + encodeURIComponent(vueContent))
         }).finally(() => {
           this.loading = false

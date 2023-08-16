@@ -79,17 +79,15 @@ export default {
     this.viewComponent()
   },
   methods: {
-    viewComponent () {
+    async viewComponent () {
       // 如果有编码，则获取组件信息
       if (this.$route.query?.code) {
-        getBizComponentInfo(this.$route.query?.code).then(data => {
-          this.vueContentInner = data.vueContent
-          this.settingContentInner = data.settingContent
-          this.dataFormatting(this.config)
-          this.remoteComponent = remoteVueLoader('data:text/plain,' + encodeURIComponent(this.vueContentInner))
-        }).finally(() => {
-          this.loading = false
-        })
+        const data = await getBizComponentInfo(this.$route.query?.code)
+        this.vueContentInner = data.vueContent
+        this.settingContentInner = data.settingContent
+        this.dataFormatting(this.config)
+        this.remoteComponent = remoteVueLoader('data:text/plain,' + encodeURIComponent(this.vueContentInner))
+        this.loading = false
       }
 
       // 如果有组件的dirName，则获取系统组件信息
@@ -139,12 +137,12 @@ export default {
     },
     dataFormatting (config, data) {
       // 数据返回成功则赋值
-      if (data.success) {
+      if (data?.success) {
         data = data.data
         config = this.transformSettingToOption(config, 'data')
         // 获取到后端返回的数据，有则赋值
-        const option = config.option
-        const setting = config.setting
+        // const option = config.option
+        // const setting = config.setting
         if (config.dataHandler) {
           try {
             // 此处函数处理data
@@ -165,8 +163,8 @@ export default {
       config = { ...this.config, ...config }
       config = this.transformSettingToOption(config, 'custom')
       // 这里定义了option和setting是为了保证在执行eval时,optionHandler、dataHandler里面可能会用到，
-      const option = config.option
-      const setting = config.setting
+      // const option = config.option
+      // const setting = config.setting
       if (this.config.optionHandler) {
         try {
           // 此处函数处理config
