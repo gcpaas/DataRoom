@@ -14,6 +14,7 @@
 
 <script>
 import AMapLoader from '@amap/amap-jsapi-loader'
+import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'RemoteMap',
   props: {
@@ -44,13 +45,14 @@ export default {
   },
 
   mounted () {
-    this.initMap()
+    this.initMap(this.customize)
   },
   methods: {
-    initMap () {
+    initMap (customize) {
       this.loading = true
+      this.updateKey = 0
       AMapLoader.load({
-        key: this.customize.mapKey || '1b0a1423b70bbcbc20c9c87327e5e94e', // 申请好的Web端开发者Key，首次调用 load 时必填
+        key: customize.mapKey || '1b0a1423b70bbcbc20c9c87327e5e94e', // 申请好的Web端开发者Key，首次调用 load 时必填
         version: '1.4.15', // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
         plugins: [
           'AMap.ToolBar',
@@ -64,12 +66,12 @@ export default {
         // eslint-disable-next-line no-undef
         this.map = new AMap.Map(`map-${this.config.code}`, {
           resizeEnable: true, // 是否监控地图容器尺寸变化
-          lang: this.customize.lang,
-          mapStyle: `amap://styles/${this.customize.mapStyle}`,
-          center: [this.customize.lng, this.customize.lat],
-          features: this.customize.features,
-          zoom: this.customize.zoom,
-          viewMode: this.customize.viewMode,
+          lang: customize.lang,
+          mapStyle: `amap://styles/${customize.mapStyle}`,
+          center: [customize.lng, customize.lat],
+          features: customize.features,
+          zoom: customize.zoom,
+          viewMode: customize.viewMode,
           plugins: ['AMap.ToolBar', 'AMap.Scale', 'AMap.MapType', 'AMap.Geolocation']
         })
         this.loading = false
@@ -85,7 +87,7 @@ export default {
         // eslint-disable-next-line no-undef
         this.map.addControl(new AMap.Geolocation())
         let marker = null // 用于存储标记对象的变量
-        if (this.customize.markerSpan) {
+        if (customize.markerSpan) {
           // 创建自定义标记内容
           const markerContent = document.createElement('div')
           markerContent.style.position = 'absolute'
@@ -102,7 +104,7 @@ export default {
           // 创建标记文本
           const markerSpan = document.createElement('span')
           markerSpan.className = 'marker'
-          markerSpan.innerHTML = this.customize.markerSpan
+          markerSpan.innerHTML = customize.markerSpan
           markerContent.appendChild(markerSpan)
           // 删除之前的标记（如果存在）
           if (marker) {
@@ -111,7 +113,7 @@ export default {
           // 创建自定义标记
           // eslint-disable-next-line no-undef
           marker = new AMap.Marker({
-            position: [this.customize.markerLng, this.customize.markerLat],
+            position: [customize.markerLng, customize.markerLat],
             content: markerContent,
             // eslint-disable-next-line no-undef
             offset: new AMap.Pixel(0, 0) // 设置标记偏移，使其指向标记位置
@@ -130,6 +132,11 @@ export default {
           }
         }
       })
+    },
+    customStyle (config) {
+      if (config && config.option && config.option.customize) {
+        this.initMap(config.option.customize)
+      }
     }
   }
 }

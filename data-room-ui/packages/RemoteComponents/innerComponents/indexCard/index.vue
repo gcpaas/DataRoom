@@ -36,7 +36,7 @@
             'font-weight':customize.firstWeight,
             'margin-bottom':customize.lineDistance +'px'
           }"
-        >{{tableData?tableData:'' }}</span>
+        >{{ tableData?tableData:'' }}</span>
         <span
           :style="{
             'font-size': customize.secondSize + 'px',
@@ -44,7 +44,8 @@
             color:customize.secondColor,
             'font-weight':customize.secondWeight,
           }"
-          class="content-right-second">
+          class="content-right-second"
+        >
           {{ customize.secondLine }}
         </span>
       </div>
@@ -63,7 +64,7 @@ export default {
       default: () => ({})
     }
   },
-  data() {
+  data () {
     return {
       customClass: {}
     }
@@ -94,6 +95,7 @@ export default {
     }
   },
   methods: {
+    customStyle () {}
   }
 }
 </script>

@@ -116,6 +116,13 @@ const option = {
 
 export default {
   title,
-  option,
-  setting
+  setting,
+  option: {
+    ...option,
+    displayOption: {
+      dataAllocation: {
+        enable: false
+      }
+    }
+  }
 }

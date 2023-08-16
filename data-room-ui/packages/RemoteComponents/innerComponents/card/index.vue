@@ -71,6 +71,7 @@ export default {
     }
   },
   methods: {
+    customStyle () {}
   }
 }
 </script>

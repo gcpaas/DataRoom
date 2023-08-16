@@ -90,7 +90,8 @@ export default {
     },
     linkage (row) {
       this.$emit('linkage', row)
-    }
+    },
+    customStyle () {}
   }
 }
 </script>
