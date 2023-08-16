@@ -67,12 +67,15 @@
             v-for="menu in menuList"
             :key="menu.id"
             :name="menu.name"
-            @click.stop="fold = false, changeActiveCode('')"
+            @click.stop.native="
+              fold = false
+              changeActiveCode('')
+            "
           >
             <div
               slot="label"
               class="menu-slot"
-              @dbclick.native="toggleSidebar"
+              @dbclick="toggleSidebar"
             >
               <i
                 :class="['iconfont-bigscreen', menu.icon]"
