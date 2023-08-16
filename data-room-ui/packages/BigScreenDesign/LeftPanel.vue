@@ -42,7 +42,7 @@
               slot="label"
               class="menu-slot"
               name="layer"
-              @dbclick.native="toggleSidebar"
+              @dbclick="toggleSidebar"
             >
               <i
                 :class="['iconfont-bigscreen', 'icon-layer']"
@@ -67,10 +67,7 @@
             v-for="menu in menuList"
             :key="menu.id"
             :name="menu.name"
-            @click.stop.native="
-              fold = false
-              changeActiveCode('')
-            "
+            @click.stop="fold = false, changeActiveCode('')"
           >
             <div
               slot="label"
