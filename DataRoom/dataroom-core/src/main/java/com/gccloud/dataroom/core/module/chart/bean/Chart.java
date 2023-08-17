@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Charts图表
@@ -62,18 +63,14 @@ public class Chart {
     @ApiModelProperty(notes = "联动入参配置")
     private List<InParam> inParams;
 
-    @ApiModelProperty(notes = "出码用到的图表信息")
-    private CodeGeneratorInfo codeGeneratorInfo = new CodeGeneratorInfo();
-
-    @Data
-    public static class CodeGeneratorInfo {
-
-        @ApiModelProperty(notes = "图表数据查询接口地址")
-        private String dataUrl;
-
-        @ApiModelProperty(notes = "图表组件配置是否完善")
-        private Boolean configComplete;
-
-    }
+    /**
+     * 主题配置,格式如下
+     *  {
+     *     dark: {},
+     *     light: {}
+     *  }
+     */
+    @ApiModelProperty(notes = "主题配置")
+    private Map<String, Object> theme;
 
 }
