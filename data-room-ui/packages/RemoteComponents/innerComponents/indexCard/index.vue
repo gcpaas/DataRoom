@@ -94,9 +94,7 @@ export default {
       return dataList
     }
   },
-  methods: {
-    customStyle () {}
-  }
+  methods: { }
 }
 </script>
 

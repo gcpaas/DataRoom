@@ -70,9 +70,7 @@ export default {
       return this.config.option.customize
     }
   },
-  methods: {
-    customStyle () {}
-  }
+  methods: { }
 }
 </script>
 

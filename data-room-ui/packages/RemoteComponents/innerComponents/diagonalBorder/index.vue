@@ -141,9 +141,7 @@ export default {
       rightDiagonal.style.top = `${this.customize.borderWidth / 2}px`
     }
   },
-  methods: {
-    customStyle () {}
-  }
+  methods: { }
 }
 </script>
 <style lang="scss" scoped>
