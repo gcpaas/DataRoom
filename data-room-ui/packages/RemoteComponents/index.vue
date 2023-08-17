@@ -199,7 +199,12 @@ export default {
         this.chart.update(config.option)
       }
       this.changeChartConfig(config)
-      this.$refs['remoteComponent' + config.code]?.customStyle(config)
+      // 在this.$refs['remoteComponent' + config.code]这个实例里判断是否存在customStyle方法，如果存在则执行
+      const componentInstance = this.$refs['remoteComponent' + config.code]
+      if (componentInstance && componentInstance.$options.methods && componentInstance.$options.methods.customStyle) {
+        // 调用 customStyle 方法
+        this.$refs['remoteComponent' + config.code]?.customStyle(config)
+      }
       return config
     },
     // 同步配置
