@@ -4,6 +4,19 @@ export default function getComponentConfig (type) {
   // const _type = _.upperFirst(type)
   // const className = `com.gccloud.starter.lowcode.page.bigscreen.components.${_type}Chart`
   switch (type) {
+    case 'marquee':
+      return {
+        name: '跑马灯',
+        title: '跑马灯',
+        icon: iconNames[0],
+        className:
+          'com.gccloud.dataroom.core.module.chart.components.ScreenTextChart',
+        w: 150,
+        h: 30,
+        x: 0,
+        y: 0,
+        type
+      }
     case 'texts':
       return {
         name: '文本',

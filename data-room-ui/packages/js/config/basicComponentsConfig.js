@@ -12,6 +12,7 @@ import getComponentConfig from 'data-room-ui/js/utils/getComponentConfig'
 // 批量引入配置文件
 import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
 const typeList = [
+  'marquee',
   'texts',
   'linkChart',
   'horizontalLine', // 横线
