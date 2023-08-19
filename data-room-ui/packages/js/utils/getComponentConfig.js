@@ -8,11 +8,11 @@ export default function getComponentConfig (type) {
       return {
         name: '跑马灯',
         title: '跑马灯',
-        icon: iconNames[0],
+        icon: iconNames[16],
         className:
           'com.gccloud.dataroom.core.module.chart.components.ScreenTextChart',
         w: 150,
-        h: 30,
+        h: 100,
         x: 0,
         y: 0,
         type

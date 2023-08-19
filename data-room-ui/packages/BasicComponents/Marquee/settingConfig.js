@@ -8,7 +8,7 @@ import { commonConfig, displayOption } from 'data-room-ui/js/config'
 
 export const settingConfig = {
   theme: 'dark',
-  text: '文本标签占位符', // text内容
+  text: '跑马灯占位符', // text内容
   // 设置面板属性的显隐
   displayOption: {
     ...displayOption,
@@ -29,14 +29,42 @@ export const settingConfig = {
 const customConfig = {
   type: 'marquee',
   root: {
-    version: '2023071001',
-    url: 'https://www.runoob.com/'
+    version: '2023071001'
   },
   customize: {
-    title: '文本标签占位符',
-    fontSize: 20,
+    title: '跑马灯占位符',
+    fontSize: 40,
     fontWeight: 700,
-    color: 'left,#ffffff,#ffffff'
+    icon: {
+      name: '',
+      position: 'left',
+      color: '#fff'
+    },
+    // 文字颜色类型: 纯色、渐变
+    textColorType: 'pure',
+    // 文字颜色
+    textColor: '#fff',
+    // 文字渐变开始颜色
+    textGradientColor0: '#fff',
+    // 文字渐变结束颜色
+    textGradientColor1: '#fff',
+    // 文字渐变方向
+    textGradientDirection: 'to right',
+    // 滚动方向
+    direction: 'right',
+    // 滚动间隔
+    dur: '8',
+    // 背景色类型：纯色、渐变、透明
+    backgroundColorType: 'transparent',
+    // 背景色
+    backgroundColor: '#fff',
+    // 背景渐变色开始颜色
+    bgGradientColor0: '#fff',
+    // 背景渐变色结束颜色
+    bgGradientColor1: '#fff',
+    // 背景色渐变方向
+    bgGradientDirection: 'to right'
+
   }
 
 }
