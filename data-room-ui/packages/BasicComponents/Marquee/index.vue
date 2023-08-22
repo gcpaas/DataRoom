@@ -171,10 +171,4 @@ export default {
     }
   }
 }
-.el-icon-edit{
-  &:before{
-    content: '11111';
-    font-size: 20px;
-  }
-}
 </style>
