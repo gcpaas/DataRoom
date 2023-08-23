@@ -85,7 +85,7 @@ export default {
         const data = await getBizComponentInfo(this.$route.query?.code)
         this.vueContentInner = data.vueContent
         this.settingContentInner = data.settingContent
-        this.dataFormatting(this.config)
+       this.config = this.dataFormatting(this.config)
         this.remoteComponent = remoteVueLoader('data:text/plain,' + encodeURIComponent(this.vueContentInner))
         this.loading = false
       }
@@ -105,7 +105,7 @@ export default {
     // 尝试渲染远程文件或远程字符串
     getRemoteComponent () {
       this.loading = true
-      this.dataFormatting(this.config, { success: false })
+      this.config = this.dataFormatting(this.config, { success: false })
       this.remoteComponent = remoteVueLoader('data:text/plain,' + encodeURIComponent(this.vueContentInner))
       this.loading = false
     },
@@ -115,6 +115,7 @@ export default {
      */
     // 将config.setting的配置转化为option里的配置，这里之所以将转化的方法提出来，是因为在改变维度指标和样式的时候都需要转化
     transformSettingToOption (config, type) {
+
       let option = null
       config.setting.forEach(set => {
         if (set.optionField) {
@@ -154,7 +155,7 @@ export default {
         config.option.data = data
       } else {
         // 数据返回失败则赋前端的模拟数据
-        config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data
+        config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data || config.option.data
       }
       return config
     },
