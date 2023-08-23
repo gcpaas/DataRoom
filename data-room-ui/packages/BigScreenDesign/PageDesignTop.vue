@@ -93,6 +93,7 @@
   </div>
 </template>
 <script>
+import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import { toJpeg, toPng } from 'html-to-image'
 import { mapMutations, mapActions, mapState } from 'vuex'
 import { saveScreen } from 'data-room-ui/js/api/bigScreenApi'
@@ -448,6 +449,8 @@ export default {
     },
     createdImg () {
       this.saveAndPreviewLoading = true
+      // 暂停跑马灯动画
+      EventBus.$emit('stopMarquee')
       const node = document.querySelector('.render-theme-wrap')
       toPng(node)
         .then((dataUrl) => {
@@ -459,6 +462,8 @@ export default {
             link.remove()
           })
           this.saveAndPreviewLoading = false
+          // 恢复跑马灯动画
+          EventBus.$emit('startMarquee')
         })
         .catch(() => {
           this.$message.warning('出现未知错误，请重试')
