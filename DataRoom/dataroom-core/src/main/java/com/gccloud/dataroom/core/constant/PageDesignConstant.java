@@ -131,6 +131,11 @@ public interface PageDesignConstant {
              * 超链接
              */
             String LINK = "linkChart";
+
+            /**
+             * 主题切换器
+             */
+            String THEME_SWITCHER = "themeSwitcher";
         }
     }
 
