@@ -117,6 +117,10 @@
                         >
                           <use :xlink:href="`#icon-a-${element.icon}`" />
                         </svg> -->
+<<<<<<< HEAD
+=======
+                        {{ element.icon }}
+>>>>>>> bac32cd20b683071d5697af079e34b69d4c316a8
                         <icon-svg
                           v-if="element.icon"
                           :name="element.icon"
