@@ -19,6 +19,8 @@ import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import { mapState, mapMutations } from 'vuex'
 import * as g2Plot from '@antv/g2plot'
 import plotList, { getCustomPlots } from '../G2Plots/plotList'
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+
 export default {
   name: 'PlotCustomComponent',
   mixins: [commonMixins, linkageMixins],
@@ -69,6 +71,7 @@ export default {
   methods: {
     ...mapMutations('bigScreen', ['changeChartConfig']),
     chartInit () {
+
       let config = this.config
       // key和code相等，说明是一进来刷新，调用list接口
       if (this.config.code === this.config.key || this.isPreview) {
@@ -157,7 +160,7 @@ export default {
         config.option.data = data
       } else {
         // 数据返回失败则赋前端的模拟数据
-        config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data
+        config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data || config?.option?.data
       }
       return config
     },
@@ -180,6 +183,9 @@ export default {
         this.chart.update(config.option)
       }
       this.changeChartConfig(config)
+      // 将设置好的主题保存起来
+      console.log('changeStyle')
+      config.theme = settingToTheme(config, this.customTheme)
       return config
     }
   }

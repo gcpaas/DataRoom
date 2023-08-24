@@ -82,6 +82,8 @@ import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
 import { randomString } from '../js/utils'
 import { compile } from 'tiny-sass-compiler/dist/tiny-sass-compiler.esm-browser.prod.js'
 import plotList, { getCustomPlots } from '../G2Plots/plotList'
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+
 export default {
   name: 'BigScreenRender',
   components: {
@@ -326,6 +328,13 @@ export default {
         option
       }
       config.key = config.code
+      // TODO:新添加一个组件时应该有默认的两套主题
+      console.log('add')
+      // 先暂时只考虑g2组件
+      if (['customComponent'].includes(chart.type)){
+        config.theme = settingToTheme(config, 'dark')
+        config.theme = settingToTheme(config, 'light')
+      }
       this.addItem(config)
     },
     addSourceChart (chart, position) {

@@ -116,6 +116,12 @@
         </el-form>
       </div>
       <div>
+        <SettingTitle>主题配置</SettingTitle>
+        <div class="bs-overall-setting-wrap">
+          <OverallThemeSet />
+        </div>
+      </div>
+      <div>
         <SettingTitle>定时器</SettingTitle>
         <!-- 定时器空数据 -->
         <el-empty
@@ -188,6 +194,7 @@ import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BgImg from './BgImgDialog.vue'
 import { mapState, mapMutations } from 'vuex'
 import { getThemeConfig } from 'data-room-ui/js/api/bigScreenApi'
+import OverallThemeSet from 'data-room-ui/OverallThemeSet/index.vue'
 // import _ from 'lodash'
 import cloneDeep from 'lodash/cloneDeep'
 import { G2 } from '@antv/g2plot'
@@ -196,7 +203,8 @@ export default {
   components: {
     ColorPicker,
     SettingTitle,
-    BgImg
+    BgImg,
+    OverallThemeSet
   },
   directives: {
     block: {

@@ -176,7 +176,7 @@ export default {
         config.option.data = data
       } else {
         // 数据返回失败则赋前端的模拟数据
-        config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data
+        config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data || config?.option?.data
       }
       return config
     },
