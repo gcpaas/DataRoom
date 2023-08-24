@@ -110,18 +110,19 @@
                         class="img_dispaly chooseDragNode"
                         @click.stop="addComponent(element)"
                       >
-                        <svg
+                        <!-- <svg
                           v-if="element.icon"
                           class="icon-svg"
                           aria-hidden="true"
                         >
                           <use :xlink:href="`#icon-a-${element.icon}`" />
-                        </svg>
-                        <!-- <icon-svg
+                        </svg> -->
+                        {{ element.icon }}
+                        <icon-svg
                           v-if="element.icon"
                           :name="element.icon"
                           class="page-opt-list-icon"
-                        /> -->
+                        />
                         <img
                           v-else-if="element.img"
                           :src="element.img"
@@ -147,7 +148,7 @@
 </template>
 <script>
 import cloneDeep from 'lodash/cloneDeep'
-import 'data-room-ui/assets/symbols/bigScreenIcon/iconfont.js'
+// import 'data-room-ui/assets/symbols/bigScreenIcon/iconfont.js'
 import basicComponents from 'data-room-ui/js/config/basicComponentsConfig'
 import g2PlotComponents, { getCustomPlots } from '../G2Plots/plotList'
 import borderComponents from 'data-room-ui/js/config/borderComponentsConfig'
