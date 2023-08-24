@@ -329,9 +329,8 @@ export default {
       }
       config.key = config.code
       // TODO:新添加一个组件时应该有默认的两套主题
-      console.log('add')
       // 先暂时只考虑g2组件
-      if (['customComponent'].includes(chart.type)){
+      if (['customComponent'].includes(_chart.type)) {
         config.theme = settingToTheme(config, 'dark')
         config.theme = settingToTheme(config, 'light')
       }

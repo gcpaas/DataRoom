@@ -1,9 +1,12 @@
+import _ from 'lodash'
+
 /**
 * @Description: 主题设置格式化
 * @author liu.shiyi
 * @date 2023/8/17 14:47
 */
 // 将组件中的setting里面的主题设置（颜色）存放到theme里面
+
 export function settingToTheme (config, type) {
   // 考虑与上一次保存过的主题进行合并
   // 排除掉主题非暗黑非明亮的情况
@@ -20,12 +23,11 @@ export function settingToTheme (config, type) {
   }
 }
 // 将保存的theme主题设置（颜色）存放到chartList
-export function themeToSetting (chartList, type) {
+export function themeToSetting (chartList, type, _this) {
   // 排除掉主题非暗黑非明亮的情况
   if (['dark', 'light'].includes(type)) {
     chartList.forEach(chart => {
       chart.option.theme = type
-      chart.key = new Date().getTime()
       if (chart.theme && chart.theme[type]) {
         for (const item of chart.setting) {
           // 检查 obj 中是否存在与 item.field 相对应的属性
@@ -34,6 +36,9 @@ export function themeToSetting (chartList, type) {
             item.value = chart.theme[type][item.field]
           }
         }
+      }
+      if (_this && _this.$refs.Render?.$refs['RenderCard' + chart.code][0] && _this.$refs.Render.$refs['RenderCard' + chart.code][0].$refs[chart.code].changeStyle) {
+        _this.$refs.Render.$refs['RenderCard' + chart.code][0].$refs[chart.code].changeStyle(_.cloneDeep(chart))
       }
     })
   }

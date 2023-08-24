@@ -9,6 +9,7 @@
       :right-fold="rightVisiable"
       @updateRightVisiable="updateRightVisiable"
       @showPageInfo="showPageInfo"
+      @updateTheme="updateTheme"
       @empty="empty"
     />
     <div class="drag-wrap">
@@ -136,6 +137,7 @@ import { isFirefox } from 'data-room-ui/js/utils/userAgent'
 import { handleResData } from 'data-room-ui/js/store/actions.js'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import NotPermission from 'data-room-ui/NotPermission'
+import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
 export default {
   name: 'BigScreenDesign',
   components: {
@@ -216,7 +218,8 @@ export default {
       hasGrid: (state) => state.bigScreen.hasGrid,
       zoom: (state) => state.bigScreen.zoom,
       fitZoom: (state) => state.bigScreen.fitZoom,
-      iframeDialog: (state) => state.bigScreen.iframeDialog
+      iframeDialog: (state) => state.bigScreen.iframeDialog,
+      activeCode: state => state.bigScreen.activeCode
     }),
     pageCode () {
       return this.code || this.$route.query.code
@@ -277,7 +280,9 @@ export default {
       'changeZoom',
       'clearTimeline',
       'saveTimeLine',
-      'changeIframeDialog'
+      'changeIframeDialog',
+      'changePageInfo',
+      'changeActiveItemConfig'
     ]),
     // 判断页面权限
     permission () {
@@ -403,6 +408,12 @@ export default {
           this.saveTimeLine('清空画布')
         })
         .catch(() => {})
+    },
+    // 切换主题时更新主题配置
+    updateTheme (theme) {
+      const pageInfo = this.pageInfo
+      pageInfo.chartList = themeToSetting(pageInfo.chartList, theme, this)
+      this.changePageInfo(pageInfo)
     },
     // 自定义属性更新
     updateSetting (config) {

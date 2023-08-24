@@ -20,6 +20,7 @@ import { mapState, mapMutations } from 'vuex'
 import * as g2Plot from '@antv/g2plot'
 import plotList, { getCustomPlots } from '../G2Plots/plotList'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+import _ from 'lodash'
 
 export default {
   name: 'PlotCustomComponent',
@@ -40,7 +41,8 @@ export default {
   computed: {
     ...mapState('bigScreen', {
       pageInfo: state => state.pageInfo,
-      customTheme: state => state.pageInfo.pageConfig.customTheme
+      customTheme: state => state.pageInfo.pageConfig.customTheme,
+      activeCode: state => state.activeCode
     }),
     chatId () {
       let prefix = 'chart_'
@@ -69,9 +71,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('bigScreen', ['changeChartConfig']),
+    ...mapMutations('bigScreen', ['changeChartConfig', 'changeActiveItemConfig']),
     chartInit () {
-
       let config = this.config
       // key和code相等，说明是一进来刷新，调用list接口
       if (this.config.code === this.config.key || this.isPreview) {
@@ -81,7 +82,8 @@ export default {
         this.changeDataByCode(config).then((res) => {
           // 初始化图表
           this.newChart(res)
-        }).catch(() => {})
+        }).catch(() => {
+        })
       } else {
         // 否则说明是更新，这里的更新只指更新数据（改变样式时是直接调取changeStyle方法），因为更新数据会改变key,调用chart接口
         this.changeData(config).then((res) => {
@@ -179,13 +181,15 @@ export default {
           console.error(e)
         }
       }
+      // 将设置好的主题保存起来
+      config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
+      this.changeChartConfig(config)
+      if (config.code === this.activeCode) {
+        this.changeActiveItemConfig(config)
+      }
       if (this.chart) {
         this.chart.update(config.option)
       }
-      this.changeChartConfig(config)
-      // 将设置好的主题保存起来
-      console.log('changeStyle')
-      config.theme = settingToTheme(config, this.customTheme)
       return config
     }
   }

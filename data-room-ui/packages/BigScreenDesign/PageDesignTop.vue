@@ -10,6 +10,16 @@
       <span class="logo-text name-span">{{ pageInfo.name }}</span>
     </div>
     <div class="head-btn-group">
+      <el-switch
+        v-model="pageInfo.pageConfig.customTheme"
+        active-text="暗黑"
+        inactive-text="明亮"
+        class="bs-el-switch theme-switch"
+        active-color="#007aff"
+        active-value="dark"
+        inactive-value="light"
+        @change="changeTheme"
+      />
       <el-tooltip
         v-for="(mode,index) in alignList"
         :key="mode.value"
@@ -113,6 +123,7 @@ import {
   translateBlobToBase64
 } from 'data-room-ui/js/utils/compressImg'
 import * as imageConversion from 'image-conversion'
+import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
 export default {
   name: 'PageTopSetting',
   components: {
@@ -209,6 +220,11 @@ export default {
       undoTimeLine: 'bigScreen/undoTimeLine',
       saveTimeLine: 'bigScreen/saveTimeLine'
     }),
+    // 切换主题
+    changeTheme (val) {
+      // 调取每个组件内部切换主题的方法
+      this.$emit('updateTheme', val)
+    },
     setAlign (command) {
       const pageInfo = cloneDeep(this.pageInfo)
       // 获取所有选中的组件
@@ -539,7 +555,7 @@ export default {
   .head-btn-group {
     display: flex;
     margin-left: 50px;
-
+    align-items: center;
     i {
       font-size: 14px;
     }
@@ -573,6 +589,15 @@ export default {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+    }
+  }
+  .theme-switch{
+    margin-right: 10px;
+    /deep/.el-switch__label{
+      color: #bcc9d4!important;
+    }
+    /deep/.el-switch__label.is-active{
+      color: var(--bs-el-color-primary)!important;
     }
   }
 }
