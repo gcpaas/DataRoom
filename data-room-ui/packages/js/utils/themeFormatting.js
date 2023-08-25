@@ -13,7 +13,7 @@ export function settingToTheme (config, type) {
   if (['dark', 'light'].includes(type)) {
     const theme = { dark: { ...config?.theme?.dark }, light: { ...config?.theme?.light } }
     config.setting.forEach((setItem) => {
-      if (['gradual', 'colorPicker'].includes(setItem.type)) {
+      if (['gradual', 'colorPicker', 'colorSelect'].includes(setItem.type)) {
         theme[type][setItem.field] = setItem.value
       }
     })
