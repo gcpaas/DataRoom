@@ -206,9 +206,9 @@ export default function getComponentConfig (type) {
         title: '跑马灯',
         icon: Icon.getNameList()[16],
         className:
-            'com.gccloud.dataroom.core.module.chart.components.ScreenTextChart',
-        w: 150,
-        h: 30,
+            'com.gccloud.dataroom.core.module.chart.components.ScreenMarqueeChart',
+        w: 250,
+        h: 150,
         x: 0,
         y: 0,
         type

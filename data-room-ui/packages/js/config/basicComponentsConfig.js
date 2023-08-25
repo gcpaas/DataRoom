@@ -28,7 +28,6 @@ const typeList = [
   'input',
   'button',
   'marquee',
-  'button',
   'themeSwitcher'
 ]
 let basicConfigList = []
