@@ -37,9 +37,6 @@ export function themeToSetting (chartList, type, _this) {
           }
         }
       }
-      if (_this && _this.$refs.Render?.$refs['RenderCard' + chart.code][0] && _this.$refs.Render.$refs['RenderCard' + chart.code][0].$refs[chart.code].changeStyle) {
-        _this.$refs.Render.$refs['RenderCard' + chart.code][0].$refs[chart.code].changeStyle(_.cloneDeep(chart))
-      }
     })
   }
   return chartList

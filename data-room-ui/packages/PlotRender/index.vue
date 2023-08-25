@@ -63,6 +63,16 @@ export default {
   created () {
     this.plotList = [...this.plotList, ...getCustomPlots()]
   },
+  watch: {
+    // 监听主题变化手动触发组件配置更新
+    'config.option.theme': {
+      handler (val) {
+        if (val) {
+          this.changeStyle(this.config)
+        }
+      }
+    }
+  },
   mounted () {
   },
   beforeDestroy () {

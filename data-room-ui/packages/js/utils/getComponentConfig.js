@@ -215,6 +215,18 @@ export default function getComponentConfig (type) {
         y: 0,
         type
       }
+    case 'themeSwitcher':
+      return {
+        name: '主题切换',
+        title: '主题切换',
+        icon: iconNames[14],
+        className: 'com.gccloud.dataroom.core.module.chart.components.ThemeSwitcherChart',
+        w: 500,
+        h: 100,
+        x: 0,
+        y: 0,
+        type
+      }
     default:
       return {}
   }
