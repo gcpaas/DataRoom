@@ -141,6 +141,11 @@ public interface PageDesignConstant {
              * 跑马灯
              */
             String MARQUEE = "marquee";
+
+            /**
+             * 飞线地图
+             */
+            String FLY_MAP = "flyMap";
         }
     }
 

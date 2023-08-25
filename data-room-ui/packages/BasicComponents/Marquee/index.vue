@@ -3,6 +3,14 @@
     <div class="scroll-area">
       <!-- 设置margin，使内容 有从无到有的出现效果 -->
       <div class="marquee-container">
+        <div class="icon">
+          <i
+            v-if="config.customize.icon.position === 'left'"
+            :class="config.customize.icon.name"
+            :style="{ color: config.customize.icon.color, fontSize: config.customize.fontSize + 'px' }"
+          />
+        </div>
+
         <svg class="svg-container">
           <defs>
             <linearGradient
@@ -50,7 +58,6 @@
             :style="{ fontSize: config.customize.fontSize + 'px', fontWeight: config.customize.fontWeight }"
             :fill="`url(#textGradient-${config.code})`"
           >
-
             <animate
               v-if="isAnimate"
               :attributeName="attributeName[config.customize.direction]"
@@ -59,19 +66,17 @@
               :dur="config.customize.dur + 's'"
               repeatCount="indefinite"
             />
-            <i
-              v-if="config.customize.icon.position === 'left'"
-              :class="config.customize.icon.name"
-              :style="{ color: config.customize.icon.color, fontSize: config.customize.fontSize + 'px' }"
-            />
+
             {{ config.customize.title }}
-            <i
-              v-if="config.customize.icon.position === 'right'"
-              :class="config.customize.icon.name"
-              :style="{ color: config.customize.icon.color, fontSize: config.customize.fontSize + 'px' }"
-            />
           </text>
         </svg>
+        <div class="icon">
+          <i
+            v-if="config.customize.icon.position === 'right'"
+            :class="config.customize.icon.name"
+            :style="{ color: config.customize.icon.color, fontSize: config.customize.fontSize + 'px' }"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -161,7 +166,7 @@ export default {
     .marquee-container {
       width: 100%;
       height: 100%;
-      display: inline-block;
+      display: flex;
 
       .svg-container {
         display: inline-block;
@@ -169,6 +174,11 @@ export default {
         height: 100%;
       }
     }
+  }
+  .icon {
+    position: relative;
+    top: 0;
+    // 清除浮动
   }
 }
 </style>
