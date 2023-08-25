@@ -12,7 +12,6 @@ import getComponentConfig from 'data-room-ui/js/utils/getComponentConfig'
 // 批量引入配置文件
 import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
 const typeList = [
-  'marquee',
   'texts',
   'linkChart',
   'horizontalLine', // 横线
@@ -27,6 +26,8 @@ const typeList = [
   'screenScrollBoard',
   'video',
   'input',
+  'button',
+  'marquee',
   'button',
   'themeSwitcher'
 ]
