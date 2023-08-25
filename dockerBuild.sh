@@ -4,8 +4,8 @@ cd ./data-room-ui
 # 执行该目录下的rebuild.sh
 sh rebuild.sh
 ### 打包后端
-# 定位到data-room目录
-cd ../data-room
+# 定位到DataRoom目录
+cd ../DataRoom
 # 执行maven打包命令
 mvn clean package -Dmaven.test.skip=true -P package
 ### 打包镜像
