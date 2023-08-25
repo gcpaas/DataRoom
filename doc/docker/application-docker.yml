@@ -1,0 +1,34 @@
+spring:
+  server:
+    port: 8081
+    servlet:
+      context-path:
+  resources:
+    static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/META-INF/resources/webjars/,file:${gc.starter.file.basePath},file:${gc.starter.file.uiPath}
+  mvc:
+    throw-exception-if-no-handler-found: true
+    # 静态资源访问接口前缀
+    static-path-pattern: /dataroom/**
+  servlet:
+    multipart:
+      # 配置上传下载文件的最大值
+      max-file-size: 500MB
+      max-request-size: 500MB
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: org.h2.Driver
+    # 文件模式，保存到当前目录下的h2DBData.mv.db
+    url: jdbc:h2:file:/db/h2DBData # jdbc:h2:mem:test
+    username: root
+    password: ${DB_PASSWORD:123456}
+    schema: classpath:init-h2.sql
+gc:
+  starter:
+    file:
+      # 一个存储文件的绝对路径，需要有写入权限
+      basePath: /data
+      # 启动服务的访问地址
+      urlPrefix: http://${IP:127.0.0.1}:${PORT:${server.port}}${server.servlet.context-path}/dataroom
+      # docker启动时，前端包所在的路径
+      uiPath: /app/dataRoom/ui
+

@@ -95,6 +95,8 @@
 
 > 如果你想源码启动，[👉 请点击这里](https://www.yuque.com/chuinixiongkou/bigscreen/ofy1bqhqgua1fu0f)
 
+> 如果你想使用Docker启动 ，[👉 请点击这里](https://www.yuque.com/chuinixiongkou/bigscreen/ahhq3i7zxea46ox2)
+
 > 如果你想将大屏集成到项目中，[👉 请点击这里](https://www.yuque.com/chuinixiongkou/bigscreen/ofy1bqhqgua1fu0f)
 
 > 如果你想设计一个大屏，[👉 请点击这里](https://www.yuque.com/chuinixiongkou/bigscreen/ofy1bqhqgua1fu0f)
