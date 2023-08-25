@@ -35,6 +35,8 @@
 <script>
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
+import {settingToTheme} from "data-room-ui/js/utils/themeFormatting";
+import _ from "lodash";
 export default {
   name: 'BasicComponentInput',
   mixins: [commonMixins, linkageMixins],
@@ -61,8 +63,8 @@ export default {
   },
   methods: {
     changeStyle (config) {
+      config = { ...this.config, ...config }
       const input = document.querySelector(`#el-input-${config.code}`)
-
       // const inputIcon = input.querySelector(`.${this.config.customize.icon.name}`)
       input.style.backgroundColor = config.customize.backgroundStyle.backgroundColor
       input.style.fontSize = config.customize.inputStyle.fontSize + 'px'
@@ -75,6 +77,12 @@ export default {
       if (config.customize.icon.name) {
         const inputIcon = document.querySelector(`.${config.customize.icon.name}`)
         inputIcon.style.fontSize = config.customize.inputStyle.fontSize + 'px'
+      }
+      // 样式改变时更新主题配置
+      config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
+      this.changeChartConfig(config)
+      if (config.code === this.activeCode) {
+        this.changeActiveItemConfig(config)
       }
     }
   }

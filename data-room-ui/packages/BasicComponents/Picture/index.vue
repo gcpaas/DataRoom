@@ -23,9 +23,12 @@
   </div>
 </template>
 <script>
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
+
 export default {
   name: 'PictureChart',
   components: {},
+  mixins: [refreshComponentMixin],
   props: {
     config: {
       type: Object,
@@ -41,9 +44,7 @@ export default {
   watch: {},
   mounted () {},
   methods: {
-    // 由于静态组件没有混入公共函数，所以需要定义一个changeStyle方法，以免报错
-    changeStyle () {
-    }
+
   }
 }
 </script>

@@ -65,7 +65,7 @@ export default {
     },
     handleChange (val) {
       const pageInfo = this.pageInfo
-      pageInfo.chartList = themeToSetting(pageInfo.chartList, val, this)
+      pageInfo.chartList = themeToSetting(pageInfo.chartList, val)
       this.changePageInfo(pageInfo)
     }
   }

@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     option () {
-      let str=this.config.option.data
+      let str = this.config.option.data
       if (!this.config.option.data) return { ...this.config.customize, data: [] }
       if (
         this.config.option.data.toString().split('').length <

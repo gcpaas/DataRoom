@@ -412,7 +412,7 @@ export default {
     // 切换主题时更新主题配置
     updateTheme (theme) {
       const pageInfo = this.pageInfo
-      pageInfo.chartList = themeToSetting(pageInfo.chartList, theme, this)
+      pageInfo.chartList = themeToSetting(pageInfo.chartList, theme)
       this.changePageInfo(pageInfo)
     },
     // 自定义属性更新
