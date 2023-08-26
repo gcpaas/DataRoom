@@ -1,5 +1,5 @@
 import Icon from 'data-room-ui/assets/images/bigScreenIcon/export'
-console.log(Icon)
+
 export default function getComponentConfig (type) {
   switch (type) {
     case 'texts':

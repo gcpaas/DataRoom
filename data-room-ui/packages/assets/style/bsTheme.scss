@@ -527,10 +527,10 @@
 
 // radio
 .bs-el-radio-group {
-  .el-radio__label{
+  .el-radio__label {
     color: var(--bs-el-text) !important;
   }
-  .el-radio__input.is-checked + .el-radio__label{
+  .el-radio__input.is-checked + .el-radio__label {
     color: var(--bs-el-color-primary) !important;
   }
   .el-radio__inner {
@@ -538,7 +538,7 @@
     background: var(--bs-background-1) !important;
     background-color: var(--bs-background-1) !important;
   }
-  .el-radio__input.is-checked .el-radio__inner::after{
+  .el-radio__input.is-checked .el-radio__inner::after {
     background-color: var(--bs-el-color-primary) !important;
   }
 }
@@ -598,8 +598,14 @@
 
 // switch
 .bs-el-switch {
+
+  .el-switch.is-checked .el-switch__core {
+    background: var(--bs-el-color-primary) !important;
+    background-color: var(--bs-el-color-primary) !important;
+  }
   .el-switch__core {
-    background: var(--bs-el-background-1) !important;
+    background: var(--bs-el-background-1);
+    background-color: var(--bs-el-background-1);
   }
 }
 

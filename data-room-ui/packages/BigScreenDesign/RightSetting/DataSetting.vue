@@ -41,7 +41,7 @@
           </div>
         </div>
         <div
-          v-if="config.type === 'customComponent'"
+          v-if="['customComponent','marquee'].includes(config.type)"
           class="data-setting-data-box"
         >
           <div class="lc-field-head">

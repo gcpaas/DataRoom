@@ -254,6 +254,22 @@
           />
         </el-form-item>
       </div>
+      <SettingTitle>其他</SettingTitle>
+      <div class="lc-field-body">
+        <!-- 是否开启语音播报 -->
+        <el-form-item
+          label="语音播报"
+          label-width="100px"
+        >
+          {{ config.customize.voiceBroadcast }}
+          <el-switch
+            v-model="config.customize.voiceBroadcast"
+            :active-value="true"
+            :inactive-value="false"
+            class="bs-el-switch"
+          />
+        </el-form-item>
+      </div>
     </el-form>
   </div>
 </template>

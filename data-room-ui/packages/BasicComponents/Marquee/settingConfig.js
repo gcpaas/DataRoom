@@ -14,18 +14,19 @@ export const settingConfig = {
     ...displayOption,
     metricField: {
       // 指标
-      label: '指标',
+      label: '音频链接',
       enable: true,
       multiple: false // 是否多选
     },
     dimensionField: {
       // 维度
-      label: '维度', // 维度/查询字段
-      enable: false,
-      multiple: true // 是否多选
+      label: '跑马灯内容', // 维度/查询字段
+      enable: true,
+      multiple: false // 是否多选
     }
   }
 }
+const dataHandler = ''
 const customConfig = {
   type: 'marquee',
   root: {
@@ -63,11 +64,16 @@ const customConfig = {
     // 背景渐变色结束颜色
     bgGradientColor1: '#fff',
     // 背景色渐变方向
-    bgGradientDirection: 'to right'
-
+    bgGradientDirection: 'to right',
+    // 语音播报
+    voiceBroadcast: false
   }
 
 }
+
+// 配置处理脚本
+
 export const dataConfig = {
-  ...commonConfig(customConfig)
+  ...commonConfig(customConfig),
+  dataHandler
 }
