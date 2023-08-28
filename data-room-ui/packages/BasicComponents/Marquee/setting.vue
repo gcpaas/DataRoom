@@ -261,7 +261,6 @@
           label="语音播报"
           label-width="100px"
         >
-          {{ config.customize.voiceBroadcast }}
           <el-switch
             v-model="config.customize.voiceBroadcast"
             :active-value="true"
