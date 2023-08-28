@@ -27,7 +27,8 @@ export function settingToTheme (config, type) {
         for (const item in config.customize) {
           const value = config.customize[item];
           //如果包含二级属性
-          if (typeof value === 'object' &&  Object.keys(value).length){
+          debugger
+          if (value && typeof value === 'object' &&  Object.keys(value).length){
             // 对于二级属性
             for (const subKey in value) {
               if (subKey.includes('color') || subKey.includes('Color') || subKey.includes('BGC')){

@@ -81,9 +81,9 @@ export default {
       // 样式改变时更新主题配置
       config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
       this.changeChartConfig(config)
-      if (config.code === this.activeCode) {
-        this.changeActiveItemConfig(config)
-      }
+      // if (config.code === this.activeCode) {
+      //   this.changeActiveItemConfig(config)
+      // }
     }
   }
 }
