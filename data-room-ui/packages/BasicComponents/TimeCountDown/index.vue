@@ -34,7 +34,7 @@
 <script>
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
-import _ from 'lodash'
+import cloneDeep from "lodash/cloneDeep";
 import {mapMutations, mapState} from "vuex";
 export default {
   name: 'TimeCountDown',
@@ -111,7 +111,7 @@ export default {
       this.getTime()
       config = { ...this.config, ...config }
       // 样式改变时更新主题配置
-      config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
+      config.theme = settingToTheme(cloneDeep(config), this.customTheme)
       this.changeChartConfig(config)
       if (this.config.code === this.activeCode) {
         this.changeActiveItemConfig(config)

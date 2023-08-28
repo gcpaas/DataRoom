@@ -12,7 +12,6 @@
 </template>
 <script>
 import 'insert-css'
-// import _ from 'lodash'
 import cloneDeep from 'lodash/cloneDeep'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
@@ -20,7 +19,6 @@ import { mapState, mapMutations } from 'vuex'
 import * as g2Plot from '@antv/g2plot'
 import plotList, { getCustomPlots } from '../G2Plots/plotList'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
-import _ from 'lodash'
 
 export default {
   name: 'PlotCustomComponent',
@@ -192,7 +190,7 @@ export default {
         }
       }
       // 将设置好的主题保存起来
-      config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
+      config.theme = settingToTheme(cloneDeep(config), this.customTheme)
       this.changeChartConfig(config)
       if (config.code === this.activeCode) {
         this.changeActiveItemConfig(config)
