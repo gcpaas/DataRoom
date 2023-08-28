@@ -73,7 +73,8 @@ public class ScreenMarqueeChart extends Chart{
         @ApiModelProperty(notes = "背景色渐变方向")
         private String bgGradientDirection;
 
-
+        @ApiModelProperty(notes = "语音播报")
+        private Boolean voiceBroadcast;
     }
 
 }
