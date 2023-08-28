@@ -87,6 +87,8 @@ import Speech from 'speak-tts'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
+import {settingToTheme} from "data-room-ui/js/utils/themeFormatting";
+import _ from "lodash";
 export default {
   props: {
     // 卡片的属性
@@ -233,7 +235,14 @@ export default {
       }
     },
     changeStyle (config) {
+      config = { ...this.config, ...config }
       this.voiceBroadcast(config)
+      // 样式改变时更新主题配置
+      config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
+      this.changeChartConfig(config)
+      if (config.code === this.activeCode) {
+        this.changeActiveItemConfig(config)
+      }
     },
     // 监听页面是否可见
     handleVisibilityChange () {
