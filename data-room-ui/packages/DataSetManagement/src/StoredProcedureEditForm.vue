@@ -795,7 +795,6 @@ export default {
       })
     },
     setSqlProcess (v, e) {
-      console.log('value:' + v)
       for (let i = 0; i < this.sourceList.length; i++) {
         if (this.sourceList[i].id === v) {
           if (this.sourceList[i].sourceType === 'sqlserver') {
