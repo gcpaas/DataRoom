@@ -431,7 +431,13 @@ export default {
         }
         config.code = this.focus.code
         config.name = this.focus.name
-        config = getRemoteComponentConfig(this.focus.code, this.focus.name)
+
+        this.$nextTick(() => {
+          config = cloneDeep(getRemoteComponentConfig(this.focus.code, this.focus.name))
+          config.setting = this.resolveStrSetting(this.focus.settingContent).setting
+          this.$emit('setRemoteComponent', config)
+        })
+        // config = getRemoteComponentConfig(this.focus.code, this.focus.name)
         this.$emit('setRemoteComponent', config)
       }
     },
@@ -470,6 +476,38 @@ export default {
           .catch(() => {
             this.loading = false
           })
+      }
+    },
+    /**
+     * 处理当前组件的字符串配置
+     */
+    resolveStrSetting (settingContent) {
+      // eslint-disable-next-line prefer-const
+      let option = {}
+      // eslint-disable-next-line prefer-const
+      let setting = []
+      // eslint-disable-next-line prefer-const, no-unused-vars
+      let title = []
+      // eslint-disable-next-line prefer-const, no-unused-vars
+      let data = []
+      // eslint-disable-next-line prefer-const
+      settingContent = settingContent.replaceAll('const ', '')
+      // 去掉 export default及后面代码
+      settingContent = settingContent.replace(/export default[\s\S]*/, '')
+      eval(settingContent)
+      if (this.config?.option) {
+        this.config.option = {
+          ...this.config.option,
+          ...option
+        }
+      }
+      if (this.config?.setting) {
+        this.config.setting = setting
+      }
+      console.log('resolveStrSetting', option, setting)
+      return {
+        option,
+        setting
       }
     },
     // 获取目录的列表

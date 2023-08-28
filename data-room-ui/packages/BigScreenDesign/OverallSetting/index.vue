@@ -373,7 +373,7 @@ export default {
         this.form.refreshConfig = []
       } else {
         this.pageInfo.chartList.forEach(chart => {
-          if (chart.dataSource.businessKey) {
+          if (chart.dataSource?.businessKey) {
             this.chartOptions.push({
               code: chart.code,
               title: chart.title,
@@ -470,7 +470,7 @@ export default {
       this.$emit('close')
     },
     timerEmptyState () {
-      return this.pageInfo.chartList.every(chart => chart.dataSource.businessKey === '')
+      return this.pageInfo.chartList.every(chart => chart.dataSource?.businessKey === '')
     }
   }
 }
