@@ -20,16 +20,6 @@
             "to": "河北省",
             "type": "move_in",
             "value": 10
-        },
-        {
-            "from": "合肥",
-            "lat1": 32.0581,
-            "lat2": 25.9222,
-            "lng1": 117.29,
-            "lng2": 119.4543,
-            "to": "福州",
-            "type": "move_in",
-            "value": 50
         }
     ],
     "columnData": {

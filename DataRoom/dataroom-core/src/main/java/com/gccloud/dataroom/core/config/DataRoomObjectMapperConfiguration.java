@@ -14,11 +14,17 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
+/**
+ * Jackson配置类
+ * @Author hongyang
+ * @Date 2022/06/19
+ * @Version 1.0.0
+ */
 @Slf4j
 @Configuration
 @ConditionalOnMissingClass(value = "com.gccloud.dashboard.core.config.ObjectMapperConfiguration")
-//@ConditionalOnProperty(prefix = "gc.starter.dataroom.component", name = "ObjectMapperConfiguration", havingValue = "ObjectMapperConfiguration", matchIfMissing = true)
-public class ObjectMapperConfiguration {
+@ConditionalOnProperty(prefix = "gc.starter.dataroom.component", name = "ObjectMapperConfiguration", havingValue = "ObjectMapperConfiguration", matchIfMissing = true)
+public class DataRoomObjectMapperConfiguration {
 
     @Resource
     private ObjectMapper objectMapper;

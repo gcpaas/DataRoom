@@ -101,6 +101,8 @@ public class ScreenFlyMapChart extends Chart{
         @ApiModelProperty(notes = "名称")
         private String name;
 
+        @ApiModelProperty(notes = "图形")
+        private List<String> graphic;
     }
 
 }
