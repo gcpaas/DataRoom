@@ -19,6 +19,9 @@ public class ScreenMarqueeChart extends Chart{
     @ApiModelProperty(notes = "类型")
     private String type = PageDesignConstant.BigScreen.Type.MARQUEE;
 
+    @ApiModelProperty(notes = "自定义处理数据源脚本")
+    private String dataHandler;
+
     @ApiModelProperty(notes = "个性化")
     private Customize customize = new Customize();
 

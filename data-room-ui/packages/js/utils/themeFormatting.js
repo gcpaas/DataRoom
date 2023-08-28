@@ -24,7 +24,7 @@ export function settingToTheme (config, type) {
       // 如果是普通组件
       if (config.customize && Object.keys(config.customize).length) {
         for (const item in config.customize) {
-          if (item.includes('color') || item.includes('Color')) {
+          if (item.includes('color') || item.includes('Color') || item.includes('BGC')) {
             theme[type][item] = config.customize[item]
           }
         }
