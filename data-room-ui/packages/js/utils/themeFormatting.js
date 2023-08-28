@@ -45,7 +45,7 @@ export function settingToTheme (config, type) {
     }
     return theme
   } else {
-    return {}
+    return config?.theme || {dark:{}, light:{}}
   }
 }
 // 将保存的theme主题设置（颜色）存放到chartList
