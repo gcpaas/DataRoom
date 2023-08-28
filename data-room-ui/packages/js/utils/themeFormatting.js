@@ -27,7 +27,6 @@ export function settingToTheme (config, type) {
         for (const item in config.customize) {
           const value = config.customize[item];
           //如果包含二级属性
-          debugger
           if (value && typeof value === 'object' &&  Object.keys(value).length){
             // 对于二级属性
             for (const subKey in value) {
