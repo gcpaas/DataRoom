@@ -4,13 +4,13 @@
  * @Author: xing.heng
  */
 // import _ from 'lodash'
-import cloneDeep from 'lodash/cloneDeep'
 import { mapMutations, mapState } from 'vuex'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import { getChatInfo, getUpdateChartInfo } from '../api/bigScreenApi'
 import axiosFormatting from '../../js/utils/httpParamsFormatting'
-import {settingToTheme} from "data-room-ui/js/utils/themeFormatting";
-import _ from "lodash";
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+import cloneDeep from 'lodash/cloneDeep'
+
 export default {
   data () {
     return {
@@ -191,7 +191,7 @@ export default {
     changeStyle (config) {
       config = { ...this.config, ...config }
       // 样式改变时更新主题配置
-      config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
+      config.theme = settingToTheme(cloneDeep(config), this.customTheme)
       this.changeChartConfig(config)
       if (config.code === this.activeCode) {
         this.changeActiveItemConfig(config)

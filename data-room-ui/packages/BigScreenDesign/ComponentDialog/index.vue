@@ -345,6 +345,7 @@
   </el-dialog>
 </template>
 <script>
+import { displayOption } from 'data-room-ui/js/config'
 import { pageMixins } from 'data-room-ui/js/mixins/page'
 // import _ from 'lodash'
 import isEmpty from 'lodash/isEmpty'
@@ -425,20 +426,22 @@ export default {
         }
         this.$emit('setRemoteComponent', this.focus)
       } if (['bizComponent'].includes(this.activeName)) {
-        let config = {}
+        let config = {
+          setting: [],
+          option: {}
+        }
         if (isEmpty(this.focus)) {
           return
         }
         config.code = this.focus.code
         config.name = this.focus.name
-
-        this.$nextTick(() => {
-          config = cloneDeep(getRemoteComponentConfig(this.focus.code, this.focus.name))
-          config.setting = this.resolveStrSetting(this.focus.settingContent).setting
-          this.$emit('setRemoteComponent', config)
-        })
-        // config = getRemoteComponentConfig(this.focus.code, this.focus.name)
+        config = cloneDeep(getRemoteComponentConfig(this.focus.code, this.focus.name))
+        const settingContent = cloneDeep(this.resolveStrSetting(this.focus.settingContent))
+        config.setting = settingContent.setting
+        config.option = settingContent.option
         this.$emit('setRemoteComponent', config)
+        // config = getRemoteComponentConfig(this.focus.code, this.focus.name)
+        // this.$emit('setRemoteComponent', config)
       }
     },
     getDataList () {
@@ -495,16 +498,11 @@ export default {
       // 去掉 export default及后面代码
       settingContent = settingContent.replace(/export default[\s\S]*/, '')
       eval(settingContent)
-      if (this.config?.option) {
-        this.config.option = {
-          ...this.config.option,
-          ...option
-        }
+      option = {
+        data,
+        displayOption,
+        ...option
       }
-      if (this.config?.setting) {
-        this.config.setting = setting
-      }
-      console.log('resolveStrSetting', option, setting)
       return {
         option,
         setting
