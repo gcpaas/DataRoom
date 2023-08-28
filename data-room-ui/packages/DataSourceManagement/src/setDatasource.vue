@@ -227,7 +227,8 @@ export default {
         { name: 'Mysql', code: 'mysql' },
         { name: 'ClickHouse', code: 'clickhouse' },
         { name: 'PostgreSQL', code: 'postgresql' },
-        { name: 'Oracle', code: 'oracle' }
+        { name: 'Oracle', code: 'oracle' },
+        { name: 'Sqlserver', code: 'sqlserver' }
       ],
       driverCLassList: [
         { code: 'mysqlDriver', name: 'com.mysql.jdbc.Driver' },
@@ -338,7 +339,7 @@ export default {
         case 'com.ibm.db2.jcc.DB2Driver':
           return 'jdbc:db2://localhost:5000/db_name'
         case 'com.microsoft.sqlserver.jdbc.SQLServerDriver':
-          return 'jdbc:microsoft:sqlserver://localhost:1433DatabaseName=db_name'
+          return 'jdbc:sqlserver://localhost:1433;databaseName=db_name'
         case 'org.postgresql.Driver':
           return 'jdbc:postgresql://localhost:13308/db_name'
         case 'org.apache.hive.jdbc.HiveDriver':
