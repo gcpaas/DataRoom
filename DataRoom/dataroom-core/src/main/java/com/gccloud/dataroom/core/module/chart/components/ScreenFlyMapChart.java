@@ -103,6 +103,12 @@ public class ScreenFlyMapChart extends Chart{
 
         @ApiModelProperty(notes = "图形")
         private List<String> graphic;
+
+        @ApiModelProperty(notes = "图形字体颜色")
+        private String fontGraphicColor;
+
+        @ApiModelProperty(notes = "图形字体大小")
+        private String fontSize;
     }
 
 }
