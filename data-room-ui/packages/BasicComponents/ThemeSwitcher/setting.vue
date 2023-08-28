@@ -31,34 +31,6 @@
       <div class="lc-field-body">
         <PosWhSetting :config="config" />
       </div>
-      <SettingTitle>基础</SettingTitle>
-      <div class="lc-field-body">
-        <el-form-item
-          label="标题字体大小"
-          label-width="100px"
-        >
-          <el-input
-            v-model="config.customize.fontSize"
-            placeholder="请输入标题字体大小"
-            clearable
-          >
-            <template slot="append">
-              px
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item
-          label="标题字体权重"
-          label-width="100px"
-        >
-          <el-input-number
-            v-model="config.customize.fontWeight"
-            class="bs-el-input-number"
-            placeholder="请输入标题字体权重"
-          />
-        </el-form-item>
-        <TextGradient v-model="config.customize.color" />
-      </div>
     </el-form>
   </div>
 </template>

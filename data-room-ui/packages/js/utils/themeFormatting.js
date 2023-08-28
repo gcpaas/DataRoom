@@ -23,9 +23,22 @@ export function settingToTheme (config, type) {
     } else {
       // 如果是普通组件
       if (config.customize && Object.keys(config.customize).length) {
+        // customize属性存在层级
         for (const item in config.customize) {
-          if (item.includes('color') || item.includes('Color') || item.includes('BGC')) {
-            theme[type][item] = config.customize[item]
+          const value = config.customize[item];
+          //如果包含二级属性
+          if (typeof value === 'object' &&  Object.keys(value).length){
+            // 对于二级属性
+            for (const subKey in value) {
+              if (subKey.includes('color') || subKey.includes('Color') || subKey.includes('BGC')){
+                theme[type][`${item}_${subKey}`] = value[subKey];
+              }
+            }
+          }else{
+            // 如果只有一级属性
+            if (item.includes('color') || item.includes('Color') || item.includes('BGC')) {
+              theme[type][item] = config.customize[item]
+            }
           }
         }
       }
@@ -54,6 +67,25 @@ export function themeToSetting (chartList, type) {
         } else {
           // 如果是普通组件
           if (chart.customize && Object.keys(chart.customize).length) {
+            for(let key in chart.theme[type]){
+              const value = chart.theme[type][key];
+              // 如果对应的是二级属性
+                if (key.includes('_')){
+                  const [propertyName, subPropertyName] = key.split('_');
+                  if (!chart.customize[propertyName]) {
+                    chart.customize[propertyName] = {}
+                  }else{
+                      chart.customize[propertyName][subPropertyName] = value;
+                  }
+                }else{
+                  // 对应的一级属性
+                  if (Object.prototype.hasOwnProperty.call(chart.customize, key)) {
+                    // 更新 customize 中对应项的值为 theme 中的属性值
+                    chart.customize[key] = chart.theme[type][key]
+                  }
+                }
+
+            }
             for (const item in chart.customize) {
               // 检查 obj 中是否存在与 customize 相对应的属性
               if (Object.prototype.hasOwnProperty.call(chart.theme[type], item)) {
