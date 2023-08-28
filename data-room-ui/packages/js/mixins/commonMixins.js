@@ -100,14 +100,14 @@ export default {
                 const scriptMethod = new Function(scriptAfterReplacement)
                 _res.data = scriptMethod()
               } catch (error) {
-                console.error('JS数据集脚本执行失败', error)
+                console.info('JS数据集脚本执行失败', error)
               }
             }
           }
           config = this.dataFormatting(config, _res)
           this.changeChartConfig(config)
         }).catch((err) => {
-          console.error(err)
+          console.info(err)
         }).finally(() => {
           resolve(config)
         })
@@ -151,7 +151,7 @@ export default {
                 const scriptMethod = new Function(scriptAfterReplacement)
                 _res.data = scriptMethod()
               } catch (error) {
-                console.error('JS数据集脚本执行失败', error)
+                console.info('JS数据集脚本执行失败', error)
               }
             }
           }
@@ -165,7 +165,7 @@ export default {
             }
           }
         }).catch(err => {
-          console.error(err)
+          console.info(err)
         }).finally(() => {
           resolve(config)
         })
