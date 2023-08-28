@@ -8,9 +8,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 基础框架基础配置
- *
- * @Author maoshufeng
+ * @Author qianxing
  * @Date 2020-06-16
  * @Version 1.0.0
  */

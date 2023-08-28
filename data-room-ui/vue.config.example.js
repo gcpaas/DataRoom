@@ -45,7 +45,7 @@ module.exports = {
   outputDir: 'dataRoomUi',
   assetsDir: 'static',
   lintOnSave: false,
-  productionSourceMap: false,
+  productionSourceMap: true,
   runtimeCompiler: true,
   devServer: {
     hot: true,

@@ -32,5 +32,4 @@ export default function speak ({ text, speechRate, lang, volume, pitch }, endEve
     startEvent && startEvent()
   }
   speechSynthesis.speak(speechUtterance)
-  console.log(2)
 }
