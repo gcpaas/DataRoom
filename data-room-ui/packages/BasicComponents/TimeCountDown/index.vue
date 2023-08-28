@@ -33,6 +33,9 @@
 
 <script>
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+import _ from 'lodash'
+import {mapMutations, mapState} from "vuex";
 export default {
   name: 'TimeCountDown',
   mixins: [paramsMixins],
@@ -51,6 +54,10 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      customTheme: state => state.bigScreen.pageInfo.pageConfig.customTheme,
+      activeCode: state => state.bigScreen.activeCode
+    }),
     isPast: {
       get () {
         if (new Date(this.config.endTime).getTime() - this.time < 0) {
@@ -93,11 +100,22 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      changeChartConfig: 'bigScreen/changeChartConfig',
+      changeActiveItemConfig: 'bigScreen/changeActiveItemConfig'
+    }),
     changeStyle (config) {
       this.config.endTime = this.config.endTime
         ? new Date(this.config.endTime).getTime()
         : new Date().getTime() + 3 * 3600 * 1000 * 24 - 1000
       this.getTime()
+      config = { ...this.config, ...config }
+      // 样式改变时更新主题配置
+      config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
+      this.changeChartConfig(config)
+      if (this.config.code === this.activeCode) {
+        this.changeActiveItemConfig(config)
+      }
     },
     getTime () {
       if (this.timer) {
