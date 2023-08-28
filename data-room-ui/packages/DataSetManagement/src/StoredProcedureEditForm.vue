@@ -143,6 +143,7 @@
                     filterable
                     placeholder="请选择数据源"
                     :disabled="!isEdit"
+                    @change="setSqlProcess($event)"
                   >
                     <el-option
                       v-for="source in sourceList"
@@ -211,7 +212,7 @@
               />
               <div class="bs-codemirror-bottom-text">
                 示例：
-                <strong>call 存储过程名称(<span style="color: red;">${参数名称}</span>,?)</strong>
+                <strong>call 存储过程名称(<span style="color: red;">${参数名称}</span>,?)，SqlServer数据源使用：exec 存储过程名称 <span style="color: red;">@参数名称</span>=?</strong>
               </div>
             </div>
             <div style="text-align: center; padding: 16px 0;">
@@ -792,6 +793,18 @@ export default {
       datasourceList(params).then(data => {
         this.sourceList = data
       })
+    },
+    setSqlProcess (v, e) {
+      console.log('value:' + v)
+      for (let i = 0; i < this.sourceList.length; i++) {
+        if (this.sourceList[i].id === v) {
+          if (this.sourceList[i].sourceType === 'sqlserver') {
+            this.dataForm.sqlProcess = 'exec '
+          } else {
+            this.dataForm.sqlProcess = 'call '
+          }
+        }
+      }
     },
     /**
      * 打开参数配置弹窗
