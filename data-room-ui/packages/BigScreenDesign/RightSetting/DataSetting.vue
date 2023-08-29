@@ -85,6 +85,7 @@
                 v-model="config.dataSource.dimensionFieldList"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
                 :multiple="config.option.displayOption.dimensionField.multiple"
                 @change="dimensionFieldListChange"
@@ -112,6 +113,7 @@
                 v-model="config.dataSource.dimensionField"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
@@ -142,6 +144,7 @@
                 v-model="config.dataSource.metricField"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
@@ -177,6 +180,7 @@
                   class="bs-el-select select"
                   popper-class="bs-el-select"
                   :value="setting.value"
+                  filterable
                   clearable
                   :multiple="setting.multiple"
                   :placeholder="`请选择${setting.label}`"
@@ -274,6 +278,7 @@
                     v-model="scope.row.align"
                     class="bs-el-select"
                     popper-class="bs-el-select"
+                    filterable
                     clearable
                     placeholder="请选择对齐方式"
                   >
@@ -315,6 +320,7 @@
                 v-model="config.customize.value"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
@@ -342,6 +348,7 @@
                 v-model="config.customize.name"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
@@ -369,6 +376,7 @@
                 v-model="config.customize.xaxis"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
@@ -396,6 +404,7 @@
                 v-model="config.customize.yaxis"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
