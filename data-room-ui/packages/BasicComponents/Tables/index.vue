@@ -3,6 +3,9 @@
     style="width: 100%;height: 100%"
     class="bs-design-wrap "
   >
+    <!-- <span style="color: aliceblue;font-size: 40px;">
+      {{ Object.keys(columnData) }}
+    </span> -->
     <!-- :border="this.config.customize.border" -->
     <el-table
       :id="config.code"
@@ -18,17 +21,18 @@
       @row-click="rowClick"
     >
       <el-table-column
-        v-for="(col, index) in config.option.columnData"
+        v-for="(col,index) in columnData"
         :key="index"
         show-overflow-tooltip
-        :label="col.remark"
         :prop="col.alias"
+        :label="col.remark"
         align="center"
       />
     </el-table>
   </div>
 </template>
 <script>
+import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
@@ -49,13 +53,16 @@ export default {
   },
   data () {
     return {
-      updateKey: '',
+      updateKey: 0,
       headerCellStyleObj: {
         backgroundColor: 'transparent'
       },
       cellStyleObj: {
         backgroundColor: 'transparent'
-      }
+      },
+      columnData: {},
+      // 第一次获取
+      isInit: true
     }
   },
   computed: {
@@ -89,12 +96,30 @@ export default {
       return style
     }
   },
+  watch: {
+    activeItemConfig (val) {
+      console.dir(val)
+    }
+  },
   created () { },
   mounted () {
     this.chartInit()
+    // this.config.option?.columnData 对象的key 根据 list 对应的key 来排序
+    EventBus.$on('dragSelectChange', (val) => {
+      const sortedColumnData = {}
+      const columnData = cloneDeep(this.config.option?.columnData)
+      val.forEach((item, index) => {
+        sortedColumnData[item] = columnData[item]
+      })
+      this.columnData = sortedColumnData
+      this.updateKey = new Date().getTime()
+    })
+  },
+  beforeDestroy () {
+    EventBus.$off('dragSelectChange')
   },
   methods: {
-    // 设置表格背景颜色
+
     cellStyle ({ row, column, rowIndex, columnIndex }) {
       const bodyBackgroundColor = {
         dark: '#141414',
@@ -117,7 +142,7 @@ export default {
       }
       return style
     },
-    // 设置表格行颜色
+
     rowStyle ({ row, rowIndex }) {
       if (rowIndex % 2) {
         return {
@@ -197,17 +222,27 @@ export default {
       config.option.tableData = data?.data
       const filteredData = {}
       const columnData = data?.columnData || {}
+      const dimensionFieldList = config.dataSource.dimensionFieldList || []
       if (config.dataSource.dimensionFieldList && config.dataSource.dimensionFieldList.length > 0) {
-        Object?.keys(columnData).forEach(key => {
+        // 根据config.dataSource.dimensionFieldList 数据的顺序将表格列顺序调整，使其初始化的时候，顺序和组件配置面板中的一致
+        const sortedColumnData = {}
+        dimensionFieldList.forEach((item, index) => {
+          sortedColumnData[item] = columnData[item]
+        })
+        Object?.keys(sortedColumnData).forEach(key => {
           if (
-            config.dataSource.dimensionFieldList.includes(columnData[key].alias)
+            config.dataSource.dimensionFieldList.includes(sortedColumnData[key]?.alias)
           ) {
-            filteredData[key] = columnData[key]
+            filteredData[key] = sortedColumnData[key]
           }
         })
         config.option.columnData = filteredData
       } else {
         config.option.columnData = columnData
+      }
+      if (this.isInit) {
+        this.columnData = cloneDeep(config.option.columnData)
+        this.isInit = false
       }
       this.updateKey = new Date().getTime()
       return config

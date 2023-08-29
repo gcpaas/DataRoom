@@ -88,6 +88,7 @@
                 clearable
                 :multiple="config.option.displayOption.dimensionField.multiple"
                 @change="dimensionFieldListChange"
+                @valuePositionChange="valuePositionChange"
               >
                 <el-option
                   v-for="(field, index) in dataSourceDataList"
@@ -803,6 +804,15 @@ export default {
         this.headerList.push({ name: item.comment, code: item.name, width: '150', align: 'left' })
       })
       this.config.customize.columnConfig = cloneDeep(this.headerList)
+      this.$store.commit('bigScreen/changeActiveItemConfig', this.config)
+    },
+    valuePositionChange (value) {
+      const sortedColumnData = {}
+      const columnData = cloneDeep(this.config.option?.columnData)
+      value.forEach((item, index) => {
+        sortedColumnData[item] = columnData[item]
+      })
+      this.config.option.columnData = sortedColumnData
       this.$store.commit('bigScreen/changeActiveItemConfig', this.config)
     },
     changeCustomProps (value, setting) {
