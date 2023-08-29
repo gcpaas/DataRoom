@@ -94,6 +94,7 @@ export default {
     this.chartInit()
   },
   methods: {
+    // 设置表格背景颜色
     cellStyle ({ row, column, rowIndex, columnIndex }) {
       const bodyBackgroundColor = {
         dark: '#141414',
@@ -106,6 +107,7 @@ export default {
         color: this.config.customize.bodyFontColor || initColor,
         fontSize: this.config.customize.bodyFontSize + 'px' || '14px'
       }
+      // 如果设置了奇偶行的背景颜色，则以奇偶行的背景颜色为主
       if (rowIndex % 2 && this.config.customize.evenRowBackgroundColor) {
         style.backgroundColor = this.config.customize.evenRowBackgroundColor
       } else if (!(rowIndex % 2) && this.config.customize.oddRowBackgroundColor) {
@@ -115,6 +117,7 @@ export default {
       }
       return style
     },
+    // 设置表格行颜色
     rowStyle ({ row, rowIndex }) {
       if (rowIndex % 2) {
         return {
