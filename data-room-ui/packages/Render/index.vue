@@ -34,7 +34,11 @@
       :is-conflict-check="false"
       :snap="true"
       :snap-tolerance="2"
-      :style="{ zIndex: chart.z || 0 }"
+      :style="{
+        zIndex: chart.z || 0,
+        // 样式过度
+        transition: 'all 0.3s',
+      }"
       :grid="[1,1]"
       @activated="activated(...arguments, chart)"
       @dragging="onDrag(...arguments, chart)"
