@@ -23,7 +23,7 @@ export const defaultData = {
       bgColor: '#151a26', // 背景色
       bg: '', // 背景图
       opacity: 100,
-      customTheme: 'auto',
+      customTheme: 'dark',
       themeJson: {}, // 自定义主题配置
       // 缓存的数据集 { name: '', dataSetId: '' }
       cacheDataSets: [],

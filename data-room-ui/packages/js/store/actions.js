@@ -60,7 +60,7 @@ export function handleResData (data) {
         h: 1080,
         bgColor: '#151a26', // 背景色
         bg: '', // 背景图
-        customTheme: 'auto',
+        customTheme: 'dark',
         opacity: 100
       }
     }

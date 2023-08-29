@@ -366,7 +366,7 @@ export default {
             h: this.resolutionRatio.h || '1080',
             bgColor: '#151a26',
             opacity: 100,
-            customTheme: 'auto'
+            customTheme: 'dark'
           },
           pageTemplateId: this.dataForm.pageTemplateId
         }
