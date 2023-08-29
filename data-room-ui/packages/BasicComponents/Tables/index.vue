@@ -3,9 +3,9 @@
     style="width: 100%;height: 100%"
     class="bs-design-wrap "
   >
-    <!-- <span style="color: aliceblue;font-size: 40px;">
-      {{ Object.keys(columnData) }}
-    </span> -->
+    <span style="color: aliceblue;font-size: 40px;">
+      {{ columnData }}
+    </span>
     <!-- :border="this.config.customize.border" -->
     <el-table
       :id="config.code"
@@ -25,7 +25,7 @@
         :key="index"
         show-overflow-tooltip
         :prop="col.alias"
-        :label="col.remark"
+        :label="getLabel(col)"
         align="center"
       />
     </el-table>
@@ -106,13 +106,15 @@ export default {
     this.chartInit()
     // this.config.option?.columnData 对象的key 根据 list 对应的key 来排序
     EventBus.$on('dragSelectChange', (val) => {
-      const sortedColumnData = {}
-      const columnData = cloneDeep(this.config.option?.columnData)
-      val.forEach((item, index) => {
-        sortedColumnData[item] = columnData[item]
-      })
-      this.columnData = sortedColumnData
-      this.updateKey = new Date().getTime()
+      if (val.length > 0) {
+        const sortedColumnData = {}
+        const columnData = cloneDeep(this.config.option?.columnData)
+        val.forEach((item, index) => {
+          sortedColumnData[item] = columnData[item]
+        })
+        this.columnData = sortedColumnData
+        this.updateKey = new Date().getTime()
+      }
     })
   },
   beforeDestroy () {
@@ -240,10 +242,7 @@ export default {
       } else {
         config.option.columnData = columnData
       }
-      if (this.isInit) {
-        this.columnData = cloneDeep(config.option.columnData)
-        this.isInit = false
-      }
+      this.columnData = cloneDeep(config.option.columnData)
       this.updateKey = new Date().getTime()
       return config
     },
@@ -290,6 +289,9 @@ export default {
       } else {
         this.cellStyleObj = {}
       }
+    },
+    getLabel (data) {
+      return data.remark || data.originalColumn
     }
   }
 }
