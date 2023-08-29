@@ -51,18 +51,18 @@ export default {
     return { }
   },
   watch: {
-    customTheme: {
+    'config.customize': {
       handler () {
-        this.changeStyle(this.config)
-      }
+        this.changeStyle(this.config, true)
+      },
+      deep: true
     }
   },
   mounted () {
     this.chartInit()
-    // this.changeStyle()
   },
   methods: {
-    changeStyle (config) {
+    changeStyle (config, isUpdateTheme) {
       config = { ...this.config, ...config }
       const input = document.querySelector(`#el-input-${config.code}`)
       // const inputIcon = input.querySelector(`.${this.config.customize.icon.name}`)
@@ -79,11 +79,13 @@ export default {
         inputIcon.style.fontSize = config.customize.inputStyle.fontSize + 'px'
       }
       // 样式改变时更新主题配置
-      config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
-      this.changeChartConfig(config)
-      // if (config.code === this.activeCode) {
-      //   this.changeActiveItemConfig(config)
-      // }
+      if (!isUpdateTheme) {
+        config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
+        this.changeChartConfig(config)
+        if (config.code === this.activeCode) {
+          this.changeActiveItemConfig(config)
+        }
+      }
     }
   }
 }
