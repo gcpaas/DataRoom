@@ -33,6 +33,7 @@ import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import cloneDeep from 'lodash/cloneDeep'
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
 export default {
   name: 'TableChart',
   mixins: [paramsMixins, commonMixins, linkageMixins],
@@ -86,28 +87,6 @@ export default {
         fontSize: this.config.customize.headerFontSize + 'px' || '14px'
       }
       return style
-    },
-    cellStyle () {
-      const bodyBackgroundColor = {
-        dark: '#141414',
-        light: '#ffffff',
-        auto: 'transparent'
-      }
-      const style = {
-        backgroundColor:
-          this.customTheme !== 'custom'
-            ? this.config.customize.bodyBackgroundColor || bodyBackgroundColor[this.customTheme]
-            : this.headerCellStyleObj.backgroundColor,
-        color:
-          this.customTheme === 'light'
-            ? '#000000'
-            : this.config.customize.bodyFontColor || '#ffffff',
-        fontSize: this.config.customize.bodyFontSize + 'px' || '14px',
-        border: `solid 1px ${this.customTheme !== 'custom'
-          ? this.config.customize.bodyBackgroundColor || bodyBackgroundColor[this.customTheme]
-          : this.headerCellStyleObj.backgroundColor}`
-      }
-      return style
     }
   },
   created () { },
@@ -115,6 +94,27 @@ export default {
     this.chartInit()
   },
   methods: {
+    cellStyle ({ row, column, rowIndex, columnIndex }) {
+      const bodyBackgroundColor = {
+        dark: '#141414',
+        light: '#ffffff',
+        auto: 'transparent'
+      }
+      const initColor = this.customTheme === 'light' ? '#000000' : '#ffffff'
+      const style = {
+        backgroundColor: '',
+        color: this.config.customize.bodyFontColor || initColor,
+        fontSize: this.config.customize.bodyFontSize + 'px' || '14px'
+      }
+      if (rowIndex % 2 && this.config.customize.evenRowBackgroundColor) {
+        style.backgroundColor = this.config.customize.evenRowBackgroundColor
+      } else if (!(rowIndex % 2) && this.config.customize.oddRowBackgroundColor) {
+        style.backgroundColor = this.config.customize.oddRowBackgroundColor
+      } else {
+        style.backgroundColor = this.config.customize.bodyBackgroundColor || bodyBackgroundColor[this.customTheme]
+      }
+      return style
+    },
     rowStyle ({ row, rowIndex }) {
       if (rowIndex % 2) {
         return {
@@ -130,16 +130,23 @@ export default {
     rowClick (row) {
       this.linkage(row)
     },
-    changeStyle (oldConfig) {
-      const config = cloneDeep(oldConfig)
-      if (this.customTheme === 'custom') {
-        this.headerCellStyleToObj()
-        this.cellStyleToObj()
+    changeStyle (config) {
+      config = { ...this.config, ...config }
+      // 样式改变时更新主题配置
+      config.theme = settingToTheme(cloneDeep(config), this.customTheme)
+      this.changeChartConfig(config)
+      if (config.code === this.activeCode) {
+        this.changeActiveItemConfig(config)
       }
-      if (this.customTheme === 'custom') {
-        this.headerCellStyleToObj()
-        this.cellStyleToObj()
-      }
+      // const config = cloneDeep(oldConfig)
+      // if (this.customTheme === 'custom') {
+      //   this.headerCellStyleToObj()
+      //   this.cellStyleToObj()
+      // }
+      // if (this.customTheme === 'custom') {
+      //   this.headerCellStyleToObj()
+      //   this.cellStyleToObj()
+      // }
       // if (config.customize.stripe) {
       //   const trs = document
       //     .getElementById(this.config.code)
@@ -173,14 +180,14 @@ export default {
       // // });
       // }
       // this.chartInit();
-      if (config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor) {
-        config.customize.oddRowBackgroundColor = config.customize.bodyBackgroundColor
-      } else if (!config.customize.evenRowBackgroundColor && config.customize.oddRowBackgroundColor) {
-        config.customize.evenRowBackgroundColor = config.customize.bodyBackgroundColor
-      } else if (!(!config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor)) {
-        config.customize.bodyBackgroundColor = ''
-      }
-      this.updateKey = new Date().getTime()
+      // if (config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor) {
+      //   config.customize.oddRowBackgroundColor = config.customize.bodyBackgroundColor
+      // } else if (!config.customize.evenRowBackgroundColor && config.customize.oddRowBackgroundColor) {
+      //   config.customize.evenRowBackgroundColor = config.customize.bodyBackgroundColor
+      // } else if (!(!config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor)) {
+      //   config.customize.bodyBackgroundColor = ''
+      // }
+      // this.updateKey = new Date().getTime()
       return config
     },
     dataFormatting (config, data) {
