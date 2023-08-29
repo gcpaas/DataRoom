@@ -35,8 +35,8 @@
 <script>
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
-import {settingToTheme} from "data-room-ui/js/utils/themeFormatting";
-import _ from "lodash";
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+import _ from 'lodash'
 export default {
   name: 'BasicComponentInput',
   mixins: [commonMixins, linkageMixins],
@@ -51,9 +51,9 @@ export default {
     return { }
   },
   watch: {
-    'config.customize.value': {
-      handler (val) {
-        this.$store.commit('bigScreen/changeActiveItemConfig', { ...this.config, customize: { ...this.config.customize, value: this.config.customize.value } })
+    customTheme: {
+      handler () {
+        this.changeStyle(this.config)
       }
     }
   },
