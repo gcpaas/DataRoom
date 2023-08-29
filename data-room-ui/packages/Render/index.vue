@@ -34,7 +34,9 @@
       :is-conflict-check="false"
       :snap="true"
       :snap-tolerance="2"
-      :style="{ zIndex: chart.z || 0 }"
+      :style="{
+        zIndex: chart.z || 0,
+      }"
       :grid="[1,1]"
       @activated="activated(...arguments, chart)"
       @dragging="onDrag(...arguments, chart)"
