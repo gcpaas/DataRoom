@@ -79,7 +79,7 @@
           </el-select>
         </el-form-item>
         <el-form-item
-          v-if="config.customize.level !== 'world'"
+          v-if="config.customize.level == 'country'"
           label="是否开启下钻"
           label-width="100px"
         >
@@ -87,6 +87,28 @@
             v-model="config.customize.down"
             class="bs-el-switch"
             active-color="#007aff"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.down"
+          label="头部字体颜色"
+          label-width="100px"
+        >
+          <ColorPicker
+            v-model="config.customize.fontGraphicColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.down"
+          label="头部字体大小"
+          label-width="100px"
+        >
+           <el-input-number
+            v-model="config.customize.fontSize"
+            placeholder="请输入轨迹大小"
+            controls-position="right"
+            :step="1"
           />
         </el-form-item>
         <el-form-item
@@ -306,6 +328,18 @@ export default {
         {
           name:'箭头',
           value:'arrow'
+        },
+        {
+          name:'圆',
+          value:'circle'
+        },
+        {
+          name:'矩形',
+          value:'rect'
+        },
+        {
+          name:'无',
+          value:'none'
         }
       ]
     }

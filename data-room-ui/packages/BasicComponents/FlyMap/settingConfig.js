@@ -1,8 +1,7 @@
 import { commonConfig, displayOption } from 'data-room-ui/js/config'
 // import Icon from 'data-room-ui/assets/images/bigScreenIcon/export'
 import cloneDeep from 'lodash/cloneDeep'
-import * as iconData from 'data-room-ui/assets/symbols/bigScreenIcon/iconfont.json'
-const iconNames = iconData.glyphs.map(item => item.name).sort((a, b) => a.localeCompare(b))
+import Icon from 'data-room-ui/assets/images/bigScreenIcon/export'
 export const settingConfig = {
   padding: [30, 30, 50, 80],
   legend: false,
@@ -106,7 +105,7 @@ export const dataConfig = {
 export const FlyMapData = {
   name: '飞线图',
   title: '飞线图',
-  icon: iconNames[5],
+  icon: Icon.getNameList()[18],
   className:
     'com.gccloud.dataroom.core.module.chart.components.ScreenFlyMapChart',
   w: 800,

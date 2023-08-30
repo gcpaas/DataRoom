@@ -92,7 +92,7 @@ export default {
       { type: 'v', site: x || 0 }
     ]
   },
-  changeActiveItemConfig (state, config) {
+  changeActiveItemConfig(state, config) {
     state.activeItemConfig = cloneDeep(config)
   },
   // 新增一个组件

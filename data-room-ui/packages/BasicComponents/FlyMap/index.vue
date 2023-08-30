@@ -32,7 +32,8 @@ export default {
   data () {
     return {
       charts: null,
-      hasData: false
+      hasData: false,
+      level:''
     }
   },
   computed: {
@@ -88,7 +89,7 @@ export default {
       this.charts = echarts.init(
         document.getElementById(`chart${this.config.code}`)
       )
-
+      this.level=config.customize.level
       const lines_coord = []
       let fromCoord=[]
       let coord=[]
@@ -107,7 +108,7 @@ export default {
         })
         echarts.registerMap(config.customize.scope, res)
         const option = {
-          // nameMap: nameMap,
+          nameMap:config.customize.level=='world'?nameMap:'',
           graphic: [
           ],
           geo: {
@@ -239,30 +240,68 @@ export default {
           }
         }
         if(config.customize.down){
-            config?.customize?.graphic?.forEach((item,index)=>{
+            // config?.customize?.graphic?.forEach((item,index)=>{
             option.graphic.push({
               type: "text",
-              left: `${(index+1) * 200}px`,
-              top: "2%",
+              left: `250px`,
+              top: "5%",
               style: {
-                  text: item,
+                  text: '中国',
                   font: `bolder ${config.customize.fontSize}px "Microsoft YaHei", sans-serif`,
                   fill: config.customize.fontGraphicColor,
               },
-              onclick:()=>{
-                console.log(item,item=='中华人民共和国'?'country': 'province')
-                const arr=config.customize.graphic.slice(0,index+1)
-                console.log(arr,config.customize.graphic)
-                this.$store.commit('bigScreen/changeActiveItemConfig', { ...config, customize: { ...config.customize,dataMap:`${item}.json`,graphic:[...arr],level:item=='中华人民共和国'?'country': 'province'}})
+              onclick:async()=>{
+                this.level='country'
+                const index = option.graphic.findIndex(i => i.style.text === '中国');
+                // 点击元素之后的所有元素全部删除
+                option.graphic.splice(index + 1);
+                const mapUrl =`${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/country/中华人民共和国.json`
+                const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, true)
+                option.geo.map = '中华人民共和国'
+                this.changeData({...config,customize:{...config.customize,level:'country',scope:'中国'}})
+                echarts.registerMap('中华人民共和国', map);
+                this.charts.setOption(option, true);
+
               }
             },)
-          })
+          // })
           }
         this.charts.setOption(option)
-         this.charts.on('click',  (params)=> {
-          if(params.name=='') return
-          if(config.customize.down===false||config.customize.level==='province') return
-          this.$store.commit('bigScreen/changeActiveItemConfig', { ...config, customize: { ...config.customize,dataMap:`${params.name}.json`,graphic:[...config.customize.graphic,params.name], level:config.customize.level==='country'?'province':'country'} })
+         this.charts.on('click',  async(params)=> {
+          const index = option.graphic.findIndex(i => i.style.text === params.name);
+          if(params.name=='' || index !== -1) return
+          if(config.customize.down===false||this.level==='province') return
+          const idx = option.graphic.length + 1;
+          option.graphic.push({
+            type: "text",
+            left: `${idx * 250}px`,
+            top: "5%",
+            style: {
+                text: params.name,
+                font: `bolder ${config.customize.fontSize}px "Microsoft YaHei", sans-serif`,
+                fill: config.customize.fontGraphicColor,
+            },
+            onclick: async() => {
+                const mapUrl =`${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/${params.name=='中华人民共和国'?'country':'province'}/${params.name}.json`
+                const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, true)
+                // 利用函数的作用域，可以直接拿上面的name来用
+                const index = option.graphic.findIndex(i => i.style.text === params.name);
+                // 点击元素之后的所有元素全部删除
+                option.graphic.splice(index + 1);
+                // 很多操作重复了，你可以将公共部分抽离出来
+                option.geo.map = params.name;
+                this.changeData({...config,customize:{...config.customize,level:'province',scope:params.name}})
+                echarts.registerMap(params.name, map);
+                this.charts.setOption(option, true);
+            },
+        });
+          this.level='province'
+          const mapUrl =`${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/province/${params.name}.json`
+          const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, true)
+          this.changeData({...config,customize:{...config.customize,level:'province',scope:params.name}})
+          option.geo.map = params.name
+          echarts.registerMap(params.name, map);
+          this.charts.setOption(option, true);
           });
       })
     }
