@@ -224,7 +224,6 @@ export default {
     speechBroadcast (text) {
       if (this.speech.hasBrowserSupport()) {
         this.speech.setLanguage('zh-CN')
-        this.speech.pitch = 1
         this.speech.init()
         this.speech.speak({ text: text })
       } else {
