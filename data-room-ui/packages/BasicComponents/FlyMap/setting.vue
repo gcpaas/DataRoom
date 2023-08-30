@@ -69,6 +69,7 @@
             v-model="config.customize.dataMap"
             popper-class="bs-el-select"
             class="bs-el-select"
+            @change="changeMap"
           >
             <el-option
               v-for="map in mapList"
@@ -89,7 +90,7 @@
             active-color="#007aff"
           />
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
           v-if="config.customize.down"
           label="头部字体颜色"
           label-width="100px"
@@ -110,7 +111,7 @@
             controls-position="right"
             :step="1"
           />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item
           label="地图分割线颜色"
           label-width="100px"
@@ -370,14 +371,20 @@ export default {
         this.mapList = res
       })
     },
+     changeMap(val){
+      this.config.customize.scope=val.slice(0,-5)
+    },
     changeLevel () {
       if (this.config.customize.level === 'country') {
         this.config.customize.dataMap = '中华人民共和国.json'
+        this.config.customize.scope='中国'
       } else if (this.config.customize.level === 'province') {
         this.getMapList()
         this.config.customize.dataMap = '安徽省.json'
+        this.config.customize.scope='安徽省'
         this.config.customize.down=false
       }else{
+        this.config.customize.scope='世界'
         this.config.customize.down=false
       }
     },
