@@ -65,6 +65,7 @@
             v-model="config.customize.dataMap"
             popper-class="bs-el-select"
             class="bs-el-select"
+            @change="changeMap()"
           >
             <el-option
               v-for="map in mapList"
@@ -307,14 +308,20 @@ export default {
         this.mapList = res
       })
     },
+    changeMap(val){
+      this.config.customize.scope=val.slice(0,-5)
+    },
     changeLevel () {
       this.getMapList()
       if (this.config.customize.level === 'country') {
         this.config.customize.dataMap = '中华人民共和国.json'
+        this.config.customize.scope='中国'
       } else if (this.config.customize.level === 'province') {
         this.config.customize.dataMap = '安徽省.json'
+        this.config.customize.scope='安徽省'
         this.config.customize.down=false
       }else{
+        this.config.customize.scope='世界'
         this.config.customize.down=false
       }
     },
