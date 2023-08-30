@@ -44,7 +44,7 @@ const customConfig = {
     // 是否显示文字
     mapName: true,
     // 地图背景色
-    backgroundColor: '#404a59',
+    backgroundColor: 'rgb(21, 26, 38)',
     // 是否打点
     scatter: true,
     // 悬浮框背景色
@@ -56,13 +56,17 @@ const customConfig = {
     // 打点图文字颜色
     scatterColor: '#fff',
     // 分割线颜色
-    mapLineColor: 'rgba(147, 235, 248, 1)',
+    mapLineColor: 'rgba(53, 86, 165, 1)',
+    fontGraphicColor: '#fff',
+    fontSize:'30',
+    // 是否开启下钻
+    down: false,
     // 地图级别
     level: 'country',
     // 范围
     scope: '中国',
     // 地图区域颜色
-    areaColor: '#007aff',
+    areaColor: 'rgba(31, 50, 121, 1)',
     // 是否开启筛选
     visual: false,
     // 筛选范围

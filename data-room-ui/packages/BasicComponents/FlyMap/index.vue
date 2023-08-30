@@ -100,8 +100,7 @@ export default {
           if(val.type==='move_in'){
             coord.push({name:val.from,value:[val.lat1,val.lng1,val.value],msg:{...val}})
             fromCoord.push({name:val.to,value:[val.lat2,val.lng2,val.value],msg:{...val}})
-          }
-          if(val.type==='move_out'){
+          }else{
             coord.push({name:val.to,value:[val.lat2,val.lng2,val.value],msg:{...val}})
             fromCoord.push({name:val.from,value:[val.lat1,val.lng1,val.value],msg:{...val}})
           }

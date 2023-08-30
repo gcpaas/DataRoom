@@ -63,6 +63,7 @@ export default {
     // 由于静态组件没有混入公共函数，所以需要定义一个changeStyle方法，以免报错
     changeStyle (config) {
     },
+    // 点击切换主题
     handleChange (val) {
       const pageInfo = this.pageInfo
       pageInfo.chartList = themeToSetting(pageInfo.chartList, val)

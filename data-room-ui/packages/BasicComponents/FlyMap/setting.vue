@@ -106,7 +106,7 @@
         >
            <el-input-number
             v-model="config.customize.fontSize"
-            placeholder="请输入轨迹大小"
+            placeholder="请输入字体大小"
             controls-position="right"
             :step="1"
           />
@@ -376,6 +376,7 @@ export default {
       } else if (this.config.customize.level === 'province') {
         this.getMapList()
         this.config.customize.dataMap = '安徽省.json'
+        this.config.customize.down=false
       }else{
         this.config.customize.down=false
       }
