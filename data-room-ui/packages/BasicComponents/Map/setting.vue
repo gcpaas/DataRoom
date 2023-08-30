@@ -75,6 +75,39 @@
           </el-select>
         </el-form-item>
         <el-form-item
+          v-if="config.customize.level == 'country'"
+          label="是否开启下钻"
+          label-width="100px"
+        >
+          <el-switch
+            v-model="config.customize.down"
+            class="bs-el-switch"
+            active-color="#007aff"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.down"
+          label="头部字体颜色"
+          label-width="100px"
+        >
+          <ColorPicker
+            v-model="config.customize.fontGraphicColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.down"
+          label="头部字体大小"
+          label-width="100px"
+        >
+           <el-input-number
+            v-model="config.customize.fontSize"
+            placeholder="请输入字体大小"
+            controls-position="right"
+            :step="1"
+          />
+        </el-form-item>
+        <el-form-item
           label="地图背景色"
           label-width="100px"
         >
@@ -280,6 +313,9 @@ export default {
         this.config.customize.dataMap = '中华人民共和国.json'
       } else if (this.config.customize.level === 'province') {
         this.config.customize.dataMap = '安徽省.json'
+        this.config.customize.down=false
+      }else{
+        this.config.customize.down=false
       }
     },
     delColor () {
