@@ -4,7 +4,7 @@
  * @Author: shiyi
 -->
 <template>
-  <div class="bs-setting-wrap">
+  <div>
     <el-form
       ref="form"
       label-width="100px"
@@ -131,17 +131,20 @@
           />
         </el-form-item>
         <el-form-item label="文字颜色类型">
-          <el-radio-group
+          <el-select
             v-model="config.customize.textColorType"
-            class="bs-el-radio-group"
+            popper-class="bs-el-select"
+            class="bs-el-select"
           >
-            <el-radio label="pure">
-              纯色
-            </el-radio>
-            <el-radio label="gradient">
-              渐变色
-            </el-radio>
-          </el-radio-group>
+            <el-option
+              label="纯色"
+              value="pure"
+            />
+            <el-option
+              label="渐变色"
+              value="gradient"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item
           v-if="config.customize.textColorType === 'pure'"
@@ -191,20 +194,24 @@
           />
         </el-form-item>
         <el-form-item label="背景色类型">
-          <el-radio-group
+          <el-select
             v-model="config.customize.backgroundColorType"
-            class="bs-el-radio-group"
+            popper-class="bs-el-select"
+            class="bs-el-select"
           >
-            <el-radio label="transparent">
-              透明
-            </el-radio>
-            <el-radio label="pure">
-              纯色
-            </el-radio>
-            <el-radio label="gradient">
-              渐变色
-            </el-radio>
-          </el-radio-group>
+            <el-option
+              label="透明"
+              value="transparent"
+            />
+            <el-option
+              label="纯色"
+              value="pure"
+            />
+            <el-option
+              label="渐变色"
+              value="gradient"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item
           v-if="config.customize.backgroundColorType === 'pure'"
@@ -364,19 +371,22 @@ export default {
   },
   watch: {
   },
-  mounted () {},
+  mounted () { },
   methods: {
-    changeStyle () {}
+    changeStyle () { }
   }
 }
 </script>
 
-  <style lang="scss" scoped>
-    @import "../../assets/style/settingWrap.scss";
-    .bs-setting-wrap{
-      padding-top: 16px;
-    }
-    .lc-field-body {
-      padding: 12px 16px;
-    }
-  </style>
+<style lang="scss" scoped>
+@import '../../assets/style/settingWrap.scss';
+@import '../../assets/style/bsTheme.scss';
+
+.bs-setting-wrap {
+  padding:12px 16px;
+}
+
+.lc-field-body {
+  padding: 12px 16px;
+}
+</style>
