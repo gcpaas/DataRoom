@@ -441,18 +441,18 @@ export default {
       }
     },
     // 改变
-    changeChart (themeName) {
-      // 统一改变组件的主题
-      const newChartList = cloneDeep(this.pageInfo.chartList)
-      const chartList = newChartList.map(chart => {
-        chart.option.theme = themeName
-        chart.key = new Date().getTime()
-        // this.changeChartKey(chart.code)
-        return chart
-      })
-      // 可能需要强制性更新chartList
-      this.changeLayout(chartList)
-    },
+    // changeChart (themeName) {
+    //   // 统一改变组件的主题
+    //   const newChartList = cloneDeep(this.pageInfo.chartList)
+    //   const chartList = newChartList.map(chart => {
+    //     chart.option.theme = themeName
+    //     chart.key = new Date().getTime()
+    //     // this.changeChartKey(chart.code)
+    //     return chart
+    //   })
+    //   // 可能需要强制性更新chartList
+    //   this.changeLayout(chartList)
+    // },
 
     // 新增数据集
     addCacheDataSet () {

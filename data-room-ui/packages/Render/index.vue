@@ -313,7 +313,7 @@ export default {
       if (_chart.type === 'customComponent') {
         option = {
           ...this.plotList?.find((plot) => plot.name === _chart.name)?.option,
-          theme: this.pageConfig.customTheme
+          theme: this.pageConfig.customTheme === 'dark' ? 'transparent' : 'light'
         }
       }
       const config = {
@@ -345,7 +345,7 @@ export default {
       if (_chart.type === 'customComponent') {
         option = {
           ...this.plotList?.find((plot) => plot.name === _chart.name)?.option,
-          theme: this.pageConfig.customTheme
+          theme: this.pageConfig.customTheme === 'dark' ? 'transparent' : 'light'
         }
       }
       const config = {
