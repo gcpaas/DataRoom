@@ -564,7 +564,6 @@
           :config="config"
           :source-field-list="sourceFieldList"
         />
-        {{ config.type }}
         <ComponentRelation
           v-if="!['carousel','gauge','liquid','marquee'].includes(config.type)"
           :config="config"
