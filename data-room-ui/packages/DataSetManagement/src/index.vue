@@ -546,15 +546,16 @@ export default {
       this.current = 1
       const list = [
         { name: '全部', datasetType: '' },
-        { name: '原始数据集', datasetType: 'original', componentName: 'OriginalEditForm' },
-        { name: '自助数据集', datasetType: 'custom', componentName: 'CustomEditForm' },
-        { name: '存储过程数据集', datasetType: 'storedProcedure', componentName: 'StoredProcedureEditForm' },
-        { name: 'JSON数据集', datasetType: 'json', componentName: 'JsonEditForm' },
-        { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm' },
-        { name: 'JS数据集', datasetType: 'js', componentName: 'JsEditForm' },
-        { name: 'HTTP数据集', datasetType: 'http', componentName: 'HttpEditForm' }
+        { name: '原始数据集', datasetType: 'original', componentName: 'OriginalEditForm', description: '直接查询某个数据库表' },
+        { name: '自助数据集', datasetType: 'custom', componentName: 'CustomEditForm', description: '自定义SQL语句查询' },
+        { name: '存储过程数据集', datasetType: 'storedProcedure', componentName: 'StoredProcedureEditForm', description: '调用数据库存储过程查询' },
+        { name: 'JSON数据集', datasetType: 'json', componentName: 'JsonEditForm', description: '直接定义静态数据' },
+        { name: 'JS数据集', datasetType: 'js', componentName: 'JsEditForm', description: '编写JS代码进行动态模拟数据创建' },
+        { name: 'HTTP数据集', datasetType: 'http', componentName: 'HttpEditForm', description: '接入第三方HTTP服务查询' },
+        { name: '脚本数据集', datasetType: 'script', componentName: 'ScriptEditForm', description: '支持ES、Mongodb、国产化数据库、自定义Java代码查询' }
+
       ]
-      if (window.BS_CONFIG?.datasetTypeList && window.BS_CONFIG?.datasetTypeList?.length != 0) {
+      if (window.BS_CONFIG?.datasetTypeList && window.BS_CONFIG?.datasetTypeList?.length !== 0) {
         this.datasetTypeList = [{ name: '全部', datasetType: '' }, ...list.filter(item => window.BS_CONFIG?.datasetTypeList.findIndex(x => x === item.datasetType) !== -1)]
       } else {
         this.datasetTypeList = [
