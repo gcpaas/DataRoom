@@ -361,7 +361,8 @@ export default {
       'changePageConfig',
       'changeLayout',
       'changeChartKey',
-      'changeRefreshConfig'
+      'changeRefreshConfig',
+      'changePageInfo'
     ]),
     // 切换主题时更新主题配置
     changeTheme (theme) {

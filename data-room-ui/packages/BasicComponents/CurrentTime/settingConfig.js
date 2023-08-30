@@ -21,7 +21,7 @@ const customConfig = {
   customize: {
     fontSize: 28,
     fontWeight: 700,
-    color: '#ffffff'
+    color: 'rgb(155 159 172)'
   }
 
 }

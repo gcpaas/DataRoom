@@ -5,7 +5,7 @@
   >
     <dv-scroll-board
       :key="updateKey"
-      :class="{'light-theme':customTheme === 'light','auto-theme':customTheme =='auto','dark-theme':customTheme =='dark'}"
+      :class="{'light-theme':customTheme === 'light','auto-theme':customTheme =='dark'}"
       :config="option"
       @click="rowClick"
     />

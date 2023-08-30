@@ -68,9 +68,8 @@ export default {
   computed: {
     headerCellStyle () {
       const headerBackgroundColor = {
-        dark: '#141414',
         light: '#ffffff',
-        auto: 'transparent'
+        dark: 'transparent'
       }
       if (document.getElementById(this.config.code)?.querySelector('tr')) {
         document
@@ -124,9 +123,8 @@ export default {
 
     cellStyle ({ row, column, rowIndex, columnIndex }) {
       const bodyBackgroundColor = {
-        dark: '#141414',
         light: '#ffffff',
-        auto: 'transparent'
+        dark: 'transparent'
       }
       const initColor = this.customTheme === 'light' ? '#000000' : '#ffffff'
       const style = {
