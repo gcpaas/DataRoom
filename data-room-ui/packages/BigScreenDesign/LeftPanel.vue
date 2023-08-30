@@ -147,7 +147,6 @@
 </template>
 <script>
 import cloneDeep from 'lodash/cloneDeep'
-// import 'data-room-ui/assets/symbols/bigScreenIcon/iconfont.js'
 import basicComponents from 'data-room-ui/js/config/basicComponentsConfig'
 import g2PlotComponents, { getCustomPlots } from '../G2Plots/plotList'
 import borderComponents from 'data-room-ui/js/config/borderComponentsConfig'
