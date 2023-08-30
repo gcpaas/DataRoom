@@ -330,7 +330,8 @@ export default {
         option
       }
       config.key = config.code
-      // 1、从左侧新增时会初始化theme的内容 2、从组件库添加自定义组件时不用初始化
+      // isComponent = false 从左侧新增时需要初始化theme的内容
+      // isComponent = true从组件库添加自定义组件时不用初始化
       if (!isComponent) {
         config.theme = settingToTheme(config, 'dark')
         config.theme = settingToTheme(config, 'light')
