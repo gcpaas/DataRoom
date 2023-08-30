@@ -26,7 +26,14 @@
               class="type-item"
               @click="openAddForm(dataset.datasetType,dataset.componentName)"
             >
-              {{ dataset.name }}
+              <span>
+                {{ dataset.name }}
+              </span>
+              <p>
+                <span class="description">
+                  {{ dataset.description }}
+                </span>
+              </p>
             </div>
           </el-card>
         </el-col>
@@ -49,6 +56,7 @@ export default {
     }
   },
   created () { },
+  mounted () { },
   methods: {
     // 选择新增类型
     openAddForm (type, componentName) {
@@ -62,17 +70,16 @@ export default {
 <style lang="scss" scoped>
 .type-item {
   height: 104px;
-  line-height: 90px;
   text-align: center;
   font-size: 16px;
   font-weight: 400;
   cursor: pointer;
   position: relative;
+  padding-top: 35px;
   color: var(--bs-el-text);
   p {
-    position: absolute;
     width: 100%;
-    bottom: 20px;
+    margin-top: 10px;
     font-size: 14px;
     line-height: 16px;
     color: #909399;

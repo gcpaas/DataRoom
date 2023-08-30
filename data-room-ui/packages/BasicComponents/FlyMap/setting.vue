@@ -46,6 +46,10 @@
             class="bs-el-select"
             @change="changeLevel()"
           >
+           <el-option
+              label="世界"
+              value="world"
+            />
             <el-option
               label="国家"
               value="country"
@@ -108,15 +112,6 @@
           />
         </el-form-item>
         <el-form-item
-          label="地图背景色"
-          label-width="100px"
-        >
-          <ColorPicker
-            v-model="config.customize.backgroundColor"
-            :predefine-colors="predefineThemeColors"
-          />
-        </el-form-item>
-        <el-form-item
           label="地图分割线颜色"
           label-width="100px"
         >
@@ -135,37 +130,6 @@
           />
         </el-form-item>
         <el-form-item
-          label="是否打点"
-          label-width="100px"
-        >
-          <el-switch
-            v-model="config.customize.scatter"
-            class="bs-el-switch"
-            active-color="#007aff"
-          />
-        </el-form-item>
-        <el-form-item
-          v-if="config.customize.scatter"
-          label="打点图背景色"
-          label-width="100px"
-        >
-          <ColorPicker
-            v-model="config.customize.scatterBackgroundColor"
-            :predefine-colors="predefineThemeColors"
-          />
-        </el-form-item>
-        <el-form-item
-          v-if="config.customize.scatter"
-          label="打点图文字颜色"
-          label-width="100px"
-        >
-          <ColorPicker
-            v-model="config.customize.scatterColor"
-            :predefine-colors="predefineThemeColors"
-          />
-        </el-form-item>
-        <el-form-item
-          v-if="!config.customize.scatter"
           label="悬浮框背景色"
           label-width="100px"
         >
@@ -175,12 +139,87 @@
           />
         </el-form-item>
         <el-form-item
-          v-if="!config.customize.scatter"
           label="悬浮框边框色"
           label-width="100px"
         >
           <ColorPicker
             v-model="config.customize.borderColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="悬浮框字体颜色"
+          label-width="100px"
+        >
+          <ColorPicker
+            v-model="config.customize.fontColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="线悬浮框内容"
+          label-width="100px"
+        >
+          <el-input :rows="8" v-model="config.customize.lineFormatter" type="textarea"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="点悬浮框内容"
+          label-width="100px"
+        >
+          <el-input :rows="4" v-model="config.customize.scatterFormatter" type="textarea"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="轨迹样式"
+          label-width="100px"
+        >
+           <el-select
+            v-model="config.customize.symbol"
+            popper-class="bs-el-select"
+            class="bs-el-select"
+          >
+            <el-option
+              v-for="symbol in symbolList"
+              :key="symbol.name"
+              :label="symbol.name"
+              :value="symbol.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="轨迹颜色"
+          label-width="100px"
+        >
+            <ColorPicker
+            v-model="config.customize.symbolColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="轨迹大小"
+          label-width="100px"
+        >
+          <el-input-number
+            v-model="config.customize.symbolSize"
+            placeholder="请输入轨迹大小"
+            controls-position="right"
+            :step="1"
+          />
+        </el-form-item>
+        <el-form-item
+          label="普通点颜色"
+          label-width="100px"
+        >
+            <ColorPicker
+            v-model="config.customize.scatterColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="中心点颜色"
+          label-width="100px"
+        >
+            <ColorPicker
+            v-model="config.customize.scatterCenterColor"
             :predefine-colors="predefineThemeColors"
           />
         </el-form-item>
@@ -284,6 +323,24 @@ export default {
         '#2B74CF',
         '#00BC9D',
         '#ED7D32'
+      ],
+      symbolList:[
+        {
+          name:'箭头',
+          value:'arrow'
+        },
+        {
+          name:'圆',
+          value:'circle'
+        },
+        {
+          name:'矩形',
+          value:'rect'
+        },
+        {
+          name:'无',
+          value:'none'
+        }
       ]
     }
   },
@@ -297,7 +354,13 @@ export default {
       }
     }
   },
-  watch: {},
+  watch: {
+    'config.customize.level': {
+      handler (val) {
+        this.getMapList()
+      }
+    }
+  },
   mounted () {
     this.getMapList()
   },
@@ -308,10 +371,10 @@ export default {
       })
     },
     changeLevel () {
-      this.getMapList()
       if (this.config.customize.level === 'country') {
         this.config.customize.dataMap = '中华人民共和国.json'
       } else if (this.config.customize.level === 'province') {
+        this.getMapList()
         this.config.customize.dataMap = '安徽省.json'
         this.config.customize.down=false
       }else{

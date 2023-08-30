@@ -1,7 +1,7 @@
 import { commonConfig, displayOption } from 'data-room-ui/js/config'
-import Icon from 'data-room-ui/assets/images/bigScreenIcon/export'
+// import Icon from 'data-room-ui/assets/images/bigScreenIcon/export'
 import cloneDeep from 'lodash/cloneDeep'
-
+import Icon from 'data-room-ui/assets/images/bigScreenIcon/export'
 export const settingConfig = {
   padding: [30, 30, 50, 80],
   legend: false,
@@ -18,7 +18,7 @@ export const settingConfig = {
       enable: false
     },
     mapField: {
-      enable: true
+      enable: false
     },
     metricField: {
       // 指标
@@ -35,32 +35,39 @@ export const settingConfig = {
   }
 }
 const customConfig = {
-  type: 'map',
+  type: 'flyMap',
   root: {
     version: '2023071001',
     contribution: false
   },
   customize: {
     // 是否显示文字
-    mapName: true,
-    // 地图背景色
-    backgroundColor: 'rgb(21, 26, 38)',
-    // 是否打点
-    scatter: true,
+    mapName: false,
     // 悬浮框背景色
     tooltipBackgroundColor: '#0C121C',
     // 悬浮框边框色
     borderColor: 'rgba(0, 0, 0, 0.16)',
+    // 悬浮框字体颜色
+    fontColor:'#DADADA',
     // 打点图背景颜色
     scatterBackgroundColor: 'rgba(255,0,0,.7)',
     // 打点图文字颜色
-    scatterColor: '#fff',
+    scatterColor: 'rgba(165, 108, 91, 1)',
+    // 打点图中心点文字颜色
+    scatterCenterColor:'rgba(205, 196, 110, 1)',
     // 分割线颜色
     mapLineColor: 'rgba(53, 86, 165, 1)',
+    // 水印字体颜色
     fontGraphicColor: '#fff',
     fontSize:'30',
     // 是否开启下钻
     down: false,
+    // 轨迹图像
+    symbol: 'arrow',
+    // 轨迹颜色
+    symbolColor: '#01AAED',
+    // 轨迹大小
+    symbolSize:8,
     // 地图级别
     level: 'country',
     // 范围
@@ -68,11 +75,15 @@ const customConfig = {
     // 地图区域颜色
     areaColor: 'rgba(31, 50, 121, 1)',
     // 是否开启筛选
-    visual: false,
+    visual: true,
+    graphic:['中华人民共和国'],
     // 筛选范围
-    range: [0, 6000],
+    range: [0, 100],
+    scatterFormatter:'`<p style="text-align:center;font-size: 14px">${params.name}</p>`',
+    // 格式化脚本
+    lineFormatter:'`<p style="font-size: 16px">销售额</p><div>${params.data.msg.from}-->${params.data.msg.to} ${params.data.msg.value} </div>`',
     // 从上到下的颜色
-    rangeColor: ['#007aff', '#A5CC82'],
+    rangeColor: ['rgba(165, 108, 91, 1)', 'rgba(205, 196, 110, 1)'],
     // 地图数据
     dataMap: '中华人民共和国.json',
     // 展示字段
@@ -91,17 +102,17 @@ export const dataConfig = {
   ...commonConfig(customConfig)
 }
 
-export const mapData = {
-  name: '地图',
-  title: '地图',
-  icon: Icon.getNameList()[5],
+export const FlyMapData = {
+  name: '飞线图',
+  title: '飞线图',
+  icon: Icon.getNameList()[18],
   className:
-    'com.gccloud.dataroom.core.module.chart.components.ScreenMapChart',
+    'com.gccloud.dataroom.core.module.chart.components.ScreenFlyMapChart',
   w: 800,
   h: 700,
   x: 0,
   y: 0,
-  type: 'map',
+  type: 'flyMap',
   option: {
     ...cloneDeep(settingConfig)
   },

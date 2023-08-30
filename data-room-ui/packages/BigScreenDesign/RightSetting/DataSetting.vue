@@ -67,7 +67,7 @@
           class="data-setting-data-box"
         >
           <div class="lc-field-head">
-            <div class="lc-field-title">
+            <div v-if="config.type!=='flyMap'" class="lc-field-title">
               数据配置
             </div>
           </div>
@@ -565,7 +565,7 @@
           :source-field-list="sourceFieldList"
         />
         <ComponentRelation
-          v-if="!['carousel','gauge','liquid'].includes(config.type)"
+          v-if="!['carousel','gauge','liquid','marquee'].includes(config.type)"
           :config="config"
           :source-field-list="sourceFieldList"
         />
