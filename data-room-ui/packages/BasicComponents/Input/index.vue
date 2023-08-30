@@ -78,7 +78,7 @@ export default {
         const inputIcon = document.querySelector(`.${config.customize.icon.name}`)
         inputIcon.style.fontSize = config.customize.inputStyle.fontSize + 'px'
       }
-      // 样式改变时更新主题配置
+      // 只有样式改变时更新主题配置，切换主题时不需要保存
       if (!isUpdateTheme) {
         config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
         this.changeChartConfig(config)

@@ -51,7 +51,7 @@
                 <span class="el-dropdown-link menu-dropdown-link">
                   <i class="el-icon-more" />
                 </span>
-                <el-dropdown-menu slot="dropdown">
+                <el-dropdown-menu  slot="dropdown">
                   <el-dropdown-item @click.native="handleDropdownClick('edit',data,node)">编辑 </el-dropdown-item>
                   <el-dropdown-item
                     v-if="data.type!=='catalog'"
