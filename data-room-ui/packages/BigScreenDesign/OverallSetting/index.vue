@@ -66,6 +66,7 @@
               popper-class="bs-el-select"
               placeholder="请选择主题"
               clearable
+              @change="changeTheme"
             >
               <el-option
                 v-for="themeItem in themeOptions"
@@ -191,6 +192,7 @@ import { getThemeConfig } from 'data-room-ui/js/api/bigScreenApi'
 // import _ from 'lodash'
 import cloneDeep from 'lodash/cloneDeep'
 import { G2 } from '@antv/g2plot'
+import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
 export default {
   name: 'OverallSetting',
   components: {
@@ -270,15 +272,15 @@ export default {
         {
           value: 'light',
           label: '明亮'
-        },
-        {
-          value: 'auto',
-          label: '透明'
-        },
-        {
-          value: 'custom',
-          label: '自定义'
         }
+        // {
+        //   value: 'auto',
+        //   label: '透明'
+        // },
+        // {
+        //   value: 'custom',
+        //   label: '自定义'
+        // }
       ],
       form: {
         w: 1920,
@@ -286,7 +288,7 @@ export default {
         bg: '',
         bgColor: '#151a26', // 背景色
         opacity: 100,
-        customTheme: 'auto',
+        customTheme: 'dark',
         themeJson: {},
         cacheDataSets: [],
         refreshConfig: [],
@@ -361,6 +363,12 @@ export default {
       'changeChartKey',
       'changeRefreshConfig'
     ]),
+    // 切换主题时更新主题配置
+    changeTheme (theme) {
+      const pageInfo = this.pageInfo
+      pageInfo.chartList = themeToSetting(pageInfo.chartList, theme)
+      this.changePageInfo(pageInfo)
+    },
     init () {
       if (!this.pageInfo.pageConfig.refreshConfig) {
         this.pageInfo.pageConfig.refreshConfig = []
