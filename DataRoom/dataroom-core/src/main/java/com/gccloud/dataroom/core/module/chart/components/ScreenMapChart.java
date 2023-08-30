@@ -80,6 +80,15 @@ public class ScreenMapChart extends Chart {
         @ApiModelProperty(notes = "值")
         private String value;
 
+        @ApiModelProperty(notes = "图形字体颜色")
+        private String fontGraphicColor;
+
+        @ApiModelProperty(notes = "图形字体大小")
+        private String fontSize;
+
+        @ApiModelProperty(notes = "是否开启下钻")
+        private Boolean down;
+
     }
 
 

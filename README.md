@@ -12,7 +12,7 @@
     <img alt="Company" src="https://img.shields.io/badge/Author-科大国创云网科技有限公司-blue.svg">
 </p>
 
-🔥DataRoom是一款基于SpringBoot、MyBatisPlus、ElementUI、G2Plot、Echarts等技术栈的大屏设计器，具备大屏设计、预览能力，支持MySQL、Oracle、PostgreSQL、JSON、JS、HTTP、Groovy等数据集接入，使用简单，完全免费，代码开源。
+🔥DataRoom是一款基于SpringBoot、MyBatisPlus、ElementUI、G2Plot、Echarts等技术栈的大屏设计器，具备大屏设计、预览能力，支持MySQL、Oracle、PostgreSQL、MSSQL、JSON、JS、HTTP、Groovy等数据集接入，使用简单，完全免费，代码开源。
 
 ## 效果图
 

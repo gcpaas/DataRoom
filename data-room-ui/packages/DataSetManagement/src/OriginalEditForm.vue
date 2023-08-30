@@ -162,7 +162,6 @@
                         :key="table.name"
                         :label="table.name"
                         :value="table.name"
-                        :disabled="table.status == 1"
                       />
                     </el-option-group>
                     <el-option-group label="视图">
@@ -171,7 +170,6 @@
                         :key="table.name"
                         :label="table.name"
                         :value="table.name"
-                        :disabled="table.status == 1"
                       />
                     </el-option-group>
                   </el-select>

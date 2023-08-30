@@ -66,7 +66,7 @@ export default {
     state.pageLoading = booleanValue
   },
   // 改变当前组件配置
-  changeChartConfig (state, itemConfig) {
+  changeChartConfig(state, itemConfig) {
     const index = state.pageInfo.chartList.findIndex(
       item => item.code === itemConfig.code
     )
@@ -92,7 +92,7 @@ export default {
       { type: 'v', site: x || 0 }
     ]
   },
-  changeActiveItemConfig (state, config) {
+  changeActiveItemConfig(state, config) {
     state.activeItemConfig = cloneDeep(config)
   },
   // 新增一个组件
