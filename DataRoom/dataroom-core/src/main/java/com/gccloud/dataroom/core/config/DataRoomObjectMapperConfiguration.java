@@ -7,16 +7,24 @@ import com.fasterxml.jackson.datatype.jsonorg.JsonOrgModule;
 import com.gccloud.dataroom.core.constant.DataRoomConst;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
+/**
+ * Jackson配置类
+ * @Author hongyang
+ * @Date 2022/06/19
+ * @Version 1.0.0
+ */
 @Slf4j
 @Configuration
+@ConditionalOnMissingClass(value = "com.gccloud.dashboard.core.config.ObjectMapperConfiguration")
 @ConditionalOnProperty(prefix = "gc.starter.dataroom.component", name = "ObjectMapperConfiguration", havingValue = "ObjectMapperConfiguration", matchIfMissing = true)
-public class ObjectMapperConfiguration {
+public class DataRoomObjectMapperConfiguration {
 
     @Resource
     private ObjectMapper objectMapper;

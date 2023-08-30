@@ -41,7 +41,7 @@
           </div>
         </div>
         <div
-          v-if="config.type === 'customComponent'"
+          v-if="['customComponent','marquee'].includes(config.type)"
           class="data-setting-data-box"
         >
           <div class="lc-field-head">
@@ -85,9 +85,11 @@
                 v-model="config.dataSource.dimensionFieldList"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
                 :multiple="config.option.displayOption.dimensionField.multiple"
                 @change="dimensionFieldListChange"
+                @valuePositionChange="valuePositionChange"
               >
                 <el-option
                   v-for="(field, index) in dataSourceDataList"
@@ -111,6 +113,7 @@
                 v-model="config.dataSource.dimensionField"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
@@ -141,6 +144,7 @@
                 v-model="config.dataSource.metricField"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
@@ -176,6 +180,7 @@
                   class="bs-el-select select"
                   popper-class="bs-el-select"
                   :value="setting.value"
+                  filterable
                   clearable
                   :multiple="setting.multiple"
                   :placeholder="`请选择${setting.label}`"
@@ -273,6 +278,7 @@
                     v-model="scope.row.align"
                     class="bs-el-select"
                     popper-class="bs-el-select"
+                    filterable
                     clearable
                     placeholder="请选择对齐方式"
                   >
@@ -314,6 +320,7 @@
                 v-model="config.customize.value"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
@@ -341,6 +348,7 @@
                 v-model="config.customize.name"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
@@ -368,6 +376,7 @@
                 v-model="config.customize.xaxis"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
@@ -395,6 +404,7 @@
                 v-model="config.customize.yaxis"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                filterable
                 clearable
               >
                 <el-option
@@ -803,6 +813,15 @@ export default {
         this.headerList.push({ name: item.comment, code: item.name, width: '150', align: 'left' })
       })
       this.config.customize.columnConfig = cloneDeep(this.headerList)
+      this.$store.commit('bigScreen/changeActiveItemConfig', this.config)
+    },
+    valuePositionChange (value) {
+      const sortedColumnData = {}
+      const columnData = cloneDeep(this.config.option?.columnData)
+      value.forEach((item, index) => {
+        sortedColumnData[item] = columnData[item]
+      })
+      this.config.option.columnData = sortedColumnData
       this.$store.commit('bigScreen/changeActiveItemConfig', this.config)
     },
     changeCustomProps (value, setting) {

@@ -26,7 +26,9 @@ const typeList = [
   'screenScrollBoard',
   'video',
   'input',
-  'button'
+  'button',
+  'marquee',
+  'themeSwitcher'
 ]
 let basicConfigList = []
 basicConfigList = typeList.map((type) => {

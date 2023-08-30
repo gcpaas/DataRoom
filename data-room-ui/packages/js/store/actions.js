@@ -6,6 +6,8 @@ import { getScreenInfo, getDataSetDetails, getDataByDataSetId } from '../api/big
 import { stringToFunction } from '../utils/evalFunctions'
 import { EventBus } from '../utils/eventBus'
 import plotList from 'data-room-ui/G2Plots/plotList'
+import { settingToTheme, themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
+
 export default {
   // 初始化页面数据
   initLayout ({ commit, dispatch }, code) {
@@ -58,7 +60,7 @@ export function handleResData (data) {
         h: 1080,
         bgColor: '#151a26', // 背景色
         bg: '', // 背景图
-        customTheme: 'auto',
+        customTheme: 'dark',
         opacity: 100
       }
     }
@@ -91,8 +93,15 @@ export function handleResData (data) {
         }
       }
     }
+    // 初始化时应该判断，是否存在theme配置，没有的话添加默认的两套主题，这是为了兼容旧组件
+    if (!chart.theme) {
+      chart.theme = settingToTheme(chart, 'dark')
+      chart.theme = settingToTheme(chart, 'light')
+    }
     chart.key = chart.code
   })
+  // 主题兼容
+  pageInfo.chartList = themeToSetting(pageInfo.chartList, pageInfo.pageConfig.customTheme)
   // 存储修改后的配置
   localStorage.setItem('pageInfo', JSON.stringify(pageInfo))
   return pageInfo

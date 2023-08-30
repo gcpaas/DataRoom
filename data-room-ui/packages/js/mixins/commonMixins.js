@@ -4,11 +4,13 @@
  * @Author: xing.heng
  */
 // import _ from 'lodash'
-import cloneDeep from 'lodash/cloneDeep'
 import { mapMutations, mapState } from 'vuex'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import { getChatInfo, getUpdateChartInfo } from '../api/bigScreenApi'
 import axiosFormatting from '../../js/utils/httpParamsFormatting'
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+import cloneDeep from 'lodash/cloneDeep'
+
 export default {
   data () {
     return {
@@ -19,7 +21,9 @@ export default {
   },
   computed: {
     ...mapState({
-      pageCode: state => state.bigScreen.pageInfo.code
+      pageCode: state => state.bigScreen.pageInfo.code,
+      customTheme: state => state.bigScreen.pageInfo.pageConfig.customTheme,
+      activeCode: state => state.bigScreen.activeCode
     }),
     isPreview () {
       return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
@@ -33,7 +37,8 @@ export default {
   },
   methods: {
     ...mapMutations({
-      changeChartConfig: 'bigScreen/changeChartConfig'
+      changeChartConfig: 'bigScreen/changeChartConfig',
+      changeActiveItemConfig: 'bigScreen/changeActiveItemConfig'
     }),
     /**
      * 初始化组件
@@ -95,14 +100,14 @@ export default {
                 const scriptMethod = new Function(scriptAfterReplacement)
                 _res.data = scriptMethod()
               } catch (error) {
-                console.error('JS数据集脚本执行失败', error)
+                console.info('JS数据集脚本执行失败', error)
               }
             }
           }
           config = this.dataFormatting(config, _res)
           this.changeChartConfig(config)
         }).catch((err) => {
-          console.error(err)
+          console.info(err)
         }).finally(() => {
           resolve(config)
         })
@@ -146,7 +151,7 @@ export default {
                 const scriptMethod = new Function(scriptAfterReplacement)
                 _res.data = scriptMethod()
               } catch (error) {
-                console.error('JS数据集脚本执行失败', error)
+                console.info('JS数据集脚本执行失败', error)
               }
             }
           }
@@ -160,7 +165,7 @@ export default {
             }
           }
         }).catch(err => {
-          console.error(err)
+          console.info(err)
         }).finally(() => {
           resolve(config)
         })
@@ -184,8 +189,13 @@ export default {
       // 覆盖
     },
     changeStyle (config) {
-      // this.changeChartConfig(config)
-      // return config
+      config = { ...this.config, ...config }
+      // 样式改变时更新主题配置
+      config.theme = settingToTheme(cloneDeep(config), this.customTheme)
+      this.changeChartConfig(config)
+      if (config.code === this.activeCode) {
+        this.changeActiveItemConfig(config)
+      }
     },
     // 缓存组件数据监听
     watchCacheData () {

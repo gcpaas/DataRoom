@@ -19,6 +19,8 @@ import remoteVueLoader from 'remote-vue-loader'
 import { mapMutations, mapState } from 'vuex'
 import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
 import { getBizComponentInfo } from 'data-room-ui/js/api/bigScreenApi'
+import {settingToTheme} from "data-room-ui/js/utils/themeFormatting";
+import _ from "lodash";
 export default {
   name: 'LcdpRemoteComponent',
   mixins: [linkageMixins, commonMixins],
@@ -41,6 +43,16 @@ export default {
     return {
       loading: false,
       remoteComponent: null
+    }
+  },
+  watch: {
+    // 监听主题变化手动触发组件配置更新
+    'config.option.theme': {
+      handler (val) {
+        if (val) {
+          this.changeStyle(this.config)
+        }
+      }
     }
   },
   created () {
@@ -126,6 +138,9 @@ export default {
         ...option
       }
       this.config.setting = setting
+      // 获取到setting后将其转化为theme
+      this.config.theme = settingToTheme(this.config, this.customTheme)
+
       return {
         option,
         setting
@@ -176,13 +191,15 @@ export default {
         config.option.data = data
       } else {
         // 数据返回失败则赋前端的模拟数据
-        config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data
+        config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data || config?.option?.data
       }
       return config
     },
     // 组件的样式改变，返回改变后的config
     changeStyle (config) {
       config = { ...this.config, ...config }
+      // 样式改变时更新主题配置
+      config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
       config = this.transformSettingToOption(config, 'custom')
       // 这里定义了option和setting是为了保证在执行eval时,optionHandler、dataHandler里面可能会用到，
       const option = config.option
@@ -199,6 +216,10 @@ export default {
         this.chart.update(config.option)
       }
       this.changeChartConfig(config)
+      if (config.code === this.activeCode) {
+        this.changeActiveItemConfig(config)
+      }
+      // this.changeChartConfig(config)
       // 在this.$refs['remoteComponent' + config.code]这个实例里判断是否存在customStyle方法，如果存在则执行
       const componentInstance = this.$refs['remoteComponent' + config.code]
       if (componentInstance && componentInstance.$options.methods && componentInstance.$options.methods.customStyle) {

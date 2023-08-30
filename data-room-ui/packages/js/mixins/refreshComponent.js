@@ -1,3 +1,6 @@
+import { mapMutations, mapState } from 'vuex'
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+import cloneDeep from "lodash/cloneDeep";
 const refreshComponentMixin = {
   data () {
     return {
@@ -5,6 +8,10 @@ const refreshComponentMixin = {
     }
   },
   computed: {
+    ...mapState({
+      customTheme: state => state.bigScreen.pageInfo.pageConfig.customTheme,
+      activeCode: state => state.bigScreen.activeCode
+    }),
     Data () {
       return JSON.parse(JSON.stringify(this.config))
     }
@@ -22,8 +29,19 @@ const refreshComponentMixin = {
     }
   },
   methods: {
-    // 由于静态组件没有混入公共函数，所以需要定义一个changeStyle方法，以免报错
-    changeStyle () {
+    ...mapMutations({
+      changeChartConfig: 'bigScreen/changeChartConfig',
+      changeActiveItemConfig: 'bigScreen/changeActiveItemConfig'
+    }),
+    // 修改样式
+    changeStyle (config) {
+      config = { ...this.config, ...config }
+      // 样式改变时更新主题配置
+      config.theme = settingToTheme(cloneDeep(config), this.customTheme)
+      this.changeChartConfig(config)
+      if (config.code === this.activeCode) {
+        this.changeActiveItemConfig(config)
+      }
     }
   }
 }

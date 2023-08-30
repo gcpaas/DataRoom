@@ -263,7 +263,7 @@ export default {
             h: this.type === 'component' ? 768 : 1080,
             bgColor: '#151a26',
             opacity: 100,
-            customTheme: 'auto',
+            customTheme: 'dark',
             bg: null,
             fitMode: 'auto'
           })

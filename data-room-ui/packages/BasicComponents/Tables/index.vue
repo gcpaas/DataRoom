@@ -3,6 +3,9 @@
     style="width: 100%;height: 100%"
     class="bs-design-wrap "
   >
+    <!-- <span style="color: aliceblue;font-size: 40px;">
+      {{ columnData }}
+    </span> -->
     <!-- :border="this.config.customize.border" -->
     <el-table
       :id="config.code"
@@ -18,21 +21,23 @@
       @row-click="rowClick"
     >
       <el-table-column
-        v-for="(col, index) in config.option.columnData"
+        v-for="(col,index) in columnData"
         :key="index"
         show-overflow-tooltip
-        :label="col.remark"
         :prop="col.alias"
+        :label="getLabel(col)"
         align="center"
       />
     </el-table>
   </div>
 </template>
 <script>
+import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import cloneDeep from 'lodash/cloneDeep'
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
 export default {
   name: 'TableChart',
   mixins: [paramsMixins, commonMixins, linkageMixins],
@@ -48,13 +53,16 @@ export default {
   },
   data () {
     return {
-      updateKey: '',
+      updateKey: 0,
       headerCellStyleObj: {
         backgroundColor: 'transparent'
       },
       cellStyleObj: {
         backgroundColor: 'transparent'
-      }
+      },
+      columnData: {},
+      // 第一次获取
+      isInit: true
     }
   },
   computed: {
@@ -86,35 +94,57 @@ export default {
         fontSize: this.config.customize.headerFontSize + 'px' || '14px'
       }
       return style
-    },
-    cellStyle () {
-      const bodyBackgroundColor = {
-        dark: '#141414',
-        light: '#ffffff',
-        auto: 'transparent'
-      }
-      const style = {
-        backgroundColor:
-          this.customTheme !== 'custom'
-            ? this.config.customize.bodyBackgroundColor || bodyBackgroundColor[this.customTheme]
-            : this.headerCellStyleObj.backgroundColor,
-        color:
-          this.customTheme === 'light'
-            ? '#000000'
-            : this.config.customize.bodyFontColor || '#ffffff',
-        fontSize: this.config.customize.bodyFontSize + 'px' || '14px',
-        border: `solid 1px ${this.customTheme !== 'custom'
-          ? this.config.customize.bodyBackgroundColor || bodyBackgroundColor[this.customTheme]
-          : this.headerCellStyleObj.backgroundColor}`
-      }
-      return style
+    }
+  },
+  watch: {
+    activeItemConfig (val) {
+      console.dir(val)
     }
   },
   created () { },
   mounted () {
     this.chartInit()
+    // this.config.option?.columnData 对象的key 根据 list 对应的key 来排序
+    EventBus.$on('dragSelectChange', (val) => {
+      if (val.length > 0) {
+        const sortedColumnData = {}
+        const columnData = cloneDeep(this.config.option?.columnData)
+        val.forEach((item, index) => {
+          sortedColumnData[item] = columnData[item]
+        })
+        this.columnData = sortedColumnData
+        this.updateKey = new Date().getTime()
+      }
+    })
+  },
+  beforeDestroy () {
+    EventBus.$off('dragSelectChange')
   },
   methods: {
+
+    cellStyle ({ row, column, rowIndex, columnIndex }) {
+      const bodyBackgroundColor = {
+        dark: '#141414',
+        light: '#ffffff',
+        auto: 'transparent'
+      }
+      const initColor = this.customTheme === 'light' ? '#000000' : '#ffffff'
+      const style = {
+        backgroundColor: '',
+        color: this.config.customize.bodyFontColor || initColor,
+        fontSize: this.config.customize.bodyFontSize + 'px' || '14px'
+      }
+      // 如果设置了奇偶行的背景颜色，则以奇偶行的背景颜色为主
+      if (rowIndex % 2 && this.config.customize.evenRowBackgroundColor) {
+        style.backgroundColor = this.config.customize.evenRowBackgroundColor
+      } else if (!(rowIndex % 2) && this.config.customize.oddRowBackgroundColor) {
+        style.backgroundColor = this.config.customize.oddRowBackgroundColor
+      } else {
+        style.backgroundColor = this.config.customize.bodyBackgroundColor || bodyBackgroundColor[this.customTheme]
+      }
+      return style
+    },
+
     rowStyle ({ row, rowIndex }) {
       if (rowIndex % 2) {
         return {
@@ -130,16 +160,23 @@ export default {
     rowClick (row) {
       this.linkage(row)
     },
-    changeStyle (oldConfig) {
-      const config = cloneDeep(oldConfig)
-      if (this.customTheme === 'custom') {
-        this.headerCellStyleToObj()
-        this.cellStyleToObj()
+    changeStyle (config) {
+      config = { ...this.config, ...config }
+      // 样式改变时更新主题配置
+      config.theme = settingToTheme(cloneDeep(config), this.customTheme)
+      this.changeChartConfig(config)
+      if (config.code === this.activeCode) {
+        this.changeActiveItemConfig(config)
       }
-      if (this.customTheme === 'custom') {
-        this.headerCellStyleToObj()
-        this.cellStyleToObj()
-      }
+      // const config = cloneDeep(oldConfig)
+      // if (this.customTheme === 'custom') {
+      //   this.headerCellStyleToObj()
+      //   this.cellStyleToObj()
+      // }
+      // if (this.customTheme === 'custom') {
+      //   this.headerCellStyleToObj()
+      //   this.cellStyleToObj()
+      // }
       // if (config.customize.stripe) {
       //   const trs = document
       //     .getElementById(this.config.code)
@@ -173,32 +210,39 @@ export default {
       // // });
       // }
       // this.chartInit();
-      if (config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor) {
-        config.customize.oddRowBackgroundColor = config.customize.bodyBackgroundColor
-      } else if (!config.customize.evenRowBackgroundColor && config.customize.oddRowBackgroundColor) {
-        config.customize.evenRowBackgroundColor = config.customize.bodyBackgroundColor
-      } else if (!(!config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor)) {
-        config.customize.bodyBackgroundColor = ''
-      }
-      this.updateKey = new Date().getTime()
+      // if (config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor) {
+      //   config.customize.oddRowBackgroundColor = config.customize.bodyBackgroundColor
+      // } else if (!config.customize.evenRowBackgroundColor && config.customize.oddRowBackgroundColor) {
+      //   config.customize.evenRowBackgroundColor = config.customize.bodyBackgroundColor
+      // } else if (!(!config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor)) {
+      //   config.customize.bodyBackgroundColor = ''
+      // }
+      // this.updateKey = new Date().getTime()
       return config
     },
     dataFormatting (config, data) {
       config.option.tableData = data?.data
       const filteredData = {}
       const columnData = data?.columnData || {}
+      const dimensionFieldList = config.dataSource.dimensionFieldList || []
       if (config.dataSource.dimensionFieldList && config.dataSource.dimensionFieldList.length > 0) {
-        Object?.keys(columnData).forEach(key => {
+        // 根据config.dataSource.dimensionFieldList 数据的顺序将表格列顺序调整，使其初始化的时候，顺序和组件配置面板中的一致
+        const sortedColumnData = {}
+        dimensionFieldList.forEach((item, index) => {
+          sortedColumnData[item] = columnData[item]
+        })
+        Object?.keys(sortedColumnData).forEach(key => {
           if (
-            config.dataSource.dimensionFieldList.includes(columnData[key].alias)
+            config.dataSource.dimensionFieldList.includes(sortedColumnData[key]?.alias)
           ) {
-            filteredData[key] = columnData[key]
+            filteredData[key] = sortedColumnData[key]
           }
         })
         config.option.columnData = filteredData
       } else {
         config.option.columnData = columnData
       }
+      this.columnData = cloneDeep(config.option.columnData)
       this.updateKey = new Date().getTime()
       return config
     },
@@ -245,6 +289,9 @@ export default {
       } else {
         this.cellStyleObj = {}
       }
+    },
+    getLabel (data) {
+      return data.remark || data.originalColumn
     }
   }
 }

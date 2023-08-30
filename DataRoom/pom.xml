@@ -60,7 +60,7 @@
         <clickhouse.version>0.3.2</clickhouse.version>
         <commons-io.version>2.2</commons-io.version>
         <okhttp3.version>4.9.1</okhttp3.version>
-        <dataset.core.version>1.0.1.2023081101.Alpha</dataset.core.version>
+        <dataset.core.version>1.0.1.2023082801.Alpha</dataset.core.version>
     </properties>
 
     <dependencies>

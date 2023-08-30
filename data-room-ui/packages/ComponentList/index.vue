@@ -391,7 +391,7 @@ export default {
         .catch()
     },
     copy (screen) {
-      const url = this.catalogInfo === 'component' ? `/bigScreen/design/copy/${screen.code}` : `/Component/copy/${screen.code}`
+      const url = this.catalogInfo === 'component' ? `/bigScreen/design/copy/${screen.code}` : `/bigScreen/bizComponent/copy/${screen.code}`
       this.$confirm('确定复制该组件', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
