@@ -1,0 +1,382 @@
+<template>
+  <div class="bs-setting-wrap">
+    <el-form
+      ref="form"
+      :model="config"
+      label-width="90px"
+      label-position="left"
+      class="setting-body bs-el-form"
+    >
+      <SettingTitle>标题</SettingTitle>
+      <div class="lc-field-body">
+        <el-form-item
+          label="标题"
+          label-width="100px"
+        >
+          <el-input
+            v-model="config.title"
+            placeholder="请输入标题"
+            clearable
+          />
+        </el-form-item>
+      </div>
+      <SettingTitle>位置</SettingTitle>
+      <div class="lc-field-body">
+        <PosWhSetting :config="config" />
+      </div>
+      <SettingTitle>基础</SettingTitle>
+      <div class="lc-field-body">
+        <el-form-item
+          label="是否显示地名"
+          label-width="100px"
+        >
+          <el-switch
+            v-model="config.customize.mapName"
+            class="bs-el-switch"
+            active-color="#007aff"
+          />
+        </el-form-item>
+        <el-form-item
+          label="地图级别"
+          label-width="100px"
+        >
+          <el-select
+            v-model="config.customize.level"
+            popper-class="bs-el-select"
+            class="bs-el-select"
+            @change="changeLevel()"
+          >
+           <el-option
+              label="世界"
+              value="world"
+            />
+            <el-option
+              label="国家"
+              value="country"
+            />
+            <el-option
+              label="省份"
+              value="province"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.level == 'province'"
+          label="地图显示区域"
+          label-width="100px"
+        >
+          <el-select
+            v-model="config.customize.dataMap"
+            popper-class="bs-el-select"
+            class="bs-el-select"
+          >
+            <el-option
+              v-for="map in mapList"
+              :key="map.name"
+              :label="map.name"
+              :value="map.url"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.level !== 'world'"
+          label="是否开启下钻"
+          label-width="100px"
+        >
+          <el-switch
+            v-model="config.customize.down"
+            class="bs-el-switch"
+            active-color="#007aff"
+          />
+        </el-form-item>
+        <el-form-item
+          label="地图分割线颜色"
+          label-width="100px"
+        >
+          <ColorPicker
+            v-model="config.customize.mapLineColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="地图分割块颜色"
+          label-width="100px"
+        >
+          <ColorPicker
+            v-model="config.customize.areaColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="悬浮框背景色"
+          label-width="100px"
+        >
+          <ColorPicker
+            v-model="config.customize.tooltipBackgroundColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="悬浮框边框色"
+          label-width="100px"
+        >
+          <ColorPicker
+            v-model="config.customize.borderColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="悬浮框字体颜色"
+          label-width="100px"
+        >
+          <ColorPicker
+            v-model="config.customize.fontColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="线悬浮框内容"
+          label-width="100px"
+        >
+          <el-input :rows="8" v-model="config.customize.lineFormatter" type="textarea"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="点悬浮框内容"
+          label-width="100px"
+        >
+          <el-input :rows="4" v-model="config.customize.scatterFormatter" type="textarea"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="轨迹样式"
+          label-width="100px"
+        >
+           <el-select
+            v-model="config.customize.symbol"
+            popper-class="bs-el-select"
+            class="bs-el-select"
+          >
+            <el-option
+              v-for="symbol in symbolList"
+              :key="symbol.name"
+              :label="symbol.name"
+              :value="symbol.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="轨迹颜色"
+          label-width="100px"
+        >
+            <ColorPicker
+            v-model="config.customize.symbolColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="轨迹大小"
+          label-width="100px"
+        >
+          <el-input-number
+            v-model="config.customize.symbolSize"
+            placeholder="请输入轨迹大小"
+            controls-position="right"
+            :step="1"
+          />
+        </el-form-item>
+        <el-form-item
+          label="普通点颜色"
+          label-width="100px"
+        >
+            <ColorPicker
+            v-model="config.customize.scatterColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="中心点颜色"
+          label-width="100px"
+        >
+            <ColorPicker
+            v-model="config.customize.scatterCenterColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="是否开启筛选"
+          label-width="100px"
+        >
+          <el-switch
+            v-model="config.customize.visual"
+            class="bs-el-switch"
+            active-color="#007aff"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.visual"
+          label="数值范围"
+          label-width="100px"
+        >
+          <el-input-number
+            v-model="config.customize.range[0]"
+            placeholder="请输入最小值"
+            controls-position="right"
+            :step="1"
+          />
+          -
+          <el-input-number
+            v-model="config.customize.range[1]"
+            controls-position="right"
+            placeholder="请输入最大值"
+            :step="1"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.visual"
+          label="配色方案"
+          label-width="100px"
+        >
+          <color-select
+            v-model="config.customize.rangeColor"
+            @update="updateColorScheme"
+          />
+          <div
+            style="
+                display: flex;
+                align-items: center;
+                height: 42px;
+                flex-wrap: wrap;
+              "
+          >
+            <el-color-picker
+              v-for="(colorItem, index) in colors"
+              :key="index"
+              v-model="config.customize.rangeColor[index]"
+              show-alpha
+              popper-class="bs-el-color-picker"
+              class="start-color bs-el-color-picker"
+            />
+            <span
+              class="el-icon-circle-plus-outline"
+              style="color: #007aff; font-size: 20px"
+              @click="addColor"
+            />
+            <span
+              v-if="colors.length"
+              class="el-icon-remove-outline"
+              style="color: #ea0b30; font-size: 20px"
+              @click="delColor"
+            />
+          </div>
+        </el-form-item>
+      </div>
+    </el-form>
+  </div>
+</template>
+<script>
+import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
+import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
+import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
+import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+export default {
+  name: 'BarSetting',
+  components: {
+    ColorSelect,
+    ColorPicker,
+    PosWhSetting,
+    SettingTitle
+  },
+  mixins: [chartSettingMixins],
+  props: {},
+  data () {
+    return {
+      mapList: [],
+      predefineThemeColors: [
+        '#007aff',
+        '#1aa97b',
+        '#ff4d53',
+        '#1890FF',
+        '#DF0E1B',
+        '#0086CC',
+        '#2B74CF',
+        '#00BC9D',
+        '#ED7D32'
+      ],
+      symbolList:[
+        {
+          name:'箭头',
+          value:'arrow'
+        }
+      ]
+    }
+  },
+  computed: {
+    config: {
+      get () {
+        return this.$store.state.bigScreen.activeItemConfig
+      },
+      set (val) {
+        this.$store.state.bigScreen.activeItemConfig = val
+      }
+    }
+  },
+  watch: {
+    'config.customize.level': {
+      handler (val) {
+        this.getMapList()
+      }
+    }
+  },
+  mounted () {
+    this.getMapList()
+  },
+  methods: {
+    getMapList () {
+      this.$dataRoomAxios.get(`${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/design/map/list/${this.config.customize.level}`).then((res) => {
+        this.mapList = res
+      })
+    },
+    changeLevel () {
+      if (this.config.customize.level === 'country') {
+        this.config.customize.dataMap = '中华人民共和国.json'
+      } else if (this.config.customize.level === 'province') {
+        this.getMapList()
+        this.config.customize.dataMap = '安徽省.json'
+      }else{
+        this.config.customize.down=false
+      }
+    },
+    delColor () {
+      this.colors = []
+      this.config.customize.rangeColor = []
+    },
+    addColor () {
+      this.colors.push('')
+    },
+    updateColorScheme (colors) {
+      this.colors = [...colors]
+      this.config.customize.rangeColor = [...colors]
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+@import '../../assets/style/settingWrap.scss';
+@import '../../assets/style/bsTheme.scss';
+// 筛选条件的按钮样式
+.add-filter-box {
+  position: relative;
+  .add-filter {
+    margin-left: 90px;
+    margin-bottom: 10px;
+  }
+  .add-filter-btn {
+    position: absolute;
+    top: 0;
+  }
+}
+.lc-field-body {
+  padding: 12px 16px;
+}
+</style>

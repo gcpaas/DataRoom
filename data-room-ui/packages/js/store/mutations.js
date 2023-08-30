@@ -66,7 +66,7 @@ export default {
     state.pageLoading = booleanValue
   },
   // 改变当前组件配置
-  changeChartConfig (state, itemConfig) {
+  changeChartConfig(state, itemConfig) {
     const index = state.pageInfo.chartList.findIndex(
       item => item.code === itemConfig.code
     )

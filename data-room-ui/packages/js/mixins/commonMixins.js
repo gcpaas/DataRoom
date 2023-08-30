@@ -26,7 +26,7 @@ export default {
     }
   },
   mounted () {
-    if (!['tables'].includes(this.config.type)) {
+    if (!['tables', 'flyMap', 'map'].includes(this.config.type)) {
       this.chartInit()
     }
     this.watchCacheData()
