@@ -176,7 +176,7 @@ export default {
   color: #000000;
 }
 .dark-theme {
-  background-color: #000000;
+  background-color: transparent;
   color: #ffffff;
 }
 .auto-theme {

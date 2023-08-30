@@ -41,13 +41,13 @@ const customConfig = {
     // 表格头部背景颜色
     headerBackgroundColor: '#232832',
     // 表格头部字体颜色
-    headerFontColor: '#ffffff',
+    headerFontColor: '#fff',
     // 表格头部字体大小
     headerFontSize: 14,
     // 表格主体背景颜色
     bodyBackgroundColor: '',
     // 表格主体字体颜色
-    bodyFontColor: '#ffffff',
+    bodyFontColor: 'rgb(155 159 172)',
     // 表格主体字体大小
     bodyFontSize: 14,
     // 表格是否需要斑马纹

@@ -1,5 +1,4 @@
 
-
 /**
 * @Description: 主题设置格式化
 * @author liu.shiyi
@@ -25,16 +24,16 @@ export function settingToTheme (config, type) {
       if (config.customize && Object.keys(config.customize).length) {
         // customize属性存在层级
         for (const item in config.customize) {
-          const value = config.customize[item];
-          //如果包含二级属性
-          if (value && typeof value === 'object' &&  Object.keys(value).length){
+          const value = config.customize[item]
+          // 如果包含二级属性
+          if (value && typeof value === 'object' && Object.keys(value).length) {
             // 对于二级属性
             for (const subKey in value) {
-              if (subKey.includes('color') || subKey.includes('Color') || subKey.includes('BGC')){
-                theme[type][`${item}_${subKey}`] = value[subKey];
+              if (subKey.includes('color') || subKey.includes('Color') || subKey.includes('BGC')) {
+                theme[type][`${item}_${subKey}`] = value[subKey]
               }
             }
-          }else{
+          } else {
             // 如果只有一级属性
             if (item.includes('color') || item.includes('Color') || item.includes('BGC')) {
               theme[type][item] = config.customize[item]
@@ -45,7 +44,7 @@ export function settingToTheme (config, type) {
     }
     return theme
   } else {
-    return config?.theme || {dark:{}, light:{}}
+    return config?.theme || { dark: {}, light: {} }
   }
 }
 // 将保存的theme主题设置（颜色）存放到chartList
@@ -53,7 +52,7 @@ export function themeToSetting (chartList, type) {
   // 排除掉主题非暗黑非明亮的情况
   if (['dark', 'light'].includes(type)) {
     chartList.forEach(chart => {
-      chart.option.theme = type
+      chart.option.theme = type === 'dark' ? 'transparent' : 'light'
       if (chart.theme && chart.theme[type]) {
         // 如果是g2组件或者远程组件
         if (['customComponent', 'remoteComponent'].includes(chart.type)) {
@@ -67,24 +66,23 @@ export function themeToSetting (chartList, type) {
         } else {
           // 如果是普通组件
           if (chart.customize && Object.keys(chart.customize).length) {
-            for(let key in chart.theme[type]){
-              const value = chart.theme[type][key];
+            for (const key in chart.theme[type]) {
+              const value = chart.theme[type][key]
               // 如果对应的是二级属性
-                if (key.includes('_')){
-                  const [propertyName, subPropertyName] = key.split('_');
-                  if (!chart.customize[propertyName]) {
-                    chart.customize[propertyName] = {}
-                  }else{
-                      chart.customize[propertyName][subPropertyName] = value;
-                  }
-                }else{
-                  // 对应的一级属性
-                  if (Object.prototype.hasOwnProperty.call(chart.customize, key)) {
-                    // 更新 customize 中对应项的值为 theme 中的属性值
-                    chart.customize[key] = chart.theme[type][key]
-                  }
+              if (key.includes('_')) {
+                const [propertyName, subPropertyName] = key.split('_')
+                if (!chart.customize[propertyName]) {
+                  chart.customize[propertyName] = {}
+                } else {
+                  chart.customize[propertyName][subPropertyName] = value
                 }
-
+              } else {
+                // 对应的一级属性
+                if (Object.prototype.hasOwnProperty.call(chart.customize, key)) {
+                  // 更新 customize 中对应项的值为 theme 中的属性值
+                  chart.customize[key] = chart.theme[type][key]
+                }
+              }
             }
             for (const item in chart.customize) {
               // 检查 obj 中是否存在与 customize 相对应的属性

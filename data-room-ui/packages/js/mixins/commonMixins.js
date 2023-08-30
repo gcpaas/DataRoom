@@ -117,10 +117,20 @@ export default {
      * @description: 更新chart
      * @param {Object} config
      */
-    changeData (config, filterList) {
+    changeData(config, filterList) {
+      const list = config?.paramsList?.map((item) => {
+        if (item.value === '${level}') {
+          return {...item,value:config.customize.level}
+        } else if (item.value === '${name}') {
+          return {...item,value:config.customize.scope}
+        } else {
+          return item
+        }
+      })
       const params = {
         chart: {
           ...config,
+          paramsList:list?[...list]:[],
           option: undefined
         },
         current: 1,

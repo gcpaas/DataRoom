@@ -211,7 +211,7 @@ export default {
   color: #000000;
 }
 .auto-theme{
-  background-color: rgba(0,0,0,0);
+  background-color: transparent;
 }
 
 </style>

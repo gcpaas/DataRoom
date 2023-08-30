@@ -10,33 +10,31 @@
       <span class="logo-text name-span">{{ pageInfo.name }}</span>
     </div>
     <div class="head-btn-group">
-      <el-switch
-        v-model="pageInfo.pageConfig.customTheme"
-        active-text="暗黑"
-        inactive-text="明亮"
-        class="bs-el-switch theme-switch"
-        active-color="#007aff"
-        active-value="dark"
-        inactive-value="light"
-        @change="changeTheme"
-      />
-      <el-tooltip
-        v-for="(mode,index) in alignList"
-        :key="mode.value"
-        popper-class="bs-el-tooltip-dark"
-        effect="dark"
-        :content="mode.label"
-        placement="top"
+      <el-dropdown
+        trigger="click"
+        class="align-list-dropdown"
       >
         <CusBtn
-          class="align-btn"
-          @click="setAlign(mode.value)"
+          type="primary"
         >
-          <icon-svg
-            :name="iconList[index]"
-          />
+          对齐<i class="el-icon-arrow-down el-icon--right" />
         </CusBtn>
-      </el-tooltip>
+        <el-dropdown-menu
+          slot="dropdown"
+          class="align-dropdown-menu"
+        >
+          <el-dropdown-item
+            v-for="(mode,index) in alignList"
+            :key="mode.value"
+            @click.native="setAlign(mode.value)"
+          >
+            <icon-svg
+              style="padding:3px 20px"
+              :name="iconList[index]"
+            />
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
 
       <CusBtn
         :loading="saveAndPreviewLoading"
@@ -600,5 +598,22 @@ export default {
       color: var(--bs-el-color-primary)!important;
     }
   }
+  .align-list-dropdown{
+    color: #ffffff!important;
+  }
+
+}
+// 自定义dropdown的样式
+.align-dropdown-menu{
+  background-color: var(--bs-background-2)!important;
+  border: 1px solid var(--bs-border-1);
+  /deep/ .el-dropdown-menu__item{
+    background-color: var(--bs-background-2)!important;
+    &:hover {
+      color: var(--bs-el-color-primary) !important;
+      background-color: var(--bs-el-background-3) !important;
+    }
+  }
+
 }
 </style>

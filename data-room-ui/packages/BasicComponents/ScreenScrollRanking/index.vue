@@ -6,7 +6,7 @@
     <dv-scroll-ranking-board
       :key="updateKey"
       class="ranking-box"
-      :class="{'light-theme':customTheme === 'light','auto-theme':customTheme =='auto','dark-theme':customTheme =='dark'}"
+      :class="{'light-theme':customTheme === 'light','auto-theme':customTheme =='dark'}"
       :config="option"
       @click="rowClick"
     />
