@@ -319,7 +319,9 @@ export default {
             group: randomStr,
             code: randomStr + chart.code
           }
-          this.$refs.Render.addChart(newChart, { x: chart.x, y: chart.y }, true)
+          // 如果是从组件库中添加的自定义组件，则不需要初始化theme
+          const isComponent = true
+          this.$refs.Render.addChart(newChart, { x: chart.x, y: chart.y }, isComponent)
           this.updateRightVisiable(false)
         })
       })

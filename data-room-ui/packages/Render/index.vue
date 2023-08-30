@@ -306,7 +306,7 @@ export default {
       this.hLine = hLine
     },
     // 新增元素
-    addChart (chart, position) {
+    addChart (chart, position, isComponent) {
       const { left, top } = this.$el.getBoundingClientRect()
       const _chart = !chart.code ? JSON.parse(chart) : chart
       let option = _chart.option
@@ -330,12 +330,12 @@ export default {
         option
       }
       config.key = config.code
-      // TODO:新添加一个组件时应该有默认的两套主题
-      // 先暂时只考虑g2组件
-      // if (['customComponent'].includes(_chart.type)) {
-      config.theme = settingToTheme(config, 'dark')
-      config.theme = settingToTheme(config, 'light')
-      // }
+      // isComponent = false 从左侧新增时需要初始化theme的内容
+      // isComponent = true从组件库添加自定义组件时不用初始化
+      if (!isComponent) {
+        config.theme = settingToTheme(config, 'dark')
+        config.theme = settingToTheme(config, 'light')
+      }
       this.addItem(config)
     },
     addSourceChart (chart, position) {
