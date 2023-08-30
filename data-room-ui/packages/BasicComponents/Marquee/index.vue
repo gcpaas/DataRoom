@@ -124,7 +124,7 @@ export default {
       // 组件内部数据
       innerData: null,
       // 音频播放
-      aduio: null,
+      audio: null,
       // 语音播报
       speech: null,
       // 语音播报定时器
@@ -184,14 +184,14 @@ export default {
       if (this.innerData) {
         if (config.customize.voiceBroadcast) {
           if (this.innerData.dataSource.businessKey && this.innerData.option.data[this.innerData.dataSource.metricField]) {
-            // 如果aduio存在，先销毁这个实例，或者替换它的URL
-            if (this.aduio) {
-              this.aduio.pause()
-              this.aduio = null
+            // 如果audio存在，先销毁这个实例，或者替换它的URL
+            if (this.audio) {
+              this.audio.pause()
+              this.audio = null
             }
-            this.aduio = new Audio()
-            this.aduio.src = this.innerData.option.data[this.innerData.dataSource.metricField]
-            this.aduio.play()
+            this.audio = new Audio()
+            this.audio.src = this.innerData.option.data[this.innerData.dataSource.metricField]
+            this.audio.play()
           } else if (config.customize.title) {
             this.speechBroadcast(config.customize.title)
             // 根据配置的时间，定时播报，第一次播报后，再定时播报
@@ -203,9 +203,9 @@ export default {
             }
           }
         } else {
-          if (this.aduio) {
-            this.aduio.pause()
-            this.aduio = null
+          if (this.audio) {
+            this.audio.pause()
+            this.audio = null
           }
         }
       } else {
@@ -246,15 +246,15 @@ export default {
     // 监听页面是否可见
     handleVisibilityChange () {
       if (document.visibilityState === 'hidden') {
-        if (this.aduio) {
-          this.aduio.pause()
+        if (this.audio) {
+          this.audio.pause()
         }
         if (this.speech) {
           this.speech.pause()
         }
       } else {
-        if (this.aduio) {
-          this.aduio.play()
+        if (this.audio) {
+          this.audio.play()
         }
         if (this.speech) {
           this.speech.resume()
