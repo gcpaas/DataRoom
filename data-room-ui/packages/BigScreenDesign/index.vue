@@ -9,6 +9,8 @@
       :right-fold="rightVisiable"
       @updateRightVisiable="updateRightVisiable"
       @showPageInfo="showPageInfo"
+      @updateTheme="updateTheme"
+      @changeZoom="changeScreenZoom"
       @empty="empty"
     />
     <div class="drag-wrap">
@@ -53,7 +55,7 @@
             />
           </MouseSelect>
         </SketchDesignRuler>
-        <div class="footer-tools-bar">
+        <!-- <div class="footer-tools-bar">
           <el-slider
             class="bs-slider-wrap"
             :value="zoom"
@@ -75,7 +77,7 @@
               :value="zoom.value"
             />
           </el-select>
-        </div>
+        </div> -->
       </div>
       <!-- 右侧折叠设置面板   -->
       <SettingPanel

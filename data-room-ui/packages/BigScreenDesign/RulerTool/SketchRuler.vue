@@ -191,7 +191,7 @@ export default {
         }
 
         // 30是grid-wrap-box的底部工具栏高度
-        this.innerHeight = screensRect.height - 30
+        this.innerHeight = screensRect.height
         this.innerWidth = screensRect.width
         this.diffX = this.width - screensRect.width
         this.diffY = this.height - screensRect.height
