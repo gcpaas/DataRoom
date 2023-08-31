@@ -15,6 +15,16 @@
           @change="changeTab"
         />
       </div>
+      <a
+        class="fork-me-on-gitee"
+        href="https://gitee.com/gcpaas/DataRoom"
+        target="_blank"
+      >
+        <img
+          src="https://gitee.com/gcpaas/DataRoom/widgets/widget_1.svg?color=007bff"
+          alt="Fork me on Gitee"
+        >
+      </a>
     </header>
     <div class="big-screen-router-view-wrap">
       <keep-alive>
@@ -195,6 +205,16 @@ export default {
   100% {
     background-position: 0 0;
     -webkit-background-clip: text;
+  }
+}
+.fork-me-on-gitee{
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 999;
+  img{
+    width: 120px;
+    height: 120px;
   }
 }
 </style>
