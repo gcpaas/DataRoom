@@ -19,7 +19,7 @@
         <CusBtn
           type="primary"
         >
-          对齐<i class="el-icon-arrow-down el-icon--right" />
+          对齐方式<i class="el-icon-arrow-down el-icon--right" />
         </CusBtn>
         <el-dropdown-menu
           slot="dropdown"
@@ -31,9 +31,10 @@
             @click.native="setAlign(mode.value)"
           >
             <icon-svg
-              style="padding:3px 20px"
+              style="padding:3px 8px"
               :name="iconList[index]"
             />
+            <span style="color: #bcc9d4">{{ mode.label }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -125,7 +126,6 @@ import {
   translateBlobToBase64
 } from 'data-room-ui/js/utils/compressImg'
 import * as imageConversion from 'image-conversion'
-import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
 export default {
   name: 'PageTopSetting',
   components: {
@@ -616,6 +616,7 @@ export default {
     }
   }
   .align-list-dropdown{
+    width: 100px !important;
     color: #ffffff!important;
   }
 
