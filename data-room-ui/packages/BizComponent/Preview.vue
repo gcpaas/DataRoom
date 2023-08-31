@@ -193,7 +193,7 @@ export default {
 
   .remote-preview-inner-wrap {
     position: absolute;
-    height: 100%;
+    // height: 100%;
     width: 100%;
     overflow: auto;
     padding: 20px;

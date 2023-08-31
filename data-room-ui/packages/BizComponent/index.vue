@@ -80,6 +80,11 @@
       </div>
       <div class="bs-custom-component-content-preview">
         <div class="bs-preview-inner">
+          <div class="code-tab-header">
+            <div class="code-tab">
+              效果预览
+            </div>
+          </div>
           <BizComponentPreview
             :vue-content="form.vueContent"
             :setting-content="form.settingContent"
@@ -230,14 +235,27 @@ export default {
       }
     },
     backManagement () {
-      this.$router.push({ path: window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components' })
-      const data = { componentsManagementType: 'bizComponent' }
-      this.$router.app.$options.globalData = data // 将数据存储在全局变量中
+      // 给出一个确认框提示，提示如下确定返回主页面吗？未保存的配置将会丢失。3个按钮 ：  留在页面 、离开页面、保存后离开页面
+      this.$confirm('确定返回主页面吗？未保存的配置将会丢失。', '提示', {
+        confirmButtonText: '保存后离开页面',
+        cancelButtonText: '离开页面',
+        cancelButtonClass: 'cancel-btn',
+        cancelButtonColor: '#FF6F6F',
+        showCancelButton: true,
+        type: 'warning',
+        customClass: 'bs-el-message-box'
+      }).then(() => {
+        this.save(true)
+      }).catch(() => {
+        this.pageJump()
+      })
     },
-    save () {
+    save (pageJump = false) {
       this.loading = true
-      const node = document.querySelector('.bs-preview-inner')
-      toJpeg(node, { quality: 0.2 })
+      const node = document.querySelector('.remote-preview-inner-wrap')
+      // 获取node下的第一个子节点
+      const childrenNode = node.children[0]
+      toJpeg(childrenNode, { quality: 0.2 })
         .then((dataUrl) => {
           const that = this
           if (showSize(dataUrl) > 200) {
@@ -255,6 +273,10 @@ export default {
                   updateBizComponent(this.form)
                     .then((res) => {
                       that.$message.success('保存成功')
+                      console.log(pageJump)
+                      if (pageJump) {
+                        this.pageJump()
+                      }
                     })
                     .finally(() => {
                       that.loading = false
@@ -265,7 +287,11 @@ export default {
             this.form.coverPicture = dataUrl
             updateBizComponent(this.form)
               .then(() => {
+                console.log(1122)
                 this.$message.success('保存成功')
+                if (pageJump) {
+                  this.pageJump()
+                }
               })
               .finally(() => {
                 this.loading = false
@@ -278,8 +304,10 @@ export default {
     },
     createdImg () {
       this.loading = true
-      const node = document.querySelector('.bs-preview-inner')
-      toPng(node)
+      const node = document.querySelector('.remote-preview-inner-wrap')
+      // 获取node下的第一个子节点
+      const childrenNode = node.children[0]
+      toPng(childrenNode)
         .then((dataUrl) => {
           const link = document.createElement('a')
           link.download = `${this.form.name}.png`
@@ -294,6 +322,11 @@ export default {
           this.$message.warning('出现未知错误，请重试')
           this.loading = false
         })
+    },
+    pageJump () {
+      this.$router.push({ path: window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components' })
+      const data = { componentsManagementType: 'bizComponent' }
+      this.$router.app.$options.globalData = data // 将数据存储在全局变量中
     }
   }
 }
@@ -410,6 +443,17 @@ export default {
         height: 100%;
         background: var(--bs-background-1);
         position: relative;
+        .code-tab-header{
+          height: 40px;
+          background-color: var(--bs-background-2);
+          line-height: 40px;
+          .code-tab{
+            width: 120px;
+            height:40px;
+            text-align: center;
+            background-color: var(--bs-background-1);
+          }
+        }
       }
     }
   }
