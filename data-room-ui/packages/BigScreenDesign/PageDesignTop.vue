@@ -17,7 +17,7 @@
         <CusBtn
           type="primary"
         >
-          对齐<i class="el-icon-arrow-down el-icon--right" />
+          对齐方式<i class="el-icon-arrow-down el-icon--right" />
         </CusBtn>
         <el-dropdown-menu
           slot="dropdown"
@@ -32,6 +32,7 @@
               style="padding:3px 20px"
               :name="iconList[index]"
             />
+            <span style="color: #ffffff">{{ mode.label }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -121,7 +122,6 @@ import {
   translateBlobToBase64
 } from 'data-room-ui/js/utils/compressImg'
 import * as imageConversion from 'image-conversion'
-import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
 export default {
   name: 'PageTopSetting',
   components: {
@@ -218,11 +218,6 @@ export default {
       undoTimeLine: 'bigScreen/undoTimeLine',
       saveTimeLine: 'bigScreen/saveTimeLine'
     }),
-    // 切换主题
-    changeTheme (val) {
-      // 调取每个组件内部切换主题的方法
-      this.$emit('updateTheme', val)
-    },
     setAlign (command) {
       const pageInfo = cloneDeep(this.pageInfo)
       // 获取所有选中的组件
@@ -599,6 +594,7 @@ export default {
     }
   }
   .align-list-dropdown{
+    width: 124px !important;
     color: #ffffff!important;
   }
 
@@ -608,6 +604,7 @@ export default {
   background-color: var(--bs-background-2)!important;
   border: 1px solid var(--bs-border-1);
   /deep/ .el-dropdown-menu__item{
+    padding: 7px 10px!important;
     background-color: var(--bs-background-2)!important;
     &:hover {
       color: var(--bs-el-color-primary) !important;
