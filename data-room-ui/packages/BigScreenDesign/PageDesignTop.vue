@@ -5,11 +5,13 @@
         class="menu-img"
         src="../BigScreenDesign/images/app.png"
         alt="返回"
-        @click="backManagement"
+        @click="goBackManage"
       >
       <span class="logo-text name-span">{{ pageInfo.name }}</span>
     </div>
     <div class="head-btn-group">
+      <span style="margin-right:8px;font-size:12px">缩放比例</span>
+      <el-input-number style="margin-right:20px" :value="zoom" @change="changeZoom" :min="1" :max="100" label="描述文字"></el-input-number>
       <el-dropdown
         trigger="click"
         class="align-list-dropdown"
@@ -17,7 +19,7 @@
         <CusBtn
           type="primary"
         >
-          对齐<i class="el-icon-arrow-down el-icon--right" />
+          对齐方式<i class="el-icon-arrow-down el-icon--right" />
         </CusBtn>
         <el-dropdown-menu
           slot="dropdown"
@@ -29,9 +31,10 @@
             @click.native="setAlign(mode.value)"
           >
             <icon-svg
-              style="padding:3px 20px"
+              style="padding:3px 8px"
               :name="iconList[index]"
             />
+            <span style="color: #bcc9d4">{{ mode.label }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -96,6 +99,7 @@
       :page-info="pageInfo"
       @replaceItByTemplate="replaceItByTemplate"
     />
+    <CloseDialog ref="CloseDialog" @back="backManagement" @backSave="backSave" />
     <AssignDialog ref="AssignDialog" />
     <HistoryList ref="HistoryList" />
   </div>
@@ -111,6 +115,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import uniqBy from 'lodash/uniqBy'
 import { stringifyObjectFunctions } from 'data-room-ui/js/utils/evalFunctions'
 import AssignDialog from 'data-room-ui/BigScreenDesign/AssignDialog/index.vue'
+import CloseDialog from 'data-room-ui/BigScreenDesign/CloseDialog/index.vue'
 import HistoryList from 'data-room-ui/BigScreenDesign/HistoryList/index.vue'
 import CusBtn from './BtnLoading'
 import icons from 'data-room-ui/assets/images/alignIcon/export'
@@ -121,7 +126,6 @@ import {
   translateBlobToBase64
 } from 'data-room-ui/js/utils/compressImg'
 import * as imageConversion from 'image-conversion'
-import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
 export default {
   name: 'PageTopSetting',
   components: {
@@ -129,7 +133,8 @@ export default {
     ChooseTemplateDialog,
     AssignDialog,
     CusBtn,
-    HistoryList
+    HistoryList,
+    CloseDialog
   },
   props: {
     code: {
@@ -189,7 +194,8 @@ export default {
       pageInfo: (state) => state.bigScreen.pageInfo,
       timelineStore: (state) => state.bigScreen.timelineStore,
       currentTimeLine: (state) => state.bigScreen.currentTimeLine,
-      activeCodes: state => state.bigScreen.activeCodes
+      activeCodes: state => state.bigScreen.activeCodes,
+      zoom: (state) => state.bigScreen.zoom,
     }),
     pageCode () {
       return this.$route.query.code || this.code
@@ -218,6 +224,10 @@ export default {
       undoTimeLine: 'bigScreen/undoTimeLine',
       saveTimeLine: 'bigScreen/saveTimeLine'
     }),
+    changeZoom(val){
+      this.$emit('changeZoom', val)
+      // console.log(val)
+    },
     // 切换主题
     changeTheme (val) {
       // 调取每个组件内部切换主题的方法
@@ -322,6 +332,13 @@ export default {
         const value2 = obj2[property]
         return value1 - value2 // 升序
       }
+    },
+    goBackManage(){
+      this.$refs.CloseDialog.init()
+    },
+    async backSave(){
+      await this.save()
+      this.backManagement()
     },
     backManagement () {
       this.$router.push({ path: this.pageInfo.type === 'component' ? (window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components') : (window.BS_CONFIG?.routers?.pageManagementUrl || '/home') })
@@ -599,6 +616,7 @@ export default {
     }
   }
   .align-list-dropdown{
+    width: 100px !important;
     color: #ffffff!important;
   }
 
@@ -615,5 +633,14 @@ export default {
     }
   }
 
+}
+::v-deep .el-input__inner,
+::v-deep .el-color-picker__color-inner,
+::v-deep .el-input-number--mini,
+::v-deep .el-textarea__inner,
+::v-deep .el-input-group__append {
+  background: var(--bs-el-background-1);
+  color: var(--bs-el-text);
+  border: 0 !important;
 }
 </style>
