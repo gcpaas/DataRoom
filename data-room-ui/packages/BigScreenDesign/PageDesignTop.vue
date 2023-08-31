@@ -462,7 +462,7 @@ export default {
       const newChartList = chartList?.map((chart) => {
         // 如果是自定义组件，需要将option转换为json字符串，因为其中可能有函数
         if (['customComponent', 'remoteComponent'].includes(chart.type)) {
-          chart.option.data = []
+          // chart.option.data = []
           chart.option = stringifyObjectFunctions(chart.option)
         }
         return chart

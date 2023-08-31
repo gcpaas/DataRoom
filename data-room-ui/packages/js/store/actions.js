@@ -85,7 +85,7 @@ export function handleResData (data) {
       chart.option = stringToFunction(chart.option)
       // 如果是自定义组件，且没配数据集，就给前端的模拟数据
       if (!chart?.dataSource?.businessKey) {
-        chart.option.data = plotList?.find(plot => plot.name === chart.name)?.option?.data
+        chart.option.data = plotList?.find(plot => plot.name === chart.name)?.option?.data || chart?.option?.data
       }
       // 如果没有版本号，或者版本号修改了则需要进行旧数据兼容
       if ((!chart.version) || (originalConfig && chart.version !== originalConfig?.version)) {
