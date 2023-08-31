@@ -981,7 +981,6 @@ return ElasticsearchDsService.query(host, port, username, password, path, dsl);
     example(type) {
       this.exampleVisible = true
       this.currentExample = this.exampleList[type]
-      console.log(this.currentExample)
     },
     useExample() {
       this.dataForm.script = this.currentExample
