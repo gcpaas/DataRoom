@@ -179,12 +179,17 @@
             class="sql-config"
           >
             <div>
-              <codemirror
-                ref="targetInSql"
-                v-model="dataForm.script"
-                :options="cOptions"
-                style="margin-top: 2px"
-              />
+              <el-button-group>
+                <el-button plain type="primary" class="bs-el-button-default" @click="example('es')">ES案例</el-button>
+              </el-button-group>
+              <div class="code-out">
+                <codemirror
+                  ref="targetInSql"
+                  v-model="dataForm.script"
+                  :options="cOptions"
+                  style="margin-top: 2px"
+                />
+              </div>
             </div>
             <div style="text-align: center; padding: 16px 0;">
               <el-button
@@ -563,6 +568,38 @@
           >确定</el-button>
         </span>
       </el-dialog>
+      <el-dialog
+        title="脚本案例"
+        :visible.sync="exampleVisible"
+        width="1000px"
+        height="1000px"
+        append-to-body
+        :close-on-click-modal="false"
+        class="bs-dialog-wrap bs-el-dialog"
+      >
+        <div class="code-inner">
+          <codemirror
+            ref="example"
+            v-model="currentExample"
+            :options="cOptions"
+            style="margin-top: 2px"
+          />
+        </div>
+
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button
+            class="bs-el-button-default"
+            @click="exampleVisible = false"
+          >关闭</el-button>
+          <el-button
+            type="primary"
+            @click="useExample"
+          >使用该案例</el-button>
+        </span>
+      </el-dialog>
     </el-scrollbar>
   </div>
 </template>
@@ -642,7 +679,38 @@ export default {
       paramsListCopy: [],
       isSet: false, // 参数是否配置状态
       passTest: false,
-      fieldDesc: null // 字段描述
+      fieldDesc: null, // 字段描述
+      exampleVisible: false,
+      currentExample: '',
+      exampleList: {
+        es: `import com.gccloud.dataset.utils.ElasticsearchDsService;
+
+def dsl = '''
+{
+    "query":{
+       "match_all":{}
+    }
+}
+'''
+def host = "127.0.0.1"
+int port = 9200
+def username = "elastic"
+def password = "pwd"
+def path = "/_search"
+
+/**
+ * query方法的参数说明：
+ * host es的ip
+ * port es的端口
+ * username es的用户名，如果没有可以不填
+ * password es的密码，如果没有可以不填
+ * path es的查询路径
+ * dsl 查询的dsl，示例见上面
+ * return 查询结果，List<Map>格式
+ */
+return ElasticsearchDsService.query(host, port, username, password, path, dsl);
+`
+      }
     }
   },
   computed: {
@@ -906,7 +974,19 @@ export default {
     treeFilter (value, data) {
       if (!value) return true
       return data.name.indexOf(value) !== -1
-    }
+    },
+    /**
+     * 获取脚本案例
+     */
+    example(type) {
+      this.exampleVisible = true
+      this.currentExample = this.exampleList[type]
+      console.log(this.currentExample)
+    },
+    useExample() {
+      this.dataForm.script = this.currentExample
+      this.exampleVisible = false
+    },
   }
 }
 </script>
@@ -954,15 +1034,24 @@ export default {
 // .codeStyle {
 //   border: 1px solid #EBEEF5;
 // }
-::v-deep .CodeMirror {
-  height: 180px !important;
-  font-family: Helvetica, Tahoma;
-  // .CodeMirror-scroll {
-  //   background: #fff;
-  //   .CodeMirror-gutters {
-  //     background: #f6f7fb;
-  //   }
-  // }
+.code-out {
+  ::v-deep .CodeMirror {
+    height: 180px ;
+    font-family: Helvetica, Tahoma;
+    // .CodeMirror-scroll {
+    //   background: #fff;
+    //   .CodeMirror-gutters {
+    //     background: #f6f7fb;
+    //   }
+    // }
+  }
+}
+
+.code-inner {
+  ::v-deep .CodeMirror {
+    height: 400px ;
+    font-family: Helvetica, Tahoma;
+  }
 }
 
 .no-border {
