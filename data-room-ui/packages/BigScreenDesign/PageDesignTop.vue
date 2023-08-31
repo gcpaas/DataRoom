@@ -29,10 +29,10 @@
             @click.native="setAlign(mode.value)"
           >
             <icon-svg
-              style="padding:3px 20px"
+              style="padding:3px 8px"
               :name="iconList[index]"
             />
-            <span style="color: #ffffff">{{ mode.label }}</span>
+            <span style="color: #bcc9d4">{{ mode.label }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -594,7 +594,7 @@ export default {
     }
   }
   .align-list-dropdown{
-    width: 124px !important;
+    width: 100px !important;
     color: #ffffff!important;
   }
 
@@ -604,7 +604,6 @@ export default {
   background-color: var(--bs-background-2)!important;
   border: 1px solid var(--bs-border-1);
   /deep/ .el-dropdown-menu__item{
-    padding: 7px 10px!important;
     background-color: var(--bs-background-2)!important;
     &:hover {
       color: var(--bs-el-color-primary) !important;
