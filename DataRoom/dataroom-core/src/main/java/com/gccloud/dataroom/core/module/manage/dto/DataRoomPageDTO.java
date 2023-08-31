@@ -93,8 +93,14 @@ public class DataRoomPageDTO extends BasePageDTO {
         @ApiModelProperty(notes = "背景色")
         private String bgColor;
 
+        @ApiModelProperty(notes = "明亮模式背景色")
+        private String lightBgColor;
+
         @ApiModelProperty(notes = "背景图")
         private String bg;
+
+        @ApiModelProperty(notes = "明亮模式背景图")
+        private String lightBg;
 
         @ApiModelProperty(notes = "自定义主题")
         private String customTheme;
