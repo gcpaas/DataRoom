@@ -276,6 +276,7 @@ export default {
                       this.$message({
                         message: '保存成功',
                         type: 'success',
+                        duration: 800,
                         onClose: () => {
                           // 此处写提示关闭后需要执行的函数
                           if (pageJump) {
@@ -296,6 +297,7 @@ export default {
                 this.$message({
                   message: '保存成功',
                   type: 'success',
+                  duration: 800,
                   onClose: () => {
                     // 此处写提示关闭后需要执行的函数
                     if (pageJump) {
