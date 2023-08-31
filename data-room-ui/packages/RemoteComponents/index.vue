@@ -19,8 +19,9 @@ import remoteVueLoader from 'remote-vue-loader'
 import { mapMutations, mapState } from 'vuex'
 import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
 import { getBizComponentInfo } from 'data-room-ui/js/api/bigScreenApi'
-import {settingToTheme} from "data-room-ui/js/utils/themeFormatting";
-import _ from "lodash";
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'LcdpRemoteComponent',
   mixins: [linkageMixins, commonMixins],
@@ -50,10 +51,18 @@ export default {
     'config.option.theme': {
       handler (val) {
         if (val) {
-          this.changeStyle(this.config)
+          this.changeStyle(this.config, true)
         }
       }
     }
+    // customTheme: {
+    //   handler (val) {
+    //     if (val) {
+    //       this.changeStyle(this.config, true)
+    //     }
+    //   },
+    //   deep: true
+    // }
   },
   created () {
     this.getRemoteComponent()
@@ -133,13 +142,19 @@ export default {
       // 去掉 export default及后面代码
       settingContent = settingContent.replace(/export default[\s\S]*/, '')
       eval(settingContent)
+      // this.config.option = {
+      //   ...this.config.option,
+      //   ...option
+      // }
       this.config.option = {
-        ...this.config.option,
-        ...option
+        ...option,
+        ...this.config.option
       }
       this.config.setting = setting
+      // 样式改变时更新主题配置
+      // this.config.theme = settingToTheme(cloneDeep(this.config), this.customTheme)
       // 获取到setting后将其转化为theme
-      this.config.theme = settingToTheme(this.config, this.customTheme)
+      // this.config.theme = settingToTheme(this.config, this.customTheme)
 
       return {
         option,
@@ -196,10 +211,8 @@ export default {
       return config
     },
     // 组件的样式改变，返回改变后的config
-    changeStyle (config) {
+    changeStyle (config, isUpdateTheme) {
       config = { ...this.config, ...config }
-      // 样式改变时更新主题配置
-      config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
       config = this.transformSettingToOption(config, 'custom')
       // 这里定义了option和setting是为了保证在执行eval时,optionHandler、dataHandler里面可能会用到，
       const option = config.option
@@ -211,6 +224,10 @@ export default {
         } catch (e) {
           console.error(e)
         }
+      }
+      // 只有样式改变时更新主题配置，切换主题时不需要保存
+      if (!isUpdateTheme) {
+        config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
       }
       if (this.chart) {
         this.chart.update(config.option)
