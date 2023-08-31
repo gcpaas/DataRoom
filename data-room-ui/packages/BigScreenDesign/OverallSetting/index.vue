@@ -391,7 +391,7 @@ export default {
         this.form.refreshConfig = []
       } else {
         this.pageInfo.chartList.forEach(chart => {
-          if (chart.dataSource?.businessKey) {
+          if (chart.dataSource?.businessKey || chart.type === 'marquee') {
             this.chartOptions.push({
               code: chart.code,
               title: chart.title,

@@ -12,6 +12,7 @@
     <div class="head-btn-group">
       <span style="margin-right:8px;font-size:12px">缩放比例</span>
       <el-input-number
+        class="bs-el-input-number"
         style="margin-right:20px"
         :value="zoom"
         :min="1"
