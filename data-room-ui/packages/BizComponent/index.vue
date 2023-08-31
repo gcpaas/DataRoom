@@ -237,17 +237,18 @@ export default {
     backManagement () {
       // 给出一个确认框提示，提示如下确定返回主页面吗？未保存的配置将会丢失。3个按钮 ：  留在页面 、离开页面、保存后离开页面
       this.$confirm('确定返回主页面吗？未保存的配置将会丢失。', '提示', {
+        distinguishCancelAndClose: true,
         confirmButtonText: '保存后离开页面',
         cancelButtonText: '离开页面',
         cancelButtonClass: 'cancel-btn',
-        cancelButtonColor: '#FF6F6F',
-        showCancelButton: true,
         type: 'warning',
         customClass: 'bs-el-message-box'
       }).then(() => {
         this.save(true)
-      }).catch(() => {
-        this.pageJump()
+      }).catch((action) => {
+        if (action === 'cancel') {
+          this.pageJump()
+        }
       })
     },
     save (pageJump = false) {
@@ -271,12 +272,18 @@ export default {
                 translateBlobToBase64(res, function (e) {
                   this.form.coverPicture = e.result
                   updateBizComponent(this.form)
-                    .then((res) => {
-                      that.$message.success('保存成功')
-                      console.log(pageJump)
-                      if (pageJump) {
-                        this.pageJump()
-                      }
+                    .then(() => {
+                      this.$message({
+                        message: '保存成功',
+                        type: 'success',
+                        duration: 800,
+                        onClose: () => {
+                          // 此处写提示关闭后需要执行的函数
+                          if (pageJump) {
+                            this.pageJump()
+                          }
+                        }
+                      })
                     })
                     .finally(() => {
                       that.loading = false
@@ -287,11 +294,17 @@ export default {
             this.form.coverPicture = dataUrl
             updateBizComponent(this.form)
               .then(() => {
-                console.log(1122)
-                this.$message.success('保存成功')
-                if (pageJump) {
-                  this.pageJump()
-                }
+                this.$message({
+                  message: '保存成功',
+                  type: 'success',
+                  duration: 800,
+                  onClose: () => {
+                    // 此处写提示关闭后需要执行的函数
+                    if (pageJump) {
+                      this.pageJump()
+                    }
+                  }
+                })
               })
               .finally(() => {
                 this.loading = false
