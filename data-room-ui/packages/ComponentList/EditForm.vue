@@ -298,6 +298,8 @@ export default {
             opacity: 100,
             customTheme: 'dark',
             bg: null,
+            lightBgColor: '#151a26',
+            lightBg: null,
             fitMode: 'auto'
           })
           this.resolutionRatio.w = this.type === 'component' ? 1024 : 1920

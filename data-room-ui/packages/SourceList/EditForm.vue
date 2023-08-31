@@ -248,7 +248,9 @@ export default {
             bgColor: '#151a26',
             opacity: 100,
             customTheme: 'auto',
-            bg: null
+            bg: null,
+            lightBgColor: '#151a26',
+            lightBg: null
           })
           if (this.dataForm.type === 'bigScreen') {
             this.resolutionRatio.w = '1920'

@@ -19,6 +19,7 @@ import { mapState, mapMutations } from 'vuex'
 import * as g2Plot from '@antv/g2plot'
 import plotList, { getCustomPlots } from '../G2Plots/plotList'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+import _ from 'lodash'
 
 export default {
   name: 'PlotCustomComponent',
@@ -66,7 +67,7 @@ export default {
     'config.option.theme': {
       handler (val) {
         if (val) {
-          this.changeStyle(this.config)
+          this.changeStyle(this.config, true)
         }
       }
     }
@@ -175,7 +176,7 @@ export default {
       return config
     },
     // 组件的样式改变，返回改变后的config
-    changeStyle (config) {
+    changeStyle (config, isUpdateTheme) {
       config = { ...this.config, ...config }
       config = this.transformSettingToOption(config, 'custom')
       // 这里定义了option和setting是为了保证在执行eval时,optionHandler、dataHandler里面可能会用到，
@@ -189,8 +190,10 @@ export default {
           console.error(e)
         }
       }
-      // 将设置好的主题保存起来
-      config.theme = settingToTheme(cloneDeep(config), this.customTheme)
+      // 只有样式改变时更新主题配置，切换主题时不需要保存
+      if (!isUpdateTheme) {
+        config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
+      }
       this.changeChartConfig(config)
       if (config.code === this.activeCode) {
         this.changeActiveItemConfig(config)

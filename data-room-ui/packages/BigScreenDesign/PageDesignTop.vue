@@ -240,11 +240,6 @@ export default {
       this.$emit('changeZoom', val)
       // console.log(val)
     },
-    // 切换主题
-    changeTheme (val) {
-      // 调取每个组件内部切换主题的方法
-      this.$emit('updateTheme', val)
-    },
     setAlign (command) {
       const pageInfo = cloneDeep(this.pageInfo)
       // 获取所有选中的组件
