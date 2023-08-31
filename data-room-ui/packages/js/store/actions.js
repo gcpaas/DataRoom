@@ -59,6 +59,8 @@ export function handleResData (data) {
         w: 1920,
         h: 1080,
         bgColor: '#151a26', // 背景色
+        lightBgColor: '#151a26',
+        lightBg: '',
         bg: '', // 背景图
         customTheme: 'dark',
         opacity: 100

@@ -22,6 +22,8 @@ export const defaultData = {
       h: 1080,
       bgColor: '#151a26', // 背景色
       bg: '', // 背景图
+      lightBgColor: '#151a26',
+      lightBg: '',
       opacity: 100,
       customTheme: 'dark',
       themeJson: {}, // 自定义主题配置

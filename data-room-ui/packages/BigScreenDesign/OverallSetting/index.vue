@@ -78,39 +78,39 @@
           </el-form-item>
           <el-form-item label="背景图">
             <el-button
-              v-if="!form.bg"
+              v-if="!form[currentBg]"
               type="primary"
               @click="$refs.bgImg.init()"
             >
               选择背景图
             </el-button>
             <el-image
-              v-if="form.bg"
+              v-if="form.currentBg"
               class="bg-img bs-el-img"
-              :src="form.bg"
+              :src="form[currentBg]"
               fit="cover"
               @click="$refs.bgImg.init()"
             />
             <div
-              v-show="form.bg"
-              @click="form.bg = ''"
+              v-show="form[currentBg]"
+              @click="form[currentBg] = ''"
             >
               <i class="el-icon-circle-close close-icon" />
             </div>
             <span
-              v-if="form.bg"
+              v-if="form[currentBg]"
               class="description"
             >（背景图优先级高于背景色，设置后将覆盖背景色）</span>
             <BgImg
               ref="bgImg"
               :form="form"
-              @imgUrl="form.bg = $event"
+              @imgUrl="form[currentBg] = $event"
             />
           </el-form-item>
           <el-form-item label="背景色">
             <ColorPicker
-              v-model="form.bgColor"
-              :placeholder="form.bg ? '' : '请选择背景色'"
+              v-model="form[currentBgColor]"
+              :placeholder="form[currentBg] ? '' : '请选择背景色'"
               :predefine-colors="predefineColors"
             />
           </el-form-item>
@@ -287,6 +287,8 @@ export default {
         h: 1080,
         bg: '',
         bgColor: '#151a26', // 背景色
+        lightBg: '',
+        lightBgColor: '#151a26',
         opacity: 100,
         customTheme: 'dark',
         themeJson: {},
@@ -315,6 +317,13 @@ export default {
       pageInfo: state => state.bigScreen.pageInfo,
       config: state => state.bigScreen.activeItemConfig
     }),
+    // 根据主题色来决定背景色和背景图绑定什么变量
+    currentBgColor () {
+      return this.form.customTheme === 'dark' ? 'bgColor' : 'lightBgColor'
+    },
+    currentBg () {
+      return this.form.customTheme === 'dark' ? 'bg' : 'lightBgColor'
+    },
     dsValue () {
       return this.form.cacheDataSets?.map(dSet => ({
         id: dSet.dataSetId,

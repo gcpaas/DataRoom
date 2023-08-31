@@ -11,7 +11,14 @@
     </div>
     <div class="head-btn-group">
       <span style="margin-right:8px;font-size:12px">缩放比例</span>
-      <el-input-number style="margin-right:20px" :value="zoom" @change="changeZoom" :min="1" :max="100" label="描述文字"></el-input-number>
+      <el-input-number
+        style="margin-right:20px"
+        :value="zoom"
+        :min="1"
+        :max="100"
+        label="描述文字"
+        @change="changeZoom"
+      />
       <el-dropdown
         trigger="click"
         class="align-list-dropdown"
@@ -99,7 +106,11 @@
       :page-info="pageInfo"
       @replaceItByTemplate="replaceItByTemplate"
     />
-    <CloseDialog ref="CloseDialog" @back="backManagement" @backSave="backSave" />
+    <CloseDialog
+      ref="CloseDialog"
+      @back="backManagement"
+      @backSave="backSave"
+    />
     <AssignDialog ref="AssignDialog" />
     <HistoryList ref="HistoryList" />
   </div>
@@ -195,7 +206,7 @@ export default {
       timelineStore: (state) => state.bigScreen.timelineStore,
       currentTimeLine: (state) => state.bigScreen.currentTimeLine,
       activeCodes: state => state.bigScreen.activeCodes,
-      zoom: (state) => state.bigScreen.zoom,
+      zoom: (state) => state.bigScreen.zoom
     }),
     pageCode () {
       return this.$route.query.code || this.code
@@ -224,14 +235,9 @@ export default {
       undoTimeLine: 'bigScreen/undoTimeLine',
       saveTimeLine: 'bigScreen/saveTimeLine'
     }),
-    changeZoom(val){
+    changeZoom (val) {
       this.$emit('changeZoom', val)
       // console.log(val)
-    },
-    // 切换主题
-    changeTheme (val) {
-      // 调取每个组件内部切换主题的方法
-      this.$emit('updateTheme', val)
     },
     setAlign (command) {
       const pageInfo = cloneDeep(this.pageInfo)
@@ -333,10 +339,10 @@ export default {
         return value1 - value2 // 升序
       }
     },
-    goBackManage(){
+    goBackManage () {
       this.$refs.CloseDialog.init()
     },
-    async backSave(){
+    async backSave () {
       await this.save()
       this.backManagement()
     },

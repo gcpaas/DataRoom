@@ -9,7 +9,6 @@
       :right-fold="rightVisiable"
       @updateRightVisiable="updateRightVisiable"
       @showPageInfo="showPageInfo"
-      @updateTheme="updateTheme"
       @changeZoom="changeScreenZoom"
       @empty="empty"
     />

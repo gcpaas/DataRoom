@@ -262,9 +262,11 @@ export default {
             w: this.type === 'component' ? 1024 : 1920,
             h: this.type === 'component' ? 768 : 1080,
             bgColor: '#151a26',
+            lightBgColor: '#151a26',
             opacity: 100,
             customTheme: 'dark',
             bg: null,
+            lightBg: null,
             fitMode: 'auto'
           })
           this.resolutionRatio.w = this.type === 'component' ? 1024 : 1920
