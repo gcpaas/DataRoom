@@ -112,6 +112,7 @@ import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
 import cloneDeep from 'lodash/cloneDeep'
 import IconSvg from 'data-room-ui/SvgIcon'
+import { get } from 'sortablejs'
 export default {
   name: 'Marquee',
   props: {
@@ -127,6 +128,7 @@ export default {
   data () {
     return {
       showVoiceSwitch: false,
+      visibilityState: false,
       voiceSwitchValue: true,
       customClass: {},
       attributeName: {
@@ -159,6 +161,7 @@ export default {
       // 语音播报
       speech: null,
       isInit: false,
+      firstSpeech: true,
       numberBroadcasts: 0
     }
   },
@@ -167,16 +170,19 @@ export default {
     speechText () {
       return this.config.customize.title || ''
     },
-    isPreview () {
-      return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
-    },
-    audioSrc () {
-      return this.config?.option?.data?.[this.config?.dataSource?.metricField] || ''
+    audioSrc: {
+      get () {
+        return this.config?.option?.data?.[this.config?.dataSource?.metricField] || ''
+      },
+      set (val) {
+        this.config.option.data[this.config.dataSource.metricField] = val
+      }
     }
   },
   watch: {
     speechText (val) {
-      if (!this.isPreview && this.config.customize.voiceBroadcast && !this.isInit) {
+      if (!this.isPreview && this.config.customize.voiceBroadcast && !this.isInit && !this.firstSpeech) {
+        console.log(4)
         this.speechBroadcast(val)
       } else {
         if (this.speech) {
@@ -236,6 +242,7 @@ export default {
           this.audio.play()
         } else {
           this.speech = null
+          console.log(1)
           this.speechBroadcast(this.config.customize.title)
           this.isInit = false
         }
@@ -271,7 +278,8 @@ export default {
         config.option.data = []
       }
       // 清除上一个visibilitychange监听，重新开始监听
-      if (this.voiceSwitchValue) {
+      if (this.voiceSwitchValue && !this.visibilityState && this.isInit) {
+        console.log(6)
         this.voiceBroadcast(config)
       }
       return config
@@ -294,6 +302,7 @@ export default {
           } else if (config.customize.title) {
             //  页面初始化不执行
             if (!this.isInit) {
+              console.log(2)
               this.speechBroadcast(config.customize.title)
             }
           }
@@ -326,9 +335,13 @@ export default {
     },
     changeStyle (config) {
       config = { ...this.config, ...config }
-      if (config.customize.voiceBroadcast && this.isInit && !this.audioSrc) {
+      if (config.customize.voiceBroadcast && this.isInit && !config?.option?.data?.[this.config?.dataSource?.metricField]) {
         this.isInit = false
+        console.log(3)
         this.speechBroadcast(config.customize.title)
+        this.$nextTick(() => {
+          this.firstSpeech = false
+        })
       }
       // 样式改变时更新主题配置
       config.theme = settingToTheme(cloneDeep(config), this.customTheme)
@@ -340,6 +353,7 @@ export default {
     // 监听页面是否可见
     handleVisibilityChange () {
       if (document.visibilityState === 'hidden') {
+        this.visibilityState = true
         if (this.audio) {
           this.audio.pause()
         }
@@ -347,6 +361,7 @@ export default {
           this.speech = null
         }
       } else {
+        this.visibilityState = false
         if (this.audio) {
           this.audio.play()
         }
