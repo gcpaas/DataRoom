@@ -313,6 +313,9 @@ export default {
       pageInfo: state => state.bigScreen.pageInfo,
       config: state => state.bigScreen.activeItemConfig
     }),
+    isPreview () {
+      return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
+    },
     // 根据主题色来决定背景色和背景图绑定什么变量
     currentBgColor () {
       return this.form.customTheme === 'dark' ? 'bgColor' : 'lightBgColor'
@@ -379,6 +382,17 @@ export default {
           this.$emit('styleHandler', chart)
         }
       })
+      if (!this.isPreview) {
+        const themeLabel = theme === 'light' ? '明亮' : '暗黑'
+        const htmlStr = `<span>当前已切换到<strong>${themeLabel}</strong>主题，颜色设置针对当前主题生效</span>`
+        this.$notify({
+          title: '注意',
+          dangerouslyUseHTMLString: true,
+          message: htmlStr,
+          customClass: 'ds-el-notify',
+          type: 'warning'
+        })
+      }
     },
     init () {
       if (!this.pageInfo.pageConfig.refreshConfig) {
@@ -656,5 +670,21 @@ export default {
 .side-catalog-box {
   height: calc(100% - 50px);
   overflow-y: auto;
+}
+
+</style>
+<style lang="scss">
+//修改notify的样式
+.ds-el-notify {
+  background-color: var(--bs-el-background-1)!important;
+  .el-notification__title{
+    color: #fff!important;
+  }
+  .el-notification__content{
+    color: #fff!important;
+  }
+  .el-notification__closeBtn{
+    color: #fff!important;
+  }
 }
 </style>
