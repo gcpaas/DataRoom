@@ -199,16 +199,20 @@ export default {
     padding: 0 !important;
     // min-height: 550px;
     overflow: hidden;
+
+    .bs-pagination {
+      position: relative !important;
+      padding-right: 16px !important;
+    }
   }
 
   ::v-deep .bs-container {
     padding: 0;
-    min-height: 500px;
+    // min-height: 500px;
     background-color: var(--bs-background-2) !important;
 
-    .el-table {
-      max-height: calc(90vh - 340px);
-    }
+    // .el-table {
+    // }
 
     .bs-table-box {
       margin-bottom: 0px;
@@ -224,9 +228,9 @@ export default {
       margin-left: 0 !important;
     }
 
-    ::v-deep .layout {
-      position: absolute !important;
-    }
+    // ::v-deep .layout {
+    // position: absolute !important;
+    // }
 
     ::v-deep .ztree {
       height: auto !important;
@@ -254,5 +258,9 @@ export default {
   .el-scrollbar {
     height: calc(100vh - 405px) !important;
   }
+}
+
+::v-deep .el-table__body {
+  height: 100% !important;
 }
 </style>

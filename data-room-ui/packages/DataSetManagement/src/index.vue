@@ -118,10 +118,104 @@
         </el-form>
         <div class="bs-table-box">
           <el-table
+            v-if="isDialog"
+            ref="userTable"
+            v-loading="dataListLoading"
+            class="bs-el-table bs-scrollbar"
+            :element-loading-text="loadingText"
+            :data="tableData"
+            :header-cell-style="sortStyle"
+            @sort-change="reSort"
+            @current-change="handleCurrentChange"
+            @select="selectDs"
+            @select-all="selectAll"
+          >
+            <el-empty slot="empty" />
+            <el-table-column
+              v-if="isDialog && multiple"
+              type="selection"
+              width="55"
+            />
+            <el-table-column
+              prop="name"
+              label="数据集名称"
+              align="left"
+              show-overflow-tooltip
+            >
+              <template slot-scope="scope">
+                <el-radio
+                  v-if="isDialog && !multiple"
+                  v-model="curRow"
+                  :label="scope.row"
+                >
+                  {{ scope.row.name }}
+                </el-radio>
+                <span v-else>{{ scope.row.name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="datasetType"
+              label="数据集类型"
+              align="center"
+              show-overflow-tooltip
+            >
+              <template slot-scope="scope">
+                <span>{{ datasetTypeList.find(type=>type.datasetType===scope.row.datasetType) ? datasetTypeList.find(type=>type.datasetType===scope.row.datasetType).name : '其他' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="labelIds"
+              label="标签"
+              align="center"
+              show-overflow-tooltip
+            >
+              <template slot-scope="scope">
+                <span>{{ getLabels(scope.row.labelIds).join(',') }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="remark"
+              label="备注"
+              align="left"
+              show-overflow-tooltip
+            />
+            <!--操作栏-->
+            <el-table-column
+              v-if="doEdit||isDelete"
+              label="操作"
+              width="200"
+              align="center"
+            >
+              <template
+                v-if="showOperate(scope.row.datasetType)"
+                slot-scope="scope"
+              >
+                <el-button
+                  v-if="doEdit"
+                  class="bs-el-button-default"
+                  :disabled="scope.row.editable === 1 && !appCode"
+                  @click="toEdit(scope.row.id, scope.row.datasetType, scope.row.name, scope.row.typeId)"
+                >
+                  编辑
+                </el-button>
+                <el-button
+                  v-if="isDelete"
+                  class="bs-el-button-default"
+                  :loading="scope.row.loading"
+                  :disabled="scope.row.editable === 1 && !appCode"
+                  @click="delDataset(scope.row)"
+                >
+                  删除
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-table
+            v-else
             ref="userTable"
             v-table
             v-loading="dataListLoading"
-            height="100%"
+            height="0"
             class="bs-el-table bs-scrollbar"
             :element-loading-text="loadingText"
             :data="tableData"
@@ -750,10 +844,10 @@ export default {
 
 .el-dialog {
   .bs-container {
-    max-height: calc(90vh - 236px) !important;
+    // max-height: calc(90vh - 236px) !important;
 
     .el-table {
-      height: calc(90vh - 340px);
+      height: calc(100vh - 390px);
     }
 
     ::v-deep .ztree {
