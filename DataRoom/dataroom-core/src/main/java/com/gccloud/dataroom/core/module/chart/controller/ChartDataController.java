@@ -3,6 +3,7 @@ package com.gccloud.dataroom.core.module.chart.controller;
 import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
 import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
 import com.gccloud.dataroom.core.module.chart.bean.Chart;
+import com.gccloud.dataroom.core.module.chart.components.ScreenFlyMapChart;
 import com.gccloud.dataroom.core.module.chart.dto.ChartDataSearchDTO;
 import com.gccloud.dataroom.core.module.chart.service.BaseChartDataService;
 import com.gccloud.dataroom.core.module.chart.service.ChartMockData;
@@ -83,7 +84,13 @@ public class ChartDataController {
         try {
             ChartDataVO chartDataVO = baseChartDataService.dataQuery(chart, chartDataSearchDTO);
             if (chartDataVO == null) {
-                chartDataVO = ChartMockData.getMockData(chartDataSearchDTO.getType());
+                String type = chartDataSearchDTO.getType();
+                if (chart instanceof ScreenFlyMapChart) {
+                    ScreenFlyMapChart screenFlyMapChart = (ScreenFlyMapChart) chart;
+                    ScreenFlyMapChart.Customize customize = screenFlyMapChart.getCustomize();
+                    type += "-" + customize.getLevel();
+                }
+                chartDataVO = ChartMockData.getMockData(type);
             }
             return R.success(chartDataVO);
         } catch (Exception e) {
