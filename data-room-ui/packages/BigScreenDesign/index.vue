@@ -87,6 +87,7 @@
         @updateSetting="updateSetting"
         @updateDataSetting="updateDataSetting"
         @updatePage="updatePage"
+        @styleHandler="styleHandler"
       >
         <template #dataSetSelect="{ value }">
           <slot
@@ -396,9 +397,17 @@ export default {
         })
         .catch(() => {})
     },
+    // 切换主题时针对远程组件触发样式修改的方法
+    styleHandler (config) {
+      this.$nextTick(() => {
+        this.$refs.Render?.$refs['RenderCard' + config.code][0]?.$refs[
+          config.code
+        ]?.changeStyle(cloneDeep(config), true)
+      })
+    },
     // 自定义属性更新
     updateSetting (config) {
-      if (config.type === 'map' || config.type === 'video' ||config.type === 'flyMap') {
+      if (config.type === 'map' || config.type === 'video' || config.type === 'flyMap') {
         config.key = new Date().getTime()
       }
       this.changeChartConfig(cloneDeep(config))

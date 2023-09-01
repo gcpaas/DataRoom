@@ -376,7 +376,7 @@ export default {
       this.changePageInfo(pageInfo)
       pageInfo.chartList.forEach(chart => {
         if (chart.type === 'remoteComponent') {
-          // this.$refs['remoteComponent' + chart.code]?.changeStyle(chart)
+          this.$emit('styleHandler', chart)
         }
       })
     },

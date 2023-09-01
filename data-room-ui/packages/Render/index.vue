@@ -54,6 +54,7 @@
         <RenderCard
           :ref="'RenderCard' + chart.code"
           :config="chart"
+          @styleHandler="styleHandler"
         />
       </Configuration>
     </vdr>
@@ -165,6 +166,14 @@ export default {
       'setPresetLine',
       'saveTimeLine'
     ]),
+    // 切换主题时针对远程组件触发样式修改的方法
+    styleHandler (config) {
+      this.$nextTick(() => {
+        this.$refs['RenderCard' + config.code][0]?.$refs[
+          config.code
+        ]?.changeStyle(cloneDeep(config), true)
+      })
+    },
     // 获取到后端传来的主题样式并进行修改
     styleSet () {
       const style = document.createElement('style')

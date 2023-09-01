@@ -25,6 +25,7 @@
         v-if="!chartSettingShow"
         ref="OverallSetting"
         @close="close"
+        @styleHandler="styleHandler"
       />
     </div>
   </div>
@@ -78,6 +79,9 @@ export default {
   },
   mounted () { },
   methods: {
+    styleHandler (config) {
+      this.$emit('styleHandler', config)
+    },
     toggleShow () {
       this.$emit('update:rightVisiable', !this.rightVisiable)
     },

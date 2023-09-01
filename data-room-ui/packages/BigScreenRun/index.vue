@@ -26,6 +26,7 @@
             ref="RenderCardRef"
             :key="chart.key"
             :config="chart"
+            @styleHandler="styleHandler"
           />
         </div>
       </div>
@@ -38,6 +39,7 @@ import RenderCard from 'data-room-ui/Render/RenderCard.vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
 import { compile } from 'tiny-sass-compiler/dist/tiny-sass-compiler.esm-browser.prod.js'
 import NotPermission from 'data-room-ui/NotPermission'
+import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'BigScreenRun',
   components: {
@@ -168,6 +170,14 @@ export default {
       'changePageConfig',
       'changeChartConfig'
     ]),
+    // 切换主题时针对远程组件触发样式修改的方法
+    styleHandler (config) {
+      this.chartList.forEach((chart, index) => {
+        if (chart.code === config.code) {
+          this.$refs.RenderCardRef[index].$refs[chart.code].changeStyle(config)
+        }
+      })
+    },
     permission () {
       this.$dataRoomAxios.get(`/bigScreen/permission/check/${this.pageCode}`).then(res => {
         this.hasPermission = res

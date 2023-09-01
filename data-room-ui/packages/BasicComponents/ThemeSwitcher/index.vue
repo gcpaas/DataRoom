@@ -68,6 +68,11 @@ export default {
       const pageInfo = this.pageInfo
       pageInfo.chartList = themeToSetting(pageInfo.chartList, val)
       this.changePageInfo(pageInfo)
+      pageInfo.chartList.forEach(chart => {
+        if (chart.type === 'remoteComponent') {
+          this.$emit('styleHandler', chart)
+        }
+      })
     }
   }
 }
