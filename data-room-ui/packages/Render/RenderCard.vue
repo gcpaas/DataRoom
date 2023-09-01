@@ -57,7 +57,6 @@ export default {
   },
   computed: {},
   mounted () {
-    console.log(this.$refs)
     // 调用初始化方法
     dataInit(this)
   },
