@@ -473,7 +473,7 @@ export default {
       this.$emit('close')
     },
     timerEmptyState () {
-      return this.pageInfo.chartList.every(chart => chart.dataSource?.businessKey === '')
+      return this.pageInfo.chartList.every(chart => chart.dataSource?.businessKey === '' && chart.type !== 'marquee')
     }
   }
 }

@@ -238,7 +238,6 @@ export default {
     }),
     changeZoom (val) {
       this.$emit('changeZoom', val)
-      // console.log(val)
     },
     setAlign (command) {
       const pageInfo = cloneDeep(this.pageInfo)

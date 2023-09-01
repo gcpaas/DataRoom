@@ -16,12 +16,13 @@
         />
       </div>
       <a
+        v-if="giteeSvg && giteeHref"
         class="fork-me-on-gitee"
-        href="https://gitee.com/gcpaas/DataRoom"
+        :href="giteeHref"
         target="_blank"
       >
         <img
-          src="https://gitee.com/gcpaas/DataRoom/widgets/widget_1.svg?color=007bff"
+          :src="giteeSvg"
           alt="Fork me on Gitee"
         >
       </a>
@@ -45,6 +46,8 @@ export default {
   data () {
     return {
       // 和此处路由保持一致，将会激活tab，请按需更改
+      giteeHref: '',
+      giteeSvg: ''
     }
   },
   computed: {
@@ -115,6 +118,10 @@ export default {
     }
   },
   created () {},
+  mounted () {
+    this.giteeHref = 'https://gitee.com/gcpaas/DataRoom'
+    this.giteeSvg = 'https://gitee.com/gcpaas/DataRoom/widgets/widget_1.svg?color=007bff'
+  },
   methods: {
     changeTab (tab) {
       if (this.$route.query.edit) {

@@ -1,9 +1,12 @@
 <template>
+  <!-- 添加fill -->
   <svg
     :class="getClassName"
     aria-hidden="true"
   >
-    <use :xlink:href="getName" />
+    <use
+      :xlink:href="getName"
+    />
   </svg>
 </template>
 
