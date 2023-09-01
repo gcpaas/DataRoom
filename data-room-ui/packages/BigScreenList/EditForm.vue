@@ -262,7 +262,7 @@ export default {
             w: this.type === 'component' ? 1024 : 1920,
             h: this.type === 'component' ? 768 : 1080,
             bgColor: '#151a26',
-            lightBgColor: '#151a26',
+            lightBgColor: '#f5f7fa',
             opacity: 100,
             customTheme: 'dark',
             bg: null,

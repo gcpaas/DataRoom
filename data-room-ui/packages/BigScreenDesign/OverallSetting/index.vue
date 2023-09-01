@@ -284,7 +284,7 @@ export default {
         bg: '',
         bgColor: '#151a26', // 背景色
         lightBg: '',
-        lightBgColor: '#151a26',
+        lightBgColor: '#f5f7fa',
         opacity: 100,
         customTheme: 'dark',
         themeJson: {},
@@ -375,7 +375,9 @@ export default {
       pageInfo.chartList = themeToSetting(pageInfo.chartList, theme)
       this.changePageInfo(pageInfo)
       pageInfo.chartList.forEach(chart => {
-        // if (chart.type === 'remoteComponent')
+        if (chart.type === 'remoteComponent') {
+          // this.$refs['remoteComponent' + chart.code]?.changeStyle(chart)
+        }
       })
     },
     init () {
