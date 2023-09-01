@@ -36,9 +36,7 @@
 <script>
 import RenderCard from 'data-room-ui/Render/RenderCard.vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
-import { getThemeConfig } from 'data-room-ui/js/api/bigScreenApi'
 import { compile } from 'tiny-sass-compiler/dist/tiny-sass-compiler.esm-browser.prod.js'
-import { G2 } from '@antv/g2plot'
 import NotPermission from 'data-room-ui/NotPermission'
 export default {
   name: 'BigScreenRun',
@@ -182,21 +180,7 @@ export default {
       if (!this.pageCode) { return }
       this.changePageLoading(true)
       this.initLayout(this.pageCode).then(() => {
-        const themeName = this.pageConfig.customTheme
-        if (this.pageConfig.customTheme === 'custom') {
-          getThemeConfig().then((res) => {
-            // 初始化时如果就是自定义主题则统一注册
-            const { registerTheme } = G2
-            registerTheme(themeName, { ...res.chart })
-            const pageConfig = this.pageConfig
-            pageConfig.themeJson = res
-            this.changePageConfig(pageConfig)
-            this.styleSet()
-            this.changePageLoading(false)
-          })
-        } else {
-          this.changePageLoading(false)
-        }
+        this.changePageLoading(false)
         this.getParentWH()
       })
     },

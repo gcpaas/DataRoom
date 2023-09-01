@@ -127,9 +127,8 @@ import PageTopSetting from './PageDesignTop.vue'
 import Render from '../Render'
 import { mapActions, mapMutations, mapState } from 'vuex'
 import SketchDesignRuler from 'data-room-ui/BigScreenDesign/RulerTool/SketchRuler.vue'
-import { G2 } from '@antv/g2plot'
 import multipleSelectMixin from 'data-room-ui/js/mixins/multipleSelectMixin'
-import { getThemeConfig, getScreenInfo } from 'data-room-ui/js/api/bigScreenApi'
+import { getScreenInfo } from 'data-room-ui/js/api/bigScreenApi'
 import MouseSelect from './MouseSelect/index.vue'
 import cloneDeep from 'lodash/cloneDeep'
 import { randomString } from '../js/utils'
@@ -367,20 +366,7 @@ export default {
       this.changePageLoading(true)
       this.initLayout(this.pageCode)
         .then(() => {
-          const themeName = this.pageConfig.customTheme
-          if (!['dark', 'light', 'auto'].includes(themeName)) {
-            getThemeConfig().then((res) => {
-              // 初始化时如果就是自定义主题则统一注册
-              const { registerTheme } = G2
-              registerTheme(themeName, { ...res.chart })
-              const pageConfig = this.pageConfig
-              pageConfig.themeJson = res
-              this.changePageConfig(pageConfig)
-              this.changePageLoading(false)
-            })
-          } else {
-            this.changePageLoading(false)
-          }
+          this.changePageLoading(false)
         })
         .finally(() => {
           setTimeout(() => {

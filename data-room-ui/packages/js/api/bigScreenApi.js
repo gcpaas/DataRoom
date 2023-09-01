@@ -13,10 +13,6 @@ export function saveScreen (data) {
 export function getDataSetDetails (id) {
   return Vue.prototype.$dataRoomAxios.get('/dataset/datasetInfo/' + id)
 }
-// 模拟后端返回自定义主题配置
-export function getThemeConfig () {
-  return Vue.prototype.$dataRoomAxios.get('https://mock.mengxuegu.com/mock/64239ff6e24b4b4cfeaca5ea/example/theme')
-}
 
 // 根据数据集id获取数据
 export function getDataByDataSetId (dataSetId) {
