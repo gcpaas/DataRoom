@@ -1,0 +1,70 @@
+{
+    "success": false,
+    "data": [],
+    "columnData": {
+        "from": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "from",
+            "aggregate": "",
+            "alias": "from",
+            "remark": "起点"
+        },
+        "lat1": {
+            "type": "double",
+            "tableName": "",
+            "originalColumn": "lat1",
+            "aggregate": "",
+            "alias": "lat1",
+            "remark": "起点纬度"
+        },
+        "lat2": {
+            "type": "double",
+            "tableName": "",
+            "originalColumn": "lat2",
+            "aggregate": "",
+            "alias": "lat2",
+            "remark": "终点纬度"
+        },
+        "lng1": {
+            "type": "double",
+            "tableName": "",
+            "originalColumn": "lng1",
+            "aggregate": "",
+            "alias": "lng1",
+            "remark": "起点经度"
+        },
+        "lng2": {
+            "type": "double",
+            "tableName": "",
+            "originalColumn": "lng2",
+            "aggregate": "",
+            "alias": "lng2",
+            "remark": "终点经度"
+        },
+        "to": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "to",
+            "aggregate": "",
+            "alias": "to",
+            "remark": "终点"
+        },
+        "type": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "type",
+            "aggregate": "",
+            "alias": "type",
+            "remark": "类型"
+        },
+        "value": {
+            "type": "int",
+            "tableName": "",
+            "originalColumn": "value",
+            "aggregate": "",
+            "alias": "value",
+            "remark": "值"
+        }
+    }
+}

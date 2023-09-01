@@ -113,7 +113,7 @@ export default {
   methods: {
     init () {
       this.dialogVisible = true
-      this.imgUrl = this.form.customTheme === 'dark' ? this.form.bg : this.form.lightBg
+      this.imgUrl = this.form.customTheme === 'light' ? this.form.bg : this.form.lightBg
       this.fileList = this.imgUrl
         ? [{
             name: '背景图',

@@ -12,6 +12,7 @@
       :ref="config.code"
       :key="config.key"
       :config="config"
+      @styleHandler="styleHandler"
     />
   </div>
 </template>
@@ -24,6 +25,7 @@ import { dataInit, destroyedEvent } from 'data-room-ui/js/utils/eventBus'
 import CustomComponent from '../PlotRender/index.vue'
 import Svgs from '../Svgs/index.vue'
 import RemoteComponent from 'data-room-ui/RemoteComponents/index.vue'
+import cloneDeep from 'lodash/cloneDeep'
 const components = {}
 for (const key in pcComponent) {
   if (Object.hasOwnProperty.call(pcComponent, key)) {
@@ -55,6 +57,7 @@ export default {
   },
   computed: {},
   mounted () {
+    console.log(this.$refs)
     // 调用初始化方法
     dataInit(this)
   },
@@ -65,7 +68,11 @@ export default {
     ...mapMutations('bigScreen', [
       'changeChartConfig'
     ]),
-    resolveComponentType
+    resolveComponentType,
+    // 切换主题时针对远程组件触发样式修改的方法
+    styleHandler (config) {
+      this.$emit('styleHandler', config)
+    }
   }
 }
 </script>

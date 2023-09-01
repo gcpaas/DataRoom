@@ -298,7 +298,7 @@ export default {
             opacity: 100,
             customTheme: 'dark',
             bg: null,
-            lightBgColor: '#151a26',
+            lightBgColor: '#f5f7fa',
             lightBg: null,
             fitMode: 'auto'
           })

@@ -188,10 +188,6 @@ import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BgImg from './BgImgDialog.vue'
 import { mapState, mapMutations } from 'vuex'
-import { getThemeConfig } from 'data-room-ui/js/api/bigScreenApi'
-// import _ from 'lodash'
-import cloneDeep from 'lodash/cloneDeep'
-import { G2 } from '@antv/g2plot'
 import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
 export default {
   name: 'OverallSetting',
@@ -288,7 +284,7 @@ export default {
         bg: '',
         bgColor: '#151a26', // 背景色
         lightBg: '',
-        lightBgColor: '#151a26',
+        lightBgColor: '#f5f7fa',
         opacity: 100,
         customTheme: 'dark',
         themeJson: {},
@@ -317,12 +313,15 @@ export default {
       pageInfo: state => state.bigScreen.pageInfo,
       config: state => state.bigScreen.activeItemConfig
     }),
+    isPreview () {
+      return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
+    },
     // 根据主题色来决定背景色和背景图绑定什么变量
     currentBgColor () {
-      return this.form.customTheme === 'dark' ? 'bgColor' : 'lightBgColor'
+      return this.form.customTheme === 'light' ? 'lightBgColor' : 'bgColor'
     },
     currentBg () {
-      return this.form.customTheme === 'dark' ? 'bg' : 'lightBgColor'
+      return this.form.customTheme === 'light' ? 'lightBgColor' : 'bg'
     },
     dsValue () {
       return this.form.cacheDataSets?.map(dSet => ({
@@ -378,6 +377,22 @@ export default {
       const pageInfo = this.pageInfo
       pageInfo.chartList = themeToSetting(pageInfo.chartList, theme)
       this.changePageInfo(pageInfo)
+      pageInfo.chartList.forEach(chart => {
+        if (chart.type === 'remoteComponent') {
+          this.$emit('styleHandler', chart)
+        }
+      })
+      if (!this.isPreview) {
+        const themeLabel = theme === 'light' ? '明亮' : '暗黑'
+        const htmlStr = `<span>当前已切换到<strong>${themeLabel}</strong>主题，颜色设置针对当前主题生效</span>`
+        this.$notify({
+          title: '注意',
+          dangerouslyUseHTMLString: true,
+          message: htmlStr,
+          customClass: 'ds-el-notify',
+          type: 'warning'
+        })
+      }
     },
     init () {
       if (!this.pageInfo.pageConfig.refreshConfig) {
@@ -432,36 +447,6 @@ export default {
     initResolution () {
       this.resolutionRatioValue = this.pageInfo.pageConfig.w + '*' + this.pageInfo.pageConfig.h
     },
-    getThemeConfig (themeName) {
-      // this.changePageLoading(true)
-      if (!['dark', 'light', 'auto'].includes(themeName)) {
-        getThemeConfig().then(res => {
-          this.form.themeJson = res
-          this.changePageConfig(cloneDeep(this.form))
-          // 统一注册主题
-          const { registerTheme } = G2
-          registerTheme(themeName, { ...res.chart })
-          this.changeChart(themeName)
-        })
-      } else {
-        this.form.themeJson = {}
-        this.changePageConfig(this.form)
-        this.changeChart(themeName)
-      }
-    },
-    // 改变
-    // changeChart (themeName) {
-    //   // 统一改变组件的主题
-    //   const newChartList = cloneDeep(this.pageInfo.chartList)
-    //   const chartList = newChartList.map(chart => {
-    //     chart.option.theme = themeName
-    //     chart.key = new Date().getTime()
-    //     // this.changeChartKey(chart.code)
-    //     return chart
-    //   })
-    //   // 可能需要强制性更新chartList
-    //   this.changeLayout(chartList)
-    // },
 
     // 新增数据集
     addCacheDataSet () {
@@ -488,7 +473,7 @@ export default {
       this.$emit('close')
     },
     timerEmptyState () {
-      return this.pageInfo.chartList.every(chart => chart.dataSource?.businessKey === '')
+      return this.pageInfo.chartList.every(chart => chart.dataSource?.businessKey === '' && chart.type !== 'marquee')
     }
   }
 }
@@ -685,5 +670,21 @@ export default {
 .side-catalog-box {
   height: calc(100% - 50px);
   overflow-y: auto;
+}
+
+</style>
+<style lang="scss">
+//修改notify的样式
+.ds-el-notify {
+  background-color: var(--bs-el-background-1)!important;
+  .el-notification__title{
+    color: #fff!important;
+  }
+  .el-notification__content{
+    color: #fff!important;
+  }
+  .el-notification__closeBtn{
+    color: #fff!important;
+  }
 }
 </style>

@@ -46,7 +46,10 @@ export default {
   computed: {
     ...mapState({
       pageInfo: (state) => state.bigScreen.pageInfo
-    })
+    }),
+    isPreview () {
+      return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
+    }
   },
   data () {
     return {
@@ -68,6 +71,22 @@ export default {
       const pageInfo = this.pageInfo
       pageInfo.chartList = themeToSetting(pageInfo.chartList, val)
       this.changePageInfo(pageInfo)
+      pageInfo.chartList.forEach(chart => {
+        if (chart.type === 'remoteComponent') {
+          this.$emit('styleHandler', chart)
+        }
+      })
+      if (!this.isPreview) {
+        const themeLabel = val === 'light' ? '明亮' : '暗黑'
+        const htmlStr = `<span>当前已切换到<strong>${themeLabel}</strong>主题，颜色设置针对当前主题生效</span>`
+        this.$notify({
+          title: '注意',
+          dangerouslyUseHTMLString: true,
+          message: htmlStr,
+          customClass: 'ds-el-notify',
+          type: 'warning'
+        })
+      }
     }
   }
 }

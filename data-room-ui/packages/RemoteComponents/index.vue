@@ -47,22 +47,6 @@ export default {
     }
   },
   watch: {
-    // 监听主题变化手动触发组件配置更新
-    'config.option.theme': {
-      handler (val) {
-        if (val) {
-          this.changeStyle(this.config, true)
-        }
-      }
-    }
-    // customTheme: {
-    //   handler (val) {
-    //     if (val) {
-    //       this.changeStyle(this.config, true)
-    //     }
-    //   },
-    //   deep: true
-    // }
   },
   created () {
     this.getRemoteComponent()

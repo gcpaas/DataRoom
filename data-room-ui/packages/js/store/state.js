@@ -22,7 +22,7 @@ export const defaultData = {
       h: 1080,
       bgColor: '#151a26', // 背景色
       bg: '', // 背景图
-      lightBgColor: '#151a26',
+      lightBgColor: '#f5f7fa',
       lightBg: '',
       opacity: 100,
       customTheme: 'dark',

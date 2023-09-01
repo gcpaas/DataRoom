@@ -26,6 +26,7 @@
             ref="RenderCardRef"
             :key="chart.key"
             :config="chart"
+            @styleHandler="styleHandler"
           />
         </div>
       </div>
@@ -36,10 +37,9 @@
 <script>
 import RenderCard from 'data-room-ui/Render/RenderCard.vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
-import { getThemeConfig } from 'data-room-ui/js/api/bigScreenApi'
 import { compile } from 'tiny-sass-compiler/dist/tiny-sass-compiler.esm-browser.prod.js'
-import { G2 } from '@antv/g2plot'
 import NotPermission from 'data-room-ui/NotPermission'
+import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'BigScreenRun',
   components: {
@@ -94,8 +94,8 @@ export default {
     previewWrapStyle () {
       const bg = this.fitMode !== 'none'
         ? {
-            backgroundColor: this.fitPageConfig.customTheme === 'dark' ? this.fitPageConfig.bgColor : this.fitPageConfig.lightBgColor,
-            backgroundImage: this.fitPageConfig.customTheme === 'dark' ? `url(${this.fitPageConfig.bg})` : `url(${this.fitPageConfig.lightBg})`,
+            backgroundColor: this.fitPageConfig.customTheme === 'light' ? this.fitPageConfig.lightBgColor : this.fitPageConfig.bgColor,
+            backgroundImage: this.fitPageConfig.customTheme === 'light' ? `url(${this.fitPageConfig.lightBg})` : `url(${this.fitPageConfig.bg})`,
             backgroundSize: 'cover'
           }
         : {}
@@ -116,8 +116,8 @@ export default {
 
       const bg = this.fitMode === 'none'
         ? {
-            backgroundColor: this.fitPageConfig.customTheme === 'dark' ? this.fitPageConfig.bgColor : this.fitPageConfig.lightBgColor,
-            backgroundImage: this.fitPageConfig.customTheme === 'dark' ? `url(${this.fitPageConfig.bg})` : `url(${this.fitPageConfig.lightBg})`,
+            backgroundColor: this.fitPageConfig.customTheme === 'light' ? this.fitPageConfig.lightBgColor : this.fitPageConfig.bgColor,
+            backgroundImage: this.fitPageConfig.customTheme === 'light' ? `url(${this.fitPageConfig.lightBg})` : `url(${this.fitPageConfig.bg})`,
             backgroundSize: 'cover'
           }
         : {}
@@ -170,6 +170,14 @@ export default {
       'changePageConfig',
       'changeChartConfig'
     ]),
+    // 切换主题时针对远程组件触发样式修改的方法
+    styleHandler (config) {
+      this.chartList.forEach((chart, index) => {
+        if (chart.code === config.code) {
+          this.$refs.RenderCardRef[index].$refs[chart.code].changeStyle(config)
+        }
+      })
+    },
     permission () {
       this.$dataRoomAxios.get(`/bigScreen/permission/check/${this.pageCode}`).then(res => {
         this.hasPermission = res
@@ -182,21 +190,7 @@ export default {
       if (!this.pageCode) { return }
       this.changePageLoading(true)
       this.initLayout(this.pageCode).then(() => {
-        const themeName = this.pageConfig.customTheme
-        if (this.pageConfig.customTheme === 'custom') {
-          getThemeConfig().then((res) => {
-            // 初始化时如果就是自定义主题则统一注册
-            const { registerTheme } = G2
-            registerTheme(themeName, { ...res.chart })
-            const pageConfig = this.pageConfig
-            pageConfig.themeJson = res
-            this.changePageConfig(pageConfig)
-            this.styleSet()
-            this.changePageLoading(false)
-          })
-        } else {
-          this.changePageLoading(false)
-        }
+        this.changePageLoading(false)
         this.getParentWH()
       })
     },

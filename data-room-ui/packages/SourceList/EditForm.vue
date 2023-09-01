@@ -249,7 +249,7 @@ export default {
             opacity: 100,
             customTheme: 'auto',
             bg: null,
-            lightBgColor: '#151a26',
+            lightBgColor: '#f5f7fa',
             lightBg: null
           })
           if (this.dataForm.type === 'bigScreen') {

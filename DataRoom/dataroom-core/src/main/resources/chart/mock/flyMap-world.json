@@ -1,0 +1,111 @@
+{
+    "success": false,
+    "data": [
+        {
+            "from": "加拿大",
+            "lat1": -95.7129,
+            "lat2": 29.80475,
+            "lng1": 56.1304,
+            "lng2": 50.0577,
+            "to": "乌克兰",
+            "type": "move_in",
+            "value": 10
+        },
+        {
+            "from": "中非",
+            "lat1": 20.6796,
+            "lng1": 6.3646,
+            "lat2": 29.80475,
+            "lng2": 50.0577,
+            "to": "乌克兰",
+            "type": "move_in",
+            "value": 10
+        },
+        {
+            "from": "巴西",
+            "lat1": -53.6453,
+            "lng1": -10.8921,
+            "lat2": 29.80475,
+            "lng2": 50.0577,
+            "to": "乌克兰",
+            "type": "move_in",
+            "value": 10
+        },
+        {
+            "from": "俄罗斯",
+            "lat1": 85.7325,
+            "lng1": 67.4894,
+            "lat2": 29.80475,
+            "lng2": 50.0577,
+            "to": "乌克兰",
+            "type": "move_in",
+            "value": 10
+        }
+    ],
+    "columnData": {
+        "from": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "from",
+            "aggregate": "",
+            "alias": "from",
+            "remark": "起点"
+        },
+        "lat1": {
+            "type": "double",
+            "tableName": "",
+            "originalColumn": "lat1",
+            "aggregate": "",
+            "alias": "lat1",
+            "remark": "起点纬度"
+        },
+        "lat2": {
+            "type": "double",
+            "tableName": "",
+            "originalColumn": "lat2",
+            "aggregate": "",
+            "alias": "lat2",
+            "remark": "终点纬度"
+        },
+        "lng1": {
+            "type": "double",
+            "tableName": "",
+            "originalColumn": "lng1",
+            "aggregate": "",
+            "alias": "lng1",
+            "remark": "起点经度"
+        },
+        "lng2": {
+            "type": "double",
+            "tableName": "",
+            "originalColumn": "lng2",
+            "aggregate": "",
+            "alias": "lng2",
+            "remark": "终点经度"
+        },
+        "to": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "to",
+            "aggregate": "",
+            "alias": "to",
+            "remark": "终点"
+        },
+        "type": {
+            "type": "varchar",
+            "tableName": "",
+            "originalColumn": "type",
+            "aggregate": "",
+            "alias": "type",
+            "remark": "类型"
+        },
+        "value": {
+            "type": "int",
+            "tableName": "",
+            "originalColumn": "value",
+            "aggregate": "",
+            "alias": "value",
+            "remark": "值"
+        }
+    }
+}

@@ -1,24 +1,34 @@
 <template>
+  <!-- 添加一个类似鼠标hover事件 -->
   <div class="marquee-box">
     <div class="scroll-area">
+      <audio
+        :ref="`audioPlayer${config.code}`"
+        muted
+        autoplay
+        crossorigin="anonymous"
+      />
       <!-- 设置margin，使内容 有从无到有的出现效果 -->
-      <div class="marquee-container">
+      <div
+        class="marquee-container"
+        @mouseenter.stop="mouseenter"
+        @mouseleave.stop="mouseleave"
+      >
         <div class="icon">
-          <i
-            v-if="config.customize.icon.position === 'left'"
-            :class="config.customize.icon.name"
-            :style="{ color: config.customize.icon.color, fontSize: config.customize.fontSize + 'px' }"
+          <icon-svg
+            v-if="config.customize.icon.name && config.customize.icon.position === 'left'"
+            :name="config.customize.icon.name"
+            :style="{ color: config.customize.icon.color, width: config.customize.fontSize + 'px',height: config.customize.fontSize + 'px' }"
           />
         </div>
-
         <svg class="svg-container">
           <defs>
             <linearGradient
-              :id="'backgroundGradient-'+config.code"
+              :id="'backgroundGradient-' + config.code"
               :x1="0"
               :y1="['to top right'].includes(config.customize.bgGradientDirection) ? '100%' : '0'"
-              :x2="['to right','to bottom right','to top right'].includes(config.customize.bgGradientDirection) ? '100%' : '0'"
-              :y2="['to bottom','to bottom right'].includes(config.customize.bgGradientDirection) ? '100%' : '0'"
+              :x2="['to right', 'to bottom right', 'to top right'].includes(config.customize.bgGradientDirection) ? '100%' : '0'"
+              :y2="['to bottom', 'to bottom right'].includes(config.customize.bgGradientDirection) ? '100%' : '0'"
             >
               <stop
                 offset="0%"
@@ -30,11 +40,11 @@
               />
             </linearGradient>
             <linearGradient
-              :id="'textGradient-'+config.code"
+              :id="'textGradient-' + config.code"
               :x1="0"
               :y1="['to top right'].includes(config.customize.textGradientDirection) ? '100%' : '0'"
-              :x2="['to right','to bottom right','to top right'].includes(config.customize.textGradientDirection) ? '100%' : '0'"
-              :y2="['to bottom','to bottom right'].includes(config.customize.textGradientDirection) ? '100%' : '0'"
+              :x2="['to right', 'to bottom right', 'to top right'].includes(config.customize.textGradientDirection) ? '100%' : '0'"
+              :y2="['to bottom', 'to bottom right'].includes(config.customize.textGradientDirection) ? '100%' : '0'"
             >
               <stop
                 offset="0%"
@@ -71,13 +81,24 @@
           </text>
         </svg>
         <div class="icon">
-          <i
-            v-if="config.customize.icon.position === 'right'"
-            :class="config.customize.icon.name"
-            :style="{ color: config.customize.icon.color, fontSize: config.customize.fontSize + 'px' }"
+          <icon-svg
+            v-if="config.customize.icon.name && config.customize.icon.position === 'right'"
+            :name="config.customize.icon.name"
+            :style="{ color: config.customize.icon.color, width: config.customize.fontSize + 'px',height: config.customize.fontSize + 'px' }"
           />
         </div>
       </div>
+    </div>
+    <div
+      v-show="config.customize.voiceBroadcast && showVoiceSwitch"
+      class="voice-switch"
+      :style="{fontSize:config.customize.fontSize + 'px',right:config.customize.fontSize + 5 + 'px',}"
+      @mouseenter.stop="mouseenter"
+    >
+      <i
+        :class="voiceSwitchValue ? 'el-icon-microphone' : 'el-icon-turn-off-microphone'"
+        @click="voiceSwitch"
+      />
     </div>
   </div>
 </template>
@@ -87,9 +108,12 @@ import Speech from 'speak-tts'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
+import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
 import cloneDeep from 'lodash/cloneDeep'
+import IconSvg from 'data-room-ui/SvgIcon'
 export default {
+  name: 'Marquee',
   props: {
     // 卡片的属性
     config: {
@@ -97,8 +121,13 @@ export default {
       default: () => ({})
     }
   },
+  components: {
+    IconSvg
+  },
   data () {
     return {
+      showVoiceSwitch: false,
+      voiceSwitchValue: true,
       customClass: {},
       attributeName: {
         right: 'x',
@@ -125,16 +154,52 @@ export default {
       innerData: null,
       // 音频播放
       audio: null,
+      // 音频地址
+      isPlayAudio: null,
       // 语音播报
       speech: null,
-      // 语音播报定时器
-      speechTimer: null
+      isInit: false,
+      numberBroadcasts: 0
     }
   },
   computed: {
-
+    // speechText
+    speechText () {
+      return this.config.customize.title || ''
+    },
+    isPreview () {
+      return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
+    },
+    audioSrc () {
+      return this.config?.option?.data?.[this.config?.dataSource?.metricField] || ''
+    }
   },
-  mixins: [paramsMixins, commonMixins],
+  watch: {
+    speechText (val) {
+      if (!this.isPreview && this.config.customize.voiceBroadcast && !this.isInit) {
+        this.speechBroadcast(val)
+      } else {
+        if (this.speech) {
+          this.speech = null
+        }
+      }
+    },
+    deep: true,
+    audioSrc (val) {
+      if (this.config.customize.voiceBroadcast) {
+        if (this.audio) {
+          this.audio.src = val
+          this.audio.play()
+        }
+      } else {
+        if (this.aduio) {
+          this.aduio.pause()
+          this.aduio = null
+        }
+      }
+    }
+  },
+  mixins: [paramsMixins, commonMixins, linkageMixins],
   mounted () {
     this.chartInit()
     // 如果点击了生成图片，则先关闭动画
@@ -145,15 +210,43 @@ export default {
     EventBus.$on('startMarquee', () => {
       this.isAnimate = true
     })
+    //  如果删除了组件
+    EventBus.$on('deleteComponent', (codes) => {
+      if (codes.includes(this.config.code)) {
+        if (this.audio) {
+          this.audio.pause()
+          this.audio = null
+        }
+        if (this.speech) {
+          this.speech = null
+        }
+      }
+    })
+    this.speech = null
+    this.isInit = true
+    // 如果是预览模式的话，则弹出对话框，当前大屏存在语音播报，是否开启语音播报
+    if (this.isPreview && this.config.customize.voiceBroadcast) {
+      this.$confirm('当前大屏存在语音播报，是否开启语音播报？若开启请点击确认或者回车', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        customClass: 'bs-el-message-box'
+      }).then(() => {
+        if (this.audioSrc) {
+          this.audio.play()
+        } else {
+          this.speech = null
+          this.speechBroadcast(this.config.customize.title)
+          this.isInit = false
+        }
+      }).catch(() => { })
+    }
     document.addEventListener('visibilitychange', this.handleVisibilityChange)
   },
   beforeDestroy () {
     EventBus.$off('stopMarquee')
     EventBus.$off('startMarquee')
-    // 销毁语音播报定时器
-    if (this.speechTimer) {
-      clearInterval(this.speechTimer)
-    }
+    EventBus.$off('deleteComponent')
   },
   methods: {
     dataFormatting (config, data) {
@@ -166,7 +259,7 @@ export default {
             // 此处函数处理data
             eval(config.dataHandler)
           } catch (e) {
-            console.error(e)
+            console.info(e)
           }
         }
         config.option.data = data
@@ -177,55 +270,53 @@ export default {
         // 数据返回失败则赋前端的模拟数据
         config.option.data = []
       }
+      // 清除上一个visibilitychange监听，重新开始监听
+      if (this.voiceSwitchValue) {
+        this.voiceBroadcast(config)
+      }
       return config
     },
     // 语音播报
     voiceBroadcast (config) {
-      if (this.innerData) {
+      const innerData = this.innerData || config
+      if (innerData) {
         if (config.customize.voiceBroadcast) {
-          if (this.innerData.dataSource.businessKey && this.innerData.option.data[this.innerData.dataSource.metricField]) {
-            // 如果audio存在，先销毁这个实例，或者替换它的URL
-            if (this.audio) {
-              this.audio.pause()
-              this.audio = null
+          if (innerData?.dataSource?.businessKey && innerData?.option?.data[this.innerData.dataSource.metricField]) {
+            // 如果aduio存在，先销毁这个实例，或者替换它的URL
+            if (this.aduio) {
+              this.aduio.pause()
+              this.aduio = null
             }
-            this.audio = new Audio()
-            this.audio.src = this.innerData.option.data[this.innerData.dataSource.metricField]
+            // 获取音频元素
+            this.audio = this.$refs[`audioPlayer${config.code}`]
+            this.audio.src = innerData.option.data[this.innerData.dataSource.metricField]
             this.audio.play()
           } else if (config.customize.title) {
-            this.speechBroadcast(config.customize.title)
-            // 根据配置的时间，定时播报，第一次播报后，再定时播报
-            this.speechBroadcast(config.customize.title)
-            if (config.customize.dur) {
-              this.speechTimer = setInterval(() => {
-                this.speechBroadcast(config.customize.title)
-              }, config.customize.dur * 1000)
+            //  页面初始化不执行
+            if (!this.isInit) {
+              this.speechBroadcast(config.customize.title)
             }
           }
         } else {
-          if (this.audio) {
-            this.audio.pause()
-            this.audio = null
-          }
-        }
-      } else {
-        if (config.customize.voiceBroadcast) {
-          this.speech = new Speech()
-          if (config.customize.dur) {
-            this.speechBroadcast(config.customize.title)
-            this.speechTimer = setInterval(() => {
-              this.speechBroadcast(config.customize.title)
-            }, config.customize.dur * 1000)
+          if (this.aduio) {
+            this.aduio.pause()
+            this.aduio = null
           }
         }
       }
     },
     // 语音播报
     speechBroadcast (text) {
+      this.numberBroadcasts = 0
+      this.speech = new Speech()
+      this.speech.setLanguage('zh-CN')
+      this.speech.pitch = 1
+      this.speech.init()
       if (this.speech.hasBrowserSupport()) {
-        this.speech.setLanguage('zh-CN')
-        this.speech.init()
-        this.speech.speak({ text: text })
+        if (this.numberBroadcasts < 1) {
+          this.speech.speak({ text: text })
+          this.numberBroadcasts += 1
+        }
       } else {
         this.$message({
           message: '您的浏览器不支持语音播报',
@@ -235,7 +326,10 @@ export default {
     },
     changeStyle (config) {
       config = { ...this.config, ...config }
-      this.voiceBroadcast(config)
+      if (config.customize.voiceBroadcast && this.isInit && !this.audioSrc) {
+        this.isInit = false
+        this.speechBroadcast(config.customize.title)
+      }
       // 样式改变时更新主题配置
       config.theme = settingToTheme(cloneDeep(config), this.customTheme)
       this.changeChartConfig(config)
@@ -250,7 +344,7 @@ export default {
           this.audio.pause()
         }
         if (this.speech) {
-          this.speech.pause()
+          this.speech = null
         }
       } else {
         if (this.audio) {
@@ -260,6 +354,38 @@ export default {
           this.speech.resume()
         }
       }
+    },
+    voiceSwitch () {
+      this.voiceSwitchValue = !this.voiceSwitchValue
+      if (this.voiceSwitchValue) {
+        if (this.audio) {
+          try {
+            this.audio.play()
+          } catch (e) {
+            console.info(e)
+          }
+        }
+        if (this.speech) {
+          this.speech.resume()
+        }
+      } else {
+        if (this.audio) {
+          try {
+            this.audio.pause()
+          } catch (e) {
+            console.info(e)
+          }
+        }
+        if (this.speech) {
+          this.speech.pause()
+        }
+      }
+    },
+    mouseenter () {
+      this.showVoiceSwitch = true
+    },
+    mouseleave () {
+      this.showVoiceSwitch = false
     }
   }
 }
@@ -269,8 +395,10 @@ export default {
 .marquee-box {
   width: 100%;
   height: 100%;
+  user-select: none;
   white-space: nowrap;
   overflow: hidden;
+  position: relative;
 
   .scroll-area {
     width: 100%;
@@ -287,10 +415,18 @@ export default {
       }
     }
   }
+
   .icon {
     position: relative;
     top: 0;
     // 清除浮动
   }
 }
+.voice-switch{
+  position: absolute;
+  cursor: pointer;
+  bottom: 5px;
+  color: #fff;
+}
+
 </style>
