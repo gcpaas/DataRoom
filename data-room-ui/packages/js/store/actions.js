@@ -51,7 +51,13 @@ export default {
 export function handleResData (data) {
   let pageInfo = {}
   if (data.pageConfig) {
-    pageInfo = data
+    pageInfo = {
+      ...data,
+      pageConfig: {
+        ...data.pageConfig,
+        lightBgColor: data.pageConfig.lightBgColor || '#151a26'
+      }
+    }
   } else {
     pageInfo = {
       ...data,
