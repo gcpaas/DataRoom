@@ -8,12 +8,24 @@
     :appen-to-body="true"
     class="bs-dialog-wrap bs-el-dialog"
   >
-  <span style="color:#fff">确定返回主页面吗？未保存的配置将会丢失!</span>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="backDialog = false">留在页面</el-button>
-    <el-button @click="goBack">离开页面</el-button>
-    <el-button type="primary" @click="goBackSave">保存后离开页面</el-button>
-  </span>
+    <span style="color:#fff">确定返回主页面吗？未保存的配置将会丢失!</span>
+    <span
+      slot="footer"
+      class="dialog-footer"
+    >
+      <el-button
+        class="bs-el-button-default"
+        @click="backDialog = false"
+      >留在页面</el-button>
+      <el-button
+        class="bs-el-button-default"
+        @click="goBack"
+      >离开页面</el-button>
+      <el-button
+        type="primary"
+        @click="goBackSave"
+      >保存后离开页面</el-button>
+    </span>
   </el-dialog>
 </template>
 <script>
@@ -37,11 +49,11 @@ export default {
     confirm () {
       this.backDialog = false
     },
-    goBack(){
+    goBack () {
       this.$emit('back')
     },
-    goBackSave(){
-     this.$emit('backSave')
+    goBackSave () {
+      this.$emit('backSave')
     }
   }
 }
