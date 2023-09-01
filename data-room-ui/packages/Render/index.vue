@@ -6,8 +6,8 @@
     :style="{
       width: pageInfo.pageConfig.w + 'px',
       height: pageInfo.pageConfig.h + 'px',
-      backgroundColor:pageInfo.pageConfig.customTheme ==='dark' ? pageInfo.pageConfig.bgColor : pageInfo.pageConfig.lightBgColor,
-      backgroundImage:pageInfo.pageConfig.customTheme ==='dark' ? `url(${pageInfo.pageConfig.bg})`:`url(${pageInfo.pageConfig.lightBg})`
+      backgroundColor:pageInfo.pageConfig.customTheme ==='light' ? pageInfo.pageConfig.lightBgColor:pageInfo.pageConfig.bgColor ,
+      backgroundImage:pageInfo.pageConfig.customTheme ==='light' ? `url(${pageInfo.pageConfig.lightBg})`:`url(${pageInfo.pageConfig.bg})`
     }"
     @drop="drop($event)"
     @dragover.prevent

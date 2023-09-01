@@ -318,10 +318,10 @@ export default {
     },
     // 根据主题色来决定背景色和背景图绑定什么变量
     currentBgColor () {
-      return this.form.customTheme === 'dark' ? 'bgColor' : 'lightBgColor'
+      return this.form.customTheme === 'light' ? 'lightBgColor' : 'bgColor'
     },
     currentBg () {
-      return this.form.customTheme === 'dark' ? 'bg' : 'lightBgColor'
+      return this.form.customTheme === 'light' ? 'lightBgColor' : 'bg'
     },
     dsValue () {
       return this.form.cacheDataSets?.map(dSet => ({

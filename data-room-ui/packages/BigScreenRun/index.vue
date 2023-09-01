@@ -94,8 +94,8 @@ export default {
     previewWrapStyle () {
       const bg = this.fitMode !== 'none'
         ? {
-            backgroundColor: this.fitPageConfig.customTheme === 'dark' ? this.fitPageConfig.bgColor : this.fitPageConfig.lightBgColor,
-            backgroundImage: this.fitPageConfig.customTheme === 'dark' ? `url(${this.fitPageConfig.bg})` : `url(${this.fitPageConfig.lightBg})`,
+            backgroundColor: this.fitPageConfig.customTheme === 'light' ? this.fitPageConfig.lightBgColor : this.fitPageConfig.bgColor,
+            backgroundImage: this.fitPageConfig.customTheme === 'light' ? `url(${this.fitPageConfig.lightBg})` : `url(${this.fitPageConfig.bg})`,
             backgroundSize: 'cover'
           }
         : {}
@@ -116,8 +116,8 @@ export default {
 
       const bg = this.fitMode === 'none'
         ? {
-            backgroundColor: this.fitPageConfig.customTheme === 'dark' ? this.fitPageConfig.bgColor : this.fitPageConfig.lightBgColor,
-            backgroundImage: this.fitPageConfig.customTheme === 'dark' ? `url(${this.fitPageConfig.bg})` : `url(${this.fitPageConfig.lightBg})`,
+            backgroundColor: this.fitPageConfig.customTheme === 'light' ? this.fitPageConfig.lightBgColor : this.fitPageConfig.bgColor,
+            backgroundImage: this.fitPageConfig.customTheme === 'light' ? `url(${this.fitPageConfig.lightBg})` : `url(${this.fitPageConfig.bg})`,
             backgroundSize: 'cover'
           }
         : {}
