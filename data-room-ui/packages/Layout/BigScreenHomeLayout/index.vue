@@ -6,7 +6,7 @@
           class="logo"
           :src="logo"
         >
-        <span>{{ title || 'GCPAAS大屏设计器' }}</span>
+        <span>{{ title }}</span>
       </div>
 
       <div class="big-screen-nav-container">
@@ -53,10 +53,10 @@ export default {
   computed: {
     title () {
       if (this.$route.query.edit) return '大屏设计器'
-      return window?.BS_CONFIG?.starter?.title
+      return window?.BS_CONFIG?.starter?.title ?? 'GCPAAS大屏设计器'
     },
     logo () {
-      return window?.BS_CONFIG?.starter?.logo || require('./images/logo.png')
+      return window?.BS_CONFIG?.starter?.logo ?? require('./images/logo.png')
     },
     tabList () {
       if (this.$route.query.edit) {
