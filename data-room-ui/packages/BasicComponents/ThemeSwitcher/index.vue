@@ -3,9 +3,9 @@
     class="bs-design-wrap theme-switcher-wrap"
     :class="`bs-theme-switcher-${customTheme}`"
   >
-    <div class="label-box">
-      切换主题
-    </div>
+    <!--    <div class="label-box">-->
+    <!--      切换主题-->
+    <!--    </div>-->
     <el-radio-group
       v-model="pageInfo.pageConfig.customTheme"
       size="medium "
@@ -13,14 +13,15 @@
       @change="handleChange"
     >
       <el-radio
-        border
         label="light"
+        style="color: red!important;"
+        :style="{color:config.customize.inactiveColor}"
       >
         明亮
       </el-radio>
       <el-radio
-        border
         label="dark"
+        :style="{color:config.customize.inactiveColor}"
       >
         暗黑
       </el-radio>
@@ -56,8 +57,15 @@ export default {
     }
   },
   watch: {
+    'config.customize.activeColor': {
+      handler (val) {
+        document.documentElement.style.setProperty('--radio-label-color', val)
+      },
+      immediate: true
+    }
   },
   mounted () {
+    document.documentElement.style.setProperty('--radio-label-color', this.config.customize.activeColor)
   },
   methods: {
     ...mapMutations({
@@ -97,6 +105,7 @@ export default {
     width: 100%;;
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-wrap: nowrap;
     color: #fff;
     .label-box{
@@ -104,13 +113,21 @@ export default {
       margin-right: 10px;
       font-size: 14px;
     }
-    .el-radio.is-checked {
-      color: #00a0e9; /* 修改激活状态下的字体颜色 */
+    //.el-radio.is-checked {
+    //  color: red; /* 修改激活状态下的字体颜色 */
+    //}
+    //
+    ///* 修改未激活状态下的字体颜色 */
+    //.el-radio:not(.is-checked) {
+    //  color: #fff; /* 修改未激活状态下的字体颜色 */
+    //}
+    /deep/ .el-radio__input.is-checked+.el-radio__label {
+      /* 使用 CSS 变量来设置字体颜色 */
+      color: var(--radio-label-color);
     }
-
-    /* 修改未激活状态下的字体颜色 */
-    .el-radio:not(.is-checked) {
-      color: #fff; /* 修改未激活状态下的字体颜色 */
+    /deep/ .el-radio__input.is-checked .el-radio__inner{
+      background: var(--radio-label-color);
+      border-color: var(--radio-label-color);
     }
   }
 </style>
