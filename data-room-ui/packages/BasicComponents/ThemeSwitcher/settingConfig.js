@@ -21,7 +21,7 @@ const customConfig = {
     version: '2023071001'
   },
   customize: {
-    activeColor: 'red', // 单选框字体激活状态
+    activeColor: '#007aff', // 单选框字体激活状态
     inactiveColor: '#bcc9d4'// 单选框字体非激活状态
   }
 

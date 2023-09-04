@@ -32,11 +32,12 @@
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
 import { mapMutations, mapState } from 'vuex'
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
 
 export default {
   name: 'ThemeSwitcher',
   components: {},
-  mixins: [paramsMixins],
+  mixins: [paramsMixins, refreshComponentMixin],
   props: {
     // 卡片的属性
     config: {
@@ -71,9 +72,6 @@ export default {
     ...mapMutations({
       changePageInfo: 'bigScreen/changePageInfo'
     }),
-    // 由于静态组件没有混入公共函数，所以需要定义一个changeStyle方法，以免报错
-    changeStyle (config) {
-    },
     // 点击切换主题
     handleChange (val) {
       const pageInfo = this.pageInfo
