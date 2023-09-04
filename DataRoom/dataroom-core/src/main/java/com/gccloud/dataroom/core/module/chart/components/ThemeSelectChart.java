@@ -6,16 +6,17 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
+ * 主题选择器
  * @author hongyang
  * @version 1.0
  * @date 2023/8/24 17:03
  */
 @Data
-public class ThemeSwitcherChart extends Chart{
+public class ThemeSelectChart extends Chart{
 
 
     @ApiModelProperty(notes = "类型")
-    private String type = PageDesignConstant.BigScreen.Type.THEME_SWITCHER;
+    private String type = PageDesignConstant.BigScreen.Type.THEME_SELECT;
 
     @ApiModelProperty(notes = "个性化")
     private Customize customize = new Customize();
@@ -34,12 +35,6 @@ public class ThemeSwitcherChart extends Chart{
 
         @ApiModelProperty(notes = "字体颜色")
         private String color;
-
-        @ApiModelProperty(notes = "单选框字体激活状态")
-        private String activeColor;
-
-        @ApiModelProperty(notes = "单选框字体非激活状态")
-        private String inactiveColor;
 
     }
 

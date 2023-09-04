@@ -13,35 +13,42 @@
       :rules="rules"
       class="bs-el-form"
     >
-      <SettingTitle>标题</SettingTitle>
-      <div class="bs-setting-wrap">
-        <el-form-item
-          label="标题"
-          label-width="100px"
-          prop="title"
-        >
-          <el-input
-            v-model="config.customize.title"
-            placeholder="请输入标题"
-            clearable
-          />
-        </el-form-item>
-      </div>
       <SettingTitle>位置</SettingTitle>
       <div class="lc-field-body">
         <PosWhSetting :config="config" />
+      </div>
+      <SettingTitle>基础</SettingTitle>
+      <div class="lc-field-body">
+        <el-form-item
+          label="激活颜色"
+          label-width="100px"
+        >
+          <el-color-picker
+            v-model="config.customize.activeColor"
+            popper-class="bs-el-color-picker"
+            class="bs-el-color-picker"
+          />
+        </el-form-item>
+        <el-form-item
+          label="非激活颜色"
+          label-width="100px"
+        >
+          <el-color-picker
+            v-model="config.customize.inactiveColor"
+            popper-class="bs-el-color-picker"
+            class="bs-el-color-picker"
+          />
+        </el-form-item>
       </div>
     </el-form>
   </div>
 </template>
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
-import TextGradient from 'data-room-ui/BigScreenDesign/RightSetting/TextGradient/index'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 export default {
   name: 'ThemeSwitcherSetting',
   components: {
-    TextGradient,
     PosWhSetting,
     SettingTitle
   },

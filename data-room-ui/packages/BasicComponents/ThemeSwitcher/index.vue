@@ -3,9 +3,9 @@
     class="bs-design-wrap theme-switcher-wrap"
     :class="`bs-theme-switcher-${customTheme}`"
   >
-    <div class="label-box">
-      切换主题
-    </div>
+    <!--    <div class="label-box">-->
+    <!--      切换主题-->
+    <!--    </div>-->
     <el-radio-group
       v-model="pageInfo.pageConfig.customTheme"
       size="medium "
@@ -13,14 +13,15 @@
       @change="handleChange"
     >
       <el-radio
-        border
         label="light"
+        style="color: red!important;"
+        :style="{color:config.customize.inactiveColor}"
       >
         明亮
       </el-radio>
       <el-radio
-        border
         label="dark"
+        :style="{color:config.customize.inactiveColor}"
       >
         暗黑
       </el-radio>
@@ -31,11 +32,12 @@
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
 import { mapMutations, mapState } from 'vuex'
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
 
 export default {
   name: 'ThemeSwitcher',
   components: {},
-  mixins: [paramsMixins],
+  mixins: [paramsMixins, refreshComponentMixin],
   props: {
     // 卡片的属性
     config: {
@@ -56,16 +58,20 @@ export default {
     }
   },
   watch: {
+    'config.customize.activeColor': {
+      handler (val) {
+        document.documentElement.style.setProperty('--radio-label-color', val)
+      },
+      immediate: true
+    }
   },
   mounted () {
+    document.documentElement.style.setProperty('--radio-label-color', this.config.customize.activeColor)
   },
   methods: {
     ...mapMutations({
       changePageInfo: 'bigScreen/changePageInfo'
     }),
-    // 由于静态组件没有混入公共函数，所以需要定义一个changeStyle方法，以免报错
-    changeStyle (config) {
-    },
     // 点击切换主题
     handleChange (val) {
       const pageInfo = this.pageInfo
@@ -97,6 +103,7 @@ export default {
     width: 100%;;
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-wrap: nowrap;
     color: #fff;
     .label-box{
@@ -104,13 +111,21 @@ export default {
       margin-right: 10px;
       font-size: 14px;
     }
-    .el-radio.is-checked {
-      color: #00a0e9; /* 修改激活状态下的字体颜色 */
+    //.el-radio.is-checked {
+    //  color: red; /* 修改激活状态下的字体颜色 */
+    //}
+    //
+    ///* 修改未激活状态下的字体颜色 */
+    //.el-radio:not(.is-checked) {
+    //  color: #fff; /* 修改未激活状态下的字体颜色 */
+    //}
+    /deep/ .el-radio__input.is-checked+.el-radio__label {
+      /* 使用 CSS 变量来设置字体颜色 */
+      color: var(--radio-label-color);
     }
-
-    /* 修改未激活状态下的字体颜色 */
-    .el-radio:not(.is-checked) {
-      color: #fff; /* 修改未激活状态下的字体颜色 */
+    /deep/ .el-radio__input.is-checked .el-radio__inner{
+      background: var(--radio-label-color);
+      border-color: var(--radio-label-color);
     }
   }
 </style>
