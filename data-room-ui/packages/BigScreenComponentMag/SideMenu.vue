@@ -35,15 +35,22 @@ export default {
       activeType: 'component'
     }
   },
-  created () {
-    const { globalData } = this.$router.app.$options
-    if (globalData?.componentsManagementType) {
-      this.activeType = globalData.componentsManagementType
-      this.$emit('getPageInfo', globalData.componentsManagementType)
-      // 清除this.$router.app.$options.globalData.componentsManagementType
-      delete globalData.componentsManagementType
+  watch: {
+    $route: {
+      handler (val) {
+        console.log(val)
+        const { globalData } = this.$router.app.$options
+        if (globalData?.componentsManagementType) {
+          this.activeType = globalData.componentsManagementType
+          this.$emit('getPageInfo', globalData.componentsManagementType)
+          // 清除this.$router.app.$options.globalData.componentsManagementType
+          delete globalData.componentsManagementType
+        }
+      },
+      immediate: true
     }
   },
+  created () { },
   methods: {
     // 点击左侧组件
     componentHandle (com) {
