@@ -38,7 +38,6 @@ export default {
   watch: {
     $route: {
       handler (val) {
-        console.log(val)
         const { globalData } = this.$router.app.$options
         if (globalData?.componentsManagementType) {
           this.activeType = globalData.componentsManagementType
