@@ -138,6 +138,11 @@ public interface PageDesignConstant {
             String THEME_SWITCHER = "themeSwitcher";
 
             /**
+             * 主题选择器
+             */
+            String THEME_SELECT = "themeSelect";
+
+            /**
              * 跑马灯
              */
             String MARQUEE = "marquee";
