@@ -66,7 +66,7 @@ export default {
     state.pageLoading = booleanValue
   },
   // 改变当前组件配置
-  changeChartConfig(state, itemConfig) {
+  changeChartConfig (state, itemConfig) {
     const index = state.pageInfo.chartList.findIndex(
       item => item.code === itemConfig.code
     )
@@ -92,7 +92,7 @@ export default {
       { type: 'v', site: x || 0 }
     ]
   },
-  changeActiveItemConfig(state, config) {
+  changeActiveItemConfig (state, config) {
     state.activeItemConfig = cloneDeep(config)
   },
   // 新增一个组件
@@ -105,8 +105,16 @@ export default {
   // 删除组件/批量删除组件
   delItem (state, codes) {
     if (Array.isArray(codes)) {
+      const delCharts = state.pageInfo.chartList.filter(chart => codes.includes(chart.code))
+      // 如果删除的组件中有跑马灯，需要删除将跑马灯组件的音频实例销毁
+      delCharts.some(item => { item.type === 'marquee' && EventBus.$emit('deleteComponent', item.code) })
       state.pageInfo.chartList = state.pageInfo.chartList.filter(chart => !codes.includes(chart.code))
     } else {
+      // 如果删除的组件是跑马灯，需要删除将跑马灯组件的音频实例销毁
+      const delChart = state.pageInfo.chartList.find(chart => codes === chart.code)
+      if (delChart && delChart.type === 'marquee') {
+        EventBus.$emit('deleteComponent', codes)
+      }
       state.pageInfo.chartList = state.pageInfo.chartList.filter(chart => codes !== chart.code)
     }
     // 存储删除后的状态

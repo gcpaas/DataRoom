@@ -66,6 +66,8 @@
             v-model="config.customize.direction"
             class="bs-el-select"
             popper-class="bs-el-select"
+            filterable
+            clearable
           >
             <el-option
               v-for="direction in directionList"
@@ -97,7 +99,24 @@
           label="图标选择"
           label-width="100px"
         >
-          <IconPicker v-model="config.customize.icon.name" />
+          <!-- <IconPicker v-model="config.customize.icon.name" /> -->
+          <el-select
+            v-model="config.customize.icon.name"
+            class="bs-el-select"
+            popper-class="bs-el-select"
+            filterable
+            clearable
+          >
+            <el-option
+              v-for="(icbroadcaston,index) in broadcastList"
+              :key="index"
+              :label="icbroadcaston.label"
+              :value="icbroadcaston.value"
+            >
+              <icon-svg :name="icbroadcaston.value" />
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ icbroadcaston.label }}</span>
+            </el-option>
+          </el-select>
         </el-form-item>
         <!-- 图标位置 -->
         <el-form-item
@@ -109,6 +128,8 @@
             v-model="config.customize.icon.position"
             class="bs-el-select"
             popper-class="bs-el-select"
+            filterable
+            clearable
           >
             <el-option
               v-for="iconPosition in iconPositionOptions"
@@ -135,6 +156,8 @@
             v-model="config.customize.textColorType"
             popper-class="bs-el-select"
             class="bs-el-select"
+            filterable
+            clearable
           >
             <el-option
               label="纯色"
@@ -164,6 +187,8 @@
             v-model="config.customize.textGradientDirection"
             popper-class="bs-el-select"
             class="bs-el-select"
+            filterable
+            clearable
           >
             <el-option
               v-for="direction in gradientDirection"
@@ -198,6 +223,8 @@
             v-model="config.customize.backgroundColorType"
             popper-class="bs-el-select"
             class="bs-el-select"
+            filterable
+            clearable
           >
             <el-option
               label="透明"
@@ -231,6 +258,8 @@
             v-model="config.customize.bgGradientDirection"
             popper-class="bs-el-select"
             class="bs-el-select"
+            filterable
+            clearable
           >
             <el-option
               v-for="direction in gradientDirection"
@@ -282,15 +311,15 @@
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
-import IconPicker from 'data-room-ui/IconPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import IconSvg from 'data-room-ui/SvgIcon'
 export default {
   name: 'TextSetting',
   components: {
     PosWhSetting,
     ColorPicker,
     SettingTitle,
-    IconPicker
+    IconSvg
   },
   data () {
     return {
@@ -352,6 +381,52 @@ export default {
           value: 'right'
         }
       ],
+      broadcastList: [
+        {
+          label: '广播1',
+          value: 'broadcast-1'
+        },
+        {
+          label: '广播2',
+          value: 'broadcast-2'
+        },
+        {
+          label: '广播3',
+          value: 'broadcast-3'
+        },
+        {
+          label: '广播4',
+          value: 'broadcast-4'
+        },
+        {
+          label: '广播5',
+          value: 'broadcast-5'
+        },
+        {
+          label: '广播6',
+          value: 'broadcast-6'
+        },
+        {
+          label: '广播7',
+          value: 'broadcast-7'
+        },
+        {
+          label: '广播8',
+          value: 'broadcast-8'
+        },
+        {
+          label: '广播9',
+          value: 'broadcast-9'
+        },
+        {
+          label: '广播10',
+          value: 'broadcast-10'
+        },
+        {
+          label: '广播11',
+          value: 'broadcast-11'
+        }
+      ],
       rules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }
@@ -383,7 +458,7 @@ export default {
 @import '../../assets/style/bsTheme.scss';
 
 .bs-setting-wrap {
-  padding:12px 16px;
+  padding: 12px 16px;
 }
 
 .lc-field-body {

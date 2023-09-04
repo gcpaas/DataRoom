@@ -6,7 +6,7 @@
           class="logo"
           :src="logo"
         >
-        <span>{{ title || 'GCPAAS大屏设计器' }}</span>
+        <span>{{ title }}</span>
       </div>
 
       <div class="big-screen-nav-container">
@@ -16,12 +16,13 @@
         />
       </div>
       <a
+        v-if="giteeSvg && giteeHref"
         class="fork-me-on-gitee"
-        href="https://gitee.com/gcpaas/DataRoom"
+        :href="giteeHref"
         target="_blank"
       >
         <img
-          src="https://gitee.com/gcpaas/DataRoom/widgets/widget_1.svg?color=007bff"
+          :src="giteeSvg"
           alt="Fork me on Gitee"
         >
       </a>
@@ -45,15 +46,17 @@ export default {
   data () {
     return {
       // 和此处路由保持一致，将会激活tab，请按需更改
+      giteeHref: '',
+      giteeSvg: ''
     }
   },
   computed: {
     title () {
       if (this.$route.query.edit) return '大屏设计器'
-      return window?.BS_CONFIG?.starter?.title
+      return window?.BS_CONFIG?.starter?.title ?? 'GCPAAS大屏设计器'
     },
     logo () {
-      return window?.BS_CONFIG?.starter?.logo || require('./images/logo.png')
+      return window?.BS_CONFIG?.starter?.logo ?? require('./images/logo.png')
     },
     tabList () {
       if (this.$route.query.edit) {
@@ -115,6 +118,10 @@ export default {
     }
   },
   created () {},
+  mounted () {
+    this.giteeHref = 'https://gitee.com/gcpaas/DataRoom'
+    this.giteeSvg = 'https://gitee.com/gcpaas/DataRoom/widgets/widget_1.svg?color=007bff'
+  },
   methods: {
     changeTab (tab) {
       if (this.$route.query.edit) {

@@ -77,6 +77,7 @@
     "vue-draggable-resizable-gorkys": "^2.4.8",
     "vue-json-editor": "^1.4.3",
     "vue-json-viewer": "^2.2.22",
+    "vue-player-audio": "^1.0.2",
     "vue-router": "3.0.6",
     "vue-sketch-ruler": "^1.0.3",
     "vue-video-player": "^5.0.1",
