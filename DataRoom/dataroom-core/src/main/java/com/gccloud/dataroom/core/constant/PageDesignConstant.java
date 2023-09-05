@@ -151,6 +151,11 @@ public interface PageDesignConstant {
              * 飞线地图
              */
             String FLY_MAP = "flyMap";
+
+            /**
+             * Tab切换
+             */
+            String TAB_CHART = "chartTab";
         }
     }
 
