@@ -28,7 +28,7 @@
           <div class="code-tab-header">
             <div class="code-tab-left">
               <div class="code-tab">组件模板</div>
-              <div class="code-tab-btn">
+              <div class="code-tab-btn" @click="change('echarts')">
                 echarts组件
               </div>
               <div class="code-tab-btn" @click="change('g2')">
@@ -130,6 +130,7 @@ import CusBtn from 'data-room-ui/BigScreenDesign/BtnLoading'
 import BizComponentPreview from './Preview'
 import { getBizComponentInfo, updateBizComponent } from 'data-room-ui/js/api/bigScreenApi'
 import { defaultSettingContent, defaultVueContent } from './config/defaultBizConfig'
+import { defaultEchartsSettingContent, defaultEchartsVueContent } from './config/defaultEchartsConfig'
 import { defaultG2SettingContent, defaultG2VueContent } from './config/defaultG2Config'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -238,6 +239,9 @@ export default {
       }else if(val=='base'){
         this.form.settingContent=defaultSettingContent
         this.form.vueContent=defaultVueContent
+      }else if(val=='echarts'){
+        this.form.settingContent= defaultEchartsSettingContent
+        this.form.vueContent=defaultEchartsVueContent
       }
     },
     change(val) {
