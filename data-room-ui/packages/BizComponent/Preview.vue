@@ -14,6 +14,8 @@
 </template>
 <script>
 import remoteVueLoader from 'remote-vue-loader'
+import * as _echarts from 'echarts'
+import * as g2Plot from '@antv/g2plot'
 import { getBizComponentInfo } from 'data-room-ui/js/api/bigScreenApi'
 import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
 export default {
@@ -37,8 +39,12 @@ export default {
         let setting = []
         // eslint-disable-next-line prefer-const, no-unused-vars
         let title = ''
+
+        let chartType = ''
         // eslint-disable-next-line prefer-const, no-unused-vars
         let data = []
+        let g2Plots=g2Plot
+        let echarts = _echarts
         // eslint-disable-next-line prefer-const
         let settingContent = this.settingContentInner?.replaceAll('const ', '')
         // 去掉 export default及后面代码
@@ -47,7 +53,10 @@ export default {
         return {
           title,
           option,
-          setting
+          setting,
+          echarts,
+          g2Plots,
+          chartType
         }
       },
       set (val) {}
@@ -72,7 +81,7 @@ export default {
       loading: false,
       remoteComponent: null,
       vueContentInner: this.vueContent,
-      settingContentInner: this.settingContent?.replaceAll('const ', '')
+      settingContentInner: this.settingContent?.replaceAll('const ', ''),
     }
   },
   created () {
@@ -185,17 +194,17 @@ export default {
 
 <style lang="scss" scoped>
 .bs-remote-preview {
-  position: absolute;
-  min-height: 100%;
+  // position: absolute;
+  height: 88%;
   min-width: 100%;
   overflow: hidden;
   box-sizing: border-box;
 
   .remote-preview-inner-wrap {
-    position: absolute;
-    // height: 100%;
+    // position: absolute;
+    height: 100%;
     width: 100%;
-    overflow: auto;
+    // overflow: auto;
     padding: 20px;
     background-color: var(--bs-background-1);
   }

@@ -13,12 +13,7 @@
         </div>
       </div>
       <div class="right-btn-wrap">
-        <CusBtn
-          :loading="loading"
-          @click.native="createdImg()"
-        >
-          生成图片
-        </CusBtn>
+
         <CusBtn
           :loading="loading"
           @click="save"
@@ -31,8 +26,17 @@
       <div class="bs-custom-component-content-code">
         <div class="left-vue-code component-code">
           <div class="code-tab-header">
-            <div class="code-tab">
-              VUE组件
+            <div class="code-tab-left">
+              <div class="code-tab">组件模板</div>
+              <div class="code-tab-btn">
+                echarts组件
+              </div>
+              <div class="code-tab-btn" @click="change('g2')">
+                G2Plot组件
+              </div>
+              <div class="code-tab-btn" @click="change('base')">
+                原生组件
+              </div>
             </div>
             <div class="upload-btn">
               <CusBtn @click="upload('vueContent')">
@@ -84,6 +88,14 @@
             <div class="code-tab">
               效果预览
             </div>
+            <div class="upload-btn">
+             <CusBtn
+              :loading="loading"
+              @click.native="createdImg()"
+            >
+              生成图片
+            </CusBtn>
+            </div>
           </div>
           <BizComponentPreview
             :vue-content="form.vueContent"
@@ -118,6 +130,7 @@ import CusBtn from 'data-room-ui/BigScreenDesign/BtnLoading'
 import BizComponentPreview from './Preview'
 import { getBizComponentInfo, updateBizComponent } from 'data-room-ui/js/api/bigScreenApi'
 import { defaultSettingContent, defaultVueContent } from './config/defaultBizConfig'
+import { defaultG2SettingContent, defaultG2VueContent } from './config/defaultG2Config'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/material-darker.css'
@@ -217,6 +230,29 @@ export default {
           // this.$refs.settingContent.editor.setValue(this.form.settingContent)
         })
       }
+    },
+    changeTemp(val){
+      if(val=='g2'){
+        this.form.settingContent=defaultG2SettingContent
+        this.form.vueContent=defaultG2VueContent
+      }else if(val=='base'){
+        this.form.settingContent=defaultSettingContent
+        this.form.vueContent=defaultVueContent
+      }
+    },
+    change(val) {
+      this.$confirm('确定替换为选中模板吗？未保存的代码将被覆盖！', '提示', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        cancelButtonClass: 'cancel-btn',
+        type: 'warning',
+        customClass: 'bs-el-message-box'
+      }).then(() => {
+        this.changeTemp(val)
+      }).catch((action) => {
+
+      })
     },
     upload (type) {
       this.currentContentType = type
@@ -426,6 +462,28 @@ export default {
           justify-content: space-between;
           height: 40px;
 
+          .code-tab-left {
+            height: 100%;
+            width: 450px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            .code-tab-btn{
+              width: 90px;
+              cursor: pointer;
+            }
+            .code-tab {
+              font-size: 14px;
+              align-items: center;
+              justify-content: center;
+              width: 120px;
+              height: 100%;
+              color: var(--bs-el-title);
+              background: var(--bs-background-1);
+            }
+          }
+
           .code-tab {
             font-size: 14px;
             display: flex;
@@ -458,13 +516,20 @@ export default {
         position: relative;
         .code-tab-header{
           height: 40px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
           background-color: var(--bs-background-2);
-          line-height: 40px;
-          .code-tab{
+          .code-tab {
+            font-size: 14px;
+            align-items: center;
+            justify-content: center;
+            display: flex;
             width: 120px;
-            height:40px;
-            text-align: center;
-            background-color: var(--bs-background-1);
+            margin-right: 20px;
+            height: 100%;
+            color: var(--bs-el-title);
+            background: var(--bs-background-1);
           }
         }
       }

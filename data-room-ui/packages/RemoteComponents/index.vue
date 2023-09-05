@@ -16,6 +16,8 @@
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import remoteVueLoader from 'remote-vue-loader'
+import * as g2Plot from '@antv/g2plot'
+import * as _echarts from 'echarts'
 import { mapMutations, mapState } from 'vuex'
 import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
 import { getBizComponentInfo } from 'data-room-ui/js/api/bigScreenApi'
@@ -90,6 +92,8 @@ export default {
     },
     async chartInit () {
       let config = this.config
+      config.g2Plots=g2Plot
+      config.echarts=_echarts
       // key和code相等，说明是一进来刷新，调用list接口
       if (this.config.code === this.config.key || this.isPreview) {
         // 改变样式

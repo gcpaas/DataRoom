@@ -407,7 +407,7 @@ export default {
     },
     // 自定义属性更新
     updateSetting (config) {
-      if (config.type === 'map' || config.type === 'video' || config.type === 'flyMap') {
+      if (config.type === 'map'|| config.type==='remoteComponent' || config.type === 'video' || config.type === 'flyMap') {
         config.key = new Date().getTime()
       }
       this.changeChartConfig(cloneDeep(config))
