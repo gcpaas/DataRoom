@@ -21,10 +21,8 @@ const customConfig = {
     version: '2023071001'
   },
   customize: {
-    title: '主题切换',
-    fontSize: 20,
-    fontWeight: 700,
-    color: 'left,#ffffff,#ffffff'
+    activeColor: '#007aff', // 单选框字体激活状态
+    inactiveColor: '#bcc9d4'// 单选框字体非激活状态
   }
 
 }

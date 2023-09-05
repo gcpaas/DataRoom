@@ -182,7 +182,6 @@ export default {
   watch: {
     speechText (val) {
       if (!this.isPreview && this.config.customize.voiceBroadcast && !this.isInit && !this.firstSpeech) {
-        console.log(4)
         this.speechBroadcast(val)
       } else {
         if (this.speech) {
@@ -242,7 +241,6 @@ export default {
           this.audio.play()
         } else {
           this.speech = null
-          console.log(1)
           this.speechBroadcast(this.config.customize.title)
           this.isInit = false
         }
@@ -279,7 +277,6 @@ export default {
       }
       // 清除上一个visibilitychange监听，重新开始监听
       if (this.voiceSwitchValue && !this.visibilityState && this.isInit) {
-        console.log(6)
         this.voiceBroadcast(config)
       }
       return config
@@ -302,7 +299,6 @@ export default {
           } else if (config.customize.title) {
             //  页面初始化不执行
             if (!this.isInit) {
-              console.log(2)
               this.speechBroadcast(config.customize.title)
             }
           }
@@ -337,7 +333,6 @@ export default {
       config = { ...this.config, ...config }
       if (config.customize.voiceBroadcast && this.isInit && !config?.option?.data?.[this.config?.dataSource?.metricField]) {
         this.isInit = false
-        console.log(3)
         this.speechBroadcast(config.customize.title)
         this.$nextTick(() => {
           this.firstSpeech = false

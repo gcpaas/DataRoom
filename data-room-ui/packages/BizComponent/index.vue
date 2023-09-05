@@ -373,9 +373,9 @@ export default {
         })
     },
     pageJump () {
-      this.$router.push({ path: window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components' })
       const data = { componentsManagementType: 'bizComponent' }
       this.$router.app.$options.globalData = data // 将数据存储在全局变量中
+      this.$router.push({ path: window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components' })
     }
   }
 }

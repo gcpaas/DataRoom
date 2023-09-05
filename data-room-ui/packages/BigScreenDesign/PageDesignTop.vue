@@ -19,7 +19,7 @@
         label="描述文字"
         @change="changeZoom"
       />
-       <CusBtn
+      <CusBtn
         :loading="saveAndPreviewLoading"
         @click.native="changeZoom('auto')"
       >
@@ -144,7 +144,7 @@ export default {
     ChooseTemplateDialog,
     AssignDialog,
     CusBtn,
-    HistoryList,
+    HistoryList
   },
   props: {
     code: {
@@ -338,14 +338,14 @@ export default {
       }
     },
     goBackManage () {
-       this.$confirm('确定返回主页面吗？未保存的配置将会丢失。', '提示', {
+      this.$confirm('确定返回主页面吗？未保存的配置将会丢失。', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '保存后离开页面',
         cancelButtonText: '离开页面',
         cancelButtonClass: 'cancel-btn',
         type: 'warning',
         customClass: 'bs-el-message-box'
-      }).then( async() => {
+      }).then(async () => {
         await this.save()
         await this.backManagement()
       }).catch((action) => {
@@ -355,9 +355,9 @@ export default {
       })
     },
     backManagement () {
-      this.$router.push({ path: this.pageInfo.type === 'component' ? (window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components') : (window.BS_CONFIG?.routers?.pageManagementUrl || '/home') })
       const data = { componentsManagementType: 'component' }
       this.$router.app.$options.globalData = data // 将数据存储在全局变量中
+      this.$router.push({ path: this.pageInfo.type === 'component' ? (window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components') : (window.BS_CONFIG?.routers?.pageManagementUrl || '/home') })
     },
     undo (isUndo) {
       this.undoTimeLine(isUndo)
