@@ -26,7 +26,10 @@
         {{ tab.name }}
       </div>
     </div>
-    <div class="line-box"></div>
+    <div
+      class="line-box"
+      :style="{'background-color':config.customize.lineColor}"
+    />
     <div
       v-if="config.customize.tabList &&config.customize.tabList.length"
       class="chart-item-box"
@@ -146,7 +149,7 @@ export default {
     width: 98%;
     height: 1px;
     margin: 0 auto;
-    background-color: #797c81;
+    //background-color: #d0d2d6;
   }
 }
 </style>

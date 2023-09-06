@@ -22,7 +22,8 @@ const customConfig = {
     fontSize: 14,
     fontWeight: 700,
     position: 'left',
-    color: 'rgb(155 159 172)'
+    color: 'rgb(155 159 172)',
+    lineColor: '#d0d2d6'
   }
 
 }

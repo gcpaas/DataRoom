@@ -33,6 +33,8 @@
         <el-select
           v-model="config.customize.position"
           placeholder="请选择标题位置"
+          popper-class="bs-el-select"
+          class="bs-el-select"
           clearable
         >
           <el-option
@@ -42,6 +44,51 @@
             :value="item.value"
           />
         </el-select>
+      </el-form-item>
+      <el-form-item
+        class="lc-field-body"
+        label="字体大小"
+        label-width="100px"
+      >
+        <el-input-number
+          v-model="config.customize.fontSize"
+          class="bs-el-input-number"
+          placeholder="请输入字体大小"
+          :min="0"
+        />
+      </el-form-item>
+      <el-form-item
+        class="lc-field-body"
+        label="字体权重"
+        label-width="100px"
+      >
+        <el-input-number
+          v-model="config.customize.fontWeight"
+          class="bs-el-input-number"
+          placeholder="请输入字体权重"
+        />
+      </el-form-item>
+      <el-form-item
+        class="lc-field-body"
+        label="字体颜色"
+        label-width="100px"
+      >
+        <el-color-picker
+          v-model="config.customize.color"
+          class="bs-el-color-picker"
+          popper-class="bs-el-color-picker"
+        />
+      </el-form-item>
+      <el-form-item
+        class="lc-field-body"
+        label="分割线颜色"
+        label-width="100px"
+      >
+        <el-color-picker
+          v-model="config.customize.lineColor"
+          class="bs-el-color-picker"
+          popper-class="bs-el-color-picker"
+        />
       </el-form-item>
       <SettingTitle>内容</SettingTitle>
       <div class="lc-field-body">
@@ -88,6 +135,8 @@
                   <el-select
                     v-model="tab.chart.title"
                     size="mini"
+                    popper-class="bs-el-select"
+                    class="bs-el-select"
                     @change="handleChangeBindCompnents(...arguments, index)"
                   >
                     <el-option
@@ -213,7 +262,7 @@ export default {
       this.$set(this.config.customize.tabList[index], 'name', configName)
       this.$set(this.config.customize.tabList[index], 'chart', { ...config, parentCode: this.config.code })
       this.$set(this.config.customize.tabList[index], 'chartCode', config.code)
-      this.$set(this.config.customize.tabList[index].chart, 'key', settingToTheme(config, config.code))
+      this.$set(this.config.customize.tabList[index].chart, 'key', config.code)
       this.$set(this.config.customize.tabList[index].chart, 'theme', settingToTheme(config, 'dark'))
       this.$set(this.config.customize.tabList[index].chart, 'theme', settingToTheme(config, 'light'))
     }
