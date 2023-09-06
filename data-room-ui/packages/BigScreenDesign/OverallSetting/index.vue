@@ -85,7 +85,7 @@
               选择背景图
             </el-button>
             <el-image
-              v-if="form.currentBg"
+              v-if="form[currentBg]"
               class="bg-img bs-el-img"
               :src="form[currentBg]"
               fit="cover"
