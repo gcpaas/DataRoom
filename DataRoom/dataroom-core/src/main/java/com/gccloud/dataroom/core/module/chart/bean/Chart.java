@@ -21,6 +21,9 @@ public class Chart {
     @ApiModelProperty(notes = "版本")
     private String version;
 
+    @ApiModelProperty(notes = "key")
+    private String key;
+
     @ApiModelProperty(notes = "图表唯一标识")
     private String code;
 
