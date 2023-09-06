@@ -40,7 +40,6 @@ export default {
         // eslint-disable-next-line prefer-const, no-unused-vars
         let title = ''
 
-        let chartType = ''
         // eslint-disable-next-line prefer-const, no-unused-vars
         let data = []
         let g2Plots=g2Plot
@@ -56,7 +55,6 @@ export default {
           setting,
           echarts,
           g2Plots,
-          chartType
         }
       },
       set (val) {}
@@ -194,17 +192,17 @@ export default {
 
 <style lang="scss" scoped>
 .bs-remote-preview {
-  // position: absolute;
-  height: 88%;
+  position: absolute;
+  min-height: 100%;
   min-width: 100%;
   overflow: hidden;
   box-sizing: border-box;
 
   .remote-preview-inner-wrap {
-    // position: absolute;
-    height: 100%;
+    position: absolute;
+    height: calc(100% - 40px);
     width: 100%;
-    // overflow: auto;
+    overflow: auto;
     padding: 20px;
     background-color: var(--bs-background-1);
   }

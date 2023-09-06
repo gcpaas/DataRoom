@@ -9,7 +9,7 @@ export const defaultG2VueContent = `
 <template>
   <div
 	 :id="chatId"
-	 style="width: 100%;height: 300px"
+	 style="width: 100%;height: 100%"
 	/>
 </template>
 <script>
@@ -264,7 +264,7 @@ const setting = [
     type: 'switch',
     field: 'xAxis_label_autoRotate',
     optionField: 'xAxis.label.autoRotate',
-    value: false,
+    value: true,
     active: true,
     inactive: false,
     tabName: 'custom',
@@ -275,7 +275,7 @@ const setting = [
     type: 'switch',
     field: 'xAxis_label_autoHide',
     optionField: 'xAxis.label.autoHide',
-    value: false,
+    value: true,
     active: true,
     inactive: false,
     tabName: 'custom',

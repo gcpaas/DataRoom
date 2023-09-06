@@ -16,6 +16,9 @@ import java.util.List;
 @Data
 public class CustomComponentChart extends Chart {
 
+    @ApiModelProperty(notes = "父编码")
+    private String parentCode;
+
     @ApiModelProperty(notes = "版本")
     private String version;
 

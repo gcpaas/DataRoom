@@ -338,7 +338,7 @@ const setting = [
     type: 'switch',
     field: 'xAxis_label_autoHide',
     optionField: 'xAxis.label.autoHide',
-    value: false,
+    value: true,
     active: true,
     inactive: false,
     tabName: 'custom',
