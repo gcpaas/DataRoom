@@ -27,7 +27,7 @@ public class ChartTabChart extends Chart{
     public static class Customize {
 
         @ApiModelProperty(notes = "组件tab列表")
-        private List tabList;
+        private List<Tab> tabList;
 
         @ApiModelProperty(notes = "字体大小")
         private Integer fontSize;
@@ -38,6 +38,45 @@ public class ChartTabChart extends Chart{
         @ApiModelProperty(notes = "字体颜色")
         private String color;
 
+        @ApiModelProperty(notes = "线条颜色")
+        private String lineColor;
+
+        @ApiModelProperty(notes = "线条位置")
+        private String position;
+
+    }
+
+    @Data
+    public static class Tab {
+
+        @ApiModelProperty(notes = "组件编码")
+        private String chartCode;
+
+        @ApiModelProperty(notes = "组件名称")
+        private String name;
+
+        @ApiModelProperty(notes = "tab图表")
+        private Chart chart;
+    }
+
+    /**
+     * 获取内部图表
+     * @param chartCode
+     * @return
+     */
+    public Chart getInnerChart(String chartCode) {
+        if (customize == null) {
+            return null;
+        }
+        if (customize.tabList == null || customize.tabList.isEmpty()) {
+            return null;
+        }
+        for (Tab tab : customize.tabList) {
+            if (tab.getChartCode().equals(chartCode)) {
+                return tab.getChart();
+            }
+        }
+        return null;
     }
 
 }
