@@ -242,7 +242,7 @@ const setting = [
     type: 'switch',
     field: 'xAxis_label_autoRotate',
     optionField: 'xAxis.label.autoRotate',
-    value: false,
+    value: true,
     active: true,
     inactive: false,
     tabName: 'custom',

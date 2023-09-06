@@ -459,7 +459,7 @@ const setting = [
     type: 'switch',
     field: 'yAxis_label_autoRotate',
     optionField: 'yAxis.label.autoRotate',
-    value: false,
+    value: true,
     active: true,
     inactive: false,
     tabName: 'custom',
