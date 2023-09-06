@@ -26,6 +26,7 @@
         {{ tab.name }}
       </div>
     </div>
+    <div class="line-box"></div>
     <div
       v-if="config.customize.tabList &&config.customize.tabList.length"
       class="chart-item-box"
@@ -127,7 +128,6 @@ export default {
   .tab-title-box{
     height: 40px;
     display: flex;
-    border-bottom: 1px solid  #797c81;
     &:hover{
       cursor: pointer;
     }
@@ -141,6 +141,12 @@ export default {
   }
   .active{
     color: var(--bs-el-color-primary) !important;
+  }
+  .line-box{
+    width: 98%;
+    height: 1px;
+    margin: 0 auto;
+    background-color: #797c81;
   }
 }
 </style>
