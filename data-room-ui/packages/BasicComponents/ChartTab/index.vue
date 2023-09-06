@@ -27,6 +27,7 @@
       </div>
     </div>
     <div
+      v-if="config.customize.tabList &&config.customize.tabList.length"
       class="line-box"
       :style="{'background-color':config.customize.lineColor}"
     />
@@ -34,16 +35,27 @@
       v-if="config.customize.tabList &&config.customize.tabList.length"
       class="chart-item-box"
     >
-      <Configuration
-        :config="config.customize.tabList[currentIndex].chart"
-        @openRightPanel="openRightPanel"
+      <!--      <Configuration-->
+      <!--        :config="config.customize.tabList[currentIndex].chart"-->
+      <!--        @openRightPanel="openRightPanel"-->
+      <!--      >-->
+      <div
+        class="configuration-wrap"
+        :class="{
+          'active': activeCodes.includes(config.customize.tabList[currentIndex].chart.code),
+          'hover': hoverCode === config.customize.tabList[currentIndex].chart.code
+        }"
+        @mouseenter.stop="changeHover(config.customize.tabList[currentIndex].chart.code)"
+        @mouseleave="changeHover('')"
+        @click.stop="changeActive(config.customize.tabList[currentIndex].chart)"
       >
         <RenderCardInner
           :ref="'RenderCard' + config.customize.tabList[currentIndex].chartCode"
           :config="config.customize.tabList[currentIndex].chart"
           @click.native="currentChartHandler"
         />
-      </Configuration>
+      </div>
+      <!--      </Configuration>-->
     </div>
     <el-empty
       v-else-if="!config.customize.tabList.length"
@@ -75,6 +87,8 @@ export default {
       pageCode: state => state.bigScreen.pageInfo.code,
       customTheme: state => state.bigScreen.pageInfo.pageConfig.customTheme,
       activeCode: state => state.bigScreen.activeCode,
+      activeCodes: state => state.bigScreen.activeCodes,
+      hoverCode: state => state.bigScreen.hoverCode,
       chartList: (state) => state.bigScreen.pageInfo.chartList
     })
   },
@@ -96,7 +110,8 @@ export default {
     ...mapMutations({
       changeChartConfig: 'bigScreen/changeChartConfig',
       changeActiveItemConfig: 'bigScreen/changeActiveItemConfig',
-      changeActiveCode: 'bigScreen/changeActiveCode'
+      changeActiveCode: 'bigScreen/changeActiveCode',
+      changeHoverCode: 'bigScreen/changeHoverCode'
     }),
     changeStyle (config) {
       config = { ...this.config, ...config }
@@ -115,11 +130,14 @@ export default {
     currentChartHandler () {
       this.changeActiveCode(this.config.customize.tabList[this.currentIndex]?.chartCode)
       this.changeActiveItemConfig(this.config.customize.tabList[this.currentIndex]?.chart)
-      console.log()
     },
-    // 打开右侧面板
-    openRightPanel () {
-      // EventBus.$emit('openRightPanel', this.currentChart)
+    // 改变hover的组件
+    changeHover (code) {
+      this.changeHoverCode(code)
+    },
+    // 改变激活的组件
+    changeActive (config) {
+      this.changeActiveCode(config.code)
     }
   }
 }
@@ -141,6 +159,13 @@ export default {
   .chart-item-box{
     width: 100%;
     height: calc(100% - 40px);
+    &:hover{
+      cursor: pointer;
+    }
+    .configuration-wrap{
+      width: 100%;
+      height: calc(100% - 40px);
+    }
   }
   .active{
     color: var(--bs-el-color-primary) !important;
