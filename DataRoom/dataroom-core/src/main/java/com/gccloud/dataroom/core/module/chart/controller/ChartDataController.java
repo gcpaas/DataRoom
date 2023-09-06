@@ -3,6 +3,7 @@ package com.gccloud.dataroom.core.module.chart.controller;
 import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
 import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
 import com.gccloud.dataroom.core.module.chart.bean.Chart;
+import com.gccloud.dataroom.core.module.chart.components.ChartTabChart;
 import com.gccloud.dataroom.core.module.chart.components.ScreenFlyMapChart;
 import com.gccloud.dataroom.core.module.chart.dto.ChartDataSearchDTO;
 import com.gccloud.dataroom.core.module.chart.service.BaseChartDataService;
@@ -110,6 +111,14 @@ public class ChartDataController {
         for (Chart chart : chartList) {
             if (chart.getCode().equals(code)) {
                 return chart;
+            }
+            // 如果是Tab图表，尝试从内部图表中获取
+            if (chart instanceof ChartTabChart) {
+                ChartTabChart chartTabChart = (ChartTabChart) chart;
+                Chart innerChart = chartTabChart.getInnerChart(code);
+                if (innerChart != null) {
+                    return innerChart;
+                }
             }
         }
         return null;
