@@ -21,6 +21,7 @@ const customConfig = {
     tabList: [],
     fontSize: 14,
     fontWeight: 700,
+    position: 'left',
     color: 'rgb(155 159 172)'
   }
 

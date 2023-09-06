@@ -6,11 +6,13 @@
     <div
       v-if="config.customize.tabList.length"
       class="tab-title-box"
+      :style="{'justify-content':config.customize.position}"
     >
       <div
         v-for="(tab,index) in config.customize.tabList"
         :key="index"
         class="tab-title-item"
+        :class="{active:currentIndex === index}"
         :style="
           'font-size:' +
             config.customize.fontSize +
@@ -52,7 +54,6 @@ import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
 import cloneDeep from 'lodash/cloneDeep'
 import { mapMutations, mapState } from 'vuex'
 import RenderCardInner from 'data-room-ui/Render/RenderCard2.vue'
-// import RenderCardInner from 'data-room-ui/Render/RenderCard2.vue'
 import Configuration from 'data-room-ui/Render/Configuration.vue'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 export default {
@@ -72,13 +73,6 @@ export default {
       activeCode: state => state.bigScreen.activeCode,
       chartList: (state) => state.bigScreen.pageInfo.chartList
     })
-    // currentChart () {
-    //   if (this.config.customize.tabList && this.config.customize.tabList.length) {
-    //     return { ...this.config.customize.tabList[this.currentIndex].chart, key: new Date().getTime() }
-    //   } else {
-    //     return null
-    //   }
-    // }
   },
   data () {
     return {
@@ -112,9 +106,6 @@ export default {
     // 切换tab页
     changeTab (index) {
       this.currentIndex = index
-      // this.currentChart = this.config.customize.tabList[index]?.chart
-      // this.changeActiveItemConfig(this.currentChart)
-      // this.currentChart.key = new Date().getTime()
     },
     // 点击Tab中的某个组件
     currentChartHandler () {
@@ -136,7 +127,7 @@ export default {
   .tab-title-box{
     height: 40px;
     display: flex;
-    border-bottom: 1px solid  var(--bs-el-background-2);
+    border-bottom: 1px solid  #797c81;
     &:hover{
       cursor: pointer;
     }
@@ -147,6 +138,9 @@ export default {
   .chart-item-box{
     width: 100%;
     height: calc(100% - 40px);
+  }
+  .active{
+    color: var(--bs-el-color-primary) !important;
   }
 }
 </style>

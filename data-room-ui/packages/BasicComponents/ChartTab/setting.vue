@@ -25,6 +25,25 @@
         />
       </div>
       <SettingTitle>基础</SettingTitle>
+      <el-form-item
+        class="lc-field-body"
+        label="标题位置"
+        label-width="100px"
+      >
+        <el-select
+          v-model="config.customize.position"
+          placeholder="请选择标题位置"
+          clearable
+        >
+          <el-option
+            v-for="item in positionList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <SettingTitle>内容</SettingTitle>
       <div class="lc-field-body">
         <div class="select-item select-item-title">
           <span class="option-drag" />
@@ -129,6 +148,18 @@ export default {
       callback()
     }
     return {
+      positionList: [{
+        label: '靠左',
+        value: 'left'
+      },
+      {
+        label: '居中',
+        value: 'center'
+      },
+      {
+        label: '靠右',
+        value: 'right'
+      }],
       rules: {
         name: [
           {
