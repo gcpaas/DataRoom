@@ -163,12 +163,12 @@
             </div>
           </template>
         </draggable>
-        <el-button
-          type="primary"
+        <div
+          class="add-btn"
           @click="addTab"
         >
           新增标签页
-        </el-button>
+        </div>
       </div>
     </el-form>
   </div>
@@ -311,6 +311,19 @@ export default {
 
   .option-delete {
     color: #f56c6c;
+  }
+}
+.add-btn{
+  width: 100px;
+  height: 40px;
+  margin: 0 auto;
+  text-align: center;
+  line-height:40px;
+  border:1px dashed #dcdfe6;
+  &:hover{
+    color: #007aff;
+    border:1px dashed #007aff;
+    cursor: pointer;
   }
 }
 </style>
