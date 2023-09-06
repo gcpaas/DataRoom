@@ -1,0 +1,236 @@
+<template>
+  <div>
+    <el-form
+      ref="form"
+      :model="config"
+      label-width="120px"
+      label-position="left"
+      class="setting-body bs-el-form"
+    >
+      <SettingTitle>基础</SettingTitle>
+      <el-form-item
+        class="lc-field-body"
+        label="名称"
+      >
+        <el-input
+          v-model="config.title"
+          clearable
+        />
+      </el-form-item>
+      <SettingTitle>位置</SettingTitle>
+      <div class="lc-field-body">
+        <PosWhSetting
+          :config="config"
+          label-width="120px"
+        />
+      </div>
+      <SettingTitle>基础</SettingTitle>
+      <div class="lc-field-body">
+        <div class="select-item select-item-title">
+          <span class="option-drag" />
+          <span class="input-wrap_left">标签页名称</span>
+          <span class="input-wrap_left">图表类型</span>
+        </div>
+        <draggable
+          :list="config.customize.tabList"
+          :animation="340"
+          group="selectItem"
+          handle=".option-drag"
+          style="padding: 10px"
+        >
+          <template>
+            <div
+              v-for="(tab, index) in config.customize.tabList"
+              :key="index"
+              class="select-item"
+            >
+              <div class="select-line-icon option-drag">
+                <i class="el-icon-rank" />
+              </div>
+              <div class="input-wrap">
+                <el-form-item
+                  :prop="'customize.tabList.' + index + '.name'"
+                  :rules="rules.name"
+                  label-width="0px"
+                >
+                  <el-input
+                    v-model="tab.name"
+                    placeholder="请输入标签页标题"
+                    size="mini"
+                  />
+                </el-form-item>
+              </div>
+              <div class="input-wrap">
+                <el-form-item
+                  :prop="'customize.tabList.' + index + '.chart'"
+                  :rules="rules.chart"
+                  label-width="0px"
+                >
+                  <el-select
+                    v-model="tab.chart.title"
+                    size="mini"
+                    @change="handleChangeBindCompnents(...arguments, index)"
+                  >
+                    <el-option
+                      v-for="item in componentList"
+                      :key="item.title"
+                      :label="item.title"
+                      :value="item.title"
+                    />
+                  </el-select>
+                </el-form-item>
+              </div>
+              <div
+                class="select-line-icon option-add"
+                @click="addTab(index)"
+              >
+                <i class="el-icon-circle-plus-outline" />
+              </div>
+              <div
+                class="select-line-icon option-delete"
+                @click="deleteTab(index)"
+              >
+                <i class="el-icon-remove-outline" />
+              </div>
+            </div>
+          </template>
+        </draggable>
+        <el-button
+          type="primary"
+          @click="addTab"
+        >
+          新增标签页
+        </el-button>
+      </div>
+    </el-form>
+  </div>
+</template>
+<script>
+import draggable from 'vuedraggable'
+import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
+import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import CloneDeep from 'lodash-es/cloneDeep'
+import plotList from 'data-room-ui/G2Plots/plotList'
+import { randomString } from 'data-room-ui/js/utils'
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+export default {
+  components: {
+    PosWhSetting,
+    SettingTitle,
+    draggable
+  },
+  mixins: [chartSettingMixins],
+  data () {
+    const validateChart = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('请选择图表'))
+      }
+      callback()
+    }
+    return {
+      rules: {
+        name: [
+          {
+            required: true,
+            message: '请输入标签页标题',
+            trigger: 'blur'
+          }
+        ],
+        chart: [
+          { required: true, trigger: 'change', validator: validateChart }
+        ]
+      }
+    }
+  },
+  computed: {
+    config: {
+      get () {
+        return this.$store.state.bigScreen.activeItemConfig
+      },
+      set (val) {
+        this.$store.state.bigScreen.activeItemConfig = val
+      }
+    },
+    pageCode () {
+      return this.$route.query.code
+    },
+    componentList () {
+      return [...plotList]
+    }
+  },
+  watch: {},
+  mounted () { },
+  methods: {
+    deleteTab (index) {
+      this.config.customize.tabList.splice(index, 1)
+    },
+    addTab () {
+      const newTab = {
+        code: '',
+        chartCode: new Date().getTime() + '',
+        name: '',
+        chart: { parentCode: this.config.code }
+      }
+      this.config.customize.tabList.push(newTab)
+    },
+    handleChangeBindCompnents (configName, index) {
+      const config = this.componentList.find(
+        item => item.title === configName
+      )
+      config.code = randomString(12)
+      this.$set(this.config.customize.tabList[index], 'name', configName)
+      this.$set(this.config.customize.tabList[index], 'chart', { ...config, parentCode: this.config.code })
+      this.$set(this.config.customize.tabList[index], 'chartCode', config.code)
+      this.$set(this.config.customize.tabList[index].chart, 'key', settingToTheme(config, config.code))
+      this.$set(this.config.customize.tabList[index].chart, 'theme', settingToTheme(config, 'dark'))
+      this.$set(this.config.customize.tabList[index].chart, 'theme', settingToTheme(config, 'light'))
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+@import "../../assets/style/settingWrap.scss";
+.lc-field-body {
+  padding: 12px 16px;
+}
+.select-item {
+  display: flex;
+  margin-bottom: 8px;
+
+  .option-drag {
+    cursor: move !important;
+    width: 30px;
+    font-size: 24px;
+  }
+  .input-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2px;
+
+    .el-input-number--mini {
+      width: 90px !important;
+    }
+  }
+  .input-wrap_left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+  }
+
+  .select-line-icon {
+    width: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .option-delete {
+    color: #f56c6c;
+  }
+}
+</style>

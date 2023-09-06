@@ -49,52 +49,70 @@ export function settingToTheme (config, type) {
 }
 // 将保存的theme主题设置（颜色）存放到chartList
 export function themeToSetting (chartList, type) {
+  let modifiedChartList = chartList
+  let finalChartList = chartList
   // 排除掉主题非暗黑非明亮的情况
   if (['dark', 'light'].includes(type)) {
-    chartList.forEach(chart => {
-      chart.option.theme = type === 'dark' ? 'transparent' : 'light'
-      if (chart.theme && chart.theme[type]) {
-        // 如果是g2组件或者远程组件
-        if (['customComponent', 'remoteComponent'].includes(chart.type)) {
-          for (const item of chart.setting) {
-            // 检查 obj 中是否存在与 item.field 相对应的属性
-            if (Object.prototype.hasOwnProperty.call(chart.theme[type], item.field)) {
-              // 更新 setting 中对应项的 value 值为 theme 中的属性值
-              item.value = chart.theme[type][item.field]
+    modifiedChartList = chartList.map((item) => {
+      // 使用 map 方法遍历 chartList 数组并执行操作chartThemeToSetting
+      return chartThemeToSetting(item, type)
+    })
+    finalChartList = modifiedChartList.map((item) => {
+      // 如果当前项的 type 为 'chartTab'，遍历其 tabList 数组并执行操作chartThemeToSetting
+      if (item.type === 'chartTab' && Array.isArray(item.customize.tabList) && item.customize.tabList.length) {
+        const modifiedChildren = item.customize.tabList.map((child) => {
+          return { ...child, chart: chartThemeToSetting(child.chart, type) }
+        })
+        return { ...item, customize: { ...item.customize, tabList: modifiedChildren } }
+      }
+      return item
+    })
+  }
+  return finalChartList
+}
+// 对单个组件进行主题设置（从theme到Setting）
+function chartThemeToSetting (chart, type) {
+  chart.option.theme = type === 'dark' ? 'transparent' : 'light'
+  if (chart.theme && chart.theme[type]) {
+    // 如果是g2组件或者远程组件
+    if (['customComponent', 'remoteComponent'].includes(chart.type)) {
+      for (const item of chart.setting) {
+        // 检查 obj 中是否存在与 item.field 相对应的属性
+        if (Object.prototype.hasOwnProperty.call(chart.theme[type], item.field)) {
+          // 更新 setting 中对应项的 value 值为 theme 中的属性值
+          item.value = chart.theme[type][item.field]
+        }
+      }
+    } else {
+      // 如果是普通组件
+      if (chart.customize && Object.keys(chart.customize).length) {
+        for (const key in chart.theme[type]) {
+          const value = chart.theme[type][key]
+          // 如果对应的是二级属性
+          if (key.includes('_')) {
+            const [propertyName, subPropertyName] = key.split('_')
+            if (!chart.customize[propertyName]) {
+              chart.customize[propertyName] = {}
+            } else {
+              chart.customize[propertyName][subPropertyName] = value
             }
-          }
-        } else {
-          // 如果是普通组件
-          if (chart.customize && Object.keys(chart.customize).length) {
-            for (const key in chart.theme[type]) {
-              const value = chart.theme[type][key]
-              // 如果对应的是二级属性
-              if (key.includes('_')) {
-                const [propertyName, subPropertyName] = key.split('_')
-                if (!chart.customize[propertyName]) {
-                  chart.customize[propertyName] = {}
-                } else {
-                  chart.customize[propertyName][subPropertyName] = value
-                }
-              } else {
-                // 对应的一级属性
-                if (Object.prototype.hasOwnProperty.call(chart.customize, key)) {
-                  // 更新 customize 中对应项的值为 theme 中的属性值
-                  chart.customize[key] = chart.theme[type][key]
-                }
-              }
-            }
-            for (const item in chart.customize) {
-              // 检查 obj 中是否存在与 customize 相对应的属性
-              if (Object.prototype.hasOwnProperty.call(chart.theme[type], item)) {
-                // 更新 customize 中对应项的值为 theme 中的属性值
-                chart.customize[item] = chart.theme[type][item]
-              }
+          } else {
+            // 对应的一级属性
+            if (Object.prototype.hasOwnProperty.call(chart.customize, key)) {
+              // 更新 customize 中对应项的值为 theme 中的属性值
+              chart.customize[key] = chart.theme[type][key]
             }
           }
         }
+        for (const item in chart.customize) {
+          // 检查 obj 中是否存在与 customize 相对应的属性
+          if (Object.prototype.hasOwnProperty.call(chart.theme[type], item)) {
+            // 更新 customize 中对应项的值为 theme 中的属性值
+            chart.customize[item] = chart.theme[type][item]
+          }
+        }
       }
-    })
+    }
   }
-  return chartList
+  return chart
 }

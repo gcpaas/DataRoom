@@ -407,13 +407,23 @@ export default {
     },
     // 自定义属性更新
     updateSetting (config) {
-      if (config.type === 'map'|| config.type==='remoteComponent' || config.type === 'video' || config.type === 'flyMap') {
+      if (config.type === 'map' || config.type === 'remoteComponent' || config.type === 'video' || config.type === 'flyMap') {
         config.key = new Date().getTime()
       }
       this.changeChartConfig(cloneDeep(config))
-      this.$refs.Render?.$refs['RenderCard' + config.code][0]?.$refs[
-        config.code
-      ]?.changeStyle(cloneDeep(config))
+      // 如果是tab内的组件
+      if (config.parentCode) {
+        const dom = this.$refs.Render?.$refs['RenderCard' + config.parentCode][0]?.$refs[config.parentCode]?.$refs['RenderCard' + config.code]?.$refs[config.code]
+        if (dom) {
+          dom?.changeStyle(cloneDeep(config))
+        }
+      } else {
+        if (this.$refs.Render?.$refs['RenderCard' + config.code]) {
+          this.$refs.Render?.$refs['RenderCard' + config.code][0]?.$refs[
+            config.code
+          ]?.changeStyle(cloneDeep(config))
+        }
+      }
     },
     // 动态属性更新
     updateDataSetting (config) {

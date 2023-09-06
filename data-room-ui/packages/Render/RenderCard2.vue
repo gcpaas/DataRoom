@@ -71,7 +71,7 @@ export default {
     // 切换主题时针对远程组件触发样式修改的方法
     styleHandler (config) {
       this.$emit('styleHandler', config)
-    }
+    },
     // // 打开右侧面板
     // openRightPanel () {
     //   this.$emit('openRightPanel', this.currentChart)

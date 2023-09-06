@@ -31,10 +31,27 @@ export default {
   changeActiveCode (state, code) {
     state.activeCode = code
     state.hoverCode = code
-
-    const activeItem = cloneDeep(state.pageInfo.chartList?.find(
-      item => item.code === code
-    ))
+    let activeItem = {}
+    // let activeItem = cloneDeep(state.pageInfo.chartList?.find(
+    //   item => item.code === code
+    // ))
+    for (const item of state.pageInfo.chartList) {
+      // 检查当前项的 code 是否与 currentCode 匹配
+      if (item.code === code) {
+        activeItem = item
+        break // 找到匹配的项后，退出循环
+      }
+      // 如果当前项的 type 为 'chartTab'，则进一步检查其 tabList
+      if (item.type === 'chartTab') {
+        for (const tabItem of item.customize.tabList) {
+          // 检查 tabList 中的每一项的 code 是否与 currentCode 匹配
+          if (tabItem.chartCode === code) {
+            activeItem = tabItem.chart
+            break // 找到匹配的项后，退出循环
+          }
+        }
+      }
+    }
     changeGroup(code, state)
     state.activeItemConfig = cloneDeep(activeItem)
   },
@@ -62,28 +79,48 @@ export default {
   changeHoverCode (state, code) {
     state.hoverCode = code
   },
+  // 改变当前选中组件id
   changePageLoading (state, booleanValue) {
+    // 改变loading状态
     state.pageLoading = booleanValue
   },
   // 改变当前组件配置
   changeChartConfig (state, itemConfig) {
-    const index = state.pageInfo.chartList.findIndex(
-      item => item.code === itemConfig.code
-    )
-    Vue.set(state.pageInfo.chartList, index, {
-      ...state.pageInfo.chartList[index],
-      ...itemConfig
-    })
-    // 对比之前的config和当前的itemConfig的xywh，如果有变化，就改变卡尺对齐线
-    const oldConfig = state.pageInfo.chartList[index]
-    if (
-      oldConfig.x !== itemConfig.x ||
-      oldConfig.y !== itemConfig.y ||
-      oldConfig.w !== itemConfig.w ||
-      oldConfig.h !== itemConfig.h
-    ) {
-      // 改变当前组件的卡尺对齐线
-      changePresetLine(state, itemConfig)
+    // 如果存在parentCode的组件，则是tab中的组件
+    if (itemConfig.parentCode) {
+      state.pageInfo.chartList.forEach((chart, index) => {
+        if (chart.code === itemConfig.parentCode) {
+          chart.customize.tabList.forEach((tabItem, i) => {
+            if (tabItem.chartCode === itemConfig.code) {
+              Vue.set(state.pageInfo.chartList[index].customize.tabList[i], 'chart', {
+                ...state.pageInfo.chartList[index].customize.tabList[i].chart,
+                ...itemConfig
+              })
+            }
+          })
+        }
+      })
+    } else {
+      // 如果是一般的组件
+      let index = null
+      index = state.pageInfo.chartList.findIndex(
+        item => item.code === itemConfig.code
+      )
+      Vue.set(state.pageInfo.chartList, index, {
+        ...state.pageInfo.chartList[index],
+        ...itemConfig
+      })
+      // 对比之前的config和当前的itemConfig的xywh，如果有变化，就改变卡尺对齐线
+      const oldConfig = state.pageInfo.chartList[index]
+      if (
+        oldConfig.x !== itemConfig.x ||
+        oldConfig.y !== itemConfig.y ||
+        oldConfig.w !== itemConfig.w ||
+        oldConfig.h !== itemConfig.h
+      ) {
+        // 改变当前组件的卡尺对齐线
+        changePresetLine(state, itemConfig)
+      }
     }
   },
   setPresetLine (state, { x, y, w, h }) {

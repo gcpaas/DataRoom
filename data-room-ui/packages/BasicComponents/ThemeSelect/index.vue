@@ -3,29 +3,28 @@
     class="bs-design-wrap theme-switcher-wrap"
     :class="`bs-theme-switcher-${customTheme}`"
   >
-    <!--    <div class="label-box">-->
-    <!--      切换主题-->
-    <!--    </div>-->
-    <el-radio-group
-      v-model="pageInfo.pageConfig.customTheme"
-      size="medium "
-      class="theme-radio"
-      @change="handleChange"
+    <el-dropdown
+      trigger="click"
+      @command="handleChange"
     >
-      <el-radio
-        label="light"
-        style="color: red!important;"
-        :style="{color:config.customize.inactiveColor}"
-      >
-        明亮主题
-      </el-radio>
-      <el-radio
-        label="dark"
-        :style="{color:config.customize.inactiveColor}"
+      <div
+        class="el-dropdown-link content-box"
+        :style="{'font-size': config.customize.fontSize +'px','font-weight': +config.customize.fontWeight,'background-image': `-webkit-linear-gradient(${config.customize.color})`}"
       >
         暗黑主题
-      </el-radio>
-    </el-radio-group>
+      </div>
+      <el-dropdown-menu
+        slot="dropdown"
+        class="theme-dropdown-menu"
+      >
+        <el-dropdown-item command="light">
+          明亮主题
+        </el-dropdown-item>
+        <el-dropdown-item command="dark">
+          暗黑主题
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
   </div>
 </template>
 <script>
@@ -58,12 +57,6 @@ export default {
     }
   },
   watch: {
-    'config.customize.activeColor': {
-      handler (val) {
-        document.documentElement.style.setProperty('--radio-label-color', val)
-      },
-      immediate: true
-    }
   },
   mounted () {
     document.documentElement.style.setProperty('--radio-label-color', this.config.customize.activeColor)
@@ -75,6 +68,7 @@ export default {
     // 点击切换主题
     handleChange (val) {
       const pageInfo = this.pageInfo
+      this.pageInfo.pageConfig.customTheme = val
       pageInfo.chartList = themeToSetting(pageInfo.chartList, val)
       this.changePageInfo(pageInfo)
       pageInfo.chartList.forEach(chart => {
@@ -102,6 +96,9 @@ export default {
 <style lang="scss" scoped>
 .bs-design-wrap{
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .content-box{
   text-align: center;
@@ -111,5 +108,28 @@ export default {
   -webkit-background-clip: text;
   /* 将文字隐藏 */
   -webkit-text-fill-color: transparent;
+}
+// 自定义dropdown的样式
+.theme-dropdown-menu{
+  //background-color: var(--bs-background-2)!important;
+  //border: 1px solid var(--bs-border-1);
+  /deep/ .el-dropdown-menu__item{
+    //background-color: var(--bs-background-2)!important;
+    &:hover {
+      //color: var(--bs-el-color-primary) !important;
+      //background-color: var(--bs-el-background-3) !important;
+    }
+  }
+
+}
+::v-deep .el-input__inner,
+::v-deep .el-color-picker__color-inner,
+::v-deep .el-input-number--mini,
+::v-deep .el-textarea__inner,
+::v-deep .el-input-group__append {
+  //background: var(--bs-el-background-1);
+  //color: var(--bs-el-text);
+  //border: 0 !important;
+  //width: 100px;
 }
 </style>
