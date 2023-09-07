@@ -114,12 +114,12 @@ export default {
           path: window?.BS_CONFIG?.routers?.dataSetUrl || '/big-screen-dataSet',
           icon: 'icon-data'
         },
-        {
-          id: 5,
-          name: '地图数据管理',
-          path: '/big-screen-map-data',
-          icon: 'icon-data'
-        }
+        // {
+        //   id: 5,
+        //   name: '地图数据管理',
+        //   path: '/big-screen-map-data',
+        //   icon: 'icon-data'
+        // }
       ]
     }
   },
