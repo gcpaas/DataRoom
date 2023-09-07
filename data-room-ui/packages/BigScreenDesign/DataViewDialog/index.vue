@@ -83,18 +83,7 @@ export default {
     getDataList (config) {
       this.loading = true
       if (config.type === 'customComponent' && (!config.dataSource.businessKey)) {
-        const list = config.option.data
-        this.columnData = (Object.keys(list[0])).map((key) => {
-          return {
-            aggregate: '',
-            alias: key,
-            originalColumn: key,
-            remark: key,
-            tableName: '',
-            type: 'varchar'
-          }
-        })
-        this.dataList = list
+        this.getDataByOption(config)
         this.loading = false
       } else {
         const params = {
@@ -108,12 +97,30 @@ export default {
         }
         getUpdateChartInfo(params).then(res => {
           this.loading = false
-          this.dataList = res.data || []
+          if (Array.isArray(res.data)) {
+            this.dataList = res.data || []
+          } else {
+            this.getDataByOption(config)
+          }
           this.columnData = res.columnData || []
         }).catch(err => { console.log(err) }).finally(() => {
           this.loading = false
         })
       }
+    },
+    getDataByOption (config) {
+      const list = config.option.data || []
+      this.columnData = list && list.length ? (Object.keys(list[0])).map((key) => {
+        return {
+          aggregate: '',
+          alias: key,
+          originalColumn: key,
+          remark: key,
+          tableName: '',
+          type: 'varchar'
+        }
+      }) : []
+      this.dataList = list
     },
     getLabel (col) {
       return col.remark || col.originalColumn
