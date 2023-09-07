@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gccloud.dataroom.core.module.map.dao.DataRoomMapDao">
+
+    <!--  查询地图数据  -->
+    <select id="getList" resultType="com.gccloud.dataroom.core.module.map.vo.DataRoomMapVO">
+        SELECT id,
+               parent_code,
+               map_code,
+               name,
+               level,
+               enable_down,
+               geo_json,
+               uploaded_geo_json,
+               create_date,
+               update_date,
+               create_by,
+               update_by,
+               del_flag,
+                map_code as curentMapcode,
+               CASE WHEN EXISTS(SELECT 1
+                                FROM big_screen_map
+                                WHERE parent_code = curentMapcode
+                                  AND del_flag = 0)
+                   THEN 1
+               ELSE 0 END AS has_children
+        FROM big_screen_map
+        WHERE del_flag = 0
+        <if test="searchDTO != null">
+            <if test="searchDTO.parentCode != null and searchDTO.parentCode != ''">
+                AND parent_code = #{searchDTO.parentCode}
+            </if>
+            <if test="searchDTO.searchKey != null and searchDTO.searchKey != ''">
+                AND (
+                    name like concat('%', #{searchDTO.searchKey}, '%')
+                    OR map_code like concat('%', #{searchDTO.searchKey}, '%')
+                    )
+            </if>
+            <if test="searchDTO.enableDown != null">
+                AND enable_down = #{searchDTO.enableDown}
+            </if>
+            <if test="searchDTO.level != null">
+                AND level = #{searchDTO.level}
+            </if>
+            <if test="searchDTO.uploadedGeoJson != null">
+                AND uploaded_geo_json = #{searchDTO.uploadedGeoJson}
+            </if>
+
+        </if>
+
+    </select>
+
+
+</mapper>
