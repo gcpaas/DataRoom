@@ -53,7 +53,7 @@ export default {
   computed: {
     title () {
       if (this.$route.query.edit) return '大屏设计器'
-      return window?.BS_CONFIG?.starter?.title ?? 'GCPAAS大屏设计器'
+      return window?.BS_CONFIG?.starter?.title ?? 'DataRoom大屏设计器'
     },
     logo () {
       return window?.BS_CONFIG?.starter?.logo ?? require('./images/logo.png')
@@ -117,7 +117,9 @@ export default {
       ]
     }
   },
-  created () {},
+  created () {
+    document.title = this.title
+  },
   mounted () {
     this.giteeHref = 'https://gitee.com/gcpaas/DataRoom'
     this.giteeSvg = 'https://gitee.com/gcpaas/DataRoom/widgets/widget_1.svg?color=007bff'
