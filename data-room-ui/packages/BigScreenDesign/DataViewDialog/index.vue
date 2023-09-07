@@ -156,7 +156,7 @@ export default {
     // 格式化fields
     fieldsFormat () {
       for (const item in this.columnData) {
-        this.fields[this.columnData[item].remark] = this.columnData[item].originalColumn
+        this.fields[this.columnData[item].remark || this.columnData[item].originalColumn] = this.columnData[item].originalColumn
       }
     },
     // 导出数据
