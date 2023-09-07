@@ -76,6 +76,7 @@
     "vue-contextmenujs": "^1.4.9",
     "vue-draggable-resizable-gorkys": "^2.4.8",
     "vue-json-editor": "^1.4.3",
+    "vue-json-excel": "^0.3.0",
     "vue-json-viewer": "^2.2.22",
     "vue-player-audio": "^1.0.2",
     "vue-router": "3.0.6",
