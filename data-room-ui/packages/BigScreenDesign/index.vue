@@ -174,7 +174,6 @@ export default {
   },
   data () {
     return {
-      dataViewDialogConfig: null,
       hasPermission: true,
       rightVisiable: false,
       pageInfoVisiable: false,
@@ -374,7 +373,6 @@ export default {
       this.pageInfoVisiable = false
     },
     openDataViewDialog (config) {
-      this.dataViewDialogConfig = config
       this.$refs.dataViewDialog.init(config)
     },
     /**

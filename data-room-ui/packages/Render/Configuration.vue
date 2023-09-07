@@ -39,7 +39,10 @@ export default {
       activeItemConfig: state => state.bigScreen.activeItemConfig,
       chartList: state => state.bigScreen.pageInfo.chartList,
       presetLine: state => state.bigScreen.presetLine
-    })
+    }),
+    isPreview () {
+      return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
+    }
   },
   data () {
     return {

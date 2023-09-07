@@ -22,15 +22,23 @@
             zIndex: chart.z || 0
           }"
         >
-          <RenderCard
-            ref="RenderCardRef"
-            :key="chart.key"
+          <Configuration
             :config="chart"
-            @styleHandler="styleHandler"
-          />
+            @openDataViewDialog="openDataViewDialog"
+          >
+            <RenderCard
+              ref="RenderCardRef"
+              :key="chart.key"
+              :config="chart"
+              @styleHandler="styleHandler"
+            />
+          </Configuration>
         </div>
       </div>
     </div>
+    <data-view-dialog
+      ref="dataViewDialog"
+    />
   </div>
   <NotPermission v-else />
 </template>
@@ -40,9 +48,13 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 import { compile } from 'tiny-sass-compiler/dist/tiny-sass-compiler.esm-browser.prod.js'
 import NotPermission from 'data-room-ui/NotPermission'
 import cloneDeep from 'lodash/cloneDeep'
+import Configuration from 'data-room-ui/Render/Configuration.vue'
+import DataViewDialog from 'data-room-ui/BigScreenDesign/DataViewDialog/index.vue'
 export default {
   name: 'BigScreenRun',
   components: {
+    DataViewDialog,
+    Configuration,
     RenderCard,
     NotPermission
   },
@@ -170,6 +182,10 @@ export default {
       'changePageConfig',
       'changeChartConfig'
     ]),
+    // 右键点击查看数据
+    openDataViewDialog (config) {
+      this.$refs.dataViewDialog.init(config)
+    },
     // 切换主题时针对远程组件触发样式修改的方法
     styleHandler (config) {
       this.chartList.forEach((chart, index) => {
