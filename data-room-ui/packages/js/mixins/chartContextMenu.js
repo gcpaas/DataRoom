@@ -131,6 +131,7 @@ export default {
     },
     // 右键菜单
     onContextmenu (event, chart) {
+      const isHidden = !chart?.option?.displayOption?.dataAllocation?.enable
       event.preventDefault()
       if (this.isPreview) {
         this.$contextmenu({
@@ -138,6 +139,7 @@ export default {
             {
               label: '查看数据',
               icon: 'el-icon-view',
+              hidden: isHidden,
               onClick: () => {
                 this.dataView(chart)
               }
@@ -228,6 +230,7 @@ export default {
             {
               label: '查看数据',
               icon: 'el-icon-view',
+              hidden: isHidden,
               onClick: () => {
                 this.dataView(chart)
               }
