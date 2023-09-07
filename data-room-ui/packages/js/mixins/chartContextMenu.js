@@ -51,6 +51,11 @@ export default {
       this.changeActiveCode(config.code)
       this.$emit('openRightPanel', config)
     },
+    // 查看数据
+    dataView (config) {
+      this.changeActiveCode(config.code)
+      this.$emit('openDataViewDialog', config)
+    },
     // 复制组件
     copyItem (config) {
       const newConfig = cloneDeep(config)
@@ -201,6 +206,13 @@ export default {
             icon: (chart.group && chart.group !== 'tempGroup') ? 'iconfont-bigscreen icon-quxiaoguanlian' : 'iconfont-bigscreen icon-zuhe',
             onClick: () => {
               this.groupChart(chart)
+            }
+          },
+          {
+            label: '查看数据',
+            icon: 'el-icon-view',
+            onClick: () => {
+              this.dataView(chart)
             }
           }
         ],

@@ -42,12 +42,12 @@
       <div
         class="configuration-wrap"
         :class="{
-          'active': activeCodes.includes(config.customize.tabList[currentIndex].chart.code),
-          'hover': hoverCode === config.customize.tabList[currentIndex].chart.code
+          'active': activeCodes.includes(config.customize.tabList[currentIndex].chartCode),
+          'hover': hoverCode === config.customize.tabList[currentIndex].chartCode
         }"
-        @mouseenter.stop="changeHover(config.customize.tabList[currentIndex].chart.code)"
+        @mouseenter.stop="changeHover(config.customize.tabList[currentIndex].chartCode)"
         @mouseleave="changeHover('')"
-        @click.stop="changeActive(config.customize.tabList[currentIndex].chart)"
+        @click.stop="changeActive(config.customize.tabList[currentIndex].chartCode)"
       >
         <RenderCardInner
           :ref="'RenderCard' + config.customize.tabList[currentIndex].chartCode"
@@ -136,8 +136,8 @@ export default {
       this.changeHoverCode(code)
     },
     // 改变激活的组件
-    changeActive (config) {
-      this.changeActiveCode(config.code)
+    changeActive (code) {
+      this.changeActiveCode(code)
     }
   }
 }

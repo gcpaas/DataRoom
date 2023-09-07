@@ -51,6 +51,7 @@
                 'grid-bg': hasGrid
               }"
               @openRightPanel="openRightPanel"
+              @openDataViewDialog="openDataViewDialog"
             />
           </MouseSelect>
         </SketchDesignRuler>
@@ -111,6 +112,9 @@
         ref="iframeDialog"
       />
     </div>
+    <data-view-dialog
+      ref="dataViewDialog"
+    />
   </div>
   <NotPermission v-else-if="!hasPermission" />
 </template>
@@ -137,6 +141,7 @@ import { isFirefox } from 'data-room-ui/js/utils/userAgent'
 import { handleResData } from 'data-room-ui/js/store/actions.js'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import NotPermission from 'data-room-ui/NotPermission'
+import DataViewDialog from 'data-room-ui/BigScreenDesign/DataViewDialog'
 export default {
   name: 'BigScreenDesign',
   components: {
@@ -149,7 +154,8 @@ export default {
     SourceDialog,
     ComponentDialog,
     iframeDialog,
-    NotPermission
+    NotPermission,
+    DataViewDialog
   },
   mixins: [multipleSelectMixin],
   props: {
@@ -168,6 +174,7 @@ export default {
   },
   data () {
     return {
+      dataViewDialogConfig: null,
       hasPermission: true,
       rightVisiable: false,
       pageInfoVisiable: false,
@@ -230,20 +237,6 @@ export default {
       }
     }
   },
-  // beforeRouteEnter (to, from, next) {
-  //   // 判断进入设计页面前是否有访问权限
-  //   const code = to.query.code
-  //   get(`/bigScreen/permission/check/${code}`).then((res) => {
-  //     if (res) {
-  //       next((vm) => {
-  //         // 重置大屏的vuex store
-  //         vm.$store.commit('bigScreen/resetStoreData')
-  //       })
-  //     } else {
-  //       next('/notPermission')
-  //     }
-  //   })
-  // },
   created () {
     this.changePageLoading(true)
     this.permission()
@@ -379,6 +372,10 @@ export default {
     openRightPanel (card) {
       this.rightVisiable = true
       this.pageInfoVisiable = false
+    },
+    openDataViewDialog (config) {
+      this.dataViewDialogConfig = config
+      this.$refs.dataViewDialog.init(config)
     },
     /**
        * @description: 清空页面
