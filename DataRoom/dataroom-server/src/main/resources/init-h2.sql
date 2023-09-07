@@ -164,3 +164,19 @@ CREATE TABLE IF NOT EXISTS  ds_dataset_label (
   label_id bigint DEFAULT NULL COMMENT '标签ID',
   PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS big_screen_map (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+    parent_code VARCHAR(255) DEFAULT NULL COMMENT '父级地图编码',
+    map_code VARCHAR(255) DEFAULT NULL COMMENT '地图编码',
+    name VARCHAR(255) DEFAULT NULL COMMENT '地图名称',
+    geo_json CLOB DEFAULT NULL COMMENT '地图geoJson',
+    level TINYINT NOT NULL DEFAULT 0 COMMENT '地图级别 0-世界 1-国家 2-省 3-市 4-区县',
+    enable_down TINYINT NOT NULL DEFAULT 0 COMMENT '是否支持下钻 0-否 1-是',
+    uploaded_geo_json TINYINT NOT NULL DEFAULT 0 COMMENT '是否已上传geoJson 0-否 1-是',
+    update_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    create_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    create_by BIGINT DEFAULT 2 COMMENT '创建人',
+    update_by BIGINT DEFAULT 2 COMMENT '更新人',
+    del_flag TINYINT NOT NULL DEFAULT '0' COMMENT '删除标识'
+)
