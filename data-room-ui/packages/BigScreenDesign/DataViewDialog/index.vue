@@ -180,6 +180,12 @@ export default {
   /deep/.el-loading-mask{
     background-color: var(--bs-background-2) !important;
   }
+  .el-table /deep/thead{
+    color: var(--bs-el-title);
+  }
+  .bs-el-table /deep/td.el-table__cell{
+    color: #bcc9d4;
+  }
   /* 自定义滚动条样式 */
   /deep/.el-table__body-wrapper::-webkit-scrollbar {
     width: 6px; /* 滚动条宽度 */
