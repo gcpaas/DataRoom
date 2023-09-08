@@ -18,7 +18,7 @@
       >
         <el-form-item
           label="上级地图"
-          prop="parentCode"
+          prop="parentId"
         >
           <el-input
             v-model="parentName"
@@ -162,7 +162,6 @@ export default {
       parentName: '顶级',
       mapForm: {
         parentId: '0',
-        parentCode: '0',
         mapCode: '',
         name: '',
         level: 0,

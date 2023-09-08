@@ -3,6 +3,7 @@ package com.gccloud.dataroom.core.module.map.controller;
 import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.common.vo.R;
 import com.gccloud.dataroom.core.module.map.dto.DataRoomMapRepeatDTO;
+import com.gccloud.dataroom.core.module.map.vo.DataRoomMapDataVO;
 import com.gccloud.dataroom.core.module.map.vo.DataRoomMapVO;
 import com.gccloud.dataroom.core.module.map.vo.MapChildVO;
 import com.gccloud.dataroom.core.module.map.dto.DataRoomMapDTO;
@@ -72,10 +73,10 @@ public class DataRoomMapController {
         return R.success();
     }
 
-    @GetMapping("/getMapChildFromGeoJson/{code}")
-    @ApiOperation(value = "根据父编码解析父级json中的子级", position = 60, notes = "根据父编码解析父级json中的子级", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<List<MapChildVO>> getMapChildFromGeoJson(@PathVariable String code) {
-        List<MapChildVO> list = dataRoomMapService.getChildFromGeo(code);
+    @GetMapping("/getMapChildFromGeoJson/{id}")
+    @ApiOperation(value = "根据地图id解析json中的子级", position = 60, notes = "根据地图id解析json中的子级", produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<List<MapChildVO>> getMapChildFromGeoJson(@PathVariable String id) {
+        List<MapChildVO> list = dataRoomMapService.getChildFromGeo(id);
         return R.success(list);
     }
 
@@ -89,11 +90,23 @@ public class DataRoomMapController {
     }
 
 
-    @GetMapping("/data/{id}")
+    @GetMapping("/data/{parentId}/{code}")
     @ApiOperation(value = "数据", position = 80, notes = "地图数据数据", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<String> data(@PathVariable String id) {
-        DataRoomMapEntity info = dataRoomMapService.info(id);
-        return R.success(info.getGeoJson());
+    public R<DataRoomMapDataVO> data(@PathVariable String parentId, @PathVariable String code) {
+        DataRoomMapEntity info = dataRoomMapService.getByParentIdAndCode(parentId, code);
+        DataRoomMapDataVO vo = new DataRoomMapDataVO();
+        // 如果没有找到该地图，或地图没有上传geojson数据，
+        if (info == null) {
+            vo.setAvailable(0);
+            return R.success(vo);
+        }
+        vo.setAvailable(0);
+        if (info.getUploadedGeoJson().equals(1)) {
+            vo.setAvailable(1);
+        }
+        vo.setGeoJson(info.getGeoJson());
+        vo.setId(info.getId());
+        return R.success(vo);
     }
 
 
@@ -110,6 +123,14 @@ public class DataRoomMapController {
     public R<Boolean> repeat(@RequestBody DataRoomMapRepeatDTO mapDTO) {
         Boolean repeat = dataRoomMapService.repeatCheck(mapDTO);
         return R.success(repeat);
+    }
+
+
+    @GetMapping("/tree/{level}")
+    @ApiOperation(value = "树", position = 110, notes = "地图数据树", produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<List<DataRoomMapVO>> tree(@PathVariable Integer level) {
+        List<DataRoomMapVO> list = dataRoomMapService.getAvailableTree(level);
+        return R.success(list);
     }
 
 

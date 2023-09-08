@@ -12,8 +12,8 @@ import lombok.Data;
 @Data
 public class MapSearchDTO extends SearchDTO {
 
-    @ApiModelProperty(notes = "父级编码")
-    private String parentCode;
+    @ApiModelProperty(notes = "父级地图id")
+    private String parentId;
 
     @ApiModelProperty(notes = "层级")
     private Integer level;

@@ -191,7 +191,7 @@ DROP TABLE IF EXISTS `big_screen_map`;
 CREATE TABLE `big_screen_map`
 (
     `id`                bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `parent_code`       varchar(255)        DEFAULT NULL COMMENT '父级地图编码',
+    `parent_id`       varchar(255)        DEFAULT NULL COMMENT '父级地图id',
     `map_code`          varchar(255)        DEFAULT NULL COMMENT '地图编码',
     `name`              varchar(255)        DEFAULT NULL COMMENT '地图名称',
     `geo_json`          longtext            DEFAULT NULL COMMENT '地图geoJson',

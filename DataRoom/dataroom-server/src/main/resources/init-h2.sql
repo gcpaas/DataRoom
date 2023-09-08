@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS  ds_dataset_label (
 
 CREATE TABLE IF NOT EXISTS big_screen_map (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
-    parent_code VARCHAR(255) DEFAULT NULL COMMENT '父级地图编码',
+    parent_id VARCHAR(255) DEFAULT NULL COMMENT '父级地图id',
     map_code VARCHAR(255) DEFAULT NULL COMMENT '地图编码',
     name VARCHAR(255) DEFAULT NULL COMMENT '地图名称',
     geo_json CLOB DEFAULT NULL COMMENT '地图geoJson',

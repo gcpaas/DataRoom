@@ -20,7 +20,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -36,14 +38,96 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
 
     @Override
     public List<DataRoomMapVO> getList(MapSearchDTO searchDTO) {
-        List<DataRoomMapVO> list = this.baseMapper.getList(searchDTO);
-        return list;
+        return this.baseMapper.getList(searchDTO);
     }
 
     @Override
+    public List<DataRoomMapVO> getAvailableTree(Integer level) {
+        // 根据层级，如果某个地图的某个子级（或子级的子级...）也符合该层级，那么把该地图也返回
+        LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(DataRoomMapEntity::getId, DataRoomMapEntity::getLevel, DataRoomMapEntity::getParentId, DataRoomMapEntity::getMapCode);
+        queryWrapper.le(DataRoomMapEntity::getLevel, level);
+        List<DataRoomMapEntity> list = list(queryWrapper);
+        // 转成树形结构
+        return this.convertToTree(list, level);
+    }
+
+
+    /**
+     * 转树形结构
+     * @param list
+     * @return
+     */
+    private List<DataRoomMapVO> convertToTree(List<DataRoomMapEntity> list, Integer targetLevel) {
+        List<DataRoomMapVO> voList = BeanConvertUtils.convert(list, DataRoomMapVO.class);
+        // 根节点
+        List<DataRoomMapVO> rootList = Lists.newArrayList();
+        // 组装id为key，地图为value的map
+        Map<String, DataRoomMapVO> map = new HashMap<>();
+        voList.forEach(vo -> map.put(vo.getId(), vo));
+        // 目标层级的地图
+        List<DataRoomMapVO> targetLevelList = voList.stream().filter(vo -> vo.getLevel().equals(targetLevel)).collect(Collectors.toList());
+        // 目标层级的地图，以及其父级地图...
+        List<DataRoomMapVO> match = Lists.newArrayList(targetLevelList);
+        for (DataRoomMapVO mapVO : targetLevelList) {
+            if (mapVO.getLevel().equals(0)) {
+                // 已经是最顶级了，没有父级了
+                continue;
+            }
+            DataRoomMapVO parent = map.get(mapVO.getParentId());
+            if(parent == null) {
+                continue;
+            }
+            // 将目标层级的地图，以及其父级地图...加入到match中
+            this.getParentMap(parent, map, match);
+        }
+        for (DataRoomMapVO vo : match) {
+            if (vo.getParentId().equals(SUPER_PARENT_ID)) {
+                rootList.add(vo);
+                continue;
+            }
+            DataRoomMapVO parent = map.get(vo.getParentId());
+            if (parent == null) {
+                continue;
+            }
+            if (parent.getChildren() == null) {
+                parent.setChildren(Lists.newArrayList());
+            }
+            parent.getChildren().add(vo);
+        }
+        return rootList;
+    }
+
+    /**
+     * 获取地图的父级地图，以及父级地图的父级地图...
+     * @param parentMap
+     * @param mapIdMap
+     * @param match
+     */
+    private void getParentMap(DataRoomMapVO parentMap, Map<String, DataRoomMapVO> mapIdMap, List<DataRoomMapVO> match) {
+        if (parentMap == null) {
+            return;
+        }
+        if (match.contains(parentMap)) {
+            // 已经包含了，不需要再加入了
+            return;
+        }
+        match.add(parentMap);
+        if (parentMap.getLevel().equals(0)) {
+            // 已经是最顶级了，没有父级了
+            return;
+        }
+        DataRoomMapVO parent = mapIdMap.get(parentMap.getParentId());
+        this.getParentMap(parent, mapIdMap, match);
+    }
+
+
+
+
+    @Override
     public String add(DataRoomMapDTO mapDTO) {
-        if (StringUtils.isBlank(mapDTO.getParentCode())) {
-            mapDTO.setParentCode(SUPER_PARENT_CODE);
+        if (StringUtils.isBlank(mapDTO.getParentId())) {
+            mapDTO.setParentId(SUPER_PARENT_ID);
         }
         if (StringUtils.isBlank(mapDTO.getMapCode())) {
             throw new GlobalException("地图编码不能为空");
@@ -91,10 +175,10 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
 
     /**
      * 从geoJson中解析下一级的基础数据，保存到数据库
-     * @param old
+     * @param mapEntity
      * @param geoJson
      */
-    private void parseNextLevelAndSave(DataRoomMapEntity old, String geoJson) {
+    private void parseNextLevelAndSave(DataRoomMapEntity mapEntity, String geoJson) {
         JSONObject jsonObject = new JSONObject(geoJson);
         JSONArray features = jsonObject.getJSONArray("features");
         if (features == null || features.length() == 0) {
@@ -108,8 +192,8 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
                 continue;
             }
             DataRoomMapEntity childMapEntity = new DataRoomMapEntity();
-            childMapEntity.setParentCode(old.getMapCode());
-            childMapEntity.setLevel(old.getLevel() + 1);
+            childMapEntity.setParentId(mapEntity.getId());
+            childMapEntity.setLevel(mapEntity.getLevel() + 1);
             childMapEntity.setMapCode(properties.getString("name"));
             childMapEntity.setName(properties.getString("name"));
             childMapEntity.setEnableDown(NO);
@@ -131,7 +215,7 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
             return;
         }
         LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(DataRoomMapEntity::getParentCode, mapEntity.getMapCode());
+        queryWrapper.eq(DataRoomMapEntity::getParentId, mapEntity.getId());
         List<DataRoomMapEntity> list = this.list(queryWrapper);
         if (list != null && list.size() > 0) {
             throw new GlobalException("该地图下存在子地图，不能删除");
@@ -154,7 +238,7 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
             return;
         }
         LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(DataRoomMapEntity::getParentCode, mapEntity.getMapCode());
+        queryWrapper.eq(DataRoomMapEntity::getParentId, mapEntity.getId());
         List<DataRoomMapEntity> list = this.list(queryWrapper);
         if (list != null && list.size() > 0) {
             for (DataRoomMapEntity entity : list) {
@@ -174,6 +258,27 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
     }
 
     @Override
+    public DataRoomMapEntity getByParentIdAndCode(String parentId, String code) {
+        if (StringUtils.isBlank(parentId)) {
+            parentId = SUPER_PARENT_ID;
+        }
+        if (StringUtils.isBlank(code)) {
+            throw new GlobalException("地图编码不能为空");
+        }
+        LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DataRoomMapEntity::getParentId, parentId);
+        queryWrapper.eq(DataRoomMapEntity::getMapCode, code);
+        List<DataRoomMapEntity> list = this.list(queryWrapper);
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        if (list.size() > 1) {
+            throw new GlobalException("地图编码重复");
+        }
+        return list.get(0);
+    }
+
+    @Override
     public DataRoomMapEntity infoByMapCode(String mapCode) {
         LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(DataRoomMapEntity::getMapCode, mapCode);
@@ -190,12 +295,12 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
 
     /**
      * 根据编码获取地图信息，取到geoJson，根据geoJson解析下一级的基础数据
-     * @param code
+     * @param id
      * @return
      */
     @Override
-    public List<MapChildVO> getChildFromGeo(String code) {
-        DataRoomMapEntity mapEntity = this.infoByMapCode(code);
+    public List<MapChildVO> getChildFromGeo(String id) {
+        DataRoomMapEntity mapEntity = this.getById(id);
         if (mapEntity.getUploadedGeoJson().equals(NO)) {
             return Lists.newArrayList();
         }
@@ -211,7 +316,7 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
         // 查询当前地图下的所有子地图
         LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.select(DataRoomMapEntity::getMapCode);
-        queryWrapper.eq(DataRoomMapEntity::getParentCode, code);
+        queryWrapper.eq(DataRoomMapEntity::getParentId, id);
         List<DataRoomMapEntity> list = this.list(queryWrapper);
         List<String> mapCodeList = list.stream().map(DataRoomMapEntity::getMapCode).collect(Collectors.toList());
         // 解析geoJson，获取下一级的基础数据
@@ -254,13 +359,12 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
         if (StringUtils.isBlank(mapDTO.getMapCode())) {
             throw new GlobalException("地图编码不能为空");
         }
-        if (StringUtils.isBlank(mapDTO.getParentCode())) {
+        if (StringUtils.isBlank(mapDTO.getParentId())) {
             throw new GlobalException("上级地图编码不能为空");
         }
-        // TODO 这里存在问题，因为编码只在某个地图下的某个层级下是唯一的，所以如果碰巧有两个地图下的某个层级下的编码相同，就会出现问题
         LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(DataRoomMapEntity::getMapCode, mapDTO.getMapCode());
-        queryWrapper.eq(DataRoomMapEntity::getParentCode, mapDTO.getParentCode());
+        queryWrapper.eq(DataRoomMapEntity::getParentId, mapDTO.getParentId());
         if (StringUtils.isNotBlank(mapDTO.getId())) {
             queryWrapper.ne(DataRoomMapEntity::getId, mapDTO.getId());
         }
