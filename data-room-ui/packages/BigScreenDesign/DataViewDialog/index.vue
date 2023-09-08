@@ -39,6 +39,7 @@
           :name="chartTitle+'数据导出'"
           class="output-excel"
           :before-finish="exportHandler"
+          :before-generate="generate"
         >
           <el-button
             type="primary"
@@ -116,7 +117,9 @@ export default {
           if (Array.isArray(res.data)) {
             this.dataList = res.data || []
           } else {
-            // 如果返回的data不是数组，则是js数据集或者是http前端数据集,则直接从option中获取
+            // 如果返回的data不是数组，存在以下几种情况：则直接从option中获取
+            // 1、是组件绑定的是js数据集或者是http前端数据集,
+            // 2、是组件返回的模拟数据为null
             this.getDataByOption(config)
           }
           this.columnData = res.columnData || {}
@@ -128,23 +131,41 @@ export default {
     },
     // 通过option获取数据
     getDataByOption (config) {
-      const list = config.option.data || []
-      for (const key of Object.keys(list[0])) {
-        this.columnData[key] = {
-          aggregate: '',
-          alias: key,
-          originalColumn: key,
-          remark: key,
-          tableName: '',
-          type: 'varchar'
-        }
+      let list = []
+      if (config.chartType === 'Treemap') {
+        list = config.option.data.children
+      } else if (config.type === 'tables') {
+        list = config.option.tableData
+      } else {
+        list = config.option.data
       }
-      console.log(this.columnData)
-      this.dataList = list
+      let keyList = []
+      if (list && list.length) {
+        // 如果list[0]是对象
+        if (typeof list[0] === 'object' && list[0] !== null) {
+          keyList = Object.keys(list[0])
+        } else {
+          keyList = list
+        }
+        for (const key of keyList) {
+          const _key = key + ''
+          this.columnData[_key] = {
+            aggregate: '',
+            alias: _key,
+            originalColumn: _key,
+            remark: _key,
+            tableName: '',
+            type: 'varchar'
+          }
+        }
+      } else {
+        this.columnData = {}
+      }
+      this.dataList = list || []
     },
     // 获取表格的表头
     getLabel (col) {
-      return col.remark || col.originalColumn
+      return col.remark || col.alias
     },
     // 数据重置
     resetData () {
@@ -155,13 +176,26 @@ export default {
     },
     // 格式化fields
     fieldsFormat () {
-      for (const item in this.columnData) {
-        this.fields[this.columnData[item].remark || this.columnData[item].originalColumn] = this.columnData[item].originalColumn
+      if (this.columnData && Object.keys(this.columnData).length) {
+        for (const item in this.columnData) {
+          this.fields[this.columnData[item].remark || this.columnData[item].alias] = this.columnData[item].alias
+        }
+      } else {
+        this.fields = {}
       }
+    },
+    generate (val) {
+      if (!Object.keys(this.fields).length) {
+        this.$message.warning('数据为空')
+      }
+      this.formVisible = false
     },
     // 导出数据
     exportHandler () {
-      this.$message.success('导出数据')
+      if (Object.keys(this.fields).length) {
+        this.$message.success('导出数据')
+      }
+      this.formVisible = false
     }
   }
 }
