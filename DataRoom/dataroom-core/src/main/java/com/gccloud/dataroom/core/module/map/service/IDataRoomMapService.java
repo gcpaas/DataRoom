@@ -18,9 +18,9 @@ import java.util.List;
 public interface IDataRoomMapService extends ISuperService<DataRoomMapEntity> {
 
     /**
-     * 顶级父级编码
+     * 顶级父级id
      */
-    String SUPER_PARENT_CODE = "0";
+    String SUPER_PARENT_ID = "0";
 
 
     /**
@@ -30,6 +30,13 @@ public interface IDataRoomMapService extends ISuperService<DataRoomMapEntity> {
      */
     List<DataRoomMapVO> getList(MapSearchDTO searchDTO);
 
+
+    /**
+     * 获取可用的地图树
+     * @param level
+     * @return
+     */
+    List<DataRoomMapVO> getAvailableTree(Integer level);
 
     /**
      * 添加地图
@@ -65,6 +72,14 @@ public interface IDataRoomMapService extends ISuperService<DataRoomMapEntity> {
      * @return
      */
     DataRoomMapEntity info(String id);
+
+    /**
+     * 根据父级id和编码获取地图
+     * @param parentId
+     * @param code
+     * @return
+     */
+    DataRoomMapEntity getByParentIdAndCode(String parentId, String code);
 
 
     /**

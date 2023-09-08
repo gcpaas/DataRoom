@@ -21,8 +21,8 @@ import lombok.experimental.Accessors;
 @ToString(callSuper = true)
 public class DataRoomMapEntity extends SuperEntity {
 
-    @ApiModelProperty(notes = "父级编码")
-    private String parentCode;
+    @ApiModelProperty(notes = "父级地图id")
+    private String parentId;
 
     @ApiModelProperty(notes = "地图编码")
     private String mapCode;

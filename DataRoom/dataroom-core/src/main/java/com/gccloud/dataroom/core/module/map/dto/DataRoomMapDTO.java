@@ -15,7 +15,7 @@ public class DataRoomMapDTO {
     private String id;
 
     @ApiModelProperty(notes = "父级编码")
-    private String parentCode;
+    private String parentId;
 
     @ApiModelProperty(notes = "地图编码")
     private String mapCode;
