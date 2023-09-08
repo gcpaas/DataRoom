@@ -232,7 +232,7 @@ export default {
         level: null,
         enableDown: null,
         uploadedGeoJson: null,
-        parentCode: '0'
+        parentId: '0'
       },
       levelList: [
         {
@@ -296,7 +296,7 @@ export default {
     load(data, treeNode, resolve) {
       this.lazyResolveIds.push(data.id)
       mapList({
-        parentCode: data.mapCode
+        parentId: data.id
       }).then(res => {
         resolve(res)
       }).catch(err => {
@@ -422,5 +422,6 @@ export default {
 .jv-container.dark {
   color: aliceblue;
   background: #161A26;
+  height: 150px;
 }
 </style>

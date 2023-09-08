@@ -18,7 +18,7 @@
       >
         <el-form-item
           label="上级地图"
-          prop="parentCode"
+          prop="parentId"
         >
           <el-input
             v-model="parentName"
@@ -41,7 +41,7 @@
           prop="mapCode"
         >
           <el-input
-            v-if="mapForm.parentCode === '0'"
+            v-if="mapForm.parentId === '0'"
             v-model="mapForm.mapCode"
             class="bs-el-input"
             placeholder="请输入地图编码"
@@ -71,7 +71,7 @@
         >
           <el-select
             v-model="mapForm.level"
-            :disabled="mapForm.parentCode !== '0'"
+            :disabled="mapForm.parentId !== '0'"
             class="bs-el-select"
             placeholder="请选择地图级别"
             popper-class="bs-el-select"
@@ -172,13 +172,12 @@ export default {
   },
   data() {
     const validateCode = (rule, value, callback) => {
-      console.log(value)
-      if (this.mapForm.parentCode !== '0') {
+      if (this.mapForm.parentId !== '0') {
         // 不需要校验
         callback()
       }
       repeatCheck({
-        parentCode: this.mapForm.parentCode,
+        parentId: this.mapForm.parentId,
         mapCode: value
       }).then(res => {
         if (res) {
@@ -197,7 +196,6 @@ export default {
       parentName: '顶级',
       mapForm: {
         parentId: '0',
-        parentCode: '0',
         mapCode: '',
         name: '',
         level: 0,
@@ -232,7 +230,6 @@ export default {
     init(parentMap) {
       this.mapForm = {
         parentId: '0',
-        parentCode: '0',
         mapCode: `map-${new Date().getTime()}`,
         name: '',
         level: 0,
@@ -244,7 +241,6 @@ export default {
       this.parentName = '顶级'
       if (parentMap) {
         this.mapForm.parentId = parentMap.id
-        this.mapForm.parentCode = parentMap.mapCode
         this.parentName = parentMap.name
         this.mapForm.level = parentMap.level + 1
         this.mapForm.mapCode = ''
@@ -287,13 +283,13 @@ export default {
     },
     getMapCodeList() {
       this.mapCodeList = []
-      if (this.mapForm.parentCode === '0') {
+      if (this.mapForm.parentId === '0') {
         this.mapCodeList = [{
           name: `map-${new Date().getTime()}`,
           exist: false
         }]
       } else {
-        getMapChildFromGeoJson(this.mapForm.parentCode).then(res => {
+        getMapChildFromGeoJson(this.mapForm.parentId).then(res => {
           this.mapCodeList = res
         })
       }
