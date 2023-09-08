@@ -13,26 +13,35 @@
       :append-to-body="false"
       class="bs-dialog-wrap bs-el-dialog"
     >
-      <el-table
-        ref="table"
-        v-loading="loading"
-        class="bs-table bs-el-table"
-        height="300"
-        :data="dataList"
-      >
-        <el-table-column
-          v-for="(col,index) in columnData"
-          :key="index"
-          show-overflow-tooltip
-          :prop="col.alias"
-          :label="getLabel(col)"
-          align="center"
-        />
-      </el-table>
+      <div class="table-box">
+        <el-table
+          ref="table"
+          v-loading="loading"
+          class="bs-table bs-el-table"
+          height="300"
+          :data="dataList"
+        >
+          <el-table-column
+            v-for="(col,index) in columnData"
+            :key="index"
+            show-overflow-tooltip
+            :prop="col.alias"
+            :label="getLabel(col)"
+            align="center"
+          />
+        </el-table>
+      </div>
+
       <div
         slot="footer"
         class="dialog-footer"
       >
+        <el-button
+          class="bs-el-button-default cancel"
+          @click="cancel"
+        >
+          取消
+        </el-button>
         <DownloadExcel
           :data="dataList"
           :fields="fields"
@@ -184,6 +193,10 @@ export default {
         this.fields = {}
       }
     },
+    // 取消
+    cancel () {
+      this.formVisible = false
+    },
     generate (val) {
       if (!Object.keys(this.fields).length) {
         this.$message.warning('数据为空')
@@ -205,8 +218,20 @@ export default {
 .bs-data-view-dialog{
   /deep/.el-dialog__body{
     background-color: var(--bs-background-2) !important;
-    max-height: unset!important;
-    min-height: unset!important;
+    height: 500px!important;
+    overflow-y: auto!important;
+  }
+  .table-box{
+    max-height: 500px; /* 设置最大高度，根据需要调整 */
+    overflow-y: auto; /* 当内容溢出时显示垂直滚动条 */
+  }
+  .dialog-footer{
+    display: flex;
+    justify-content: flex-end;
+    .cancel{
+      margin-right: 10px;
+      overflow-y: hidden;
+    }
   }
  .el-table th.el-table__cell.is-leaf, .el-table /deep/td.el-table__cell{
     border-bottom:none;
@@ -220,25 +245,27 @@ export default {
   .bs-el-table /deep/td.el-table__cell{
     color: #bcc9d4;
   }
-  /* 自定义滚动条样式 */
-  /deep/.el-table__body-wrapper::-webkit-scrollbar {
-    width: 6px; /* 滚动条宽度 */
+  .el-table--scrollable-y /deep/.el-table__body-wrapper{
+    overflow-y: hidden;
+  }
+  /* 修改滚动条的样式 */
+  /deep/.el-dialog__body::-webkit-scrollbar {
+    width: 8px; /* 滚动条宽度 */
   }
 
-  /deep/.el-table__body-wrapper::-webkit-scrollbar-thumb {
+ /deep/.el-dialog__body::-webkit-scrollbar-thumb {
     background-color: #888; /* 滚动条拖动块颜色 */
     height: 30px;
     border-radius: 5px;
   }
 
-  /deep/.el-table__body-wrapper::-webkit-scrollbar-track {
+  /deep/.el-dialog__body::-webkit-scrollbar-track {
     background-color: transparent; /* 滚动条轨道颜色 */
   }
 
   /* 鼠标悬停在滚动条上时的样式 */
-  /deep/.el-table__body-wrapper::-webkit-scrollbar-thumb:hover {
+  /deep/.el-dialog__body::-webkit-scrollbar-thumb:hover {
     background-color: #555;
-    cursor: pointer;
   }
 }
 </style>
