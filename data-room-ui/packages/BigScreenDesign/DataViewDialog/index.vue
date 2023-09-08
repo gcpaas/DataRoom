@@ -171,10 +171,34 @@ export default {
 .bs-data-view-dialog{
   /deep/.el-dialog__body{
     background-color: var(--bs-background-2) !important;
+    max-height: unset!important;
+    min-height: unset!important;
   }
  .el-table th.el-table__cell.is-leaf, .el-table /deep/td.el-table__cell{
     border-bottom:none;
   }
-}
+  /deep/.el-loading-mask{
+    background-color: var(--bs-background-2) !important;
+  }
+  /* 自定义滚动条样式 */
+  /deep/.el-table__body-wrapper::-webkit-scrollbar {
+    width: 6px; /* 滚动条宽度 */
+  }
 
+  /deep/.el-table__body-wrapper::-webkit-scrollbar-thumb {
+    background-color: #888; /* 滚动条拖动块颜色 */
+    height: 30px;
+    border-radius: 5px;
+  }
+
+  /deep/.el-table__body-wrapper::-webkit-scrollbar-track {
+    background-color: transparent; /* 滚动条轨道颜色 */
+  }
+
+  /* 鼠标悬停在滚动条上时的样式 */
+  /deep/.el-table__body-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    cursor: pointer;
+  }
+}
 </style>
