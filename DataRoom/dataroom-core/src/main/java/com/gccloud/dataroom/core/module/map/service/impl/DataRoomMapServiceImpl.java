@@ -45,7 +45,8 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
     public List<DataRoomMapVO> getAvailableTree(Integer level) {
         // 根据层级，如果某个地图的某个子级（或子级的子级...）也符合该层级，那么把该地图也返回
         LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.select(DataRoomMapEntity::getId, DataRoomMapEntity::getLevel, DataRoomMapEntity::getParentId, DataRoomMapEntity::getMapCode);
+        queryWrapper.select(DataRoomMapEntity::getId, DataRoomMapEntity::getLevel, DataRoomMapEntity::getParentId,
+                DataRoomMapEntity::getMapCode, DataRoomMapEntity::getName, DataRoomMapEntity::getEnableDown, DataRoomMapEntity::getUploadedGeoJson);
         queryWrapper.le(DataRoomMapEntity::getLevel, level);
         List<DataRoomMapEntity> list = list(queryWrapper);
         // 转成树形结构
@@ -70,6 +71,7 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
         // 目标层级的地图，以及其父级地图...
         List<DataRoomMapVO> match = Lists.newArrayList(targetLevelList);
         for (DataRoomMapVO mapVO : targetLevelList) {
+            mapVO.setDisabled(!mapVO.getUploadedGeoJson().equals(YES));
             if (mapVO.getLevel().equals(0)) {
                 // 已经是最顶级了，没有父级了
                 continue;

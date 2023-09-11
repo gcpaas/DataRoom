@@ -128,8 +128,14 @@ public class DataRoomMapController {
 
     @GetMapping("/tree/{level}")
     @ApiOperation(value = "树", position = 110, notes = "地图数据树", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<List<DataRoomMapVO>> tree(@PathVariable Integer level) {
-        List<DataRoomMapVO> list = dataRoomMapService.getAvailableTree(level);
+    public R<List<DataRoomMapVO>> tree(@PathVariable String level) {
+        int levelInt = 0;
+        try {
+            levelInt = Integer.parseInt(level);
+        } catch (NumberFormatException e) {
+            return R.error("地图层级参数错误");
+        }
+        List<DataRoomMapVO> list = dataRoomMapService.getAvailableTree(levelInt);
         return R.success(list);
     }
 

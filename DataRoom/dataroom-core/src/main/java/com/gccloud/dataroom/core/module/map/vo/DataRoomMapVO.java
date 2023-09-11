@@ -43,4 +43,7 @@ public class DataRoomMapVO {
     @ApiModelProperty(notes = "子级")
     private List<DataRoomMapVO> children;
 
+    @ApiModelProperty(notes = "是否禁用")
+    private Boolean disabled;
+
 }
