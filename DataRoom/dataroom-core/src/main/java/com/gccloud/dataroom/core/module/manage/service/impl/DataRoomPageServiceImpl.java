@@ -14,6 +14,7 @@ import com.gccloud.dataroom.core.module.manage.extend.DataRoomExtendClient;
 import com.gccloud.dataroom.core.module.manage.service.IDataRoomPageService;
 import com.gccloud.dataroom.core.module.template.entity.PageTemplateEntity;
 import com.gccloud.dataroom.core.module.template.service.IPageTemplateService;
+import com.gccloud.dataroom.core.permission.DataRoomPermissionClient;
 import com.gccloud.dataroom.core.utils.CodeGenerateUtils;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.AssertUtils;
@@ -53,6 +54,9 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
 
     @Resource
     private DataRoomExtendClient dataRoomExtendClient;
+
+    @Resource
+    private DataRoomPermissionClient permissionClient;
 
     @Override
     public String add(DataRoomPageDTO bigScreenPageDTO) {
@@ -181,12 +185,19 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         queryWrapper.select(PageEntity::getCode);
         List<PageEntity> idEntityList = this.list(queryWrapper);
         if (idEntityList == null || idEntityList.isEmpty()) {
-            return new PageVO<>();
+            PageVO<PageEntity> pageVO = new PageVO<>();
+            pageVO.setList(Lists.newArrayList());
+            return pageVO;
         }
-        List<String> codeList = idEntityList.stream().map(PageEntity::getId).collect(Collectors.toList());
-        List<String> filterByPermission = dataRoomExtendClient.filterByPermission(codeList);
+        List<String> codeList = idEntityList.stream().map(PageEntity::getCode).collect(Collectors.toList());
+        List<String> filterByPermission = permissionClient.filterByPermission(codeList);
+        if (filterByPermission == null || filterByPermission.isEmpty()) {
+            PageVO<PageEntity> pageVO = new PageVO<>();
+            pageVO.setList(Lists.newArrayList());
+            return pageVO;
+        }
         LambdaQueryWrapper<PageEntity> reQueryWrapper =  new LambdaQueryWrapper<>();
-        if (codeList.size() == filterByPermission.size()) {
+        if (idEntityList.size() == filterByPermission.size()) {
             // 说明没有过滤掉任何一个, 按照原来的条件查询
             reQueryWrapper = queryWrapper;
         } else {

@@ -17,16 +17,7 @@ public interface IDataRoomExtendService {
      * @param code
      */
     @Deprecated
-    void deleteByCode(String code);
-
-    /**
-     * 根据权限过滤
-     * @param allCode 全部的大屏code
-     * @return 当前用户有权限的大屏code
-     */
-    default List<String> filterByPermission(List<String> allCode) {
-        return allCode;
-    }
+    default void deleteByCode(String code) {}
 
     /**
      * 大屏新增后的处理, 可在此处处理权限等
