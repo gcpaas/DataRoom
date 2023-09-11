@@ -50,6 +50,7 @@
         v-if="isInit"
         :config="chart"
         @openRightPanel="openRightPanel"
+        @openDataViewDialog="openDataViewDialog"
       >
         <RenderCard
           :ref="'RenderCard' + chart.code"
@@ -195,6 +196,10 @@ export default {
     // 点击当前组件时打开右侧面板
     openRightPanel (config) {
       this.$emit('openRightPanel', config)
+    },
+    // 查看数据
+    openDataViewDialog (config) {
+      this.$emit('openDataViewDialog', config)
     },
     drop (e) {
       e.preventDefault()

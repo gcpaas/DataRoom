@@ -73,6 +73,13 @@ function registerRouters (config, router) {
           }
         },
         {
+          path: '/big-screen-map-data',
+          component: () => import('data-room-ui/MapDataManagement'),
+          meta: {
+            title: '地图数据管理'
+          }
+        },
+        {
           path: config?.routers?.SourceUrl || '/big-screen-source',
           component: () => import('data-room-ui/SourceManagement'),
           meta: {

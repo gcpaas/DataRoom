@@ -104,3 +104,25 @@ CREATE TABLE `ds_dataset_label` (
 
 # 20230710 数据源新增字段
 ALTER TABLE `ds_datasource` ADD COLUMN `table_name` varchar(255) DEFAULT NULL COMMENT '表名' AFTER `module_code`;
+
+
+# 20230907 新增地图数据维护表
+DROP TABLE IF EXISTS `big_screen_map`;
+CREATE TABLE `big_screen_map`
+(
+    `id`                bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `parent_id`       varchar(255)        DEFAULT NULL COMMENT '父级地图id',
+    `map_code`          varchar(255)        DEFAULT NULL COMMENT '地图编码',
+    `name`              varchar(255)        DEFAULT NULL COMMENT '地图名称',
+    `geo_json`          longtext            DEFAULT NULL COMMENT '地图geoJson',
+    `level`             tinyint(2) NOT NULL DEFAULT 0 COMMENT '地图级别 0-世界 1-国家 2-省 3-市 4-区县',
+    `enable_down`       tinyint(2) NOT NULL DEFAULT 0 COMMENT '是否支持下钻 0-否 1-是',
+    `uploaded_geo_json` tinyint(2) NOT NULL DEFAULT 0 COMMENT '是否已上传geoJson 0-否 1-是',
+    `update_date`       timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    `create_date`       timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `create_by`         bigint(64) null     default 2 comment '创建人',
+    `update_by`         bigint(64) null     default 2 comment '更新人',
+    `del_flag`          tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8 COMMENT ='地图数据维护表';

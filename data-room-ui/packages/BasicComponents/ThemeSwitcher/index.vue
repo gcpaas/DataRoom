@@ -17,13 +17,13 @@
         style="color: red!important;"
         :style="{color:config.customize.inactiveColor}"
       >
-        明亮
+        明亮主题
       </el-radio>
       <el-radio
         label="dark"
         :style="{color:config.customize.inactiveColor}"
       >
-        暗黑
+        暗黑主题
       </el-radio>
     </el-radio-group>
   </div>
@@ -84,12 +84,13 @@ export default {
       })
       if (!this.isPreview) {
         const themeLabel = val === 'light' ? '明亮' : '暗黑'
-        const htmlStr = `<span>当前已切换到<strong>${themeLabel}</strong>主题，颜色设置针对当前主题生效</span>`
+        const htmlStr = `<span>当前已切换为<strong>${themeLabel}</strong>主题，涉及到颜色的配置仅针对当前主题生效</span>`
         this.$notify({
           title: '注意',
           dangerouslyUseHTMLString: true,
           message: htmlStr,
           customClass: 'ds-el-notify',
+          duration: 5000,
           type: 'warning'
         })
       }
@@ -99,33 +100,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .bs-design-wrap{
-    width: 100%;;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: nowrap;
-    color: #fff;
-    .label-box{
-      padding: 10px;
-      margin-right: 10px;
-      font-size: 14px;
-    }
-    //.el-radio.is-checked {
-    //  color: red; /* 修改激活状态下的字体颜色 */
-    //}
-    //
-    ///* 修改未激活状态下的字体颜色 */
-    //.el-radio:not(.is-checked) {
-    //  color: #fff; /* 修改未激活状态下的字体颜色 */
-    //}
-    /deep/ .el-radio__input.is-checked+.el-radio__label {
-      /* 使用 CSS 变量来设置字体颜色 */
-      color: var(--radio-label-color);
-    }
-    /deep/ .el-radio__input.is-checked .el-radio__inner{
-      background: var(--radio-label-color);
-      border-color: var(--radio-label-color);
-    }
-  }
+.bs-design-wrap{
+  width: 100%;
+}
+.content-box{
+  text-align: center;
+  /* 将背景设为渐变 */
+  /*background-image: -webkit-linear-gradient(left, #6294F7, #C85D14);*/
+  /* 规定背景绘制区域 */
+  -webkit-background-clip: text;
+  /* 将文字隐藏 */
+  -webkit-text-fill-color: transparent;
+}
 </style>

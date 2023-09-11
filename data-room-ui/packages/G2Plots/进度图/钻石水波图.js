@@ -148,7 +148,11 @@ const setting = [
     groupName: 'padding'
   }
 ]
-
+const data = [
+  {
+    percent: 0.25
+  }
+]
 // 数据处理脚本
 const dataHandler = '// 取返回数据列表的第一项指标值\noption.percent = data[0][setting.filter(settingItem=>settingItem.field === \'percent\')[0].value]'
 
@@ -157,6 +161,7 @@ const option = {
   renderer: 'canvas',
   color: '#598BF2',
   percent: 0.25,
+  data,
   appendPadding: [16, 16, 16, 16], // 设置图标的边距
   shape: 'diamond',
   outline: {

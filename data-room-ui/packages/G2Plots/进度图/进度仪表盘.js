@@ -123,7 +123,11 @@ const setting = [
     groupName: 'padding'
   }
 ]
-const data = []
+const data = [
+  {
+    percent: 0.75
+  }
+]
 // 数据处理脚本
 const dataHandler = '// 取返回数据列表的第一项指标值\noption.percent = data[0][setting.filter(settingItem=>settingItem.field === \'percent\')[0].value]'
 

@@ -51,6 +51,11 @@ export default {
       this.changeActiveCode(config.code)
       this.$emit('openRightPanel', config)
     },
+    // 查看数据
+    dataView (config) {
+      this.changeActiveCode(config.code)
+      this.$emit('openDataViewDialog', config)
+    },
     // 复制组件
     copyItem (config) {
       const newConfig = cloneDeep(config)
@@ -126,89 +131,117 @@ export default {
     },
     // 右键菜单
     onContextmenu (event, chart) {
+      const isHidden = !chart?.option?.displayOption?.dataAllocation?.enable
       event.preventDefault()
-      this.$contextmenu({
-        items: [
-          {
-            label: '配置',
-            icon: 'el-icon-setting',
-            onClick: () => {
-              this.openRightPanel(chart)
+      if (this.isPreview) {
+        this.$contextmenu({
+          items: [
+            {
+              label: '查看数据',
+              icon: 'el-icon-view',
+              hidden: isHidden,
+              onClick: () => {
+                this.dataView(chart)
+              }
             }
-          },
-          {
-            label: '删除',
-            icon: 'el-icon-delete',
-            onClick: () => {
-              this.deleteItem(chart)
+          ],
+          event, // 鼠标事件信息
+          customClass: 'bs-context-menu-class', // 自定义菜单 class
+          zIndex: 999, // 菜单样式 z-index
+          minWidth: 150 // 主菜单最小宽度
+        })
+      } else {
+        this.$contextmenu({
+          items: [
+            {
+              label: '配置',
+              icon: 'el-icon-setting',
+              onClick: () => {
+                this.openRightPanel(chart)
+              }
+            },
+            {
+              label: '删除',
+              icon: 'el-icon-delete',
+              onClick: () => {
+                this.deleteItem(chart)
+              }
+            },
+            {
+              label: '批量删除',
+              icon: 'el-icon-delete',
+              onClick: () => {
+                this.deleteGroupItem(chart)
+              }
+            },
+            {
+              label: '复制',
+              icon: 'el-icon-copy-document',
+              onClick: () => {
+                this.copyItem(chart)
+              }
+            },
+            {
+              label: '组合复制',
+              icon: 'el-icon-copy-document',
+              onClick: () => {
+                this.copyCharts()
+                this.pasteCharts()
+              }
+            },
+            {
+              label: '置于顶层',
+              icon: 'el-icon-arrow-up',
+              onClick: () => {
+                let chartList = cloneDeep(this.chartList)
+                // 将当前图表置底
+                chartList = chartList.filter(item => item.code !== chart.code)
+                chartList.unshift(chart)
+                this.changeLayout(chartList)
+                this.changeZIndex(chartList)
+              }
+            },
+            {
+              label: '置于底层',
+              icon: 'el-icon-arrow-down',
+              onClick: () => {
+                let chartList = cloneDeep(this.chartList)
+                // 将当前图表置顶
+                chartList = chartList.filter(item => item.code !== chart.code)
+                chartList.push(chart)
+                this.changeLayout(chartList)
+                this.changeZIndex(chartList)
+              }
+            },
+            {
+              label: chart.locked ? '解锁' : '锁定',
+              icon: chart.locked ? 'el-icon-unlock' : 'el-icon-lock',
+              onClick: () => {
+                this.changeLocked(chart)
+              }
+            },
+            {
+              label: (chart.group && chart.group !== 'tempGroup') ? '取消组合' : '组合',
+              icon: (chart.group && chart.group !== 'tempGroup') ? 'iconfont-bigscreen icon-quxiaoguanlian' : 'iconfont-bigscreen icon-zuhe',
+              onClick: () => {
+                this.groupChart(chart)
+              }
+            },
+            {
+              label: '查看数据',
+              icon: 'el-icon-view',
+              hidden: isHidden,
+              onClick: () => {
+                this.dataView(chart)
+              }
             }
-          },
-          {
-            label: '批量删除',
-            icon: 'el-icon-delete',
-            onClick: () => {
-              this.deleteGroupItem(chart)
-            }
-          },
-          {
-            label: '复制',
-            icon: 'el-icon-copy-document',
-            onClick: () => {
-              this.copyItem(chart)
-            }
-          },
-          {
-            label: '组合复制',
-            icon: 'el-icon-copy-document',
-            onClick: () => {
-              this.copyCharts()
-              this.pasteCharts()
-            }
-          },
-          {
-            label: '置于顶层',
-            icon: 'el-icon-arrow-up',
-            onClick: () => {
-              let chartList = cloneDeep(this.chartList)
-              // 将当前图表置底
-              chartList = chartList.filter(item => item.code !== chart.code)
-              chartList.unshift(chart)
-              this.changeLayout(chartList)
-              this.changeZIndex(chartList)
-            }
-          },
-          {
-            label: '置于底层',
-            icon: 'el-icon-arrow-down',
-            onClick: () => {
-              let chartList = cloneDeep(this.chartList)
-              // 将当前图表置顶
-              chartList = chartList.filter(item => item.code !== chart.code)
-              chartList.push(chart)
-              this.changeLayout(chartList)
-              this.changeZIndex(chartList)
-            }
-          },
-          {
-            label: chart.locked ? '解锁' : '锁定',
-            icon: chart.locked ? 'el-icon-unlock' : 'el-icon-lock',
-            onClick: () => {
-              this.changeLocked(chart)
-            }
-          },
-          {
-            label: (chart.group && chart.group !== 'tempGroup') ? '取消组合' : '组合',
-            icon: (chart.group && chart.group !== 'tempGroup') ? 'iconfont-bigscreen icon-quxiaoguanlian' : 'iconfont-bigscreen icon-zuhe',
-            onClick: () => {
-              this.groupChart(chart)
-            }
-          }
-        ],
-        event, // 鼠标事件信息
-        customClass: 'bs-context-menu-class', // 自定义菜单 class
-        zIndex: 999, // 菜单样式 z-index
-        minWidth: 150 // 主菜单最小宽度
-      })
+          ],
+          event, // 鼠标事件信息
+          customClass: 'bs-context-menu-class', // 自定义菜单 class
+          zIndex: 999, // 菜单样式 z-index
+          minWidth: 150 // 主菜单最小宽度
+        })
+      }
       return false
     }
   }

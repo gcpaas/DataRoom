@@ -148,7 +148,11 @@ const setting = [
 
 // 配置处理脚本
 const optionHandler = 'option.color = [option.color1, option.color2]'
-const data = []
+const data = [
+  {
+    percent: 0.6
+  }
+]
 // 数据处理脚本
 const dataHandler =
   "option.percent = data[0][setting.filter(settingItem=>settingItem.field === 'percent')[0].value]"

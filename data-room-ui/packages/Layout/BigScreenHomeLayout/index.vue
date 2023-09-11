@@ -53,7 +53,7 @@ export default {
   computed: {
     title () {
       if (this.$route.query.edit) return '大屏设计器'
-      return window?.BS_CONFIG?.starter?.title ?? 'GCPAAS大屏设计器'
+      return window?.BS_CONFIG?.starter?.title ?? 'DataRoom大屏设计器'
     },
     logo () {
       return window?.BS_CONFIG?.starter?.logo ?? require('./images/logo.png')
@@ -113,11 +113,19 @@ export default {
           name: '数据集管理',
           path: window?.BS_CONFIG?.routers?.dataSetUrl || '/big-screen-dataSet',
           icon: 'icon-data'
-        }
+        },
+        // {
+        //   id: 5,
+        //   name: '地图数据管理',
+        //   path: '/big-screen-map-data',
+        //   icon: 'icon-data'
+        // }
       ]
     }
   },
-  created () {},
+  created () {
+    document.title = this.title
+  },
   mounted () {
     this.giteeHref = 'https://gitee.com/gcpaas/DataRoom'
     this.giteeSvg = 'https://gitee.com/gcpaas/DataRoom/widgets/widget_1.svg?color=007bff'

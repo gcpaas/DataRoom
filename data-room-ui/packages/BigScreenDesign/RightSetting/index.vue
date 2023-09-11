@@ -152,9 +152,9 @@ export default {
       if (!isEqual(val, oldValue)) {
         if (type === 'configStyle') {
           if (this.config.type === 'iframeChart') {
-            this.debounce(500, { ...val, type: this.config.type, code: this.config.code })
+            this.debounce(500, { ...val, type: this.config.type, code: this.config.code, parentCode: this.config?.parentCode })
           } else {
-            this.$emit('updateSetting', { ...val, type: this.config.type, code: this.config.code, theme: this.config.theme })
+            this.$emit('updateSetting', { ...val, type: this.config.type, code: this.config.code, theme: this.config.theme, parentCode: this.config?.parentCode })
           }
         } else {
           this.$emit('updateDataSetting', this.config)

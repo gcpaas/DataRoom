@@ -51,6 +51,7 @@
                 'grid-bg': hasGrid
               }"
               @openRightPanel="openRightPanel"
+              @openDataViewDialog="openDataViewDialog"
             />
           </MouseSelect>
         </SketchDesignRuler>
@@ -111,6 +112,9 @@
         ref="iframeDialog"
       />
     </div>
+    <data-view-dialog
+      ref="dataViewDialog"
+    />
   </div>
   <NotPermission v-else-if="!hasPermission" />
 </template>
@@ -137,6 +141,7 @@ import { isFirefox } from 'data-room-ui/js/utils/userAgent'
 import { handleResData } from 'data-room-ui/js/store/actions.js'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import NotPermission from 'data-room-ui/NotPermission'
+import DataViewDialog from 'data-room-ui/BigScreenDesign/DataViewDialog'
 export default {
   name: 'BigScreenDesign',
   components: {
@@ -149,7 +154,8 @@ export default {
     SourceDialog,
     ComponentDialog,
     iframeDialog,
-    NotPermission
+    NotPermission,
+    DataViewDialog
   },
   mixins: [multipleSelectMixin],
   props: {
@@ -230,20 +236,6 @@ export default {
       }
     }
   },
-  // beforeRouteEnter (to, from, next) {
-  //   // 判断进入设计页面前是否有访问权限
-  //   const code = to.query.code
-  //   get(`/bigScreen/permission/check/${code}`).then((res) => {
-  //     if (res) {
-  //       next((vm) => {
-  //         // 重置大屏的vuex store
-  //         vm.$store.commit('bigScreen/resetStoreData')
-  //       })
-  //     } else {
-  //       next('/notPermission')
-  //     }
-  //   })
-  // },
   created () {
     this.changePageLoading(true)
     this.permission()
@@ -380,6 +372,9 @@ export default {
       this.rightVisiable = true
       this.pageInfoVisiable = false
     },
+    openDataViewDialog (config) {
+      this.$refs.dataViewDialog.init(config)
+    },
     /**
        * @description: 清空页面
        */
@@ -407,13 +402,23 @@ export default {
     },
     // 自定义属性更新
     updateSetting (config) {
-      if (config.type === 'map'|| config.type==='remoteComponent' || config.type === 'video' || config.type === 'flyMap') {
+      if (config.type === 'map' || config.type === 'remoteComponent' || config.type === 'video' || config.type === 'flyMap') {
         config.key = new Date().getTime()
       }
       this.changeChartConfig(cloneDeep(config))
-      this.$refs.Render?.$refs['RenderCard' + config.code][0]?.$refs[
-        config.code
-      ]?.changeStyle(cloneDeep(config))
+      // 如果是tab内的组件
+      if (config.parentCode) {
+        const dom = this.$refs.Render?.$refs['RenderCard' + config.parentCode][0]?.$refs[config.parentCode]?.$refs['RenderCard' + config.code]?.$refs[config.code]
+        if (dom) {
+          dom?.changeStyle(cloneDeep(config))
+        }
+      } else {
+        if (this.$refs.Render?.$refs['RenderCard' + config.code]) {
+          this.$refs.Render?.$refs['RenderCard' + config.code][0]?.$refs[
+            config.code
+          ]?.changeStyle(cloneDeep(config))
+        }
+      }
     },
     // 动态属性更新
     updateDataSetting (config) {

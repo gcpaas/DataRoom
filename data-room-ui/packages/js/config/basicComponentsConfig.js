@@ -28,7 +28,9 @@ const typeList = [
   'input',
   'button',
   'marquee',
-  'themeSwitcher'
+  'themeSwitcher',
+  'chartTab',
+  'themeSelect'
 ]
 let basicConfigList = []
 basicConfigList = typeList.map((type) => {

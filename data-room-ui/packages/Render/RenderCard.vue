@@ -72,6 +72,10 @@ export default {
     styleHandler (config) {
       this.$emit('styleHandler', config)
     }
+    // // 打开右侧面板
+    // openRightPanel () {
+    //   this.$emit('openRightPanel', this.currentChart)
+    // }
   }
 }
 </script>

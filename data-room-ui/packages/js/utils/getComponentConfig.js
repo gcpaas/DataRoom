@@ -219,7 +219,31 @@ export default function getComponentConfig (type) {
         title: '主题切换',
         icon: Icon.getNameList()[17],
         className: 'com.gccloud.dataroom.core.module.chart.components.ThemeSwitcherChart',
-        w: 500,
+        w: 260,
+        h: 100,
+        x: 0,
+        y: 0,
+        type
+      }
+    case 'chartTab':
+      return {
+        name: '图表Tab页',
+        title: '图表Tab页',
+        icon: Icon.getNameList()[19],
+        className: 'com.gccloud.dataroom.core.module.chart.components.ChartTabChart',
+        w: 600,
+        h: 400,
+        x: 0,
+        y: 0,
+        type
+      }
+    case 'themeSelect':
+      return {
+        name: '主题切换',
+        title: '主题切换',
+        icon: Icon.getNameList()[20],
+        className: 'com.gccloud.dataroom.core.module.chart.components.ThemeSelectChart',
+        w: 200,
         h: 100,
         x: 0,
         y: 0,
