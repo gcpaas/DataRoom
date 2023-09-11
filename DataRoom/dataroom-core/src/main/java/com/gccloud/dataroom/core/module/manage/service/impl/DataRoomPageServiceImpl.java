@@ -18,7 +18,6 @@ import com.gccloud.dataroom.core.utils.CodeGenerateUtils;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.AssertUtils;
 import com.gccloud.common.utils.BeanConvertUtils;
-import com.gccloud.common.utils.QueryWrapperUtils;
 import com.gccloud.common.vo.PageVO;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +33,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author hongyang
@@ -80,6 +80,7 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         AssertUtils.isTrue(!checkNameRepeat(bigScreenEntity), "名称重复");
         AssertUtils.isTrue(!checkCodeRepeat(bigScreenEntity), "编码重复");
         this.save(bigScreenEntity);
+        dataRoomExtendClient.afterAdd(bigScreenEntity.getCode());
         return bigScreenEntity.getCode();
     }
 
@@ -171,16 +172,32 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         if (StringUtils.isBlank(searchDTO.getType())) {
             throw new GlobalException("类型不能为空");
         }
-        LambdaQueryWrapper<PageEntity> queryWrapper = QueryWrapperUtils.wrapperLike(new LambdaQueryWrapper<>(), searchDTO.getSearchKey(), PageEntity::getName);
+        LambdaQueryWrapper<PageEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.isNotBlank(searchDTO.getSearchKey()), PageEntity::getName, searchDTO.getSearchKey());
         if (StringUtils.isNotBlank(searchDTO.getParentCode())) {
             queryWrapper.eq(PageEntity::getParentCode, searchDTO.getParentCode());
         }
         queryWrapper.eq(PageEntity::getType, searchDTO.getType());
-        queryWrapper.select(PageEntity::getId, PageEntity::getAppCode, PageEntity::getCode, PageEntity::getName, PageEntity::getParentCode, PageEntity::getOrderNum, PageEntity::getCoverPicture, PageEntity::getUpdateDate);
+        queryWrapper.select(PageEntity::getCode);
+        List<PageEntity> idEntityList = this.list(queryWrapper);
+        if (idEntityList == null || idEntityList.isEmpty()) {
+            return new PageVO<>();
+        }
+        List<String> codeList = idEntityList.stream().map(PageEntity::getId).collect(Collectors.toList());
+        List<String> filterByPermission = dataRoomExtendClient.filterByPermission(codeList);
+        LambdaQueryWrapper<PageEntity> reQueryWrapper =  new LambdaQueryWrapper<>();
+        if (codeList.size() == filterByPermission.size()) {
+            // 说明没有过滤掉任何一个, 按照原来的条件查询
+            reQueryWrapper = queryWrapper;
+        } else {
+            // 说明过滤掉了一些, 按照过滤后的编码查询
+            reQueryWrapper.in(PageEntity::getCode, filterByPermission);
+        }
+        reQueryWrapper.select(PageEntity::getId, PageEntity::getAppCode, PageEntity::getCode, PageEntity::getName, PageEntity::getParentCode, PageEntity::getOrderNum, PageEntity::getCoverPicture, PageEntity::getUpdateDate);
         // 优先序号升序，其次创建时间降序
-        queryWrapper.orderByAsc(PageEntity::getOrderNum);
-        queryWrapper.orderByDesc(PageEntity::getCreateDate);
-        PageVO<PageEntity> page = page(searchDTO, queryWrapper);
+        reQueryWrapper.orderByAsc(PageEntity::getOrderNum);
+        reQueryWrapper.orderByDesc(PageEntity::getCreateDate);
+        PageVO<PageEntity> page = this.page(searchDTO, reQueryWrapper);
         List<PageEntity> list = page.getList();
         if (list == null || list.isEmpty()) {
             return page;
@@ -242,6 +259,7 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
             chart.setCode(CodeGenerateUtils.generate(chart.getType() == null ? "chart" : chart.getType()));
         }
         this.save(screenEntity);
+        dataRoomExtendClient.afterAdd(screenEntity.getCode());
         return screenEntity.getCode();
     }
 
@@ -253,5 +271,7 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         PAGE_ENTITY_CACHE.invalidate(code);
         // 调用拓展接口
         dataRoomExtendClient.deleteByCode(code);
+        // 移除权限拓展
+        dataRoomExtendClient.afterDelete(code);
     }
 }
