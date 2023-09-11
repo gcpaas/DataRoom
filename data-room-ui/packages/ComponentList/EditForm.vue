@@ -145,7 +145,7 @@ export default {
   },
   data () {
     return {
-      bizType:'',
+      bizType:'native',
       resolutionRatioValue: '',
       resolutionRatio: {},
       BizList:[
@@ -252,6 +252,7 @@ export default {
     closeAddDialog () {
       this.formVisible = false
       this.$refs.dataForm.resetFields()
+      this.bizType='native'
     },
     // 初始化
     init (nodeData, parentCode) {
