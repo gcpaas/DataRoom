@@ -39,7 +39,6 @@ export default {
         let setting = []
         // eslint-disable-next-line prefer-const, no-unused-vars
         let title = ''
-
         // eslint-disable-next-line prefer-const, no-unused-vars
         let data = []
         let g2Plots=g2Plot
@@ -203,7 +202,7 @@ export default {
     height: calc(100% - 40px);
     width: 100%;
     overflow: auto;
-    padding: 20px;
+    padding: 5px 20px;
     background-color: var(--bs-background-1);
   }
 }

@@ -28,14 +28,17 @@
           <div class="code-tab-header">
             <div class="code-tab-left">
               <div class="code-tab">组件模板</div>
-              <div class="code-tab-btn" @click="change('echarts')">
+              <div class="code-tab-btn" @click="change('echart')">
                 echarts组件
               </div>
-              <div class="code-tab-btn" @click="change('g2')">
+              <div class="code-tab-btn" @click="change('g2plot')">
                 G2Plot组件
               </div>
-              <div class="code-tab-btn" @click="change('base')">
+              <div class="code-tab-btn" @click="change('native')">
                 原生组件
+              </div>
+              <div class="code-tab-btn" @click="change('3DEchart')">
+                3D组件
               </div>
             </div>
             <div class="upload-btn">
@@ -218,33 +221,63 @@ export default {
   methods: {
     getBizComponentInfo () {
       const code = this.$route.query.code
+      const type = this.$route.query.type
       if (code) {
         getBizComponentInfo(code).then(data => {
-          this.form = {
-            ...data,
-            name: data.name,
-            coverPicture: data.coverPicture,
-            settingContent: data.settingContent || defaultSettingContent,
-            vueContent: data.vueContent || defaultVueContent
+         if(type&&type==='g2plot'){
+            this.form = {
+              ...data,
+              name: data.name,
+              coverPicture: data.coverPicture,
+              settingContent: data.settingContent || defaultG2SettingContent,
+              vueContent: data.vueContent || defaultG2VueContent
+            }
+          }else if(type&&type==='echart'){
+            this.form = {
+              ...data,
+              name: data.name,
+              coverPicture: data.coverPicture,
+              settingContent: data.settingContent || defaultEchartsSettingContent,
+              vueContent: data.vueContent || defaultEchartsVueContent
+            }
+          }else{
+            this.form = {
+              ...data,
+              name: data.name,
+              coverPicture: data.coverPicture,
+              settingContent: data.settingContent || defaultSettingContent,
+              vueContent: data.vueContent || defaultVueContent
+            }
           }
+
           // this.$refs.vueContent.editor.setValue(this.form.vueContent)
           // this.$refs.settingContent.editor.setValue(this.form.settingContent)
         })
       }
     },
     changeTemp(val){
-      if(val=='g2'){
+      if(val=='g2plot'){
         this.form.settingContent=defaultG2SettingContent
         this.form.vueContent=defaultG2VueContent
-      }else if(val=='base'){
+      }else if(val=='native'){
         this.form.settingContent=defaultSettingContent
         this.form.vueContent=defaultVueContent
-      }else if(val=='echarts'){
+      }else if(val=='echart'){
         this.form.settingContent= defaultEchartsSettingContent
         this.form.vueContent=defaultEchartsVueContent
       }
     },
     change(val) {
+      if(val==='3DEchart') return this.$confirm('开发中。。。。', '提示', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        cancelButtonClass: 'cancel-btn',
+        type: 'warning',
+        customClass: 'bs-el-message-box'
+      }).then(() => {
+      }).catch((action) => {
+      })
       this.$confirm('确定替换为选中模板吗？未保存的代码将被覆盖！', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确定',
@@ -444,8 +477,8 @@ export default {
       display: flex;
       justify-content: space-between;
       width: 100%;
-      height: 400px;
-      padding: 16px;
+      height: 354px;
+      padding: 5px 16px;
 
       .left-vue-code {
         width: 60%;
@@ -474,8 +507,9 @@ export default {
             align-items: center;
             justify-content: space-between;
             .code-tab-btn{
-              width: 90px;
+              // width: 90px;
               cursor: pointer;
+              text-align: center;
             }
             .code-tab {
               font-size: 14px;
@@ -501,7 +535,7 @@ export default {
         }
 
         .code-tab-content {
-          height: calc(100% - 40px);
+          height: calc(100% - 88px);
           background: var(--bs-background-1);
         }
       }

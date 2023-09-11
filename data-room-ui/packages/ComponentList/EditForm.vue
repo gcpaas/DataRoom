@@ -29,6 +29,25 @@
             class="bs-el-input"
           />
         </el-form-item>
+         <el-form-item
+          label="组件类型"
+          v-if="type === 'bizComponent'"
+        >
+          <el-select
+            v-model="bizType"
+            class="bs-el-select"
+            popper-class="bs-el-select"
+            placeholder="请选择组件类型"
+            clearable
+          >
+            <el-option
+              v-for="resolutionRatioItem in BizList"
+              :key="resolutionRatioItem.value"
+              :label="resolutionRatioItem.label"
+              :value="resolutionRatioItem.value"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item
           v-if="type === 'component'"
           label="推荐分辨率"
@@ -126,8 +145,21 @@ export default {
   },
   data () {
     return {
+      bizType:'',
       resolutionRatioValue: '',
       resolutionRatio: {},
+      BizList:[
+        {
+          label:'echarts组件',
+          value:'echarts'
+        }, {
+          label:'g2Plot组件',
+          value:'g2plot'
+        }, {
+          label:'基础组件',
+          value:'native'
+        },
+      ],
       resolutionRatioOptions: [
         {
           value: '1024*768',
@@ -422,7 +454,13 @@ export default {
     // 跳转设计态
     toDesign (form) {
       const path = this.type === 'component' ? (window.BS_CONFIG?.routers?.designUrl || '/big-screen/design') : 'big-screen-biz-component-design'
-      const { href: bigScreenHref } = this.$router.resolve({
+      const { href: bigScreenHref } =this.type=='bizComponent'? this.$router.resolve({
+        path,
+        query: {
+          code: form.code,
+          type:this.bizType
+        }
+      }):this.$router.resolve({
         path,
         query: {
           code: form.code
