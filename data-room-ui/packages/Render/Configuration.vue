@@ -2,8 +2,8 @@
   <div
     class="configuration-wrap"
     :class="{
-      'active': activeCodes.includes(config.code),
-      'hover': hoverCode === config.code
+      'active': activeCodes.includes(config.code) && (!isPreview),
+      'hover': hoverCode === config.code && (!isPreview)
     }"
     @mouseenter.stop="changeHover(config.code)"
     @mouseleave="changeHover('')"
