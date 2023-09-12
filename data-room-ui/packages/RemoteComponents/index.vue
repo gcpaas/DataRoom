@@ -22,7 +22,6 @@ import { mapMutations, mapState } from 'vuex'
 import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
 import { getBizComponentInfo } from 'data-room-ui/js/api/bigScreenApi'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
-import _ from 'lodash'
 import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'LcdpRemoteComponent',
@@ -45,7 +44,8 @@ export default {
   data () {
     return {
       loading: false,
-      remoteComponent: null
+      remoteComponent: null,
+      componentInstance: null
     }
   },
   watch: {
@@ -92,8 +92,9 @@ export default {
     },
     async chartInit () {
       let config = this.config
-      config.g2Plots=g2Plot
-      config.echarts=_echarts
+      config.g2Plots = g2Plot
+      config.echarts = _echarts
+      this.componentInstance = this.$refs['remoteComponent' + config.code]
       // key和code相等，说明是一进来刷新，调用list接口
       if (this.config.code === this.config.key || this.isPreview) {
         // 改变样式
@@ -110,7 +111,7 @@ export default {
         }
       }
     },
-    linkEvent (formData) {
+        linkEvent (formData) {
       this.linkage(formData)
     },
     /**
@@ -215,7 +216,7 @@ export default {
       }
       // 只有样式改变时更新主题配置，切换主题时不需要保存
       if (!isUpdateTheme) {
-        config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
+        config.theme = settingToTheme(cloneDeep(config), this.customTheme)
       }
       if (this.chart) {
         this.chart.update(config.option)

@@ -13,7 +13,6 @@
         </div>
       </div>
       <div class="right-btn-wrap">
-
         <CusBtn
           :loading="loading"
           @click="save"
@@ -27,14 +26,25 @@
         <div class="left-vue-code component-code">
           <div class="code-tab-header">
             <div class="code-tab-left">
-              <div class="code-tab">组件模板</div>
-              <div class="code-tab-btn" @click="change('echarts')">
+              <div class="code-tab">
+                组件模板
+              </div>
+              <div
+                class="code-tab-btn"
+                @click="change('echarts')"
+              >
                 echarts组件
               </div>
-              <div class="code-tab-btn" @click="change('g2')">
+              <div
+                class="code-tab-btn"
+                @click="change('g2')"
+              >
                 G2Plot组件
               </div>
-              <div class="code-tab-btn" @click="change('base')">
+              <div
+                class="code-tab-btn"
+                @click="change('base')"
+              >
                 原生组件
               </div>
             </div>
@@ -89,12 +99,12 @@
               效果预览
             </div>
             <div class="upload-btn">
-             <CusBtn
-              :loading="loading"
-              @click.native="createdImg()"
-            >
-              生成图片
-            </CusBtn>
+              <CusBtn
+                :loading="loading"
+                @click.native="createdImg()"
+              >
+                生成图片
+              </CusBtn>
             </div>
           </div>
           <BizComponentPreview
@@ -232,19 +242,19 @@ export default {
         })
       }
     },
-    changeTemp(val){
-      if(val=='g2'){
-        this.form.settingContent=defaultG2SettingContent
-        this.form.vueContent=defaultG2VueContent
-      }else if(val=='base'){
-        this.form.settingContent=defaultSettingContent
-        this.form.vueContent=defaultVueContent
-      }else if(val=='echarts'){
-        this.form.settingContent= defaultEchartsSettingContent
-        this.form.vueContent=defaultEchartsVueContent
+    changeTemp (val) {
+      if (val == 'g2') {
+        this.form.settingContent = defaultG2SettingContent
+        this.form.vueContent = defaultG2VueContent
+      } else if (val == 'base') {
+        this.form.settingContent = defaultSettingContent
+        this.form.vueContent = defaultVueContent
+      } else if (val == 'echarts') {
+        this.form.settingContent = defaultEchartsSettingContent
+        this.form.vueContent = defaultEchartsVueContent
       }
     },
-    change(val) {
+    change (val) {
       this.$confirm('确定替换为选中模板吗？未保存的代码将被覆盖！', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确定',

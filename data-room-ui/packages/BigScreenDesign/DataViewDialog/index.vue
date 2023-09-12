@@ -139,7 +139,6 @@ export default {
           type: 'varchar'
         }
       }
-      console.log(this.columnData)
       this.dataList = list
     },
     // 获取表格的表头
