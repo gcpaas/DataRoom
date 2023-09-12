@@ -121,11 +121,47 @@ const setting = [
     tabName: 'data'
   },
   {
+    label: '柱形颜色',
+    type: 'colorPicker',
+    field: 'color',
+    optionField: 'color',
+    value: '#007aff',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
     label: 'x轴类型',
     type: 'input',
     field: 'xAxis_type',
     optionField: 'xAxis.type',
     value: 'category',
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '是否显示标签',
+    type: 'switch',
+    field: 'xAxis_axisLabel_show',
+    optionField: 'xAxis.axisLabel.show',
+    value: true,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签旋转角度',
+    type: 'inputNumber',
+    field: 'xAxis_axisLabel_rotate',
+    optionField: 'xAxis.axisLabel.rotate',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签颜色',
+    type: 'colorPicker',
+    field: 'xAxis_axisLabel_color',
+    optionField: 'xAxis.axisLabel.color',
+    value: '#fff',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -158,14 +194,19 @@ const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
   data,
-  color: '',
+  //柱状图颜色
+  color: '#007aff',
   appendPadding: [16, 16, 16, 16], // 设置图标的边距
   xField: 'Date',
   yField: 'scales',
-  smooth: true,
   xAxis: {
     type:'category',
-	  data: []
+	  data: [],
+	  axisLabel:{
+	   show:true,
+		color:'#fff',
+		rotate:0
+	  }
    },
   yAxis: {
     type: 'value'
@@ -173,7 +214,10 @@ const option = {
   series:[
 	{
 	  data: [],
-	  type:'line'
+	  type: 'bar',
+	  backgroundStyle: {
+       color: '#fff'
+      }
     }
   ]
 }

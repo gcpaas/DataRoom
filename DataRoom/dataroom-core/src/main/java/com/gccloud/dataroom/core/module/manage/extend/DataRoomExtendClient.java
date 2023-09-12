@@ -3,6 +3,8 @@ package com.gccloud.dataroom.core.module.manage.extend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * @author hongyang
  * @version 1.0
@@ -24,5 +26,26 @@ public class DataRoomExtendClient {
             extendService.deleteByCode(code);
         }
     }
+
+    /**
+     * 大屏新增后的处理
+     * @param code 新增的大屏code
+     */
+    public void afterAdd(String code) {
+        if (extendService != null) {
+            extendService.afterAdd(code);
+        }
+    }
+
+    /**
+     * 大屏删除后的处理
+     * @param code 删除的大屏code
+     */
+    public void afterDelete(String code) {
+        if (extendService != null) {
+            extendService.afterDelete(code);
+        }
+    }
+
 
 }

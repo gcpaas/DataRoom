@@ -14,8 +14,8 @@ public class DataRoomMapRepeatDTO {
     @ApiModelProperty(notes = "主键")
     private String id;
 
-    @ApiModelProperty(notes = "父级编码")
-    private String parentCode;
+    @ApiModelProperty(notes = "父级地图id")
+    private String parentId;
 
     @ApiModelProperty(notes = "地图编码")
     private String mapCode;

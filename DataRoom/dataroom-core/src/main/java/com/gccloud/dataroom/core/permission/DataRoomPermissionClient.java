@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author hongyang
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class DataRoomPermissionClient {
 
     @Autowired(required = false)
-    private IDataRoomPermissionService tokenService;
+    private IDataRoomPermissionService permissionService;
 
 
     /**
@@ -25,10 +26,23 @@ public class DataRoomPermissionClient {
      */
     public boolean verifyDataPermission(HttpServletRequest request, String pageCode) {
         boolean verify = true;
-        if (tokenService != null) {
-            verify = tokenService.verifyDataPermission(request, pageCode);
+        if (permissionService != null) {
+            verify = permissionService.verifyDataPermission(request, pageCode);
         }
         return verify;
+    }
+
+
+    /**
+     * 根据权限过滤
+     * @param allCode 全部的大屏code
+     * @return 当前用户有权限的大屏code
+     */
+    public List<String> filterByPermission(List<String> allCode) {
+        if (permissionService != null) {
+            return permissionService.filterByPermission(allCode);
+        }
+        return allCode;
     }
 
 

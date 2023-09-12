@@ -58,7 +58,7 @@ const customConfig = {
     // 分割线颜色
     mapLineColor: 'rgba(53, 86, 165, 1)',
     fontGraphicColor: '#fff',
-    fontSize:'30',
+    fontSize: '30',
     // 是否开启下钻
     down: false,
     // 地图级别

@@ -3,6 +3,8 @@ package com.gccloud.dataroom.core.module.map.vo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author hongyang
  * @version 1.0
@@ -15,7 +17,7 @@ public class DataRoomMapVO {
     private String id;
 
     @ApiModelProperty(notes = "父级编码")
-    private String parentCode;
+    private String parentId;
 
     @ApiModelProperty(notes = "地图编码")
     private String mapCode;
@@ -37,4 +39,11 @@ public class DataRoomMapVO {
 
     @ApiModelProperty(notes = "是否有子节点")
     private Boolean hasChildren;
+
+    @ApiModelProperty(notes = "子级")
+    private List<DataRoomMapVO> children;
+
+    @ApiModelProperty(notes = "是否禁用")
+    private Boolean disabled;
+
 }
