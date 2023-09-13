@@ -33,7 +33,7 @@ CREATE TABLE `big_screen_page`
     `icon_color`  varchar(100) NOT NULL DEFAULT '' COMMENT '图标颜色',
     `type`        varchar(100) NOT NULL DEFAULT 'custom' COMMENT '页面类型',
     `layout`      varchar(255) NOT NULL DEFAULT '' COMMENT '组件布局，记录组件的相对位置和顺序',
-    `config`      longtext COMMENT '表单属性，只有表单类型时才有这个值',
+    `config`      longtext COMMENT '页面配置',
     `parent_code` varchar(255) NOT NULL DEFAULT '' COMMENT '父级目录编码',
     `order_num`   bigint(64)   NOT NULL DEFAULT '0' COMMENT '排序',
     `remark`      varchar(100) NOT NULL DEFAULT '' COMMENT '备忘',

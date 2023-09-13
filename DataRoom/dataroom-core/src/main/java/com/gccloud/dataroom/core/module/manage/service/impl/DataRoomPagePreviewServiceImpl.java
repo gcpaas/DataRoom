@@ -11,6 +11,7 @@ import com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePreviewServi
 import com.gccloud.dataroom.core.utils.CodeGenerateUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,9 +21,6 @@ import java.util.List;
  */
 @Service
 public class DataRoomPagePreviewServiceImpl extends ServiceImpl<DataRoomPagePreviewDao, PagePreviewEntity> implements IDataRoomPagePreviewService {
-
-
-
 
     @Override
     public String add(DataRoomPageDTO bigScreenPageDTO) {
@@ -42,5 +40,15 @@ public class DataRoomPagePreviewServiceImpl extends ServiceImpl<DataRoomPagePrev
             throw new GlobalException("大屏预览数据不存在，可能已过期");
         }
         return list.get(0);
+    }
+
+    @Override
+    public void clear() {
+        // 清除创建时间超过一天的预览数据
+        Date date = new Date();
+        date.setTime(date.getTime() - 24 * 60 * 60 * 1000);
+        LambdaQueryWrapper<PagePreviewEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.le(PagePreviewEntity::getCreateDate, date);
+        this.delete(queryWrapper);
     }
 }

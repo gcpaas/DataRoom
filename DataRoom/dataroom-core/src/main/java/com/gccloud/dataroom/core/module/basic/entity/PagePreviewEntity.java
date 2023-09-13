@@ -21,7 +21,7 @@ import java.util.Date;
 @Data
 @TableName(value = "big_screen_page_preview", autoResultMap = true)
 @ApiModel
-public class PagePreviewEntity extends SuperEntity implements Serializable {
+public class PagePreviewEntity implements Serializable {
 
     @TableId
     @ApiModelProperty(notes = "主键")

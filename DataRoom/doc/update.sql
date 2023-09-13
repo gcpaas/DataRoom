@@ -1,3 +1,9 @@
+###########################################################################
+# 该sql文件只用于版本升级，如果您执行init.sql文件的时间在如下时间之后，您可以忽略该文件
+# 否则您需要按照时间顺序选择性执行该文件中的sql语句
+###########################################################################
+
+
 
 #20230621 配置表中的类名替换
 UPDATE big_screen_page SET config = REPLACE(config, '"className":"com.gccloud.bigscreen', '"className":"com.gccloud.dataroom');
@@ -126,3 +132,16 @@ CREATE TABLE `big_screen_map`
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8 COMMENT ='地图数据维护表';
+
+
+# 20230913 新增大屏页面预览缓存表
+DROP TABLE IF EXISTS `big_screen_page_preview`;
+CREATE TABLE `big_screen_page_preview`
+(
+    `id`          bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `code`        varchar(255) NOT NULL DEFAULT '' COMMENT '页面编码，页面唯一标识符',
+    `config`      longtext COMMENT '页面配置',
+    `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='页面预览缓存表，每日定时删除';

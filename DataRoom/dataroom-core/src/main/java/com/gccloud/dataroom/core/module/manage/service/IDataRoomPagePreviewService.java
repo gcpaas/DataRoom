@@ -28,4 +28,9 @@ public interface IDataRoomPagePreviewService extends ISuperService<PagePreviewEn
      */
     PagePreviewEntity getByCode(String code);
 
+    /**
+     * 清理预览数据
+     */
+    void clear();
+
 }
