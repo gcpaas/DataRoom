@@ -578,6 +578,7 @@
 </template>
 <script>
 import ElDragSelect from './ElDragSelect.vue'
+import { EventBus } from 'data-room-ui/js/utils/eventBus'
 // import { isEmpty, cloneDeep } from 'lodash'
 import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
@@ -736,6 +737,7 @@ export default {
       if (id) {
         this.config.dataSource.businessKey = id
         getDataSetDetails(id).then(res => {
+          EventBus.$emit('changeBusinessKey')
           this.fieldsList = res.fields
           // 初始化时以组件本来的参数设置为主
           if (type === 'initial') {

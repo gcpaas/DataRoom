@@ -28,9 +28,10 @@ const typeList = [
   'input',
   'button',
   'marquee',
-  'themeSwitcher',
   'chartTab',
-  'themeSelect'
+  'themeSwitcher',
+  'themeSelect',
+  'select'
 ]
 let basicConfigList = []
 basicConfigList = typeList.map((type) => {
@@ -40,10 +41,10 @@ basicConfigList = basicConfigList.map((item) => {
   return basicComponentsConfig(item)
 })
 // 生成基本配置
-export function basicComponentsConfig(item) {
+export function basicComponentsConfig (item) {
   return {
     ...item,
-    border:{type:''},
+    border: { type: '' },
     option: cloneDeep(setModules[item.type]),
     ...cloneDeep(dataModules[item.type])
   }
