@@ -46,17 +46,21 @@ export default {
   methods: {
     ...mapMutations('bigScreen', ['changeIframeDialog']),
     linkHandle () {
-      if (this.config.customize.url) {
-        if (this.config.customize.openType === 'dialog') {
-          if (this.isPreview) {
-            this.$refs.iframeDialogPreview.dialogVisible = true
+      // 设计态点击不进行跳转,预览态进行跳转
+      if (this.isPreview){
+        if (this.config.customize.url) {
+          if (this.config.customize.openType === 'dialog') {
+            if (this.isPreview) {
+              this.$refs.iframeDialogPreview.dialogVisible = true
+            } else {
+              this.changeIframeDialog(true)
+            }
           } else {
-            this.changeIframeDialog(true)
+            window.open(this.config.customize.url, this.config.customize.openType)
           }
-        } else {
-          window.open(this.config.customize.url, this.config.customize.openType)
         }
       }
+
     },
     dataFormatting (config, data) {
       // 文本数据配置原则：选择数据集则以后端返回的数据为主，否则以设置面板中标题设置为准
