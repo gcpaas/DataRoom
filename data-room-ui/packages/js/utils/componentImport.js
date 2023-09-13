@@ -29,4 +29,5 @@ function importComponents (files) {
 importComponents(require.context('data-room-ui/BasicComponents', true, /\index.vue$/))
 importComponents(require.context('data-room-ui/Borders', true, /\index.vue$/))
 importComponents(require.context('data-room-ui/Decorations', true, /\index.vue$/))
+importComponents(require.context('data-room-ui/BorderComponents', true, /\index.vue$/))
 export default modules

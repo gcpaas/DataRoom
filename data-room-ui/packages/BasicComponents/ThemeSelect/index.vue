@@ -99,6 +99,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 16px;
 }
 .content-box{
   text-align: center;

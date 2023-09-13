@@ -304,6 +304,7 @@ export default {
 }
 .bs-design-wrap{
   position: relative;
+  padding: 0 16px;
   .button{
     position: absolute;
     z-index: 999;

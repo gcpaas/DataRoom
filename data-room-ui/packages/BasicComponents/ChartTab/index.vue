@@ -146,6 +146,7 @@ export default {
 <style lang="scss" scoped>
 .bs-design-wrap{
   width: 100%;
+  padding: 0 16px;
   .tab-title-box{
     height: 40px;
     display: flex;

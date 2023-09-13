@@ -83,6 +83,7 @@ export default {
 }
   .bs-design-wrap{
     position: relative;
+    padding: 0 16px;
     width: 100%;
     height: 100%;
     background-color: transparent;

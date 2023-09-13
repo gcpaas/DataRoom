@@ -106,6 +106,7 @@ export default {
       return {
         showTitle: this.config.showTitle,
         title: cloneDeep(this.config?.title),
+        border: cloneDeep(this.config?.border),
         w: this.config?.w,
         h: this.config?.h,
         x: this.config?.x,

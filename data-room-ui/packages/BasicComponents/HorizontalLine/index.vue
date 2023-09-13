@@ -57,6 +57,7 @@ export default {
 .bs-design-wrap {
   position: relative;
   display: flex;
+  padding: 0 16px;
   flex-direction: column;
   justify-content: center;
   align-items: center;

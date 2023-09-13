@@ -7,13 +7,22 @@
 <template>
   <div class="render-item-wrap">
     <component
-      :is="resolveComponentType(config.type)"
-      :id="`${config.code}`"
-      :ref="config.code"
-      :key="config.key"
+      v-if="config.border&&config.border.type"
+      :is="resolveComponentType(config.border.type)"
+      :id="`border${config.code}`"
+      :ref="`border${config.code}`"
+      :key="`border${config.key}`"
       :config="config"
-      @styleHandler="styleHandler"
     />
+    <div class="element" v-if="config.border&&config.border.type" style="box-sizing:content-box;font-size:20px;color:#fff;margin:20px 0 0 20px">{{config.title}}</div>
+       <component
+        :is="resolveComponentType(config.type)"
+        :id="`${config.code}`"
+        :ref="config.code"
+        :key="config.key"
+        :config="config"
+        @styleHandler="styleHandler"
+      />
   </div>
 </template>
 <script>
@@ -55,7 +64,8 @@ export default {
   data () {
     return {}
   },
-  computed: {},
+  computed: {
+  },
   mounted () {
     // 调用初始化方法
     dataInit(this)
@@ -85,6 +95,9 @@ export default {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
+  align-content: center;
+  position: relative;
   overflow: hidden;
   box-sizing: border-box;
 }

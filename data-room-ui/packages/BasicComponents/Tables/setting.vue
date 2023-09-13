@@ -18,6 +18,23 @@
           clearable
         />
       </el-form-item>
+      <el-form-item
+        class="lc-field-body"
+        label="边框"
+        v-if="config.border"
+      >
+        <el-button
+          size="small"
+          type="primary"
+          @click="init"
+        >
+          选择边框
+        </el-button>
+        <BorderSelect
+          v-model="config.border.type"
+          ref="BorderSelect"
+         />
+      </el-form-item>
       <SettingTitle>位置</SettingTitle>
       <div class="lc-field-body">
         <PosWhSetting
@@ -93,6 +110,7 @@
   </div>
 </template>
 <script>
+import BorderSelect from 'data-room-ui/BorderSelect/index.vue'
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
@@ -101,7 +119,8 @@ export default {
   components: {
     ColorPicker,
     PosWhSetting,
-    SettingTitle
+    SettingTitle,
+    BorderSelect
   },
   mixins: [chartSettingMixins],
   data () {
@@ -134,7 +153,11 @@ export default {
   },
   watch: {},
   mounted () { },
-  methods: {}
+  methods: {
+    init(){
+      this.$refs.BorderSelect.init()
+    }
+  }
 }
 </script>
 

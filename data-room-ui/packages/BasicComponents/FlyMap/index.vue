@@ -277,6 +277,7 @@ export default {
   background-color: rgba(0, 0, 0, 0);
 }
 .bs-design-wrap{
+  padding: 0 16px;
   position: relative;
   .button{
     position: absolute;

@@ -245,5 +245,6 @@ export default {
 <style lang="scss" scoped>
 .bs-remote-wrap {
   width: 100%;
+  height: 100%;
 }
 </style>

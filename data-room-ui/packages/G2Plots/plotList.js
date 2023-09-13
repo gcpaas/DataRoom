@@ -32,6 +32,7 @@ function getPlotList (files) {
       category: configMapKey,
       name: config.name,
       title: config.title,
+      border:{type:''},
       icon: null,
       img: require(`../G2Plots/images/componentLogo/${config.title}.png`),
       className:
@@ -63,6 +64,7 @@ export function getCustomPlots () {
       category: config.category,
       name: config.name,
       title: config.title,
+      border:{type:''},
       icon: null,
       img: config.img,
       className:
