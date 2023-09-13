@@ -104,6 +104,7 @@ public class DataRoomMapController {
         if (info.getUploadedGeoJson().equals(1)) {
             vo.setAvailable(1);
         }
+        vo.setEnableDown(info.getEnableDown());
         vo.setGeoJson(info.getGeoJson());
         vo.setId(info.getId());
         return R.success(vo);
