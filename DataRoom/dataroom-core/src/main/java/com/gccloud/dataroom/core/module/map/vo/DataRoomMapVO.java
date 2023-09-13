@@ -28,9 +28,6 @@ public class DataRoomMapVO {
     @ApiModelProperty(notes = "地图级别 0-世界 1-国家 2-省 3-市 4-区县")
     private Integer level;
 
-    @ApiModelProperty(notes = "是否支持下钻 0-否 1-是")
-    private Integer enableDown;
-
     @ApiModelProperty(notes = "geo地图数据json")
     private String geoJson;
 

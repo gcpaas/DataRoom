@@ -56,6 +56,9 @@ public class ScreenFlyMapChart extends Chart{
         @ApiModelProperty(notes = "是否开启下钻")
         private Boolean down;
 
+        @ApiModelProperty(notes = "允许下钻的层级")
+        private Integer downLevel;
+
         @ApiModelProperty(notes = "轨迹图像")
         private String symbol;
 

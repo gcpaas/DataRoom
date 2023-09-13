@@ -29,9 +29,7 @@
         trigger="click"
         class="align-list-dropdown"
       >
-        <CusBtn
-          type="primary"
-        >
+        <CusBtn type="primary">
           对齐方式<i class="el-icon-arrow-down el-icon--right" />
         </CusBtn>
         <el-dropdown-menu
@@ -39,7 +37,7 @@
           class="align-dropdown-menu"
         >
           <el-dropdown-item
-            v-for="(mode,index) in alignList"
+            v-for="(mode, index) in alignList"
             :key="mode.value"
             @click.native="setAlign(mode.value)"
           >
@@ -58,9 +56,7 @@
       >
         设计分工
       </CusBtn>
-      <CusBtn
-        @click.native="showHostory"
-      >
+      <CusBtn @click.native="showHostory">
         历史操作
       </CusBtn>
       <CusBtn
@@ -369,71 +365,64 @@ export default {
     },
     // 预览
     async execRun () {
-      this.save('saveAndPreviewLoading').then((res) => {
-        this.preview()
+      this.save('preview').then((res) => {
+        this.preview(res)
       })
     },
     // 预览
-    preview () {
+    preview (previewCode) {
       const { href } = this.$router.resolve({
         path: window.BS_CONFIG?.routers?.previewUrl || '/big-screen/preview',
         query: {
-          code: this.pageCode
+          code: previewCode || this.pageCode
         }
       })
       window.open(href, '_blank')
     },
     // 保存
-    save (loadingType = 'saveLoading', hasPageTemplateId = false) {
+    async save (type, hasPageTemplateId = false) {
       const pageInfo = cloneDeep(this.handleSaveData())
       // 保存页面
-      this[loadingType] = true
-      return new Promise((resolve, reject) => {
+      try {
         if (!hasPageTemplateId) {
           delete pageInfo.pageTemplateId
         }
-        const node = document.querySelector('.render-theme-wrap')
-        toJpeg(node, { quality: 0.2 })
-          .then((dataUrl) => {
-            const that = this
-            if (showSize(dataUrl) > 200) {
-              const url = dataURLtoBlob(dataUrl)
-              // 压缩到500KB,这里的500就是要压缩的大小,可自定义
-              imageConversion
-                .compressAccurately(url, {
-                  size: 200, // 图片大小压缩到100kb
-                  width: 1280, // 宽度压缩到1280
-                  height: 720 // 高度压缩到720
-                })
-                .then((res) => {
-                  translateBlobToBase64(res, function (e) {
-                    pageInfo.coverPicture = e.result
-                    saveScreen(pageInfo)
-                      .then((res) => {
-                        that.$message.success('保存成功')
-                        resolve(res)
-                      })
-                      .finally(() => {
-                        that[loadingType] = false
-                      })
-                  })
-                })
-            } else {
-              pageInfo.coverPicture = dataUrl
-              saveScreen(pageInfo)
-                .then((res) => {
-                  this.$message.success('保存成功')
-                  resolve(res)
-                })
-                .finally(() => {
-                  this[loadingType] = false
-                })
-            }
-          })
-          .catch(() => {
-            this[loadingType] = false
-          })
-      })
+        if (type === 'preview') {
+          pageInfo.isPreview = true
+          const res = await saveScreen(pageInfo)
+          return res
+        } else {
+          pageInfo.isPreview = false
+          this.saveLoading = true
+          const node = document.querySelector('.render-theme-wrap')
+          const dataUrl = await toJpeg(node, { quality: 0.2 })
+          if (showSize(dataUrl) > 200) {
+            const url = dataURLtoBlob(dataUrl)
+            // 压缩到500KB,这里的500就是要压缩的大小,可自定义
+            const imgRes = await imageConversion.compressAccurately(url, {
+              size: 200, // 图片大小压缩到100kb
+              width: 1280, // 宽度压缩到1280
+              height: 720 // 高度压缩到720
+            })
+            const base64 = await translateBlobToBase64(imgRes)
+            pageInfo.coverPicture = base64.result
+            const res = await saveScreen(pageInfo)
+            this.$message.success('保存成功')
+            return res
+          } else {
+            pageInfo.coverPicture = dataUrl
+            const res = await saveScreen(pageInfo)
+            this.$message.success('保存成功')
+            return res
+          }
+        }
+      } catch (error) {
+        console.error(error)
+        this.saveLoading = false
+        throw error
+      } finally {
+        this.saveLoading = false
+      }
     },
     goBack (path) {
       this.$router.push({
@@ -520,6 +509,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '../BigScreenDesign/fonts/iconfont.css';
+
 .default-layout-box {
   display: flex;
   flex-wrap: wrap;
@@ -585,6 +575,7 @@ export default {
     display: flex;
     margin-left: 50px;
     align-items: center;
+
     i {
       font-size: 14px;
     }
@@ -620,27 +611,34 @@ export default {
       text-overflow: ellipsis;
     }
   }
-  .theme-switch{
+
+  .theme-switch {
     margin-right: 10px;
-    /deep/.el-switch__label{
-      color: #bcc9d4!important;
+
+    /deep/.el-switch__label {
+      color: #bcc9d4 !important;
     }
-    /deep/.el-switch__label.is-active{
-      color: var(--bs-el-color-primary)!important;
+
+    /deep/.el-switch__label.is-active {
+      color: var(--bs-el-color-primary) !important;
     }
   }
-  .align-list-dropdown{
+
+  .align-list-dropdown {
     width: 100px !important;
-    color: #ffffff!important;
+    color: #ffffff !important;
   }
 
 }
+
 // 自定义dropdown的样式
-.align-dropdown-menu{
-  background-color: var(--bs-background-2)!important;
+.align-dropdown-menu {
+  background-color: var(--bs-background-2) !important;
   border: 1px solid var(--bs-border-1);
-  /deep/ .el-dropdown-menu__item{
-    background-color: var(--bs-background-2)!important;
+
+  /deep/ .el-dropdown-menu__item {
+    background-color: var(--bs-background-2) !important;
+
     &:hover {
       color: var(--bs-el-color-primary) !important;
       background-color: var(--bs-el-background-3) !important;
@@ -648,6 +646,7 @@ export default {
   }
 
 }
+
 ::v-deep .el-input__inner,
 ::v-deep .el-color-picker__color-inner,
 ::v-deep .el-input-number--mini,
@@ -658,6 +657,7 @@ export default {
   border: 0 !important;
   width: 100px;
 }
+
 // .bs-el-input-number{
 
 // }

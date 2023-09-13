@@ -94,7 +94,7 @@ public class DataRoomPageController {
     @PostMapping("/update")
     @ApiOperation(value = "修改大屏/组件", position = 30, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> update(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
-        if (bigScreenPageDTO.getIsPreview().equals(Boolean.TRUE)) {
+        if (Boolean.TRUE.equals(bigScreenPageDTO.getIsPreview())) {
             // 保存到预览临时缓存表
             String code = previewService.add(bigScreenPageDTO);
             return R.success(code);

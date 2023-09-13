@@ -46,7 +46,7 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
         // 根据层级，如果某个地图的某个子级（或子级的子级...）也符合该层级，那么把该地图也返回
         LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.select(DataRoomMapEntity::getId, DataRoomMapEntity::getLevel, DataRoomMapEntity::getParentId,
-                DataRoomMapEntity::getMapCode, DataRoomMapEntity::getName, DataRoomMapEntity::getEnableDown, DataRoomMapEntity::getUploadedGeoJson);
+                DataRoomMapEntity::getMapCode, DataRoomMapEntity::getName, DataRoomMapEntity::getUploadedGeoJson);
         queryWrapper.le(DataRoomMapEntity::getLevel, level);
         List<DataRoomMapEntity> list = list(queryWrapper);
         // 转成树形结构
@@ -162,7 +162,6 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
         updateWrapper.eq(DataRoomMapEntity::getId, mapDTO.getId());
         // 只允许修改名称和是否开启下钻
         updateWrapper.set(DataRoomMapEntity::getName, mapDTO.getName());
-        updateWrapper.set(DataRoomMapEntity::getEnableDown, mapDTO.getEnableDown());
         // 如果之前没有上传过geoJson，现在上传了，那么允许更新geoJson
         if (!uploadedGeoJson.equals(YES) && StringUtils.isNotBlank(mapDTO.getGeoJson())) {
             if (mapDTO.getAutoParseNextLevel().equals(YES)) {
@@ -198,7 +197,6 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
             childMapEntity.setLevel(mapEntity.getLevel() + 1);
             childMapEntity.setMapCode(properties.getString("name"));
             childMapEntity.setName(properties.getString("name"));
-            childMapEntity.setEnableDown(NO);
             childMapEntity.setUploadedGeoJson(NO);
             mapEntityList.add(childMapEntity);
         }

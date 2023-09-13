@@ -76,4 +76,16 @@ public class Chart {
     @ApiModelProperty(notes = "主题配置")
     private Map<String, Object> theme;
 
+
+    /**
+     * 边框配置,格式如下
+     * {
+     *    type: '',
+     *    titleHeight: 60,
+     *    fontSize: 30,
+     *    color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9']
+     */
+    @ApiModelProperty(notes = "边框配置")
+    private Map<String, Object> border;
+
 }

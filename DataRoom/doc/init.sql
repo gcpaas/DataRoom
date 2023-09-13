@@ -196,7 +196,6 @@ CREATE TABLE `big_screen_map`
     `name`              varchar(255)        DEFAULT NULL COMMENT '地图名称',
     `geo_json`          longtext            DEFAULT NULL COMMENT '地图geoJson',
     `level`             tinyint(2) NOT NULL DEFAULT 0 COMMENT '地图级别 0-世界 1-国家 2-省 3-市 4-区县',
-    `enable_down`       tinyint(2) NOT NULL DEFAULT 0 COMMENT '是否支持下钻 0-否 1-是',
     `uploaded_geo_json` tinyint(2) NOT NULL DEFAULT 0 COMMENT '是否已上传geoJson 0-否 1-是',
     `update_date`       timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
     `create_date`       timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -206,3 +205,14 @@ CREATE TABLE `big_screen_map`
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8 COMMENT ='地图数据维护表';
+
+DROP TABLE IF EXISTS `big_screen_page_preview`;
+CREATE TABLE `big_screen_page_preview`
+(
+    `id`          bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `code`        varchar(255) NOT NULL DEFAULT '' COMMENT '页面编码，页面唯一标识符',
+    `config`      longtext COMMENT '页面配置',
+    `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='页面预览缓存表，每日定时删除';

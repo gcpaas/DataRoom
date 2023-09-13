@@ -14,9 +14,6 @@ public class DataRoomMapDataVO {
     @ApiModelProperty(notes = "主键")
     private String id;
 
-    @ApiModelProperty(notes = "是否支持下钻 0-否 1-是")
-    private Integer enableDown;
-
     @ApiModelProperty(notes = "geo地图数据json")
     private String geoJson;
 

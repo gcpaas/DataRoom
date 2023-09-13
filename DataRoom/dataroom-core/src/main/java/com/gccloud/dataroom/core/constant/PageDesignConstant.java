@@ -156,6 +156,13 @@ public interface PageDesignConstant {
              * Tab切换
              */
             String TAB_CHART = "chartTab";
+
+            /**
+             * 选择器
+             */
+            String SELECT = "select";
+
+
         }
     }
 
