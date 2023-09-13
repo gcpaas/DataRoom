@@ -27,6 +27,8 @@ public class DataRoomPagePreviewServiceImpl extends ServiceImpl<DataRoomPagePrev
         String code = CodeGenerateUtils.generate(PREVIEW_KEY);
         bigScreenPageDTO.setCode(code);
         PagePreviewEntity pagePreviewEntity = BeanConvertUtils.convert(bigScreenPageDTO, PagePreviewEntity.class);
+        pagePreviewEntity.setCreateDate(new Date());
+        pagePreviewEntity.setConfig(bigScreenPageDTO);
         this.save(pagePreviewEntity);
         return code;
     }
