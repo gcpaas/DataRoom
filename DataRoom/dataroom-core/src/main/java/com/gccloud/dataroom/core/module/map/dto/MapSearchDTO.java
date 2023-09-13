@@ -21,7 +21,5 @@ public class MapSearchDTO extends SearchDTO {
     @ApiModelProperty(notes = "是否已上传")
     private Integer uploadedGeoJson;
 
-    @ApiModelProperty(notes = "是否支持下钻")
-    private Integer enableDown;
 
 }

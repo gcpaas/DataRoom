@@ -10,7 +10,6 @@
                map_code,
                name,
                level,
-               enable_down,
                geo_json,
                uploaded_geo_json,
                create_date,
@@ -36,9 +35,6 @@
                     name like concat('%', #{searchDTO.searchKey}, '%')
                     OR map_code like concat('%', #{searchDTO.searchKey}, '%')
                     )
-            </if>
-            <if test="searchDTO.enableDown != null">
-                AND enable_down = #{searchDTO.enableDown}
             </if>
             <if test="searchDTO.level != null">
                 AND level = #{searchDTO.level}

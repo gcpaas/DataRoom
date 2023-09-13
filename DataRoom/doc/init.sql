@@ -196,7 +196,6 @@ CREATE TABLE `big_screen_map`
     `name`              varchar(255)        DEFAULT NULL COMMENT '地图名称',
     `geo_json`          longtext            DEFAULT NULL COMMENT '地图geoJson',
     `level`             tinyint(2) NOT NULL DEFAULT 0 COMMENT '地图级别 0-世界 1-国家 2-省 3-市 4-区县',
-    `enable_down`       tinyint(2) NOT NULL DEFAULT 0 COMMENT '是否支持下钻 0-否 1-是',
     `uploaded_geo_json` tinyint(2) NOT NULL DEFAULT 0 COMMENT '是否已上传geoJson 0-否 1-是',
     `update_date`       timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
     `create_date`       timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
