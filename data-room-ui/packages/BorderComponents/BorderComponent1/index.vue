@@ -6,7 +6,7 @@
     <dv-border-box-1
       :id="'dataV' + config.code"
     >
-    <div class="element" v-if="config.border&&config.border.type" :style="`font-size:${config.border.fontSize}px;line-height:${config.border.titleHeight}px;color:${config.border.color[0]};height:${config.border.titleHeight};margin:0 0 0 20px`">{{config.title}}</div>
+    <div class="element"  :style="`font-size:${config.border.fontSize}px;line-height:${config.border.titleHeight}px;color:${config.border.color[0]};height:${config.border.titleHeight};margin:0 0 0 20px`">{{config.title}}</div>
     </dv-border-box-1>
   </div>
 </template>

@@ -7,7 +7,7 @@
       :id="'dataV' + config.code"
       :key="updateKey"
     >
-    <div class="element" v-if="config.border&&config.border.type" style="box-sizing: content-box;font-size:40px;color:#fff;height:50px;margin:20px 0 0 20px">{{config.title}}</div>
+    <div class="element" style="box-sizing: content-box;font-size:40px;color:#fff;height:50px;margin:0 0 0 20px">{{config.title}}</div>
     </dv-border-box-2>
   </div>
 </template>

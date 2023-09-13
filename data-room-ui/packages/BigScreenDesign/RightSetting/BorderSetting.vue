@@ -5,13 +5,24 @@
       :label-width="labelWidth"
       label="边框"
     >
-      <el-button
-        size="small"
-        type="primary"
-        @click="init"
-      >
-        选择边框
-      </el-button>
+    <el-input
+      v-model="config.type"
+      v-support
+      clearable
+      read-only
+      placeholder="请选择边框"
+      @focus="init"
+    >
+      <template slot="append">
+        <el-button
+          size="small"
+          type="primary"
+          @click="init"
+        >
+          选择
+        </el-button>
+      </template>
+    </el-input>
       <BorderSelect
         v-model="config.type"
         ref="BorderSelect"
