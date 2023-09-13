@@ -26,6 +26,14 @@
         <div class="lc-field-body">
           <PosWhSetting :config="config" />
         </div>
+         <SettingTitle v-if="config.border">边框</SettingTitle>
+          <div class="lc-field-body">
+            <BorderSetting
+              v-if="config.border"
+              label-width="100px"
+              :config="config.border"
+            />
+          </div>
         <SettingTitle>基础</SettingTitle>
         <div class="lc-field-body">
           <el-form-item
@@ -71,11 +79,13 @@
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 export default {
   name: 'BarSetting',
   components: {
     PosWhSetting,
-    SettingTitle
+    SettingTitle,
+    BorderSetting
   },
   data () {
     return {

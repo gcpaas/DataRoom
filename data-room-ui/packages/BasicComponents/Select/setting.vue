@@ -19,6 +19,14 @@
           <div class="lc-field-body">
             <PosWhSetting :config="config" />
           </div>
+          <SettingTitle v-if="config.border">边框</SettingTitle>
+          <div class="lc-field-body">
+            <BorderSetting
+              v-if="config.border"
+              label-width="120px"
+              :config="config.border"
+            />
+          </div>
           <SettingTitle>基础</SettingTitle>
           <div class="lc-field-body">
             <!-- 选择器背景颜色 -->
@@ -121,6 +129,7 @@
 </template>
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 // import IconPicker from 'data-room-ui/IconPicker/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
@@ -130,7 +139,8 @@ export default {
     // IconPicker,
     ColorPicker,
     PosWhSetting,
-    SettingTitle
+    SettingTitle,
+    BorderSetting
   },
   props: {
     config: {

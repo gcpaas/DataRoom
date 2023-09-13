@@ -9,32 +9,24 @@
       class="setting-body bs-el-form"
     >
       <SettingTitle>基础</SettingTitle>
-      <el-form-item
-        class="lc-field-body"
-        label="名称"
-      >
-        <el-input
-          v-model="config.title"
-          clearable
-        />
-      </el-form-item>
-      <el-form-item
-        class="lc-field-body"
-        label="边框"
-        v-if="config.border"
-      >
-        <el-button
-          size="small"
-          type="primary"
-          @click="init"
+      <div class="lc-field-body">
+        <el-form-item
+          label="名称"
         >
-          选择边框
-        </el-button>
-        <BorderSelect
-          v-model="config.border.type"
-          ref="BorderSelect"
-         />
-      </el-form-item>
+          <el-input
+            v-model="config.title"
+            clearable
+          />
+        </el-form-item>
+      </div>
+       <SettingTitle v-if="config.border">边框</SettingTitle>
+          <div class="lc-field-body">
+            <BorderSetting
+              v-if="config.border"
+              label-width="120px"
+              :config="config.border"
+            />
+          </div>
       <SettingTitle>位置</SettingTitle>
       <div class="lc-field-body">
         <PosWhSetting
@@ -110,7 +102,7 @@
   </div>
 </template>
 <script>
-import BorderSelect from 'data-room-ui/BorderSelect/index.vue'
+import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
@@ -120,7 +112,7 @@ export default {
     ColorPicker,
     PosWhSetting,
     SettingTitle,
-    BorderSelect
+    BorderSetting
   },
   mixins: [chartSettingMixins],
   data () {
@@ -154,9 +146,6 @@ export default {
   watch: {},
   mounted () { },
   methods: {
-    init(){
-      this.$refs.BorderSelect.init()
-    }
   }
 }
 </script>
