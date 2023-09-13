@@ -17,6 +17,14 @@
           clearable
         />
       </el-form-item>
+       <SettingTitle v-if="config.border">边框</SettingTitle>
+          <div class="lc-field-body">
+            <BorderSetting
+              v-if="config.border"
+              label-width="120px"
+              :config="config.border"
+            />
+          </div>
       <SettingTitle>位置</SettingTitle>
       <div class="lc-field-body">
         <PosWhSetting
@@ -178,6 +186,7 @@ import draggable from 'vuedraggable'
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import CloneDeep from 'lodash-es/cloneDeep'
 import plotList from 'data-room-ui/G2Plots/plotList'
 import { randomString } from 'data-room-ui/js/utils'
@@ -186,7 +195,8 @@ export default {
   components: {
     PosWhSetting,
     SettingTitle,
-    draggable
+    draggable,
+    BorderSetting
   },
   mixins: [chartSettingMixins],
   data () {

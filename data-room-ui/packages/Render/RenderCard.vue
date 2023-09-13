@@ -5,7 +5,7 @@
 -->
 
 <template>
-  <div class="render-item-wrap">
+  <div class="content">
     <component
       v-if="config.border&&config.border.type"
       :is="resolveComponentType(config.border.type)"
@@ -14,7 +14,7 @@
       :key="`border${config.key}`"
       :config="config"
     />
-    <div class="element" v-if="config.border&&config.border.type" style="box-sizing:content-box;font-size:20px;color:#fff;margin:20px 0 0 20px">{{config.title}}</div>
+    <div class="render-item-wrap" :style="`height:calc(100% - ${(config.border&&config.border.type)?config.border.titleHeight:0}px)`">
        <component
         :is="resolveComponentType(config.type)"
         :id="`${config.code}`"
@@ -23,7 +23,9 @@
         :config="config"
         @styleHandler="styleHandler"
       />
+    </div>
   </div>
+
 </template>
 <script>
 // import commonMixins from 'data-room-ui/js/mixins/commonMixins'
@@ -62,7 +64,9 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+      height:0
+    }
   },
   computed: {
   },
@@ -91,12 +95,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.content{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
 .render-item-wrap {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
-  align-content: center;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;

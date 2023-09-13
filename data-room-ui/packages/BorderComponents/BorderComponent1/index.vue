@@ -6,10 +6,7 @@
     <dv-border-box-1
       :id="'dataV' + config.code"
     >
-      <!-- <span style="font-size:20px;color:#fff;height:20px">测试标题</span>
-      <div style="height:calc(100% - 40px)">
-        <slot/>
-      </div> -->
+    <div class="element" v-if="config.border&&config.border.type" :style="`font-size:${config.border.fontSize}px;line-height:${config.border.titleHeight}px;color:${config.border.color[0]};height:${config.border.titleHeight};margin:0 0 0 20px`">{{config.title}}</div>
     </dv-border-box-1>
   </div>
 </template>
@@ -44,6 +41,10 @@ export default {
   border-radius: 4px;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+  .element{
+    display: flex;
+    align-items: center;
+  }
 }
 
 .title-box {

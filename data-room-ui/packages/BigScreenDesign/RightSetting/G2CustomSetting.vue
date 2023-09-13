@@ -21,6 +21,13 @@
           />
         </el-form-item>
       </div>
+      <div class="lc-field-body">
+        <BorderSetting
+          v-if="config.border"
+          label-width="120px"
+          :config="config.border"
+        />
+      </div>
       <SettingTitle>位置</SettingTitle>
       <div class="lc-field-body">
         <PosWhSetting
@@ -158,6 +165,7 @@
   </div>
 </template>
 <script>
+import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
 import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
@@ -173,6 +181,7 @@ export default {
     PaddingSetting,
     GradualSetting,
     PosWhSetting,
+    BorderSetting,
     SettingTitle
   },
   mixins: [chartSettingMixins],

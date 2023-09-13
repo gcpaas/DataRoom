@@ -27,6 +27,14 @@
       <div class="lc-field-body">
         <PosWhSetting :config="config" />
       </div>
+       <SettingTitle v-if="config.border">边框</SettingTitle>
+          <div class="lc-field-body">
+            <BorderSetting
+              v-if="config.border"
+              label-width="100px"
+              :config="config.border"
+            />
+          </div>
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
@@ -60,6 +68,7 @@
 </template>
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import TextGradient from 'data-room-ui/BigScreenDesign/RightSetting/TextGradient/index'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 export default {
@@ -67,7 +76,8 @@ export default {
   components: {
     TextGradient,
     PosWhSetting,
-    SettingTitle
+    SettingTitle,
+    BorderSetting
   },
   data () {
     return {
