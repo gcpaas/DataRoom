@@ -3,8 +3,10 @@ package com.gccloud.dataroom.core.module.manage.controller;
 import com.gccloud.dataroom.core.config.DataRoomConfig;
 import com.gccloud.dataroom.core.constant.DataRoomConst;
 import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
+import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomSearchDTO;
+import com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePreviewService;
 import com.gccloud.dataroom.core.module.manage.service.IDataRoomPageService;
 import com.gccloud.dataroom.core.module.manage.vo.StaticFileVO;
 import com.gccloud.dataroom.core.permission.Permission;
@@ -44,11 +46,19 @@ public class DataRoomPageController {
     private IDataRoomPageService bigScreenPageService;
     @Resource
     private DataRoomConfig bigScreenConfig;
+    @Resource
+    private IDataRoomPagePreviewService previewService;
 
     @ApiPermission(permissions = {Permission.DataRoom.VIEW})
     @GetMapping("/info/code/{code}")
     @ApiOperation(value = "大屏页/组件详情", position = 10, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixinsResp<DataRoomPageDTO> info(@PathVariable("code") String code) {
+        if (code.startsWith(IDataRoomPagePreviewService.PREVIEW_KEY)) {
+            PagePreviewEntity preview = previewService.getByCode(code);
+            MixinsResp<DataRoomPageDTO> r = new MixinsResp<DataRoomPageDTO>().setData((DataRoomPageDTO) preview.getConfig());
+            r.setCode(DataRoomConst.Response.Code.SUCCESS);
+            return r;
+        }
         PageEntity bigScreen = bigScreenPageService.getByCode(code);
         DataRoomPageDTO bigScreenPageDTO = (DataRoomPageDTO) bigScreen.getConfig();
         BeanConvertUtils.convert(bigScreen, bigScreenPageDTO);
@@ -84,6 +94,11 @@ public class DataRoomPageController {
     @PostMapping("/update")
     @ApiOperation(value = "修改大屏/组件", position = 30, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> update(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
+        if (bigScreenPageDTO.getIsPreview().equals(Boolean.TRUE)) {
+            // 保存到预览临时缓存表
+            String code = previewService.add(bigScreenPageDTO);
+            return R.success(code);
+        }
         ValidatorUtils.validateEntity(bigScreenPageDTO, Update.class);
         if (StringUtils.isBlank(bigScreenPageDTO.getParentCode())) {
             bigScreenPageDTO.setParentCode("0");

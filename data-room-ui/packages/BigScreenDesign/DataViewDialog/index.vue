@@ -202,11 +202,13 @@ export default {
         this.$message.warning('数据为空')
       }
       this.formVisible = false
+      this.exportLoading = true
     },
     // 导出数据
     exportHandler () {
+      this.exportLoading = false
       if (Object.keys(this.fields).length) {
-        this.$message.success('导出数据')
+        this.$message.success('数据导出成功')
       }
       this.formVisible = false
     }

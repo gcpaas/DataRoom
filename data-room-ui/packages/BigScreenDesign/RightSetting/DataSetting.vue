@@ -751,7 +751,6 @@ export default {
           } else {
             this.params = res.params
           }
-
           this.datasetName = res.name
           // 选择数据集的时候，如果数据集类型是dataModel,则不显示参数配置
           this.config.option.displayOption.params.enable = res.type !== 'dataModel'

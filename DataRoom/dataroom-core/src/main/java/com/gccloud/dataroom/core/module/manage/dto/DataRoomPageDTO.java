@@ -72,6 +72,9 @@ public class DataRoomPageDTO extends BasePageDTO {
     @ApiModelProperty(notes = "所属应用编码")
     private String appCode;
 
+    @ApiModelProperty(notes = "是否预览")
+    private Boolean isPreview;
+
     @Data
     public static class CacheDataSet {
         @ApiModelProperty(notes = "数据集名称")

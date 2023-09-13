@@ -47,7 +47,6 @@ import RenderCard from 'data-room-ui/Render/RenderCard.vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
 import { compile } from 'tiny-sass-compiler/dist/tiny-sass-compiler.esm-browser.prod.js'
 import NotPermission from 'data-room-ui/NotPermission'
-import cloneDeep from 'lodash/cloneDeep'
 import Configuration from 'data-room-ui/Render/Configuration.vue'
 import DataViewDialog from 'data-room-ui/BigScreenDesign/DataViewDialog/index.vue'
 export default {
@@ -225,7 +224,11 @@ export default {
             that.chartList.forEach((chart, index) => {
               if (item.code === chart.code && item.time === time) {
                 item.time = item.time + item.originTime
-                that.$refs.RenderCardRef[index].$refs[chart.code].changeData(chart)
+                if (that.$refs.RenderCardRef[index].$refs[chart.code]?.componentInstance) {
+                  that.$refs.RenderCardRef[index].$refs[chart.code].componentInstance.changeData(chart)
+                } else {
+                  that.$refs.RenderCardRef[index].$refs[chart.code].changeData(chart)
+                }
               }
             })
           }

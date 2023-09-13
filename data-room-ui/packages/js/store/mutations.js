@@ -87,7 +87,7 @@ export default {
   // 改变当前组件配置
   changeChartConfig (state, itemConfig) {
     // 如果存在parentCode的组件，则是tab中的组件
-    if (itemConfig.parentCode) {
+    if (itemConfig?.parentCode) {
       state.pageInfo.chartList.forEach((chart, index) => {
         if (chart.code === itemConfig.parentCode) {
           chart.customize.tabList.forEach((tabItem, i) => {

@@ -13,7 +13,6 @@
         </div>
       </div>
       <div class="right-btn-wrap">
-
         <CusBtn
           :loading="loading"
           @click="save"
@@ -92,12 +91,12 @@
               效果预览
             </div>
             <div class="upload-btn">
-             <CusBtn
-              :loading="loading"
-              @click.native="createdImg()"
-            >
-              生成图片
-            </CusBtn>
+              <CusBtn
+                :loading="loading"
+                @click.native="createdImg()"
+              >
+                生成图片
+              </CusBtn>
             </div>
           </div>
           <BizComponentPreview
