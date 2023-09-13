@@ -6,11 +6,13 @@ import com.gccloud.dataroom.core.config.DataRoomConfig;
 import com.gccloud.dataroom.core.constant.PageDesignConstant;
 import com.gccloud.dataroom.core.module.basic.dao.DataRoomPageDao;
 import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
+import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
 import com.gccloud.dataroom.core.module.chart.bean.Chart;
 import com.gccloud.dataroom.core.module.chart.components.datasource.DataSetDataSource;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomSearchDTO;
 import com.gccloud.dataroom.core.module.manage.extend.DataRoomExtendClient;
+import com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePreviewService;
 import com.gccloud.dataroom.core.module.manage.service.IDataRoomPageService;
 import com.gccloud.dataroom.core.module.template.entity.PageTemplateEntity;
 import com.gccloud.dataroom.core.module.template.service.IPageTemplateService;
@@ -57,6 +59,18 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
 
     @Resource
     private DataRoomPermissionClient permissionClient;
+
+    @Resource
+    private IDataRoomPagePreviewService previewService;
+
+    @Override
+    public PageEntity getByCode(String code) {
+        if (code.startsWith(IDataRoomPagePreviewService.PREVIEW_KEY)) {
+            PagePreviewEntity preview = previewService.getByCode(code);
+            return BeanConvertUtils.convert(preview, PageEntity.class);
+        }
+        return IDataRoomPageService.super.getByCode(code);
+    }
 
     @Override
     public String add(DataRoomPageDTO bigScreenPageDTO) {
