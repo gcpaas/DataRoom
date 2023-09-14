@@ -34,8 +34,10 @@ const customConfig = {
   type: 'tables',
   root: {
     version: '2023071001',
-    contribution: false
+    contribution: false,
+    loading: false
   },
+
   customize: {
     theme: 'dark', // 'light'、'dark'
     // 表格头部背景颜色

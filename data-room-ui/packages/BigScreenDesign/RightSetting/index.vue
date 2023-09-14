@@ -99,7 +99,8 @@ export default {
         dataSource: cloneDeep(this.config.dataSource),
         linkage: cloneDeep(this.config?.linkage),
         dataHandler: this.config?.dataHandler,
-        dataSourceSetting: cloneDeep(this.config?.setting?.filter(item => item.tabName === 'data')) || []
+        dataSourceSetting: cloneDeep(this.config?.setting?.filter(item => item.tabName === 'data')) || [],
+        code: this.config?.code
       }
     },
     configStyle () {
@@ -131,6 +132,7 @@ export default {
     // 更新数据源部分，需要调用接口
     configDataSource: {
       handler (val, oldValue) {
+        console.log('oldValue', oldValue)
         this.handleConfigChange(val, oldValue, 'configDataSource')
       },
       deep: true
@@ -150,17 +152,19 @@ export default {
       }, delay)
     },
     handleConfigChange (val, oldValue, type) {
-      if (!isEqual(val, oldValue)) {
-        if (type === 'configStyle') {
-          if (this.config.type === 'iframeChart') {
-            this.debounce(500, { ...val, type: this.config.type, code: this.config.code, parentCode: this.config?.parentCode })
+      if (val.code === oldValue.code) {
+        if (!isEqual(val, oldValue)) {
+          if (type === 'configStyle') {
+            if (this.config.type === 'iframeChart') {
+              this.debounce(500, { ...val, type: this.config.type, code: this.config.code, parentCode: this.config?.parentCode })
+            } else {
+              this.$emit('updateSetting', { ...val, type: this.config.type, code: this.config.code, theme: this.config.theme, parentCode: this.config?.parentCode })
+            }
           } else {
-            this.$emit('updateSetting', { ...val, type: this.config.type, code: this.config.code, theme: this.config.theme, parentCode: this.config?.parentCode })
+            this.$emit('updateDataSetting', this.config)
           }
-        } else {
-          this.$emit('updateDataSetting', this.config)
+          this.saveTimeLine(`更新${val?.title ?? this.config.title}组件属性`)
         }
-        this.saveTimeLine(`更新${val?.title ?? this.config.title}组件属性`)
       }
     },
     close () {

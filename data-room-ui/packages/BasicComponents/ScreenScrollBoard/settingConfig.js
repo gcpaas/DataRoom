@@ -32,7 +32,8 @@ const customConfig = {
   type: 'screenScrollBoard',
   root: {
     version: '2023071001',
-    contribution: false
+    contribution: false,
+    loading: false
   },
   customize: {
     rowNum: 5,
