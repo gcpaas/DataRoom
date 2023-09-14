@@ -162,6 +162,11 @@ public interface PageDesignConstant {
              */
             String SELECT = "select";
 
+            /**
+             * 时间选择
+             */
+            String TIME_PICKER = "timePicker";
+
 
         }
     }

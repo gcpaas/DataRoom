@@ -23,6 +23,9 @@ public class ScreenMapChart extends Chart {
     @Data
     public static class Customize {
 
+        @ApiModelProperty(notes = "地图id")
+        private String mapId;
+
         @ApiModelProperty(notes = "是否显示文字")
         private Boolean mapName;
 
@@ -88,6 +91,18 @@ public class ScreenMapChart extends Chart {
 
         @ApiModelProperty(notes = "是否开启下钻")
         private Boolean down;
+
+        @ApiModelProperty(notes = "允许下钻的层级")
+        private Integer downLevel;
+
+        @ApiModelProperty(notes = "地图比例")
+        private Integer zoom;
+
+        @ApiModelProperty(notes = "中心点x轴位置")
+        private Integer center1;
+
+        @ApiModelProperty(notes = "中心点y轴位置")
+        private Integer center2;
 
     }
 
