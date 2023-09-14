@@ -247,7 +247,7 @@ export default {
       const maxY = Math.max.apply(Math, activeChartList.map(item => { return item.y }))
       const minY = Math.min.apply(Math, activeChartList.map(item => { return item.y }))
       const centerW = maxXW - minX
-      const centerH = maxY - minY
+      const centerH = maxYH - minY
       switch (command) {
         case 'left':
           activeChartList.forEach((chart) => {
