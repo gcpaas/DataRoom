@@ -123,6 +123,7 @@ export default {
       return config
     },
     changeStyle (config) {
+      config = { ...this.config, ...config }
       // 样式改变时更新主题配置
       config.theme = settingToTheme(cloneDeep(config), this.customTheme)
       this.changeChartConfig(config)
