@@ -61,7 +61,8 @@ export default {
     }
   },
   watch: { },
-  created () { },
+  created () {
+  },
   mounted () {
     window.dataSetFields = []
     this.changeStyle(this.config)
@@ -169,11 +170,11 @@ export default {
           item.style.setProperty('--dropDownHoverBackgroundColor', this.innerConfig.customize.dropDownHoverBackgroundColor)
         })
         // 激活项
-        const selectDropdownItemSelectedEl = document.querySelectorAll(`.select-popper-${this.innerConfig.code} .el-select-dropdown__item.selected`)
-        selectDropdownItemSelectedEl.forEach(item => {
-          item.style.color = this.innerConfig.customize.activeFontColor
-          item.style.backgroundColor = this.innerConfig.customize.activeBackgroundColor
-        })
+        // const selectDropdownItemSelectedEl = document.querySelectorAll(`.select-popper-${this.innerConfig.code} .el-select-dropdown__item.selected`)
+        // selectDropdownItemSelectedEl.forEach(item => {
+        //   item.style.color = this.innerConfig.customize.activeFontColor
+        //   item.style.backgroundColor = this.innerConfig.customize.activeBackgroundColor
+        // })
       }
       // 不是激活项的还是使用背景颜色
       const selectDropdownItemEl = document.querySelectorAll(`.select-popper-${this.innerConfig.code} .el-select-dropdown__item`)
