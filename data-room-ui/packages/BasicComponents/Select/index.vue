@@ -73,7 +73,7 @@ export default {
     if (this.isPreview) {
       this.filterable = true
       document.querySelector(`.select-${this.config.code}`).style.pointerEvents = 'all'
-      if (window.dataSetFields.length === 0) {
+      if (this.config.dataSource.businessKey && window.dataSetFields.length === 0) {
         getDataSetDetails(this.config.dataSource.businessKey).then(res => {
           window.dataSetFields = res.fields.map(field => {
             return {
