@@ -43,6 +43,7 @@ function getPlotList (files) {
       y: 0,
       type: 'customComponent',
       chartType: config.chartType,
+      loading: false,
       option: {
         ...config.option,
         ...cloneDeep(settingConfig)

@@ -1,5 +1,8 @@
 <template>
   <div
+    v-loading="config.loading"
+    element-loading-text="图表加载中"
+    :element-loading-background="loadingBackground"
     style="width: 100%;height: 100%"
     class="bs-design-wrap bs-custom-component"
     :class="{'light-theme':customTheme === 'light','auto-theme':customTheme !=='light'}"
@@ -8,6 +11,7 @@
       :id="chatId"
       style="width: 100%;height: 100%"
     />
+    <!--    <span style="color:#ffffff">{{config.option.data}}</span>-->
   </div>
 </template>
 <script>
@@ -80,7 +84,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('bigScreen', ['changeChartConfig', 'changeActiveItemConfig']),
+    ...mapMutations('bigScreen', ['changeChartConfig', 'changeActiveItemConfig', 'changeChartLoading']),
     chartInit () {
       let config = this.config
       // key和code相等，说明是一进来刷新，调用list接口
@@ -88,14 +92,22 @@ export default {
         // 改变样式
         config = this.changeStyle(config)
         // 改变数据
+        config.loading = true
+        this.changeChartLoading(config)
         this.changeDataByCode(config).then((res) => {
           // 初始化图表
+          config.loading = false
+          this.changeChartLoading(config)
           this.newChart(res)
         }).catch(() => {
         })
       } else {
+        config.loading = true
+        this.changeChartLoading(config)
         // 否则说明是更新，这里的更新只指更新数据（改变样式时是直接调取changeStyle方法），因为更新数据会改变key,调用chart接口
         this.changeData(config).then((res) => {
+          config.loading = false
+          this.changeChartLoading(config)
           // 初始化图表
           this.newChart(res)
         })

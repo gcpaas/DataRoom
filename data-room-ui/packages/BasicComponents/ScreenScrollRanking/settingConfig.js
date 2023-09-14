@@ -26,7 +26,8 @@ const customConfig = {
   type: 'screenScrollRanking',
   root: {
     version: '2023071001',
-    contribution: false
+    contribution: false,
+    loading: false
   },
   customize: {
     rowNum: 5,

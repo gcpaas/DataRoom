@@ -25,6 +25,10 @@ export default {
       customTheme: state => state.bigScreen.pageInfo.pageConfig.customTheme,
       activeCode: state => state.bigScreen.activeCode
     }),
+    // 组件数据加载时的背景颜色
+    loadingBackground () {
+      return this.customTheme === 'light' ? '#ffffff' : '#151A26'
+    },
     isPreview () {
       return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
     }
@@ -70,6 +74,7 @@ export default {
         size = config.option.pagination.pageSize
       }
       return new Promise((resolve, reject) => {
+        config.loading = true
         getChatInfo({
           // innerChartCode: this.pageCode ? config.code : undefined,
           chartCode: config.code,
@@ -78,6 +83,7 @@ export default {
           size: size,
           type: config.type
         }).then(async (res) => {
+          config.loading = false
           let _res = cloneDeep(res)
           // 如果是http数据集的前端代理，则需要调封装的axios请求
           if (res.executionByFrontend) {
@@ -139,7 +145,9 @@ export default {
         filterList: filterList || this.filterList
       }
       return new Promise((resolve, reject) => {
+        config.loading = true
         getUpdateChartInfo(params).then(async (res) => {
+          config.loading = false
           let _res = cloneDeep(res)
           // 如果是http数据集的前端代理，则需要调封装的axios请求
           if (res.executionByFrontend) {
@@ -177,6 +185,7 @@ export default {
         }).catch(err => {
           console.info(err)
         }).finally(() => {
+          config.loading = false
           resolve(config)
         })
       })
