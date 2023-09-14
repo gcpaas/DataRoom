@@ -157,6 +157,50 @@
   }
 }
 
+// cascader
+.bs-el-cascader {
+  border-color: var(--bs-el-border) !important;
+  background-color: var(--bs-el-background-1) !important;
+  background: var(--bs-el-background-1) !important;
+
+  .el-cascader-menu {
+    // 选项的未选中时颜色
+    color: var(--bs-el-text) !important;
+    border: var(--bs-el-border) !important;
+  }
+
+  .el-cascader-node.hover,
+  .el-cascader-node:hover {
+    // hover状态的选项颜色和背景色
+    color: var(--bs-el-color-primary) !important;
+    background-color: var(--bs-el-background-3) !important;
+  }
+
+  .in-active-path {
+    // 选中项的路径项的文本颜色和背景颜色
+    color: var(--bs-el-color-primary) !important;
+    background-color: var(--bs-el-background-3) !important;
+  }
+
+  .popper__arrow {
+    bottom: 0 !important;
+    border-top-color: var(--bs-el-background-1) !important;
+    border-bottom-color: var(--bs-el-background-1) !important;
+
+    &:after {
+      bottom: 0 !important;
+      border-top-color: var(--bs-el-background-1) !important;
+      border-bottom-color: var(--bs-el-background-1) !important;
+    }
+  }
+
+  // 弹出层，有滚动条下最后一项显示不全
+  .el-cascader-menu__wrap {
+    margin-bottom: 0px !important;
+  }
+
+}
+
 // select
 .bs-el-select {
   border-color: var(--bs-el-border) !important;
