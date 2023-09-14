@@ -5,8 +5,8 @@
     :popper-class="'basic-component-select select-popper-' + config.code"
     :class="['basic-component-select', `select-${config.code}`]"
     :placeholder="`请选择${placeholder || newPlaceholder}`"
-    filterable
     clearable
+    :filterable="filterable"
     @visible-change="visibleChange"
     @change="selectChange"
     @mouseenter.native="mouseenter"
@@ -44,7 +44,8 @@ export default {
       value: '',
       innerConfig: {},
       optionData: [],
-      newPlaceholder: ''
+      newPlaceholder: '',
+      filterable: false
     }
   },
   computed: {
@@ -70,6 +71,8 @@ export default {
       window.dataSetFields = []
     })
     if (this.isPreview) {
+      this.filterable = true
+      document.querySelector(`.select-${this.config.code}`).style.pointerEvents = 'all'
       if (window.dataSetFields.length === 0) {
         getDataSetDetails(this.config.dataSource.businessKey).then(res => {
           window.dataSetFields = res.fields.map(field => {
@@ -81,6 +84,8 @@ export default {
           this.placeholder = window.dataSetFields.find(field => field.value === this.config.dataSource.dimensionField)?.label || ''
         })
       }
+    } else {
+      document.querySelector(`.select-${this.config.code}`).style.pointerEvents = 'none'
     }
   },
   beforeDestroy () {
@@ -170,12 +175,6 @@ export default {
           item.style.setProperty('--dropDownHoverFontColor', this.innerConfig.customize.dropDownHoverFontColor)
           item.style.setProperty('--dropDownHoverBackgroundColor', this.innerConfig.customize.dropDownHoverBackgroundColor)
         })
-        // 激活项
-        // const selectDropdownItemSelectedEl = document.querySelectorAll(`.select-popper-${this.innerConfig.code} .el-select-dropdown__item.selected`)
-        // selectDropdownItemSelectedEl.forEach(item => {
-        //   item.style.color = this.innerConfig.customize.activeFontColor
-        //   item.style.backgroundColor = this.innerConfig.customize.activeBackgroundColor
-        // })
       }
       // 不是激活项的还是使用背景颜色
       const selectDropdownItemEl = document.querySelectorAll(`.select-popper-${this.innerConfig.code} .el-select-dropdown__item`)
@@ -187,6 +186,7 @@ export default {
         }
       })
     },
+    // 鼠标进入
     mouseenter () {
       if (this.value) {
         setTimeout(() => {
