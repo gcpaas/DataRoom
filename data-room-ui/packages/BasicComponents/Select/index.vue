@@ -25,6 +25,8 @@ import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import { getDataSetDetails } from 'data-room-ui/js/api/bigScreenApi'
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+import cloneDeep from 'lodash/cloneDeep'
 window.dataSetFields = []
 export default {
   name: 'BasicComponentSelect',
@@ -120,6 +122,9 @@ export default {
       return config
     },
     changeStyle (config) {
+      // 样式改变时更新主题配置
+      config.theme = settingToTheme(cloneDeep(config), this.customTheme)
+      this.changeChartConfig(config)
       this.innerConfig = config
       // 选择器元素
       const selectInputEl = document.querySelector(`.select-${config.code} .el-input__inner`)

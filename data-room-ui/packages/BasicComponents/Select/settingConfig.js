@@ -27,7 +27,7 @@ const customConfig = {
   // 名称
   title: '下拉框',
   root: {
-    version: '2023071001'
+    version: '2023091401'
   },
   // 自定义属性
   customize: {
