@@ -25,9 +25,8 @@ export const settingConfig = {
 const customConfig = {
   type: 'select',
   // 名称
-  title: '下拉框',
   root: {
-    version: '2023071001'
+    version: '2023091402'
   },
   // 自定义属性
   customize: {
@@ -44,11 +43,7 @@ const customConfig = {
     // 下拉项hover背景颜色
     dropDownHoverBackgroundColor: '#6A7E9D',
     // 下拉项hover字体颜色
-    dropDownHoverFontColor: '#FFFFFF',
-    // 激活项背景颜色
-    activeBackgroundColor: '#6A7E9D',
-    // 激活项字体颜色
-    activeFontColor: '#FFFFFF'
+    dropDownHoverFontColor: '#FFFFFF'
   }
 }
 export const dataConfig = {

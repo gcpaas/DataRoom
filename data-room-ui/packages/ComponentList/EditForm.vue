@@ -29,9 +29,9 @@
             class="bs-el-input"
           />
         </el-form-item>
-         <el-form-item
-          label="组件类型"
+        <el-form-item
           v-if="type === 'bizComponent'"
+          label="组件类型"
         >
           <el-select
             v-model="bizType"
@@ -145,20 +145,20 @@ export default {
   },
   data () {
     return {
-      bizType:'native',
+      bizType: 'native',
       resolutionRatioValue: '',
       resolutionRatio: {},
-      BizList:[
+      BizList: [
         {
-          label:'echarts组件',
-          value:'echarts'
+          label: 'echarts组件',
+          value: 'echarts'
         }, {
-          label:'g2Plot组件',
-          value:'g2plot'
+          label: 'g2Plot组件',
+          value: 'g2plot'
         }, {
-          label:'基础组件',
-          value:'native'
-        },
+          label: '基础组件',
+          value: 'native'
+        }
       ],
       resolutionRatioOptions: [
         {
@@ -252,7 +252,7 @@ export default {
     closeAddDialog () {
       this.formVisible = false
       this.$refs.dataForm.resetFields()
-      this.bizType='native'
+      this.bizType = 'native'
     },
     // 初始化
     init (nodeData, parentCode) {
@@ -455,13 +455,13 @@ export default {
     // 跳转设计态
     toDesign (form) {
       const path = this.type === 'component' ? (window.BS_CONFIG?.routers?.designUrl || '/big-screen/design') : 'big-screen-biz-component-design'
-      const { href: bigScreenHref } =this.type=='bizComponent'? this.$router.resolve({
+      const { href: bigScreenHref } = this.type == 'bizComponent' ? this.$router.resolve({
         path,
         query: {
           code: form.code,
-          type:this.bizType
+          type: this.bizType
         }
-      }):this.$router.resolve({
+      }) : this.$router.resolve({
         path,
         query: {
           code: form.code
