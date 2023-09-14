@@ -24,7 +24,20 @@ public class DataRoomPagePreviewServiceImpl extends ServiceImpl<DataRoomPagePrev
 
     @Override
     public String add(DataRoomPageDTO bigScreenPageDTO) {
-        String code = CodeGenerateUtils.generate(PREVIEW_KEY);
+        String originalCode = bigScreenPageDTO.getCode();
+        String code = PREVIEW_KEY + "_" + originalCode;
+        LambdaQueryWrapper<PagePreviewEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(PagePreviewEntity::getCode, code);
+        List<PagePreviewEntity> list = this.list(queryWrapper);
+        if (list != null && !list.isEmpty()) {
+            // 有则直接更新
+            PagePreviewEntity pagePreviewEntity = list.get(0);
+            pagePreviewEntity.setConfig(bigScreenPageDTO);
+            pagePreviewEntity.setCreateDate(new Date());
+            this.updateById(pagePreviewEntity);
+            return code;
+        }
+        // 没有则新增
         bigScreenPageDTO.setCode(code);
         PagePreviewEntity pagePreviewEntity = BeanConvertUtils.convert(bigScreenPageDTO, PagePreviewEntity.class);
         pagePreviewEntity.setCreateDate(new Date());
