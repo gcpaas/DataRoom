@@ -1,17 +1,18 @@
 <template>
   <el-select
     :key="config.code"
-    v-model="selectValue"
-    :popper-class="'basic-component-select selct-popper-' + config.code"
-    :class="['basic-component-select', `selct-${config.code}`]"
-    :placeholder="`请选择${placeholder}`"
+    v-model="value"
+    :popper-class="'basic-component-select select-popper-' + config.code"
+    :class="['basic-component-select', `select-${config.code}`]"
+    :placeholder="`请选择${placeholder || newPlaceholder}`"
     filterable
     clearable
     @visible-change="visibleChange"
     @change="selectChange"
+    @mouseenter.native="mouseenter"
   >
     <el-option
-      v-for="(option, key) in config.option.data"
+      v-for="(option, key) in optionData"
       :key="key"
       :label="option[config.dataSource.dimensionField]"
       :value="option[config.dataSource.metricField]"
@@ -38,22 +39,46 @@ export default {
   },
   data () {
     return {
-      selectValue: '',
-      innerConfig: {}
+      value: '',
+      innerConfig: {},
+      optionData: [],
+      newPlaceholder: ''
     }
   },
   computed: {
-    placeholder () {
-      return window.dataSetFields.find(field => field.value === this.config.dataSource.dimensionField)?.label || ''
+    isPreview () {
+      return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
+    },
+    placeholder: {
+      get () {
+        return window.dataSetFields.find(field => field.value === this.config.dataSource.dimensionField)?.label || ''
+      },
+      set (val) {
+        this.newPlaceholder = val
+      }
     }
   },
   watch: { },
   created () { },
   mounted () {
+    window.dataSetFields = []
     this.changeStyle(this.config)
     EventBus.$on('changeBusinessKey', () => {
       window.dataSetFields = []
     })
+    if (this.isPreview) {
+      if (window.dataSetFields.length === 0) {
+        getDataSetDetails(this.config.dataSource.businessKey).then(res => {
+          window.dataSetFields = res.fields.map(field => {
+            return {
+              label: field.comment || field.fieldDesc,
+              value: field.name || field.fieldName
+            }
+          })
+          this.placeholder = window.dataSetFields.find(field => field.value === this.config.dataSource.dimensionField)?.label || ''
+        })
+      }
+    }
   },
   beforeDestroy () {
     EventBus.$off('changeBusinessKey')
@@ -73,6 +98,7 @@ export default {
           }
         }
         config.option.data = data
+        this.optionData = data
         config.customize.title = config.option.data[config.dataSource.dimensionField] || config.customize.title
         if (window.dataSetFields.length === 0) {
           getDataSetDetails(this.config.dataSource.businessKey).then(res => {
@@ -82,47 +108,38 @@ export default {
                 value: field.name || field.fieldName
               }
             })
+            this.placeholder = window.dataSetFields.find(field => field.value === this.config.dataSource.dimensionField)?.label || ''
           })
         }
         // 语音播报
       } else {
         // 数据返回失败则赋前端的模拟数据
         config.option.data = []
+        this.optionData = []
       }
       return config
     },
     changeStyle (config) {
       this.innerConfig = config
       // 选择器元素
-      const selectInputEl = document.querySelector(`.selct-${config.code} .el-input__inner`)
+      const selectInputEl = document.querySelector(`.select-${config.code} .el-input__inner`)
       // 背景颜色
       selectInputEl.style.backgroundColor = config.customize.backgroundColor
       // 字体大小
       selectInputEl.style.fontSize = config.customize.fontSize + 'px'
       // 字体颜色
       selectInputEl.style.color = config.customize.fontColor
+      // 下拉图标
+      const selectDropdownIcon = document.querySelector(`.select-${config.code} .el-icon-arrow-up`)
+      selectDropdownIcon.style.fontSize = config.customize.fontSize + 'px'
       // 选择器下拉框元素
-      const selectDropdownEl = document.querySelector(`.selct-${config.code} .el-select-dropdown`)
+      const selectDropdownEl = document.querySelector(`.select-${config.code} .el-select-dropdown`)
       // 箭头背景颜色和下拉框背景颜色一致
       if (selectDropdownEl) {
         // 下拉框无边框
         selectDropdownEl.style.border = 'none'
         // 背景颜色
         selectDropdownEl.style.backgroundColor = config.customize.dropDownBackgroundColor
-        // 下拉项hover颜色
-        const selectDropdownItemEl = document.querySelectorAll(`.selct-${this.innerConfig.code} .el-select-dropdown__item`)
-        selectDropdownItemEl.forEach(item => {
-          // 下拉项字体颜色
-          item.style.color = this.innerConfig.customize.dropDownFontColor
-          item.addEventListener('mouseenter', () => {
-            item.style.color = this.innerConfig.customize.dropDownHoverFontColor
-            item.style.backgroundColor = this.innerConfig.customize.dropDownHoverBackgroundColor
-          })
-          item.addEventListener('mouseleave', () => {
-            item.style.color = this.innerConfig.customize.dropDownFontColor
-            item.style.backgroundColor = this.innerConfig.customize.dropDownBackgroundColor
-          })
-        })
       }
     },
     // 组件联动
@@ -132,22 +149,29 @@ export default {
     visibleChange (val) {
       if (val) {
         // 修改下拉框背景颜色，让下拉框背景颜色和箭头背景颜色一致
-        const selectDropdownEl = document.querySelector(`.selct-popper-${this.innerConfig.code}`)
+        const selectDropdownEl = document.querySelector(`.select-popper-${this.innerConfig.code}`)
         selectDropdownEl.style.color = this.innerConfig.customize.dropDownBackgroundColor
         // 空状态
-        const selectDropdownEmptyEl = document.querySelector(`.selct-popper-${this.innerConfig.code} .el-select-dropdown__empty`)
+        const selectDropdownEmptyEl = document.querySelector(`.select-popper-${this.innerConfig.code} .el-select-dropdown__empty`)
         if (selectDropdownEmptyEl) {
           selectDropdownEmptyEl.style.backgroundColor = this.innerConfig.customize.dropDownBackgroundColor
         }
+        // 下拉项hover颜色
+        const selectDropdownItemEl = document.querySelectorAll(`.select-popper-${this.innerConfig.code} .el-select-dropdown__item`)
+        // 给--dropDownHoverFontColor 和 --dropDownHoverBackgroundColor 赋值
+        selectDropdownItemEl.forEach(item => {
+          item.style.setProperty('--dropDownHoverFontColor', this.innerConfig.customize.dropDownHoverFontColor)
+          item.style.setProperty('--dropDownHoverBackgroundColor', this.innerConfig.customize.dropDownHoverBackgroundColor)
+        })
         // 激活项
-        const selectDropdownItemSelectedEl = document.querySelectorAll(`.selct-popper-${this.innerConfig.code} .el-select-dropdown__item.selected`)
+        const selectDropdownItemSelectedEl = document.querySelectorAll(`.select-popper-${this.innerConfig.code} .el-select-dropdown__item.selected`)
         selectDropdownItemSelectedEl.forEach(item => {
           item.style.color = this.innerConfig.customize.activeFontColor
           item.style.backgroundColor = this.innerConfig.customize.activeBackgroundColor
         })
       }
       // 不是激活项的还是使用背景颜色
-      const selectDropdownItemEl = document.querySelectorAll(`.selct-popper-${this.innerConfig.code} .el-select-dropdown__item`)
+      const selectDropdownItemEl = document.querySelectorAll(`.select-popper-${this.innerConfig.code} .el-select-dropdown__item`)
       selectDropdownItemEl.forEach(item => {
         // 检查是否是激活项，不是则使用背景颜色
         if (!item.classList.contains('selected')) {
@@ -155,6 +179,17 @@ export default {
           item.style.backgroundColor = this.innerConfig.customize.dropDownBackgroundColor
         }
       })
+    },
+    mouseenter () {
+      if (this.value) {
+        setTimeout(() => {
+        // 清空图标
+          const selectDropdownCloseIcon = document.querySelector(`.select-${this.innerConfig.code} .el-icon-circle-close`)
+          if (selectDropdownCloseIcon) {
+            selectDropdownCloseIcon.style.fontSize = this.innerConfig.customize.fontSize + 'px'
+          }
+        }, 30)
+      }
     }
   }
 
@@ -183,14 +218,25 @@ export default {
 .basic-component-select {
   width: 100%;
   height: 100%;
+
   ::v-deep .el-input {
     height: 100% !important;
-
+    .el-select__caret{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
     //  选择器输入框样式
     .el-input__inner {
       height: 100% !important;
       border-color: var(--bs-el-border) !important;
     }
+  }
+  .el-select-dropdown__item.hover,
+  .el-select-dropdown__item:hover {
+    color: var(--dropDownHoverFontColor) !important;
+    background-color: var(--dropDownHoverBackgroundColor) !important;
   }
 
   .el-tag.el-tag--info {
