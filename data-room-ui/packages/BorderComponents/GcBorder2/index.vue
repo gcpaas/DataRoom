@@ -3,15 +3,25 @@
     style="width: 100%;height: 100%"
     class="bs-design-wrap"
   >
-    <dv-border-box-2
+     <dv-border-box-2
       :id="'dataV' + config.code"
+      :background-color="backgroundColor"
       :key="updateKey"
     >
-    <div class="element" style="box-sizing: content-box;font-size:40px;color:#fff;height:50px;margin:0 0 0 20px">{{config.title}}</div>
+    <div class="element"
+    :style="`
+    color:${color};
+    font-size:${config.border.fontSize}px;
+    line-height:${config.border.titleHeight}px;
+    height:${config.border.titleHeight};
+    padding:0 0 0 20px`"
+    >
+    {{config.title}}</div>
     </dv-border-box-2>
   </div>
 </template>
 <script>
+import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
 import DvBorderBox2 from '@jiaminghi/data-view/lib/components/borderBox2/src/main.vue'
 import '@jiaminghi/data-view/lib/components/borderBox2/src/main.css'
 export default {
@@ -19,6 +29,7 @@ export default {
   components: {
     DvBorderBox2
   },
+  mixins: [refreshComponentMixin],
   props: {
     // 卡片的属性
     config: {
@@ -28,25 +39,23 @@ export default {
   },
   data () {
     return {
-      updateKey: 0
     }
   },
   computed: {
-    Data () {
-      return JSON.parse(JSON.stringify(this.config))
-    }
+    color () {
+      return this.config.border.fontColor ? this.config.border.fontColor
+        : '#fff'
+    },
+    backgroundColor () {
+      return this.config.border.backgroundColor
+        ? this.config.border.backgroundColor
+        : 'transparent'
+    },
+    // colorType () {
+    //   return this.config.border.colorType
+    // }
   },
   watch: {
-    Data: {
-      handler (newVal, oldVal) {
-        this.$nextTick(() => {
-          if ((newVal.w !== oldVal.w) || (newVal.h !== oldVal.h)) {
-            this.updateKey = new Date().getTime()
-          }
-        })
-      },
-      deep: true
-    }
   },
   mounted () {},
   methods: {}

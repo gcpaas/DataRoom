@@ -44,7 +44,7 @@ basicConfigList = basicConfigList.map((item) => {
 export function basicComponentsConfig (item) {
   return {
     ...item,
-    border:{type:'',titleHeight:60,fontSize:30,color:['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9']},
+    border:{type:'',titleHeight:60,fontSize:30},
     option: cloneDeep(setModules[item.type]),
     ...cloneDeep(dataModules[item.type])
   }

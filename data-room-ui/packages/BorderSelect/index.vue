@@ -17,7 +17,6 @@
           :style="{
             display: remoteComponentsGridComputed ? 'grid' : 'flex',
             justifyContent: remoteComponentsGridComputed ? 'space-around' : 'flex-start',
-            height: 'calc(100vh - 430px)'
           }"
         >
           <div
@@ -126,7 +125,6 @@ export default {
   },
   mounted () {
     this.remoteComponentlist = [...borderComponents]
-    console.log(this.remoteComponentlist)
   },
   methods: {
     chooseComponent (component) {
@@ -144,7 +142,6 @@ export default {
     confirm () {
       this.dialogVisible = false
       if (isEmpty(this.focus)) return
-      console.log(this.focus.title)
       this.$emit('select', this.focus.title)
     },
 

@@ -32,7 +32,7 @@ export function getRemoteComponents (comList) {
       title: config.title,
       icon: null,
       img: config.img,
-      border:{type:'',titleHeight:60,fontSize:30,color:['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9']},
+      border:{type:'',titleHeight:60,fontSize:30},
       className:
         'com.gccloud.dataroom.core.module.chart.components.RemoteComponentChart',
       w: 450,
@@ -64,7 +64,7 @@ export function getRemoteComponentConfig (code, name) {
     title: name,
     icon: null,
     img: null,
-    border:{type:'',titleHeight:60,fontSize:30,color:['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9']},
+    border:{type:'',titleHeight:60,fontSize:30},
     className:
       'com.gccloud.dataroom.core.module.chart.components.RemoteComponentChart',
     w: 450,

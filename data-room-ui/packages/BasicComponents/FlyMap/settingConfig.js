@@ -106,7 +106,7 @@ export const FlyMapData = {
   name: '飞线图',
   title: '飞线图',
   icon: Icon.getNameList()[18],
-  border:{type:'',titleHeight:60,fontSize:30,color:['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9']},
+  border:{type:'',titleHeight:60,fontSize:30},
   className:
     'com.gccloud.dataroom.core.module.chart.components.ScreenFlyMapChart',
   w: 800,

@@ -9,7 +9,7 @@ files.keys().forEach(key => {
   const img = require(`../BorderComponents/${title}/component.png`)
   borderComponents.push({
     title:title,
-    img
+    img,
   })
 })
 // 抛出内置系统组件

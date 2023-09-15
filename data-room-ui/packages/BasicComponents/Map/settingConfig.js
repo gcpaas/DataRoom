@@ -95,7 +95,7 @@ export const mapData = {
   name: '地图',
   title: '地图',
   icon: Icon.getNameList()[5],
-  border:{type:'',titleHeight:60,fontSize:30,color:['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9']},
+  border:{type:'',titleHeight:60,fontSize:30},
   className:
     'com.gccloud.dataroom.core.module.chart.components.ScreenMapChart',
   w: 800,
