@@ -114,6 +114,7 @@ const option = {
         show: true,
         alignWithLabel: true
       },
+      // 横坐标颜色
       nameTextStyle: {
         color: '#82b0ec'
       },
@@ -129,6 +130,25 @@ const option = {
         },
         margin: 30
       }
+    },
+    {
+      type: 'category',
+      axisLine: {
+        show: false
+      },
+      axisTick: {
+        show: false
+      },
+      axisLabel: {
+        show: false
+      },
+      splitArea: {
+        show: false
+      },
+      splitLine: {
+        show: false
+      },
+      data: xData
     }
   ],
   yAxis: [
