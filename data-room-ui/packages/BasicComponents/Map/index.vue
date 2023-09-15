@@ -1,9 +1,16 @@
 <template>
   <div
-    class="bs-design-wrap bs-bar"
     style="width: 100%; height: 100%"
+    class="bs-design-wrap bs-bar"
   >
-    <el-button v-if="currentDeep > 0" class="button" type='text' @click="jumpTo(config)"> 返回上一级</el-button>
+    <el-button
+      v-if="level=='province'&&config.customize.down"
+      class="button"
+      type="text"
+      @click="jumpTo(config)"
+    >
+      返回上一级
+    </el-button>
     <div
       :id="`chart${config.code}`"
       style="width: 100%; height: 100%"
@@ -16,7 +23,6 @@ import * as echarts from 'echarts'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins.js'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
-
 export default {
   name: 'MapCharts',
   mixins: [paramsMixins, commonMixins, linkageMixins],
@@ -30,24 +36,22 @@ export default {
       default: () => ({})
     }
   },
-  data() {
+  data () {
     return {
-      currentDeep: 0,
-      mapList: [],
       charts: null,
       hasData: false,
-      level: '',
-      option: {}
+      level:'',
+      option:{}
     }
   },
   computed: {
-    Data() {
+    Data () {
       return JSON.parse(JSON.stringify(this.config))
     }
   },
   watch: {
     Data: {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         if (newVal.w !== oldVal.w || newVal.h !== oldVal.h) {
           this.$nextTick(() => {
             this.charts.resize()
@@ -57,14 +61,14 @@ export default {
       deep: true
     }
   },
-  mounted() {
+  mounted () {
     this.chartInit()
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.charts?.clear()
   },
   methods: {
-    chartInit() {
+    chartInit () {
       const config = this.config
       // key和code相等，说明是一进来刷新，调用list接口
       if (this.config.code === this.config.key || this.isPreview) {
@@ -73,8 +77,7 @@ export default {
           // 改变样式
           // config = this.changeStyle(res)
           this.newChart(config)
-        }).catch(() => {
-        })
+        }).catch(() => {})
       } else {
         // 否则说明是更新，这里的更新只指更新数据（改变样式时是直接调取changeStyle方法），因为更新数据会改变key,调用chart接口
         this.changeData(config).then((res) => {
@@ -83,13 +86,10 @@ export default {
         })
       }
     },
-    dataFormatting(config, data) {
+    dataFormatting (config, data) {
       const dataList = []
       data?.data?.forEach(item => {
-        dataList.push({
-          name: item[config.customize.name],
-          value: [item[config.customize.xaxis], item[config.customize.yaxis], item[config.customize.value]]
-        })
+        dataList.push({ name: item[config.customize.name], value: [item[config.customize.xaxis], item[config.customize.yaxis], item[config.customize.value]] })
       })
       config.option = {
         ...config.option,
@@ -97,36 +97,32 @@ export default {
       }
       return config
     },
-    async jumpTo(config) {
-      this.currentDeep--
-      let map = this.mapList[this.currentDeep]
-      // 移除mapList中的最后一个元素
-      this.mapList.pop()
-      let mapData = JSON.parse(map.geoJson)
-      this.option.geo.map = map.name;
-      this.changeData({...config, customize: {...config.customize, level: map.level, scope: map.name}})
-      echarts.registerMap(map.name, mapData);
-      this.charts.setOption(this.option, true);
+    async jumpTo (config) {
+      this.level = 'country'
+      const mapUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/country/中华人民共和国.json`
+      const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, true)
+      this.option.geo.map = '中华人民共和国'
+      this.changeData({ ...config, customize: { ...config.customize, level: 'country', scope: '中国' } })
+      echarts.registerMap('中华人民共和国', map)
+      this.charts.setOption(this.option, true)
     },
-    async newChart(config) {
-      let center1 = config.customize.center1 ? config.customize.center1 + '%' : '50%'
-      let center2 = config.customize.center2 ? config.customize.center2 + '%' : '50%'
+    async newChart (config) {
       this.charts = echarts.init(
         document.getElementById(`chart${this.config.code}`)
       )
       this.option = {
         // 背景颜色
         backgroundColor: config.customize.backgroundColor,
-        graphic: [],
+        graphic: [
+        ],
         geo: {
           map: config.customize.scope,
-          zlevel: 9,
+          zlevel: 10,
           show: true,
-          // 地图中心点位置
-          layoutCenter: [center1, center2],
+          layoutCenter: ['50%', '50%'],
           roam: true,
-          layoutSize: "100%",
-          zoom: config.customize.zoom || 1,
+          layoutSize: '100%',
+          zoom: 1,
           label: {
             // 通常状态下的样式
             normal: {
@@ -181,97 +177,97 @@ export default {
         },
         series: config.customize.scatter
           ? [
-            // {
-            //   type: 'effectScatter',
-            //   coordinateSystem: 'geo',
-            //   effectType: 'ripple',
-            //   showEffectOn: 'render',
-            //   rippleEffect: {
-            //     period: 10,
-            //     scale: 10,
-            //     brushType: 'fill'
-            //   },
+              // {
+              //   type: 'effectScatter',
+              //   coordinateSystem: 'geo',
+              //   effectType: 'ripple',
+              //   showEffectOn: 'render',
+              //   rippleEffect: {
+              //     period: 10,
+              //     scale: 10,
+              //     brushType: 'fill'
+              //   },
 
-            //   hoverAnimation: true,
-            //   itemStyle: {
-            //     normal: {
-            //       color: 'rgba(255, 235, 59, .7)',
-            //       shadowBlur: 10,
-            //       shadowColor: '#333'
-            //     }
-            //   },
-            //   tooltip: {
-            //     formatter(params) {
-            //       return `<p style="text-align:center;line-height: 30px;height:30px;font-size: 14px;border-bottom: 1px solid #7A8698;">${
-            //         params.name
-            //       }</p>
-            //   <div style="line-height:22px;margin-top:5px">GDP<span style="margin-left:12px;color:#fff;float:right">${
-            //     params.data?.value[2] || '--'
-            //   }</span></div>`
-            //     },
-            //     show: true
-            //   },
-            //   zlevel: 1,
-            //   data: [
-            //     { name: '西藏自治区', value: [91.23, 29.5, 1] },
-            //     { name: '黑龙江省', value: [128.03, 47.01, 1007] },
-            //     { name: '北京市', value: [116.4551, 40.2539, 5007] }
-            //   ]
-            // }
-            {
-              type: 'scatter',
-              coordinateSystem: 'geo',
-              symbol: 'pin',
-              legendHoverLink: true,
-              symbolSize: [60, 60],
-              showEffectOn: 'render',
-              rippleEffect: {
-                brushType: 'stroke'
-              },
-              hoverAnimation: true,
-              zlevel: 11,
-              // 这里渲染标志里的内容以及样式
-              label: {
-                show: true,
-                formatter(value) {
-                  return value.data.value[2]
+              //   hoverAnimation: true,
+              //   itemStyle: {
+              //     normal: {
+              //       color: 'rgba(255, 235, 59, .7)',
+              //       shadowBlur: 10,
+              //       shadowColor: '#333'
+              //     }
+              //   },
+              //   tooltip: {
+              //     formatter(params) {
+              //       return `<p style="text-align:center;line-height: 30px;height:30px;font-size: 14px;border-bottom: 1px solid #7A8698;">${
+              //         params.name
+              //       }</p>
+              //   <div style="line-height:22px;margin-top:5px">GDP<span style="margin-left:12px;color:#fff;float:right">${
+              //     params.data?.value[2] || '--'
+              //   }</span></div>`
+              //     },
+              //     show: true
+              //   },
+              //   zlevel: 1,
+              //   data: [
+              //     { name: '西藏自治区', value: [91.23, 29.5, 1] },
+              //     { name: '黑龙江省', value: [128.03, 47.01, 1007] },
+              //     { name: '北京市', value: [116.4551, 40.2539, 5007] }
+              //   ]
+              // }
+              {
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                symbol: 'pin',
+                legendHoverLink: true,
+                symbolSize: [60, 60],
+                showEffectOn: 'render',
+                rippleEffect: {
+                  brushType: 'stroke'
                 },
-                color: config.customize.scatterColor
-              },
-              // 标志的样式
-              itemStyle: {
-                normal: {
-                  color: config.customize.scatterBackgroundColor,
-                  shadowBlur: 2,
-                  shadowColor: 'D8BC37'
-                }
-              },
-              data: config.option?.data
-            }
-          ]
-          : [
-            {
-              type: 'map',
-              map: config.customize.scope,
-              geoIndex: 0,
-              roam: false,
-              zoom: 1.5,
-              center: [105, 36],
-              showLegendSymbol: false, // 存在legend时显示
-              data: config.option?.data,
-              tooltip: {
-                formatter(params) {
-                  return `<p style="text-align:center;line-height: 30px;height:30px;font-size: 14px;border-bottom: 1px solid #7A8698;">${
-                    params.name
-                  }</p>
-                <div style="line-height:22px;margin-top:5px">GDP<span style="margin-left:12px;color:#fff;float:right">${
-                    params.data?.value[2] || '--'
-                  }</span></div>`
+                hoverAnimation: true,
+                zlevel: 1,
+                // 这里渲染标志里的内容以及样式
+                label: {
+                  show: true,
+                  formatter (value) {
+                    return value.data.value[2]
+                  },
+                  color: config.customize.scatterColor
                 },
-                show: true
+                // 标志的样式
+                itemStyle: {
+                  normal: {
+                    color: config.customize.scatterBackgroundColor,
+                    shadowBlur: 2,
+                    shadowColor: 'D8BC37'
+                  }
+                },
+                data: config.option?.data
               }
-            }
-          ]
+            ]
+          : [
+              {
+                type: 'map',
+                map: config.customize.scope,
+                geoIndex: 0,
+                roam: false,
+                zoom: 1.5,
+                center: [105, 36],
+                showLegendSymbol: false, // 存在legend时显示
+                data: config.option?.data,
+                tooltip: {
+                  formatter (params) {
+                    return `<p style="text-align:center;line-height: 30px;height:30px;font-size: 14px;border-bottom: 1px solid #7A8698;">${
+                      params.name
+                    }</p>
+                <div style="line-height:22px;margin-top:5px">GDP<span style="margin-left:12px;color:#fff;float:right">${
+                  params.data?.value[2] || '--'
+                }</span></div>`
+                  },
+                  show: true
+                }
+              }
+            ]
       }
       if (config.customize.visual) {
         this.option.visualMap = {
@@ -284,55 +280,21 @@ export default {
           }
         }
       }
-      let hasMapId = !!config.customize.mapId
-      // 根据mapId获取地图数据
-      let mapInfoUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/map/info/${config.customize.mapId}`
-      // 如果设置了地图id，就用地图id获取地图数据，否则用默认的世界地图
-      if (!hasMapId) {
-        mapInfoUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/country/中华人民共和国.json`
-      }
-      const mapResp = await this.$dataRoomAxios.get(decodeURI(mapInfoUrl), {}, true)
-      const map = hasMapId ? JSON.parse(mapResp.data.geoJson) : mapResp
-      if (hasMapId && mapResp.data.uploadedGeoJson !== 1) {
-        // 没有上传过geoJson
-        this.$message({
-          message: '请先上传地图数据',
-          type: 'warning'
-        })
-        return
-      }
-      this.mapList.push(mapResp.data)
+      const mapUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/${config.customize.level}/${config.customize.dataMap}`
+      const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, true)
       echarts.registerMap(config.customize.scope, map)
       this.charts.setOption(this.option)
-      // 点击下钻
       this.charts.on('click', async (params) => {
         if (params.name == '') return
-        if (!config.customize.down) {
-          this.$message({
-            message: '该地图未开启下钻',
-            type: 'warning'
-          })
-          return
-        }
-        // 到达允许下钻的层数，则不再下钻
-        if (this.currentDeep >= config.customize.downLevel) return
-        const downMapUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/map/data/${this.mapList[this.currentDeep].id}/${params.name}`
-        const downMap = await this.$dataRoomAxios.get(decodeURI(downMapUrl), {}, false)
-        // 地图不可用
-        if (downMap.available !== 1) {
-          this.$message({
-            message: '未找到该地图配置',
-            type: 'warning'
-          })
-          return
-        }
-        this.currentDeep++
-        this.mapList.push(downMap)
-        this.changeData({...config, customize: {...config.customize, scope: params.name}})
+        if (config.customize.down === false || this.level === 'province') return
+        this.level = 'province'
+        const mapUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/province/${params.name}.json`
+        const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, true)
+        this.changeData({ ...config, customize: { ...config.customize, level: 'province', scope: params.name } })
         this.option.geo.map = params.name
-        echarts.registerMap(params.name, JSON.parse(downMap.geoJson));
-        this.charts.setOption(this.option, true);
-      });
+        echarts.registerMap(params.name, map)
+        this.charts.setOption(this.option, true)
+      })
     }
   }
 }
@@ -340,21 +302,17 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/style/echartStyle';
-
 .light-theme {
   background-color: #ffffff;
   color: #000000;
 }
-
 .auto-theme {
   background-color: rgba(0, 0, 0, 0);
 }
-
-.bs-design-wrap {
+.bs-design-wrap{
   position: relative;
   padding: 0 16px;
-
-  .button {
+  .button{
     position: absolute;
     z-index: 999;
   }
