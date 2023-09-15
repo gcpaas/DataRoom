@@ -160,8 +160,10 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
         Integer uploadedGeoJson = old.getUploadedGeoJson();
         LambdaUpdateWrapper<DataRoomMapEntity> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(DataRoomMapEntity::getId, mapDTO.getId());
-        // 只允许修改名称和是否开启下钻
+        // 修改名称
         updateWrapper.set(DataRoomMapEntity::getName, mapDTO.getName());
+        // 修改地图编码
+        updateWrapper.set(!old.getMapCode().equals(mapDTO.getMapCode()), DataRoomMapEntity::getMapCode, mapDTO.getMapCode());
         // 如果之前没有上传过geoJson，现在上传了，那么允许更新geoJson
         if (!uploadedGeoJson.equals(YES) && StringUtils.isNotBlank(mapDTO.getGeoJson())) {
             if (mapDTO.getAutoParseNextLevel().equals(YES)) {
@@ -172,6 +174,10 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
             updateWrapper.set(DataRoomMapEntity::getUploadedGeoJson, YES);
         }
         this.update(updateWrapper);
+        // 更新父级的geoJson
+        if (!old.getMapCode().equals(mapDTO.getMapCode())) {
+            this.updateParentJson(old.getParentId(), old.getMapCode(), mapDTO.getMapCode());
+        }
     }
 
     /**
@@ -204,6 +210,45 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
             this.saveBatch(mapEntityList);
         }
     }
+
+    /**
+     * 更新父级地图的geoJson
+     * @param parentId
+     * @param oldCode
+     * @param newMapCode
+     */
+    private void updateParentJson(String parentId, String oldCode, String newMapCode) {
+        if (StringUtils.isBlank(parentId) || parentId.equals(SUPER_PARENT_ID)) {
+            return;
+        }
+        DataRoomMapEntity parent = this.getById(parentId);
+        String geoJson = parent.getGeoJson();
+        if (StringUtils.isBlank(geoJson)) {
+            return;
+        }
+        JSONObject jsonObject = new JSONObject(geoJson);
+        JSONArray features = jsonObject.getJSONArray("features");
+        if (features == null || features.length() == 0) {
+            return;
+        }
+        for (int i = 0; i < features.length(); i++) {
+            JSONObject feature = features.getJSONObject(i);
+            JSONObject properties = feature.getJSONObject("properties");
+            if (properties == null) {
+                continue;
+            }
+            String name = properties.getString("name");
+            if (oldCode.equals(name)) {
+                properties.put("name", newMapCode);
+                break;
+            }
+        }
+        LambdaUpdateWrapper<DataRoomMapEntity> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(DataRoomMapEntity::getId, parentId);
+        updateWrapper.set(DataRoomMapEntity::getGeoJson, jsonObject.toString());
+        this.update(updateWrapper);
+    }
+
 
     @Override
     public void delete(String id) {
@@ -324,6 +369,9 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
         for (int i = 0; i < features.length(); i++) {
             JSONObject feature = features.getJSONObject(i);
             JSONObject properties = feature.getJSONObject("properties");
+            if (!properties.has("name")) {
+                continue;
+            }
             String name = properties.getString("name");
             MapChildVO childVO = new MapChildVO();
             childVO.setName(name);

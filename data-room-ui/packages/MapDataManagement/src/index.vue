@@ -11,7 +11,7 @@
             class="bs-el-input"
             clearable
             maxlength="200"
-            placeholder="请输入地图名称或编码"
+            placeholder="请输入地图名称或标识"
           />
         </el-form-item>
         <el-form-item class="filter-item">
@@ -73,7 +73,7 @@
           />
           <el-table-column
             align="center"
-            label="编码"
+            label="标识"
             prop="mapCode"
             show-overflow-tooltip
           />
@@ -89,17 +89,6 @@
               <span v-else-if="scope.row.level === 2">省份</span>
               <span v-else-if="scope.row.level === 3">城市</span>
               <span v-else-if="scope.row.level === 4">区县</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="开启下钻"
-            prop="enableDown"
-            show-overflow-tooltip
-          >
-            <template slot-scope="scope">
-              <span v-if="scope.row.enableDown === 1">是</span>
-              <span v-else>否</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -230,7 +219,6 @@ export default {
       searchForm: {
         searchKey: '',
         level: null,
-        enableDown: null,
         uploadedGeoJson: null,
         parentId: '0'
       },
@@ -256,12 +244,14 @@ export default {
           value: 4
         }
       ],
-      mapList: []
+      mapList: [],
+      // 提示过了
+      tipped: false
+
     }
   },
   mounted() {
     this.init()
-
   },
   methods: {
     init() {
@@ -270,6 +260,9 @@ export default {
       mapList(this.searchForm).then(res => {
         this.mapList = res
         this.searchLoading = false
+        if (!this.tipped && this.mapList.length === 0) {
+          this.tip()
+        }
       }).catch(err => {
         this.searchLoading = false
       })
@@ -320,6 +313,18 @@ export default {
           this.deleteMapCascade(map)
         })
       }).catch(() => {
+      })
+    },
+    tip() {
+      // 超链接跳转至
+      const htmlStr = `<span>大屏设计器提供了全国省市区县的地图数据，<a href="https://www.yuque.com/chuinixiongkou/bigscreen/kdrm8g3c8zfgaaq6#xjE8w" style="color: #00a0e9"  target="_blank">点击查看</a></span>`
+      this.$notify({
+        title: '推荐',
+        dangerouslyUseHTMLString: true,
+        message: htmlStr,
+        customClass: 'ds-el-notify',
+        type: 'warning',
+        duration: 5000
       })
     },
     deleteMapCascade(map) {
@@ -423,5 +428,21 @@ export default {
   color: aliceblue;
   background: #161A26;
   height: 150px;
+}
+</style>
+<style lang="scss">
+//修改notify的样式
+.ds-el-notify {
+  background-color: var(--bs-el-background-1)!important;
+  border: var(--bs-el-border)!important;
+  .el-notification__title{
+    color: #fff!important;
+  }
+  .el-notification__content{
+    color: #fff!important;
+  }
+  .el-notification__closeBtn{
+    color: #fff!important;
+  }
 }
 </style>

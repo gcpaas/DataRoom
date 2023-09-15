@@ -19,7 +19,9 @@
           <div class="lc-field-body">
             <PosWhSetting :config="config" />
           </div>
-          <SettingTitle v-if="config.border">边框</SettingTitle>
+          <SettingTitle v-if="config.border">
+            边框
+          </SettingTitle>
           <div class="lc-field-body">
             <BorderSetting
               v-if="config.border"
@@ -52,31 +54,6 @@
                 :predefine="predefineThemeColors"
               />
             </el-form-item>
-            <!-- 下拉框是否需要边框 -->
-            <!-- <el-form-item label="下拉框边框">
-              <el-switch v-model="config.customize.dropDownBorder" />
-            </el-form-item> -->
-            <!-- 下拉框如果有边框，再选择边框颜色 -->
-            <!-- <el-form-item
-              v-if="config.customize.dropDownBorder"
-              label="下拉框边框颜色"
-            >
-              <ColorPicker
-                v-model="config.customize.dropDownBorderColor"
-                :predefine="predefineThemeColors"
-              />
-            </el-form-item> -->
-            <!-- hover 颜色 -->
-            <!-- 下拉框字体大小 -->
-            <!-- <el-form-item label="下拉框字体大小">
-              <el-input-number
-                v-model="config.customize.dropDownFontSize"
-                class="bs-el-input-number"
-                :min="12"
-                :max="100"
-              />
-            </el-form-item> -->
-            <!-- 下拉框字体颜色 -->
           </div>
           <SettingTitle>下拉项</SettingTitle>
           <!-- 选择器下拉框背景颜色 -->
@@ -104,20 +81,6 @@
             <el-form-item label="悬浮字体颜色">
               <ColorPicker
                 v-model="config.customize.dropDownHoverFontColor"
-                :predefine="predefineThemeColors"
-              />
-            </el-form-item>
-            <!-- 激活项背景颜色 -->
-            <el-form-item label="激活项背景颜色">
-              <ColorPicker
-                v-model="config.customize.activeBackgroundColor"
-                :predefine="predefineThemeColors"
-              />
-            </el-form-item>
-            <!-- 激活项文字颜色 -->
-            <el-form-item label="激活项文字颜色">
-              <ColorPicker
-                v-model="config.customize.activeFontColor"
                 :predefine="predefineThemeColors"
               />
             </el-form-item>

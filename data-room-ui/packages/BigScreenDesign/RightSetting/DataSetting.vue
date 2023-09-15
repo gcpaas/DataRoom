@@ -75,7 +75,7 @@
             </div>
           </div>
           <!--  基础组件数据配置  -->
-          <template v-if="!['customComponent', 'remoteComponent'].includes(config.type)">
+          <template v-if="!['customComponent', 'remoteComponent','echartsComponent'].includes(config.type)">
             <!--维度多选-->
             <el-form-item
               v-if="config.option.displayOption.dimensionField.enable"

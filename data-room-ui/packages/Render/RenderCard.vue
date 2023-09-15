@@ -7,15 +7,18 @@
 <template>
   <div class="content">
     <component
-      v-if="config.border&&config.border.type"
       :is="resolveComponentType(config.border.type)"
+      v-if="config.border&&config.border.type"
       :id="`border${config.code}`"
       :ref="`border${config.code}`"
       :key="`border${config.key}`"
       :config="config"
     />
-    <div class="render-item-wrap" :style="`height:calc(100% - ${(config.border&&config.border.type)?config.border.titleHeight:0}px)`">
-       <component
+    <div
+      class="render-item-wrap"
+      :style="`height:calc(100% - ${(config.border&&config.border.type)?config.border.titleHeight:0}px)`"
+    >
+      <component
         :is="resolveComponentType(config.type)"
         :id="`${config.code}`"
         :ref="config.code"
@@ -25,7 +28,6 @@
       />
     </div>
   </div>
-
 </template>
 <script>
 // import commonMixins from 'data-room-ui/js/mixins/commonMixins'
@@ -34,6 +36,7 @@ import { resolveComponentType } from 'data-room-ui/js/utils'
 import pcComponent from 'data-room-ui/js/utils/componentImport'
 import { dataInit, destroyedEvent } from 'data-room-ui/js/utils/eventBus'
 import CustomComponent from '../PlotRender/index.vue'
+import EchartsComponent from '../EchartsRender/index.vue'
 import Svgs from '../Svgs/index.vue'
 import RemoteComponent from 'data-room-ui/RemoteComponents/index.vue'
 import cloneDeep from 'lodash/cloneDeep'
@@ -50,7 +53,8 @@ export default {
     ...components,
     CustomComponent,
     Svgs,
-    RemoteComponent
+    RemoteComponent,
+    EchartsComponent
   },
   props: {
     // 卡片的属性
@@ -65,7 +69,7 @@ export default {
   },
   data () {
     return {
-      height:0
+      height: 0
     }
   },
   computed: {

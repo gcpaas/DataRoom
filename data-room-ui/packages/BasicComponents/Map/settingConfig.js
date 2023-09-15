@@ -41,6 +41,11 @@ const customConfig = {
     contribution: false
   },
   customize: {
+    mapId: '',
+    // 缩放尺寸
+    zoom: 1,
+    center1: 50,
+    center2: 50,
     // 是否显示文字
     mapName: true,
     // 地图背景色
@@ -61,8 +66,10 @@ const customConfig = {
     fontSize: '30',
     // 是否开启下钻
     down: false,
+    // 允许下钻的层级
+    downLevel: 1,
     // 地图级别
-    level: 'country',
+    level: 1,
     // 范围
     scope: '中国',
     // 地图区域颜色

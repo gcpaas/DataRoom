@@ -92,7 +92,7 @@ import borderComponents from 'data-room-ui/BorderComponents/bordersList'
 export default {
   name: 'ComponentDialog',
   mixins: [pageMixins],
-   model: {
+  model: {
     prop: 'type',
     event: 'select'
   },
@@ -113,13 +113,13 @@ export default {
       code: '',
       focus: -1,
       searchKey: '',
-      remoteComponentlist: [],
+      remoteComponentlist: []
     }
   },
   computed: {
     remoteComponentsGridComputed () {
       return this.remoteComponentlist.length > 3
-    },
+    }
   },
   watch: {
   },
@@ -143,7 +143,7 @@ export default {
       this.dialogVisible = false
       if (isEmpty(this.focus)) return
       this.$emit('select', this.focus.title)
-    },
+    }
 
   }
 }

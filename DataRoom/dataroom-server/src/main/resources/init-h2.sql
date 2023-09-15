@@ -179,4 +179,11 @@ CREATE TABLE IF NOT EXISTS big_screen_map (
     create_by BIGINT DEFAULT 2 COMMENT '创建人',
     update_by BIGINT DEFAULT 2 COMMENT '更新人',
     del_flag TINYINT NOT NULL DEFAULT '0' COMMENT '删除标识'
-)
+);
+
+CREATE TABLE IF NOT EXISTS big_screen_page_preview (
+    id bigint(32) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+    code varchar(255) NOT NULL DEFAULT '' COMMENT '页面编码，页面唯一标识符',
+    config clob COMMENT '页面配置',
+    create_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);

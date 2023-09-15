@@ -92,9 +92,9 @@ export default {
     },
     colorChange (val) {
       if (!this.startColor && this.endColor) {
-        this.colorsValue = `${this.position} ,#ffffff,${this.endColor}`
+        this.colorsValue = `${this.position} ,${this.endColor},${this.endColor}`
       } else if (this.startColor && !this.endColor) {
-        this.colorsValue = `${this.position} ,${this.startColor} ,#ffffff`
+        this.colorsValue = `${this.position} ,${this.startColor} ,${this.startColor}`
       } else if (!this.startColor && !this.endColor) {
         this.colorsValue = `${this.position} ,#ffffff ,#ffffff`
       } else {

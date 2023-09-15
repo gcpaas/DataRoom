@@ -84,6 +84,15 @@ export default {
     // 改变loading状态
     state.pageLoading = booleanValue
   },
+  // 改变当前组件的加载状态
+  changeChartLoading (state, itemConfig) {
+    // 改变loading状态
+    state.pageInfo.chartList.forEach((chart, index) => {
+      if (chart.code === itemConfig.code) {
+        chart.loading = itemConfig.loading
+      }
+    })
+  },
   // 改变当前组件配置
   changeChartConfig (state, itemConfig) {
     // 如果存在parentCode的组件，则是tab中的组件

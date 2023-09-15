@@ -37,20 +37,35 @@
           />
         </el-form-item>
         <el-form-item
-          label="地图编码"
+          label="地图标识"
           prop="mapCode"
         >
+          <template slot="label">
+            <span>地图标识</span>
+            <el-tooltip
+              v-if="mapForm.parentId !== '0'"
+              class="item"
+              effect="light"
+              content="子级的地图标识解析自上级地图的子区块数据"
+              placement="top"
+            >
+              <i
+                class="el-icon-warning-outline"
+                style="color: #E3C98C;margin-left: 6px;font-size:14px"
+              />
+            </el-tooltip>
+          </template>
           <el-input
             v-if="mapForm.parentId === '0'"
             v-model="mapForm.mapCode"
             class="bs-el-input"
-            placeholder="请输入地图编码"
+            placeholder="请输入地图标识"
           />
           <el-select
             v-else
             v-model="mapForm.mapCode"
             class="bs-el-select"
-            placeholder="请选择地图编码"
+            placeholder="请选择地图标识"
             popper-class="bs-el-select"
           >
             <el-option
@@ -83,17 +98,6 @@
               :value="level.value"
             />
           </el-select>
-        </el-form-item>
-        <el-form-item
-          label="开启下钻"
-          prop="enableDown"
-        >
-          <el-switch
-            v-model="mapForm.enableDown"
-            :active-value="1"
-            :inactive-value="0"
-            class="bs-el-switch"
-          />
         </el-form-item>
         <el-form-item
           label="geoJson上传"
@@ -165,8 +169,8 @@ export default {
   },
   computed: {
     autoParseNextLevelShow () {
-      // geoJson 不为空，且支持下钻
-      return !this.isEmpty(this.mapForm.geoJson) && this.mapForm.enableDown === 1
+      // geoJson 不为空
+      return !this.isEmpty(this.mapForm.geoJson)
     }
   },
   data () {
@@ -174,13 +178,14 @@ export default {
       if (this.mapForm.parentId !== '0') {
         // 不需要校验
         callback()
+        return
       }
       repeatCheck({
         parentId: this.mapForm.parentId,
         mapCode: value
       }).then(res => {
         if (res) {
-          callback(new Error('地图编码已存在'))
+          callback(new Error('地图标识已存在'))
         } else {
           callback()
         }
@@ -197,14 +202,13 @@ export default {
         mapCode: '',
         name: '',
         level: 0,
-        enableDown: 0,
         geoJson: {},
         uploadedGeoJson: 0,
         autoParseNextLevel: 0
       },
       rules: {
         mapCode: [
-          { required: true, message: '请选择地图编码', trigger: 'blur' },
+          { required: true, message: '请选择地图标识', trigger: 'blur' },
           { validator: validateCode, trigger: 'blur' }
         ],
         name: [
@@ -231,7 +235,6 @@ export default {
         mapCode: `map-${new Date().getTime()}`,
         name: '',
         level: 0,
-        enableDown: 0,
         geoJson: {},
         uploadedGeoJson: 0,
         autoParseNextLevel: 0

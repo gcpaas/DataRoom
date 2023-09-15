@@ -37,7 +37,7 @@ const mapDelete = (id = '-1') => Vue.prototype.$dataRoomAxios.post(`/bigScreen/m
  * 级联删除地图
  * @param id
  */
-const mapCascadeDelete = (id = '-1') => Vue.prototype.$dataRoomAxios.post(`/bigScreen/map/cascadeDelete/${id}`)
+const mapCascadeDelete = (id = '-1') => Vue.prototype.$dataRoomAxios.post(`/bigScreen/map/cascadingDelete/${id}`)
 
 /**
  * 根据父编码解析父级json中的子级

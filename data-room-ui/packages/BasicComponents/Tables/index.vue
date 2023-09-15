@@ -1,5 +1,8 @@
 <template>
   <div
+    v-loading="config.loading"
+    element-loading-text="数据加载中"
+    :element-loading-background="loadingBackground"
     style="width: 100%;height: 100%"
     class="bs-design-wrap "
   >
