@@ -89,7 +89,20 @@ public class ChartDataController {
                 if (chart instanceof ScreenFlyMapChart) {
                     ScreenFlyMapChart screenFlyMapChart = (ScreenFlyMapChart) chart;
                     ScreenFlyMapChart.Customize customize = screenFlyMapChart.getCustomize();
-                    type += "-" + customize.getLevel();
+                    // 兼容旧版地图等级
+                    switch (customize.getLevel()) {
+                        case "0":
+                            type += "-world";
+                            break;
+                        case "1":
+                            type += "-country";
+                            break;
+                        case "2":
+                            type += "-province";
+                            break;
+                        default:
+                            type += "-" + customize.getLevel();
+                    }
                 }
                 chartDataVO = ChartMockData.getMockData(type);
             }
