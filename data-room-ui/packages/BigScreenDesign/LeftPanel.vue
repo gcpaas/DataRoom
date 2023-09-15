@@ -149,7 +149,6 @@
 import cloneDeep from 'lodash/cloneDeep'
 import basicComponents from 'data-room-ui/js/config/basicComponentsConfig'
 import g2PlotComponents, { getCustomPlots } from '../G2Plots/plotList'
-import echartsComponents from '../Echarts/echartList'
 import borderComponents from 'data-room-ui/js/config/borderComponentsConfig'
 import decorationComponents from 'data-room-ui/js/config/decorationComponentsConfig'
 import LayerList from './LayerList/index.vue'
@@ -173,7 +172,6 @@ export default {
   },
   data () {
     return {
-      echartsComponents,
       g2PlotComponents,
       activeName: 'chart', // 设置左侧tab栏的默认值
       fold: false, // 控制左侧菜单栏伸缩
@@ -192,13 +190,6 @@ export default {
           title: '图表',
           icon: 'icon-jichushuju',
           components: this.g2PlotComponents
-        },
-        {
-          id: 7,
-          name: 'echart',
-          title: '3D',
-          icon: 'icon-jichushuju',
-          components: this.echartsComponents
         },
         {
           id: 3,
@@ -252,7 +243,6 @@ export default {
     this.initList()
     this.g2PlotComponents = [...this.g2PlotComponents, ...getCustomPlots()]
     this.menuList[1].components = this.g2PlotComponents
-    this.menuList[2].components = this.echartsComponents
   },
   mounted () {
     this.nodeDrag()

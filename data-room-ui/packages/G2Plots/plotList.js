@@ -32,7 +32,7 @@ function getPlotList (files) {
       category: configMapKey,
       name: config.name,
       title: config.title,
-      border: { type: '', titleHeight: 60, fontSize: 30, color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9'] },
+      border:{type:'',titleHeight:60,fontSize:30,color:['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9']},
       icon: null,
       img: require(`../G2Plots/images/componentLogo/${config.title}.png`),
       className:
@@ -65,7 +65,7 @@ export function getCustomPlots () {
       category: config.category,
       name: config.name,
       title: config.title,
-      border: { type: '', titleHeight: 60, fontSize: 30, color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9'] },
+      border:{type:'',titleHeight:60,fontSize:30,color:['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9']},
       icon: null,
       img: config.img,
       className:
@@ -89,5 +89,5 @@ export function getCustomPlots () {
   return list
 }
 
-const plots = [...plotList, ...customPlots, mapData, FlyMapData]
+const plots = [...plotList, ...customPlots, mapData,FlyMapData]
 export default plots
