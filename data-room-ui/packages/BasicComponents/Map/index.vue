@@ -326,11 +326,21 @@ export default {
           })
           return
         }
+        let geoJsonObj
+        try {
+          geoJsonObj = JSON.parse(downMap.geoJson)
+        } catch (error) {
+          this.$message({
+            message: params.name + '地图数据格式错误',
+            type: 'warning'
+          })
+          return
+        }
         this.currentDeep++
         this.mapList.push(downMap)
         this.changeData({...config, customize: {...config.customize, scope: params.name}})
         this.option.geo.map = params.name
-        echarts.registerMap(params.name, JSON.parse(downMap.geoJson));
+        echarts.registerMap(params.name, geoJsonObj);
         this.charts.setOption(this.option, true);
       });
     }

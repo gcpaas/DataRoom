@@ -244,12 +244,14 @@ export default {
           value: 4
         }
       ],
-      mapList: []
+      mapList: [],
+      // 提示过了
+      tipped: false
+
     }
   },
   mounted() {
     this.init()
-
   },
   methods: {
     init() {
@@ -258,6 +260,9 @@ export default {
       mapList(this.searchForm).then(res => {
         this.mapList = res
         this.searchLoading = false
+        if (!this.tipped && this.mapList.length === 0) {
+          this.tip()
+        }
       }).catch(err => {
         this.searchLoading = false
       })
@@ -308,6 +313,18 @@ export default {
           this.deleteMapCascade(map)
         })
       }).catch(() => {
+      })
+    },
+    tip() {
+      // 超链接跳转至
+      const htmlStr = `<span>大屏设计器提供了全国省市区县的地图数据，<a href="https://www.yuque.com/chuinixiongkou/bigscreen/kdrm8g3c8zfgaaq6#xjE8w" style="color: #00a0e9"  target="_blank">点击查看</a></span>`
+      this.$notify({
+        title: '推荐',
+        dangerouslyUseHTMLString: true,
+        message: htmlStr,
+        customClass: 'ds-el-notify',
+        type: 'warning',
+        duration: 5000
       })
     },
     deleteMapCascade(map) {
@@ -411,5 +428,21 @@ export default {
   color: aliceblue;
   background: #161A26;
   height: 150px;
+}
+</style>
+<style lang="scss">
+//修改notify的样式
+.ds-el-notify {
+  background-color: var(--bs-el-background-1)!important;
+  border: var(--bs-el-border)!important;
+  .el-notification__title{
+    color: #fff!important;
+  }
+  .el-notification__content{
+    color: #fff!important;
+  }
+  .el-notification__closeBtn{
+    color: #fff!important;
+  }
 }
 </style>

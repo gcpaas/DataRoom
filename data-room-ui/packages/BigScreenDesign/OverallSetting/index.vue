@@ -677,6 +677,7 @@ export default {
 //修改notify的样式
 .ds-el-notify {
   background-color: var(--bs-el-background-1)!important;
+  border: var(--bs-el-border)!important;
   .el-notification__title{
     color: #fff!important;
   }

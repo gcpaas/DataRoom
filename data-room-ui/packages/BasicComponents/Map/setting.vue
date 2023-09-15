@@ -73,7 +73,6 @@
             :options="mapTree"
             :props="{ value: 'id', label: 'name', children: 'children', emitPath: false }"
             @change="mapSelect">
-
             <template slot-scope="{ node, data }">
               <span style="float: left">{{ data.name }}</span>
               <span v-if="data.disabled" style="float: right; color: #8492a6; font-size: 13px"> 未配置 </span>
@@ -92,42 +91,6 @@
           />
         </el-form-item>
         <el-form-item
-          label="比例"
-          label-width="100px"
-        >
-          <el-slider
-            v-model="config.customize.zoom"
-            class="bs-el-slider-dark"
-            :step="0.1"
-            :min="0.1"
-            :max="5"
-          ></el-slider>
-        </el-form-item>
-        <el-form-item
-          label="中心点x轴位置"
-          label-width="100px"
-        >
-          <el-slider
-            class="bs-el-slider-dark"
-            v-model="config.customize.center1"
-            :step="1"
-            :min="1"
-            :max="100"
-          ></el-slider>
-        </el-form-item>
-        <el-form-item
-          label="中心点y轴位置"
-          label-width="100px"
-        >
-          <el-slider
-            class="bs-el-slider-dark"
-            v-model="config.customize.center2"
-            :step="1"
-            :min="1"
-            :max="100"
-          ></el-slider>
-        </el-form-item>
-        <el-form-item
           v-if="config.customize.down"
           label="允许下钻层级"
           label-width="100px"
@@ -143,6 +106,42 @@
               :value="level.value"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item
+          label="比例"
+          label-width="100px"
+        >
+          <el-slider
+            v-model="config.customize.zoom"
+            class="bs-el-slider-dark"
+            :step="0.1"
+            :min="0.1"
+            :max="5"
+          ></el-slider>
+        </el-form-item>
+        <el-form-item
+          label="中心点横向偏移"
+          label-width="100px"
+        >
+          <el-slider
+            class="bs-el-slider-dark"
+            v-model="config.customize.center1"
+            :step="1"
+            :min="1"
+            :max="100"
+          ></el-slider>
+        </el-form-item>
+        <el-form-item
+          label="中心点纵向偏移"
+          label-width="100px"
+        >
+          <el-slider
+            class="bs-el-slider-dark"
+            v-model="config.customize.center2"
+            :step="1"
+            :min="1"
+            :max="100"
+          ></el-slider>
         </el-form-item>
         <el-form-item
           v-if="config.customize.down"
