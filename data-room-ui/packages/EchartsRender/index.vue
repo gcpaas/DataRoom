@@ -175,12 +175,178 @@ export default {
             console.error(e)
           }
         }
-        // config.option.data = data
+        config.option = this.echartsOptionFormatting(config, data)
       } else {
         // 数据返回失败则赋前端的模拟数据
         // config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data || config?.option?.data
       }
       return config
+    },
+    // 格式化echarts的配置
+    echartsOptionFormatting (config, data) {
+      const option = config.option
+      // 分组字段
+      const xField = config.setting.find(item => item.optionField === 'xField')?.value
+      const yField = config.setting.find(item => item.optionField === 'yField')?.value
+      const xData = [...new Set(data.map(item => item[xField]))]
+      const yData = data.map(item => item[yField])
+      const maxY = Math.max(...yData)
+      // 生成阴影柱子的值
+      const shadowData = Array.from({ length: xField.length }, () => maxY)
+      option.xAxis[0].data = xData
+      const hasSeries = config.setting.find(item => item.optionField === 'seriesField' && item.value !== '')
+      // 判断是否存在分组字段
+      if (hasSeries) {
+        option.xAxis = [
+          {
+            type: 'category',
+            data: xData,
+            // 坐标轴刻度设置:x轴数据展示
+            axisTick: {
+              show: true,
+              alignWithLabel: true
+            },
+            nameTextStyle: {
+              color: '#82b0ec'
+            },
+            // 横坐标颜色
+            nameTextStyle: {
+              color: '#82b0ec'
+            },
+            // 是否显示坐标轴的轴线
+            axisLine: {
+              show: false
+            },
+            // 坐标轴刻度标签
+            axisLabel: {
+              textStyle: {
+                fontSize: 10,
+                color: 'rgb(40, 129, 170)'
+              },
+              margin: 30
+            }
+          },
+          {
+            type: 'category',
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+            },
+            splitArea: {
+              show: false
+            },
+            splitLine: {
+              show: false
+            },
+            data: xData
+          }
+        ]
+        const seriesField = config.setting.find(item => item.optionField === 'seriesField')?.value
+        const seriesFieldList = [...new Set(data.map(item => item[seriesField]))]
+        option.series = []
+        for (const seriesFieldItem of seriesFieldList) {
+          const seriesData = (data.filter(item => item[seriesField] === seriesFieldItem))?.map(item => item[yField])
+          const seriesItem = [
+            {
+              name: 'y1柱子顶部',
+              type: 'pictorialBar',
+              tooltip: { show: false },
+              symbol: 'diamond',
+              symbolSize: [30, 10],
+              symbolOffset: ['-60%', -5],
+              symbolPosition: 'end',
+              z: 15,
+              zlevel: 2,
+              color: 'rgba(2, 175, 249,1)',
+              data: seriesData
+            },
+            {
+              name: seriesFieldItem,
+              type: 'bar',
+              barGap: '20%',
+              barWidth: 30,
+              itemStyle: {
+                normal: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    {
+                      offset: 0,
+                      color: '#115ba6'
+                    },
+                    {
+                      offset: 1,
+                      color: '#1db0dd'
+                    }
+                  ]),
+                  opacity: 0.8,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
+                  shadowBlur: 0 // 阴影模糊值
+                }
+              },
+              label: {
+                show: false
+
+              },
+              zlevel: 2,
+              z: 12,
+              data: seriesData
+            },
+            {
+              name: 'y1柱子底部',
+              type: 'pictorialBar',
+              tooltip: { show: false },
+              symbol: 'diamond',
+              symbolSize: [30, 10],
+              symbolOffset: ['-60%', 5],
+              zlevel: 2,
+              z: 15,
+              color: 'rgb(2, 192, 255)',
+              data: seriesData
+            },
+            {
+              name: '背景柱子1',
+              type: 'bar',
+              tooltip: { show: false },
+              xAxisIndex: 1,
+              barGap: '20%',
+              data: shadowData,
+              zlevel: 1,
+              barWidth: 30,
+              itemStyle: {
+                normal: {
+                  color: 'rgba(9, 44, 76,.8)'
+                }
+              }
+            },
+            {
+              name: 'y1背景柱子顶部',
+              type: 'pictorialBar',
+              tooltip: { show: false },
+              symbol: 'diamond',
+              symbolSize: [30, 10],
+              symbolOffset: ['-60%', -5],
+              symbolPosition: 'end',
+              z: 15,
+              color: 'rgb(15, 69, 133)',
+              zlevel: 1,
+              data: shadowData
+            }
+          ]
+          option.series.push(...seriesItem)
+        }
+      } else {
+        option.series = option.series.map(item => {
+          return {
+            ...item,
+            data: yData
+          }
+        })
+      }
+      return option
     },
     // 组件的样式改变，返回改变后的config
     changeStyle (config, isUpdateTheme) {
