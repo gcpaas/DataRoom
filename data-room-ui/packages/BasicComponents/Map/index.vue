@@ -3,7 +3,14 @@
     style="width: 100%; height: 100%"
     class="bs-design-wrap bs-bar"
   >
-  <el-button class="button" v-if="this.level=='province'&&config.customize.down" @click="jumpTo(config)" type='text' > 返回上一级</el-button>
+    <el-button
+      v-if="level=='province'&&config.customize.down"
+      class="button"
+      type="text"
+      @click="jumpTo(config)"
+    >
+      返回上一级
+    </el-button>
     <div
       :id="`chart${config.code}`"
       style="width: 100%; height: 100%"
@@ -90,14 +97,14 @@ export default {
       }
       return config
     },
-    async jumpTo(config){
-      this.level='country'
-      const mapUrl =`${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/country/中华人民共和国.json`
+    async jumpTo (config) {
+      this.level = 'country'
+      const mapUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/country/中华人民共和国.json`
       const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, true)
-      this.option.geo.map = '中华人民共和国';
-      this.changeData({...config,customize:{...config.customize,level:'country',scope:'中国'}})
-      echarts.registerMap('中华人民共和国', map);
-      this.charts.setOption(this.option, true);
+      this.option.geo.map = '中华人民共和国'
+      this.changeData({ ...config, customize: { ...config.customize, level: 'country', scope: '中国' } })
+      echarts.registerMap('中华人民共和国', map)
+      this.charts.setOption(this.option, true)
     },
     async newChart (config) {
       this.charts = echarts.init(
@@ -107,14 +114,14 @@ export default {
         // 背景颜色
         backgroundColor: config.customize.backgroundColor,
         graphic: [
-          ],
+        ],
         geo: {
           map: config.customize.scope,
           zlevel: 10,
-          show:true,
+          show: true,
           layoutCenter: ['50%', '50%'],
           roam: true,
-          layoutSize: "100%",
+          layoutSize: '100%',
           zoom: 1,
           label: {
             // 通常状态下的样式
@@ -277,17 +284,17 @@ export default {
       const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, true)
       echarts.registerMap(config.customize.scope, map)
       this.charts.setOption(this.option)
-      this.charts.on('click',  async(params)=> {
-          if(params.name=='') return
-          if(config.customize.down===false||this.level==='province') return
-          this.level='province'
-          const mapUrl =`${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/province/${params.name}.json`
-          const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, true)
-          this.changeData({...config,customize:{...config.customize,level:'province',scope:params.name}})
-          this.option.geo.map = params.name
-          echarts.registerMap(params.name, map);
-          this.charts.setOption(this.option, true);
-          });
+      this.charts.on('click', async (params) => {
+        if (params.name == '') return
+        if (config.customize.down === false || this.level === 'province') return
+        this.level = 'province'
+        const mapUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/province/${params.name}.json`
+        const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, true)
+        this.changeData({ ...config, customize: { ...config.customize, level: 'province', scope: params.name } })
+        this.option.geo.map = params.name
+        echarts.registerMap(params.name, map)
+        this.charts.setOption(this.option, true)
+      })
     }
   }
 }
