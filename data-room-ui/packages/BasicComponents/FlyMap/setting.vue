@@ -55,40 +55,56 @@
             @change="changeLevel()"
           >
            <el-option
-              label="世界"
-              value="world"
-            />
-            <el-option
-              label="国家"
-              value="country"
-            />
-            <el-option
-              label="省份"
-              value="province"
+              v-for="level in levelList"
+              :key="level.value"
+              :label="level.label"
+              :value="level.value"
             />
           </el-select>
         </el-form-item>
+
+
         <el-form-item
-          v-if="config.customize.level == 'province'"
-          label="地图显示区域"
+          label="地图"
           label-width="100px"
         >
-          <el-select
-            v-model="config.customize.dataMap"
-            popper-class="bs-el-select"
-            class="bs-el-select"
-            @change="changeMap"
-          >
-            <el-option
-              v-for="map in mapList"
-              :key="map.name"
-              :label="map.name"
-              :value="map.url"
-            />
-          </el-select>
+          <el-cascader
+            ref="cascade"
+            v-model="config.customize.mapId"
+            popper-class="bs-el-cascader"
+            :options="mapTree"
+            :props="{ value: 'id', label: 'name', children: 'children', emitPath: false }"
+            @change="mapSelect">
+
+            <template slot-scope="{ node, data }">
+              <span style="float: left">{{ data.name }}</span>
+              <span v-if="data.disabled" style="float: right; color: #8492a6; font-size: 13px"> 未配置 </span>
+            </template>
+          </el-cascader>
+
         </el-form-item>
+
+
+<!--        <el-form-item-->
+<!--          v-if="config.customize.level == 'province'"-->
+<!--          label="地图显示区域"-->
+<!--          label-width="100px"-->
+<!--        >-->
+<!--          <el-select-->
+<!--            v-model="config.customize.dataMap"-->
+<!--            popper-class="bs-el-select"-->
+<!--            class="bs-el-select"-->
+<!--            @change="changeMap"-->
+<!--          >-->
+<!--            <el-option-->
+<!--              v-for="map in mapList"-->
+<!--              :key="map.name"-->
+<!--              :label="map.name"-->
+<!--              :value="map.url"-->
+<!--            />-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item
-          v-if="config.customize.level == 'country'"
           label="是否开启下钻"
           label-width="100px"
         >
@@ -98,6 +114,24 @@
             active-color="#007aff"
           />
         </el-form-item>
+        <el-form-item
+          v-if="config.customize.down"
+          label="允许下钻层级"
+          label-width="100px"
+        >
+          <el-select
+            v-model="config.customize.downLevel"
+            popper-class="bs-el-select"
+            class="bs-el-select">
+            <el-option
+              v-for="level in downLevelList"
+              :key="level.value"
+              :label="level.label"
+              :value="level.value"
+            />
+          </el-select>
+        </el-form-item>
+
         <!-- <el-form-item
           v-if="config.customize.down"
           label="头部字体颜色"
@@ -323,7 +357,9 @@ export default {
   props: {},
   data () {
     return {
+      mapTree: [],
       mapList: [],
+      currentMap: {},
       predefineThemeColors: [
         '#007aff',
         '#1aa97b',
@@ -352,7 +388,27 @@ export default {
           name:'无',
           value:'none'
         }
-      ]
+      ],
+      levelList: [
+        {value: '0', label: '世界'},
+        {value: '1', label: '国家'},
+        {value: '2', label: '省份'},
+        {value: '3', label: '城市'},
+        {value: '4', label: '区县'}
+      ],
+      // 旧版本地图等级，该数据用于兼容旧版本
+      oldLevelMap: {
+        'world' : '0',
+        'country' : '1',
+        'province' : '2',
+      },
+      downLevelList: [
+        {value: 1, label: '下钻一层'},
+        {value: 2, label: '下钻两层'},
+        {value: 3, label: '下钻三层'},
+        {value: 4, label: '下钻四层'},
+        {value: 5, label: '下钻五层'}
+      ],
     }
   },
   computed: {
@@ -366,14 +422,15 @@ export default {
     }
   },
   watch: {
-    'config.customize.level': {
-      handler (val) {
-        this.getMapList()
-      }
-    }
+    // 'config.customize.level': {
+    //   handler (val) {
+    //     this.getMapList()
+    //   }
+    // }
   },
   mounted () {
-    this.getMapList()
+    // this.getMapList()
+    this.getMapTree()
   },
   methods: {
     getMapList () {
@@ -381,22 +438,24 @@ export default {
         this.mapList = res
       })
     },
+    getMapTree() {
+      const levelConst = ['0', '1', '2', '3', '4']
+      if (!levelConst.includes(this.config.customize.level)) {
+        this.config.customize.level = this.oldLevelMap[this.config.customize.level] || '0'
+      }
+      this.$dataRoomAxios.get(`${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/map/tree/${this.config.customize.level}`).then((res) => {
+        this.mapTree = res
+      })
+    },
+    mapSelect (mapId) {
+      let mapData = this.$refs['cascade'].getCheckedNodes()[0].data
+      this.currentMap = mapData
+    },
      changeMap(val){
       this.config.customize.scope=val.slice(0,-5)
     },
     changeLevel () {
-      if (this.config.customize.level === 'country') {
-        this.config.customize.dataMap = '中华人民共和国.json'
-        this.config.customize.scope='中国'
-      } else if (this.config.customize.level === 'province') {
-        this.getMapList()
-        this.config.customize.dataMap = '安徽省.json'
-        this.config.customize.scope='安徽省'
-        this.config.customize.down=false
-      }else{
-        this.config.customize.scope='世界'
-        this.config.customize.down=false
-      }
+      this.getMapTree()
     },
     delColor () {
       this.colors = []
@@ -431,4 +490,5 @@ export default {
 .lc-field-body {
   padding: 12px 16px;
 }
+
 </style>

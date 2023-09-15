@@ -11,7 +11,7 @@
             class="bs-el-input"
             clearable
             maxlength="200"
-            placeholder="请输入地图名称或编码"
+            placeholder="请输入地图名称或标识"
           />
         </el-form-item>
         <el-form-item class="filter-item">
@@ -73,7 +73,7 @@
           />
           <el-table-column
             align="center"
-            label="编码"
+            label="标识"
             prop="mapCode"
             show-overflow-tooltip
           />
@@ -89,17 +89,6 @@
               <span v-else-if="scope.row.level === 2">省份</span>
               <span v-else-if="scope.row.level === 3">城市</span>
               <span v-else-if="scope.row.level === 4">区县</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="开启下钻"
-            prop="enableDown"
-            show-overflow-tooltip
-          >
-            <template slot-scope="scope">
-              <span v-if="scope.row.enableDown === 1">是</span>
-              <span v-else>否</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -230,7 +219,6 @@ export default {
       searchForm: {
         searchKey: '',
         level: null,
-        enableDown: null,
         uploadedGeoJson: null,
         parentId: '0'
       },

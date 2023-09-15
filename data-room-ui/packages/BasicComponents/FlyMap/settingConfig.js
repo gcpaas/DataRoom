@@ -41,6 +41,8 @@ const customConfig = {
     contribution: false
   },
   customize: {
+    // 地图id
+    mapId: '',
     // 是否显示文字
     mapName: false,
     // 悬浮框背景色
@@ -62,6 +64,8 @@ const customConfig = {
     fontSize:'30',
     // 是否开启下钻
     down: false,
+    // 允许下钻的层级
+    downLevel: 1,
     // 轨迹图像
     symbol: 'arrow',
     // 轨迹颜色
@@ -69,7 +73,7 @@ const customConfig = {
     // 轨迹大小
     symbolSize:8,
     // 地图级别
-    level: 'country',
+    level: 1,
     // 范围
     scope: '中国',
     // 地图区域颜色
