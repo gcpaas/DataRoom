@@ -167,6 +167,11 @@ public interface PageDesignConstant {
              */
             String TIME_PICKER = "timePicker";
 
+            /**
+             * echarts组件
+             */
+            String ECHARTS_COMPONENT = "echartsComponent";
+
 
         }
     }
