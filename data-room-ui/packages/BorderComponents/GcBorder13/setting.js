@@ -1,5 +1,5 @@
 
-const type = 'GcBorder8'
+const type = 'GcBorder13'
 
 const name='边框十三'
 // 右侧配置项

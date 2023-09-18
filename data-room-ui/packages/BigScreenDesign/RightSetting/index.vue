@@ -133,7 +133,6 @@ export default {
     // 更新数据源部分，需要调用接口
     configDataSource: {
       handler (val, oldValue) {
-        console.log('oldValue', oldValue)
         this.handleConfigChange(val, oldValue, 'configDataSource')
       },
       deep: true

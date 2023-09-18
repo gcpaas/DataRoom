@@ -51,7 +51,7 @@
                   class="left-bigscreen-title"
                   :title="component.title"
                 >
-                  {{ component.title }}
+                  {{ getName(component.title) }}
                 </div>
               </div>
             </div>
@@ -88,6 +88,7 @@
 import { pageMixins } from 'data-room-ui/js/mixins/page'
 import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
+import plotList from 'data-room-ui/BorderComponents/settingList.js'
 import borderComponents from 'data-room-ui/BorderComponents/bordersList'
 export default {
   name: 'ComponentDialog',
@@ -127,6 +128,21 @@ export default {
     this.remoteComponentlist = [...borderComponents]
   },
   methods: {
+    getName(title){
+      plotList[Symbol.iterator]=function*(){
+        let keys=Object.keys(plotList)
+        for(let k of keys){
+          yield [k,plotList[k]]
+        }
+      }
+      let name
+      for(let [key,value] of plotList){
+        if(value.type==title){
+          name=value.name
+        }
+      }
+      return name
+    },
     chooseComponent (component) {
       this.focus = cloneDeep(component)
     },

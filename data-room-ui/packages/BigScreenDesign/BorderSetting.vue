@@ -121,6 +121,7 @@
 </template>
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 export default {

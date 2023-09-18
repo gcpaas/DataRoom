@@ -6,6 +6,7 @@
      <dv-border-box-4
       :id="'dataV' + config.code"
       :background-color="backgroundColor"
+      :color='borderColor'
       :key="updateKey"
     >
     <div class="element"
@@ -42,6 +43,15 @@ export default {
     }
   },
   computed: {
+    borderColor () {
+      return this.config.border.borderMainColor ||
+        this.config.border.borderSecondaryColor
+        ? [
+            this.config.border.borderMainColor,
+            this.config.border.borderSecondaryColor
+          ]
+        : null
+    },
     color () {
       return this.config.border.fontColor ? this.config.border.fontColor
         : '#fff'

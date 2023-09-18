@@ -6,7 +6,7 @@
       label="边框"
     >
     <el-input
-      v-model="config.type"
+      v-model="title"
       clearable
       read-only
       placeholder="请选择边框"
@@ -194,8 +194,27 @@ export default {
     }
   },
   computed:{
+    title:{
+      set(){
+       this.config.type=''
+      },
+      get(){
+       plotList[Symbol.iterator]=function*(){
+        let keys=Object.keys(plotList)
+        for(let k of keys){
+          yield [k,plotList[k]]
+        }
+      }
+      let name
+      for(let [key,value] of plotList){
+        if(value.type==this.config.type){
+          name=value.name
+        }
+      }
+      return name
+      }
+    },
     list(){
-      console.log(plotList)
       plotList[Symbol.iterator]=function*(){
         let keys=Object.keys(plotList)
         for(let k of keys){
