@@ -13,7 +13,7 @@ export function settingToTheme (config, type) {
     const theme = { dark: { ...config?.theme?.dark }, light: { ...config?.theme?.light } }
     // 根据组件的type来判断主题的转化方式
     // 如果是g2组件或者远程组件
-    if (['customComponent', 'remoteComponent'].includes(config.type)) {
+    if (['customComponent', 'remoteComponent', 'echartsComponent'].includes(config.type)) {
       config.setting.forEach((setItem) => {
         if (['gradual', 'colorPicker', 'colorSelect'].includes(setItem.type)) {
           theme[type][setItem.field] = setItem.value
@@ -75,7 +75,7 @@ function chartThemeToSetting (chart, type) {
   chart.option.theme = type === 'dark' ? 'transparent' : 'light'
   if (chart.theme && chart.theme[type]) {
     // 如果是g2组件或者远程组件
-    if (['customComponent', 'remoteComponent'].includes(chart.type)) {
+    if (['customComponent', 'remoteComponent', 'echartsComponent'].includes(chart.type)) {
       for (const item of chart.setting) {
         // 检查 obj 中是否存在与 item.field 相对应的属性
         if (Object.prototype.hasOwnProperty.call(chart.theme[type], item.field)) {
