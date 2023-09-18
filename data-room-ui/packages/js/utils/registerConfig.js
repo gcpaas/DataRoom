@@ -73,7 +73,7 @@ function registerRouters (config, router) {
           }
         },
         {
-          path: '/big-screen-map-data',
+          path: config?.routers?.mapData || '/big-screen-map-data',
           component: () => import('data-room-ui/MapDataManagement'),
           meta: {
             title: '地图数据管理'
@@ -110,7 +110,7 @@ function registerRouters (config, router) {
     {
       path: '/dataRoom-redirect',
       name: 'Redirect',
-      component: () =>import('data-room-ui/Layout/Redirect/index.vue'),
+      component: () => import('data-room-ui/Layout/Redirect/index.vue')
     },
     {
       path: config?.routers?.bizComponentDesignUrl || '/big-screen-biz-component-design',
