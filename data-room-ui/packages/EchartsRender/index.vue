@@ -317,6 +317,7 @@ export default {
       } else {
         option.series = [
           {
+            id: 'barTopColor', // 用于区分是图表的什么部分
             type: 'pictorialBar', // 象形柱图
             symbol: 'diamond',
             symbolOffset: [0, '-50%'], // 上部菱形
@@ -333,20 +334,22 @@ export default {
                 color: '#27a7ce'
               }
             },
-            color: '#2DB1EF',
+            color: option.seriesCustom.barTopColor,
             data: yData
           },
           {
+            id: 'barBottomColor', // 用于区分是图表的什么部分
             type: 'pictorialBar',
             symbol: 'diamond',
             symbolSize: [30, 15],
             symbolOffset: ['0%', '50%'], // 下部菱形
             // symbolOffset: [0, 7], // 下部椭圆
             z: 12,
-            color: '#187dcb',
+            color: option.seriesCustom.barBottomColor,
             data: yData
           },
           {
+            id: 'barColor', // 用于区分是图表的什么部分
             type: 'bar',
             barWidth: 30,
             z: 10,
@@ -355,11 +358,11 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: '#115ba6'
+                    color: option.seriesCustom.barColor1
                   },
                   {
                     offset: 1,
-                    color: '#1db0dd'
+                    color: option.seriesCustom.barColor2
                   }
                 ]),
                 opacity: 0.8,
@@ -370,12 +373,13 @@ export default {
             data: yData
           },
           {
+            id: 'shadowColor', // 用于区分是图表的什么部分
             type: 'bar',
             barWidth: 30,
             xAxisIndex: 1,
             itemStyle: {
               normal: {
-                color: '#041133',
+                color: option.seriesCustom.shadowColor,
                 opacity: 0.8,
                 shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
                 shadowBlur: 0 // 阴影模糊值
@@ -390,6 +394,7 @@ export default {
             data: shadowData
           },
           {
+            id: 'shadowTopColor', // 用于区分是图表的什么部分
             type: 'pictorialBar', // 象形柱图
             xAxisIndex: 1,
             symbol: 'diamond',
@@ -407,7 +412,7 @@ export default {
                 color: '#27a7ce'
               }
             },
-            color: '#142f5a',
+            color: option.seriesCustom.shadowTopColor,
             tooltip: {
               show: false
             },
@@ -416,6 +421,15 @@ export default {
         ]
       }
       return option
+    },
+    // 对series里面的样式进行配置
+    seriesStyle (config) {
+      // 如果
+      for (const item of config.option.seriesCustom) {
+        if (item.id === 'shadowTopColor') {
+          item.color = config.seriesCustom.shadowTopColor
+        }
+      }
     },
     // 组件的样式改变，返回改变后的config
     changeStyle (config, isUpdateTheme) {

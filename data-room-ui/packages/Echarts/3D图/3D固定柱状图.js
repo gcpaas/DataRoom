@@ -46,6 +46,60 @@ const setting = [
     multiple: false,
     value: '',
     tabName: 'data'
+  },
+  {
+    label: '柱子顶部颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_barTopColor', // 字段
+    optionField: 'seriesCustom.barTopColor', // 对应options中的字段
+    value: '#2DB1EF',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '柱子颜色1',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_barColor1', // 字段
+    optionField: 'seriesCustom.barColor1', // 对应options中的字段
+    value: '#115ba6',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '柱子颜色2',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_barColor2', // 字段
+    optionField: 'seriesCustom.barColor2', // 对应options中的字段
+    value: '#1db0dd',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '柱子底部颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_barBottomColor', // 字段
+    optionField: 'seriesCustom.barBottomColor', // 对应options中的字段
+    value: '#187dcb',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '柱子背景顶部颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_shadowColor', // 字段
+    optionField: 'seriesCustom.shadowColor', // 对应options中的字段
+    value: '#041133',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '柱子背景颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_shadowTopColor', // 字段
+    optionField: 'seriesCustom.shadowTopColor', // 对应options中的字段
+    value: '#142f5a',
+    tabName: 'custom',
+    groupName: 'graph'
   }
 ]
 
@@ -170,7 +224,16 @@ const option = {
       }
     }
   ],
+  seriesCustom: {
+    barTopColor: '#2DB1EF',
+    barBottomColor: '#187dcb',
+    barColor1: '#115ba6',
+    barColor2: '#1db0dd',
+    shadowColor: '#041133',
+    shadowTopColor: '#142f5a'
+  },
   series: [
+    // 顶部
     {
       type: 'pictorialBar', // 象形柱图
       symbol: 'diamond',
@@ -191,6 +254,7 @@ const option = {
       color: '#2DB1EF',
       data: yData
     },
+    // 底部
     {
       type: 'pictorialBar',
       symbol: 'diamond',
@@ -201,6 +265,7 @@ const option = {
       color: '#187dcb',
       data: yData
     },
+    // 柱子
     {
       type: 'bar',
       barWidth: 30,
@@ -224,13 +289,13 @@ const option = {
       },
       data: yData
     },
+    // 阴影柱子
     {
       type: 'bar',
       barWidth: 30,
       barGap: '-100%',
       itemStyle: {
         normal: {
-          color: '#041133',
           opacity: 0.8,
           shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
           shadowBlur: 0 // 阴影模糊值
@@ -239,8 +304,10 @@ const option = {
       label: {
         show: false
       },
+      color: '#041133',
       data: maxData
     },
+    // 阴影顶部
     {
       type: 'pictorialBar', // 象形柱图
       symbol: 'diamond',
