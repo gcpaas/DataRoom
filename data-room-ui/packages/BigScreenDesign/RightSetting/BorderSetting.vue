@@ -27,6 +27,50 @@
         ref="BorderSelect"
         />
     </el-form-item>
+    <el-form-item
+      :label-width="labelWidth"
+      label="上边距"
+    >
+      <el-input-number
+        v-model="config.padding[0]"
+        class="bs-el-input-number"
+        :min="0"
+        :step="1"
+      />
+    </el-form-item>
+    <el-form-item
+      :label-width="labelWidth"
+      label="右边距"
+    >
+      <el-input-number
+        v-model="config.padding[1]"
+        class="bs-el-input-number"
+        :min="0"
+        :step="1"
+      />
+    </el-form-item>
+    <el-form-item
+      :label-width="labelWidth"
+      label="下边距"
+    >
+      <el-input-number
+        v-model="config.padding[2]"
+        class="bs-el-input-number"
+        :min="0"
+        :step="1"
+      />
+    </el-form-item>
+    <el-form-item
+      :label-width="labelWidth"
+      label="左边距"
+    >
+      <el-input-number
+        v-model="config.padding[3]"
+        class="bs-el-input-number"
+        :min="0"
+        :step="1"
+      />
+    </el-form-item>
     <div v-if="config.type">
     <el-form-item
       :label-width="labelWidth"
@@ -38,18 +82,6 @@
           :active-value="true"
           :inactive-value="false"
         />
-    </el-form-item>
-    <el-form-item
-      v-if="!config.isTitle"
-      :label-width="labelWidth"
-      label="上边距"
-    >
-      <el-input-number
-        v-model="config.paddingTop"
-        class="bs-el-input-number"
-        :min="0"
-        :step="1"
-      />
     </el-form-item>
     <el-form-item
       v-if="config.isTitle"

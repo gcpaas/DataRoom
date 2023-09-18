@@ -31,7 +31,7 @@
           <div class="lc-field-body">
             <BorderSetting
               v-if="config.border"
-              label-width="120px"
+              label-width="100px"
               :config="config.border"
             />
           </div>

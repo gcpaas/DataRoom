@@ -297,7 +297,7 @@ export default {
       getScreenInfo(component.code).then(res => {
         res.chartList.forEach((item) => {
           if (!item.border) {
-            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,paddingTop:20}
+            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[16,16,16,16]}
           }
         })
         // 给组件库导入的组件加入统一的前缀

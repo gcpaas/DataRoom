@@ -138,15 +138,6 @@ const setting = [
     groupName: 'graph'
   },
   // 边距 padding
-  {
-    label: '图表边距',
-    type: 'padding', // 设置组件类型
-    field: 'appendPadding', // 字段
-    optionField: 'appendPadding', // 对应options中的字段
-    value: [16, 16, 16, 16],
-    tabName: 'custom',
-    groupName: 'padding'
-  }
 ]
 const data = [
   {
@@ -164,7 +155,6 @@ const option = {
   renderer: 'canvas',
   color: '#598BF2',
   percent: 0.25,
-  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   shape: 'rect',
   outline: {
     border: 1, // 边框宽度

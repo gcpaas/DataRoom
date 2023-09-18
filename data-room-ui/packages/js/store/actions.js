@@ -16,7 +16,7 @@ export default {
         // 兼容边框配置
         data.chartList.forEach((item) => {
           if (!item.border) {
-            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,paddingTop:10}
+            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[16,16,16,16]}
           }
         })
         const pageInfo = handleResData(data)
