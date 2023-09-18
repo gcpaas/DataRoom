@@ -13,6 +13,12 @@ export default {
   initLayout ({ commit, dispatch }, code) {
     return new Promise(resolve => {
       getScreenInfo(code).then(data => {
+        // 兼容边框配置
+        data.chartList.forEach((item) => {
+          if (!item.border) {
+            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,paddingTop:10}
+          }
+        })
         const pageInfo = handleResData(data)
         // 改变页面数据
         commit('changePageInfo', pageInfo)

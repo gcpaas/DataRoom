@@ -27,7 +27,32 @@
         ref="BorderSelect"
         />
     </el-form-item>
+    <div v-if="config.type">
     <el-form-item
+      :label-width="labelWidth"
+      label="是否显示标题"
+    >
+      <el-switch
+          v-model="config.isTitle"
+          class="bs-el-switch"
+          :active-value="true"
+          :inactive-value="false"
+        />
+    </el-form-item>
+    <el-form-item
+      v-if="!config.isTitle"
+      :label-width="labelWidth"
+      label="上边距"
+    >
+      <el-input-number
+        v-model="config.paddingTop"
+        class="bs-el-input-number"
+        :min="0"
+        :step="1"
+      />
+    </el-form-item>
+    <el-form-item
+      v-if="config.isTitle"
       :label-width="labelWidth"
       label="标题高度"
     >
@@ -39,6 +64,7 @@
       />
     </el-form-item>
     <el-form-item
+      v-if="config.isTitle"
       :label-width="labelWidth"
       label="标题字体大小"
     >
@@ -49,13 +75,25 @@
         :step="1"
       />
     </el-form-item>
+    <el-form-item
+      v-if="config.isTitle"
+      :label-width="labelWidth"
+      label="标题颜色"
+    >
+      <el-color-picker
+          v-model="config.fontColor"
+          popper-class="bs-el-color-picker"
+          class="bs-el-color-picker"
+          show-alpha
+        />
+    </el-form-item>
     <div
       v-for="(setting, settingIndex) in list"
       :key="settingIndex+1"
     >
       <el-form-item
         :label="setting.type=== 'padding' ? '' : setting.label"
-        :label-width="setting.type=== 'padding' ? '0px' :'120px'"
+        :label-width="labelWidth"
       >
         <el-input
           v-if="setting.type === 'input'"
@@ -165,6 +203,7 @@
           v-model="config[setting.field]"
         />
       </el-form-item>
+      </div>
     </div>
   </div>
 </template>

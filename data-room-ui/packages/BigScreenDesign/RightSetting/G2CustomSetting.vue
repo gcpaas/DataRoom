@@ -21,8 +21,9 @@
           />
         </el-form-item>
       </div>
+      <SettingTitle>边框</SettingTitle>
       <div class="lc-field-body">
-        <BorderSetting
+         <BorderSetting
           v-if="config.border"
           label-width="120px"
           :config="config.border"

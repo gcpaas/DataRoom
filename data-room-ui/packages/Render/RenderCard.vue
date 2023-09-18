@@ -16,7 +16,7 @@
     />
     <div
       class="render-item-wrap"
-      :style="`height:calc(100% - ${(config.border&&config.border.type)?config.border.titleHeight:0}px)`"
+      :style="`height:calc(100% - ${(config.border&&config.border.type&&config.border.isTitle)?config.border.titleHeight:0}px);padding-top:${(config.border&&config.border.type&&!config.border.isTitle)?config.border.paddingTop:0}px`"
     >
       <component
         :is="resolveComponentType(config.type)"
@@ -113,6 +113,6 @@ export default {
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
-  padding-bottom:20px;
+  padding-bottom: 15px;
 }
 </style>
