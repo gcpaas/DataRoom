@@ -458,16 +458,6 @@ const setting = [
     tabName: 'custom',
     groupName: 'yAxis'
   },
-  // 边距 padding
-    {
-    label: '图表边距',
-    type: 'padding',
-    field: 'appendPadding',
-    optionField: 'appendPadding',
-    value: [16, 16, 16, 16],
-    tabName: 'custom',
-    groupName: 'padding'
-  }
 ]
 
 // 模拟数据
@@ -521,7 +511,6 @@ const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
   data,
-  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   xField: 'city',
   yField: 'value',
   seriesField: 'type',

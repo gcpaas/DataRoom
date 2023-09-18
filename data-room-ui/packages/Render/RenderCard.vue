@@ -16,7 +16,13 @@
     />
     <div
       class="render-item-wrap"
-      :style="`height:calc(100% - ${(config.border&&config.border.type&&config.border.isTitle)?config.border.titleHeight:0}px);padding-top:${(config.border&&config.border.type&&!config.border.isTitle)?config.border.paddingTop:0}px`"
+      :style="
+      `height:calc(100% - ${(config.border&&config.border.type&&config.border.isTitle)?config.border.titleHeight:0}px);
+      padding-top:${config.border?config.border.padding[0]:0}px;
+      padding-right:${config.border?config.border.padding[1]:0}px;
+      padding-bottom:${config.border?config.border.padding[2]:0}px;
+      padding-left:${config.border?config.border.padding[3]:0}px
+      `"
     >
       <component
         :is="resolveComponentType(config.type)"
