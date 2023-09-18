@@ -86,21 +86,22 @@ const setting = [
   {
     label: '柱子背景顶部颜色',
     type: 'colorPicker', // 设置组件类型
-    field: 'seriesCustom_shadowColor', // 字段
-    optionField: 'seriesCustom.shadowColor', // 对应options中的字段
-    value: '#041133',
+    field: 'seriesCustom_shadowTopColor', // 字段
+    optionField: 'seriesCustom.shadowTopColor', // 对应options中的字段
+    value: '#142f5a',
     tabName: 'custom',
     groupName: 'graph'
   },
   {
     label: '柱子背景颜色',
     type: 'colorPicker', // 设置组件类型
-    field: 'seriesCustom_shadowTopColor', // 字段
-    optionField: 'seriesCustom.shadowTopColor', // 对应options中的字段
-    value: '#142f5a',
+    field: 'seriesCustom_shadowColor', // 字段
+    optionField: 'seriesCustom.shadowColor', // 对应options中的字段
+    value: '#041133',
     tabName: 'custom',
     groupName: 'graph'
   }
+
 ]
 
 // 配置处理脚本
@@ -235,6 +236,7 @@ const option = {
   series: [
     // 顶部
     {
+      id: 'barTopColor', // 用于区分是图表的什么部分
       type: 'pictorialBar', // 象形柱图
       symbol: 'diamond',
       symbolOffset: [0, '-50%'], // 上部菱形
@@ -256,6 +258,7 @@ const option = {
     },
     // 底部
     {
+      id: 'barBottomColor', // 用于区分是图表的什么部分
       type: 'pictorialBar',
       symbol: 'diamond',
       symbolSize: [30, 15],
@@ -267,6 +270,7 @@ const option = {
     },
     // 柱子
     {
+      id: 'barColor', // 用于区分是图表的什么部分
       type: 'bar',
       barWidth: 30,
       z: 10,
@@ -291,6 +295,7 @@ const option = {
     },
     // 阴影柱子
     {
+      id: 'shadowColor', // 用于区分是图表的什么部分
       type: 'bar',
       barWidth: 30,
       barGap: '-100%',
@@ -309,6 +314,7 @@ const option = {
     },
     // 阴影顶部
     {
+      id: 'shadowTopColor', // 用于区分是图表的什么部分
       type: 'pictorialBar', // 象形柱图
       symbol: 'diamond',
       symbolOffset: [0, '-50%'], // 上部菱形
