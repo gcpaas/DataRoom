@@ -182,24 +182,44 @@ export default {
       }
       return config
     },
+    getxDataAndYData (xField, yField, data, hasSeries) {
+      let list = []
+      let xData = []
+      let yData = []
+
+      const uniqueData = {}
+
+      // 遍历原始数据数组
+      data.forEach((item) => {
+        // 使用城市名称作为键，覆盖旧数据，始终保留最后一条数据
+        uniqueData[item[xField]] = item
+      })
+
+      // 将唯一数据对象的值（即去重后的数据）转换回数组
+      list = Object.values(uniqueData)
+      xData = list.map(item => item[xField])
+      yData = list.map(item => item[yField])
+      return { xData, yData }
+    },
     // 格式化echarts的配置
     echartsOptionFormatting (config, data) {
       const option = config.option
       // 分组字段
       const xField = config.setting.find(item => item.optionField === 'xField')?.value
       const yField = config.setting.find(item => item.optionField === 'yField')?.value
-      const xData = [...new Set(data.map(item => item[xField]))]
-      const yData = data.map(item => item[yField])
+      const hasSeries = config.setting.find(item => item.optionField === 'seriesField' && item.value !== '')
+      const { xData, yData } = this.getxDataAndYData(xField, yField, data, hasSeries)
+      // const xData = [...new Set(data.map(item => item[xField]))]
+      // const yData = data.map(item => item[yField])
       const maxY = Math.max(...yData)
       // 生成阴影柱子的值
-      const shadowData = Array.from({ length: xField.length }, () => maxY)
+      const shadowData = Array.from({ length: xData.length }, () => maxY)
       option.xAxis = option.xAxis.map(item => {
         return {
           ...item,
           data: xData
         }
       })
-      const hasSeries = config.setting.find(item => item.optionField === 'seriesField' && item.value !== '')
       // 判断是否存在分组字段
       if (hasSeries) {
         const seriesField = config.setting.find(item => item.optionField === 'seriesField')?.value
@@ -295,12 +315,105 @@ export default {
           option.series.push(...seriesItem)
         }
       } else {
-        option.series = option.series.map(item => {
-          return {
-            ...item,
+        option.series = [
+          {
+            type: 'pictorialBar', // 象形柱图
+            symbol: 'diamond',
+            symbolOffset: [0, '-50%'], // 上部菱形
+            symbolSize: [30, 15],
+            // symbolOffset: [0, -6], // 上部椭圆
+            symbolPosition: 'end',
+            z: 12,
+            label: {
+              normal: {
+                show: true,
+                position: 'top',
+                fontSize: 15,
+                fontWeight: 'bold',
+                color: '#27a7ce'
+              }
+            },
+            color: '#2DB1EF',
             data: yData
+          },
+          {
+            type: 'pictorialBar',
+            symbol: 'diamond',
+            symbolSize: [30, 15],
+            symbolOffset: ['0%', '50%'], // 下部菱形
+            // symbolOffset: [0, 7], // 下部椭圆
+            z: 12,
+            color: '#187dcb',
+            data: yData
+          },
+          {
+            type: 'bar',
+            barWidth: 30,
+            z: 10,
+            itemStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: '#115ba6'
+                  },
+                  {
+                    offset: 1,
+                    color: '#1db0dd'
+                  }
+                ]),
+                opacity: 0.8,
+                shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
+                shadowBlur: 0 // 阴影模糊值
+              }
+            },
+            data: yData
+          },
+          {
+            type: 'bar',
+            barWidth: 30,
+            xAxisIndex: 1,
+            itemStyle: {
+              normal: {
+                color: '#041133',
+                opacity: 0.8,
+                shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
+                shadowBlur: 0 // 阴影模糊值
+              }
+            },
+            label: {
+              show: false
+            },
+            tooltip: {
+              show: false
+            },
+            data: shadowData
+          },
+          {
+            type: 'pictorialBar', // 象形柱图
+            xAxisIndex: 1,
+            symbol: 'diamond',
+            symbolOffset: [0, '-50%'], // 上部菱形
+            symbolSize: [30, 15],
+            // symbolOffset: [0, -6], // 上部椭圆
+            symbolPosition: 'end',
+            z: 12,
+            label: {
+              normal: {
+                show: false,
+                position: 'top',
+                fontSize: 15,
+                fontWeight: 'bold',
+                color: '#27a7ce'
+              }
+            },
+            color: '#142f5a',
+            tooltip: {
+              show: false
+            },
+            data: shadowData
           }
-        })
+        ]
       }
       return option
     },
