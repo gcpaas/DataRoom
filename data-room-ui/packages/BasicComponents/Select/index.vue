@@ -146,6 +146,7 @@ export default {
       selectDropdownIcon.style.fontSize = config.customize.fontSize + 'px'
       // 选择器下拉框元素
       const selectDropdownEl = document.querySelector(`.select-${config.code} .el-select-dropdown`)
+      console.log('selectDropdownEl', selectDropdownEl)
       // 箭头背景颜色和下拉框背景颜色一致
       if (selectDropdownEl) {
         // 下拉框无边框
@@ -169,12 +170,9 @@ export default {
           selectDropdownEmptyEl.style.backgroundColor = this.innerConfig.customize.dropDownBackgroundColor
         }
         // 下拉项hover颜色
-        const selectDropdownItemEl = document.querySelectorAll(`.select-popper-${this.innerConfig.code} .el-select-dropdown__item`)
-        // 给--dropDownHoverFontColor 和 --dropDownHoverBackgroundColor 赋值
-        selectDropdownItemEl.forEach(item => {
-          item.style.setProperty('--dropDownHoverFontColor', this.innerConfig.customize.dropDownHoverFontColor)
-          item.style.setProperty('--dropDownHoverBackgroundColor', this.innerConfig.customize.dropDownHoverBackgroundColor)
-        })
+        const selectDropdownWrap = document.querySelector(`.select-popper-${this.innerConfig.code} .el-select-dropdown__wrap`)
+        selectDropdownWrap.style.setProperty('--dropDownHoverFontColor', this.innerConfig.customize.dropDownHoverFontColor)
+        selectDropdownWrap.style.setProperty('--dropDownHoverBackgroundColor', this.innerConfig.customize.dropDownHoverBackgroundColor)
       }
       // 不是激活项的还是使用背景颜色
       const selectDropdownItemEl = document.querySelectorAll(`.select-popper-${this.innerConfig.code} .el-select-dropdown__item`)
