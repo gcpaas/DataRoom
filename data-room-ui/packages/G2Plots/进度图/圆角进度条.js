@@ -35,7 +35,7 @@ const setting = [
     field: 'frontColor',
     // 对应options中的字段
     optionField: 'frontColor',
-    value: 'l(0) 0:#5F92F9  1:#5F92F9',
+    value: 'l(0) 0:#6B74E3 1:#38BBE5',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -89,8 +89,8 @@ const option = {
   percent: 0.8,
   barWidthRatio: 0.3,
   backColor: 'rgba(255, 255, 255, 0)',
-  frontColor: '#4a7af4',
-  color: ['#4a7af4', 'rgba(255, 255, 255, 0)'],
+  frontColor: 'l(0) 0:#6B74E3 1:#38BBE5',
+  color: ['l(0) 0:#6B74E3 1:#38BBE5', 'rgba(255, 255, 255, 0)'],
   progressStyle: {
     r: 10,
     // fill: 'red',

@@ -1,8 +1,3 @@
-/*
- * @description: 配置，参考https://g2plot.antv.antgroup.com/examples
- * @Date: 2023-03-27 14:38:23
- * @Author: xing.heng
- */
 import * as echarts from 'echarts'
 // 配置版本号
 const version = '2023071001'

@@ -26,17 +26,31 @@
         <div class="left-vue-code component-code">
           <div class="code-tab-header">
             <div class="code-tab-left">
-              <div class="code-tab">组件模板</div>
-              <div class="code-tab-btn" @click="change('echart')">
+              <div class="code-tab">
+                组件模板
+              </div>
+              <div
+                class="code-tab-btn"
+                @click="change('echart')"
+              >
                 echarts组件
               </div>
-              <div class="code-tab-btn" @click="change('g2plot')">
+              <div
+                class="code-tab-btn"
+                @click="change('g2plot')"
+              >
                 G2Plot组件
               </div>
-              <div class="code-tab-btn" @click="change('native')">
+              <div
+                class="code-tab-btn"
+                @click="change('native')"
+              >
                 原生组件
               </div>
-              <div class="code-tab-btn" @click="change('3DEchart')">
+              <div
+                class="code-tab-btn"
+                @click="change('3DEchart')"
+              >
                 3D组件
               </div>
             </div>
@@ -223,7 +237,7 @@ export default {
       const type = this.$route.query.type
       if (code) {
         getBizComponentInfo(code).then(data => {
-         if(type&&type==='g2plot'){
+          if (type && type === 'g2plot') {
             this.form = {
               ...data,
               name: data.name,
@@ -231,7 +245,7 @@ export default {
               settingContent: data.settingContent || defaultG2SettingContent,
               vueContent: data.vueContent || defaultG2VueContent
             }
-          }else if(type&&type==='echart'){
+          } else if (type && type === 'echart') {
             this.form = {
               ...data,
               name: data.name,
@@ -239,7 +253,7 @@ export default {
               settingContent: data.settingContent || defaultEchartsSettingContent,
               vueContent: data.vueContent || defaultEchartsVueContent
             }
-          }else{
+          } else {
             this.form = {
               ...data,
               name: data.name,
@@ -254,29 +268,31 @@ export default {
         })
       }
     },
-    changeTemp(val){
-      if(val=='g2plot'){
-        this.form.settingContent=defaultG2SettingContent
-        this.form.vueContent=defaultG2VueContent
-      }else if(val=='native'){
-        this.form.settingContent=defaultSettingContent
-        this.form.vueContent=defaultVueContent
-      }else if(val=='echart'){
-        this.form.settingContent= defaultEchartsSettingContent
-        this.form.vueContent=defaultEchartsVueContent
+    changeTemp (val) {
+      if (val == 'g2plot') {
+        this.form.settingContent = defaultG2SettingContent
+        this.form.vueContent = defaultG2VueContent
+      } else if (val == 'native') {
+        this.form.settingContent = defaultSettingContent
+        this.form.vueContent = defaultVueContent
+      } else if (val == 'echart') {
+        this.form.settingContent = defaultEchartsSettingContent
+        this.form.vueContent = defaultEchartsVueContent
       }
     },
-    change(val) {
-      if(val==='3DEchart') return this.$confirm('开发中。。。。', '提示', {
-        distinguishCancelAndClose: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        cancelButtonClass: 'cancel-btn',
-        type: 'warning',
-        customClass: 'bs-el-message-box'
-      }).then(() => {
-      }).catch((action) => {
-      })
+    change (val) {
+      if (val === '3DEchart') {
+        return this.$confirm('开发中。。。。', '提示', {
+          distinguishCancelAndClose: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          cancelButtonClass: 'cancel-btn',
+          type: 'warning',
+          customClass: 'bs-el-message-box'
+        }).then(() => {
+        }).catch((action) => {
+        })
+      }
       this.$confirm('确定替换为选中模板吗？未保存的代码将被覆盖！', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确定',

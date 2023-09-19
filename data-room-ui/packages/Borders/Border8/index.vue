@@ -15,13 +15,12 @@
 </template>
 <script>
 import Vue from 'vue'
-import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
 import { dataVMixins } from 'data-room-ui/js/mixins/dataVMixins'
 import { borderBox8 } from '@jiaminghi/data-view'
 Vue.use(borderBox8)
 export default {
   name: 'Border8',
-  mixins: [refreshComponentMixin, dataVMixins],
+  mixins: [dataVMixins],
   computed: {
     dur () {
       return this.config.customize.dur

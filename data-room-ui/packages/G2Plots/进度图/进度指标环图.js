@@ -3,11 +3,11 @@ const version = '2023071001'
 // 分类
 const category = 'RingProgress'
 // 标题
-const title = '进度环图'
+const title = '进度指标环图'
 // 类别， new Gauge()
 const chartType = 'RingProgress'
 // 用于标识，唯一，和文件夹名称一致
-const name = 'JinDuHuanTu'
+const name = 'JinDuZhiBiaoHuanTu'
 
 // 右侧配置项
 const setting = [
@@ -50,55 +50,55 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
-  {
-    label: '标签文本',
-    // 设置组件类型
-    type: 'input',
-    // 字段
-    field: 'statistic_title_content',
-    // 对应options中的字段
-    optionField: 'statistic.title.content',
-    value: '进度',
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
-    label: '标签字体颜色',
-    // 设置组件类型
-    type: 'colorPicker',
-    // 字段
-    field: 'statistic_title_style_fill',
-    // 对应options中的字段
-    optionField: 'statistic.title.style.fill',
-    value: 'rgba(133, 133, 133, 1)',
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
-    label: '标签字体大小',
-    // 设置组件类型
-    type: 'inputNumber',
-    // 字段
-    field: 'statistic_title_style_fontSize',
-    // 对应options中的字段
-    optionField: 'statistic.title.style.fontSize',
-    value: 20,
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
-    label: '标签位置',
-    // 设置组件类型
-    type: 'inputNumber',
-    // 字段
-    field: 'statistic_title_style_offsetY',
-    // 对应options中的字段
-    optionField: 'statistic.title.offsetY',
-    value: 0,
-    min: -100,
-    tabName: 'custom',
-    groupName: 'graph'
-  },
+  // {
+  //   label: '标签文本',
+  //   // 设置组件类型
+  //   type: 'input',
+  //   // 字段
+  //   field: 'statistic_title_content',
+  //   // 对应options中的字段
+  //   optionField: 'statistic.title.content',
+  //   value: '进度',
+  //   tabName: 'custom',
+  //   groupName: 'graph'
+  // },
+  // {
+  //   label: '标签字体颜色',
+  //   // 设置组件类型
+  //   type: 'colorPicker',
+  //   // 字段
+  //   field: 'statistic_title_style_fill',
+  //   // 对应options中的字段
+  //   optionField: 'statistic.title.style.fill',
+  //   value: 'rgba(133, 133, 133, 1)',
+  //   tabName: 'custom',
+  //   groupName: 'graph'
+  // },
+  // {
+  //   label: '标签字体大小',
+  //   // 设置组件类型
+  //   type: 'inputNumber',
+  //   // 字段
+  //   field: 'statistic_title_style_fontSize',
+  //   // 对应options中的字段
+  //   optionField: 'statistic.title.style.fontSize',
+  //   value: 20,
+  //   tabName: 'custom',
+  //   groupName: 'graph'
+  // },
+  // {
+  //   label: '标签位置',
+  //   // 设置组件类型
+  //   type: 'inputNumber',
+  //   // 字段
+  //   field: 'statistic_title_style_offsetY',
+  //   // 对应options中的字段
+  //   optionField: 'statistic.title.offsetY',
+  //   value: 0,
+  //   min: -100,
+  //   tabName: 'custom',
+  //   groupName: 'graph'
+  // },
   {
     label: '指标字体颜色',
     // 设置组件类型
@@ -163,11 +163,11 @@ const option = {
   innerRadius: 0.85,
   radius: 0.98,
   statistic: {
-    title: {
-      style: { fill: '#fafafa', fontSize: 28, lineHeight: 2 },
-      content: '进度',
-      offsetY: 0
-    },
+    // title: {
+    //   style: { fill: '#fafafa', fontSize: 28, lineHeight: 2 },
+    //   content: '进度',
+    //   offsetY: 0
+    // },
     content: {
       style: { fill: '#fafafa', fontSize: 28, lineHeight: 2 },
       offsetY: 0

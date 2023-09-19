@@ -42,12 +42,12 @@ const setting = [
   {
     label: '进度条颜色',
     // 设置组件类型
-    type: 'colorPicker',
+    type: 'gradual',
     // 字段
     field: 'frontColor',
     // 对应options中的字段
     optionField: 'frontColor',
-    value: '#4a7af4',
+    value: 'l(0) 0:#6B74E3 1:#38BBE5',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -87,8 +87,8 @@ const option = {
   percent: 0.8,
   barWidthRatio: 0.3,
   backColor: '#EEEEEE',
-  frontColor: '#4391F4',
-  color: ['#4a7af4', '#fff'],
+  frontColor: 'l(0) 0:#6B74E3 1:#38BBE5',
+  color: ['l(0) 0:#6B74E3 1:#38BBE5', '#fff'],
   progressStyle: {
     current: {
       style: {

@@ -11,7 +11,6 @@
       :id="chatId"
       style="width: 100%;height: 100%"
     />
-    <!--    <span style="color:#ffffff">{{config.option.data}}</span>-->
   </div>
 </template>
 <script>
@@ -81,7 +80,7 @@ export default {
   },
   beforeDestroy () {
     if (this.chart) {
-      this.chart.destroy()
+      this.chart.dispose()
     }
   },
   methods: {
@@ -212,7 +211,7 @@ export default {
       const { xData, yData } = this.getxDataAndYData(xField, yField, data, hasSeries)
       // const xData = [...new Set(data.map(item => item[xField]))]
       // const yData = data.map(item => item[yField])
-      const maxY = Math.max(...yData)
+      const maxY = Math.max(...yData) + Math.max(...yData) * 0.2
       // 生成阴影柱子的值
       const shadowData = Array.from({ length: xData.length }, () => maxY)
       option.xAxis = option.xAxis.map(item => {
@@ -226,6 +225,28 @@ export default {
         const seriesField = config.setting.find(item => item.optionField === 'seriesField')?.value
         const seriesFieldList = [...new Set(data.map(item => item[seriesField]))]
         option.series = []
+        const offsetArr = []
+        let index = 0
+        let barWidth = 10
+        if (seriesFieldList.length % 2 === 0) {
+          const length = seriesFieldList.length / 2
+          for (let i = 0; i < length; i++) {
+            const offsetX = (parseInt('10%') + parseInt('50%')) * (2 * i + 1)
+            offsetArr.push(offsetX)
+            offsetArr.unshift(-offsetX)
+          }
+        } else {
+          const length = Math.ceil(seriesFieldList.length / 2)
+          for (let i = 0; i < length; i++) {
+            if (i === 0) {
+              offsetArr.push(0)
+            } else {
+              const offsetX = (parseInt('20%') + parseInt('100%')) * i
+              offsetArr.push(offsetX)
+              offsetArr.unshift(-offsetX)
+            }
+          }
+        }
         for (const seriesFieldItem of seriesFieldList) {
           const seriesData = (data.filter(item => item[seriesField] === seriesFieldItem))?.map(item => item[yField])
           const seriesItem = [
@@ -234,8 +255,8 @@ export default {
               type: 'pictorialBar',
               tooltip: { show: false },
               symbol: 'diamond',
-              symbolSize: [30, 10],
-              symbolOffset: ['-60%', -5],
+              symbolSize: [barWidth, barWidth / 2],
+              symbolOffset: [offsetArr[index] + '%', -barWidth / 4],
               symbolPosition: 'end',
               z: 15,
               zlevel: 2,
@@ -246,7 +267,7 @@ export default {
               name: seriesFieldItem,
               type: 'bar',
               barGap: '20%',
-              barWidth: 30,
+              barWidth: barWidth,
               itemStyle: {
                 normal: {
                   color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -277,8 +298,8 @@ export default {
               type: 'pictorialBar',
               tooltip: { show: false },
               symbol: 'diamond',
-              symbolSize: [30, 10],
-              symbolOffset: ['-60%', 5],
+              symbolSize: [barWidth, barWidth / 2],
+              symbolOffset: [offsetArr[index] + '%', barWidth / 4],
               zlevel: 2,
               z: 15,
               color: 'rgb(2, 192, 255)',
@@ -292,7 +313,7 @@ export default {
               barGap: '20%',
               data: shadowData,
               zlevel: 1,
-              barWidth: 30,
+              barWidth: barWidth,
               itemStyle: {
                 normal: {
                   color: 'rgba(9, 44, 76,.8)'
@@ -304,8 +325,8 @@ export default {
               type: 'pictorialBar',
               tooltip: { show: false },
               symbol: 'diamond',
-              symbolSize: [30, 10],
-              symbolOffset: ['-60%', -5],
+              symbolSize: [barWidth, barWidth / 2],
+              symbolOffset: [offsetArr[index] + '%', -barWidth / 4],
               symbolPosition: 'end',
               z: 15,
               color: 'rgb(15, 69, 133)',
@@ -313,6 +334,7 @@ export default {
               data: shadowData
             }
           ]
+          index++
           option.series.push(...seriesItem)
         }
       } else {

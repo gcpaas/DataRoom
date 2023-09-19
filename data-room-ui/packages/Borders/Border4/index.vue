@@ -13,7 +13,6 @@
   </div>
 </template>
 <script>
-import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
 import { dataVMixins } from 'data-room-ui/js/mixins/dataVMixins'
 import DvBorderBox4 from '@jiaminghi/data-view/lib/components/borderBox4/src/main.vue'
 import '@jiaminghi/data-view/lib/components/borderBox4/src/main.css'
@@ -22,7 +21,7 @@ export default {
   components: {
     DvBorderBox4
   },
-  mixins: [refreshComponentMixin, dataVMixins],
+  mixins: [dataVMixins],
   computed: {
     reverse () {
       return this.config.customize.reverse
