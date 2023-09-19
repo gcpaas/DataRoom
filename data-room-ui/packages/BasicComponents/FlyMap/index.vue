@@ -332,7 +332,6 @@ export default {
 }
 
 .bs-design-wrap {
-  padding: 0 16px;
   position: relative;
 
   .button {
