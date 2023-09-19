@@ -121,7 +121,7 @@ export default {
         renderer: 'svg',
         // 仪表盘缩放状态下，点击准确
         supportCSSTransform: true,
-        ...config.option
+        ...config.option,
       })
       this.chart.render()
       this.registerEvent()

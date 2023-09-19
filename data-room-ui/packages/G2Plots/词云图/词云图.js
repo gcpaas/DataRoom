@@ -67,15 +67,6 @@ const setting = [
   },
   // 图例 legend
   // 边距 padding
-  {
-    label: '图表边距',
-    type: 'padding', // 设置组件类型
-    field: 'appendPadding', // 字段
-    optionField: 'appendPadding', // 对应options中的字段
-    value: [16, 16, 16, 16],
-    tabName: 'custom',
-    groupName: 'padding'
-  }
 ]
 
 // 模拟数据
@@ -591,7 +582,6 @@ const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
   data,
-  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   wordField: 'x',
   weightField: 'value',
   colorField: 'category',

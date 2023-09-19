@@ -24,6 +24,7 @@ import plotList, { getCustomPlots } from '../G2Plots/plotList'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
 import _ from 'lodash'
 import * as echarts from 'echarts'
+import CloneDeep from 'lodash-es/cloneDeep'
 
 export default {
   name: 'PlotCustomComponent',
@@ -118,8 +119,8 @@ export default {
      */
     newChart (config) {
       const chartDom = document.getElementById(this.chatId)
-      const myChart = echarts.init(chartDom)
-      config.option && myChart.setOption(config.option)
+      this.chart = echarts.init(chartDom)
+      config.option && this.chart.setOption(config.option)
     },
     /**
      * 注册事件
@@ -317,6 +318,7 @@ export default {
       } else {
         option.series = [
           {
+            id: 'barTopColor', // 用于区分是图表的什么部分
             type: 'pictorialBar', // 象形柱图
             symbol: 'diamond',
             symbolOffset: [0, '-50%'], // 上部菱形
@@ -333,20 +335,22 @@ export default {
                 color: '#27a7ce'
               }
             },
-            color: '#2DB1EF',
+            color: option.seriesCustom.barTopColor,
             data: yData
           },
           {
+            id: 'barBottomColor', // 用于区分是图表的什么部分
             type: 'pictorialBar',
             symbol: 'diamond',
             symbolSize: [30, 15],
             symbolOffset: ['0%', '50%'], // 下部菱形
             // symbolOffset: [0, 7], // 下部椭圆
             z: 12,
-            color: '#187dcb',
+            color: option.seriesCustom.barBottomColor,
             data: yData
           },
           {
+            id: 'barColor', // 用于区分是图表的什么部分
             type: 'bar',
             barWidth: 30,
             z: 10,
@@ -355,11 +359,11 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: '#115ba6'
+                    color: option.seriesCustom.barColor1
                   },
                   {
                     offset: 1,
-                    color: '#1db0dd'
+                    color: option.seriesCustom.barColor2
                   }
                 ]),
                 opacity: 0.8,
@@ -370,12 +374,13 @@ export default {
             data: yData
           },
           {
+            id: 'shadowColor', // 用于区分是图表的什么部分
             type: 'bar',
             barWidth: 30,
             xAxisIndex: 1,
             itemStyle: {
               normal: {
-                color: '#041133',
+                color: option.seriesCustom.shadowColor,
                 opacity: 0.8,
                 shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
                 shadowBlur: 0 // 阴影模糊值
@@ -390,6 +395,7 @@ export default {
             data: shadowData
           },
           {
+            id: 'shadowTopColor', // 用于区分是图表的什么部分
             type: 'pictorialBar', // 象形柱图
             xAxisIndex: 1,
             symbol: 'diamond',
@@ -407,7 +413,7 @@ export default {
                 color: '#27a7ce'
               }
             },
-            color: '#142f5a',
+            color: option.seriesCustom.shadowTopColor,
             tooltip: {
               show: false
             },
@@ -416,6 +422,30 @@ export default {
         ]
       }
       return option
+    },
+    // 对series里面的样式进行配置
+    seriesStyle (config) {
+      const _config = CloneDeep(config)
+      // 如果
+      // const ids = Object.keys(config.option.seriesCustom)
+      const ids = ['barTopColor', 'barBottomColor', 'shadowColor', 'shadowTopColor']
+      _config.option.series.forEach((item) => {
+        if (ids.includes(item.id)) {
+          item.color = _config.option.seriesCustom[item.id]
+        } else {
+          item.itemStyle.normal.color = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: _config.option.seriesCustom.barColor1
+            },
+            {
+              offset: 1,
+              color: _config.option.seriesCustom.barColor2
+            }
+          ])
+        }
+      })
+      return _config
     },
     // 组件的样式改变，返回改变后的config
     changeStyle (config, isUpdateTheme) {
@@ -432,6 +462,7 @@ export default {
           console.error(e)
         }
       }
+      config = this.seriesStyle(config)
       // 只有样式改变时更新主题配置，切换主题时不需要保存
       if (!isUpdateTheme) {
         config.theme = settingToTheme(_.cloneDeep(config), this.customTheme)
@@ -441,7 +472,7 @@ export default {
         this.changeActiveItemConfig(config)
       }
       if (this.chart) {
-        this.chart.update(config.option)
+        this.chart.setOption(config.option)
       }
       return config
     }

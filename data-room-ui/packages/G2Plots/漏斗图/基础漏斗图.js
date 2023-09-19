@@ -213,15 +213,6 @@ const setting = [
     groupName: 'legend'
   },
   // 边距 padding
-  {
-    label: '图表边距',
-    type: 'padding', // 设置组件类型
-    field: 'appendPadding', // 字段
-    optionField: 'appendPadding', // 对应options中的字段
-    value: [16, 16, 16, 16],
-    tabName: 'custom',
-    groupName: 'padding'
-  }
 ]
 
 // 模拟数据
@@ -251,7 +242,6 @@ const option = {
   dataKey: 'data',
   data,
   color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
-  appendPadding: [16, 16, 16, 16], // 设置图标的边距
   xField: 'stage',
   yField: 'number',
   dynamicHeight: false,

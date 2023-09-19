@@ -295,6 +295,11 @@ export default {
     setComponent (component) {
       // 根据component获取页面详情
       getScreenInfo(component.code).then(res => {
+        res.chartList.forEach((item) => {
+          if (!item.border) {
+            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[16,16,16,16]}
+          }
+        })
         // 给组件库导入的组件加入统一的前缀
         const randomStr = randomString(8)
         const pageInfo = handleResData(res)

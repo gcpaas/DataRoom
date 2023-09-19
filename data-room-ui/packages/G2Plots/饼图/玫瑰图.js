@@ -156,15 +156,6 @@ const setting = [
     groupName: 'legend'
   },
   // 边距 padding
-  {
-    label: '图表边距',
-    type: 'padding', // 设置组件类型
-    field: 'appendPadding', // 字段
-    optionField: 'appendPadding', // 对应options中的字段
-    value: [16, 16, 16, 16],
-    tabName: 'custom',
-    groupName: 'padding'
-  }
 ]
 
 // 模拟数据
@@ -216,7 +207,6 @@ const option = {
       fontWeight: 400
     }
   },
-  appendPadding: [16, 16, 16, 16] // 设置图标的边距
 }
 export default {
   category,

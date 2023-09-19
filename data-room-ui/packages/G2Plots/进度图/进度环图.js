@@ -135,15 +135,6 @@ const setting = [
     groupName: 'graph'
   },
   // 边距 padding
-  {
-    label: '图表边距',
-    type: 'padding', // 设置组件类型
-    field: 'appendPadding', // 字段
-    optionField: 'appendPadding', // 对应options中的字段
-    value: [0, 0, 0, 0],
-    tabName: 'custom',
-    groupName: 'padding'
-  }
 ]
 
 // 配置处理脚本
@@ -162,7 +153,6 @@ const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'percent',
   data,
-  appendPadding: [0, 0, 0, 0], // 设置图标的边距
   color1: '#F4664A',
   color2: '#d0d0d0',
   autoFit: true,

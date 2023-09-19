@@ -102,7 +102,7 @@ export const mapData = {
   name: '地图',
   title: '地图',
   icon: Icon.getNameList()[5],
-  border:{type:'',titleHeight:60,fontSize:30},
+  border:{type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[16,16,16,16]},
   className:
     'com.gccloud.dataroom.core.module.chart.components.ScreenMapChart',
   w: 800,

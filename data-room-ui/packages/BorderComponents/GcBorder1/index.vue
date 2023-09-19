@@ -9,6 +9,7 @@
       :key="updateKey"
     >
     <div class="element"
+    v-if="config.border.isTitle"
     :style="`
     color:${color};
     font-size:${config.border.fontSize}px;

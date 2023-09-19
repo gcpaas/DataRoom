@@ -13,6 +13,12 @@ export default {
   initLayout ({ commit, dispatch }, code) {
     return new Promise(resolve => {
       getScreenInfo(code).then(data => {
+        // 兼容边框配置
+        data.chartList.forEach((item) => {
+          if (!item.border) {
+            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[16,16,16,16]}
+          }
+        })
         const pageInfo = handleResData(data)
         // 改变页面数据
         commit('changePageInfo', pageInfo)
@@ -78,7 +84,7 @@ export function handleResData (data) {
   pageInfo.pageConfig.refreshConfig = pageInfo.pageConfig.refreshConfig || []
   let originalConfig = {}
   pageInfo.chartList.forEach((chart) => {
-    if (!['customComponent', 'remoteComponent'].includes(chart.type)) {
+    if (!['customComponent', 'remoteComponent', 'echartsComponent'].includes(chart.type)) {
       originalConfig = { option: { ...setModules[chart.type] }, ...dataModules[chart.type] }
       // 如果没有版本号，或者版本号修改了则需要进行旧数据兼容
       if ((!chart.version) || chart.version !== originalConfig.version) {
