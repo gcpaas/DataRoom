@@ -12,7 +12,6 @@
   </div>
 </template>
 <script>
-import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
 import { dataVMixins } from 'data-room-ui/js/mixins/dataVMixins'
 import DvBorderBox7 from '@jiaminghi/data-view/lib/components/borderBox7/src/main.vue'
 import '@jiaminghi/data-view/lib/components/borderBox7/src/main.css'
@@ -21,11 +20,11 @@ export default {
   components: {
     DvBorderBox7
   },
-  mixins: [refreshComponentMixin, dataVMixins],
+  mixins: [dataVMixins],
   computed: {},
   watch: {},
-  mounted () {},
-  methods: {}
+  mounted () { },
+  methods: { }
 }
 </script>
 

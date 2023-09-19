@@ -104,7 +104,10 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="不透明度">
+          <el-form-item
+            v-if="config.customize.colorType === 'gradient'"
+            label="不透明度"
+          >
             <el-input-number
               v-model="config.customize.opacity"
               class="bs-el-input-number"

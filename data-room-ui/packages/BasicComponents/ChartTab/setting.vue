@@ -23,6 +23,7 @@
               v-if="config.border"
               label-width="120px"
               :config="config.border"
+              :bigTitle='config.title'
             />
           </div>
       <SettingTitle>位置</SettingTitle>

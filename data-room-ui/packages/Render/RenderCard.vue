@@ -17,7 +17,7 @@
     <div
       class="render-item-wrap"
       :style="
-      `height:calc(100% - ${(config.border&&config.border.type&&config.border.isTitle)?config.border.titleHeight:0}px);
+      `height:calc(100% - ${(config.border&&config.title&&config.border.type&&config.border.type!='GcBorder11'&&config.border.isTitle)?config.border.titleHeight:0}px);
       padding-top:${config.border?config.border.padding[0]:0}px;
       padding-right:${config.border?config.border.padding[1]:0}px;
       padding-bottom:${config.border?config.border.padding[2]:0}px;

@@ -33,6 +33,7 @@
             <BorderSetting
               v-if="config.border"
               label-width="100px"
+              :bigTitle='config.title'
               :config="config.border"
             />
           </div>

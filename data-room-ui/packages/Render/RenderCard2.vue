@@ -24,6 +24,7 @@ import pcComponent from 'data-room-ui/js/utils/componentImport'
 import { dataInit, destroyedEvent } from 'data-room-ui/js/utils/eventBus'
 import CustomComponent from '../PlotRender/index.vue'
 import Svgs from '../Svgs/index.vue'
+import EchartsComponent from '../EchartsRender/index.vue'
 import RemoteComponent from 'data-room-ui/RemoteComponents/index.vue'
 import cloneDeep from 'lodash/cloneDeep'
 const components = {}
@@ -39,7 +40,8 @@ export default {
     ...components,
     CustomComponent,
     Svgs,
-    RemoteComponent
+    RemoteComponent,
+    EchartsComponent
   },
   props: {
     // 卡片的属性

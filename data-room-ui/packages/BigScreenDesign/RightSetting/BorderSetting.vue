@@ -72,53 +72,55 @@
       />
     </el-form-item>
     <div v-if="config.type">
-    <el-form-item
-      :label-width="labelWidth"
-      label="是否显示标题"
-    >
-      <el-switch
-          v-model="config.isTitle"
-          class="bs-el-switch"
-          :active-value="true"
-          :inactive-value="false"
-        />
-    </el-form-item>
-    <el-form-item
-      v-if="config.isTitle"
-      :label-width="labelWidth"
-      label="标题高度"
-    >
-      <el-input-number
-        v-model="config.titleHeight"
-        class="bs-el-input-number"
-        :min="0"
-        :step="1"
-      />
-    </el-form-item>
-    <el-form-item
-      v-if="config.isTitle"
-      :label-width="labelWidth"
-      label="标题字体大小"
-    >
-      <el-input-number
-        v-model="config.fontSize"
-        class="bs-el-input-number"
-        :min="0"
-        :step="1"
-      />
-    </el-form-item>
-    <el-form-item
-      v-if="config.isTitle"
-      :label-width="labelWidth"
-      label="标题颜色"
-    >
-      <el-color-picker
-          v-model="config.fontColor"
-          popper-class="bs-el-color-picker"
-          class="bs-el-color-picker"
-          show-alpha
-        />
-    </el-form-item>
+      <div v-if="bigTitle&&config.type!='GcBorder11'">
+         <el-form-item
+          :label-width="labelWidth"
+          label="是否显示标题"
+        >
+          <el-switch
+              v-model="config.isTitle"
+              class="bs-el-switch"
+              :active-value="true"
+              :inactive-value="false"
+            />
+        </el-form-item>
+        <el-form-item
+          v-if="config.isTitle"
+          :label-width="labelWidth"
+          label="标题高度"
+        >
+          <el-input-number
+            v-model="config.titleHeight"
+            class="bs-el-input-number"
+            :min="0"
+            :step="1"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.isTitle"
+          :label-width="labelWidth"
+          label="标题字体大小"
+        >
+          <el-input-number
+            v-model="config.fontSize"
+            class="bs-el-input-number"
+            :min="0"
+            :step="1"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.isTitle"
+          :label-width="labelWidth"
+          label="标题颜色"
+        >
+          <el-color-picker
+              v-model="config.fontColor"
+              popper-class="bs-el-color-picker"
+              class="bs-el-color-picker"
+              show-alpha
+            />
+        </el-form-item>
+      </div>
     <div
       v-for="(setting, settingIndex) in list"
       :key="settingIndex+1"
@@ -250,6 +252,10 @@ export default {
     ColorSelect
   },
   props: {
+    bigTitle:{
+      type: String,
+      default: ''
+    },
     config: {
       type: Object,
       default: () => ({
@@ -296,6 +302,11 @@ export default {
       for(let [key,value] of plotList){
         if(value.type==this.config.type){
           arr=value.setting
+          value.setting.forEach((item)=>{
+            if(item.value){
+              this.config[item.field]=this.config[item.field]||item.value
+            }
+          })
         }
       }
       return arr

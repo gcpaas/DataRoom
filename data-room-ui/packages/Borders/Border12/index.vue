@@ -12,7 +12,6 @@
   </div>
 </template>
 <script>
-import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
 import { dataVMixins } from 'data-room-ui/js/mixins/dataVMixins'
 import DvBorderBox12 from '@jiaminghi/data-view/lib/components/borderBox12/src/main.vue'
 import '@jiaminghi/data-view/lib/components/borderBox12/src/main.css'
@@ -21,7 +20,7 @@ export default {
   components: {
     DvBorderBox12
   },
-  mixins: [refreshComponentMixin, dataVMixins],
+  mixins: [dataVMixins],
   computed: {
     color () {
       return this.config.customize.borderMainColor ||

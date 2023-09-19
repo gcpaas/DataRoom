@@ -25,6 +25,7 @@
               v-if="config.border"
               label-width="100px"
               :config="config.border"
+              :bigTitle='config.title'
             />
           </div>
           <SettingTitle>基础</SettingTitle>

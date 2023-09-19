@@ -1,14 +1,10 @@
 import * as echarts from 'echarts'
 // 配置版本号
-const version = '2023071001'
-// 分类
-const category = 'Column'
+const version = '2023091901'
 // 标题
 const title = '3D固定柱状图'
-// 类别， new Line()
-const chartType = 'Column'
 // 用于标识，唯一，和文件夹名称一致
-const name = 'FenZuZhuZhuangTu'
+const name = '3DGuDingZhuZhuangTu'
 
 // 右侧配置项
 const setting = [
@@ -96,7 +92,6 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   }
-
 ]
 
 // 配置处理脚本
@@ -107,9 +102,9 @@ const dataHandler = ''
 
 // 图表配置 new Line('domName', option)
 
-const xData = ['本年话务总量', '本年人工话务量', '每万客户呼入量', '本年话务总量', '本年人工话务量', '每万客户呼入量']
-const yData = [300, 1230, 425, 300, 1230, 425]
-const maxData = [1500, 1500, 1500, 1500, 1500, 1500]
+const xData = ['本年话务总量', '本年人工话务量', '每万客户呼入量', '本年话务总量']
+const yData = [300, 1230, 425, 300]
+const maxData = [1500, 1500, 1500, 1500]
 const option = {
   animation: false,
   tooltip: {
@@ -333,10 +328,8 @@ const option = {
   ]
 }
 export default {
-  category,
   version,
   title,
-  chartType,
   name,
   option,
   setting,

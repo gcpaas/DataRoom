@@ -5,10 +5,13 @@
   >
      <dv-border-box-11
       :id="'dataV' + config.code"
-      :background-color="backgroundColor"
+      :background-color="(config.border.gradientColor0||config.border.gradientColor1)?`url(#${borderBgId})`:'transparent'"
+      :color='borderColor'
       :key="updateKey"
+      :title="config.border.title"
+      :title-width="config.border.titleWidth"
     >
-    <div class="element"
+    <!-- <div class="element"
     v-if="config.border.isTitle"
     :style="`
     color:${color};
@@ -17,7 +20,7 @@
     height:${config.border.titleHeight};
     padding:0 0 0 20px`"
     >
-    {{config.title}}</div>
+    {{config.title}}</div> -->
     </dv-border-box-11>
   </div>
 </template>
@@ -40,26 +43,111 @@ export default {
   },
   data () {
     return {
+    borderBgId: `borderBg${this.config.code}`
     }
   },
   computed: {
+    borderColor () {
+      return this.config.border.borderMainColor ||
+        this.config.border.borderSecondaryColor
+        ? [
+            this.config.border.borderMainColor,
+            this.config.border.borderSecondaryColor
+          ]
+        : null
+    },
     color () {
       return this.config.border.fontColor ? this.config.border.fontColor
         : '#fff'
     },
-    backgroundColor () {
-      return this.config.border.backgroundColor
-        ? this.config.border.backgroundColor
-        : 'transparent'
-    },
-    // colorType () {
-    //   return this.config.border.colorType
-    // }
   },
   watch: {
+    updateKey:{
+      handler (val) {
+        this.$nextTick(()=>{
+          this.changeColor()
+        })
+      },
+      deep: true
+    },
+    'config.border.gradientColor0':{
+         handler (val) {
+          this.changeColor()
+      },immediate: true
+    },
+    'config.border.gradientColor1':{
+         handler (val) {
+          this.changeColor()
+      },immediate: true
+    },
+    'config.border.gradientDirection':{
+         handler (val) {
+          this.changeColor()
+      },immediate: true
+    },
+    'config.border.opacity':{
+         handler (val) {
+          this.changeColor()
+      },immediate: true
+    }
   },
-  mounted () {},
-  methods: {}
+  mounted () {
+    this.changeColor()
+  },
+  methods: {
+    changeColor(){
+      if(!this.config.border.opacity){
+              this.config.border.opacity=100
+            }
+      if(!this.config.border.gradientColor0&&!this.config.border.gradientColor1) return
+      if (document.querySelector(`#dataV${this.config.code}`)) {
+          const borderElement = document.querySelector(`#dataV${this.config.code}`).querySelector('.border') || document.querySelector(`#dataV${this.config.code}`)?.querySelector('.dv-border-svg-container')
+          if (borderElement) {
+              borderElement.style.opacity = (this.config.border.opacity / 100)
+              let gradientDirection = ''
+              switch (this.config.border.gradientDirection) {
+                case 'to right':
+                  gradientDirection = 'x1="0%" y1="0%" x2="100%" y2="0%"'
+                  break
+                case 'to left':
+                  gradientDirection = 'x1="100%" y1="0%" x2="0%" y2="0%"'
+                  break
+                case 'to bottom':
+                  gradientDirection = 'x1="0%" y1="0%" x2="0%" y2="100%"'
+                  break
+                case 'to top':
+                  gradientDirection = 'x1="0%" y1="100%" x2="0%" y2="0%"'
+                  break
+                case 'to bottom right':
+                  gradientDirection = 'x1="0%" y1="0%" x2="100%" y2="100%"'
+                  break
+                case 'to bottom left':
+                  gradientDirection = 'x1="100%" y1="0%" x2="0%" y2="100%"'
+                  break
+                case 'to top right':
+                  gradientDirection = 'x1="0%" y1="100%" x2="100%" y2="0%"'
+                  break
+                case 'to top left':
+                  gradientDirection = 'x1="100%" y1="100%" x2="0%" y2="0%"'
+                  break
+                default:
+                  gradientDirection = 'x1="0%" y1="0%" x2="100%" y2="0%"'
+                  break
+              }
+              // 在目标元素内的第一个位置插入 <defs> 和其中的内容
+              borderElement.insertAdjacentHTML(
+                'afterbegin',
+                `<defs>
+                      <linearGradient id="${this.borderBgId}" ${gradientDirection}>
+                        <stop offset="0%" stop-color="${this.config.border.gradientColor0?this.config.border.gradientColor0:this.config.border.gradientColor1}" />
+                        <stop offset="100%" stop-color="${this.config.border.gradientColor1?this.config.border.gradientColor1:this.config.border.gradientColor0}" />
+                      </linearGradient>
+                </defs>`
+              )
+          }
+        }
+    }
+  }
 }
 </script>
 
