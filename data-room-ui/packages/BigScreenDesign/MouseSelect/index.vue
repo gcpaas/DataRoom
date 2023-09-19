@@ -1,5 +1,6 @@
 <template>
   <div
+    class="mouse-select-wrap"
     style="position: relative; user-select: none;"
     @mousedown="handleMouseDown"
     @mousemove="handleMouseMove"
@@ -168,7 +169,13 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
+.mouse-select-wrap{
+  width: 200%;
+  height: 200%;
+  margin: -50px;
+  padding: 50px;
+}
 .notSelect {
   user-select: none;
   pointer-events: none;
