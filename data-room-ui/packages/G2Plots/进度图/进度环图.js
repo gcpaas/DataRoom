@@ -41,12 +41,12 @@ const setting = [
   {
     label: '进度条颜色',
     // 设置组件类型
-    type: 'colorPicker',
+    type: 'gradual',
     // 字段
     field: 'color1',
     // 对应options中的字段
     optionField: 'color1',
-    value: 'rgba(67, 145, 244, 1)',
+    value: 'l(0) 0:#6B74E3 1:#38BBE5',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -153,11 +153,11 @@ const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'percent',
   data,
-  color1: '#F4664A',
+  color1: 'l(0) 0:#6B74E3 1:#38BBE5',
   color2: '#d0d0d0',
   autoFit: true,
   percent: 0.6,
-  color: ['#F4664A', '#d0d0d0'],
+  color: ['l(0) 0:#6B74E3 1:#38BBE5', '#d0d0d0'],
   innerRadius: 0.85,
   radius: 0.98,
   statistic: {
