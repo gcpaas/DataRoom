@@ -74,6 +74,22 @@ export default {
           this.changeStyle(this.config, true)
         }
       }
+    },
+    'config.w': {
+      handler (val) {
+        if (val) {
+          console.log('this.config',this.config);
+          const chartDom = document.getElementById(this.chatId)
+          this.observeChart(chartDom, this.chart, this.config.option)
+        }
+      }
+    },
+    'config.h': {
+      handler (val) {
+        if (val) {
+          this.newChart(this.config)
+        }
+      }
     }
   },
   mounted () {
@@ -117,9 +133,33 @@ export default {
      * 构造chart
      */
     newChart (config) {
+      // console.log('重新渲染图片');
       const chartDom = document.getElementById(this.chatId)
       this.chart = echarts.init(chartDom)
       config.option && this.chart.setOption(config.option)
+    },
+    /**
+     * 控制底部阴影大小
+     */
+    observeChart (container, myChart, option) {
+      const resizeObserver = new ResizeObserver(entries => {
+        myChart.resize()
+        // entries[0].contentRect.width:此时监测的盒子的宽度
+        // entries[0].contentRect.height:此时监测的盒子的高度
+        const width = entries[0].contentRect.width
+        const height = entries[0].contentRect.height
+        // 调整长方形的大小
+        option.graphic.children[0].shape.width = width * 0.9
+        // 调整多边形的大小
+        option.graphic.children[1].shape.points = [
+          [width / 10, -height / 6],
+          [width - width / 6, -height / 6],
+          [width * 0.9, 0],
+          [0, 0]
+        ]
+        myChart.setOption(option)
+      })
+      resizeObserver.observe(container)
     },
     /**
      * 注册事件
@@ -160,6 +200,7 @@ export default {
       return config
     },
     dataFormatting (config, data) {
+      console.log('config', config)
       // 数据返回成功则赋值
       if (data.success) {
         data = data.data
@@ -471,6 +512,7 @@ export default {
     },
     // 组件的样式改变，返回改变后的config
     changeStyle (config, isUpdateTheme) {
+      console.log('組件樣式改變',config)
       config = { ...this.config, ...config }
       config = this.transformSettingToOption(config, 'custom')
       // 这里定义了option和setting是为了保证在执行eval时,optionHandler、dataHandler里面可能会用到，
