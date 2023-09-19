@@ -91,10 +91,11 @@ const setting = [
     // 设置组件类型
     type: 'inputNumber',
     // 字段
-    field: 'statistic_title_style_lineHeight',
+    field: 'statistic_title_style_offsetY',
     // 对应options中的字段
-    optionField: 'statistic.title.style.lineHeight',
-    value: 2,
+    optionField: 'statistic.title.offsetY',
+    value: 0,
+    min: -100,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -127,13 +128,14 @@ const setting = [
     // 设置组件类型
     type: 'inputNumber',
     // 字段
-    field: 'statistic_content_style_lineHeight',
+    field: 'statistic_content_style_offsetY',
     // 对应options中的字段
-    optionField: 'statistic.content.style.lineHeight',
-    value: 2,
+    optionField: 'statistic.content.offsetY',
+    value: 0,
+    min: -100,
     tabName: 'custom',
     groupName: 'graph'
-  },
+  }
   // 边距 padding
 ]
 
@@ -163,10 +165,12 @@ const option = {
   statistic: {
     title: {
       style: { fill: '#fafafa', fontSize: 28, lineHeight: 2 },
-      content: '进度'
+      content: '进度',
+      offsetY: 0
     },
     content: {
-      style: { fill: '#fafafa', fontSize: 28, lineHeight: 2 }
+      style: { fill: '#fafafa', fontSize: 28, lineHeight: 2 },
+      offsetY: 0
     }
   }
 }
