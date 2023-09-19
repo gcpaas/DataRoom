@@ -11,7 +11,6 @@
       :id="chatId"
       style="width: 100%;height: 100%"
     />
-    <!--    <span style="color:#ffffff">{{config.option.data}}</span>-->
   </div>
 </template>
 <script>
@@ -81,7 +80,7 @@ export default {
   },
   beforeDestroy () {
     if (this.chart) {
-      this.chart.destroy()
+      this.chart.dispose()
     }
   },
   methods: {
@@ -212,7 +211,7 @@ export default {
       const { xData, yData } = this.getxDataAndYData(xField, yField, data, hasSeries)
       // const xData = [...new Set(data.map(item => item[xField]))]
       // const yData = data.map(item => item[yField])
-      const maxY = Math.max(...yData)
+      const maxY = Math.max(...yData) + Math.max(...yData) * 0.2
       // 生成阴影柱子的值
       const shadowData = Array.from({ length: xData.length }, () => maxY)
       option.xAxis = option.xAxis.map(item => {
