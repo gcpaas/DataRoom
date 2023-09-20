@@ -127,6 +127,6 @@ export default {
   border: 1px dashed var(--bs-el-color-primary);
 }
 .active {
-  border: 1px solid var(--bs-el-color-primary);
+  border: 1px solid #ff40e2;
 }
 </style>
