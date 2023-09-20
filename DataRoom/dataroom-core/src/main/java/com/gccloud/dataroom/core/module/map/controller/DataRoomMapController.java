@@ -1,5 +1,6 @@
 package com.gccloud.dataroom.core.module.map.controller;
 
+import com.gccloud.common.permission.ApiPermission;
 import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.common.vo.R;
 import com.gccloud.dataroom.core.module.map.dto.DataRoomMapRepeatDTO;
@@ -10,6 +11,7 @@ import com.gccloud.dataroom.core.module.map.dto.DataRoomMapDTO;
 import com.gccloud.dataroom.core.module.map.dto.MapSearchDTO;
 import com.gccloud.dataroom.core.module.map.entity.DataRoomMapEntity;
 import com.gccloud.dataroom.core.module.map.service.IDataRoomMapService;
+import com.gccloud.dataroom.core.permission.Permission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiSort;
@@ -37,6 +39,7 @@ public class DataRoomMapController {
     private IDataRoomMapService dataRoomMapService;
 
 
+    @ApiPermission(permissions = {Permission.Map.VIEW})
     @GetMapping("/list")
     @ApiOperation(value = "列表", position = 10, notes = "地图数据列表查询", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<List<DataRoomMapVO>> list(MapSearchDTO searchDTO) {
@@ -44,7 +47,7 @@ public class DataRoomMapController {
         return R.success(list);
     }
 
-
+    @ApiPermission(permissions = {Permission.Map.ADD})
     @PostMapping("/add")
     @ApiOperation(value = "添加", position = 20, notes = "添加地图数据", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> add(@RequestBody DataRoomMapDTO mapDTO) {
@@ -52,6 +55,7 @@ public class DataRoomMapController {
         return R.success(id);
     }
 
+    @ApiPermission(permissions = {Permission.Map.UPDATE})
     @PostMapping("/update")
     @ApiOperation(value = "修改", position = 30, notes = "修改地图数据", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Void> update(@RequestBody DataRoomMapDTO mapDTO) {
@@ -59,6 +63,7 @@ public class DataRoomMapController {
         return R.success();
     }
 
+    @ApiPermission(permissions = {Permission.Map.DELETE})
     @PostMapping("/delete/{id}")
     @ApiOperation(value = "删除", position = 40, notes = "删除地图数据", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Void> delete(@PathVariable String id) {
@@ -66,6 +71,7 @@ public class DataRoomMapController {
         return R.success();
     }
 
+    @ApiPermission(permissions = {Permission.Map.DELETE})
     @PostMapping("/cascadingDelete/{id}")
     @ApiOperation(value = "级联删除", position = 50, notes = "级联删除地图数据", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Void> cascadingDelete(@PathVariable String id) {
@@ -73,6 +79,7 @@ public class DataRoomMapController {
         return R.success();
     }
 
+    @ApiPermission(permissions = {Permission.Map.VIEW})
     @GetMapping("/getMapChildFromGeoJson/{id}")
     @ApiOperation(value = "根据地图id解析json中的子级", position = 60, notes = "根据地图id解析json中的子级", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<List<MapChildVO>> getMapChildFromGeoJson(@PathVariable String id) {
@@ -80,7 +87,7 @@ public class DataRoomMapController {
         return R.success(list);
     }
 
-
+    @ApiPermission(permissions = {Permission.Map.VIEW})
     @GetMapping("/info/{id}")
     @ApiOperation(value = "详情", position = 70, notes = "地图数据详情", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<DataRoomMapVO> info(@PathVariable String id) {
@@ -89,7 +96,7 @@ public class DataRoomMapController {
         return R.success(vo);
     }
 
-
+    @ApiPermission(permissions = {Permission.Map.VIEW})
     @GetMapping("/data/{parentId}/{code}")
     @ApiOperation(value = "数据", position = 80, notes = "地图数据数据", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<DataRoomMapDataVO> data(@PathVariable String parentId, @PathVariable String code) {
@@ -109,7 +116,7 @@ public class DataRoomMapController {
         return R.success(vo);
     }
 
-
+    @ApiPermission(permissions = {Permission.Map.UPDATE})
     @PostMapping("/upload")
     @ApiOperation(value = "上传", position = 90, notes = "上传地图数据", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Void> upload(@RequestBody DataRoomMapDTO mapDTO) {
@@ -118,6 +125,7 @@ public class DataRoomMapController {
     }
 
 
+    @ApiPermission(permissions = {Permission.Map.VIEW})
     @PostMapping("/repeat")
     @ApiOperation(value = "重复", position = 100, notes = "地图数据重复校验", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Boolean> repeat(@RequestBody DataRoomMapRepeatDTO mapDTO) {
@@ -125,7 +133,7 @@ public class DataRoomMapController {
         return R.success(repeat);
     }
 
-
+    @ApiPermission(permissions = {Permission.Map.VIEW})
     @GetMapping("/tree/{level}")
     @ApiOperation(value = "树", position = 110, notes = "地图数据树", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<List<DataRoomMapVO>> tree(@PathVariable String level) {

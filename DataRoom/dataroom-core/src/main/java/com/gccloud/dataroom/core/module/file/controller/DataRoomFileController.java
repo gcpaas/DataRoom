@@ -1,5 +1,6 @@
 package com.gccloud.dataroom.core.module.file.controller;
 
+import com.gccloud.common.permission.ApiPermission;
 import com.gccloud.dataroom.core.module.file.dto.FileSearchDTO;
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomFileService;
@@ -9,6 +10,7 @@ import com.gccloud.common.controller.SuperController;
 import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.common.vo.PageVO;
 import com.gccloud.common.vo.R;
+import com.gccloud.dataroom.core.permission.Permission;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +38,7 @@ public class DataRoomFileController extends SuperController {
     @Resource
     private IDataRoomFileService fileService;
 
+    @ApiPermission(permissions = {Permission.File.VIEW})
     @GetMapping(value = {"", "/"})
     @ApiOperation(value = "列表", position = 10, notes = "分页查询文件", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiImplicitParams({
@@ -49,6 +52,7 @@ public class DataRoomFileController extends SuperController {
         return R.success(pageVO);
     }
 
+    @ApiPermission(permissions = {Permission.File.UPLOAD})
     @PostMapping("/upload")
     @ApiOperation(value = "上传", notes = "上传", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<DataRoomFileEntity> upload(@RequestParam("file") MultipartFile file, @RequestParam(value = "module", required = false) String module, HttpServletResponse response, HttpServletRequest request) {
@@ -63,12 +67,14 @@ public class DataRoomFileController extends SuperController {
         return R.success(entity);
     }
 
+    @ApiPermission(permissions = {Permission.File.DOWNLOAD})
     @PostMapping("/download/{id}")
     @ApiOperation(value = "下载", notes = "下载资源", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void download(@PathVariable("id") String id, HttpServletResponse response, HttpServletRequest request) {
         sysOssService.download(id, response, request);
     }
 
+    @ApiPermission(permissions = {Permission.File.VIEW})
     @GetMapping("/getAllFileSuffix")
     @ApiOperation(value = "获取所有文件后缀名", notes = "获取所有文件后缀名", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public R<List<String>> getAllFileSuffix() {
@@ -78,7 +84,7 @@ public class DataRoomFileController extends SuperController {
     	return R.success(extensions);
     }
 
-
+    @ApiPermission(permissions = {Permission.File.DELETE})
     @PostMapping("/delete/{id}")
     @ApiOperation(value = "删除", notes = "删除", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public R<Boolean> delete(@PathVariable("id") String id) {

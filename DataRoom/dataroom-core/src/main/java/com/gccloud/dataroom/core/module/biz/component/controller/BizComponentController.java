@@ -1,10 +1,12 @@
 package com.gccloud.dataroom.core.module.biz.component.controller;
 
+import com.gccloud.common.permission.ApiPermission;
 import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentSearchDTO;
 import com.gccloud.dataroom.core.module.biz.component.entity.BizComponentEntity;
 import com.gccloud.dataroom.core.module.biz.component.service.IBizComponentService;
 import com.gccloud.common.vo.PageVO;
 import com.gccloud.common.vo.R;
+import com.gccloud.dataroom.core.permission.Permission;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -28,7 +30,7 @@ public class BizComponentController {
     @Resource
     private IBizComponentService bizComponentService;
 
-
+    @ApiPermission(permissions = {Permission.Component.VIEW})
     @GetMapping("/page")
     @ApiOperation(value = "分页", position = 10, notes = "分页查询业务组件", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiImplicitParams({
@@ -41,6 +43,7 @@ public class BizComponentController {
         return R.success(page);
     }
 
+    @ApiPermission(permissions = {Permission.Component.ADD})
     @PostMapping("/add")
     @ApiOperation(value = "新增", notes = "新增", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> add(@ApiParam(name = "新增", value = "传入新增的业务条件", required = true) @RequestBody BizComponentEntity entity) {
@@ -49,6 +52,7 @@ public class BizComponentController {
     }
 
 
+    @ApiPermission(permissions = {Permission.Component.UPDATE})
     @PostMapping("/update")
     @ApiOperation(value = "修改", notes = "修改", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Void> update(@ApiParam(name = "修改", value = "传入修改的业务条件", required = true) @RequestBody BizComponentEntity entity) {
@@ -56,6 +60,7 @@ public class BizComponentController {
         return R.success();
     }
 
+    @ApiPermission(permissions = {Permission.Component.ADD})
     @PostMapping("/copy/{code}")
     @ApiOperation(value = "复制", notes = "复制", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> copy( @PathVariable String code) {
@@ -63,6 +68,7 @@ public class BizComponentController {
         return R.success(newCode);
     }
 
+    @ApiPermission(permissions = {Permission.Component.DELETE})
     @PostMapping("/delete/{id}")
     @ApiOperation(value = "删除", notes = "删除", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Void> delete(@ApiParam(name = "删除", value = "传入删除的业务条件", required = true) @PathVariable String id) {
@@ -70,6 +76,7 @@ public class BizComponentController {
         return R.success();
     }
 
+    @ApiPermission(permissions = {Permission.Component.VIEW})
     @GetMapping("/info/{code}")
     @ApiOperation(value = "根据编码获取组件", notes = "根据编码获取组件", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<BizComponentEntity> getInfoByCode(@ApiParam(name = "根据编码获取组件", value = "传入根据编码获取组件的业务条件", required = true) @PathVariable String code) {
@@ -77,12 +84,11 @@ public class BizComponentController {
         return R.success(entity);
     }
 
+    @ApiPermission(permissions = {Permission.Component.VIEW})
     @PostMapping("/name/repeat")
     @ApiOperation(value = "名称查重", notes = "名称查重", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Boolean> nameRepeat(@RequestBody BizComponentEntity entity) {
         return R.success(bizComponentService.checkName(entity.getId(), entity.getName()));
     }
-
-
 
 }
