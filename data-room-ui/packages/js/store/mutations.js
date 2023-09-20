@@ -70,7 +70,7 @@ export default {
       state.pageInfo.chartList = state.pageInfo.chartList?.map(chart => {
         return {
           ...chart,
-          group: ''
+          group: chart.group === 'tempGroup' ? '' : chart.group
         }
       })
     }

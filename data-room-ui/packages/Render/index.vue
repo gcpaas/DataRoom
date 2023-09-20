@@ -11,6 +11,7 @@
     }"
     @drop="drop($event)"
     @dragover.prevent
+    @click="handleClickOutside($event)"
   >
     <vdr
       v-for="chart in chartList"
@@ -165,8 +166,25 @@ export default {
       'resetPresetLine',
       'changeGridShow',
       'setPresetLine',
-      'saveTimeLine'
+      'saveTimeLine',
+      'changeActiveCodes'
     ]),
+    handleClickOutside (event) {
+      // 获取被点击的元素
+      const clickedElement = event.target
+      const elementToHighlights = []
+      // 获取需要高亮的元素的引用
+      for (const code of this.activeCodes) {
+        elementToHighlights.push(this.$refs['RenderCard' + code][0])
+      }
+
+      const isElementInHighlights = elementToHighlights.some((elementToHighlight) => {
+        return elementToHighlight?.$el?.contains(clickedElement)
+      })
+      if (!isElementInHighlights) {
+        this.changeActiveCodes([])
+      }
+    },
     // 切换主题时针对远程组件触发样式修改的方法
     styleHandler (config) {
       this.$nextTick(() => {
