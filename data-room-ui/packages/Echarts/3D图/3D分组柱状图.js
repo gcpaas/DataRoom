@@ -101,10 +101,12 @@ const optionHandler = ''
 const dataHandler = ''
 
 // 图表配置 new Line('domName', option)
-
-const xData = ['本年话务总量', '本年人工话务量', '每万客户呼入量', '本年话务总量']
-const yData = [300, 1230, 425, 300]
-const maxData = [1500, 1500, 1500, 1500]
+const xData = ['本年话务总量', '本年人工话务量', '每万客户呼入量', '每万客户呼入量'
+]
+const yData1 = [300, 1230, 425, 1200]
+const yData2 = [400, 400, 400, 1200]
+const maxData1 = [1500, 1500, 1500, 1500]
+const maxData2 = [1500, 1500, 1500, 1500]
 const option = {
   animation: false,
   tooltip: {
@@ -224,46 +226,37 @@ const option = {
     shadowTopColor: '#142f5a'
   },
   series: [
-    // 顶部
     {
-      id: 'barTopColor', // 用于区分是图表的什么部分
-      type: 'pictorialBar', // 象形柱图
-      symbol: 'diamond',
-      symbolOffset: [0, '-50%'], // 上部菱形
-      symbolSize: [30, 15],
-      // symbolOffset: [0, -6], // 上部椭圆
-      symbolPosition: 'end',
-      z: 12,
-      label: {
-        normal: {
-          show: true,
-          position: 'top',
-          fontSize: 15,
-          fontWeight: 'bold',
-          color: '#27a7ce'
-        }
-      },
-      color: '#2DB1EF',
-      data: yData
-    },
-    // 底部
-    {
-      id: 'barBottomColor', // 用于区分是图表的什么部分
+      name: 'y1柱子顶部',
       type: 'pictorialBar',
+      tooltip: { show: false },
       symbol: 'diamond',
-      symbolSize: [30, 15],
-      symbolOffset: ['0%', '50%'], // 下部菱形
-      // symbolOffset: [0, 7], // 下部椭圆
-      z: 12,
-      color: '#187dcb',
-      data: yData
+      symbolSize: [30, 10],
+      symbolOffset: ['-60%', -5],
+      symbolPosition: 'end',
+      z: 15,
+      zlevel: 2,
+      color: 'rgba(2, 175, 249,1)',
+      data: yData1
     },
-    // 柱子
     {
-      id: 'barColor', // 用于区分是图表的什么部分
+      name: 'y2柱子顶部',
+      type: 'pictorialBar',
+      tooltip: { show: false },
+      symbol: 'diamond',
+      symbolSize: [30, 10],
+      symbolOffset: ['60%', -5],
+      symbolPosition: 'end',
+      z: 15,
+      zlevel: 2,
+      color: 'rgba(45, 206, 177,0.9)',
+      data: yData2
+    },
+    {
+      name: 'y1',
       type: 'bar',
-      barWidth: 30,
-      z: 10,
+      barGap: '20%',
+      30: 30,
       itemStyle: {
         normal: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -281,16 +274,30 @@ const option = {
           shadowBlur: 0 // 阴影模糊值
         }
       },
-      data: yData
+      label: {
+        show: false
+      },
+      zlevel: 2,
+      z: 12,
+      data: yData1
     },
-    // 阴影柱子
     {
-      id: 'shadowColor', // 用于区分是图表的什么部分
+      name: 'y2',
       type: 'bar',
-      barWidth: 30,
-      barGap: '-100%',
+      // barGap: '60%',
+      30: 30,
       itemStyle: {
         normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: '#73eccd'
+            },
+            {
+              offset: 1,
+              color: '#4dd9e5'
+            }
+          ]),
           opacity: 0.8,
           shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
           shadowBlur: 0 // 阴影模糊值
@@ -299,31 +306,89 @@ const option = {
       label: {
         show: false
       },
-      color: '#041133',
-      data: maxData
-    },
-    // 阴影顶部
-    {
-      id: 'shadowTopColor', // 用于区分是图表的什么部分
-      type: 'pictorialBar', // 象形柱图
-      symbol: 'diamond',
-      symbolOffset: [0, '-50%'], // 上部菱形
-      symbolSize: [30, 15],
-      // symbolOffset: [0, -6], // 上部椭圆
-      symbolPosition: 'end',
+      zlevel: 2,
       z: 12,
-      label: {
+      data: yData2
+    },
+    {
+      name: 'y1柱子底部',
+      type: 'pictorialBar',
+      tooltip: { show: false },
+      symbol: 'diamond',
+      symbolSize: [30, 10],
+      symbolOffset: ['-60%', 5],
+      zlevel: 2,
+      z: 15,
+      color: 'rgb(2, 192, 255)',
+      data: yData1
+    },
+    {
+      name: 'y2柱子底部',
+      type: 'pictorialBar',
+      tooltip: { show: false },
+      symbol: 'diamond',
+      symbolSize: [30, 10],
+      symbolOffset: ['60%', 5],
+      zlevel: 2,
+      z: 15,
+      color: 'rgba(45, 206, 177,0.9)',
+      data: yData2
+    },
+    {
+      name: '背景柱子1',
+      type: 'bar',
+      tooltip: { show: false },
+      xAxisIndex: 1,
+      barGap: '20%',
+      data: maxData1,
+      zlevel: 1,
+      30: 30,
+      itemStyle: {
         normal: {
-          show: false,
-          position: 'top',
-          fontSize: 15,
-          fontWeight: 'bold',
-          color: '#27a7ce'
+          color: 'rgba(9, 44, 76,.8)'
         }
-      },
-      color: '#142f5a',
-      data: maxData
-
+      }
+    },
+    {
+      name: '背景柱子2',
+      type: 'bar',
+      tooltip: { show: false },
+      xAxisIndex: 1,
+      barGap: '20%',
+      data: maxData2,
+      zlevel: 1,
+      30: 30,
+      itemStyle: {
+        normal: {
+          color: 'rgba(16, 56, 70,.8)'
+        }
+      }
+    },
+    {
+      name: 'y1背景柱子顶部',
+      type: 'pictorialBar',
+      tooltip: { show: false },
+      symbol: 'diamond',
+      symbolSize: [30, 10],
+      symbolOffset: ['-60%', -5],
+      symbolPosition: 'end',
+      z: 15,
+      color: 'rgb(15, 69, 133)',
+      zlevel: 1,
+      data: maxData1
+    },
+    {
+      name: 'y2背景柱子顶部',
+      type: 'pictorialBar',
+      tooltip: { show: false },
+      symbol: 'diamond',
+      symbolSize: [30, 10],
+      symbolOffset: ['60%', -5],
+      symbolPosition: 'end',
+      z: 15,
+      color: 'rgb(30, 100, 112)',
+      zlevel: 1,
+      data: maxData2
     }
   ]
 }

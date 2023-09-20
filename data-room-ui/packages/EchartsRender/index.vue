@@ -508,16 +508,16 @@ export default {
         if (ids.includes(item.id)) {
           item.color = _config.option.seriesCustom[item.id]
         } else {
-          item.itemStyle.normal.color = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: _config.option.seriesCustom.barColor1
-            },
-            {
-              offset: 1,
-              color: _config.option.seriesCustom.barColor2
-            }
-          ])
+        //   item.itemStyle.normal.color = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        //     {
+        //       offset: 0,
+        //       color: _config.option.seriesCustom.barColor1
+        //     },
+        //     {
+        //       offset: 1,
+        //       color: _config.option.seriesCustom.barColor2
+        //     }
+        //   ])
         }
       })
       return _config
