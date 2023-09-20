@@ -1,19 +1,13 @@
-/*
- * @description: webpack读取当前文件夹下的所有 图表的js文件配置, 生成g2Plot配置列表
- * @Date: 2023-03-28 10:40:22
- * @Author: xing.heng
- */
-import { dataConfig, settingConfig } from '../PlotRender/settingConfig'
+import { dataConfig, settingConfig } from '../EchartsRender/settingConfig'
 import cloneDeep from 'lodash/cloneDeep'
 import sortList from './echartListSort'
 // 遍历 当前文件夹下的所有文件，找到中文.js文件，然后导出
 const files = require.context('./', true, /[\u4e00-\u9fa5]+.js$/)
 const echartsList = getEchartsList(files)
-// 获取plot配置
+// 获取echarts配置
 function getEchartsList (files) {
   const configMapList = {}
   files.keys().forEach((key) => {
-    // ./折线图/基础折线图.js
     // 取到 "基础折线图"
     const configName = key.split('/')[2].replace('.js', '')
     configMapList[configName] = files(key).default
@@ -38,8 +32,8 @@ function getEchartsList (files) {
       x: 0,
       y: 0,
       type: 'echartsComponent',
-      chartType: config.chartType,
       loading: false,
+      // 把默认右侧配置与自定义右侧配置集合
       option: {
         ...config.option,
         ...cloneDeep(settingConfig)
