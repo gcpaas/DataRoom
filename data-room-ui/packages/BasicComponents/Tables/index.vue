@@ -302,7 +302,6 @@ export default {
 .bs-design-wrap {
   position: relative;
   width: 100%;
-  padding: 0 16px;
   height: 100%;
   background-color: transparent;
   border-radius: 4px;

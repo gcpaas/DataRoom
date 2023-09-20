@@ -12,5 +12,5 @@ files.keys().forEach(key => {
     img,
   })
 })
-// 抛出内置系统组件
+// 抛出边框组件
 export default borderComponents

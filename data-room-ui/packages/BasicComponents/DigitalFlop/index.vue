@@ -130,7 +130,6 @@ export default {
   background-color: rgb(31, 31, 31);
 }
 .bs-design-wrap {
-   padding: 0 16px;
   position: relative;
   width: 100%;
   height: 100%;

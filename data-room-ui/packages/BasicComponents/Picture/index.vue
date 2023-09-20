@@ -51,7 +51,6 @@ export default {
 
 <style lang="scss" scoped>
 .bs-design-wrap {
-  padding: 0 16px;
   width: 100%;
   background-color: rgba(0, 0, 0, 0);
   .content-box {

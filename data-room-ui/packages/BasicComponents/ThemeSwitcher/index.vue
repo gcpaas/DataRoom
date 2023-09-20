@@ -102,7 +102,6 @@ export default {
 <style lang="scss" scoped>
 .bs-design-wrap{
   width: 100%;
-  padding: 0 16px;
 }
 .content-box{
   text-align: center;

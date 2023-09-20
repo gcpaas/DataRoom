@@ -103,7 +103,6 @@ export default {
 @import "../../BasicComponents/fonts/index.css";
 .bs-design-wrap{
   width: 100%;
-   padding: 0 16px;
 }
 .time {
   width: 100%;
