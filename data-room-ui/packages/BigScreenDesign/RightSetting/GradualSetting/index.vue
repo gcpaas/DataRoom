@@ -34,7 +34,6 @@ export default {
       endColor: '', // 终止颜色
       position: '', // 渐变方向
       colorsValue: ''// 拼接后的符合g2语法的颜色值
-
     }
   },
   computed: {
