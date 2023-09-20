@@ -32,7 +32,7 @@ public class PagePermissionController {
     @ApiOperation(value = "校验大屏页权限")
     public R<Boolean> checkPermission(HttpServletRequest request, @PathVariable("code") String code) {
         if (code.startsWith(PREVIEW_KEY)) {
-            code = code.replace(PREVIEW_KEY, "");
+            code = code.replace(PREVIEW_KEY + "_", "");
         }
         boolean access = permissionClient.verifyDataPermission(request, code);
         return R.success(access);
