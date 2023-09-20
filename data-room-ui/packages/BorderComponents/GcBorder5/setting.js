@@ -1,7 +1,9 @@
 
 const type = 'GcBorder5'
 
-const name='边框五'
+const name = '边框五'
+
+const isTitle=false
 // 右侧配置项
 const setting = [
   // 背景色
@@ -133,5 +135,6 @@ const setting = [
 export default {
   setting,
   type,
-  name
+  name,
+  isTitle
 }

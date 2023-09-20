@@ -1,6 +1,8 @@
 
 const type = 'GcBorder4'
 
+const isTitle=false
+
 const name='边框四'
 // 右侧配置项
 const setting = [
@@ -134,5 +136,6 @@ const setting = [
 export default {
   setting,
   type,
-  name
+  name,
+  isTitle
 }

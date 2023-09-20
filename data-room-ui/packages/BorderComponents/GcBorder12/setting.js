@@ -3,6 +3,8 @@ const type = 'GcBorder12'
 
 const name = '边框十二'
 
+const isTitle=false
+
 // 右侧配置项
 const setting = [
   // 背景色
@@ -123,5 +125,6 @@ const setting = [
 export default {
   setting,
   type,
-  name
+  name,
+  isTitle
 }
