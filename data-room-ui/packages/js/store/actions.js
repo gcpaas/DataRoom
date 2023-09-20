@@ -123,11 +123,11 @@ export function handleResData (data) {
 // 组件属性兼容
 function compatibility (config, originalConfig) {
   const newConfig = config
-  newConfig.version = originalConfig.version
-  newConfig.dataSource = objCompare(newConfig.dataSource, originalConfig.dataSource)
-  newConfig.customize = objCompare(newConfig.customize, originalConfig.customize)
-  newConfig.option = { ...objCompare(newConfig.option, originalConfig.option), displayOption: originalConfig.option.displayOption }
-  newConfig.setting = arrCompare(newConfig.setting, originalConfig.setting)
+  newConfig.version = originalConfig?.version || '2023071001'
+  newConfig.dataSource = objCompare(newConfig?.dataSource, originalConfig?.dataSource)
+  newConfig.customize = objCompare(newConfig?.customize, originalConfig?.customize)
+  newConfig.option = { ...objCompare(newConfig.option, originalConfig?.option), displayOption: originalConfig?.option?.displayOption }
+  newConfig.setting = arrCompare(newConfig?.setting, originalConfig?.setting)
   return newConfig
 }
 // 对象比较

@@ -32,7 +32,7 @@ function getPlotList (files) {
       category: configMapKey,
       name: config.name,
       title: config.title,
-      border:{type:'',titleHeight:100,fontSize:30,isTitle:true,padding:[16,16,16,16]},
+      border: { type: '', titleHeight: 100, fontSize: 30, isTitle: true, padding: [16, 16, 16, 16] },
       icon: null,
       img: require(`../G2Plots/images/componentLogo/${config.title}.png`),
       className:
@@ -62,10 +62,11 @@ export function getCustomPlots () {
   const list = []
   customList.forEach((config) => {
     list.push({
+      version: config.version,
       category: config.category,
       name: config.name,
       title: config.title,
-      border:{type:'',titleHeight:100,fontSize:30,isTitle:true,padding:[16,16,16,16]},
+      border: { type: '', titleHeight: 100, fontSize: 30, isTitle: true, padding: [16, 16, 16, 16] },
       icon: null,
       img: config.img,
       className:
