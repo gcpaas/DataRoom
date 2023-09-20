@@ -70,6 +70,7 @@ export default {
       state.pageInfo.chartList = state.pageInfo.chartList?.map(chart => {
         return {
           ...chart,
+          // 确保取消高亮状态时不会使得原本设置过的组合被取消
           group: chart.group === 'tempGroup' ? '' : chart.group
         }
       })
