@@ -8,7 +8,7 @@
       :background-color="(config.border.gradientColor0||config.border.gradientColor1)?`url(#${borderBgId})`:'transparent'"
       :color='borderColor'
       :key="updateKey"
-      :title="config.border.title"
+      :title="config.border.isTitle?config.title:''"
       :title-width="config.border.titleWidth"
     >
     <!-- <div class="element"

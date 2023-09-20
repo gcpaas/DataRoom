@@ -1,15 +1,74 @@
 
-const type = 'GcBorder14'
+const type = 'GcBorder15'
 
-const name = '边框十四'
+const name = '边框十五'
 
-const isTitle=false
+const isTitle=true
 // 右侧配置项
 const setting = [
   // 背景色
-
   {
-    label:'边框线颜色',
+    label:'标题区域背景色一',
+    // 设置组件类型， select / input / colorPicker
+    type: 'colorPicker',
+    // 字段
+    field: 'fontGradientColor0',
+    optionField: 'fontGradientColor0', // 对应options中的字段
+    // 是否多选
+    multiple: false,
+    // 绑定的值
+    value: '',
+  },
+  {
+    label:'标题区域背景色二',
+    // 设置组件类型， select / input / colorPicker
+    type: 'colorPicker',
+    // 字段
+    field: 'fontGradientColor1',
+    optionField: 'fontGradientColor1', // 对应options中的字段
+    // 是否多选
+    multiple: false,
+    // 绑定的值
+    value: '',
+  },
+  {
+    label:'标题左侧颜色',
+    // 设置组件类型， select / input / colorPicker
+    type: 'colorPicker',
+    // 字段
+    field: 'fontLeftColor',
+    optionField: 'fontLeftColor', // 对应options中的字段
+    // 是否多选
+    multiple: false,
+    // 绑定的值
+    value: '#007aff',
+  },
+  {
+    label:'标题左侧宽度',
+    // 设置组件类型， select / input / colorPicker
+    type: 'inputNumber',
+    // 字段
+    field: 'fontLeftWidth',
+    optionField: 'fontLeftWidth', // 对应options中的字段
+    // 是否多选
+    multiple: false,
+    // 绑定的值
+    value: 6,
+  },
+  {
+    label:'标题底部分割线颜色',
+    // 设置组件类型， select / input / colorPicker
+    type: 'colorPicker',
+    // 字段
+    field: 'fontBottomColor',
+    optionField: 'fontBottomColor', // 对应options中的字段
+    // 是否多选
+    multiple: false,
+    // 绑定的值
+    value: '#007aff',
+  },
+  {
+    label:'外边框线颜色',
     // 设置组件类型， select / input / colorPicker
     type: 'colorPicker',
     // 字段
@@ -21,7 +80,7 @@ const setting = [
     value: '',
   },
   {
-    label:'边框线宽度',
+    label:'外边框线宽度',
     // 设置组件类型， select / input / colorPicker
     type: 'inputNumber',
     // 字段
@@ -30,7 +89,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: 2,
+    value: 1,
   },
   {
     label:'背景色一',
@@ -42,7 +101,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: '#83bff6',
+    value: '',
   },
   {
     label:'背景色二',
@@ -54,7 +113,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: '#188df0',
+    value: '',
   },
   {
     label: '渐变色方向',
@@ -101,18 +160,6 @@ const setting = [
         value: 'to top left'
       }
     ]
-  },
-  {
-    label:'不透明度',
-    // 设置组件类型， select / input / colorPicker
-    type: 'inputNumber',
-    // 字段
-    field: 'opacity',
-    optionField: 'opacity', // 对应options中的字段
-    // 是否多选
-    multiple: false,
-    // 绑定的值
-    value: 100,
   },
   {
     label:'左上圆角值',

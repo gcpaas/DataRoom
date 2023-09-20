@@ -12,7 +12,6 @@
         border-bottom-left-radius: ${radiusLeftBottom}px;
         border-bottom-right-radius: ${radiusRightBottom}px;
         border: ${width}px solid ${color};
-        opacity: ${opacity/ 100};
         background-image: linear-gradient(${gradientDirection}, ${
           gradientColor0 ? gradientColor0 : gradientColor1
         } , ${gradientColor1 ? gradientColor1 : gradientColor0})
@@ -21,13 +20,26 @@
     <div class="element"
       v-if="config.border.isTitle"
       :style="`
-      color:${fontColor};
-      font-size:${config.border.fontSize}px;
       line-height:${config.border.titleHeight}px;
       height:${config.border.titleHeight};
-      padding:0 0 0 20px`"
+      border-bottom:3px solid ${fontBottomColor};
+      background-image: linear-gradient(${gradientDirection}, ${
+          fontGradientColor0 ? fontGradientColor0 : fontGradientColor1
+        } , ${fontGradientColor1 ? fontGradientColor1 : fontGradientColor0})
+      `"
       >
-      {{config.title}}</div>
+      <span
+      :style="`
+      width:100%;
+      padding:0 0 0 20px;
+      color:${fontColor};
+      font-size:${config.border.fontSize}px;
+      border-left:${fontLeftWidth}px solid ${fontLeftColor};
+      `"
+      >
+        {{config.title}}
+      </span>
+      </div>
     </div>
   </div>
 </template>
@@ -58,13 +70,28 @@ export default {
       return this.config.border.borderColor || ''
     },
     width () {
-      return this.config.border.borderWidth || 2
+      return this.config.border.borderWidth!=null?this.config.border.borderWidth : 2
     },
     gradientColor0 () {
       return this.config.border.gradientColor0 ||this.config.border.gradientColor1|| 'transparent'
     },
     gradientColor1 () {
       return this.config.border.gradientColor1 ||this.config.border.gradientColor0|| 'transparent'
+    },
+    fontGradientColor0 () {
+      return this.config.border.fontGradientColor0 ||this.config.border.fontGradientColor1|| 'transparent'
+    },
+    fontGradientColor1 () {
+      return this.config.border.fontGradientColor1 ||this.config.border.fontGradientColor0|| 'transparent'
+    },
+    fontLeftColor(){
+      return this.config.border.fontLeftColor || ''
+    },
+    fontBottomColor(){
+      return this.config.border.fontBottomColor || ''
+    },
+    fontLeftWidth(){
+      return this.config.border.fontLeftWidth!=null?this.config.border.fontLeftWidth : 6
     },
     radiusLeftTop () {
       return this.config.border.radiusLeftTop || 2
@@ -81,13 +108,11 @@ export default {
     gradientDirection () {
       return this.config.border.gradientDirection || 'to right'
     },
-    opacity () {
-      return this.config.border.opacity || 100
-    }
   },
   watch: {
   },
   mounted () {
+    console.log( this.config.border)
   },
   methods: {
   }

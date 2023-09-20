@@ -1,22 +1,12 @@
 
 const type = 'GcBorder11'
 
-const name='边框十一'
+const name = '边框十一'
+
+const isTitle=true
 // 右侧配置项
 const setting = [
   // 背景色
-  {
-    label:'边框标题',
-    // 设置组件类型， select / input / colorPicker
-    type: 'input',
-    // 字段
-    field: 'title',
-    optionField: 'title', // 对应options中的字段
-    // 是否多选
-    multiple: false,
-    // 绑定的值
-    value: '',
-  },
   {
     label:'标题区域宽度',
     // 设置组件类型， select / input / colorPicker
@@ -144,5 +134,6 @@ const setting = [
 export default {
   setting,
   type,
-  name
+  name,
+  isTitle
 }

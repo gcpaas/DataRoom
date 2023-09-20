@@ -72,7 +72,6 @@
       />
     </el-form-item>
     <div v-if="config.type">
-      <div v-if="bigTitle&&config.type!='GcBorder11'">
          <el-form-item
           :label-width="labelWidth"
           label="是否显示标题"
@@ -85,7 +84,7 @@
             />
         </el-form-item>
         <el-form-item
-          v-if="config.isTitle"
+          v-if="config.isTitle&&config.type!='GcBorder11'"
           :label-width="labelWidth"
           label="标题高度"
         >
@@ -97,7 +96,7 @@
           />
         </el-form-item>
         <el-form-item
-          v-if="config.isTitle"
+          v-if="config.isTitle&&config.type!='GcBorder11'"
           :label-width="labelWidth"
           label="标题字体大小"
         >
@@ -109,7 +108,7 @@
           />
         </el-form-item>
         <el-form-item
-          v-if="config.isTitle"
+          v-if="config.isTitle&&config.type!='GcBorder11'"
           :label-width="labelWidth"
           label="标题颜色"
         >
@@ -120,9 +119,8 @@
               show-alpha
             />
         </el-form-item>
-      </div>
     <div
-      v-for="(setting, settingIndex) in list"
+      v-for="(setting, settingIndex) in list.setting"
       :key="settingIndex+1"
     >
       <el-form-item
@@ -270,6 +268,28 @@ export default {
       default: '100px'
     }
   },
+  watch:{
+    'config.type':{
+      handler () {
+         this.config.isTitle=this.list.isTitle
+        plotList[Symbol.iterator]=function*(){
+        let keys=Object.keys(plotList)
+        for(let k of keys){
+          yield [k,plotList[k]]
+        }
+      }
+      for(let [key,value] of plotList){
+        if(value.type==this.config.type){
+          value.setting.forEach((item)=>{
+            if(item.value){
+              this.config[item.field]=item.value? item.value:this.config[item.field]
+            }
+          })
+        }
+      }
+      },immediate: true
+    },
+  },
   computed:{
     title:{
       set(){
@@ -298,23 +318,17 @@ export default {
           yield [k,plotList[k]]
         }
       }
-      let arr=[]
+      let obj={}
       for(let [key,value] of plotList){
         if(value.type==this.config.type){
-          arr=value.setting
-          value.setting.forEach((item)=>{
-            if(item.value){
-              this.config[item.field]=this.config[item.field]||item.value
-            }
-          })
+          obj={setting:value.setting,isTitle:value.isTitle}
         }
       }
-      return arr
+      return obj
     }
   },
   data () {
     return {
-
     }
   },
   mounted () {

@@ -8,7 +8,8 @@ const plotList = []
     plotList.push({
       type: config.type,
       setting: config.setting,
-      name:config.name
+      name: config.name,
+      isTitle:config.isTitle
     })
   })
 export default plotList
