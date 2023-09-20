@@ -2,10 +2,9 @@ import * as echarts from 'echarts'
 // 配置版本号
 const version = '2023091901'
 // 标题
-const title = '3D固定柱状图'
+const title = '3D基础柱状图'
 // 用于标识，唯一，和文件夹名称一致
-const name = '3DGuDingZhuZhuangTu'
-
+const name = '3DJiChuZhuZhuangTu'
 // 右侧配置项
 const setting = [
   {
@@ -28,69 +27,207 @@ const setting = [
     value: '',
     tabName: 'data'
   },
+  //  样式配置
   {
-    label: '分组字段',
-    type: 'select', // 设置组件类型
-    field: 'seriesField', // 字段
-    optionField: 'seriesField', // 对应options中的字段
+    label: '柱子宽度',
+    type: 'inputNumber', // 设置组件类型
+    field: 'seriesCustom_barWidth', // 字段
+    optionField: 'seriesCustom.barWidth', // 对应options中的字段
+    value: 30,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签',
+    type: 'switch', // 设置组件类型
+    field: 'label_style_opacity', // 字段
+    // optionField: 'series', // 对应options中的字段
+    value: 0,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  // x轴 xAxis
+  {
+    label: '显示',
+    type: 'switch',
+    field: 'xAxis_show',
+    optionField: 'xAxis.show',
+    value: 1,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '轴线显示',
+    type: 'switch',
+    field: 'xAxis_axisLine_show',
+    optionField: 'xAxis.axisLine.show',
+    value: 1,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '刻度显示',
+    type: 'switch',
+    field: 'xAxis_axisTick_show',
+    optionField: 'xAxis.axisTick.show',
+    value: 0,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签显示',
+    type: 'switch',
+    field: 'xAxis_axisLabel_show',
+    optionField: 'xAxis.axisLabel.show',
+    value: 0,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签颜色',
+    type: 'colorPicker',
+    field: 'xAxis_axisLabel_textStyle_color',
+    optionField: 'xAxis.axisLabel.textStyle.color',
     // 是否多选
     multiple: false,
+    value: '#8C8C8C',
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标题',
+    type: 'input',
+    field: 'xAxis_name',
+    optionField: 'xAxis.name',
     value: '',
-    tabName: 'data'
+    tabName: 'custom',
+    groupName: 'xAxis'
   },
   {
-    label: '柱子顶部颜色',
-    type: 'colorPicker', // 设置组件类型
-    field: 'seriesCustom_barTopColor', // 字段
-    optionField: 'seriesCustom.barTopColor', // 对应options中的字段
-    value: '#2DB1EF',
+    label: '标题颜色',
+    type: 'colorPicker',
+    field: 'xAxis_nameTextStyle_color',
+    optionField: 'xAxis.nameTextStyle.color',
+    // 是否多选
+    multiple: false,
+    value: '#8C8C8C',
     tabName: 'custom',
-    groupName: 'graph'
+    groupName: 'xAxis'
   },
   {
-    label: '柱子颜色1',
-    type: 'colorPicker', // 设置组件类型
-    field: 'seriesCustom_barColor1', // 字段
-    optionField: 'seriesCustom.barColor1', // 对应options中的字段
-    value: '#115ba6',
+    label: '标题大小',
+    type: 'inputNumber',
+    field: 'xAxis_nameTextStyle_fontSize',
+    optionField: 'xAxis.nameTextStyle.fontSize',
+    value: 12,
     tabName: 'custom',
-    groupName: 'graph'
+    groupName: 'xAxis'
   },
   {
-    label: '柱子颜色2',
-    type: 'colorPicker', // 设置组件类型
-    field: 'seriesCustom_barColor2', // 字段
-    optionField: 'seriesCustom.barColor2', // 对应options中的字段
-    value: '#1db0dd',
+    label: '标题位置',
+    type: 'select',
+    field: 'xAxis_nameLocation',
+    optionField: 'xAxis.nameLocation',
+    value: 'start',
     tabName: 'custom',
-    groupName: 'graph'
+    options: [
+      {
+        label: '左',
+        value: 'start'
+      },
+      {
+        label: '中',
+        value: 'center'
+      },
+      {
+        label: '右',
+        value: 'end'
+      }],
+    groupName: 'xAxis'
+  },
+  // Y轴 yAxis
+  {
+    label: '显示',
+    type: 'switch',
+    field: 'yAxis_show',
+    optionField: 'yAxis.show',
+    value: 1,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'yAxis'
   },
   {
-    label: '柱子底部颜色',
-    type: 'colorPicker', // 设置组件类型
-    field: 'seriesCustom_barBottomColor', // 字段
-    optionField: 'seriesCustom.barBottomColor', // 对应options中的字段
-    value: '#187dcb',
+    label: '名称',
+    type: 'input',
+    field: 'yAxis_name',
+    optionField: 'yAxis.name',
+    value: '',
     tabName: 'custom',
-    groupName: 'graph'
+    groupName: 'yAxis'
   },
   {
-    label: '柱子背景顶部颜色',
-    type: 'colorPicker', // 设置组件类型
-    field: 'seriesCustom_shadowTopColor', // 字段
-    optionField: 'seriesCustom.shadowTopColor', // 对应options中的字段
-    value: '#142f5a',
+    label: '名称颜色',
+    type: 'colorPicker',
+    field: 'yAxis_nameTextStyle_color',
+    optionField: 'yAxis.nameTextStyle.color',
+    // 是否多选
+    multiple: false,
+    value: '#8C8C8C',
     tabName: 'custom',
-    groupName: 'graph'
+    groupName: 'yAxis'
   },
   {
-    label: '柱子背景颜色',
-    type: 'colorPicker', // 设置组件类型
-    field: 'seriesCustom_shadowColor', // 字段
-    optionField: 'seriesCustom.shadowColor', // 对应options中的字段
-    value: '#041133',
+    label: '名称大小',
+    type: 'inputNumber',
+    field: 'yAxis_nameTextStyle_fontSize',
+    optionField: 'yAxis.nameTextStyle.fontSize',
+    value: 12,
     tabName: 'custom',
-    groupName: 'graph'
+    groupName: 'yAxis'
+  },
+  {
+    label: '名称位置',
+    type: 'select',
+    field: 'yAxis_nameLocation',
+    optionField: 'yAxis.nameLocation',
+    value: 'end',
+    tabName: 'custom',
+    options: [
+      {
+        label: '下',
+        value: 'start'
+      },
+      {
+        label: '中',
+        value: 'center'
+      },
+      {
+        label: '上',
+        value: 'end'
+      }],
+    groupName: 'yAxis'
+  },
+  {
+    label: '刻度颜色',
+    type: 'colorPicker',
+    field: 'yAxis_axisLabel_textStyle',
+    optionField: 'yAxis.axisLabel.textStyle.color',
+    // 是否多选
+    multiple: false,
+    value: '#d0d0d0',
+    tabName: 'custom',
+    groupName: 'yAxis'
   }
 ]
 
@@ -101,7 +238,6 @@ const optionHandler = ''
 const dataHandler = ''
 
 // 图表配置 new Line('domName', option)
-
 const xData = ['本年话务总量', '本年人工话务量', '每万客户呼入量', '本年话务总量']
 const yData = [300, 1230, 425, 300]
 const maxData = [1500, 1500, 1500, 1500]
@@ -152,16 +288,19 @@ const option = {
   },
   xAxis: [
     {
+      show: false,
+      name: '',
       type: 'category',
       data: xData,
+      nameTextStyle: {
+        color: '',
+        fontSize: 12
+      },
+      nameLocation: '',
       // 坐标轴刻度设置:x轴数据展示
       axisTick: {
-        show: true,
+        show: false,
         alignWithLabel: true
-      },
-      // 横坐标颜色
-      nameTextStyle: {
-        color: '#82b0ec'
       },
       // 是否显示坐标轴的轴线
       axisLine: {
@@ -169,6 +308,7 @@ const option = {
       },
       // 坐标轴刻度标签
       axisLabel: {
+        show: false,
         textStyle: {
           fontSize: 10,
           color: 'rgb(40, 129, 170)'
@@ -177,6 +317,7 @@ const option = {
       }
     },
     {
+      show: false,
       type: 'category',
       axisLine: {
         show: false
@@ -196,26 +337,31 @@ const option = {
       data: xData
     }
   ],
-  yAxis: [
-    {
-      show: true, // y轴文本标签显示
-      type: 'value',
-      axisLabel: {
-        textStyle: {
-          color: 'rgb(40, 129, 170)'
-        }
-      },
-      // 分隔线
-      splitLine: {
-        show: false // yAxis.show配置为true时，该配置才有效
-      },
-      // y轴轴线是否显示
-      axisLine: {
-        show: true
+  yAxis: {
+    name: '',
+    nameTextStyle: {
+      color: '',
+      fontSize: 12
+    },
+    nameLocation: 'end',
+    show: true, // y轴文本标签显示
+    type: 'value',
+    axisLabel: {
+      textStyle: {
+        color: 'rgb(40, 129, 170)'
       }
+    },
+    // 分隔线
+    splitLine: {
+      show: false // yAxis.show配置为true时，该配置才有效
+    },
+    // y轴轴线是否显示
+    axisLine: {
+      show: true
     }
-  ],
+  },
   seriesCustom: {
+    barWidth: 30,
     barTopColor: '#2DB1EF',
     barBottomColor: '#187dcb',
     barColor1: '#115ba6',
@@ -236,7 +382,7 @@ const option = {
       z: 12,
       label: {
         normal: {
-          show: true,
+          show: false,
           position: 'top',
           fontSize: 15,
           fontWeight: 'bold',
@@ -244,6 +390,9 @@ const option = {
         }
       },
       color: '#2DB1EF',
+      tooltip: {
+        show: false
+      },
       data: yData
     },
     // 底部
@@ -256,6 +405,9 @@ const option = {
       // symbolOffset: [0, 7], // 下部椭圆
       z: 12,
       color: '#187dcb',
+      tooltip: {
+        show: false
+      },
       data: yData
     },
     // 柱子
@@ -300,6 +452,9 @@ const option = {
         show: false
       },
       color: '#041133',
+      tooltip: {
+        show: false
+      },
       data: maxData
     },
     // 阴影顶部
@@ -322,6 +477,9 @@ const option = {
         }
       },
       color: '#142f5a',
+      tooltip: {
+        show: false
+      },
       data: maxData
 
     }
