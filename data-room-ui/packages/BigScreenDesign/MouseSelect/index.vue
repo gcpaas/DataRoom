@@ -149,13 +149,13 @@ export default {
         this.startY = 0
         this.endX = 0
         this.endY = 0
-        this.$emit('selectArea', {
-          startX: Math.min(this.startX, this.endX),
-          startY: Math.min(this.startY, this.endY),
-          endX: Math.max(this.startX, this.endX),
-          endY: Math.max(this.startY, this.endY)
-        })
-        this.changeActiveCodes([])
+        // this.$emit('selectArea', {
+        //   startX: Math.min(this.startX, this.endX),
+        //   startY: Math.min(this.startY, this.endY),
+        //   endX: Math.max(this.startX, this.endX),
+        //   endY: Math.max(this.startY, this.endY)
+        // })
+        // this.changeActiveCodes([])
       }
     },
     handleMouseLeave () {

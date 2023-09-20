@@ -11,6 +11,7 @@
     }"
     @drop="drop($event)"
     @dragover.prevent
+    @click="handleClickOutside($event)"
   >
     <vdr
       v-for="chart in chartList"
@@ -165,8 +166,27 @@ export default {
       'resetPresetLine',
       'changeGridShow',
       'setPresetLine',
-      'saveTimeLine'
+      'saveTimeLine',
+      'changeActiveCodes'
     ]),
+    // 判断鼠标点击的是画布中的高亮元素（被框选的）还是非高亮元素或者空白区域
+    // 如果是高亮元素则不会取消高亮状态，如果不是则取消高亮状态
+    handleClickOutside (event) {
+      // 获取被点击的元素
+      const clickedElement = event.target
+      const elementToHighlights = []
+      // 获取需要高亮的元素的引用
+      for (const code of this.activeCodes) {
+        elementToHighlights.push(this.$refs['RenderCard' + code][0])
+      }
+
+      const isElementInHighlights = elementToHighlights.some((elementToHighlight) => {
+        return elementToHighlight?.$el?.contains(clickedElement)
+      })
+      if (!isElementInHighlights) {
+        this.changeActiveCodes([])
+      }
+    },
     // 切换主题时针对远程组件触发样式修改的方法
     styleHandler (config) {
       this.$nextTick(() => {

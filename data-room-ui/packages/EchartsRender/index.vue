@@ -19,14 +19,13 @@ import cloneDeep from 'lodash/cloneDeep'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import { mapState, mapMutations } from 'vuex'
-import plotList, { getCustomPlots } from '../G2Plots/plotList'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
 import _ from 'lodash'
 import * as echarts from 'echarts'
 import CloneDeep from 'lodash-es/cloneDeep'
 
 export default {
-  name: 'PlotCustomComponent',
+  name: 'EchartsCustomComponent',
   mixins: [commonMixins, linkageMixins],
   props: {
     config: {
@@ -37,8 +36,7 @@ export default {
   data () {
     return {
       chart: null,
-      hasData: false,
-      plotList
+      hasData: false
     }
   },
   computed: {
@@ -64,7 +62,6 @@ export default {
     }
   },
   created () {
-    this.plotList = [...this.plotList, ...getCustomPlots()]
   },
   watch: {
     // 监听主题变化手动触发组件配置更新
@@ -78,7 +75,7 @@ export default {
     'config.w': {
       handler (val) {
         if (val) {
-          console.log('this.config',this.config);
+          // console.log('this.config',this.config);
           const chartDom = document.getElementById(this.chatId)
           this.observeChart(chartDom, this.chart, this.config.option)
         }
@@ -87,7 +84,8 @@ export default {
     'config.h': {
       handler (val) {
         if (val) {
-          this.newChart(this.config)
+          const chartDom = document.getElementById(this.chatId)
+          this.observeChart(chartDom, this.chart, this.config.option)
         }
       }
     }
@@ -133,7 +131,6 @@ export default {
      * 构造chart
      */
     newChart (config) {
-      // console.log('重新渲染图片');
       const chartDom = document.getElementById(this.chatId)
       this.chart = echarts.init(chartDom)
       config.option && this.chart.setOption(config.option)
@@ -184,23 +181,38 @@ export default {
         if (set.optionField) {
           const optionField = set.optionField.split('.')
           option = config.option
-          optionField.forEach((field, index) => {
-            if (index === optionField.length - 1) {
+          // 判断是不是关于x轴的相关配置，x轴叠加了两层坐标轴，如果是x轴相关配置则作用于xAxis[0]
+          if (optionField[0] === 'xAxis') {
+            optionField.forEach((field, index) => {
+              if (index === 0) {
+                option = option.xAxis[0]
+              } else if (index === optionField.length - 1) {
               // 数据配置时，必须有值才更新
-              if ((set.tabName === type && type === 'data' && set.value) || (set.tabName === type && type === 'custom')) {
-                option[field] = set.value
+                if ((set.tabName === type && type === 'data' && set.value) || (set.tabName === type && type === 'custom')) {
+                  option[field] = set.value
+                }
+              } else {
+                option = option[field]
               }
-            } else {
-              option = option[field]
-            }
-          })
+            })
+          } else {
+            optionField.forEach((field, index) => {
+              if (index === optionField.length - 1) {
+              // 数据配置时，必须有值才更新
+                if ((set.tabName === type && type === 'data' && set.value) || (set.tabName === type && type === 'custom')) {
+                  option[field] = set.value
+                }
+              } else {
+                option = option[field]
+              }
+            })
+          }
         }
       })
       config.option = { ...config.option, ...option }
       return config
     },
     dataFormatting (config, data) {
-      console.log('config', config)
       // 数据返回成功则赋值
       if (data.success) {
         data = data.data
@@ -496,23 +508,22 @@ export default {
         if (ids.includes(item.id)) {
           item.color = _config.option.seriesCustom[item.id]
         } else {
-          item.itemStyle.normal.color = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: _config.option.seriesCustom.barColor1
-            },
-            {
-              offset: 1,
-              color: _config.option.seriesCustom.barColor2
-            }
-          ])
+        //   item.itemStyle.normal.color = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        //     {
+        //       offset: 0,
+        //       color: _config.option.seriesCustom.barColor1
+        //     },
+        //     {
+        //       offset: 1,
+        //       color: _config.option.seriesCustom.barColor2
+        //     }
+        //   ])
         }
       })
       return _config
     },
     // 组件的样式改变，返回改变后的config
     changeStyle (config, isUpdateTheme) {
-      console.log('組件樣式改變',config)
       config = { ...this.config, ...config }
       config = this.transformSettingToOption(config, 'custom')
       // 这里定义了option和setting是为了保证在执行eval时,optionHandler、dataHandler里面可能会用到，
