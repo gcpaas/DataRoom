@@ -31,7 +31,8 @@ const typeList = [
   'chartTab',
   'themeSwitcher',
   'themeSelect',
-  'select'
+  'select',
+  'timePicker'
 ]
 let basicConfigList = []
 basicConfigList = typeList.map((type) => {

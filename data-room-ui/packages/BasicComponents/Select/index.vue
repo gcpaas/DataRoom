@@ -146,7 +146,6 @@ export default {
       selectDropdownIcon.style.fontSize = config.customize.fontSize + 'px'
       // 选择器下拉框元素
       const selectDropdownEl = document.querySelector(`.select-${config.code} .el-select-dropdown`)
-      console.log('selectDropdownEl', selectDropdownEl)
       // 箭头背景颜色和下拉框背景颜色一致
       if (selectDropdownEl) {
         // 下拉框无边框
@@ -157,7 +156,9 @@ export default {
     },
     // 组件联动
     selectChange (val) {
-      this.linkage(this.config.option.data.find(item => item[this.config.dataSource.metricField] === val))
+      if (val) {
+        this.linkage(this.config.option.data.find(item => item[this.config.dataSource.metricField] === val))
+      }
     },
     visibleChange (val) {
       if (val) {

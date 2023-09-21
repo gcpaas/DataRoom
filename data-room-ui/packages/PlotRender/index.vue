@@ -121,7 +121,7 @@ export default {
         renderer: 'svg',
         // 仪表盘缩放状态下，点击准确
         supportCSSTransform: true,
-        ...config.option,
+        ...config.option
       })
       this.chart.render()
       this.registerEvent()
@@ -180,7 +180,14 @@ export default {
             console.error(e)
           }
         }
-        config.option.data = data
+        // 如果维度为数字类型则转化为字符串，否则在不增加其他配置的情况下会导致图标最后一项不显示（g2plot官网已说明）
+        const xAxis = config.setting.find(item => item.field === 'xField')?.value
+        config.option.data = data.map(item => {
+          if (xAxis && typeof item[xAxis] === 'number') {
+            item[xAxis] = (item[xAxis]).toString()
+          }
+          return item
+        })
       } else {
         // 数据返回失败则赋前端的模拟数据
         config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data || config?.option?.data
