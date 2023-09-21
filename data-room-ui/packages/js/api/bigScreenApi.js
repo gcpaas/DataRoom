@@ -8,7 +8,6 @@ export function getScreenInfo (code) {
 export function saveScreen(data) {
   data.chartList.forEach((item) => {
     if (item.type == 'customComponent') {
-      console.log(item)
       item.setting=item.setting.map((x) => {
         const {field,value,...obj}=x
 	        return {field,value}

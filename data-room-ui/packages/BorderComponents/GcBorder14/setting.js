@@ -33,28 +33,16 @@ const setting = [
     value: 2,
   },
   {
-    label:'背景色一',
+    label:'背景色',
     // 设置组件类型， select / input / colorPicker
-    type: 'colorPicker',
+    type: 'gradual',
     // 字段
-    field: 'gradientColor0',
-    optionField: 'gradientColor0', // 对应options中的字段
+    field: 'gradientColor',
+    optionField: 'gradientColor', // 对应options中的字段
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: '#83bff6',
-  },
-  {
-    label:'背景色二',
-    // 设置组件类型， select / input / colorPicker
-    type: 'colorPicker',
-    // 字段
-    field: 'gradientColor1',
-    optionField: 'gradientColor1', // 对应options中的字段
-    // 是否多选
-    multiple: false,
-    // 绑定的值
-    value: '#188df0',
+    value: '',
   },
   {
     label: '渐变色方向',

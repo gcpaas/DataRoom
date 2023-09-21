@@ -5,7 +5,7 @@
   >
      <dv-border-box-10
       :id="'dataV' + config.code"
-      :background-color="(config.border.gradientColor0||config.border.gradientColor1)?`url(#${borderBgId})`:'transparent'"
+      :background-color="(config.border.gradientColor&&(config.border.gradientColor[0]||config.border.gradientColor[1]))?`url(#${borderBgId})`:'transparent'"
       :color='borderColor'
       :key="updateKey"
     >
@@ -68,12 +68,7 @@ export default {
       },
       deep: true
     },
-    'config.border.gradientColor0':{
-         handler (val) {
-          this.changeColor()
-      },immediate: true
-    },
-    'config.border.gradientColor1':{
+    'config.border.gradientColor':{
          handler (val) {
           this.changeColor()
       },immediate: true
@@ -97,7 +92,7 @@ export default {
       if(!this.config.border.opacity){
               this.config.border.opacity=100
             }
-      if(!this.config.border.gradientColor0&&!this.config.border.gradientColor1) return
+      if(!this.config.border.gradientColor) return
       if (document.querySelector(`#dataV${this.config.code}`)) {
           const borderElement = document.querySelector(`#dataV${this.config.code}`).querySelector('.border') || document.querySelector(`#dataV${this.config.code}`)?.querySelector('.dv-border-svg-container')
           if (borderElement) {
@@ -137,8 +132,8 @@ export default {
                 'afterbegin',
                 `<defs>
                       <linearGradient id="${this.borderBgId}" ${gradientDirection}>
-                        <stop offset="0%" stop-color="${this.config.border.gradientColor0?this.config.border.gradientColor0:this.config.border.gradientColor1}" />
-                        <stop offset="100%" stop-color="${this.config.border.gradientColor1?this.config.border.gradientColor1:this.config.border.gradientColor0}" />
+                        <stop offset="0%" stop-color="${this.config.border.gradientColor[0]?this.config.border.gradientColor[0]:this.config.border.gradientColor[1]}" />
+                        <stop offset="100%" stop-color="${this.config.border.gradientColor[1]?this.config.border.gradientColor[1]:this.config.border.gradientColor[0]}" />
                       </linearGradient>
                 </defs>`
               )

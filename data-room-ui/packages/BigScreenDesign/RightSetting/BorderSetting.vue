@@ -190,7 +190,7 @@
           class="bs-el-color-picker"
           show-alpha
         />
-        <GradualSetting
+        <BorderColorSetting
           v-else-if="setting.type === 'gradual'"
           v-model="config[setting.field]"
         />
@@ -240,14 +240,17 @@
   </div>
 </template>
 <script>
+import _ from 'lodash'
 import plotList from 'data-room-ui/BorderComponents/settingList.js'
+import BorderColorSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderColorSetting/index.vue'
 import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
 import BorderSelect from 'data-room-ui/BorderSelect/index.vue'
 export default {
   name: '',
   components: {
     BorderSelect,
-    ColorSelect
+    ColorSelect,
+    BorderColorSetting
   },
   props: {
     bigTitle:{

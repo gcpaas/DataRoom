@@ -73,16 +73,32 @@ export default {
       return this.config.border.borderWidth!=null?this.config.border.borderWidth : 2
     },
     gradientColor0 () {
-      return this.config.border.gradientColor0 ||this.config.border.gradientColor1|| 'transparent'
+      if(this.config.border.gradientColor){
+        return this.config.border.gradientColor[0] ||this.config.border.gradientColor[1]
+      }else{
+        return 'transparent'
+      }
     },
     gradientColor1 () {
-      return this.config.border.gradientColor1 ||this.config.border.gradientColor0|| 'transparent'
+      if(this.config.border.gradientColor){
+       return this.config.border.gradientColor[1] ||this.config.border.gradientColor[0]
+      }else{
+        return 'transparent'
+      }
     },
     fontGradientColor0 () {
-      return this.config.border.fontGradientColor0 ||this.config.border.fontGradientColor1|| 'transparent'
+      if(this.config.border.fontGradientColor){
+       return this.config.border.fontGradientColor[0] ||this.config.border.fontGradientColor[1]
+      }else{
+        return 'transparent'
+      }
     },
     fontGradientColor1 () {
-      return this.config.border.fontGradientColor1 ||this.config.border.fontGradientColor0|| 'transparent'
+      if(this.config.border.fontGradientColor){
+        return this.config.border.fontGradientColor[1]||this.config.border.fontGradientColor[0]
+      }else{
+        return 'transparent'
+      }
     },
     fontLeftColor(){
       return this.config.border.fontLeftColor || ''

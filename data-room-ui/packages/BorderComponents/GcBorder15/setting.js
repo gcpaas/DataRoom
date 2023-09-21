@@ -6,31 +6,44 @@ const name = '边框十五'
 const isTitle=true
 // 右侧配置项
 const setting = [
+
+  {
+    label:'标题区域背景色',
+    // 设置组件类型， select / input / colorPicker
+    type: 'gradual',
+    // 字段
+    field: 'fontGradientColor',
+    optionField: 'fontGradientColor', // 对应options中的字段
+    // 是否多选
+    multiple: false,
+    // 绑定的值
+    value: '',
+  },
   // 背景色
-  {
-    label:'标题区域背景色一',
-    // 设置组件类型， select / input / colorPicker
-    type: 'colorPicker',
-    // 字段
-    field: 'fontGradientColor0',
-    optionField: 'fontGradientColor0', // 对应options中的字段
-    // 是否多选
-    multiple: false,
-    // 绑定的值
-    value: '',
-  },
-  {
-    label:'标题区域背景色二',
-    // 设置组件类型， select / input / colorPicker
-    type: 'colorPicker',
-    // 字段
-    field: 'fontGradientColor1',
-    optionField: 'fontGradientColor1', // 对应options中的字段
-    // 是否多选
-    multiple: false,
-    // 绑定的值
-    value: '',
-  },
+  // {
+  //   label:'标题区域背景色一',
+  //   // 设置组件类型， select / input / colorPicker
+  //   type: 'colorPicker',
+  //   // 字段
+  //   field: 'fontGradientColor0',
+  //   optionField: 'fontGradientColor0', // 对应options中的字段
+  //   // 是否多选
+  //   multiple: false,
+  //   // 绑定的值
+  //   value: '',
+  // },
+  // {
+  //   label:'标题区域背景色二',
+  //   // 设置组件类型， select / input / colorPicker
+  //   type: 'colorPicker',
+  //   // 字段
+  //   field: 'fontGradientColor1',
+  //   optionField: 'fontGradientColor1', // 对应options中的字段
+  //   // 是否多选
+  //   multiple: false,
+  //   // 绑定的值
+  //   value: '',
+  // },
   {
     label:'标题左侧颜色',
     // 设置组件类型， select / input / colorPicker
@@ -92,29 +105,41 @@ const setting = [
     value: 1,
   },
   {
-    label:'背景色一',
+    label:'背景色',
     // 设置组件类型， select / input / colorPicker
-    type: 'colorPicker',
+    type: 'gradual',
     // 字段
-    field: 'gradientColor0',
-    optionField: 'gradientColor0', // 对应options中的字段
+    field: 'gradientColor',
+    optionField: 'gradientColor', // 对应options中的字段
     // 是否多选
     multiple: false,
     // 绑定的值
     value: '',
   },
-  {
-    label:'背景色二',
-    // 设置组件类型， select / input / colorPicker
-    type: 'colorPicker',
-    // 字段
-    field: 'gradientColor1',
-    optionField: 'gradientColor1', // 对应options中的字段
-    // 是否多选
-    multiple: false,
-    // 绑定的值
-    value: '',
-  },
+  // {
+  //   label:'背景色一',
+  //   // 设置组件类型， select / input / colorPicker
+  //   type: 'colorPicker',
+  //   // 字段
+  //   field: 'gradientColor0',
+  //   optionField: 'gradientColor0', // 对应options中的字段
+  //   // 是否多选
+  //   multiple: false,
+  //   // 绑定的值
+  //   value: '',
+  // },
+  // {
+  //   label:'背景色二',
+  //   // 设置组件类型， select / input / colorPicker
+  //   type: 'colorPicker',
+  //   // 字段
+  //   field: 'gradientColor1',
+  //   optionField: 'gradientColor1', // 对应options中的字段
+  //   // 是否多选
+  //   multiple: false,
+  //   // 绑定的值
+  //   value: '',
+  // },
   {
     label: '渐变色方向',
     // 设置组件类型
