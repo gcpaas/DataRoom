@@ -49,6 +49,9 @@ public class ScreenSelectChart extends Chart {
         @ApiModelProperty("激活项字体颜色")
         private String activeFontColor;
 
+        @ApiModelProperty("占位提示")
+        private String placeholder;
+
     }
 
 
