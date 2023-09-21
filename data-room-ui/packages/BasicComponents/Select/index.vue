@@ -4,7 +4,7 @@
     v-model="value"
     :popper-class="'basic-component-select select-popper-' + config.code"
     :class="['basic-component-select', `select-${config.code}`]"
-    :placeholder="`请选择${placeholder || newPlaceholder}`"
+    :placeholder="config.customize.placeholder"
     clearable
     :filterable="filterable"
     @visible-change="visibleChange"
@@ -21,10 +21,8 @@
 </template>
 
 <script>
-import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
-import { getDataSetDetails } from 'data-room-ui/js/api/bigScreenApi'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
 import cloneDeep from 'lodash/cloneDeep'
 window.dataSetFields = []
@@ -44,53 +42,26 @@ export default {
       value: '',
       innerConfig: {},
       optionData: [],
-      newPlaceholder: '',
       filterable: false
     }
   },
   computed: {
     isPreview () {
       return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
-    },
-    placeholder: {
-      get () {
-        return window.dataSetFields.find(field => field.value === this.config.dataSource.dimensionField)?.label || ''
-      },
-      set (val) {
-        this.newPlaceholder = val
-      }
     }
   },
   watch: { },
   created () {
   },
   mounted () {
-    window.dataSetFields = []
     this.changeStyle(this.config)
-    EventBus.$on('changeBusinessKey', () => {
-      window.dataSetFields = []
-    })
     if (this.isPreview) {
       this.filterable = true
-      document.querySelector(`.select-${this.config.code}`).style.pointerEvents = 'all'
-      if (this.config.dataSource.businessKey && window.dataSetFields.length === 0) {
-        getDataSetDetails(this.config.dataSource.businessKey).then(res => {
-          window.dataSetFields = res.fields.map(field => {
-            return {
-              label: field.comment || field.fieldDesc,
-              value: field.name || field.fieldName
-            }
-          })
-          this.placeholder = window.dataSetFields.find(field => field.value === this.config.dataSource.dimensionField)?.label || ''
-        })
-      }
     } else {
       document.querySelector(`.select-${this.config.code}`).style.pointerEvents = 'none'
     }
   },
-  beforeDestroy () {
-    EventBus.$off('changeBusinessKey')
-  },
+  beforeDestroy () { },
   methods: {
     dataFormatting (config, data) {
       // 数据返回成功则赋值
@@ -105,20 +76,8 @@ export default {
             console.info(e)
           }
         }
-        config.option.data = data
         this.optionData = data
         config.customize.title = config.option.data[config.dataSource.dimensionField] || config.customize.title
-        if (window.dataSetFields.length === 0) {
-          getDataSetDetails(this.config.dataSource.businessKey).then(res => {
-            window.dataSetFields = res.fields.map(field => {
-              return {
-                label: field.comment || field.fieldDesc,
-                value: field.name || field.fieldName
-              }
-            })
-            this.placeholder = window.dataSetFields.find(field => field.value === this.config.dataSource.dimensionField)?.label || ''
-          })
-        }
         // 语音播报
       } else {
         // 数据返回失败则赋前端的模拟数据

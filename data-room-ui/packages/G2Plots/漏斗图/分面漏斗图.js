@@ -229,7 +229,8 @@ const data = [
 const optionHandler = `option.legend = option.legendEnable ? {position: option.legendPosition}: false;
 window.conversionTagName = option.conversionTagName
 option.conversionTag.formatter = (datum) => {
-  return window.conversionTagName + datum.$$percentage$$.toFixed(2) * 100 + '%'
+  const percentage = parseFloat(datum.$$percentage$$)
+  return window.conversionTagName +  (percentage * 100).toFixed(2) + '%'
 }
 if (option.legendEnable) {
    option.legend.itemName = option.legendItemName
@@ -277,7 +278,8 @@ const option = {
       fontSize: 12
     },
     formatter: (datum) => {
-      return option.conversionTagName + datum.$$percentage$$.toFixed(2) * 100 + '%'
+      const percentage = parseFloat(datum.$$percentage$$)
+      return '转化率' + (percentage * 100).toFixed(2) + '%'
     }
   }
 }

@@ -6,6 +6,7 @@ import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.dataroom.core.module.basic.dao.DataRoomPagePreviewDao;
 import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
+import com.gccloud.dataroom.core.module.chart.bean.Chart;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
 import com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePreviewService;
 import com.gccloud.dataroom.core.utils.CodeGenerateUtils;
@@ -32,6 +33,7 @@ public class DataRoomPagePreviewServiceImpl extends ServiceImpl<DataRoomPagePrev
         if (list != null && !list.isEmpty()) {
             // 有则直接更新
             PagePreviewEntity pagePreviewEntity = list.get(0);
+            bigScreenPageDTO.setCode(code);
             pagePreviewEntity.setConfig(bigScreenPageDTO);
             pagePreviewEntity.setCreateDate(new Date());
             this.updateById(pagePreviewEntity);

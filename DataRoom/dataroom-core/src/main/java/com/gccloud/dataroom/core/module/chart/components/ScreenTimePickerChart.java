@@ -56,6 +56,9 @@ public class ScreenTimePickerChart extends Chart {
         @ApiModelProperty(notes = "绑定值的格式")
         private String valueFormat;
 
+        @ApiModelProperty("占位提示")
+        private String placeholder;
+
     }
 
 

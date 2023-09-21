@@ -111,13 +111,20 @@ export default {
 }
 // 自定义dropdown的样式
 .theme-dropdown-menu{
-  //background-color: var(--bs-background-2)!important;
-  //border: 1px solid var(--bs-border-1);
+  background-color: var(--bs-background-2)!important;
+  border: 1px solid var(--bs-border-1);
+  /deep/ .popper__arrow{
+    background-color: var(--bs-background-2)!important;
+    &:after{
+      border-bottom-color: var(--bs-background-2)!important;
+    }
+  }
   /deep/ .el-dropdown-menu__item{
-    //background-color: var(--bs-background-2)!important;
+    background-color: var(--bs-background-2)!important;
+    color: rgb(188, 201, 212)!important;
     &:hover {
-      //color: var(--bs-el-color-primary) !important;
-      //background-color: var(--bs-el-background-3) !important;
+      color: var(--bs-el-color-primary) !important;
+      background-color: var(--bs-el-background-3) !important;
     }
   }
 
