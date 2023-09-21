@@ -138,6 +138,36 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
+  // 网格线
+  {
+    label: '分隔线',
+    type: 'switch',
+    field: 'yAxis_splitLine_show',
+    optionField: 'yAxis.splitLine.show',
+    value: 0,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'grid'
+  },
+  {
+    label: '宽度',
+    type: 'inputNumber',
+    field: 'yAxis_splitLine_lineStyle_width',
+    optionField: 'yAxis.splitLine.lineStyle.width',
+    value: 2,
+    tabName: 'custom',
+    groupName: 'grid'
+  },
+  {
+    label: '颜色',
+    type: 'colorPicker',
+    field: 'yAxis_splitLine_lineStyle_color',
+    optionField: 'yAxis.splitLine.lineStyle.color',
+    value: '#fff',
+    tabName: 'custom',
+    groupName: 'grid'
+  },
   // x轴 xAxis
   {
     label: '显示',
@@ -294,6 +324,39 @@ const setting = [
     // 是否多选
     multiple: false,
     value: '#333',
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '刻度显示',
+    type: 'switch',
+    field: 'yAxis_axisTick_show',
+    optionField: 'yAxis.axisTick.show',
+    value: 1,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '刻度颜色',
+    type: 'colorPicker',
+    field: 'yAxis_axisTick_lineStyle_color',
+    optionField: 'yAxis.axisTick.lineStyle.color',
+    // 是否多选
+    multiple: false,
+    value: '#fff',
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '刻度宽度',
+    type: 'inputNumber',
+    field: 'yAxis_axisTick_lineStyle_width',
+    optionField: 'yAxis.axisTick.lineStyle.width',
+    // 是否多选
+    multiple: false,
+    value: 1,
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -516,9 +579,20 @@ const option = {
       },
       margin: 10
     },
+    axisTick: {
+      show: true,
+      lineStyle: {
+        color: '#fff',
+        width: 1
+      }
+    },
     // 分隔线
     splitLine: {
-      show: false // yAxis.show配置为true时，该配置才有效
+      show: true, // yAxis.show配置为true时，该配置才有效
+      lineStyle: {
+        color: '#fff',
+        width: 2
+      }
     },
     // y轴轴线是否显示
     axisLine: {
