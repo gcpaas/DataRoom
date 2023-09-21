@@ -261,6 +261,18 @@ export default function getComponentConfig (type) {
         y: 0,
         type
       }
+    case 'timePicker':
+      return {
+        name: '时间选择器',
+        title: '时间选择器',
+        icon: Icon.getNameList()[22],
+        className: 'com.gccloud.dataroom.core.module.chart.components.ScreenTimePickerChart',
+        w: 200,
+        h: 100,
+        x: 0,
+        y: 0,
+        type
+      }
     default:
       return {}
   }

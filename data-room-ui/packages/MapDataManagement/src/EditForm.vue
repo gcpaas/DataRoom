@@ -130,19 +130,19 @@
         slot="footer"
         class="dialog-footer"
       >
-      <el-button
-        class="bs-el-button-default"
-        @click="handleClose"
-      >
-        取消
-      </el-button>
-      <el-button
-        type="primary"
-        @click="submitForm"
-      >
-        确定
-      </el-button>
-    </span>
+        <el-button
+          class="bs-el-button-default"
+          @click="handleClose"
+        >
+          取消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="submitForm"
+        >
+          确定
+        </el-button>
+      </span>
     </el-dialog>
     <input
       ref="geoJsonFile"
@@ -158,22 +158,21 @@
 <script>
 import _ from 'lodash'
 import vueJsonViewer from 'vue-json-viewer'
-import {mapUpdate, getMapChildFromGeoJson} from 'data-room-ui/js/utils/mapDataService'
+import { mapUpdate, getMapChildFromGeoJson } from 'data-room-ui/js/utils/mapDataService'
 
 export default {
-  name: "EditForm",
+  name: 'EditForm',
   components: {
     vueJsonViewer
   },
   computed: {
-    autoParseNextLevelShow() {
+    autoParseNextLevelShow () {
       // geoJson 不为空，且未上传过（说明是刚上传的）
       return !this.isWhitespace(this.mapForm.geoJson) && this.mapForm.uploadedGeoJson === 0
     }
   },
-  data() {
+  data () {
     const validateCode = (rule, value, callback) => {
-      console.log(this.mapForm.parentId)
       if (this.mapForm.parentId === '0' || this.mapForm.parentId === 0) {
         // 不需要校验
         callback()
@@ -192,7 +191,6 @@ export default {
           callback()
         }
       })
-
     }
     return {
       mapFormVisible: false,
@@ -211,40 +209,40 @@ export default {
       },
       rules: {
         mapCode: [
-          {required: true, message: '请输入地图标识', trigger: 'blur'},
+          { required: true, message: '请输入地图标识', trigger: 'blur' },
           { validator: validateCode, trigger: 'blur' }
         ],
         name: [
-          {required: true, message: '请输入地图名称', trigger: 'blur'}
+          { required: true, message: '请输入地图名称', trigger: 'blur' }
         ],
         level: [
-          {required: true, message: '请选择地图级别', trigger: 'change'}
+          { required: true, message: '请选择地图级别', trigger: 'change' }
         ],
         geoJson: [
-          {required: true, message: '请上传地图数据', trigger: 'change'}
+          { required: true, message: '请上传地图数据', trigger: 'change' }
         ]
       },
       levelList: [
-        {value: 0, label: '世界'},
-        {value: 1, label: '国家'},
-        {value: 2, label: '省份'},
-        {value: 3, label: '城市'},
-        {value: 4, label: '区县'}
+        { value: 0, label: '世界' },
+        { value: 1, label: '国家' },
+        { value: 2, label: '省份' },
+        { value: 3, label: '城市' },
+        { value: 4, label: '区县' }
       ],
       mapCodeList: []
     }
   },
   methods: {
-    init(map) {
+    init (map) {
       this.mapForm = _.cloneDeep(map)
       if (!this.isWhitespace(this.mapForm.geoJson)) {
         this.mapForm.geoJson = JSON.parse(this.mapForm.geoJson)
       }
     },
-    handleClose() {
+    handleClose () {
       this.mapFormVisible = false
     },
-    submitForm() {
+    submitForm () {
       this.$refs.mapForm.validate(valid => {
         if (!valid) {
           return false
@@ -263,27 +261,26 @@ export default {
           this.mapFormVisible = false
           this.$emit('refresh')
         })
-
       })
     },
-    isWhitespace(str) {
+    isWhitespace (str) {
       // 如果是null、undefined，返回true
       if (str == null) {
         return true
       }
-      return /^\s*$/.test(str);
+      return /^\s*$/.test(str)
     },
-    upload() {
+    upload () {
       this.$refs.geoJsonFile.click()
     },
-    handleBatchUpload(source) {
+    handleBatchUpload (source) {
       this.uploadLoading = true
       const file = source.target.files
       const reader = new FileReader() // 新建一个FileReader
       reader.readAsText(file[0], 'UTF-8') // 读取文件
 
       reader.onload = (event) => {
-        let jsonStr = event.target.result
+        const jsonStr = event.target.result
         // 读取文件内容
         try {
           this.mapForm.geoJson = JSON.parse(jsonStr)
@@ -296,11 +293,10 @@ export default {
         // input通过onchange事件来触发js代码的，由于两次文件是重复的，所以这个时候onchange事件是没有触发到的，所以需要手动清空input的值
         source.target.value = ''
       }
-    },
+    }
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
 @import '../../assets/style/bsTheme.scss';

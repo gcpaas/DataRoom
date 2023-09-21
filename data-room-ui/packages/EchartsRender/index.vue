@@ -75,7 +75,6 @@ export default {
     'config.w': {
       handler (val) {
         if (val) {
-          // console.log('this.config',this.config);
           const chartDom = document.getElementById(this.chatId)
           this.observeChart(chartDom, this.chart, this.config.option)
         }
@@ -213,7 +212,6 @@ export default {
       return config
     },
     dataFormatting (config, data) {
-      console.log('dataFormatting')
       // 数据返回成功则赋值
       if (data.success) {
         data = data.data
@@ -257,7 +255,6 @@ export default {
     },
     // 格式化echarts的配置
     echartsOptionFormatting (config, data) {
-      console.log('echartsOptionFormatting');
       const option = config.option
       // 分组字段
       const xField = config.setting.find(item => item.optionField === 'xField')?.value
@@ -542,7 +539,6 @@ export default {
     },
     // 组件的样式改变，返回改变后的config
     changeStyle (config, isUpdateTheme) {
-      console.log('changeStyle');
       config = { ...this.config, ...config }
       config = this.transformSettingToOption(config, 'custom')
       // 这里定义了option和setting是为了保证在执行eval时,optionHandler、dataHandler里面可能会用到，
