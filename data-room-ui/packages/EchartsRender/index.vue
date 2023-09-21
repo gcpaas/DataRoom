@@ -213,6 +213,7 @@ export default {
       return config
     },
     dataFormatting (config, data) {
+      console.log('dataFormatting')
       // 数据返回成功则赋值
       if (data.success) {
         data = data.data
@@ -256,6 +257,7 @@ export default {
     },
     // 格式化echarts的配置
     echartsOptionFormatting (config, data) {
+      console.log('echartsOptionFormatting');
       const option = config.option
       // 分组字段
       const xField = config.setting.find(item => item.optionField === 'xField')?.value
@@ -501,9 +503,25 @@ export default {
     // 对series里面的样式进行配置
     seriesStyle (config) {
       const _config = CloneDeep(config)
-      // 如果
-      // const ids = Object.keys(config.option.seriesCustom)
-      const ids = ['barTopColor', 'barBottomColor', 'shadowColor', 'shadowTopColor']
+      const seriesCustom = _config.option.seriesCustom
+      const ids = Object.keys(config.option.seriesCustom)
+      // const ids = ['barTopColor', 'barBottomColor', 'shadowColor', 'shadowTopColor']
+      const hasSeries = _config.setting.find(item => item.optionField === 'seriesField' && item.value !== '')
+      // 如果是基础柱状图
+      if (!hasSeries) {
+        _config.option.series.forEach(item => {
+          // 配置颜色
+          if (ids.includes(item.id)) {
+            item.color = seriesCustom[item.id]
+          }
+          // 配置宽度
+          if (item.type === 'pictorialBar') {
+            item.symbolSize = [seriesCustom.barWidth, seriesCustom.barWidth / 2]
+          } else if (item.type === 'bar') {
+            item.barWidth = seriesCustom.barWidth
+          }
+        })
+      }
       _config.option.series.forEach((item) => {
         if (ids.includes(item.id)) {
           item.color = _config.option.seriesCustom[item.id]
@@ -524,6 +542,7 @@ export default {
     },
     // 组件的样式改变，返回改变后的config
     changeStyle (config, isUpdateTheme) {
+      console.log('changeStyle');
       config = { ...this.config, ...config }
       config = this.transformSettingToOption(config, 'custom')
       // 这里定义了option和setting是为了保证在执行eval时,optionHandler、dataHandler里面可能会用到，
@@ -537,6 +556,7 @@ export default {
           console.error(e)
         }
       }
+      // 此时，setting中的部分变量映射到了option.seriesCustom中，但未映射到series的具体配置中
       config = this.seriesStyle(config)
       // 只有样式改变时更新主题配置，切换主题时不需要保存
       if (!isUpdateTheme) {

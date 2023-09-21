@@ -38,23 +38,68 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '数据标签',
-    type: 'switch', // 设置组件类型
-    field: 'label_style_opacity', // 字段
-    // optionField: 'series', // 对应options中的字段
-    value: 0,
-    active: 1,
-    inactive: 0,
+    label: '柱子顶部颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_barTopColor', // 字段
+    optionField: 'seriesCustom.barTopColor', // 对应options中的字段
+    value: '#2DB1EF',
     tabName: 'custom',
     groupName: 'graph'
   },
+  {
+    label: '柱子颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_barColor', // 字段
+    optionField: 'seriesCustom.barColor', // 对应options中的字段
+    value: '#115ba6',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '柱子底部颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_barBottomColor', // 字段
+    optionField: 'seriesCustom.barBottomColor', // 对应options中的字段
+    value: '#187dcb',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '柱子背景顶部颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_shadowTopColor', // 字段
+    optionField: 'seriesCustom.shadowTopColor', // 对应options中的字段
+    value: '#142f5a',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '阴影柱子颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_shadowColor', // 字段
+    optionField: 'seriesCustom.shadowColor', // 对应options中的字段
+    value: '#041133',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  // {
+  //   label: '数据标签',
+  //   type: 'switch', // 设置组件类型
+  //   field: 'label_style_opacity', // 字段
+  //   // optionField: 'series', // 对应options中的字段
+  //   value: 0,
+  //   active: 1,
+  //   inactive: 0,
+  //   tabName: 'custom',
+  //   groupName: 'graph'
+  // },
   // x轴 xAxis
   {
     label: '显示',
     type: 'switch',
     field: 'xAxis_show',
     optionField: 'xAxis.show',
-    value: 1,
+    value: 0,
     active: 1,
     inactive: 0,
     tabName: 'custom',
@@ -65,20 +110,20 @@ const setting = [
     type: 'switch',
     field: 'xAxis_axisLine_show',
     optionField: 'xAxis.axisLine.show',
-    value: 1,
+    value: 0,
     active: 1,
     inactive: 0,
     tabName: 'custom',
     groupName: 'xAxis'
   },
   {
-    label: '刻度显示',
-    type: 'switch',
-    field: 'xAxis_axisTick_show',
-    optionField: 'xAxis.axisTick.show',
-    value: 0,
-    active: 1,
-    inactive: 0,
+    label: '轴线颜色',
+    type: 'colorPicker',
+    field: 'xAxis_axisLine_lineStyle_color',
+    optionField: 'xAxis.axisLine.lineStyle.color',
+    // 是否多选
+    multiple: false,
+    value: '#333',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -87,7 +132,7 @@ const setting = [
     type: 'switch',
     field: 'xAxis_axisLabel_show',
     optionField: 'xAxis.axisLabel.show',
-    value: 0,
+    value: 1,
     active: 1,
     inactive: 0,
     tabName: 'custom',
@@ -101,6 +146,24 @@ const setting = [
     // 是否多选
     multiple: false,
     value: '#8C8C8C',
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签大小',
+    type: 'inputNumber',
+    field: 'xAxis_axisLabel_textStyle_fontSize',
+    optionField: 'xAxis.axisLabel.textStyle.fontSize',
+    value: 14,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签距离',
+    type: 'inputNumber',
+    field: 'xAxis_axisLabel_margin',
+    optionField: 'xAxis.axisLabel.margin',
+    value: 30,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -168,7 +231,69 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '名称',
+    label: '轴线显示',
+    type: 'switch',
+    field: 'yAxis_axisLine_show',
+    optionField: 'yAxis.axisLine.show',
+    value: 1,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '轴线颜色',
+    type: 'colorPicker',
+    field: 'yAxis_axisLine_lineStyle_color',
+    optionField: 'yAxis.axisLine.lineStyle.color',
+    // 是否多选
+    multiple: false,
+    value: '#333',
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '标签显示',
+    type: 'switch',
+    field: 'yAxis_axisLabel_show',
+    optionField: 'yAxis.axisLabel.show',
+    value: 1,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '标签颜色',
+    type: 'colorPicker',
+    field: 'yAxis_axisLabel_textStyle_color',
+    optionField: 'yAxis.axisLabel.textStyle.color',
+    // 是否多选
+    multiple: false,
+    value: '#8C8C8C',
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '标签大小',
+    type: 'inputNumber',
+    field: 'yAxis_axisLabel_textStyle_fontSize',
+    optionField: 'yAxis.axisLabel.textStyle.fontSize',
+    value: 14,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '标签距离',
+    type: 'inputNumber',
+    field: 'yAxis_axisLabel_margin',
+    optionField: 'yAxis.axisLabel.margin',
+    value: 10,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '标题',
     type: 'input',
     field: 'yAxis_name',
     optionField: 'yAxis.name',
@@ -177,7 +302,7 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '名称颜色',
+    label: '标题颜色',
     type: 'colorPicker',
     field: 'yAxis_nameTextStyle_color',
     optionField: 'yAxis.nameTextStyle.color',
@@ -188,7 +313,7 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '名称大小',
+    label: '标题大小',
     type: 'inputNumber',
     field: 'yAxis_nameTextStyle_fontSize',
     optionField: 'yAxis.nameTextStyle.fontSize',
@@ -197,7 +322,7 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '名称位置',
+    label: '标题位置',
     type: 'select',
     field: 'yAxis_nameLocation',
     optionField: 'yAxis.nameLocation',
@@ -216,17 +341,6 @@ const setting = [
         label: '上',
         value: 'end'
       }],
-    groupName: 'yAxis'
-  },
-  {
-    label: '刻度颜色',
-    type: 'colorPicker',
-    field: 'yAxis_axisLabel_textStyle',
-    optionField: 'yAxis.axisLabel.textStyle.color',
-    // 是否多选
-    multiple: false,
-    value: '#d0d0d0',
-    tabName: 'custom',
     groupName: 'yAxis'
   }
 ]
@@ -256,7 +370,7 @@ const option = {
   },
   graphic: {
     type: 'group',
-    bottom: '8%',
+    bottom: '5%',
     left: '10%',
     z: 100,
     children: [
@@ -265,7 +379,7 @@ const option = {
         left: 0,
         bottom: 0,
         shape: {
-          width: 400,
+          width: 418 * 0.9,
           height: 10
         },
         style: {
@@ -278,7 +392,7 @@ const option = {
         bottom: 10,
         shape: {
           // 左上、右上、右下、左下
-          points: [[40, -50], [360, -50], [400, 0], [0, 0]]
+          points: [[418 / 10, -320 / 6], [418 - 418 / 6, -320 / 6], [418 * 0.9, 0], [0, 0]]
         },
         style: {
           fill: '#303256'
@@ -297,14 +411,17 @@ const option = {
         fontSize: 12
       },
       nameLocation: '',
-      // 坐标轴刻度设置:x轴数据展示
+      // 坐标轴刻度设置
       axisTick: {
         show: false,
         alignWithLabel: true
       },
       // 是否显示坐标轴的轴线
       axisLine: {
-        show: false
+        show: false,
+        lineStyle: {
+          color: '#333'
+        }
       },
       // 坐标轴刻度标签
       axisLabel: {
@@ -344,12 +461,15 @@ const option = {
       fontSize: 12
     },
     nameLocation: 'end',
-    show: true, // y轴文本标签显示
+    show: true,
     type: 'value',
     axisLabel: {
+      show: true,
       textStyle: {
-        color: 'rgb(40, 129, 170)'
-      }
+        color: '#333',
+        fontSize: 12
+      },
+      margin: 10
     },
     // 分隔线
     splitLine: {
@@ -357,16 +477,24 @@ const option = {
     },
     // y轴轴线是否显示
     axisLine: {
-      show: true
+      show: true,
+      lineStyle: {
+        color: '#333'
+      }
+
     }
   },
   seriesCustom: {
     barWidth: 30,
+    // 顶部菱形颜色
     barTopColor: '#2DB1EF',
+    // 底部菱形颜色
     barBottomColor: '#187dcb',
-    barColor1: '#115ba6',
-    barColor2: '#1db0dd',
+    // 柱子颜色
+    barColor: '#1db0dd',
+    // 阴影柱子颜色
     shadowColor: '#041133',
+    // 阴影柱子顶部颜色
     shadowTopColor: '#142f5a'
   },
   series: [
@@ -416,23 +544,24 @@ const option = {
       type: 'bar',
       barWidth: 30,
       z: 10,
-      itemStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: '#115ba6'
-            },
-            {
-              offset: 1,
-              color: '#1db0dd'
-            }
-          ]),
-          opacity: 0.8,
-          shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
-          shadowBlur: 0 // 阴影模糊值
-        }
-      },
+      color: '#115ba6',
+      // itemStyle: {
+      //   normal: {
+      //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      //       {
+      //         offset: 0,
+      //         color: '#115ba6'
+      //       },
+      //       {
+      //         offset: 1,
+      //         color: '#1db0dd'
+      //       }
+      //     ]),
+      //     opacity: 0.8,
+      //     shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
+      //     shadowBlur: 0 // 阴影模糊值
+      //   }
+      // },
       data: yData
     },
     // 阴影柱子
