@@ -277,7 +277,7 @@ export default {
       // eslint-disable-next-line eqeqeq
       if (row.editable == 1 && !this.appCode) return
       this.$refs.setDatasource.setDatasourceVisible = true
-      this.$refs.setDatasource.title = '编辑编剧源'
+      this.$refs.setDatasource.title = '编辑数据源'
       this.$refs.setDatasource.init(cloneDeep(row))
     },
     handleDelete (row) {
