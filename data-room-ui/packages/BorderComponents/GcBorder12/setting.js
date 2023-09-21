@@ -91,18 +91,6 @@ const setting = [
       }
     ]
   },
-  {
-    label:'不透明度',
-    // 设置组件类型， select / input / colorPicker
-    type: 'inputNumber',
-    // 字段
-    field: 'opacity',
-    optionField: 'opacity', // 对应options中的字段
-    // 是否多选
-    multiple: false,
-    // 绑定的值
-    value: 100,
-  },
 
 
 ]

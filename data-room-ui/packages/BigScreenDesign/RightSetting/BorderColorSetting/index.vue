@@ -4,12 +4,14 @@
     <el-color-picker
       v-model="startColor"
       class="bs-el-color-picker"
+      show-alpha
       popper-class="bs-el-color-picker"
     />
     <div class="el-icon-right" />
     <el-color-picker
       v-model="endColor"
       class="bs-el-color-picker"
+      show-alpha
       popper-class="bs-el-color-picker"
     />
   </div>
@@ -32,11 +34,14 @@ export default {
     return {
       startColor: '', // 初始颜色
       endColor: '', // 终止颜色
-    }
+          }
   },
   computed: {
   },
   watch: {
+    colors(){
+      this.init()
+    },
     startColor () {
       this.colorChange()
     },
@@ -53,8 +58,8 @@ export default {
       this.endColor = this.colors[1]
     },
     colorChange (val) {
-      this.colorsValue = [this.startColor,this.endColor]
-      this.$emit('change', this.colorsValue)
+      const colorsValue = [this.startColor,this.endColor]
+      this.$emit('change', colorsValue)
     }
   }
 }

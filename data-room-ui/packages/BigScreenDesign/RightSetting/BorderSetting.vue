@@ -290,7 +290,7 @@ export default {
           })
         }
       }
-      },immediate: true
+      }
     },
   },
   computed:{

@@ -73,14 +73,14 @@ export default {
       return this.config.border.borderWidth!=null?this.config.border.borderWidth : 2
     },
     gradientColor0 () {
-      if(this.config.border.gradientColor){
+            if(this.config.border.gradientColor){
         return this.config.border.gradientColor[0] ||this.config.border.gradientColor[1]
       }else{
         return 'transparent'
       }
     },
     gradientColor1 () {
-      if(this.config.border.gradientColor){
+            if(this.config.border.gradientColor){
        return this.config.border.gradientColor[1] ||this.config.border.gradientColor[0]
       }else{
         return 'transparent'

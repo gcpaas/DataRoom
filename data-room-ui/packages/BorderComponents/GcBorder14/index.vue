@@ -61,6 +61,7 @@ export default {
       return this.config.border.borderWidth || 2
     },
     gradientColor0 () {
+      console.log(this.config.border.gradientColor)
       if(this.config.border.gradientColor){
         return this.config.border.gradientColor[0] ||this.config.border.gradientColor[1]
       }else{
@@ -68,6 +69,7 @@ export default {
       }
     },
     gradientColor1 () {
+      console.log(this.config.border.gradientColor)
       if(this.config.border.gradientColor){
         return this.config.border.gradientColor[1] ||this.config.border.gradientColor[0]
       }else{
