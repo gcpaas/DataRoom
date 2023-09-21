@@ -408,7 +408,9 @@ export default {
       const node = document.querySelector('.remote-preview-inner-wrap')
       // 获取node下的第一个子节点
       const childrenNode = node.children[0]
-      toPng(childrenNode)
+      // 为childrenNode添加一个背景颜色
+      childrenNode.style.backgroundColor = 'var(--bs-background-1)'
+      toJpeg(childrenNode)
         .then((dataUrl) => {
           const link = document.createElement('a')
           link.download = `${this.form.name}.png`
