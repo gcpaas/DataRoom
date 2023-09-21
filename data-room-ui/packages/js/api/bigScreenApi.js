@@ -5,7 +5,16 @@ export function getScreenInfo (code) {
 }
 
 // 保存更新大屏
-export function saveScreen (data) {
+export function saveScreen(data) {
+  data.chartList.forEach((item) => {
+    if (item.type == 'customComponent') {
+      console.log(item)
+      item.setting=item.setting.map((x) => {
+        const {field,value,...obj}=x
+	        return {field,value}
+      })
+    }
+  })
   return Vue.prototype.$dataRoomAxios.post('/bigScreen/design/update', data)
 }
 

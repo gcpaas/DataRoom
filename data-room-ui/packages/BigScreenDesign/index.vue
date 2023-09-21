@@ -134,6 +134,7 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 import SketchDesignRuler from 'data-room-ui/BigScreenDesign/RulerTool/SketchRuler.vue'
 import multipleSelectMixin from 'data-room-ui/js/mixins/multipleSelectMixin'
 import { getScreenInfo } from 'data-room-ui/js/api/bigScreenApi'
+import plotSettings from 'data-room-ui/G2Plots/settings'
 import MouseSelect from './MouseSelect/index.vue'
 import cloneDeep from 'lodash/cloneDeep'
 import { randomString } from '../js/utils'
@@ -297,7 +298,29 @@ export default {
       getScreenInfo(component.code).then(res => {
         res.chartList.forEach((item) => {
           if (!item.border) {
-            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[16,16,16,16]}
+            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[0,0,0,0]}
+          }
+          if(!item.border.padding){
+            item.border.padding=[0,0,0,0]
+          }
+          if (item.type == 'customComponent'){
+            plotSettings[Symbol.iterator]=function*(){
+              let keys=Object.keys(plotSettings)
+              for(let k of keys){
+                yield [k,plotSettings[k]]
+              }
+            }
+            for(let [key,value] of plotSettings){
+             if (item.name == value.name) {
+                const settings=JSON.parse(JSON.stringify(value.setting))
+                item.setting=settings.map((x)=>{
+                  const index=item.setting.findIndex(y=>y.field==x.field)
+                  x.field = item.setting[index].field
+                  x.value=item.setting[index].value
+                  return x
+               })
+              }
+            }
           }
         })
         // 给组件库导入的组件加入统一的前缀

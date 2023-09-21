@@ -3,6 +3,7 @@
 import cloneDeep from 'lodash/cloneDeep'
 import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
 import { getScreenInfo, getDataSetDetails, getDataByDataSetId } from '../api/bigScreenApi'
+import plotSettings from 'data-room-ui/G2Plots/settings'
 import { stringToFunction } from '../utils/evalFunctions'
 import { EventBus } from '../utils/eventBus'
 import plotList from 'data-room-ui/G2Plots/plotList'
@@ -16,7 +17,29 @@ export default {
         // 兼容边框配置
         data.chartList.forEach((item) => {
           if (!item.border) {
-            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[16,16,16,16]}
+            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[0,0,0,0]}
+          }
+          if(!item.border.padding){
+            item.border.padding=[0,0,0,0]
+          }
+          if (item.type == 'customComponent'){
+            plotSettings[Symbol.iterator]=function*(){
+              let keys=Object.keys(plotSettings)
+              for(let k of keys){
+                yield [k,plotSettings[k]]
+              }
+            }
+            for(let [key,value] of plotSettings){
+              if (item.name == value.name) {
+                const settings=JSON.parse(JSON.stringify(value.setting))
+                item.setting=settings.map((x)=>{
+                  const index=item.setting.findIndex(y=>y.field==x.field)
+                  x.field = item.setting[index].field
+                  x.value=item.setting[index].value
+                  return x
+               })
+              }
+            }
           }
         })
         const pageInfo = handleResData(data)
