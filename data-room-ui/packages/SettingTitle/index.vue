@@ -9,8 +9,6 @@
 <style lang="scss" scoped>
 .lc-field-head {
     height: 30px;
-    // margin-bottom: 12px;
-
     .lc-field-title {
       width: 308px;
         // 文字溢出隐藏
@@ -21,7 +19,6 @@
         padding-left: 12px;
         line-height: 30px;
         height: 30px;
-
         &:after {
             position: absolute;
             left: 0;

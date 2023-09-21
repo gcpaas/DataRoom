@@ -89,6 +89,7 @@
                 v-model="config.customize.formatType"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                clearable
                 @change="selectFormatType"
               >
                 <el-option
@@ -103,10 +104,22 @@
               v-if="config.customize.formatType === 'custom'"
               label="自定义时间格式"
             >
-              <el-input
-                v-model="config.customize.valueFormat"
-                placeholder="例如：HH:mm:ss"
-              />
+              <div class="time-format-description">
+                <el-input
+                  v-model="config.customize.valueFormat"
+                  placeholder="例如：HH:mm:ss"
+                  clearable
+                />
+                <el-tooltip
+                  content="时间格式示例：HH表示小时（24小时制），mm表示分钟，ss表示秒"
+                  placement="top"
+                >
+                  <span
+                    class="el-icon-question"
+                    style="color:#9e9e9e"
+                  />
+                </el-tooltip>
+              </div>
             </el-form-item>
           </div>
         </el-form>
@@ -175,13 +188,15 @@ export default {
   watch: {},
   mounted () {},
   methods: {
-    selectFormatType (val) {
-      if (val === 'default') {
+    selectFormatType (type) {
+      if (type === 'default') {
         this.config.customize.value = ''
         this.config.customize.valueFormat = ''
-      } else if (val === 'timestamp') {
+      } else if (type === 'timestamp') {
         this.config.customize.value = 0
         this.config.customize.valueFormat = 'timestamp'
+      } else if (type === 'custom') {
+        this.config.customize.valueFormat = 'HH:mm:ss'
       }
     }
   }
@@ -192,5 +207,12 @@ export default {
   .lc-field-body {
     width: 97%;
     padding: 16px;
+  }
+  .time-format-description{
+    display: flex;
+    align-items: center;
+    .el-tooltip{
+      margin-left: 5px;
+    }
   }
   </style>
