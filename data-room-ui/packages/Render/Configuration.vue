@@ -12,7 +12,7 @@
   >
     <!--    <span class="point-text" v-show="hoverCode === config.code"> {{ getPoint(config) }}</span>-->
     <span
-      v-show="config.locked"
+      v-show="!isPreview && config.locked"
       class="locked-status el-icon-lock"
     />
     <slot />

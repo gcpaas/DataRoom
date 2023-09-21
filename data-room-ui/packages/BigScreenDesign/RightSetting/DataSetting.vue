@@ -667,14 +667,15 @@ export default {
     // 映射字段
     sourceFieldList () {
       const list = this?.config?.customize?.bindComponents || this.fieldsList
-      return (
-        list?.map(field => {
-          return {
-            label: field.comment || field.fieldDesc,
-            value: field.name || field.fieldName
-          }
-        }) || []
-      )
+      const modifiedList = list?.map(field => ({
+        label: field.comment || field.fieldDesc,
+        value: field.name || field.fieldName
+      })) || []
+
+      if (this.config.type === 'timePicker') {
+        modifiedList.push({ label: '当前组件值', value: this.config.code })
+      }
+      return modifiedList
     }
   },
   watch: {
