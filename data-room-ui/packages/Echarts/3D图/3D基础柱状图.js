@@ -1,4 +1,3 @@
-import * as echarts from 'echarts'
 // 配置版本号
 const version = '2023091901'
 // 标题
@@ -65,15 +64,6 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '柱子背景顶部颜色',
-    type: 'colorPicker', // 设置组件类型
-    field: 'seriesCustom_shadowTopColor', // 字段
-    optionField: 'seriesCustom.shadowTopColor', // 对应options中的字段
-    value: '#142f5a',
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
     label: '阴影柱子颜色',
     type: 'colorPicker', // 设置组件类型
     field: 'seriesCustom_shadowColor', // 字段
@@ -82,17 +72,72 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
-  // {
-  //   label: '数据标签',
-  //   type: 'switch', // 设置组件类型
-  //   field: 'label_style_opacity', // 字段
-  //   // optionField: 'series', // 对应options中的字段
-  //   value: 0,
-  //   active: 1,
-  //   inactive: 0,
-  //   tabName: 'custom',
-  //   groupName: 'graph'
-  // },
+  {
+    label: '阴影柱子顶部颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'seriesCustom_shadowTopColor', // 字段
+    optionField: 'seriesCustom.shadowTopColor', // 对应options中的字段
+    value: '#142f5a',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签',
+    type: 'switch', // 设置组件类型
+    field: 'series_barColor_label_show', // 字段
+    optionField: 'series.barColor.label.show', // 对应options中的字段
+    value: 0,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签位置',
+    type: 'select', // 设置组件类型
+    field: 'series_barColor_label_position', // 字段
+    optionField: 'series.barColor.label.position', // 对应options中的字段
+    // 是否多选
+    multiple: false,
+    value: 'inside',
+    tabName: 'custom',
+    options: [
+      {
+        label: '顶部',
+        value: 'top'
+      },
+      {
+        label: '居中',
+        value: 'inside'
+      },
+      {
+        label: '底部',
+        value: 'bottom'
+      }
+    ],
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'series_barColor_label_color', // 字段
+    optionField: 'series.barColor.label.color', // 对应options中的字段
+    value: '#ffffff',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签大小',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'series_barColor_label_fontSize',
+    // 对应options中的字段
+    optionField: 'series.barColor.label.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
   // x轴 xAxis
   {
     label: '显示',
@@ -509,13 +554,7 @@ const option = {
       symbolPosition: 'end',
       z: 12,
       label: {
-        normal: {
-          show: false,
-          position: 'top',
-          fontSize: 15,
-          fontWeight: 'bold',
-          color: '#27a7ce'
-        }
+        show: false
       },
       color: '#2DB1EF',
       tooltip: {
@@ -534,6 +573,9 @@ const option = {
       z: 12,
       color: '#187dcb',
       tooltip: {
+        show: false
+      },
+      label: {
         show: false
       },
       data: yData
@@ -562,6 +604,12 @@ const option = {
       //     shadowBlur: 0 // 阴影模糊值
       //   }
       // },
+      label: {
+        show: true,
+        position: 'inside',
+        color: '#fff',
+        fontSize: 12
+      },
       data: yData
     },
     // 阴影柱子
@@ -597,13 +645,7 @@ const option = {
       symbolPosition: 'end',
       z: 12,
       label: {
-        normal: {
-          show: false,
-          position: 'top',
-          fontSize: 15,
-          fontWeight: 'bold',
-          color: '#27a7ce'
-        }
+        show: false
       },
       color: '#142f5a',
       tooltip: {

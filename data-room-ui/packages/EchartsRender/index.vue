@@ -75,7 +75,6 @@ export default {
     'config.w': {
       handler (val) {
         if (val) {
-          // console.log('this.config',this.config);
           const chartDom = document.getElementById(this.chatId)
           this.observeChart(chartDom, this.chart, this.config.option)
         }
@@ -195,6 +194,30 @@ export default {
                 option = option[field]
               }
             })
+          } else if (optionField[0] === 'series') {
+            // 存储要修改的series对象
+            let changeObject = {}
+            // 存储改变后的series对象
+            let changedObject = {}
+            optionField.forEach((field, index) => {
+              if (index === 0) {
+                option = option[field]
+              } else if (index === 1) {
+                // 根据id找到对应的type
+                changeObject = option.find(obj => obj.id === field)
+                changedObject = changeObject
+                option = option.filter(obj => obj.id !== field)
+              } else if (index === optionField.length - 1) {
+                // 数据配置时，必须有值才更新
+                if ((set.tabName === type && type === 'data' && set.value) || (set.tabName === type && type === 'custom')) {
+                  changeObject[field] = set.value
+                }
+              } else {
+                changeObject = changeObject[field]
+              }
+            })
+            changeObject = { ...changeObject, ...changedObject }
+            option.push(changeObject)
           } else {
             optionField.forEach((field, index) => {
               if (index === optionField.length - 1) {
@@ -213,7 +236,6 @@ export default {
       return config
     },
     dataFormatting (config, data) {
-      console.log('dataFormatting')
       // 数据返回成功则赋值
       if (data.success) {
         data = data.data
@@ -257,15 +279,12 @@ export default {
     },
     // 格式化echarts的配置
     echartsOptionFormatting (config, data) {
-      console.log('echartsOptionFormatting');
       const option = config.option
       // 分组字段
       const xField = config.setting.find(item => item.optionField === 'xField')?.value
       const yField = config.setting.find(item => item.optionField === 'yField')?.value
       const hasSeries = config.setting.find(item => item.optionField === 'seriesField' && item.value !== '')
       const { xData, yData } = this.getxDataAndYData(xField, yField, data, hasSeries)
-      // const xData = [...new Set(data.map(item => item[xField]))]
-      // const yData = data.map(item => item[yField])
       const maxY = Math.max(...yData) + Math.max(...yData) * 0.2
       // 生成阴影柱子的值
       const shadowData = Array.from({ length: xData.length }, () => maxY)
@@ -393,110 +412,14 @@ export default {
           option.series.push(...seriesItem)
         }
       } else {
-        option.series = [
-          {
-            id: 'barTopColor', // 用于区分是图表的什么部分
-            type: 'pictorialBar', // 象形柱图
-            symbol: 'diamond',
-            symbolOffset: [0, '-50%'], // 上部菱形
-            symbolSize: [30, 15],
-            // symbolOffset: [0, -6], // 上部椭圆
-            symbolPosition: 'end',
-            z: 12,
-            label: {
-              normal: {
-                show: true,
-                position: 'top',
-                fontSize: 15,
-                fontWeight: 'bold',
-                color: '#27a7ce'
-              }
-            },
-            color: option.seriesCustom.barTopColor,
-            data: yData
-          },
-          {
-            id: 'barBottomColor', // 用于区分是图表的什么部分
-            type: 'pictorialBar',
-            symbol: 'diamond',
-            symbolSize: [30, 15],
-            symbolOffset: ['0%', '50%'], // 下部菱形
-            // symbolOffset: [0, 7], // 下部椭圆
-            z: 12,
-            color: option.seriesCustom.barBottomColor,
-            data: yData
-          },
-          {
-            id: 'barColor', // 用于区分是图表的什么部分
-            type: 'bar',
-            barWidth: 30,
-            z: 10,
-            itemStyle: {
-              normal: {
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  {
-                    offset: 0,
-                    color: option.seriesCustom.barColor1
-                  },
-                  {
-                    offset: 1,
-                    color: option.seriesCustom.barColor2
-                  }
-                ]),
-                opacity: 0.8,
-                shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
-                shadowBlur: 0 // 阴影模糊值
-              }
-            },
-            data: yData
-          },
-          {
-            id: 'shadowColor', // 用于区分是图表的什么部分
-            type: 'bar',
-            barWidth: 30,
-            xAxisIndex: 1,
-            itemStyle: {
-              normal: {
-                color: option.seriesCustom.shadowColor,
-                opacity: 0.8,
-                shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
-                shadowBlur: 0 // 阴影模糊值
-              }
-            },
-            label: {
-              show: false
-            },
-            tooltip: {
-              show: false
-            },
-            data: shadowData
-          },
-          {
-            id: 'shadowTopColor', // 用于区分是图表的什么部分
-            type: 'pictorialBar', // 象形柱图
-            xAxisIndex: 1,
-            symbol: 'diamond',
-            symbolOffset: [0, '-50%'], // 上部菱形
-            symbolSize: [30, 15],
-            // symbolOffset: [0, -6], // 上部椭圆
-            symbolPosition: 'end',
-            z: 12,
-            label: {
-              normal: {
-                show: false,
-                position: 'top',
-                fontSize: 15,
-                fontWeight: 'bold',
-                color: '#27a7ce'
-              }
-            },
-            color: option.seriesCustom.shadowTopColor,
-            tooltip: {
-              show: false
-            },
-            data: shadowData
+        // 没有分组，不需要修改配置，直接修改series中每个对象的series
+        option.series.forEach(item => {
+          if (item.id.includes('shadow')) {
+            item.data = shadowData
+          } else {
+            item.data = yData
           }
-        ]
+        })
       }
       return option
     },
@@ -542,7 +465,6 @@ export default {
     },
     // 组件的样式改变，返回改变后的config
     changeStyle (config, isUpdateTheme) {
-      console.log('changeStyle');
       config = { ...this.config, ...config }
       config = this.transformSettingToOption(config, 'custom')
       // 这里定义了option和setting是为了保证在执行eval时,optionHandler、dataHandler里面可能会用到，
