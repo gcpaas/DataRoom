@@ -1,6 +1,7 @@
+import { Funnel } from '@antv/g2plot'
 
 // 配置版本号
-const version = '2023071001'
+const version = '2023071002'
 // 分类
 const category = 'Funnel'
 // 标题
@@ -211,7 +212,7 @@ const setting = [
     value: '#595959',
     tabName: 'custom',
     groupName: 'legend'
-  },
+  }
   // 边距 padding
 ]
 
@@ -228,7 +229,8 @@ const data = [
 const optionHandler = `option.legend = option.legendEnable ? {position: option.legendPosition}: false;
 window.conversionTagName = option.conversionTagName
 option.conversionTag.formatter = (datum) => {
-  return window.conversionTagName + datum.$$percentage$$.toFixed(2) * 100 + '%'
+  const percentage = parseFloat(datum.$$percentage$$)
+  return window.conversionTagName +  (percentage * 100).toFixed(2) + '%'
 }
 if (option.legendEnable) {
    option.legend.itemName = option.legendItemName
@@ -275,7 +277,8 @@ const option = {
       fontSize: 12
     },
     formatter: (datum) => {
-      return '转化率' + datum.$$percentage$$.toFixed(2) * 100 + '%'
+      const percentage = parseFloat(datum.$$percentage$$)
+      return '转化率' + (percentage * 100).toFixed(2) + '%'
     }
   }
 }
