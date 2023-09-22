@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023071001'
+const version = '2023092201'
 // 分类
 const category = 'Area'
 // 标题
@@ -327,6 +327,17 @@ const setting = [
     field: 'yAxis_title_text',
     optionField: 'yAxis.title.text',
     value: '',
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '标题过长时旋转',
+    type: 'switch',
+    field: 'yAxis_title_autoRotate',
+    optionField: 'yAxis.title.autoRotate',
+    value: true,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'yAxis'
   },
