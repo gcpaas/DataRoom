@@ -14,8 +14,11 @@ export default {
   initLayout ({ commit, dispatch }, code) {
     return new Promise(resolve => {
       getScreenInfo(code).then(data => {
+        // 配置兼容
+        const pageInfo = handleResData(data)
         // 兼容边框配置
-        data.chartList.forEach((item) => {
+        pageInfo.chartList.forEach((item) => {
+          console.log(item)
           if (!item.border) {
             item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[0,0,0,0]}
           }
@@ -34,6 +37,7 @@ export default {
                 const settings=JSON.parse(JSON.stringify(value.setting))
                 item.setting=settings.map((x)=>{
                   const index=item.setting.findIndex(y=>y.field==x.field)
+                  console.log(item.setting[index].field)
                   x.field = item.setting[index].field
                   x.value=item.setting[index].value
                   return x
@@ -42,7 +46,7 @@ export default {
             }
           }
         })
-        const pageInfo = handleResData(data)
+
         // 改变页面数据
         commit('changePageInfo', pageInfo)
         commit('changeZIndex', pageInfo.chartList)

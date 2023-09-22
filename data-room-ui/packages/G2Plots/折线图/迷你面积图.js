@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023071001'
+const version = '2023092201'
 // 分类
 const category = 'TinyArea'
 // 标题

@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023090801'
+const version = '2023092201'
 // 分类
 const category = 'Liquid'
 // 标题
