@@ -171,9 +171,18 @@ export default {
     background-color: transparent !important;
   }
   .popper__arrow{
+    bottom: -6px !important;
+    border-top-color:var(--color) !important;
     border-bottom-color:var(--color) !important;
     &::after{
+      bottom: 0px !important;
+      border-top-color:var(--color) !important;
       border-bottom-color:var(--color) !important;
+    }
+  }
+  .el-popper[x-placement^="top"] .popper__arrow{
+
+    &::after{
     }
   }
 }
@@ -203,17 +212,8 @@ export default {
     color: var(--dropDownHoverFontColor) !important;
     background-color: var(--dropDownHoverBackgroundColor) !important;
   }
-
   .el-tag.el-tag--info {
     color: var(--bs-el-text) !important;
-  }
-
-  .popper__arrow {
-    bottom: 0 !important;
-
-    &:after {
-      bottom: 0 !important;
-    }
   }
 }
 </style>
