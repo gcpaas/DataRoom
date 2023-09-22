@@ -277,7 +277,7 @@ export default function getComponentConfig (type) {
       return {
         name: '日期时间选择器',
         title: '日期时间选择器',
-        icon: Icon.getNameList()[22],
+        icon: Icon.getNameList()[23],
         className: 'com.gccloud.dataroom.core.module.chart.components.ScreenTimePickerChart',
         w: 260,
         h: 80,

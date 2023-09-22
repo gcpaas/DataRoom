@@ -24,7 +24,7 @@
             <!-- 选择器背景颜色 -->
             <el-form-item label="背景颜色">
               <ColorPicker
-                v-model="config.customize.backgroundColor"
+                v-model="config.customize.bgColor"
                 :predefine="predefineThemeColors"
               />
             </el-form-item>
@@ -50,34 +50,44 @@
           <div class="lc-field-body">
             <el-form-item label="背景颜色">
               <ColorPicker
-                v-model="config.customize.dropDownBackgroundColor"
+                v-model="config.customize.dropDownBox.bgColor"
                 :predefine="predefineThemeColors"
               />
             </el-form-item>
             <el-form-item label="字体颜色">
               <ColorPicker
-                v-model="config.customize.dropDownFontColor"
+                v-model="config.customize.dropDownBox.fontColor"
                 :predefine="predefineThemeColors"
               />
             </el-form-item>
             <!-- 下拉项悬浮背景颜色 -->
             <el-form-item label="悬浮颜色">
               <ColorPicker
-                v-model="config.customize.dropDownHoverBackgroundColor"
+                v-model="config.customize.dropDownBox.hoverBgColor"
                 :predefine="predefineThemeColors"
               />
             </el-form-item>
             <!-- 下拉项悬浮字体颜色 -->
             <el-form-item label="悬浮字体颜色">
               <ColorPicker
-                v-model="config.customize.dropDownHoverFontColor"
+                v-model="config.customize.dropDownBox.hoverFontColor"
                 :predefine="predefineThemeColors"
               />
             </el-form-item>
             <!-- 激活项文字颜色 -->
             <el-form-item label="选中项文字颜色">
               <ColorPicker
-                v-model="config.customize.dropDownSelectedFontColor"
+                v-model="config.customize.dropDownBox.selectedFontColor"
+                :predefine="predefineThemeColors"
+              />
+            </el-form-item>
+            <!-- 选中范围背景颜色 -->
+            <el-form-item
+              v-if="['daterange','datetimerange'].includes(config.customize.type)"
+              label="范围背景颜色"
+            >
+              <ColorPicker
+                v-model="config.customize.dropDownBox.rangeBgColor"
                 :predefine="predefineThemeColors"
               />
             </el-form-item>
@@ -85,9 +95,13 @@
           <SettingTitle>时间格式</SettingTitle>
           <div class="lc-field-body">
             <el-form-item label="显示类型">
-              <el-select v-model="config.customize.type">
+              <el-select
+                v-model="config.customize.type"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+              >
                 <el-option
-                  v-for="(type) in displayType"
+                  v-for="(type) in displayTypeOptions"
                   :key="type.value"
                   :label="type.label"
                   :value="type.value"
@@ -114,14 +128,16 @@
               v-if="config.customize.formatType === 'custom'"
               label="自定义时间格式"
             >
+              <!-- year/month/date/week/ datetime/datetimerange/daterange -->
               <div class="time-format-description">
                 <el-input
                   v-model="config.customize.valueFormat"
-                  placeholder="例如：HH:mm:ss"
+                  placeholder="例如：yyyy-MM-dd HH:mm:ss"
                   clearable
                 />
+                <!-- HH表示小时（24小时制），mm表示分钟，ss表示秒 -->
                 <el-tooltip
-                  content="时间格式示例：HH表示小时（24小时制），mm表示分钟，ss表示秒"
+                  content="时间格式示例：yyyy表示年份，MM表示月份，dd表示日期，HH表示小时（24小时制），mm表示分钟，ss表示秒，具体可参考Element-UI官网的日期选择器的时间格式化部分"
                   placement="top"
                 >
                   <span
@@ -181,17 +197,15 @@ export default {
         { label: '时间戳', value: 'timestamp' },
         { label: '自定义', value: 'custom' }
       ],
-      hourOptions: [
-        { label: '24小时制，不补0', value: 'H' },
-        { label: '24小时制，补0', value: 'HH' }
-      ],
-      minuteOptions: [
-        { label: '分钟，不补0', value: 'm' },
-        { label: '分钟，补0', value: 'mm' }
-      ],
-      secondOptions: [
-        { label: '秒，不补0', value: 's' },
-        { label: '秒，补0', value: 'ss' }
+      // 时间显示类型选项 :year/month/date/week/ datetime/datetimerange/daterange
+      displayTypeOptions: [
+        { label: '年', value: 'year' },
+        { label: '月', value: 'month' },
+        { label: '日', value: 'date' },
+        { label: '周', value: 'week' },
+        { label: '日期时间', value: 'datetime' },
+        { label: '日期时间范围', value: 'datetimerange' },
+        { label: '日期范围', value: 'daterange' }
       ]
     }
   },
@@ -206,7 +220,7 @@ export default {
         this.config.customize.value = 0
         this.config.customize.valueFormat = 'timestamp'
       } else if (type === 'custom') {
-        this.config.customize.valueFormat = 'HH:mm:ss'
+        this.config.customize.valueFormat = 'yyyy-MM-dd HH:mm:ss'
       }
     }
   }

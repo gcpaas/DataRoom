@@ -32,7 +32,8 @@ const typeList = [
   'themeSwitcher',
   'themeSelect',
   'select',
-  'timePicker'
+  'timePicker',
+  'dateTimePicker'
 ]
 let basicConfigList = []
 basicConfigList = typeList.map((type) => {

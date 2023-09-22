@@ -170,18 +170,6 @@ export default {
         { label: 'Date 对象', value: 'default' },
         { label: '时间戳', value: 'timestamp' },
         { label: '自定义', value: 'custom' }
-      ],
-      hourOptions: [
-        { label: '24小时制，不补0', value: 'H' },
-        { label: '24小时制，补0', value: 'HH' }
-      ],
-      minuteOptions: [
-        { label: '分钟，不补0', value: 'm' },
-        { label: '分钟，补0', value: 'mm' }
-      ],
-      secondOptions: [
-        { label: '秒，不补0', value: 's' },
-        { label: '秒，补0', value: 'ss' }
       ]
     }
   },

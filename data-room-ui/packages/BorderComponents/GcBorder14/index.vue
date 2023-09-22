@@ -14,20 +14,22 @@
         border: ${width}px solid ${color};
         opacity: ${opacity/ 100};
         background-image: linear-gradient(${gradientDirection}, ${
-          gradientColor0 ? gradientColor0 : gradientColor1
-        } , ${gradientColor1 ? gradientColor1 : gradientColor0})
+        gradientColor0 ? gradientColor0 : gradientColor1
+      } , ${gradientColor1 ? gradientColor1 : gradientColor0})
       `"
     >
-    <div class="element"
-      v-if="config.border.isTitle"
-      :style="`
+      <div
+        v-if="config.border.isTitle"
+        class="element"
+        :style="`
       color:${fontColor};
       font-size:${config.border.fontSize}px;
       line-height:${config.border.titleHeight}px;
       height:${config.border.titleHeight};
       padding:0 0 0 20px`"
       >
-      {{config.title}}</div>
+        {{ config.title }}
+      </div>
     </div>
   </div>
 </template>
@@ -50,32 +52,29 @@ export default {
     }
   },
   computed: {
-     fontColor () {
+    fontColor () {
       return this.config.border.fontColor ? this.config.border.fontColor
         : '#fff'
     },
-     color () {
+    color () {
       return this.config.border.borderColor || ''
     },
     width () {
       return this.config.border.borderWidth || 2
     },
     gradientColor0 () {
-      console.log(this.config.border.gradientColor)
-      if(this.config.border.gradientColor){
-        return this.config.border.gradientColor[0] ||this.config.border.gradientColor[1]
-      }else{
+      if (this.config.border.gradientColor) {
+        return this.config.border.gradientColor[0] || this.config.border.gradientColor[1]
+      } else {
         return 'transparent'
       }
     },
     gradientColor1 () {
-      console.log(this.config.border.gradientColor)
-      if(this.config.border.gradientColor){
-        return this.config.border.gradientColor[1] ||this.config.border.gradientColor[0]
-      }else{
+      if (this.config.border.gradientColor) {
+        return this.config.border.gradientColor[1] || this.config.border.gradientColor[0]
+      } else {
         return 'transparent'
       }
-
     },
     radiusLeftTop () {
       return this.config.border.radiusLeftTop || 2
