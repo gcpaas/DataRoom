@@ -172,6 +172,11 @@ public interface PageDesignConstant {
              */
             String ECHARTS_COMPONENT = "echartsComponent";
 
+            /**
+             * 日期时间选择
+             */
+            String DATE_TIME_PICKER = "dateTimePicker";
+
 
         }
     }
