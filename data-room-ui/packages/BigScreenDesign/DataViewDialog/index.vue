@@ -9,6 +9,7 @@
     <el-dialog
       :close-on-click-modal="false"
       title="数据查看"
+      width="60%"
       :visible.sync="formVisible"
       :append-to-body="false"
       class="bs-dialog-wrap bs-el-dialog"
@@ -18,7 +19,6 @@
           ref="table"
           v-loading="loading"
           class="bs-table bs-el-table"
-          height="300"
           :data="dataList"
         >
           <el-table-column
@@ -220,11 +220,11 @@ export default {
 .bs-data-view-dialog{
   /deep/.el-dialog__body{
     background-color: var(--bs-background-2) !important;
-    height: 500px!important;
     overflow-y: auto!important;
+    max-height: calc(90vh - 500px) !important;
   }
   .table-box{
-    max-height: 500px; /* 设置最大高度，根据需要调整 */
+    height: 100%;
     overflow-y: auto; /* 当内容溢出时显示垂直滚动条 */
   }
   .dialog-footer{
@@ -248,7 +248,7 @@ export default {
     color: #bcc9d4;
   }
   .el-table--scrollable-y /deep/.el-table__body-wrapper{
-    overflow-y: hidden;
+    //overflow-y: hidden;
   }
   /* 修改滚动条的样式 */
   /deep/.el-dialog__body::-webkit-scrollbar {
