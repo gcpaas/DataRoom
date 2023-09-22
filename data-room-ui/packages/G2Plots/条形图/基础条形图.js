@@ -479,7 +479,7 @@ const setting = [
     value: true,
     tabName: 'custom',
     groupName: 'yAxis'
-  },
+  }
 ]
 
 // 模拟数据
@@ -492,15 +492,15 @@ const data = [
 ]
 
 // 配置处理脚本
-const optionHandler = 'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
+const optionHandler = 'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]' +
+  '\noption.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
+  '\nconst radiusNum = setting.find(settingItem=>settingItem.field === \'radiusNum\').value; option.barStyle.radius = [radiusNum,radiusNum,0,0]'
 
 // 数据处理脚本
 const dataHandler = 'const yFieldValue = setting.find(settingItem=>settingItem.field === \'yField\').value\n' +
   'if (yFieldValue) {\n' +
   '  option.seriesField = yFieldValue\n' +
-  '}' +
-  '\noption.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
-  '\nconst radiusNum = setting.find(settingItem=>settingItem.field === \'radiusNum\').value; option.barStyle.radius = [radiusNum,radiusNum,0,0]'
+  '}'
 
 // 图表配置 new Line('domName', option)
 const option = {
@@ -613,7 +613,7 @@ const option = {
         lineWidth: 1
       }
     }
-  },
+  }
 }
 
 export default {
