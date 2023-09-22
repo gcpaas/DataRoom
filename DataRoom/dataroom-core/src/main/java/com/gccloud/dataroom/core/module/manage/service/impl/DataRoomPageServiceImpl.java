@@ -25,6 +25,7 @@ import com.gccloud.common.vo.PageVO;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
@@ -141,6 +142,35 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
             log.error(ExceptionUtils.getStackTrace(e));
         }
         return fileUrl;
+    }
+
+
+    /**
+     * 复制封面文件
+     * @param oldFileName
+     * @param newFileName
+     * @return
+     */
+    private boolean copyCoverPicture(String oldFileName, String newFileName) {
+        if (StringUtils.isBlank(oldFileName)) {
+            return false;
+        }
+        String basePath = bigScreenConfig.getFile().getBasePath() + File.separator;
+        String oldFile = basePath + "cover" + File.separator + oldFileName + ".png";
+        // 检查文件是否存在
+        File file = new File(oldFile);
+        if (!file.exists() || !file.isFile()) {
+            return false;
+        }
+        // 复制一份
+        String newFilePath = basePath + "cover" + File.separator + newFileName + ".png";
+        try {
+            FileUtils.copyFile(file, new File(newFilePath));
+            return true;
+        } catch (IOException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+        }
+        return false;
     }
 
     @Override
@@ -270,6 +300,7 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
     public String copy(PageEntity screenEntity) {
         DataRoomPageDTO config = (DataRoomPageDTO) screenEntity.getConfig();
         screenEntity.setId(null);
+        String oldCode = screenEntity.getCode();
         screenEntity.setCode(CodeGenerateUtils.generate(screenEntity.getType()));
         int i = 1;
         String oldName = screenEntity.getName();
@@ -282,6 +313,12 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         List<Chart> chartList = config.getChartList();
         for (Chart chart : chartList) {
             chart.setCode(CodeGenerateUtils.generate(chart.getType() == null ? "chart" : chart.getType()));
+        }
+        boolean copy = this.copyCoverPicture(oldCode, screenEntity.getCode());
+        if (!copy) {
+            screenEntity.setCoverPicture(null);
+        } else {
+            screenEntity.setCoverPicture("cover" + File.separator + screenEntity.getCode() + ".png");
         }
         this.save(screenEntity);
         dataRoomExtendClient.afterAdd(screenEntity.getCode());

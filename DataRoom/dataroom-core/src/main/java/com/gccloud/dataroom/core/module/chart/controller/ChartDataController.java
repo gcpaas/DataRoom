@@ -17,10 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -61,7 +58,7 @@ public class ChartDataController {
     }
 
     @PostMapping("/chart")
-    @ApiOperation(value = "图表数据", position = 10, notes = "获取指定图表的数据(通过配置)", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "图表数据", position = 20, notes = "获取指定图表的数据(通过配置)", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<ChartDataVO> getChartData(@RequestBody ChartDataSearchDTO chartDataSearchDTO) {
         PageEntity pageEntity = pageService.getByCode(chartDataSearchDTO.getPageCode());
         AssertUtils.isTrue(pageEntity != null, "页面不存在");
@@ -69,6 +66,14 @@ public class ChartDataController {
         Chart chart = chartDataSearchDTO.getChart();
         return getChartData(chartDataSearchDTO, config, chart);
     }
+
+    @GetMapping("/mock/{type}")
+    @ApiOperation(value = "图表模拟数据", position = 30, notes = "获取指定类型的图表模拟数据", produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<ChartDataVO> getMockData(@PathVariable String type) {
+        ChartDataVO mockData = ChartMockData.getMockData(type);
+        return R.success(mockData);
+    }
+
 
     /**
      * 获取图表数据

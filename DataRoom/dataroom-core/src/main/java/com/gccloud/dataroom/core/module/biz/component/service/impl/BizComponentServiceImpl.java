@@ -11,6 +11,7 @@ import com.gccloud.dataroom.core.utils.CodeGenerateUtils;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.vo.PageVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
@@ -165,7 +166,7 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
             FileOutputStream outputStream = new FileOutputStream(filePath);
             outputStream.write(imageBytes);
             outputStream.close();
-            log.info("大屏封面保存至：{}", filePath);
+            log.info("组业务件封面保存至：{}", filePath);
         } catch (IOException e) {
             log.error(ExceptionUtils.getStackTrace(e));
         }
@@ -178,14 +179,50 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
         if (copyFrom == null) {
             throw new GlobalException("源业务组件不存在");
         }
+        String oldCode = copyFrom.getCode();
         copyFrom.setId(null);
         copyFrom.setName(copyFrom.getName() + "_复制");
         while(this.checkName(null, copyFrom.getName())) {
             copyFrom.setName(copyFrom.getName() + "_复制");
         }
         copyFrom.setCode(CodeGenerateUtils.generate("bizComponent"));
+        boolean copy = this.copyCoverPicture(oldCode, copyFrom.getCode());
+        if (!copy) {
+            copyFrom.setCoverPicture(null);
+        } else {
+            copyFrom.setCoverPicture("cover" + File.separator + copyFrom.getCode() + ".png");
+        }
         this.save(copyFrom);
         return copyFrom.getCode();
+    }
+
+
+    /**
+     * 复制封面文件
+     * @param oldFileName
+     * @param newFileName
+     * @return
+     */
+    private boolean copyCoverPicture(String oldFileName, String newFileName) {
+        if (StringUtils.isBlank(oldFileName)) {
+            return false;
+        }
+        String basePath = bigScreenConfig.getFile().getBasePath() + File.separator;
+        String oldFile = basePath + "cover" + File.separator + oldFileName + ".png";
+        // 检查文件是否存在
+        File file = new File(oldFile);
+        if (!file.exists() || !file.isFile()) {
+            return false;
+        }
+        // 复制一份
+        String newFilePath = basePath + "cover" + File.separator + newFileName + ".png";
+        try {
+            FileUtils.copyFile(file, new File(newFilePath));
+            return true;
+        } catch (IOException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+        }
+        return false;
     }
 
     @Override
