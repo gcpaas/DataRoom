@@ -475,7 +475,7 @@ const setting = [
     value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'yAxis'
-  },
+  }
   // 边距 padding
 ]
 
@@ -501,7 +501,7 @@ const optionHandler = '  let pointEnable = setting.find(settingItem=>settingItem
   '    option.point = {shape: pointEnable}\n' +
   '    let pointColor = setting.find(settingItem=>settingItem.field === \'point_color\').value\n' +
   '    option.point.color = pointColor\n' +
-  '  option.point.size =  setting.find(settingItem=>settingItem.field === \'point_size\').value\n'  +
+  '  option.point.size =  setting.find(settingItem=>settingItem.field === \'point_size\').value\n' +
   '};' +
   'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
 
@@ -517,6 +517,7 @@ const option = {
   yField: 'scales',
   smooth: false,
   startOnZero: true,
+  isStack: false,
   areaStyle: {
     fill: 'l(0) 0:#3e5bdb 1:#3e5bdb'
   },

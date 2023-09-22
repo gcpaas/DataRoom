@@ -114,6 +114,7 @@ const setting = [
     value: 0.6,
     tabName: 'custom',
     step: 0.1,
+    max: 1,
     groupName: 'graph'
   },
   {

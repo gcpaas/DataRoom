@@ -86,7 +86,7 @@ const setting = [
     type: 'switch', // 设置组件类型
     field: 'series_barColor_label_show', // 字段
     optionField: 'series.barColor.label.show', // 对应options中的字段
-    value: 0,
+    value: 1,
     active: 1,
     inactive: 0,
     tabName: 'custom',

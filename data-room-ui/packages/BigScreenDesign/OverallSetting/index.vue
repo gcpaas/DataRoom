@@ -321,7 +321,7 @@ export default {
       return this.form.customTheme === 'light' ? 'lightBgColor' : 'bgColor'
     },
     currentBg () {
-      return this.form.customTheme === 'light' ? 'lightBgColor' : 'bg'
+      return this.form.customTheme === 'light' ? 'lightBg' : 'bg'
     },
     dsValue () {
       return this.form.cacheDataSets?.map(dSet => ({

@@ -114,6 +114,7 @@ const setting = [
     value: '0.6',
     tabName: 'custom',
     step: 0.1,
+    max: 1,
     groupName: 'graph'
   },
   {
@@ -193,7 +194,7 @@ const setting = [
     value: '#595959',
     tabName: 'custom',
     groupName: 'legend'
-  },
+  }
 ]
 
 // 模拟数据
