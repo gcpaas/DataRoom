@@ -50,9 +50,12 @@ export default {
 <style lang="scss" scoped>
   .bs-design-wrap{
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .content-box{
-    text-align: center;
+    //text-align: center;
     /* 将背景设为渐变 */
     /*background-image: -webkit-linear-gradient(left, #6294F7, #C85D14);*/
     /* 规定背景绘制区域 */
