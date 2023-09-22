@@ -296,6 +296,9 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         PAGE_ENTITY_CACHE.invalidate(bigScreenEntity.getCode());
     }
 
+
+    public static final String COPY_SUFFIX = "-副本";
+
     @Override
     public String copy(PageEntity screenEntity) {
         DataRoomPageDTO config = (DataRoomPageDTO) screenEntity.getConfig();
@@ -304,9 +307,18 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         screenEntity.setCode(CodeGenerateUtils.generate(screenEntity.getType()));
         int i = 1;
         String oldName = screenEntity.getName();
-        screenEntity.setName(oldName + "_复制");
+        // 检查是否有 -副本，有的话从-副本开始，后面全部去掉
+        if (oldName.contains(COPY_SUFFIX)) {
+            oldName = oldName.substring(0, oldName.indexOf(COPY_SUFFIX));
+            if (StringUtils.isBlank(oldName)) {
+                oldName = "大屏";
+            }
+        }
+        screenEntity.setName(oldName + COPY_SUFFIX);
         while (checkNameRepeat(screenEntity)) {
-            screenEntity.setName(oldName + "_复制" + i++);
+           // 如果重复，采取 -副本1，-副本2的方式
+            screenEntity.setName(oldName + COPY_SUFFIX + i);
+            i++;
         }
         config.setName(screenEntity.getName());
         config.setCode(screenEntity.getCode());

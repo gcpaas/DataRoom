@@ -229,6 +229,7 @@
                 >
                   <el-radio-group
                     v-model="dataForm.repeatStatus"
+                    @change="repeatStatusChange"
                     class="bs-el-radio-group"
                     :disabled="!isEdit"
                   >
@@ -849,6 +850,9 @@ export default {
       this.dataForm.fieldInfo = []
       if (!this.dataForm.tableName) return
       this.queryAllField()
+    },
+    repeatStatusChange () {
+      this.getPreViewData()
     },
     /**
      * 获取原始表字段列表
