@@ -173,6 +173,8 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
         return fileUrl;
     }
 
+    public static final String COPY_SUFFIX = "-副本";
+
     @Override
     public String copy(String code) {
         BizComponentEntity copyFrom = this.getInfoByCode(code);
@@ -181,9 +183,19 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
         }
         String oldCode = copyFrom.getCode();
         copyFrom.setId(null);
-        copyFrom.setName(copyFrom.getName() + "_复制");
+        String oldName = copyFrom.getName();
+        // 检查是否有 -副本，有的话从-副本开始，后面全部去掉
+        if (oldName.contains(COPY_SUFFIX)) {
+            oldName = oldName.substring(0, oldName.indexOf(COPY_SUFFIX));
+            if (StringUtils.isBlank(oldName)) {
+                oldName = "组件";
+            }
+        }
+        copyFrom.setName(oldName + COPY_SUFFIX);
+        int i = 1;
         while(this.checkName(null, copyFrom.getName())) {
-            copyFrom.setName(copyFrom.getName() + "_复制");
+            copyFrom.setName(oldName + COPY_SUFFIX + i);
+            i++;
         }
         copyFrom.setCode(CodeGenerateUtils.generate("bizComponent"));
         boolean copy = this.copyCoverPicture(oldCode, copyFrom.getCode());
