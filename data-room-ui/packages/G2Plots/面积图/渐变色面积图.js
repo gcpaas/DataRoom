@@ -484,6 +484,7 @@ const option = {
   yField: 'scales',
   smooth: false,
   startOnZero: true,
+  isStack: false,
   areaStyle: {
     fill: 'l(270) 0:#ffffff 1:#1890ff'
   },
