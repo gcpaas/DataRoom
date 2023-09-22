@@ -127,6 +127,7 @@ export default {
   data () {
     const validateName = (rule, value, callback) => {
       this.$dataRoomAxios.post('/bigScreen/type/nameRepeat', {
+        id: this.currentCatalog.id,
         name: value,
         type: 'resourceCatalog'
       }, true).then((r) => {
@@ -175,7 +176,6 @@ export default {
         name: '',
         id: '',
         code: '',
-        orderNum: 0
       },
       formRules: {
         name: [
