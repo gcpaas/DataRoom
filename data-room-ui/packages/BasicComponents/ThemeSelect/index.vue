@@ -11,7 +11,7 @@
         class="el-dropdown-link content-box"
         :style="{'font-size': config.customize.fontSize +'px','font-weight': +config.customize.fontWeight,'background-image': `-webkit-linear-gradient(${config.customize.color})`}"
       >
-        暗黑主题
+        主题切换
       </div>
       <el-dropdown-menu
         slot="dropdown"
