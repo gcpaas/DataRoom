@@ -117,6 +117,14 @@ const categoryUpdate = (params = {}, flag = false) => Vue.prototype.$dataRoomAxi
  */
 const categoryRemove = (id = '-1', flag = false) => Vue.prototype.$dataRoomAxios.post(`/category/delete/${id}`, {}, flag)
 
+
+/**
+ * 分类名称校验
+ * @param params
+ * @param flag
+ */
+const categoryNameRepeat = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/category/checkRepeat', params, flag)
+
 export {
   datasetPage,
   datasetList,
@@ -132,5 +140,6 @@ export {
   categoryAdd,
   categoryUpdate,
   categoryRemove,
-  datasetCheck
+  datasetCheck,
+  categoryNameRepeat
 }

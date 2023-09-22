@@ -51,6 +51,7 @@
 
 <script>
 import { categoryAdd, categoryUpdate } from 'data-room-ui/js/utils/datasetConfigService'
+import { categoryNameRepeat } from "../../js/utils/datasetConfigService";
 export default {
   name: 'CategroyEditForm',
   props: {
@@ -60,6 +61,29 @@ export default {
     }
   },
   data () {
+    const nameRepeatCheck = (rule, value, callback) => {
+      let parentId = ''
+      if (this.nodeFlag) {
+        // 新增节点
+        if (this.radio === 0) {
+          // 新增同级
+          parentId = this.nodeData.parentId
+        } else {
+          // 新增子级
+          parentId = this.nodeData.id
+        }
+      }
+      categoryNameRepeat({
+        ...this.dataForm,
+        parentId
+      }).then(res => {
+        if (res) {
+          callback(new Error('分组名称已存在'))
+        } else {
+          callback()
+        }
+      })
+    }
     return {
       type: 'dataset',
       dataForm: {
@@ -73,7 +97,8 @@ export default {
       nodeFlag: false,
       rules: {
         name: [
-          { required: true, message: '分组名称不能为空', trigger: 'blur' }
+          { required: true, message: '分组名称不能为空', trigger: 'blur' },
+          { validator: nameRepeatCheck, trigger: 'blur' }
         ]
       },
       nodeData: {}
