@@ -17,7 +17,8 @@
 <script>
 import DvScrollBoard from '@jiaminghi/data-view/lib/components/scrollBoard/src/main.vue'
 import '@jiaminghi/data-view/lib/components/scrollBoard/src/main.css'
-import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
+import { dataVMixins } from 'data-room-ui/js/mixins/dataVMixins'
+// import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
@@ -26,7 +27,7 @@ export default {
   components: {
     DvScrollBoard
   },
-  mixins: [refreshComponentMixin, paramsMixins, commonMixins, linkageMixins],
+  mixins: [dataVMixins, paramsMixins, commonMixins, linkageMixins],
   props: {
     // 卡片的属性
     config: {
@@ -57,6 +58,7 @@ export default {
       this.linkage(row)
     },
     dataFormatting (config, data) {
+      this.config.loading = false
       const header = []
       const dataList = []
       const alignList = []
