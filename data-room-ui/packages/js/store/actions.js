@@ -14,35 +14,37 @@ export default {
   initLayout ({ commit, dispatch }, code) {
     return new Promise(resolve => {
       getScreenInfo(code).then(data => {
+        // 配置兼容
+        const pageInfo = handleResData(data)
         // 兼容边框配置
-        data.chartList.forEach((item) => {
+        pageInfo.chartList.forEach((item) => {
           if (!item.border) {
-            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[0,0,0,0]}
+            item.border = { type: '', titleHeight: 60, fontSize: 30, isTitle: true, padding: [0, 0, 0, 0] }
           }
-          if(!item.border.padding){
-            item.border.padding=[0,0,0,0]
+          if (!item.border.padding) {
+            item.border.padding = [0, 0, 0, 0]
           }
-          if (item.type == 'customComponent'){
-            plotSettings[Symbol.iterator]=function*(){
-              let keys=Object.keys(plotSettings)
-              for(let k of keys){
-                yield [k,plotSettings[k]]
+          if (item.type == 'customComponent') {
+            plotSettings[Symbol.iterator] = function * () {
+              const keys = Object.keys(plotSettings)
+              for (const k of keys) {
+                yield [k, plotSettings[k]]
               }
             }
-            for(let [key,value] of plotSettings){
+            for (const [key, value] of plotSettings) {
               if (item.name == value.name) {
-                const settings=JSON.parse(JSON.stringify(value.setting))
-                item.setting=settings.map((x)=>{
-                  const index=item.setting.findIndex(y=>y.field==x.field)
+                const settings = JSON.parse(JSON.stringify(value.setting))
+                item.setting = settings.map((x) => {
+                  const index = item.setting.findIndex(y => y.field == x.field)
                   x.field = item.setting[index].field
-                  x.value=item.setting[index].value
+                  x.value = item.setting[index].value
                   return x
-               })
+                })
               }
             }
           }
         })
-        const pageInfo = handleResData(data)
+
         // 改变页面数据
         commit('changePageInfo', pageInfo)
         commit('changeZIndex', pageInfo.chartList)

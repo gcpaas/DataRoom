@@ -126,6 +126,7 @@ export default {
   data () {
     const validateName = (rule, value, callback) => {
       this.$dataRoomAxios.post('/bigScreen/type/nameRepeat', {
+        id: this.currentCatalog.id,
         name: value,
         type: this.type || 'bigScreenCatalog'
       }, true).then((r) => {
@@ -234,7 +235,7 @@ export default {
     },
     // 删除目录
     catalogDel (catalog) {
-      this.$confirm('确定删除该目录？', '提示', {
+      this.$confirm('分组删除后，分组下的大屏会被归纳至全部中，确定删除该分组？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

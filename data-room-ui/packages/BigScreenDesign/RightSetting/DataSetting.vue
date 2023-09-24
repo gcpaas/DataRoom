@@ -57,7 +57,10 @@
                 v-model="config.dataHandler"
                 type="textarea"
                 :rows="5"
-                placeholder="请输入数据处理脚本"
+                placeholder="示例:
+data.forEach(item => {
+// 数据处理
+})"
               />
             </el-form-item>
           </div>

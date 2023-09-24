@@ -195,29 +195,39 @@ export default {
               }
             })
           } else if (optionField[0] === 'series') {
-            // 存储要修改的series对象
-            let changeObject = {}
-            // 存储改变后的series对象
-            let changedObject = {}
+            let changeObject = []
+            let beforeChange = []
+            // 如果要配置数据标签相关信息
             optionField.forEach((field, index) => {
               if (index === 0) {
                 option = option[field]
               } else if (index === 1) {
-                // 根据id找到对应的type
-                changeObject = option.find(obj => obj.id === field)
-                changedObject = changeObject
-                option = option.filter(obj => obj.id !== field)
+                // 筛选出需要修改的series对象
+                changeObject = option.filter(item => item.id.includes(field))
+                beforeChange = [...changeObject]
+                option = option.filter(item => !(item.id.includes(field)))
               } else if (index === optionField.length - 1) {
-                // 数据配置时，必须有值才更新
                 if ((set.tabName === type && type === 'data' && set.value) || (set.tabName === type && type === 'custom')) {
-                  changeObject[field] = set.value
+                  changeObject.map(item => {
+                    item[field] = set.value
+                  })
                 }
               } else {
-                changeObject = changeObject[field]
+                const changeResult = []
+                changeObject.forEach(item => {
+                  const result = { ...item[field] }
+                  changeResult.push(result)
+                })
+                changeObject = [...changeResult]
               }
             })
-            changeObject = { ...changeObject, ...changedObject }
-            option.push(changeObject)
+            // 合并修改后的series对象
+            changeObject.forEach(
+              (item, index) => {
+                beforeChange[index].label = _.cloneDeep(item)
+                option.push(beforeChange[index])
+              }
+            )
           } else {
             optionField.forEach((field, index) => {
               if (index === optionField.length - 1) {

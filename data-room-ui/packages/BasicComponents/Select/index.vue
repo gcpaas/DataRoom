@@ -116,7 +116,7 @@ export default {
     // 组件联动
     selectChange (val) {
       if (val) {
-        this.linkage(this.config.option.data.find(item => item[this.config.dataSource.metricField] === val))
+        this.linkage(this.optionData.find(item => item[this.config.dataSource.metricField] === val))
       }
     },
     visibleChange (val) {
@@ -171,8 +171,12 @@ export default {
     background-color: transparent !important;
   }
   .popper__arrow{
+    bottom: -6px !important;
+    border-top-color:var(--color) !important;
     border-bottom-color:var(--color) !important;
     &::after{
+      bottom: 0px !important;
+      border-top-color:var(--color) !important;
       border-bottom-color:var(--color) !important;
     }
   }
@@ -195,7 +199,7 @@ export default {
     //  选择器输入框样式
     .el-input__inner {
       height: 100% !important;
-      border-color: var(--bs-el-border) !important;
+      border-color: none !important;
     }
   }
   .el-select-dropdown__item.hover,
@@ -203,17 +207,8 @@ export default {
     color: var(--dropDownHoverFontColor) !important;
     background-color: var(--dropDownHoverBackgroundColor) !important;
   }
-
   .el-tag.el-tag--info {
     color: var(--bs-el-text) !important;
-  }
-
-  .popper__arrow {
-    bottom: 0 !important;
-
-    &:after {
-      bottom: 0 !important;
-    }
   }
 }
 </style>

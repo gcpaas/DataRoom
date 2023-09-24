@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023071001'
+const version = '2023092201'
 // 分类
 const category = 'Area'
 // 标题
@@ -277,6 +277,17 @@ const setting = [
     groupName: 'yAxis'
   },
   {
+    label: '标题过长时旋转',
+    type: 'switch',
+    field: 'yAxis_title_autoRotate',
+    optionField: 'yAxis.title.autoRotate',
+    value: true,
+    active: true,
+    inactive: false,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
     label: '标题位置',
     type: 'select',
     field: 'yAxis_title_position',
@@ -473,6 +484,7 @@ const option = {
   yField: 'scales',
   smooth: false,
   startOnZero: true,
+  isStack: false,
   areaStyle: {
     fill: 'l(270) 0:#ffffff 1:#1890ff'
   },

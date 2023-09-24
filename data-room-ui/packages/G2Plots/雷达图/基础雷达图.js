@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023071001'
+const version = '2023092202'
 // 分类
 const category = 'Radar'
 // 标题
@@ -145,9 +145,9 @@ const setting = [
   {
     label: '数据点颜色',
     type: 'colorPicker', // 设置组件类型
-    field: 'point_color', // 字段
-    optionField: 'point.color', // 对应options中的字段
-    value: '#ffffff',
+    field: 'point_style_fill', // 字段
+    optionField: 'point.style.fill', // 对应options中的字段
+    value: '#fff',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -159,7 +159,7 @@ const setting = [
     value: 2,
     tabName: 'custom',
     groupName: 'graph'
-  },
+  }
   // 边距 padding
 ]
 
@@ -185,7 +185,7 @@ const option = {
   xField: 'name',
   yField: 'star',
   smooth: false,
-  color: 'l(90) 0:#648ff7 1:#648ff7',
+  color: 'l(0) 0:#648ff7 1:#648ff7',
   theme: {
     styleSheet: {
       backgroundColor: ''
@@ -210,7 +210,9 @@ const option = {
   },
   // 开启辅助点
   point: {
-    color: '',
+    style: {
+      fill: '#fff'
+    },
     shape: '',
     size: 2
   },

@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023071001'
+const version = '2023092201'
 // 分类
 const category = 'Bar'
 // 标题
@@ -330,6 +330,17 @@ const setting = [
     groupName: 'yAxis'
   },
   {
+    label: '标题过长时旋转',
+    type: 'switch',
+    field: 'yAxis_title_autoRotate',
+    optionField: 'yAxis.title.autoRotate',
+    value: true,
+    active: true,
+    inactive: false,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
     label: '标题位置',
     type: 'select',
     field: 'yAxis_title_position',
@@ -468,7 +479,7 @@ const setting = [
     value: true,
     tabName: 'custom',
     groupName: 'yAxis'
-  },
+  }
 ]
 
 // 模拟数据
@@ -481,15 +492,15 @@ const data = [
 ]
 
 // 配置处理脚本
-const optionHandler = 'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
+const optionHandler = 'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]' +
+  '\noption.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
+  '\nconst radiusNum = setting.find(settingItem=>settingItem.field === \'radiusNum\').value; option.barStyle.radius = [radiusNum,radiusNum,0,0]'
 
 // 数据处理脚本
 const dataHandler = 'const yFieldValue = setting.find(settingItem=>settingItem.field === \'yField\').value\n' +
   'if (yFieldValue) {\n' +
   '  option.seriesField = yFieldValue\n' +
-  '}' +
-  '\noption.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
-  '\nconst radiusNum = setting.find(settingItem=>settingItem.field === \'radiusNum\').value; option.barStyle.radius = [radiusNum,radiusNum,0,0]'
+  '}'
 
 // 图表配置 new Line('domName', option)
 const option = {
@@ -602,7 +613,7 @@ const option = {
         lineWidth: 1
       }
     }
-  },
+  }
 }
 
 export default {

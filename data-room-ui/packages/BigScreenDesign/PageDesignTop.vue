@@ -13,10 +13,12 @@
       <span style="margin-right:8px;font-size:12px">缩放</span>
       <el-input-number
         class="bs-el-input-number"
+        ref="zoomInput"
         style="margin-right:10px"
         :value="zoom"
         :min="1"
         label="描述文字"
+        :controls="true"
         @change="changeZoom"
       />
       <CusBtn
@@ -219,6 +221,12 @@ export default {
       )
     }
   },
+  mounted() {
+    this.$refs.zoomInput.$el.addEventListener('mousewheel', this.handleMouseWheel);
+  },
+  beforeDestroy() {
+    this.$refs.zoomInput.$el.removeEventListener('mousewheel', this.handleMouseWheel);
+  },
   methods: {
     ...mapActions({
       initLayout: 'bigScreen/initLayout'
@@ -230,6 +238,14 @@ export default {
       undoTimeLine: 'bigScreen/undoTimeLine',
       saveTimeLine: 'bigScreen/saveTimeLine'
     }),
+    handleMouseWheel() {
+      const delta = Math.sign(event.deltaY);
+      // 限制最小缩放比例为10
+      if (this.zoom <= 10 && delta > 0) return;
+      event.preventDefault();
+      let zoom1 = this.zoom - delta
+      this.$emit('changeZoom', zoom1)
+    },
     changeZoom (val) {
       this.$emit('changeZoom', val)
     },

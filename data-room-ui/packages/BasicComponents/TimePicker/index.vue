@@ -4,8 +4,8 @@
     :picker-options="config.customize.pickerOptions"
     placeholder="选择时间"
     clearable
-    :class="['basic-component-time-select', `time-picker-${config.code}`]"
-    :popper-class="'basic-component-time-select time-picker-popper-' + config.code"
+    :class="['basic-component-time-picker', `time-picker-${config.code}`]"
+    :popper-class="'basic-component-time-picker time-picker-popper-' + config.code"
     :value-format="config.customize.valueFormat"
     @focus="focusEvent"
     @change="changeValue"
@@ -15,7 +15,6 @@
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
-import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import { getDataSetDetails } from 'data-room-ui/js/api/bigScreenApi'
@@ -62,16 +61,11 @@ export default {
   created () { },
   mounted () {
     if (!this.isPreview) {
-      document.querySelector(`.time-picker-${this.config.code}`).style.pointerEvents = 'none'
+      // document.querySelector(`.time-picker-${this.config.code}`).style.pointerEvents = 'none'
     }
     this.changeStyle(this.config)
-    EventBus.$on('changeBusinessKey', () => {
-      window.dataSetFields = []
-    })
   },
-  beforeDestroy () {
-    EventBus.$off('changeBusinessKey')
-  },
+  beforeDestroy () { },
   methods: {
     dataFormatting (config, data) {
       // 数据返回成功则赋值
@@ -183,7 +177,7 @@ export default {
 </script>
 
 <style lang="scss">
-.basic-component-time-select {
+.basic-component-time-picker {
   color: '';
 
   // 清空图标
@@ -193,8 +187,9 @@ export default {
     display: flex !important;
     align-items: center !important;
   }
+
   // 时间选择器
-  .el-icon-time{
+  .el-icon-time {
     display: flex !important;
     align-items: center !important;
   }
@@ -219,6 +214,22 @@ export default {
     }
   }
 
+  .el-time-panel__content::before {
+    content: "";
+    top: 50%;
+    position: absolute;
+    margin-top: -15px;
+    height: 32px;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    padding-top: 6px;
+    text-align: left;
+    border-top: 1px solid var(--dropDownFontColor);
+    border-bottom: 1px solid var(--dropDownFontColor);
+  }
+
   .popper__arrow {
     border-bottom-color: var(--dropDownBackgroundColor) !important;
 
@@ -237,13 +248,13 @@ export default {
   }
 
   .el-time-panel__footer {
-    border-top: 1px solid var(--dropDownFontColor) !important;
+    border-color: 1px solid var(--dropDownFontColor) !important;
   }
 }
 </style>
 
 <style lang="scss" scoped>
-.basic-component-time-select {
+.basic-component-time-picker {
   width: 100%;
   height: 100%;
 

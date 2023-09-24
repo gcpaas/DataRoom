@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023071001'
+const version = '2023092201'
 // 分类
 const category = 'Pie'
 // 标题
@@ -114,6 +114,7 @@ const setting = [
     value: '0.6',
     tabName: 'custom',
     step: 0.1,
+    max: 1,
     groupName: 'graph'
   },
   {
@@ -193,7 +194,7 @@ const setting = [
     value: '#595959',
     tabName: 'custom',
     groupName: 'legend'
-  },
+  }
 ]
 
 // 模拟数据
