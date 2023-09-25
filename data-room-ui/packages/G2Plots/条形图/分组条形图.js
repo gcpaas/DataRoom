@@ -59,35 +59,35 @@ const setting = [
   },
   /** 样式配置 **/
   // 图表 graph
-  {
-    label: '条形样式',
-    type: 'select', // 设置组件类型
-    field: 'shape', // 字段
-    optionField: 'shape', // 对应options中的字段
-    // 是否多选
-    multiple: false,
-    value: 'default',
-    tabName: 'custom',
-    options: [
-      {
-        label: '实心条形',
-        value: 'default'
-      },
-      // {
-      //   label: '线性',
-      //   value: 'line'
-      // },
-      {
-        label: '空心条形',
-        value: 'hollow-rect'
-      },
-      {
-        label: '钉形',
-        value: 'tick'
-      }
-    ],
-    groupName: 'graph'
-  },
+  // {
+  //   label: '条形样式',
+  //   type: 'select', // 设置组件类型
+  //   field: 'shape', // 字段
+  //   optionField: 'shape', // 对应options中的字段
+  //   // 是否多选
+  //   multiple: false,
+  //   value: 'default',
+  //   tabName: 'custom',
+  //   options: [
+  //     {
+  //       label: '实心条形',
+  //       value: 'default'
+  //     },
+  //     // {
+  //     //   label: '线性',
+  //     //   value: 'line'
+  //     // },
+  //     {
+  //       label: '空心条形',
+  //       value: 'hollow-rect'
+  //     },
+  //     {
+  //       label: '钉形',
+  //       value: 'tick'
+  //     }
+  //   ],
+  //   groupName: 'graph'
+  // },
   {
     label: '圆角设置',
     // 设置组件类型
@@ -565,7 +565,7 @@ const option = {
   dataKey: 'data',
   data,
   isGroup: true,
-  shape: ' ',
+  // shape: ' ',
   xField: 'value',
   yField: 'label',
   legendEnable: false,
