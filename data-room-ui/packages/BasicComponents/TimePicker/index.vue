@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import cloneDeep from 'lodash/cloneDeep'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
@@ -51,7 +52,7 @@ export default {
       handler: function (val) {
         if (val && val.customize && val.customize.formatType === 'custom') {
           this.$nextTick(() => {
-            this.value = toString(this.value)
+            this.config.customize.value = toString(this.config.customize.value)
           })
         }
       },
@@ -64,6 +65,14 @@ export default {
       // document.querySelector(`.time-picker-${this.config.code}`).style.pointerEvents = 'none'
     }
     this.changeStyle(this.config)
+    // 将config.customize.value设置值为当前时间 ：HH:mm:ss
+    // if (this.config.customize.value === '') {
+    //   this.config.customize.valueFormat = 'HH:mm:ss'
+    //   this.$nextTick(() => {
+    //     this.config.customize.value = moment(new Date()).format('HH:mm:ss')
+    //     console.log(this.config.customize.value)
+    //   })
+    // }
   },
   beforeDestroy () { },
   methods: {

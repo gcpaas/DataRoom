@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023092201'
+const version = '2023092501'
 // 分类
 const category = 'Funnel'
 // 标题
@@ -244,6 +244,7 @@ const dataHandler = 'data = data.sort((a, b) => b[option.yField] - a[option.yFie
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  renderer: 'canvas',
   data,
   color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
   xField: 'stage',

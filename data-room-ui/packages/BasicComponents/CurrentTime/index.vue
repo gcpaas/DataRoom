@@ -31,8 +31,8 @@
 import moment from 'moment'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
-import cloneDeep from "lodash/cloneDeep";
-import {mapMutations, mapState} from 'vuex'
+import cloneDeep from 'lodash/cloneDeep'
+import { mapMutations, mapState } from 'vuex'
 export default {
   name: 'CurrentTime',
   mixins: [paramsMixins],

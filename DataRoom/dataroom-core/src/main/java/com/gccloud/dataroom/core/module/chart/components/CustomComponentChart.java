@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 自定义组件
@@ -38,7 +39,7 @@ public class CustomComponentChart extends Chart {
     private Object option;
 
     @ApiModelProperty(notes = "右侧面板自定义配置")
-    private List<Setting> setting;
+    private List<Map<String, Object>> setting;
 
     @ApiModelProperty(notes = "组件的唯一名称")
     private String name;

@@ -39,10 +39,10 @@ const customConfig = {
     dropDownHoverFontColor: '#FFFFFF',
     // 下拉项激活文字颜色
     dropDownSelectedFontColor: '#409EFF',
-    // 时间格式化类型:Date 对象（default），时间戳（timestamp），自定义（custom）
-    formatType: 'default',
+    // 时间格式化类型:时间戳（timestamp），自定义（custom）
+    formatType: 'custom',
     // 绑定值的格式
-    valueFormat: ''
+    valueFormat: 'HH:mm:ss'
   }
 }
 export const dataConfig = {

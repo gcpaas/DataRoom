@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023092201'
+const version = '2023092501'
 // 分类
 const category = 'Pie'
 // 标题
@@ -220,6 +220,7 @@ const dataHandler = ''
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  renderer: 'canvas',
   data,
   legendEnable: false,
   legendLayout: 'vertical',

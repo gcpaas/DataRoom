@@ -137,13 +137,22 @@
                 />
                 <!-- HH表示小时（24小时制），mm表示分钟，ss表示秒 -->
                 <el-tooltip
-                  content="时间格式示例：yyyy表示年份，MM表示月份，dd表示日期，HH表示小时（24小时制），mm表示分钟，ss表示秒，具体可参考Element-UI官网的日期选择器的时间格式化部分"
                   placement="top"
                 >
                   <span
                     class="el-icon-question"
                     style="color:#9e9e9e"
                   />
+                  <div slot="content">
+                    时间格式示例：<br>
+                    yyyy：表示年份，<br>
+                    MM：表示月份，<br>
+                    dd：表示日期，<br>
+                    HH：表示小时（24小时制），<br>
+                    mm：表示分钟，<br>
+                    ss：表示秒，<br>
+                    具体可参考Element-UI官网的日期选择器的时间格式化部分。
+                  </div>
                 </el-tooltip>
               </div>
             </el-form-item>
@@ -193,7 +202,6 @@ export default {
       second: 'ss',
       // 时间格式化类型选项
       formatTypeOptions: [
-        { label: 'Date 对象', value: 'default' },
         { label: '时间戳', value: 'timestamp' },
         { label: '自定义', value: 'custom' }
       ],
@@ -213,10 +221,7 @@ export default {
   mounted () {},
   methods: {
     selectFormatType (type) {
-      if (type === 'default') {
-        this.config.customize.value = ''
-        this.config.customize.valueFormat = ''
-      } else if (type === 'timestamp') {
+      if (type === 'timestamp') {
         this.config.customize.value = 0
         this.config.customize.valueFormat = 'timestamp'
       } else if (type === 'custom') {

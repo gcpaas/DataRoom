@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023092201'
+const version = '2023092501'
 // 分类
 const category = 'Bar'
 // 标题
@@ -46,35 +46,35 @@ const setting = [
   },
   /** 样式配置 **/
   // 图表 graph
-  {
-    label: '条形样式',
-    type: 'select', // 设置组件类型
-    field: 'shape', // 字段
-    optionField: 'shape', // 对应options中的字段
-    // 是否多选
-    multiple: false,
-    value: 'default',
-    tabName: 'custom',
-    options: [
-      {
-        label: '实心条形',
-        value: 'default'
-      },
-      // {
-      //   label: '线性',
-      //   value: 'line'
-      // },
-      {
-        label: '空心条形',
-        value: 'hollow-rect'
-      },
-      {
-        label: '钉形',
-        value: 'tick'
-      }
-    ],
-    groupName: 'graph'
-  },
+  // {
+  //   label: '条形样式',
+  //   type: 'select', // 设置组件类型
+  //   field: 'shape', // 字段
+  //   optionField: 'shape', // 对应options中的字段
+  //   // 是否多选
+  //   multiple: false,
+  //   value: 'default',
+  //   tabName: 'custom',
+  //   options: [
+  //     {
+  //       label: '实心条形',
+  //       value: 'default'
+  //     },
+  //     // {
+  //     //   label: '线性',
+  //     //   value: 'line'
+  //     // },
+  //     {
+  //       label: '空心条形',
+  //       value: 'hollow-rect'
+  //     },
+  //     {
+  //       label: '钉形',
+  //       value: 'tick'
+  //     }
+  //   ],
+  //   groupName: 'graph'
+  // },
   {
     label: '圆角设置',
     // 设置组件类型
@@ -506,10 +506,11 @@ const dataHandler = 'const yFieldValue = setting.find(settingItem=>settingItem.f
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  renderer: 'canvas',
   data,
   xField: 'value',
   yField: 'year',
-  shape: 'default', // 条形图形状
+  // shape: 'default', // 条形图形状
   seriesField: 'year',
   color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
   legendEnable: true,
@@ -528,6 +529,7 @@ const option = {
   },
   label: {
     position: 'middle',
+    layout:{},
     style: {
       fill: '#59F25F',
       opacity: 0,
