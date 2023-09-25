@@ -527,7 +527,7 @@ const option = {
     radius: [10, 10, 0, 0]// 设置条形图的圆角
   },
   label: {
-    position: 'middle',
+    layout:{},
     style: {
       fill: '#59F25F',
       opacity: 0,
