@@ -166,11 +166,13 @@ export default {
     }
     // 存储删除后的状态
     saveTimeLineFunc(state, '删除组件')
-    // 删除后，清空当前选中组件
-    state.activeItemConfig = null
-    state.activeCode = null
+    if (state.pageInfo.chartList.findIndex(item=>item.code===state.activeCode)==-1) {
+      state.activeItemConfig = null
+      state.activeCode = null
+      EventBus.$emit('closeRightPanel')
+    }
     // 发送事件，关闭配置面板
-    EventBus.$emit('closeRightPanel')
+
   },
   changePageConfig (state, pageConfig) {
     Vue.set(state.pageInfo, 'pageConfig', cloneDeep(pageConfig))

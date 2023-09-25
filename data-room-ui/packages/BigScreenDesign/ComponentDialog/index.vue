@@ -140,15 +140,6 @@
         >
           <div class="big-screen-list-wrap">
             <div class="top-search-wrap">
-              <el-input
-                v-model="name"
-                class="bs-el-input"
-                placeholder="请输入组件名称"
-                prefix-icon="el-icon-search"
-                clearable
-                @clear="reSearch"
-                @keyup.enter.native="reSearch"
-              />
               <el-select
                 v-model="code"
                 class="bs-el-select"
@@ -164,6 +155,15 @@
                   :value="item.code"
                 />
               </el-select>
+              <el-input
+                v-model="name"
+                class="bs-el-input"
+                placeholder="请输入组件名称"
+                prefix-icon="el-icon-search"
+                clearable
+                @clear="reSearch"
+                @keyup.enter.native="reSearch"
+              />
               <el-button
                 size="small"
                 type="primary"

@@ -119,6 +119,19 @@
               show-alpha
             />
         </el-form-item>
+        <!-- <el-form-item
+          v-if="config.type=='GcBorder15'"
+          :label-width="labelWidth"
+          label="外侧边框线宽度"
+        >
+         <el-input-number
+          v-model="borderWidth"
+          class="bs-el-input-number"
+          :step="1"
+          :min="0"
+          :max="100000"
+        />
+        </el-form-item> -->
     <div
       v-for="(setting, settingIndex) in list.setting"
       :key="settingIndex+1"
@@ -272,8 +285,13 @@ export default {
     }
   },
   watch:{
+    // borderWidth:{
+    //   handler (val) {
+    //     this.config.borderWidth=val
+    //   }
+    // },
     'config.type':{
-      handler () {
+      handler (val) {
          this.config.isTitle=this.list.isTitle
         plotList[Symbol.iterator]=function*(){
         let keys=Object.keys(plotList)
@@ -282,11 +300,12 @@ export default {
         }
       }
       for(let [key,value] of plotList){
+        if(value.padding&&val==value.type){
+          this.config.padding=[...value.padding]
+        }
         if(value.type==this.config.type){
           value.setting.forEach((item)=>{
-            if(item.value){
-              this.config[item.field]=item.value? item.value:this.config[item.field]
-            }
+            this.$set(this.config,item.field,item.value)
           })
         }
       }
@@ -297,6 +316,7 @@ export default {
     title:{
       set(){
        this.config.type=''
+       this.config.padding=[16,16,16,16]
       },
       get(){
        plotList[Symbol.iterator]=function*(){
@@ -332,9 +352,13 @@ export default {
   },
   data () {
     return {
+      // borderWidth:0
     }
   },
   mounted () {
+    // if(this.config.borderWidth){
+    //   this.borderWidth=this.config.borderWidth
+    // }
   },
   methods: {
     init(){

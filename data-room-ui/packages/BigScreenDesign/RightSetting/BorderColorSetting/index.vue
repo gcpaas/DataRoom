@@ -58,7 +58,7 @@ export default {
       this.endColor = this.colors[1]
     },
     colorChange (val) {
-      const colorsValue = [this.startColor,this.endColor]
+      const colorsValue = (this.startColor||this.endColor)?[this.startColor,this.endColor]:[]
       this.$emit('change', colorsValue)
     }
   }
