@@ -243,7 +243,6 @@
                     :key="index"
                     :gutter="10"
                     :span="24"
-                    style="margin-top: 10px"
                   >
                     <el-col :span="11">
                       <el-form-item
