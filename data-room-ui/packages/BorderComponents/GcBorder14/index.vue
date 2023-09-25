@@ -60,17 +60,17 @@ export default {
       return this.config.border.borderColor || ''
     },
     width () {
-      return this.config.border.borderWidth || 2
+      return this.config.border.borderWidth || 0
     },
     gradientColor0 () {
-      if (this.config.border.gradientColor) {
+      if (this.config.border.gradientColor&&this.config.border.gradientColor.length) {
         return this.config.border.gradientColor[0] || this.config.border.gradientColor[1]
       } else {
         return 'transparent'
       }
     },
     gradientColor1 () {
-      if (this.config.border.gradientColor) {
+      if (this.config.border.gradientColor&&this.config.border.gradientColor.length) {
         return this.config.border.gradientColor[1] || this.config.border.gradientColor[0]
       } else {
         return 'transparent'

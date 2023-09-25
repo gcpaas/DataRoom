@@ -22,7 +22,7 @@
       :style="`
       line-height:${config.border.titleHeight}px;
       height:${config.border.titleHeight};
-      border-bottom:3px solid ${fontBottomColor};
+      border-bottom:${fontBottomColor?3:0}px solid ${fontBottomColor};
       background-image: linear-gradient(${gradientDirection}, ${
           fontGradientColor0 ? fontGradientColor0 : fontGradientColor1
         } , ${fontGradientColor1 ? fontGradientColor1 : fontGradientColor0})
@@ -70,31 +70,31 @@ export default {
       return this.config.border.borderColor || ''
     },
     width () {
-      return this.config.border.borderWidth!=null?this.config.border.borderWidth : 2
+      return this.config.border.borderWidth!=null?this.config.border.borderWidth : 0
     },
     gradientColor0 () {
-            if(this.config.border.gradientColor){
+      if(this.config.border.gradientColor&&this.config.border.gradientColor.length){
         return this.config.border.gradientColor[0] ||this.config.border.gradientColor[1]
       }else{
         return 'transparent'
       }
     },
     gradientColor1 () {
-            if(this.config.border.gradientColor){
+      if(this.config.border.gradientColor&&this.config.border.gradientColor.length){
        return this.config.border.gradientColor[1] ||this.config.border.gradientColor[0]
       }else{
         return 'transparent'
       }
     },
     fontGradientColor0 () {
-      if(this.config.border.fontGradientColor){
+      if(this.config.border.fontGradientColor&&this.config.border.fontGradientColor.length){
        return this.config.border.fontGradientColor[0] ||this.config.border.fontGradientColor[1]
       }else{
         return 'transparent'
       }
     },
     fontGradientColor1 () {
-      if(this.config.border.fontGradientColor){
+      if(this.config.border.fontGradientColor&&this.config.border.fontGradientColor.length){
         return this.config.border.fontGradientColor[1]||this.config.border.fontGradientColor[0]
       }else{
         return 'transparent'
@@ -107,7 +107,7 @@ export default {
       return this.config.border.fontBottomColor || ''
     },
     fontLeftWidth(){
-      return this.config.border.fontLeftWidth!=null?this.config.border.fontLeftWidth : 6
+      return this.config.border.fontLeftWidth || 6
     },
     radiusLeftTop () {
       return this.config.border.radiusLeftTop || 2

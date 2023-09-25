@@ -126,6 +126,9 @@ export default {
   },
   mounted () {
     this.remoteComponentlist = [...borderComponents]
+    this.remoteComponentlist.sort((a,b)=>{
+      return a.title.slice(8) - b.title.slice(8)
+    })
   },
   methods: {
     getName(title){

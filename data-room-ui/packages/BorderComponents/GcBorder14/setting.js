@@ -1,7 +1,9 @@
 
 const type = 'GcBorder14'
 
-const name = '边框十四'
+const name = '边框14'
+
+const padding =[16,16,16,16]
 
 const isTitle=false
 // 右侧配置项
@@ -42,7 +44,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: '',
+    value: ['#83bff6','#188df0'],
   },
   {
     label: '渐变色方向',
@@ -152,5 +154,6 @@ export default {
   setting,
   type,
   name,
-  isTitle
+  isTitle,
+  padding
 }

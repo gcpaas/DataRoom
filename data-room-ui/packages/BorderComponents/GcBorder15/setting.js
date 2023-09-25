@@ -1,9 +1,11 @@
 
 const type = 'GcBorder15'
 
-const name = '边框十五'
+const name = '边框15'
 
-const isTitle=true
+const isTitle = true
+
+const padding =[0,0,0,0]
 // 右侧配置项
 const setting = [
 
@@ -17,7 +19,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: '',
+    value: [],
   },
   // 背景色
   // {
@@ -66,7 +68,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: 6,
+    value: 4,
   },
   {
     label:'标题底部分割线颜色',
@@ -78,7 +80,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: '#007aff',
+    value: '',
   },
   {
     label:'外边框线颜色',
@@ -102,7 +104,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: 1,
+    value: 0,
   },
   {
     label:'背景色',
@@ -114,7 +116,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: '',
+    value: [],
   },
   // {
   //   label:'背景色一',
@@ -248,5 +250,6 @@ export default {
   setting,
   type,
   name,
-  isTitle
+  isTitle,
+  padding
 }

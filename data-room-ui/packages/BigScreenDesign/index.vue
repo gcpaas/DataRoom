@@ -205,6 +205,15 @@ export default {
     }
   },
   watch: {
+    chartList(val){
+      // console.log(val,this.activeCode)
+      // if(val.findIndex(item=>item.code==this.activeCode)==-1){
+      //   this.updateRightVisiable(false)
+      // }
+      // if(val.length==0){
+      //   this.updateRightVisiable(false)
+      // }
+    },
     fitZoom (zoom) {
       this.zoomList[0] = {
         label: `自适应(${zoom}%)`,
@@ -252,7 +261,9 @@ export default {
     }
   },
   mounted () {
-    EventBus.$on('closeRightPanel', () => { this.rightVisiable = false })
+    EventBus.$on('closeRightPanel', () => {
+      this.updateRightVisiable(false)
+      })
   },
   beforeDestroy () {
     this.clearTimeline()
@@ -298,7 +309,7 @@ export default {
       getScreenInfo(component.code).then(res => {
         res.chartList.forEach((item) => {
           if (!item.border) {
-            item.border={type:'',titleHeight:60,fontSize:30,isTitle:true,padding:[0,0,0,0]}
+            item.border={type:'',titleHeight:60,fontSize:16,isTitle:true,padding:[0,0,0,0]}
           }
           if(!item.border.padding){
             item.border.padding=[0,0,0,0]

@@ -19,7 +19,7 @@ export default {
         // 兼容边框配置
         pageInfo.chartList.forEach((item) => {
           if (!item.border) {
-            item.border = { type: '', titleHeight: 60, fontSize: 30, isTitle: true, padding: [0, 0, 0, 0] }
+            item.border = { type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [0, 0, 0, 0] }
           }
           if (!item.border.padding) {
             item.border.padding = [0, 0, 0, 0]
