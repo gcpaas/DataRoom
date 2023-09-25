@@ -31,10 +31,10 @@ const customConfig = {
     fontSize: 20,
     // 显示类型 year/month/date/week/ datetime/datetimerange/daterange
     type: 'datetime',
-    // 时间格式化类型:Date 对象（default），时间戳（timestamp），自定义（custom）
-    formatType: 'default',
+    // 时间格式化类型:时间戳（timestamp），自定义（custom）
+    formatType: 'custom',
     // 绑定值的格式
-    valueFormat: '',
+    valueFormat: 'yyyy-MM-dd HH:mm:ss',
     // 下拉框
     dropDownBox: {
       // 下拉框背景颜色

@@ -52,7 +52,7 @@ export default {
         if (val && val.customize && val.customize.formatType === 'custom') {
           // 解决时间格式化类型为自定义时，时间格式化类型和时间格式化值数据类型不匹配的问题
           this.$nextTick(() => {
-            this.value = toString(this.value)
+            this.config.customize.value = toString(this.config.customize.value)
           })
         }
       },
@@ -65,6 +65,10 @@ export default {
       document.querySelector(`.date-picker-${this.config.code}`).style.pointerEvents = 'none'
     }
     this.changeStyle(this.config)
+    // 将config.customize.value设置值为当前时间 ：
+    if (this.config.customize.value === '') {
+      this.config.customize.value = new Date()
+    }
   },
   beforeDestroy () {
   },
