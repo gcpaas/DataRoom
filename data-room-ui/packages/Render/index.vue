@@ -177,7 +177,9 @@ export default {
       const elementToHighlights = []
       // 获取需要高亮的元素的引用
       for (const code of this.activeCodes) {
-        elementToHighlights.push(this.$refs['RenderCard' + code][0])
+        if (this.$refs['RenderCard' + code] &&this.$refs['RenderCard' + code].length && this.$refs['RenderCard' + code][0]){
+          elementToHighlights.push(this.$refs['RenderCard' + code][0])
+        }
       }
 
       const isElementInHighlights = elementToHighlights.some((elementToHighlight) => {
