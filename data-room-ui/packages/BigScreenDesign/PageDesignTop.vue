@@ -358,8 +358,10 @@ export default {
         type: 'warning',
         customClass: 'bs-el-message-box'
       }).then(async () => {
-        await this.save()
-        await this.backManagement()
+        const flag =  await this.save()
+        if (flag){
+          await this.backManagement()
+        }
       }).catch((action) => {
         if (action === 'cancel') {
           this.backManagement()
@@ -395,9 +397,32 @@ export default {
       })
       window.open(href, '_blank')
     },
+    // 保存时判断tabs组件里面的元素是否符合要求
+    validateTabs(chartList){
+      let isValid = true
+      if(chartList.length){
+        for(let chart of chartList){
+          if(chart.type === 'chartTab' && chart.customize.tabList.length !== 0 ){
+            for(let tab of  chart.customize.tabList){
+              if((!tab.name) || (!tab.chartCode)){
+                isValid = false
+                return isValid
+              }
+            }
+          }
+        }
+      }
+      return isValid
+    },
     // 保存
     async save (type, hasPageTemplateId = false) {
       const pageInfo = cloneDeep(this.handleSaveData())
+      //保存时判断tabs组件里面的元素是否符合要求
+      const flag = this.validateTabs(pageInfo?.chartList)
+      if (!flag){
+        this.$message.warning('请完成tab项配置')
+        return false
+      }
       // 保存页面
       try {
         if (!hasPageTemplateId) {
