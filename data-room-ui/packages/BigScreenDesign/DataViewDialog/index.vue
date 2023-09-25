@@ -220,7 +220,7 @@ export default {
 .bs-data-view-dialog{
   /deep/.el-dialog__body{
     background-color: var(--bs-background-2) !important;
-    overflow-y: auto!important;
+    overflow: auto!important;
     max-height: calc(90vh - 500px) !important;
   }
   .table-box{
@@ -248,7 +248,7 @@ export default {
     color: #bcc9d4;
   }
   .el-table--scrollable-y /deep/.el-table__body-wrapper{
-    //overflow-y: hidden;
+    overflow: auto!important;
   }
   /* 修改滚动条的样式 */
   /deep/.el-dialog__body::-webkit-scrollbar {
@@ -257,7 +257,7 @@ export default {
 
  /deep/.el-dialog__body::-webkit-scrollbar-thumb {
     background-color: #888; /* 滚动条拖动块颜色 */
-    height: 30px;
+    height: 6px;
     border-radius: 5px;
   }
 
@@ -269,5 +269,26 @@ export default {
   /deep/.el-dialog__body::-webkit-scrollbar-thumb:hover {
     background-color: #555;
   }
+}
+/* 自定义滚动条样式 */
+/deep/.el-table__body-wrapper::-webkit-scrollbar {
+  width: 3px; /* 滚动条宽度 */
+  height: 8px;
+}
+
+/deep/.el-table__body-wrapper::-webkit-scrollbar-thumb {
+  background-color: #888; /* 滚动条拖动块颜色 */
+  height: 3px;
+  border-radius: 5px;
+}
+
+/deep/.el-table__body-wrapper::-webkit-scrollbar-track {
+  background-color: transparent; /* 滚动条轨道颜色 */
+}
+
+/* 鼠标悬停在滚动条上时的样式 */
+/deep/.el-table__body-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+  cursor: pointer;
 }
 </style>
