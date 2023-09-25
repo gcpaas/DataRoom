@@ -71,25 +71,10 @@ export default {
           this.changeStyle(this.config, true)
         }
       }
-    },
-    'config.w': {
-      handler (val) {
-        if (val) {
-          const chartDom = document.getElementById(this.chatId)
-          this.observeChart(chartDom, this.chart, this.config.option)
-        }
-      }
-    },
-    'config.h': {
-      handler (val) {
-        if (val) {
-          const chartDom = document.getElementById(this.chatId)
-          this.observeChart(chartDom, this.chart, this.config.option)
-        }
-      }
     }
   },
   mounted () {
+
   },
   beforeDestroy () {
     if (this.chart) {
@@ -133,6 +118,7 @@ export default {
       const chartDom = document.getElementById(this.chatId)
       this.chart = echarts.init(chartDom)
       config.option && this.chart.setOption(config.option)
+      this.observeChart(chartDom, this.chart, config.option)
     },
     /**
      * 控制底部阴影大小
@@ -266,9 +252,10 @@ export default {
         // 数据返回失败则赋前端的模拟数据
         // config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data || config?.option?.data
       }
+      config = this.seriesStyle(config)
       return config
     },
-    getxDataAndYData (xField, yField, data, hasSeries) {
+    getxDataAndYData (xField, yField, data) {
       let list = []
       let xData = []
       let yData = []
@@ -280,7 +267,6 @@ export default {
         // 使用城市名称作为键，覆盖旧数据，始终保留最后一条数据
         uniqueData[item[xField]] = item
       })
-
       // 将唯一数据对象的值（即去重后的数据）转换回数组
       list = Object.values(uniqueData)
       xData = list.map(item => item[xField])
@@ -293,8 +279,9 @@ export default {
       // 分组字段
       const xField = config.setting.find(item => item.optionField === 'xField')?.value
       const yField = config.setting.find(item => item.optionField === 'yField')?.value
+      // 判断是否存在分组
       const hasSeries = config.setting.find(item => item.optionField === 'seriesField' && item.value !== '')
-      const { xData, yData } = this.getxDataAndYData(xField, yField, data, hasSeries)
+      const { xData, yData } = this.getxDataAndYData(xField, yField, data)
       const maxY = Math.max(...yData) + Math.max(...yData) * 0.2
       // 生成阴影柱子的值
       const shadowData = Array.from({ length: xData.length }, () => maxY)
@@ -304,14 +291,15 @@ export default {
           data: xData
         }
       })
-      // 判断是否存在分组字段
+      // 存在分组字段
       if (hasSeries) {
         const seriesField = config.setting.find(item => item.optionField === 'seriesField')?.value
         const seriesFieldList = [...new Set(data.map(item => item[seriesField]))]
         option.series = []
+        const barWidth = option.seriesCustom.barWidth
+        // 偏移量数组
         const offsetArr = []
         let index = 0
-        let barWidth = 10
         if (seriesFieldList.length % 2 === 0) {
           const length = seriesFieldList.length / 2
           for (let i = 0; i < length; i++) {
@@ -335,7 +323,7 @@ export default {
           const seriesData = (data.filter(item => item[seriesField] === seriesFieldItem))?.map(item => item[yField])
           const seriesItem = [
             {
-              name: seriesFieldItem + '柱子顶部',
+              id: 'barTopColor' + seriesFieldItem,
               type: 'pictorialBar',
               tooltip: { show: false },
               symbol: 'diamond',
@@ -348,27 +336,28 @@ export default {
               data: seriesData
             },
             {
-              name: seriesFieldItem,
+              id: 'barColor' + seriesFieldItem,
               type: 'bar',
               barGap: '20%',
               barWidth: barWidth,
-              itemStyle: {
-                normal: {
-                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                    {
-                      offset: 0,
-                      color: '#115ba6'
-                    },
-                    {
-                      offset: 1,
-                      color: '#1db0dd'
-                    }
-                  ]),
-                  opacity: 0.8,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
-                  shadowBlur: 0 // 阴影模糊值
-                }
-              },
+              color: '#115ba6',
+              // itemStyle: {
+              //   normal: {
+              //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              //       {
+              //         offset: 0,
+              //         color: '#115ba6'
+              //       },
+              //       {
+              //         offset: 1,
+              //         color: '#1db0dd'
+              //       }
+              //     ]),
+              //     opacity: 0.8,
+              //     shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
+              //     shadowBlur: 0 // 阴影模糊值
+              //   }
+              // },
               label: {
                 show: false
 
@@ -378,7 +367,7 @@ export default {
               data: seriesData
             },
             {
-              name: seriesFieldItem + '柱子底部',
+              id: 'barBottomColor' + seriesFieldItem,
               type: 'pictorialBar',
               tooltip: { show: false },
               symbol: 'diamond',
@@ -390,7 +379,7 @@ export default {
               data: seriesData
             },
             {
-              name: seriesFieldItem + '背景柱子',
+              id: 'shadowColor' + seriesFieldItem,
               type: 'bar',
               tooltip: { show: false },
               xAxisIndex: 1,
@@ -405,7 +394,7 @@ export default {
               }
             },
             {
-              name: seriesFieldItem + '背景柱子顶部',
+              id: 'shadowTopColor' + seriesFieldItem,
               type: 'pictorialBar',
               tooltip: { show: false },
               symbol: 'diamond',
@@ -437,40 +426,51 @@ export default {
     seriesStyle (config) {
       const _config = CloneDeep(config)
       const seriesCustom = _config.option.seriesCustom
+      // const ids = ['barTopColor', 'barColor', 'barBottomColor', 'shadowColor', 'shadowTopColor']
       const ids = Object.keys(config.option.seriesCustom)
-      // const ids = ['barTopColor', 'barBottomColor', 'shadowColor', 'shadowTopColor']
-      const hasSeries = _config.setting.find(item => item.optionField === 'seriesField' && item.value !== '')
+      const isGroup = _config.option.series.length !== 5
+      // 宽度配置
+      _config.option.series.forEach(item => {
+        if (item.type === 'pictorialBar') {
+          item.symbolSize = [seriesCustom.barWidth, seriesCustom.barWidth / 2]
+        } else if (item.type === 'bar') {
+          item.barWidth = seriesCustom.barWidth
+        }
+      })
+      // 颜色配置
+      // ids.forEach(id => {
+      //   if (id !== 'barWidth') {
+      //     let index = 0
+      //     _config.option.series.forEach(item => {
+      //       if (item.id.includes(id)) {
+      //         item.color = _config.option.seriesCustom[id][index]
+      //         index++
+      //       }
+      //     })
+      //   }
+      // })
       // 如果是基础柱状图
-      if (!hasSeries) {
+      if (!isGroup) {
         _config.option.series.forEach(item => {
           // 配置颜色
           if (ids.includes(item.id)) {
             item.color = seriesCustom[item.id]
           }
-          // 配置宽度
-          if (item.type === 'pictorialBar') {
-            item.symbolSize = [seriesCustom.barWidth, seriesCustom.barWidth / 2]
-          } else if (item.type === 'bar') {
-            item.barWidth = seriesCustom.barWidth
+        })
+      } else {
+        // 如果是分组柱状图
+        ids.forEach(id => {
+          if (id !== 'barWidth') {
+            let index = 0
+            _config.option.series.forEach(item => {
+              if (item.id.includes(id)) {
+                item.color = _config.option.seriesCustom[id][index]
+                index++
+              }
+            })
           }
         })
       }
-      _config.option.series.forEach((item) => {
-        if (ids.includes(item.id)) {
-          item.color = _config.option.seriesCustom[item.id]
-        } else {
-        //   item.itemStyle.normal.color = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        //     {
-        //       offset: 0,
-        //       color: _config.option.seriesCustom.barColor1
-        //     },
-        //     {
-        //       offset: 1,
-        //       color: _config.option.seriesCustom.barColor2
-        //     }
-        //   ])
-        }
-      })
       return _config
     },
     // 组件的样式改变，返回改变后的config

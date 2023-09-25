@@ -258,7 +258,7 @@ export default {
     },
     addTab () {
       const newTab = {
-        chartCode: new Date().getTime() + '',
+        chartCode:'',
         name: '',
         chart: { parentCode: this.config.code }
       }

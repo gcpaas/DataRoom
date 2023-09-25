@@ -40,6 +40,7 @@
       <!--        @openRightPanel="openRightPanel"-->
       <!--      >-->
       <div
+        v-if="config.customize.tabList[currentIndex].chartCode"
         class="configuration-wrap"
         :class="{
           'active': activeCodes.includes(config.customize.tabList[currentIndex].chartCode),

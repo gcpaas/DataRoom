@@ -114,7 +114,9 @@ export default {
   background-color: var(--bs-background-2)!important;
   border: 1px solid var(--bs-border-1);
   /deep/ .popper__arrow{
-    background-color: var(--bs-background-2)!important;
+    //background-color: var(--bs-background-2)!important;
+    background-color: transparent!important;
+    border-bottom-color:transparent!important;
     &:after{
       border-bottom-color: var(--bs-background-2)!important;
     }
