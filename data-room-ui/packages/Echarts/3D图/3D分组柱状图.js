@@ -1,4 +1,3 @@
-import * as echarts from 'echarts'
 // 配置版本号
 const version = '2023091901'
 // 标题
@@ -47,60 +46,66 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
-  // {
-  //   label: '柱子顶部颜色',
-  //   type: 'colorPicker', // 设置组件类型
-  //   field: 'seriesCustom_barTopColor', // 字段
-  //   optionField: 'seriesCustom.barTopColor', // 对应options中的字段
-  //   value: '#2DB1EF',
-  //   tabName: 'custom',
-  //   groupName: 'graph'
-  // },
-  // {
-  //   label: '柱子颜色1',
-  //   type: 'colorPicker', // 设置组件类型
-  //   field: 'seriesCustom_barColor1', // 字段
-  //   optionField: 'seriesCustom.barColor1', // 对应options中的字段
-  //   value: '#115ba6',
-  //   tabName: 'custom',
-  //   groupName: 'graph'
-  // },
-  // {
-  //   label: '柱子颜色2',
-  //   type: 'colorPicker', // 设置组件类型
-  //   field: 'seriesCustom_barColor2', // 字段
-  //   optionField: 'seriesCustom.barColor2', // 对应options中的字段
-  //   value: '#1db0dd',
-  //   tabName: 'custom',
-  //   groupName: 'graph'
-  // },
-  // {
-  //   label: '柱子底部颜色',
-  //   type: 'colorPicker', // 设置组件类型
-  //   field: 'seriesCustom_barBottomColor', // 字段
-  //   optionField: 'seriesCustom.barBottomColor', // 对应options中的字段
-  //   value: '#187dcb',
-  //   tabName: 'custom',
-  //   groupName: 'graph'
-  // },
-  // {
-  //   label: '柱子背景顶部颜色',
-  //   type: 'colorPicker', // 设置组件类型
-  //   field: 'seriesCustom_shadowTopColor', // 字段
-  //   optionField: 'seriesCustom.shadowTopColor', // 对应options中的字段
-  //   value: '#142f5a',
-  //   tabName: 'custom',
-  //   groupName: 'graph'
-  // },
-  // {
-  //   label: '柱子背景颜色',
-  //   type: 'colorPicker', // 设置组件类型
-  //   field: 'seriesCustom_shadowColor', // 字段
-  //   optionField: 'seriesCustom.shadowColor', // 对应options中的字段
-  //   value: '#041133',
-  //   tabName: 'custom',
-  //   groupName: 'graph'
-  // },
+  {
+    label: '柱子顶部颜色',
+    // 设置组件类型
+    type: 'colorSelect',
+    // 字段
+    field: 'seriesCustom_barTopColor',
+    // 对应options中的字段
+    optionField: 'seriesCustom.barTopColor',
+    value: ['#0e4481', '#1e637b', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '柱子颜色',
+    // 设置组件类型
+    type: 'colorSelect',
+    // 字段
+    field: 'seriesCustom_barColor',
+    // 对应options中的字段
+    optionField: 'seriesCustom.barColor',
+    value: ['#1370a7', '#4ebebe', '#3864ab', '#9c9c46', '#a6404b', '#ac582c', '#719c33', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '柱子底部颜色',
+    // 设置组件类型
+    type: 'colorSelect',
+    // 字段
+    field: 'seriesCustom_barBottomColor',
+    // 对应options中的字段
+    optionField: 'seriesCustom.barBottomColor',
+    value: ['#0998d9', '#2ec6ad', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3', '#5B8FF9', '#61DDAA'],
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '阴影柱子颜色',
+    // 设置组件类型
+    type: 'colorSelect',
+    // 字段
+    field: 'seriesCustom_shadowColor',
+    // 对应options中的字段
+    optionField: 'seriesCustom.shadowColor',
+    value: ['#082442', '#0e2e3c', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '阴影柱子顶部颜色',
+    // 设置组件类型
+    type: 'colorSelect',
+    // 字段
+    field: 'seriesCustom_shadowTopColor',
+    // 对应options中的字段
+    optionField: 'seriesCustom.shadowTopColor',
+    value: ['#0e4481', '#1e637b', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
+    tabName: 'custom',
+    groupName: 'graph'
+  },
   {
     label: '数据标签',
     type: 'switch', // 设置组件类型
@@ -627,15 +632,20 @@ const option = {
   seriesCustom: {
     barWidth: 30,
     // 顶部菱形颜色
-    barTopColor: ['#2DB1EF'],
+    barTopColor: ['#2DB1EF', '#2DB1EF'],
+    // barTopColor: '#2DB1EF',
     // 底部菱形颜色
-    barBottomColor: ['#187dcb'],
+    barBottomColor: ['#187dcb', '#187dcb'],
+    // barBottomColor: '#187dcb',
     // 柱子颜色
-    barColor: ['#1db0dd'],
+    barColor: ['#1db0dd', '#1db0dd'],
+    // barColor: '#1db0dd',
     // 阴影柱子颜色
-    shadowColor: ['#041133'],
+    shadowColor: ['#041133', '#041133'],
+    // shadowColor: '#041133',
     // 阴影柱子顶部颜色
-    shadowTopColor: ['#142f5a']
+    shadowTopColor: ['#142f5a', '#142f5a']
+    // shadowTopColor: '#142f5a'
   },
   series: [
     {
@@ -669,23 +679,24 @@ const option = {
       type: 'bar',
       barGap: '20%',
       barWidth: 30,
-      itemStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: '#115ba6'
-            },
-            {
-              offset: 1,
-              color: '#1db0dd'
-            }
-          ]),
-          opacity: 0.8,
-          shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
-          shadowBlur: 0 // 阴影模糊值
-        }
-      },
+      color: '#115ba6',
+      // itemStyle: {
+      //   normal: {
+      //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      //       {
+      //         offset: 0,
+      //         color: '#115ba6'
+      //       },
+      //       {
+      //         offset: 1,
+      //         color: '#1db0dd'
+      //       }
+      //     ]),
+      //     opacity: 0.8,
+      //     shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
+      //     shadowBlur: 0 // 阴影模糊值
+      //   }
+      // },
       label: {
         show: true,
         position: 'inside',
@@ -700,23 +711,24 @@ const option = {
       type: 'bar',
       // barGap: '60%',
       barWidth: 30,
-      itemStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: '#73eccd'
-            },
-            {
-              offset: 1,
-              color: '#4dd9e5'
-            }
-          ]),
-          opacity: 0.8,
-          shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
-          shadowBlur: 0 // 阴影模糊值
-        }
-      },
+      color: '#73eccd',
+      // itemStyle: {
+      //   normal: {
+      //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      //       {
+      //         offset: 0,
+      //         color: '#73eccd'
+      //       },
+      //       {
+      //         offset: 1,
+      //         color: '#4dd9e5'
+      //       }
+      //     ]),
+      //     opacity: 0.8,
+      //     shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
+      //     shadowBlur: 0 // 阴影模糊值
+      //   }
+      // },
       label: {
         show: true,
         position: 'inside',
@@ -747,7 +759,7 @@ const option = {
       symbolOffset: ['60%', 5],
       zlevel: 2,
       z: 15,
-      color: 'rgba(45, 206, 177,0.9)',
+      color: 'S',
       data: yData2
     },
     {
@@ -759,11 +771,7 @@ const option = {
       data: maxData1,
       zlevel: 1,
       barWidth: 30,
-      itemStyle: {
-        normal: {
-          color: 'rgba(9, 44, 76,.8)'
-        }
-      }
+      color: 'rgba(9, 44, 76,.8)'
     },
     {
       id: 'shadowColor2',
@@ -774,11 +782,7 @@ const option = {
       data: maxData2,
       zlevel: 1,
       barWidth: 30,
-      itemStyle: {
-        normal: {
-          color: 'rgba(16, 56, 70,.8)'
-        }
-      }
+      color: 'rgba(16, 56, 70,.8)'
     },
     {
       id: 'shadowTopColor1',

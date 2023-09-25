@@ -73,7 +73,7 @@
                 </el-select>
                 <template v-else-if="setting.type === 'colorSelect'">
                   <color-select
-                    v-model="colorScheme"
+                    v-model="setting.value"
                     @update="updateColorScheme"
                   />
                   <div
