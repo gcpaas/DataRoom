@@ -49,8 +49,8 @@ export default {
       return this.config.border.borderMainColor ||
         this.config.border.borderSecondaryColor
         ? [
-            this.config.border.borderMainColor,
-            this.config.border.borderSecondaryColor
+            this.config.border.borderMainColor||this.config.border.borderSecondaryColor,
+            this.config.border.borderSecondaryColor||this.config.border.borderMainColor
           ]
         : null
     },
@@ -68,7 +68,7 @@ export default {
       },
       deep: true
     },
-    'config.border.gradientColor':{
+     'config.border.gradientColor':{
          handler (val) {
           this.changeColor()
       },immediate: true
@@ -149,6 +149,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
+  // padding: 0 16px;
   background-color: transparent;
   border-radius: 4px;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);

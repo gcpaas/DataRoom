@@ -49,8 +49,8 @@ export default {
       return this.config.border.borderMainColor ||
         this.config.border.borderSecondaryColor
         ? [
-            this.config.border.borderMainColor,
-            this.config.border.borderSecondaryColor
+            this.config.border.borderMainColor||this.config.border.borderSecondaryColor,
+            this.config.border.borderSecondaryColor||this.config.border.borderMainColor
           ]
         : null
     },
