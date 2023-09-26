@@ -82,6 +82,18 @@ const setting = [
     groupName: 'graph'
   },
   {
+    label: '底部阴影颜色',
+    // 设置组件类型
+    type: 'colorPicker',
+    // 字段
+    field: 'graphic_children_style_fill',
+    // 对应options中的字段
+    optionField: 'graphic.children.style.fill',
+    value: '#3f4867',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
     label: '数据标签',
     type: 'switch', // 设置组件类型
     field: 'series_barColor_label_show', // 字段

@@ -118,18 +118,19 @@ export default {
       const chartDom = document.getElementById(this.chatId)
       this.chart = echarts.init(chartDom)
       config.option && this.chart.setOption(config.option)
-      this.observeChart(chartDom, this.chart, config.option)
+      this.observeChart(chartDom, this.chart)
     },
     /**
      * 控制底部阴影大小
      */
-    observeChart (container, myChart, option) {
+    observeChart (container, myChart) {
       const resizeObserver = new ResizeObserver(entries => {
         myChart.resize()
         // entries[0].contentRect.width:此时监测的盒子的宽度
         // entries[0].contentRect.height:此时监测的盒子的高度
         const width = entries[0].contentRect.width
         const height = entries[0].contentRect.height
+        const option = this.config.option
         // 调整长方形的大小
         option.graphic.children[0].shape.width = width * 0.9
         // 调整多边形的大小
@@ -214,6 +215,10 @@ export default {
                 option.push(beforeChange[index])
               }
             )
+          } else if (optionField[0] === 'graphic') {
+            option.graphic.children.forEach(item => {
+              item.style.fill = set.value
+            })
           } else {
             optionField.forEach((field, index) => {
               if (index === optionField.length - 1) {
@@ -232,10 +237,11 @@ export default {
       return config
     },
     dataFormatting (config, data) {
+      console.log('config', config);
+      // config = this.config
       // 数据返回成功则赋值
       if (data.success) {
         data = data.data
-        config = this.transformSettingToOption(config, 'data')
         // 获取到后端返回的数据，有则赋值
         const option = config.option
         const setting = config.setting
@@ -248,6 +254,7 @@ export default {
           }
         }
         config.option = this.echartsOptionFormatting(config, data)
+        config = this.transformSettingToOption(config, 'data')
       } else {
         // 数据返回失败则赋前端的模拟数据
         // config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data || config?.option?.data
@@ -332,7 +339,7 @@ export default {
               symbolPosition: 'end',
               z: 15,
               zlevel: 2,
-              color: 'rgba(2, 175, 249,1)',
+              color: '#ffff33',
               data: seriesData
             },
             {
@@ -341,23 +348,6 @@ export default {
               barGap: '20%',
               barWidth: barWidth,
               color: '#115ba6',
-              // itemStyle: {
-              //   normal: {
-              //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              //       {
-              //         offset: 0,
-              //         color: '#115ba6'
-              //       },
-              //       {
-              //         offset: 1,
-              //         color: '#1db0dd'
-              //       }
-              //     ]),
-              //     opacity: 0.8,
-              //     shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
-              //     shadowBlur: 0 // 阴影模糊值
-              //   }
-              // },
               label: {
                 show: false
 
@@ -387,11 +377,7 @@ export default {
               data: shadowData,
               zlevel: 1,
               barWidth: barWidth,
-              itemStyle: {
-                normal: {
-                  color: 'rgba(9, 44, 76,.8)'
-                }
-              }
+              color: 'rgba(9, 44, 76,.8)'
             },
             {
               id: 'shadowTopColor' + seriesFieldItem,
@@ -437,18 +423,6 @@ export default {
           item.barWidth = seriesCustom.barWidth
         }
       })
-      // 颜色配置
-      // ids.forEach(id => {
-      //   if (id !== 'barWidth') {
-      //     let index = 0
-      //     _config.option.series.forEach(item => {
-      //       if (item.id.includes(id)) {
-      //         item.color = _config.option.seriesCustom[id][index]
-      //         index++
-      //       }
-      //     })
-      //   }
-      // })
       // 如果是基础柱状图
       if (!isGroup) {
         _config.option.series.forEach(item => {
