@@ -45,23 +45,10 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="操作符"
+          label="映射规则"
           align="center"
         >
-          <template #default="scope">
-            <el-select
-              v-model="configMapConfig.maps[scope.$index].queryRule"
-              popper-class="bs-el-select"
-              class="bs-el-select"
-            >
-              <el-option
-                v-for="operator in operatorList"
-                :key="operator.value"
-                :label="operator.label"
-                :value="operator.value"
-              />
-            </el-select>
-          </template>
+          <span>等于</span>
         </el-table-column>
         <el-table-column
           label="目标组件接收参数"

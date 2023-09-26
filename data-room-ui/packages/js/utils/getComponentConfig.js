@@ -188,18 +188,18 @@ export default function getComponentConfig (type) {
         y: 0,
         type
       }
-    case 'button':
-      return {
-        name: '按钮',
-        title: '按钮',
-        icon: Icon.getNameList()[14],
-        className: 'com.gccloud.dataroom.core.module.chart.components.ScreenButtonChart',
-        w: 80,
-        h: 40,
-        x: 0,
-        y: 0,
-        type
-      }
+    // case 'button':
+    //   return {
+    //     name: '按钮',
+    //     title: '按钮',
+    //     icon: Icon.getNameList()[14],
+    //     className: 'com.gccloud.dataroom.core.module.chart.components.ScreenButtonChart',
+    //     w: 80,
+    //     h: 40,
+    //     x: 0,
+    //     y: 0,
+    //     type
+    //   }
     case 'marquee':
       return {
         name: '跑马灯',

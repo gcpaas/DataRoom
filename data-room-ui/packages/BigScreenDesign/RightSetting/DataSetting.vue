@@ -674,7 +674,7 @@ export default {
         value: field.name || field.fieldName
       })) || []
 
-      if (this.config.type === 'timePicker') {
+      if (['input', 'timePicker', 'dateTimePicker'].includes(this.config.type)) {
         modifiedList.push({ label: '当前组件值', value: this.config.code })
       }
       return modifiedList
