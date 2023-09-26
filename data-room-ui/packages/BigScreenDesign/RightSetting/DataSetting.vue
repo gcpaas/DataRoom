@@ -752,12 +752,15 @@ export default {
           if (type === 'initial') {
             for (const key in this.config.dataSource.params) {
               const param = res?.params?.find(field => field.name === key)
-              this.params.push({
-                name: key,
-                value: this.config.dataSource.params[key],
-                type: param?.type,
-                remark: param?.remark
-              })
+              // 如果组件参数在数据集中找不到，说明参数已经被删除，不需要再显示
+              if (param) {
+                this.params.push({
+                  name: key,
+                  value: this.config.dataSource.params[key],
+                  type: param?.type,
+                  remark: param?.remark
+                })
+              }
             }
           } else {
             this.params = res.params
