@@ -97,6 +97,11 @@
               :label="level.label"
               :value="level.value"
             />
+            <el-option
+              v-if="![0,1,2,3,4].includes(mapForm.level)"
+              :value="mapForm.level"
+              :label="outRangeLabel"
+            />
           </el-select>
         </el-form-item>
         <el-form-item
@@ -160,7 +165,7 @@
 
 <script>
 import vueJsonViewer from 'vue-json-viewer'
-import { getMapChildFromGeoJson, mapAdd, repeatCheck } from 'data-room-ui/js/utils/mapDataService'
+import { getMapChildFromGeoJson, mapAdd, repeatCheck, nameRepeatCheck } from 'data-room-ui/js/utils/mapDataService'
 
 export default {
   name: 'AddForm',
@@ -171,6 +176,9 @@ export default {
     autoParseNextLevelShow () {
       // geoJson 不为空
       return !this.isEmpty(this.mapForm.geoJson)
+    },
+    outRangeLabel() {
+      return `级别${this.mapForm.level}`;
     }
   },
   data () {
@@ -186,6 +194,18 @@ export default {
       }).then(res => {
         if (res) {
           callback(new Error('地图标识已存在'))
+        } else {
+          callback()
+        }
+      })
+    }
+    const validateName = (rule, value, callback) => {
+      nameRepeatCheck({
+        parentId: this.mapForm.parentId,
+        mapName: value
+      }).then(res => {
+        if (res) {
+          callback(new Error('地图名称已存在'))
         } else {
           callback()
         }
@@ -212,7 +232,8 @@ export default {
           { validator: validateCode, trigger: 'blur' }
         ],
         name: [
-          { required: true, message: '请输入地图名称', trigger: 'blur' }
+          { required: true, message: '请输入地图名称', trigger: 'blur' },
+          { validator: validateName, trigger: 'blur' }
         ],
         level: [
           { required: true, message: '请选择地图级别', trigger: 'change' }

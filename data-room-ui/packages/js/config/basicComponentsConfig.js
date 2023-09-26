@@ -26,7 +26,7 @@ const typeList = [
   'screenScrollBoard',
   'video',
   'input',
-  'button',
+  // 'button',
   'marquee',
   'chartTab',
   'themeSwitcher',

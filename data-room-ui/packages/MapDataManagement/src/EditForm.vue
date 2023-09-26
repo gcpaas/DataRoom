@@ -93,6 +93,11 @@
               :label="level.label"
               :value="level.value"
             />
+            <el-option
+              v-if="![0,1,2,3,4].includes(mapForm.level)"
+              :value="mapForm.level"
+              :label="outRangeLabel"
+            />
           </el-select>
         </el-form-item>
         <el-form-item
@@ -158,7 +163,7 @@
 <script>
 import _ from 'lodash'
 import vueJsonViewer from 'vue-json-viewer'
-import { mapUpdate, getMapChildFromGeoJson } from 'data-room-ui/js/utils/mapDataService'
+import { mapUpdate, getMapChildFromGeoJson, nameRepeatCheck } from 'data-room-ui/js/utils/mapDataService'
 
 export default {
   name: 'EditForm',
@@ -169,6 +174,9 @@ export default {
     autoParseNextLevelShow () {
       // geoJson 不为空，且未上传过（说明是刚上传的）
       return !this.isWhitespace(this.mapForm.geoJson) && this.mapForm.uploadedGeoJson === 0
+    },
+    outRangeLabel() {
+      return `级别${this.mapForm.level}`;
     }
   },
   data () {
@@ -181,12 +189,30 @@ export default {
       getMapChildFromGeoJson(this.mapForm.parentId).then(children => {
         let repeat = false
         children.forEach(child => {
-          if (child.exist && child.name === value) {
+          if (child.exist && child.name === value && child.existId !== this.mapForm.id) {
             repeat = true
           }
         })
         if (repeat) {
           callback(new Error('地图标识已存在'))
+        } else {
+          callback()
+        }
+      })
+    }
+    const validateName = (rule, value, callback) => {
+      if (this.mapForm.parentId !== '0') {
+        // 不需要校验
+        callback()
+        return
+      }
+      nameRepeatCheck({
+        id: this.mapForm.id,
+        parentId: this.mapForm.parentId,
+        mapName: value
+      }).then(res => {
+        if (res) {
+          callback(new Error('地图名称已存在'))
         } else {
           callback()
         }
@@ -213,7 +239,8 @@ export default {
           { validator: validateCode, trigger: 'blur' }
         ],
         name: [
-          { required: true, message: '请输入地图名称', trigger: 'blur' }
+          { required: true, message: '请输入地图名称', trigger: 'blur' },
+          { validator: validateName, trigger: 'blur' }
         ],
         level: [
           { required: true, message: '请选择地图级别', trigger: 'change' }

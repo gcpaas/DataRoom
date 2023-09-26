@@ -185,7 +185,9 @@ export default {
         }).catch(err => {
           console.info(err)
         }).finally(() => {
-          config.loading = false
+          if (config) {
+            config.loading = false
+          }
           resolve(config)
         })
       })

@@ -66,9 +66,9 @@ public class DataRoomMapController {
     @ApiPermission(permissions = {Permission.Map.DELETE})
     @PostMapping("/delete/{id}")
     @ApiOperation(value = "删除", position = 40, notes = "删除地图数据", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<Void> delete(@PathVariable String id) {
-        dataRoomMapService.delete(id);
-        return R.success();
+    public R<Boolean> delete(@PathVariable String id) {
+        boolean delete = dataRoomMapService.delete(id);
+        return R.success(delete);
     }
 
     @ApiPermission(permissions = {Permission.Map.DELETE})
@@ -126,16 +126,24 @@ public class DataRoomMapController {
 
 
     @ApiPermission(permissions = {Permission.Map.VIEW})
-    @PostMapping("/repeat")
-    @ApiOperation(value = "重复", position = 100, notes = "地图数据重复校验", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/repeat/code")
+    @ApiOperation(value = "编码重复校验", position = 100, notes = "地图数据重复校验", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Boolean> repeat(@RequestBody DataRoomMapRepeatDTO mapDTO) {
-        Boolean repeat = dataRoomMapService.repeatCheck(mapDTO);
+        Boolean repeat = dataRoomMapService.codeRepeatCheck(mapDTO);
+        return R.success(repeat);
+    }
+
+    @ApiPermission(permissions = {Permission.Map.VIEW})
+    @PostMapping("/repeat/name")
+    @ApiOperation(value = "名称重复校验", position = 110, notes = "地图数据重复校验", produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<Boolean> repeatName(@RequestBody DataRoomMapRepeatDTO mapDTO) {
+        Boolean repeat = dataRoomMapService.nameRepeatCheck(mapDTO);
         return R.success(repeat);
     }
 
     @ApiPermission(permissions = {Permission.Map.VIEW})
     @GetMapping("/tree/{level}")
-    @ApiOperation(value = "树", position = 110, notes = "地图数据树", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "树", position = 120, notes = "地图数据树", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<List<DataRoomMapVO>> tree(@PathVariable String level) {
         int levelInt = 0;
         try {

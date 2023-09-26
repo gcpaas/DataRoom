@@ -167,7 +167,7 @@ export default {
     dataFormatting (config, data) {
       // 数据返回成功则赋值
       if (data.success) {
-        data = data.data
+        data = data.data || []
         config = this.transformSettingToOption(config, 'data')
         // 获取到后端返回的数据，有则赋值
         const option = config.option
@@ -182,7 +182,7 @@ export default {
         }
         // 如果维度为数字类型则转化为字符串，否则在不增加其他配置的情况下会导致图标最后一项不显示（g2plot官网已说明）
         const xAxis = config.setting.find(item => item.field === 'xField')?.value
-        config.option.data = data.map(item => {
+        config.option.data = data?.map(item => {
           if (xAxis && typeof item[xAxis] === 'number') {
             item[xAxis] = (item[xAxis]).toString()
           }

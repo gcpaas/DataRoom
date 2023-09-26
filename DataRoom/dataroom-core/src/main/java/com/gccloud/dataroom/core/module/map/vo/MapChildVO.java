@@ -17,4 +17,7 @@ public class MapChildVO {
     @ApiModelProperty(notes = "是否已存在")
     private Boolean exist;
 
+    @ApiModelProperty(notes = "已存在的地图id")
+    private String existId;
+
 }

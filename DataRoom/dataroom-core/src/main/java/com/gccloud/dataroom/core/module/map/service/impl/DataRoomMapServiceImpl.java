@@ -251,21 +251,22 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
 
 
     @Override
-    public void delete(String id) {
+    public boolean delete(String id) {
         if (StringUtils.isBlank(id)) {
-            return;
+            return true;
         }
         DataRoomMapEntity mapEntity = this.getById(id);
         if (mapEntity == null) {
-            return;
+            return true;
         }
         LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(DataRoomMapEntity::getParentId, mapEntity.getId());
         List<DataRoomMapEntity> list = this.list(queryWrapper);
         if (list != null && list.size() > 0) {
-            throw new GlobalException("该地图下存在子地图，不能删除");
+            return false;
         }
         this.removeById(id);
+        return true;
     }
 
 
@@ -360,10 +361,10 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
         }
         // 查询当前地图下的所有子地图
         LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.select(DataRoomMapEntity::getMapCode);
+        queryWrapper.select(DataRoomMapEntity::getMapCode, DataRoomMapEntity::getId);
         queryWrapper.eq(DataRoomMapEntity::getParentId, id);
         List<DataRoomMapEntity> list = this.list(queryWrapper);
-        List<String> mapCodeList = list.stream().map(DataRoomMapEntity::getMapCode).collect(Collectors.toList());
+        Map<String, String> codeIdMap = list.stream().collect(Collectors.toMap(DataRoomMapEntity::getMapCode, DataRoomMapEntity::getId));
         // 解析geoJson，获取下一级的基础数据
         List<MapChildVO> childList = Lists.newArrayList();
         for (int i = 0; i < features.length(); i++) {
@@ -375,7 +376,10 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
             String name = properties.getString("name");
             MapChildVO childVO = new MapChildVO();
             childVO.setName(name);
-            childVO.setExist(mapCodeList.contains(name));
+            childVO.setExist(codeIdMap.containsKey(name));
+            if (childVO.getExist()) {
+                childVO.setExistId(codeIdMap.get(name));
+            }
             childList.add(childVO);
         }
         return childList;
@@ -403,7 +407,7 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
     }
 
     @Override
-    public boolean repeatCheck(DataRoomMapRepeatDTO mapDTO) {
+    public boolean codeRepeatCheck(DataRoomMapRepeatDTO mapDTO) {
         if (StringUtils.isBlank(mapDTO.getMapCode())) {
             throw new GlobalException("地图编码不能为空");
         }
@@ -418,5 +422,25 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
         }
         List<DataRoomMapEntity> list = this.list(queryWrapper);
         return list != null && list.size() > 0;
+    }
+
+
+    @Override
+    public boolean nameRepeatCheck(DataRoomMapRepeatDTO mapDTO) {
+        if (StringUtils.isBlank(mapDTO.getMapName())) {
+            throw new GlobalException("地图名称不能为空");
+        }
+        if (StringUtils.isBlank(mapDTO.getParentId())) {
+            throw new GlobalException("上级地图编码不能为空");
+        }
+        LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DataRoomMapEntity::getName, mapDTO.getMapName());
+        queryWrapper.eq(DataRoomMapEntity::getParentId, mapDTO.getParentId());
+        if (StringUtils.isNotBlank(mapDTO.getId())) {
+            queryWrapper.ne(DataRoomMapEntity::getId, mapDTO.getId());
+        }
+        List<DataRoomMapEntity> list = this.list(queryWrapper);
+        return list != null && list.size() > 0;
+
     }
 }

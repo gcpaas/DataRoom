@@ -11,6 +11,7 @@
             class="bs-el-input"
             clearable
             maxlength="200"
+            @clear="getDataList"
             placeholder="请输入地图名称或标识"
           />
         </el-form-item>
@@ -67,19 +68,19 @@
           <el-empty slot="empty"/>
           <el-table-column
             align="left"
-            label="名称"
+            label="地图名称"
             prop="name"
             show-overflow-tooltip
           />
           <el-table-column
             align="center"
-            label="标识"
+            label="地图标识"
             prop="mapCode"
             show-overflow-tooltip
           />
           <el-table-column
             align="center"
-            label="级别"
+            label="地图级别"
             prop="level"
             show-overflow-tooltip
           >
@@ -89,6 +90,7 @@
               <span v-else-if="scope.row.level === 2">省份</span>
               <span v-else-if="scope.row.level === 3">城市</span>
               <span v-else-if="scope.row.level === 4">区县</span>
+              <span v-else>{{ getMoreLevel(scope.row.level) }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -282,6 +284,9 @@ export default {
         this.$refs.table.store.states.treeData[this.lazyResolveIds[i]].expanded = false
       }
     },
+    getMoreLevel(level) {
+      return '级别' + level
+    },
     addMap() {
       this.$refs.addForm.mapFormVisible = true
       this.$refs.addForm.init()
@@ -303,14 +308,21 @@ export default {
         type: 'warning',
         customClass: 'bs-el-message-box'
       }).then(async () => {
-        mapDelete(map.id).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功'
-          })
-          this.getDataList()
+        mapDelete(map.id).then((deleteSuccess) => {
+          if (deleteSuccess) {
+            this.$message({
+              type: 'success',
+              message: '删除成功'
+            })
+            this.getDataList()
+          } else {
+            this.deleteMapCascade(map)
+          }
         }).catch(() => {
-          this.deleteMapCascade(map)
+         this.$message({
+            type: 'error',
+            message: '删除失败'
+          })
         })
       }).catch(() => {
       })

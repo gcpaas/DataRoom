@@ -22,15 +22,14 @@ const customConfig = {
   },
   // 自定义属性
   customize: {
-    value: '',
     // 选择框背景颜色
     bgColor: '#35393F',
     // 选择框文字颜色
     fontColor: '#FFFFFF',
     // 选择框文字大小
     fontSize: 20,
-    // 显示类型 year/month/date/week/ datetime/datetimerange/daterange
-    type: 'datetime',
+    // 显示类型 year/month/date/ datetime/datetimerange/daterange
+    type: 'datetimerange',
     // 时间格式化类型:时间戳（timestamp），自定义（custom）
     formatType: 'custom',
     // 绑定值的格式

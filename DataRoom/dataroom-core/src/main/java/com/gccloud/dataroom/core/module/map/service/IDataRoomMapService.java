@@ -56,8 +56,9 @@ public interface IDataRoomMapService extends ISuperService<DataRoomMapEntity> {
     /**
      * 删除地图
      * @param id
+     * @return
      */
-    void delete(String id);
+    boolean delete(String id);
 
     /**
      * 级联删除地图，删除地图及其子地图...
@@ -110,6 +111,14 @@ public interface IDataRoomMapService extends ISuperService<DataRoomMapEntity> {
      * @param mapDTO
      * @return
      */
-    boolean repeatCheck(DataRoomMapRepeatDTO mapDTO);
+    boolean codeRepeatCheck(DataRoomMapRepeatDTO mapDTO);
 
+
+    /**
+     * 名称重复校验
+     * 只在相同的父级下校验
+     * @param mapDTO
+     * @return
+     */
+    boolean nameRepeatCheck(DataRoomMapRepeatDTO mapDTO);
 }

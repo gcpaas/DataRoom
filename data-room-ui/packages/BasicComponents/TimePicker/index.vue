@@ -1,12 +1,13 @@
 <template>
   <el-time-picker
-    v-model="config.customize.value"
+    v-model="value"
     :picker-options="config.customize.pickerOptions"
     placeholder="选择时间"
     clearable
     :class="['basic-component-time-picker', `time-picker-${config.code}`]"
     :popper-class="'basic-component-time-picker time-picker-popper-' + config.code"
     :value-format="config.customize.valueFormat"
+    :default-value="value"
     @focus="focusEvent"
     @change="changeValue"
     @mouseenter.native="mouseenter"
@@ -48,31 +49,30 @@ export default {
     }
   },
   watch: {
-    config: {
-      handler: function (val) {
-        if (val && val.customize && val.customize.formatType === 'custom') {
-          this.$nextTick(() => {
-            this.config.customize.value = toString(this.config.customize.value)
-          })
+
+    'config.customize.formatType': {
+      handler (val) {
+        if (val === 'timestamp') {
+          this.value = 0
+          this.config.customize.valueFormat = 'timestamp'
+        } else if (val === 'custom') {
+          this.config.customize.valueFormat = 'HH:mm:ss'
+          this.value = ''
         }
       },
-      deep: true
+      immediate: true
     }
+
   },
   created () { },
   mounted () {
     if (!this.isPreview) {
-      // document.querySelector(`.time-picker-${this.config.code}`).style.pointerEvents = 'none'
+      document.querySelector(`.time-picker-${this.config.code}`).style.pointerEvents = 'none'
+    }
+    if (this.value === '') {
+      this.value = moment(new Date()).format(this.config.customize.valueFormat)
     }
     this.changeStyle(this.config)
-    // 将config.customize.value设置值为当前时间 ：HH:mm:ss
-    // if (this.config.customize.value === '') {
-    //   this.config.customize.valueFormat = 'HH:mm:ss'
-    //   this.$nextTick(() => {
-    //     this.config.customize.value = moment(new Date()).format('HH:mm:ss')
-    //     console.log(this.config.customize.value)
-    //   })
-    // }
   },
   beforeDestroy () { },
   methods: {
@@ -170,7 +170,7 @@ export default {
       })
     },
     mouseenter () {
-      if (this.config.customize.value) {
+      if (this.value) {
         setTimeout(() => {
           // 清空图标
           const timePickerCloseIcon = document.querySelector(`.time-picker-${this.innerConfig.code} .el-icon-circle-close`)

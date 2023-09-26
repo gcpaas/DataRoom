@@ -140,7 +140,7 @@
   </div>
 </template>
 <script>
-import { toJpeg, toPng } from 'html-to-image'
+import { toJpeg } from 'html-to-image'
 import CusBtn from 'data-room-ui/BigScreenDesign/BtnLoading'
 // import MonacoEditor from 'data-room-ui/MonacoEditor'
 import BizComponentPreview from './Preview'
