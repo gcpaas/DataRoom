@@ -17,8 +17,9 @@
       <div class="table-box">
         <el-table
           ref="table"
+          max-height="500"
           v-loading="loading"
-          class="bs-table bs-el-table"
+          class="bs-table bs-el-table fixed-header-table"
           :data="dataList"
         >
           <el-table-column
@@ -220,8 +221,9 @@ export default {
 .bs-data-view-dialog{
   /deep/.el-dialog__body{
     background-color: var(--bs-background-2) !important;
-    overflow: auto!important;
-    max-height: calc(90vh - 500px) !important;
+    overflow: hidden;
+    //max-height: calc(90vh - 300px) !important;
+    max-height: 540px!important;
   }
   .table-box{
     height: 100%;
@@ -275,13 +277,13 @@ export default {
 }
 /* 自定义滚动条样式 */
 /deep/.el-table__body-wrapper::-webkit-scrollbar {
-  width: 3px; /* 滚动条宽度 */
-  height: 8px;
+  width: 6px; /* 滚动条宽度 */
+  height: 6px;
 }
 
 /deep/.el-table__body-wrapper::-webkit-scrollbar-thumb {
   background-color: #888; /* 滚动条拖动块颜色 */
-  height: 3px;
+  height: 100px;
   border-radius: 5px;
 }
 
