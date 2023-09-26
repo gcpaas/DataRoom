@@ -100,7 +100,6 @@ export default {
     handleInput (val) {
       // 提供一个防抖的方法
       this.debounce(() => {
-        console.log('val', val)
         this.linkage({ [this.config.code]: val })
       })
     },

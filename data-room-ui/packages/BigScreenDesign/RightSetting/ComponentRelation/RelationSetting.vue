@@ -48,7 +48,7 @@
           label="映射规则"
           align="center"
         >
-          <span>等于</span>
+          <span>赋值给</span>
         </el-table-column>
         <el-table-column
           label="目标组件接收参数"
