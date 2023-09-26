@@ -237,7 +237,6 @@ export default {
       return config
     },
     dataFormatting (config, data) {
-      console.log('config', config);
       // config = this.config
       // 数据返回成功则赋值
       if (data.success) {
