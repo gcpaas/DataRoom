@@ -222,7 +222,6 @@ export default {
   /deep/.el-dialog__body{
     background-color: var(--bs-background-2) !important;
     overflow: hidden;
-    //max-height: calc(90vh - 300px) !important;
     max-height: 540px!important;
   }
   .table-box{
