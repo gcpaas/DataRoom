@@ -235,6 +235,9 @@ export default {
       overflow-y: hidden;
     }
   }
+  /deep/ .el-table__body-wrapper{
+    min-height: 200px !important;
+  }
  .el-table th.el-table__cell.is-leaf, .el-table /deep/td.el-table__cell{
     border-bottom:none;
   }
