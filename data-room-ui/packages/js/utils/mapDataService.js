@@ -57,7 +57,14 @@ const uploadGeoJson = (params = {}, flag = false) => Vue.prototype.$dataRoomAxio
  * @param params
  * @param flag
  */
-const repeatCheck = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/bigScreen/map/repeat', params, flag)
+const repeatCheck = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/bigScreen/map/repeat/code', params, flag)
+
+/**
+ * 名称重复校验
+ * @param params
+ * @param flag
+ */
+const nameRepeatCheck = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/bigScreen/map/repeat/name', params, flag)
 
 export {
   mapList,
@@ -67,5 +74,6 @@ export {
   mapCascadeDelete,
   getMapChildFromGeoJson,
   uploadGeoJson,
-  repeatCheck
+  repeatCheck,
+  nameRepeatCheck
 }
