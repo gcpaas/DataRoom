@@ -9,13 +9,14 @@
     </span>
     <el-input
       :id="`el-input-${config.code}`"
-      v-model="config.customize.value"
+      v-model="value"
       type="text"
       resize="both"
       class="input"
       :placeholder="config.customize.placeholderStyle.placeholder"
       :style="{ backgroundColor: config.customize.backgroundStyle.backgroundColor }"
       @input="handleInput"
+      @keyup.enter.native="keyupEnter"
     >
       <i
         v-if="config.customize.icon.position === 'left' && config.customize.icon.name"
@@ -50,6 +51,7 @@ export default {
   },
   data () {
     return {
+      value: '',
       timer: null
     }
   },
@@ -63,6 +65,7 @@ export default {
   },
   mounted () {
     this.chartInit()
+    this.changeStyle(this.config)
   },
   beforeDestroy () {
     // 销毁时清除定时器
@@ -97,8 +100,12 @@ export default {
     handleInput (val) {
       // 提供一个防抖的方法
       this.debounce(() => {
+        console.log('val', val)
         this.linkage({ [this.config.code]: val })
       })
+    },
+    keyupEnter () {
+      this.linkage({ [this.config.code]: this.value })
     },
     debounce (fn, delay = 500) {
       clearTimeout(this.timer)
