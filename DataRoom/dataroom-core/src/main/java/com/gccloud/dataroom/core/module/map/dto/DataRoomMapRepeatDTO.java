@@ -20,4 +20,6 @@ public class DataRoomMapRepeatDTO {
     @ApiModelProperty(notes = "地图编码")
     private String mapCode;
 
+    @ApiModelProperty(notes = "地图名称")
+    private String mapName;
 }
