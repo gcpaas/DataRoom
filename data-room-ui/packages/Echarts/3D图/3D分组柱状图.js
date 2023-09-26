@@ -66,7 +66,7 @@ const setting = [
     field: 'seriesCustom_barColor',
     // 对应options中的字段
     optionField: 'seriesCustom.barColor',
-    value: ['#1370a7', '#4ebebe', '#3864ab', '#9c9c46', '#a6404b', '#ac582c', '#719c33', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
+    value: ['#1370a7', '#4ebebe', '#3864ab', '#9c9c46', '#a6404b', '#ac582c', '#719c33', '#945FB9', '#FF9845', '#1E9493'],
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -90,7 +90,7 @@ const setting = [
     field: 'seriesCustom_shadowColor',
     // 对应options中的字段
     optionField: 'seriesCustom.shadowColor',
-    value: ['#082442', '#0e2e3c', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
+    value: ['#082442', '#0e2e3c', '#082442', '#0e2e3c', '#082442', '#0e2e3c', '#082442', '#0e2e3c', '#082442', '#0e2e3c'],
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -103,6 +103,18 @@ const setting = [
     // 对应options中的字段
     optionField: 'seriesCustom.shadowTopColor',
     value: ['#0e4481', '#1e637b', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '底部阴影颜色',
+    // 设置组件类型
+    type: 'colorPicker',
+    // 字段
+    field: 'graphic_children_style_fill',
+    // 对应options中的字段
+    optionField: 'graphic.children.style.fill',
+    value: '#3f4867',
     tabName: 'custom',
     groupName: 'graph'
   },
