@@ -32,7 +32,7 @@ export default function getComponentConfig (type) {
       return {
         name: '水平线',
         title: '水平线',
-        icon: Icon.getNameList()[10],
+        icon: Icon.getNameList()[24],
         component: null,
         className:
           'com.gccloud.dataroom.core.module.chart.components.ScreenBorderChart',
@@ -46,7 +46,7 @@ export default function getComponentConfig (type) {
       return {
         name: '垂直线',
         title: '垂直线',
-        icon: Icon.getNameList()[11],
+        icon: Icon.getNameList()[25],
         component: null,
         className:
           'com.gccloud.dataroom.core.module.chart.components.ScreenBorderChart',
