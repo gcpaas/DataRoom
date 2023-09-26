@@ -15,6 +15,7 @@
       class="input"
       :placeholder="config.customize.placeholderStyle.placeholder"
       :style="{ backgroundColor: config.customize.backgroundStyle.backgroundColor }"
+      @input="handleInput"
     >
       <i
         v-if="config.customize.icon.position === 'left' && config.customize.icon.name"
@@ -48,7 +49,9 @@ export default {
     }
   },
   data () {
-    return { }
+    return {
+      timer: null
+    }
   },
   watch: {
     'config.customize': {
@@ -60,6 +63,10 @@ export default {
   },
   mounted () {
     this.chartInit()
+  },
+  beforeDestroy () {
+    // 销毁时清除定时器
+    clearTimeout(this.timer)
   },
   methods: {
     changeStyle (config, isUpdateTheme) {
@@ -86,6 +93,18 @@ export default {
           this.changeActiveItemConfig(config)
         }
       }
+    },
+    handleInput (val) {
+      // 提供一个防抖的方法
+      this.debounce(() => {
+        this.linkage({ [this.config.code]: val })
+      })
+    },
+    debounce (fn, delay = 500) {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        fn()
+      }, delay)
     }
   }
 }

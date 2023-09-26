@@ -1,12 +1,13 @@
 
-import { commonConfig } from 'data-room-ui/js/config'
+import { commonConfig, displayOption } from 'data-room-ui/js/config'
 
 export const settingConfig = {
+  title: '输入框',
   displayOption: {
-    dataAllocation: {
-      // 是否存在数据配置
-      enable: false
-    }
+    ...displayOption,
+    dataAllocation: { enable: true },
+    dataSourceType: { enable: false },
+    params: { enable: false }
   }
 }
 const customConfig = {
