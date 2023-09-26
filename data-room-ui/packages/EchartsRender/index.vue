@@ -74,7 +74,17 @@ export default {
     }
   },
   mounted () {
-
+    const dragSelect = document.querySelector('#' + this.chatId)
+    const resizeObserver = new ResizeObserver(entries => {
+      if (this.chart) {
+        this.chart.resize()
+        let config = this.observeChart(entries)
+        config = this.seriesStyle(config)
+        config.option && this.chart.setOption(config.option)
+      }
+      // const config = this.observeChart(entries)
+    })
+    resizeObserver.observe(dragSelect)
   },
   beforeDestroy () {
     if (this.chart) {
@@ -118,31 +128,21 @@ export default {
       const chartDom = document.getElementById(this.chatId)
       this.chart = echarts.init(chartDom)
       config.option && this.chart.setOption(config.option)
-      this.observeChart(chartDom, this.chart)
     },
     /**
      * 控制底部阴影大小
      */
-    observeChart (container, myChart) {
-      const resizeObserver = new ResizeObserver(entries => {
-        myChart.resize()
-        // entries[0].contentRect.width:此时监测的盒子的宽度
-        // entries[0].contentRect.height:此时监测的盒子的高度
-        const width = entries[0].contentRect.width
-        const height = entries[0].contentRect.height
-        const option = this.config.option
-        // 调整长方形的大小
-        option.graphic.children[0].shape.width = width * 0.9
-        // 调整多边形的大小
-        option.graphic.children[1].shape.points = [
-          [width / 10, -height / 6],
-          [width - width / 6, -height / 6],
-          [width * 0.9, 0],
-          [0, 0]
-        ]
-        myChart.setOption(option)
-      })
-      resizeObserver.observe(container)
+    observeChart (entries) {
+      // entries[0].contentRect.width:此时监测的盒子的宽度
+      // entries[0].contentRect.height:此时监测的盒子的高度
+      const width = entries[0].contentRect.width
+      const height = entries[0].contentRect.height
+      const option = this.config.option
+      // 调整长方形的大小
+      option.graphic.children[0].shape.width = width * 0.9
+      // 调整多边形的大小
+      option.graphic.children[1].shape.points = [[width / 10, -height / 6], [width - width / 6, -height / 6], [width * 0.9, 0], [0, 0]]
+      return this.config
     },
     /**
      * 注册事件
@@ -237,7 +237,6 @@ export default {
       return config
     },
     dataFormatting (config, data) {
-      console.log('config', config);
       // config = this.config
       // 数据返回成功则赋值
       if (data.success) {
