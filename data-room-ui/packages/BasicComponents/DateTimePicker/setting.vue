@@ -114,7 +114,6 @@
                 class="bs-el-select"
                 popper-class="bs-el-select"
                 clearable
-                @change="selectFormatType"
               >
                 <el-option
                   v-for="(type) in formatTypeOptions"
@@ -163,6 +162,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
@@ -210,7 +210,6 @@ export default {
         { label: '年', value: 'year' },
         { label: '月', value: 'month' },
         { label: '日', value: 'date' },
-        { label: '周', value: 'week' },
         { label: '日期时间', value: 'datetime' },
         { label: '日期时间范围', value: 'datetimerange' },
         { label: '日期范围', value: 'daterange' }
@@ -220,14 +219,25 @@ export default {
   watch: {},
   mounted () {},
   methods: {
-    selectFormatType (type) {
-      if (type === 'timestamp') {
-        this.config.customize.value = 0
-        this.config.customize.valueFormat = 'timestamp'
-      } else if (type === 'custom') {
-        this.config.customize.valueFormat = 'yyyy-MM-dd HH:mm:ss'
-      }
-    }
+    // selectFormatType (type) {
+    //   if (type === 'timestamp') {
+    //     this.config.customize.value = 0
+    //     this.config.customize.valueFormat = 'timestamp'
+    //   } else if (type === 'custom') {
+    //     this.config.customize.value = ''
+    //     this.config.customize.valueFormat = 'YYYY-MM-DD HH:mm:ss'
+    //   }
+    // },
+    // selectDisplayType (val) {
+    //   if (['year', 'month', 'date', 'week', 'datetime'].includes(val)) {
+    //     this.config.customize.value = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    //   } else {
+    //     this.config.customize.value = [
+    //       moment(new Date()).subtract(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
+    //       moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    //     ]
+    //   }
+    // }
   }
 }
 </script>

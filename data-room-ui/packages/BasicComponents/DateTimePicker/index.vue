@@ -1,13 +1,14 @@
 <template>
   <el-date-picker
     :key="config.customize.type"
-    v-model="config.customize.value"
+    v-model="value"
     :picker-options="config.customize.pickerOptions"
     :type="config.customize.type"
     clearable
     :class="['basic-component-date-picker', `date-picker-${config.code}`]"
     :popper-class="'basic-component-date-picker date-picker-popper-' + config.code"
     :value-format="config.customize.valueFormat"
+    :default-value="value"
     size="large"
     @focus="focusEvent"
     @change="changeValue"
@@ -16,6 +17,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import cloneDeep from 'lodash/cloneDeep'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
@@ -35,6 +37,7 @@ export default {
   },
   data () {
     return {
+      value: '',
       innerConfig: {}
     }
   },
@@ -47,16 +50,30 @@ export default {
     }
   },
   watch: {
-    config: {
-      handler: function (val) {
-        if (val && val.customize && val.customize.formatType === 'custom') {
-          // 解决时间格式化类型为自定义时，时间格式化类型和时间格式化值数据类型不匹配的问题
-          this.$nextTick(() => {
-            this.config.customize.value = toString(this.config.customize.value)
-          })
+    'config.customize.formatType': {
+      handler (val) {
+        if (val === 'timestamp') {
+          this.value = 0
+          this.valueFormat = 'timestamp'
+        } else if (val === 'custom') {
+          this.value = ''
+          this.valueFormat = 'YYYY-MM-DD HH:mm:ss'
         }
       },
-      deep: true
+      immediate: true
+    },
+    'config.customize.type': {
+      handler (val) {
+        if (['year', 'month', 'date', 'week', 'datetime'].includes(val)) {
+          this.value = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+        } else {
+          this.value = [
+            moment(new Date()).subtract(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
+            moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+          ]
+        }
+      },
+      immediate: true
     }
   },
   created () { },
@@ -65,9 +82,11 @@ export default {
       document.querySelector(`.date-picker-${this.config.code}`).style.pointerEvents = 'none'
     }
     this.changeStyle(this.config)
-    // 将config.customize.value设置值为当前时间 ：
-    if (this.config.customize.value === '') {
-      this.config.customize.value = new Date()
+    if (this.value === '') {
+      this.value = [
+        moment(new Date()).subtract(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
+        moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+      ]
     }
   },
   beforeDestroy () {
@@ -128,6 +147,7 @@ export default {
     },
     // 组件联动
     changeValue (val) {
+      console.log(val)
       this.linkage({ [this.config.code]: val })
     },
     focusEvent () {
@@ -171,7 +191,7 @@ export default {
       })
     },
     mouseenter () {
-      if (this.config.customize.value) {
+      if (this.value) {
         setTimeout(() => {
           // 清空图标
           const timePickerCloseIcon = document.querySelector(`.date-picker-${this.innerConfig.code} .el-icon-circle-close`)

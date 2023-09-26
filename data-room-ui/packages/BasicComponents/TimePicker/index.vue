@@ -7,6 +7,7 @@
     :class="['basic-component-time-picker', `time-picker-${config.code}`]"
     :popper-class="'basic-component-time-picker time-picker-popper-' + config.code"
     :value-format="config.customize.valueFormat"
+    :default-value="config.customize.value"
     @focus="focusEvent"
     @change="changeValue"
     @mouseenter.native="mouseenter"
@@ -47,32 +48,16 @@ export default {
       return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
     }
   },
-  watch: {
-    config: {
-      handler: function (val) {
-        if (val && val.customize && val.customize.formatType === 'custom') {
-          this.$nextTick(() => {
-            this.config.customize.value = toString(this.config.customize.value)
-          })
-        }
-      },
-      deep: true
-    }
-  },
+  watch: { },
   created () { },
   mounted () {
     if (!this.isPreview) {
-      // document.querySelector(`.time-picker-${this.config.code}`).style.pointerEvents = 'none'
+      document.querySelector(`.time-picker-${this.config.code}`).style.pointerEvents = 'none'
+    }
+    if (this.config.customize.value === '') {
+      this.config.customize.value = moment(new Date()).format(this.config.customize.valueFormat)
     }
     this.changeStyle(this.config)
-    // 将config.customize.value设置值为当前时间 ：HH:mm:ss
-    // if (this.config.customize.value === '') {
-    //   this.config.customize.valueFormat = 'HH:mm:ss'
-    //   this.$nextTick(() => {
-    //     this.config.customize.value = moment(new Date()).format('HH:mm:ss')
-    //     console.log(this.config.customize.value)
-    //   })
-    // }
   },
   beforeDestroy () { },
   methods: {
@@ -130,6 +115,7 @@ export default {
     },
     // 组件联动
     changeValue (val) {
+      console.log('val', val)
       this.linkage({ [this.config.code]: val })
     },
     focusEvent () {

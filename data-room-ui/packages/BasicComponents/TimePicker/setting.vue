@@ -184,6 +184,7 @@ export default {
         this.config.customize.valueFormat = 'timestamp'
       } else if (type === 'custom') {
         this.config.customize.valueFormat = 'HH:mm:ss'
+        this.config.customize.value = ''
       }
     }
   }
