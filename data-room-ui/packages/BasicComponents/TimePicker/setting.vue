@@ -89,8 +89,6 @@
                 v-model="config.customize.formatType"
                 class="bs-el-select"
                 popper-class="bs-el-select"
-                clearable
-                @change="selectFormatType"
               >
                 <el-option
                   v-for="(type) in formatTypeOptions"
@@ -177,17 +175,7 @@ export default {
   },
   watch: {},
   mounted () {},
-  methods: {
-    selectFormatType (type) {
-      if (type === 'timestamp') {
-        this.config.customize.value = 0
-        this.config.customize.valueFormat = 'timestamp'
-      } else if (type === 'custom') {
-        this.config.customize.valueFormat = 'HH:mm:ss'
-        this.config.customize.value = ''
-      }
-    }
-  }
+  methods: { }
 }
 </script>
 

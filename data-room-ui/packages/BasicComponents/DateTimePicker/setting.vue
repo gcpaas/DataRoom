@@ -218,27 +218,7 @@ export default {
   },
   watch: {},
   mounted () {},
-  methods: {
-    // selectFormatType (type) {
-    //   if (type === 'timestamp') {
-    //     this.config.customize.value = 0
-    //     this.config.customize.valueFormat = 'timestamp'
-    //   } else if (type === 'custom') {
-    //     this.config.customize.value = ''
-    //     this.config.customize.valueFormat = 'YYYY-MM-DD HH:mm:ss'
-    //   }
-    // },
-    // selectDisplayType (val) {
-    //   if (['year', 'month', 'date', 'week', 'datetime'].includes(val)) {
-    //     this.config.customize.value = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    //   } else {
-    //     this.config.customize.value = [
-    //       moment(new Date()).subtract(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
-    //       moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    //     ]
-    //   }
-    // }
-  }
+  methods: { }
 }
 </script>
 

@@ -1,13 +1,13 @@
 <template>
   <el-time-picker
-    v-model="config.customize.value"
+    v-model="value"
     :picker-options="config.customize.pickerOptions"
     placeholder="选择时间"
     clearable
     :class="['basic-component-time-picker', `time-picker-${config.code}`]"
     :popper-class="'basic-component-time-picker time-picker-popper-' + config.code"
     :value-format="config.customize.valueFormat"
-    :default-value="config.customize.value"
+    :default-value="value"
     @focus="focusEvent"
     @change="changeValue"
     @mouseenter.native="mouseenter"
@@ -48,14 +48,29 @@ export default {
       return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
     }
   },
-  watch: { },
+  watch: {
+
+    'config.customize.formatType': {
+      handler (val) {
+        if (val === 'timestamp') {
+          this.value = 0
+          this.config.customize.valueFormat = 'timestamp'
+        } else if (val === 'custom') {
+          this.config.customize.valueFormat = 'HH:mm:ss'
+          this.value = ''
+        }
+      },
+      immediate: true
+    }
+
+  },
   created () { },
   mounted () {
     if (!this.isPreview) {
       document.querySelector(`.time-picker-${this.config.code}`).style.pointerEvents = 'none'
     }
-    if (this.config.customize.value === '') {
-      this.config.customize.value = moment(new Date()).format(this.config.customize.valueFormat)
+    if (this.value === '') {
+      this.value = moment(new Date()).format(this.config.customize.valueFormat)
     }
     this.changeStyle(this.config)
   },
@@ -115,7 +130,6 @@ export default {
     },
     // 组件联动
     changeValue (val) {
-      console.log('val', val)
       this.linkage({ [this.config.code]: val })
     },
     focusEvent () {
@@ -156,7 +170,7 @@ export default {
       })
     },
     mouseenter () {
-      if (this.config.customize.value) {
+      if (this.value) {
         setTimeout(() => {
           // 清空图标
           const timePickerCloseIcon = document.querySelector(`.time-picker-${this.innerConfig.code} .el-icon-circle-close`)

@@ -147,7 +147,11 @@ export default {
     },
     // 组件联动
     changeValue (val) {
-      console.log(val)
+      // 判断如果val是数组，需要将它转成字符串
+      if (Array.isArray(val)) {
+        val = val.join(',')
+      }
+      console.log('val', val)
       this.linkage({ [this.config.code]: val })
     },
     focusEvent () {
