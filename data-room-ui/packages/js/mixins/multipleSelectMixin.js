@@ -112,6 +112,10 @@ export default {
       ) {
         // 关闭默认事件
         event.preventDefault()
+        // 如果没有选中任何组件的话则不弹出删除提示框
+        if (!this.activeCodes.length) {
+          return
+        }
         this.$confirm('确定删除该组件吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
