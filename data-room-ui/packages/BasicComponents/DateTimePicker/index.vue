@@ -151,7 +151,6 @@ export default {
       if (Array.isArray(val)) {
         val = val.join(',')
       }
-      console.log('val', val)
       this.linkage({ [this.config.code]: val })
     },
     focusEvent () {
