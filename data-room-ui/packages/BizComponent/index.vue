@@ -54,11 +54,11 @@
                 3D组件
               </div>
             </div>
-            <div class="upload-btn">
+            <!-- <div class="upload-btn">
               <CusBtn @click="upload('vueContent')">
                 上传
               </CusBtn>
-            </div>
+            </div> -->
           </div>
           <div class="code-tab-content">
             <!-- <MonacoEditor
@@ -78,11 +78,11 @@
             <div class="code-tab">
               组件配置
             </div>
-            <div class="upload-btn">
+            <!-- <div class="upload-btn">
               <CusBtn @click="upload('settingContent')">
                 上传
               </CusBtn>
-            </div>
+            </div> -->
           </div>
           <div class="code-tab-content">
             <!-- <MonacoEditor

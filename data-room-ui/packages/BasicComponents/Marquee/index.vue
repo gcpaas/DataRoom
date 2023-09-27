@@ -207,7 +207,6 @@ export default {
   mixins: [paramsMixins, commonMixins, linkageMixins],
   mounted () {
     this.chartInit()
-    // 如果点击了生成图片，则先关闭动画
     EventBus.$on('stopMarquee', () => {
       this.isAnimate = false
     })
