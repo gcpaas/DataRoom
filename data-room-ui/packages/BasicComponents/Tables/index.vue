@@ -123,7 +123,6 @@ export default {
     EventBus.$off('dragSelectChange')
   },
   methods: {
-
     cellStyle ({ row, column, rowIndex, columnIndex }) {
       const bodyBackgroundColor = {
         light: '#ffffff',
@@ -169,60 +168,10 @@ export default {
       if (config.code === this.activeCode) {
         this.changeActiveItemConfig(config)
       }
-      // const config = cloneDeep(oldConfig)
-      // if (this.customTheme === 'custom') {
-      //   this.headerCellStyleToObj()
-      //   this.cellStyleToObj()
-      // }
-      // if (this.customTheme === 'custom') {
-      //   this.headerCellStyleToObj()
-      //   this.cellStyleToObj()
-      // }
-      // if (config.customize.stripe) {
-      //   const trs = document
-      //     .getElementById(this.config.code)
-      //     ?.querySelectorAll('tr.el-table__row--striped')
-      //   if (trs) {
-      //     trs.forEach(tr => {
-      //       tr.style.opacity = '0.9'
-      //     // 透明度
-      //     // const overlay = document.createElement("div");
-      //     // overlay.classList.add("overlay");
-      //     // // 将蒙版添加到容器中
-      //     // tr.appendChild(overlay);
-      //     })
-      //   }
-      // } else {
-      //   const trs = document
-      //     .getElementById(config.code)
-      //     ?.querySelectorAll('tr.el-table__row--striped')
-      //   if (trs) {
-      //     trs.forEach(tr => {
-      //       tr.style.opacity = '1'
-      //     // 透明度
-      //     // const overlay = document.createElement("div");
-      //     // overlay.classList.add("overlay");
-      //     // // 将蒙版添加到容器中
-      //     // tr.appendChild(overlay);
-      //     })
-      //   }
-      // // document.querySelectorAll(".overlay").forEach(overlay => {
-      // //   overlay.remove();
-      // // });
-      // }
-      // this.chartInit();
-      // if (config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor) {
-      //   config.customize.oddRowBackgroundColor = config.customize.bodyBackgroundColor
-      // } else if (!config.customize.evenRowBackgroundColor && config.customize.oddRowBackgroundColor) {
-      //   config.customize.evenRowBackgroundColor = config.customize.bodyBackgroundColor
-      // } else if (!(!config.customize.evenRowBackgroundColor && !config.customize.oddRowBackgroundColor)) {
-      //   config.customize.bodyBackgroundColor = ''
-      // }
-      // this.updateKey = new Date().getTime()
       return config
     },
     dataFormatting (config, data) {
-      config.option.tableData = data?.data
+      config.option.tableData = data?.data && data.data.length > 0 ? data.data : []
       const filteredData = {}
       const columnData = data?.columnData || {}
       const dimensionFieldList = config.dataSource.dimensionFieldList || []

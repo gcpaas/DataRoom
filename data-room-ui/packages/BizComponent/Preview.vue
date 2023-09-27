@@ -41,8 +41,8 @@ export default {
         let title = ''
         // eslint-disable-next-line prefer-const, no-unused-vars
         let data = []
-        let g2Plots=g2Plot
-        let echarts = _echarts
+        const g2Plots = g2Plot
+        const echarts = _echarts
         // eslint-disable-next-line prefer-const
         let settingContent = this.settingContentInner?.replaceAll('const ', '')
         // 去掉 export default及后面代码
@@ -53,7 +53,7 @@ export default {
           option,
           setting,
           echarts,
-          g2Plots,
+          g2Plots
         }
       },
       set (val) {}
@@ -78,7 +78,7 @@ export default {
       loading: false,
       remoteComponent: null,
       vueContentInner: this.vueContent,
-      settingContentInner: this.settingContent?.replaceAll('const ', ''),
+      settingContentInner: this.settingContent?.replaceAll('const ', '')
     }
   },
   created () {
