@@ -14,11 +14,13 @@
         } , ${gradientColor1 ? gradientColor1 : gradientColor0})`,
         'font-size': fontSize + 'px',
         'font-weight': fontWeight,
-        opacity: opacity / 100,
+        opacity: opacity === 0 ? 0 : opacity / 100 ,
         color: fontColor
       }"
     >
-      {{ text }}
+      <span>
+        {{ text }}
+      </span>
     </div>
   </div>
 </template>
@@ -67,11 +69,12 @@ export default {
       return this.config.customize.fontColor || '#fff'
     },
     opacity () {
-      return this.config.customize.opacity || 100
+      return (this.config.customize.opacity === 0 || this.config.customize.opacity) ? this.config.customize.opacity : 100
     }
   },
   watch: {},
-  mounted () {},
+  mounted () {
+  },
   methods: {}
 }
 </script>
