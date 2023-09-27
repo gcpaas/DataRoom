@@ -448,8 +448,8 @@ export default {
 
 <style lang="scss" scoped>
 .basic-component-date-picker {
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
 
   // 范围时间选择器连接符
   ::v-deep .el-range-separator {
