@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.common.utils.JSON;
+import com.gccloud.common.utils.QueryWrapperUtils;
 import com.gccloud.dataroom.core.module.map.dto.DataRoomMapRepeatDTO;
 import com.gccloud.dataroom.core.module.map.vo.DataRoomMapVO;
 import com.gccloud.dataroom.core.module.map.vo.MapChildVO;
@@ -38,8 +39,30 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
 
     @Override
     public List<DataRoomMapVO> getList(MapSearchDTO searchDTO) {
-        return this.baseMapper.getList(searchDTO);
+        if (StringUtils.isNotBlank(searchDTO.getSearchKey())) {
+            searchDTO.setParentId(null);
+        }
+        LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(DataRoomMapEntity::getParentId);
+        List<DataRoomMapEntity> list = this.list(queryWrapper);
+        List<String> idList = list.stream().map(DataRoomMapEntity::getParentId).collect(Collectors.toList());
+
+        LambdaQueryWrapper<DataRoomMapEntity> wrapper = QueryWrapperUtils.wrapperLike(new LambdaQueryWrapper<>(), searchDTO.getSearchKey(), DataRoomMapEntity::getName, DataRoomMapEntity::getMapCode);
+        wrapper.eq(searchDTO.getLevel() != null, DataRoomMapEntity::getLevel, searchDTO.getLevel());
+        wrapper.eq(StringUtils.isNotBlank(searchDTO.getParentId()), DataRoomMapEntity::getParentId, searchDTO.getParentId());
+        wrapper.eq(searchDTO.getUploadedGeoJson() != null, DataRoomMapEntity::getUploadedGeoJson, searchDTO.getUploadedGeoJson());
+        List<DataRoomMapEntity> entityList = this.list(wrapper);
+        List<DataRoomMapVO> voList = Lists.newArrayList();
+        for (DataRoomMapEntity entity : entityList) {
+            DataRoomMapVO mapVO = BeanConvertUtils.convert(entity, DataRoomMapVO.class);
+            mapVO.setHasChildren(idList.contains(entity.getId()));
+            voList.add(mapVO);
+        }
+        return voList;
+//        return this.baseMapper.getList(searchDTO);
     }
+
+
 
     @Override
     public List<DataRoomMapVO> getAvailableTree(Integer level) {

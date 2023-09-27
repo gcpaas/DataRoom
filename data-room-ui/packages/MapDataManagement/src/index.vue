@@ -319,7 +319,7 @@ export default {
       })
     },
     getMoreLevel(level) {
-      return '级别' + level
+      return '级别' + (level + 1)
     },
     addMap() {
       this.$refs.addForm.mapFormVisible = true

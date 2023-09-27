@@ -176,7 +176,7 @@ export default {
       return !this.isWhitespace(this.mapForm.geoJson) && this.mapForm.uploadedGeoJson === 0
     },
     outRangeLabel() {
-      return `级别${this.mapForm.level}`;
+      return `级别${this.mapForm.level + 1}`;
     }
   },
   data () {
