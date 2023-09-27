@@ -646,7 +646,7 @@ export default {
         this.buildFieldDesc()
       }
       if (this.passTest && !initAnalysis) {
-        this.$message.success('JSON解析通过')
+        this.$message.success('脚本执行通过')
       }
       this.structurePreviewListCopy = cloneDeep(this.structurePreviewList)
     },

@@ -1244,7 +1244,7 @@ export default {
           this.$message.warning('参数名称不可以与字段名相同！')
           this.passTest = false
         } else {
-          if (val) this.$message.success('运行成功')
+          if (val) this.$message.success('脚本执行通过')
           this.exception = ''
           this.msg = ''
           this.passTest = true

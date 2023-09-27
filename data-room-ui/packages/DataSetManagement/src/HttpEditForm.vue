@@ -1144,7 +1144,7 @@ export default {
           this.dataPreviewList = res && Array.isArray(res) ? res : [{ ...res }]
           // 获取数据后更新输出字段
           this.updateOoutputFieldList(this.dataPreviewList)
-          this.$message.success('解析并执行成功')
+          this.$message.success('脚本执行通过')
         }).catch((e) => {
           // 未成功获取数据时，清空数据预览和输出字段
           this.dataPreviewList = []
@@ -1162,7 +1162,7 @@ export default {
           this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : [{ ...res.data }]
           // 获取数据后更新输出字段
           this.updateOoutputFieldList(this.dataPreviewList)
-          this.$message.success('解析并执行成功')
+          this.$message.success('脚本执行通过')
         }).catch((e) => {
           // 未成功获取数据时，清空数据预览和输出字段
           this.dataPreviewList = []
