@@ -144,11 +144,11 @@
     </div>
     <add-form
       ref="addForm"
-      @refresh="getDataList"
+      @refresh="refreshData"
     />
     <edit-form
       ref="editForm"
-      @refresh="getDataList"
+      @refresh="refreshData"
     />
     <el-dialog
       :close-on-click-modal="false"
@@ -195,7 +195,7 @@
 
 <script>
 import table from 'data-room-ui/js/utils/table.js'
-import {mapList, mapDelete, uploadGeoJson, mapCascadeDelete} from 'data-room-ui/js/utils/mapDataService'
+import {mapList, mapDelete, uploadGeoJson, mapCascadeDelete, mapInfo} from 'data-room-ui/js/utils/mapDataService'
 import AddForm from "./AddForm"
 import EditForm from "./EditForm"
 import vueJsonViewer from 'vue-json-viewer'
@@ -218,6 +218,7 @@ export default {
       searchLoading: false,
       geoJsonVisible: false,
       lazyResolveIds: [],
+      lazyResolveMap: new Map(),
       searchForm: {
         searchKey: '',
         level: null,
@@ -270,6 +271,7 @@ export default {
       })
     },
     getDataList() {
+      this.lazyResolveMap.clear()
       this.searchLoading = true
       this.loadingText = '正在加载地图数据...'
       mapList(this.searchForm).then(res => {
@@ -284,6 +286,38 @@ export default {
         this.$refs.table.store.states.treeData[this.lazyResolveIds[i]].expanded = false
       }
     },
+    /**
+     * 新增、删除、修改等操作成功后刷新数据,不改变展开状态
+     * @param cbObj
+     */
+    refreshData(cbObj) {
+      let parentId = cbObj.parentId
+      if (this.lazyResolveMap.get(parentId)) {
+        // 刷新父节点
+        const { data, treeNode, resolve } = this.lazyResolveMap.get(parentId)
+        // debugger
+        this.$set(this.$refs.table.store.states.lazyTreeNodeMap, parentId, [])
+        this.load(data, treeNode, resolve)
+        return
+      }
+      if (parentId === '0' || parentId === 0) {
+        // 刷新根节点
+        this.getDataList()
+        return
+      }
+      mapInfo(parentId).then((res) => {
+        parentId = res.parentId
+        if (this.lazyResolveMap.get(parentId)) {
+          // 刷新父节点的父节点
+          const { data, treeNode, resolve } = this.lazyResolveMap.get(parentId)
+          this.$set(this.$refs.table.store.states.lazyTreeNodeMap, parentId, [])
+          this.load(data, treeNode, resolve)
+        } else {
+          // 刷新根节点
+          this.getDataList()
+        }
+      })
+    },
     getMoreLevel(level) {
       return '级别' + level
     },
@@ -292,6 +326,7 @@ export default {
       this.$refs.addForm.init()
     },
     load(data, treeNode, resolve) {
+      this.lazyResolveMap.set(data.id, { data, treeNode, resolve })
       this.lazyResolveIds.push(data.id)
       mapList({
         parentId: data.id
@@ -314,7 +349,10 @@ export default {
               type: 'success',
               message: '删除成功'
             })
-            this.getDataList()
+            this.refreshData({
+              id: map.id,
+              parentId: map.parentId
+            })
           } else {
             this.deleteMapCascade(map)
           }
@@ -351,7 +389,10 @@ export default {
             type: 'success',
             message: '删除成功'
           })
-          this.getDataList()
+          this.refreshData({
+            id: map.id,
+            parentId: map.parentId
+          })
         }).catch(() => {
         })
       }).catch(() => {
@@ -414,7 +455,11 @@ export default {
           message: '上传成功'
         })
         this.geoJsonVisible = false
-        this.getDataList()
+        // 刷新
+        this.refreshData({
+          id: this.currentMap.id,
+          parentId: this.currentMap.parentId
+        })
       }).catch(err => {
         this.$message({
           type: 'error',

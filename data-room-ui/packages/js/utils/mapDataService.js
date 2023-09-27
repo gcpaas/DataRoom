@@ -66,6 +66,12 @@ const repeatCheck = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.
  */
 const nameRepeatCheck = (params = {}, flag = false) => Vue.prototype.$dataRoomAxios.post('/bigScreen/map/repeat/name', params, flag)
 
+/**
+ * 根据父编码解析父级json中的子级
+ * @param id
+ */
+const mapInfo = (id = '-1') => Vue.prototype.$dataRoomAxios.get(`/bigScreen/map/info/${id}`)
+
 export {
   mapList,
   mapAdd,
@@ -75,5 +81,6 @@ export {
   getMapChildFromGeoJson,
   uploadGeoJson,
   repeatCheck,
-  nameRepeatCheck
+  nameRepeatCheck,
+  mapInfo
 }

@@ -286,7 +286,10 @@ export default {
           geoJson: geoJson
         }).then(res => {
           this.mapFormVisible = false
-          this.$emit('refresh')
+          this.$emit('refresh', {
+            id: this.mapForm.id,
+            parentId: this.mapForm.parentId
+          })
         })
       })
     },
