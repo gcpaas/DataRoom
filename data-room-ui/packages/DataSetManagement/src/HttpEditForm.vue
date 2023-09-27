@@ -14,7 +14,7 @@
               <div class="page-header-right">
                 <el-button
                   class="bs-el-button-default"
-                  @click="openNewWindow('https://www.yuque.com/chuinixiongkou/bigscreen/groovy_dataset')"
+                  @click="openNewWindow('https://www.yuque.com/chuinixiongkou/bigscreen/htag6vmt5oin15ib')"
                 >
                   帮助
                 </el-button>
