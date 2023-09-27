@@ -798,9 +798,13 @@ export default {
       for (let i = 0; i < this.sourceList.length; i++) {
         if (this.sourceList[i].id === v) {
           if (this.sourceList[i].sourceType === 'sqlserver') {
-            this.dataForm.sqlProcess = 'exec '
+            if (this.dataForm.sqlProcess === 'call ') {
+              this.dataForm.sqlProcess = 'exec '
+            }
           } else {
-            this.dataForm.sqlProcess = 'call '
+            if (this.dataForm.sqlProcess === 'exec ') {
+              this.dataForm.sqlProcess = 'call '
+            }
           }
         }
       }
