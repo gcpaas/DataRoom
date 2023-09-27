@@ -11,7 +11,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? '存储过程数据集详情' : dataForm.id ? '存储过程数据集编辑' : '存储过程数据集新增' }}
+                {{ !isEdit ? '存储过程数据集详情' : dataForm.id ? '编辑存储过程数据集' : '新增存储过程数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button

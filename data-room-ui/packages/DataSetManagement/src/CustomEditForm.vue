@@ -11,7 +11,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? '自助数据集详情' : dataForm.id ? '自助数据集编辑' : '自助数据集新增' }}
+                {{ !isEdit ? '自助数据集详情' : dataForm.id ? '编辑自助数据集' : '新增自助数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button

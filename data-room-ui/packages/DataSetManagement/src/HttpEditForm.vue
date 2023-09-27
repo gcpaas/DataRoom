@@ -9,7 +9,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? 'HTTP数据集详情' : dataForm.id ? 'HTTP数据集编辑' : 'HTTP数据集新增' }}
+                {{ !isEdit ? 'HTTP数据集详情' : dataForm.id ? '编辑HTTP数据集' : '新增HTTP数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button
