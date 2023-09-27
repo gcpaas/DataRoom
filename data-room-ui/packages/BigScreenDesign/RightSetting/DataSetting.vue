@@ -750,10 +750,12 @@ export default {
           this.fieldsList = res.fields
           // 初始化时以组件本来的参数设置为主
           if (type === 'initial') {
+            let deleteKeys = []
             for (const key in this.config.dataSource.params) {
               const param = res?.params?.find(field => field.name === key)
               // 如果组件参数在数据集中找不到，说明参数已经被删除，不需要再显示
               if (param) {
+                deleteKeys.push(key)
                 this.params.push({
                   name: key,
                   value: this.config.dataSource.params[key],
@@ -762,6 +764,9 @@ export default {
                 })
               }
             }
+            deleteKeys.forEach(key => {
+              delete this.config.dataSource.params[key]
+            })
           } else {
             this.params = res.params
           }
