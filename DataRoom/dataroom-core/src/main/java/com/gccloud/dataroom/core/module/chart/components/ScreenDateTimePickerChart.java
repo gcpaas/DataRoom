@@ -25,9 +25,6 @@ public class ScreenDateTimePickerChart extends Chart {
     @Data
     public static class Customize {
 
-        @ApiModelProperty(notes = "值")
-        private String value;
-
         @ApiModelProperty(notes = "选择框背景颜色")
         private String bgColor;
 
@@ -45,9 +42,6 @@ public class ScreenDateTimePickerChart extends Chart {
 
         @ApiModelProperty(notes = "绑定值的格式")
         private String valueFormat;
-
-        @ApiModelProperty(notes = "占位提示")
-        private String placeholder;
 
         @ApiModelProperty(notes = "下拉框")
         private Map<String, Object> dropDownBox;
