@@ -158,7 +158,7 @@
                   <el-input
                     v-model="dataForm.config.url"
                     autocomplete="off"
-                    class="bs-el-input"
+                    class="bs-el-input bs-el-input-url"
                     placeholder="请输入请求地址"
                     clearable
                   />
@@ -1434,5 +1434,13 @@ export default {
 ::v-deep ::-webkit-scrollbar-thumb {
   background: #fff !important;
   border-radius: 10px;
+}
+::v-deep .el-input__inner{
+  width: 230px !important;
+}
+.bs-el-input-url{
+  ::v-deep .el-input__inner{
+    width:600px !important;
+  }
 }
 </style>

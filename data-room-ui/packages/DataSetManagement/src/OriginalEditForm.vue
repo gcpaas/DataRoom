@@ -1104,7 +1104,11 @@ export default {
 ::v-deep .el-loading-spinner{
   top: 75%;
 }
+
+.bs-el-select{
+  width: 100% !important;
+}
 ::v-deep .el-input__inner{
-  width: 230px !important;
+  width: 100% !important;
 }
 </style>
