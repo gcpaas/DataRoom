@@ -410,6 +410,7 @@ export default {
     openRightPanel (card) {
       this.rightVisiable = true
       this.pageInfoVisiable = false
+      this.$refs.Rules.initRuleHeight()
     },
     openDataViewDialog (config) {
       this.$refs.dataViewDialog.init(config)
