@@ -13,6 +13,7 @@
             placeholder="请输入数据源名称"
             clearable
             maxlength="200"
+            @clear="searchData"
           />
         </el-form-item>
         <el-form-item class="filter-item">
