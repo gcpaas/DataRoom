@@ -10,7 +10,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? '脚本数据集详情' : dataForm.id ? '脚本数据集编辑' : '脚本数据集新增' }}
+                {{ !isEdit ? '脚本数据集详情' : dataForm.id ? '编辑脚本数据集' : '新增脚本数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button
