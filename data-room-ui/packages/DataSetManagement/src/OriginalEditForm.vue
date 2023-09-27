@@ -229,9 +229,9 @@
                 >
                   <el-radio-group
                     v-model="dataForm.repeatStatus"
-                    @change="repeatStatusChange"
                     class="bs-el-radio-group"
                     :disabled="!isEdit"
+                    @change="repeatStatusChange"
                   >
                     <el-radio :label="1">
                       是
@@ -1103,5 +1103,8 @@ export default {
 // 修改el-select样式 loading 位置
 ::v-deep .el-loading-spinner{
   top: 75%;
+}
+::v-deep .el-input__inner{
+  width: 230px !important;
 }
 </style>
