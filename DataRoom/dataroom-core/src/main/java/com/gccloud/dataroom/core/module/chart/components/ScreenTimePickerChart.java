@@ -23,9 +23,6 @@ public class ScreenTimePickerChart extends Chart {
     @Data
     public static class Customize {
 
-        @ApiModelProperty(notes = "值")
-        private String value;
-
         @ApiModelProperty(notes = "选择框背景颜色")
         private String backgroundColor;
 
@@ -56,8 +53,6 @@ public class ScreenTimePickerChart extends Chart {
         @ApiModelProperty(notes = "绑定值的格式")
         private String valueFormat;
 
-        @ApiModelProperty("占位提示")
-        private String placeholder;
 
     }
 
