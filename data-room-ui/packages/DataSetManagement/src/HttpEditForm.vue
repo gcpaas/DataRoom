@@ -149,16 +149,17 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row :gutter="20">
-              <el-col :span="21">
+            <el-row>
+              <el-col :span="24">
                 <el-form-item
                   label="请求地址"
                   prop="config.url"
+                  class="bs-el-input-url"
                 >
                   <el-input
                     v-model="dataForm.config.url"
                     autocomplete="off"
-                    class="bs-el-input bs-el-input-url"
+                    class="bs-el-input"
                     placeholder="请输入请求地址"
                     clearable
                   />
@@ -1438,9 +1439,21 @@ export default {
 ::v-deep .el-input__inner{
   width: 230px !important;
 }
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
+}
 .bs-el-input-url{
+  // ::v-deep .el-form-item__content{
+  //   width: calc(100%) !important;
+  // }
+  .bs-el-input-url{
+    width: 100% !important;
+  }
   ::v-deep .el-input__inner{
-    width:600px !important;
+    width:100% !important;
   }
 }
 </style>

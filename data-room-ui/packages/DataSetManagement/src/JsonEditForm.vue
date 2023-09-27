@@ -843,4 +843,11 @@ export default {
   height: 100% !important;
   margin-bottom: 0 !important;
 }
+
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
+}
 </style>

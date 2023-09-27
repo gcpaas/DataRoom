@@ -1425,4 +1425,10 @@ export default {
     background: var(--bs-el-background-1);
   }
 }
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
+}
 </style>

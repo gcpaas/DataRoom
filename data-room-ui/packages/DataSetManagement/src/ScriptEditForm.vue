@@ -180,7 +180,14 @@
           >
             <div>
               <el-button-group>
-                <el-button plain type="primary" class="bs-el-button-default" @click="example('es')">ES案例</el-button>
+                <el-button
+                  plain
+                  type="primary"
+                  class="bs-el-button-default"
+                  @click="example('es')"
+                >
+                  ES案例
+                </el-button>
               </el-button-group>
               <div class="code-out">
                 <codemirror
@@ -978,14 +985,14 @@ return ElasticsearchDsService.query(host, port, username, password, path, dsl);
     /**
      * 获取脚本案例
      */
-    example(type) {
+    example (type) {
       this.exampleVisible = true
       this.currentExample = this.exampleList[type]
     },
-    useExample() {
+    useExample () {
       this.dataForm.script = this.currentExample
       this.exampleVisible = false
-    },
+    }
   }
 }
 </script>
@@ -1150,5 +1157,12 @@ return ElasticsearchDsService.query(host, port, username, password, path, dsl);
 .bs-table-box {
   height: 100% !important;
   margin-bottom: 0 !important;
+}
+
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
 }
 </style>
