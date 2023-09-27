@@ -51,6 +51,7 @@
               clearable
               class="bs-el-input"
               placeholder="请输入标签名称"
+              @clear="getDataList"
             />
           </el-form-item>
           <el-form-item
