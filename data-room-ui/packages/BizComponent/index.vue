@@ -306,10 +306,10 @@ export default {
 
       })
     },
-    upload (type) {
-      this.currentContentType = type
-      this.$refs[`${this.currentContentType}File`].click()
-    },
+    // upload (type) {
+    //   this.currentContentType = type
+    //   this.$refs[`${this.currentContentType}File`].click()
+    // },
     handleBatchUpload (source) {
       const file = source.target.files
       const reader = new FileReader() // 新建一个FileReader
