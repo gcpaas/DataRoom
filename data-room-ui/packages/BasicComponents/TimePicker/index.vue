@@ -264,8 +264,8 @@ export default {
 
 <style lang="scss" scoped>
 .basic-component-time-picker {
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
 
   .el-input--mini ::v-deep .el-input__inner {
     height: 100% !important;
