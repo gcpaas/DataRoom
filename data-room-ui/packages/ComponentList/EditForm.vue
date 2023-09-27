@@ -375,7 +375,7 @@ export default {
         addOrUpdateHandel(form)
           .then((code) => {
             this.formVisible = false
-            const message = this.dataForm.code ? '更新成功' : '新建成功'
+            const message = this.dataForm.code ? '更新成功' : '新增成功'
             this.$message.success(message)
             this.$emit('refreshData', form, this.dataForm.id)
             if (isToDesign) {
@@ -431,7 +431,7 @@ export default {
         addOrUpdateHandel(form)
           .then((code) => {
             this.formVisible = false
-            const message = this.dataForm.code ? '更新成功' : '新建成功'
+            const message = this.dataForm.code ? '更新成功' : '新增成功'
             this.$message.success(message)
             this.$emit('refreshData', form, this.dataForm.id)
             if (isToDesign) {
