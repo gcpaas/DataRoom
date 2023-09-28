@@ -189,4 +189,12 @@ public class DataRoomPageController {
         }
         return R.success(bgList);
     }
+
+    @ApiPermission
+    @PostMapping("/name/repeat")
+    @ApiOperation(value = "大屏/组件名称是否重复", position = 60, produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<Boolean> nameRepeat(@RequestBody PageEntity pageEntity) {
+        boolean repeat = bigScreenPageService.checkNameRepeat(pageEntity);
+        return R.success(repeat);
+    }
 }
