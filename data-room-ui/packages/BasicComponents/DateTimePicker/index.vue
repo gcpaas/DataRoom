@@ -79,7 +79,7 @@ export default {
   created () { },
   mounted () {
     if (!this.isPreview) {
-      document.querySelector(`.date-picker-${this.config.code}`).style.pointerEvents = 'none'
+      // document.querySelector(`.date-picker-${this.config.code}`).style.pointerEvents = 'none'
     }
     this.changeStyle(this.config)
     if (this.value === '') {
@@ -449,11 +449,17 @@ export default {
   .prev-month{
   span{
     color: #999 !important;
+    &:hover{
+      color: var(--hoverFontColor) !important;
+    }
   }
   }
   .next-month{
     span{
       color: #999 !important;
+      &:hover{
+      color: var(--hoverFontColor) !important;
+    }
     }
   }
 }

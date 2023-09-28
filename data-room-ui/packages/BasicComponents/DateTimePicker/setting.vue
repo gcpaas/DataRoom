@@ -61,12 +61,12 @@
               />
             </el-form-item>
             <!-- 下拉项悬浮背景颜色 -->
-            <el-form-item label="悬浮颜色">
+            <!-- <el-form-item label="悬浮背景颜色">
               <ColorPicker
                 v-model="config.customize.dropDownBox.hoverBgColor"
                 :predefine="predefineThemeColors"
               />
-            </el-form-item>
+            </el-form-item> -->
             <!-- 下拉项悬浮字体颜色 -->
             <el-form-item label="悬浮字体颜色">
               <ColorPicker
