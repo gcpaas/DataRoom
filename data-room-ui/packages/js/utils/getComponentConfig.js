@@ -255,8 +255,8 @@ export default function getComponentConfig (type) {
         title: '选择器',
         icon: Icon.getNameList()[21],
         className: 'com.gccloud.dataroom.core.module.chart.components.ScreenSelectChart',
-        w: 180,
-        h: 80,
+        w: 450,
+        h: 60,
         x: 0,
         y: 0,
         type
@@ -267,8 +267,8 @@ export default function getComponentConfig (type) {
         title: '时间选择器',
         icon: Icon.getNameList()[22],
         className: 'com.gccloud.dataroom.core.module.chart.components.ScreenTimePickerChart',
-        w: 180,
-        h: 80,
+        w: 200,
+        h: 60,
         x: 0,
         y: 0,
         type
@@ -279,8 +279,8 @@ export default function getComponentConfig (type) {
         title: '日期时间选择器',
         icon: Icon.getNameList()[23],
         className: 'com.gccloud.dataroom.core.module.chart.components.ScreenDateTimePickerChart',
-        w: 260,
-        h: 80,
+        w: 500,
+        h: 60,
         x: 0,
         y: 0,
         type
