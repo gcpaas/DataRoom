@@ -79,7 +79,7 @@ export default {
   created () { },
   mounted () {
     if (!this.isPreview) {
-      // document.querySelector(`.date-picker-${this.config.code}`).style.pointerEvents = 'none'
+      document.querySelector(`.date-picker-${this.config.code}`).style.pointerEvents = 'none'
     }
     this.changeStyle(this.config)
     if (this.value === '') {
