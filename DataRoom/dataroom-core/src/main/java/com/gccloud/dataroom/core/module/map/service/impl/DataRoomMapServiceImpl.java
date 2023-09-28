@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -45,18 +46,24 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
         LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.select(DataRoomMapEntity::getParentId);
         List<DataRoomMapEntity> list = this.list(queryWrapper);
-        List<String> idList = list.stream().map(DataRoomMapEntity::getParentId).collect(Collectors.toList());
+        Set<String> parentIds = list.stream().map(DataRoomMapEntity::getParentId).collect(Collectors.toSet());
 
         LambdaQueryWrapper<DataRoomMapEntity> wrapper = QueryWrapperUtils.wrapperLike(new LambdaQueryWrapper<>(), searchDTO.getSearchKey(), DataRoomMapEntity::getName, DataRoomMapEntity::getMapCode);
         wrapper.eq(searchDTO.getLevel() != null, DataRoomMapEntity::getLevel, searchDTO.getLevel());
         wrapper.eq(StringUtils.isNotBlank(searchDTO.getParentId()), DataRoomMapEntity::getParentId, searchDTO.getParentId());
         wrapper.eq(searchDTO.getUploadedGeoJson() != null, DataRoomMapEntity::getUploadedGeoJson, searchDTO.getUploadedGeoJson());
         List<DataRoomMapEntity> entityList = this.list(wrapper);
+        List<String> idList = entityList.stream().map(DataRoomMapEntity::getId).collect(Collectors.toList());
         List<DataRoomMapVO> voList = Lists.newArrayList();
         for (DataRoomMapEntity entity : entityList) {
+            // 如果地图的直接父级也在列表中，那么不返回该地图
+            if (idList.contains(entity.getParentId())) {
+                continue;
+            }
             DataRoomMapVO mapVO = BeanConvertUtils.convert(entity, DataRoomMapVO.class);
-            mapVO.setHasChildren(idList.contains(entity.getId()));
+            mapVO.setHasChildren(parentIds.contains(entity.getId()));
             voList.add(mapVO);
+
         }
         return voList;
 //        return this.baseMapper.getList(searchDTO);

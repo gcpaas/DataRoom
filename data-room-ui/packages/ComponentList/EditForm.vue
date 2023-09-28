@@ -208,7 +208,29 @@ export default {
       },
       dataFormRules: {
         name: [
-          { required: true, message: '名称不能为空', trigger: 'blur' }
+          { required: true, message: '名称不能为空', trigger: 'blur' },
+          // 组件名称判重
+          // 名称重复自定义校验
+          {
+            validator: (rule, value, callback) => {
+              if (value) {
+                this.$dataRoomAxios.post('/bigScreen/design/name/repeat', {
+                  name: value,
+                  type: this.type,
+                  id: this.dataForm.id
+                }).then((resp) => {
+                  if (resp) {
+                    callback(new Error('名称已存在'))
+                  } else {
+                    callback()
+                  }
+                })
+              } else {
+                callback()
+              }
+            },
+            trigger: 'change'
+          }
         ]
       },
       sureLoading: false,
