@@ -9,7 +9,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? 'HTTP数据集详情' : dataForm.id ? 'HTTP数据集编辑' : 'HTTP数据集新增' }}
+                {{ !isEdit ? 'HTTP数据集详情' : dataForm.id ? '编辑HTTP数据集' : '新增HTTP数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button
@@ -71,6 +71,7 @@
                     class="bs-el-select"
                     popper-class="bs-el-select"
                     placeholder="请选择分组"
+                    filterable
                     clearable
                     :disabled="!isEdit"
                     @clear="clearType"
@@ -148,11 +149,12 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row :gutter="20">
-              <el-col :span="21">
+            <el-row>
+              <el-col :span="24">
                 <el-form-item
                   label="请求地址"
                   prop="config.url"
+                  class="bs-el-input-url"
                 >
                   <el-input
                     v-model="dataForm.config.url"
@@ -1432,5 +1434,25 @@ export default {
 ::v-deep ::-webkit-scrollbar-thumb {
   background: #fff !important;
   border-radius: 10px;
+}
+::v-deep .el-input__inner{
+  width: 230px !important;
+}
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
+}
+.bs-el-input-url{
+  // ::v-deep .el-form-item__content{
+  //   width: calc(100%) !important;
+  // }
+  .bs-el-input-url{
+    width: 100% !important;
+  }
+  ::v-deep .el-input__inner{
+    width:100% !important;
+  }
 }
 </style>

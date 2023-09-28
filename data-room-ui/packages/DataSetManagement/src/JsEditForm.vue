@@ -9,7 +9,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? 'JS数据集详情' : dataForm.id ? 'JS数据集编辑' : 'JS数据集新增' }}
+                {{ !isEdit ? 'JS数据集详情' : dataForm.id ? '编辑JS数据集' : '新增JS数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button
@@ -932,5 +932,12 @@ export default {
 
 .tree-box {
   padding: 0;
+}
+
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
 }
 </style>

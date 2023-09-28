@@ -79,7 +79,7 @@
     </el-dialog>
     <!-- 新增或编辑目录弹窗 -->
     <el-dialog
-      :title="currentCatalog.code ? '编辑分组':'新建分组'"
+      :title="currentCatalog.code ? '编辑分组':'新增分组'"
       :visible.sync="catalogVisible"
       custom-class="bs-el-dialog"
       width="30%"

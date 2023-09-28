@@ -50,8 +50,7 @@
 </template>
 
 <script>
-import { categoryAdd, categoryUpdate } from 'data-room-ui/js/utils/datasetConfigService'
-import { categoryNameRepeat } from "../../js/utils/datasetConfigService";
+import { categoryAdd, categoryUpdate, categoryNameRepeat } from 'data-room-ui/js/utils/datasetConfigService'
 export default {
   name: 'CategroyEditForm',
   props: {
@@ -154,9 +153,8 @@ export default {
             id = this.dataForm.id
             parentId = this.nodeData.parentId
           }
-
           const params = {
-            id: id,
+            id: this.dataForm.id,
             name: this.dataForm.name,
             parentId: parentId,
             type: this.type,
@@ -164,7 +162,7 @@ export default {
           }
           if (id) {
             categoryUpdate(params).then((r) => {
-              params.id = r
+              // params.id = r
               this.$message.success('保存成功')
               this.cancel()
               try {

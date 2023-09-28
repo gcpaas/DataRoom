@@ -182,8 +182,8 @@ export default function getComponentConfig (type) {
         title: '输入框',
         icon: Icon.getNameList()[13],
         className: 'com.gccloud.dataroom.core.module.chart.components.ScreenInputChart',
-        w: 180,
-        h: 40,
+        w: 450,
+        h: 60,
         x: 0,
         y: 0,
         type

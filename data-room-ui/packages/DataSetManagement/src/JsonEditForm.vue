@@ -10,7 +10,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? 'JSON数据集详情' : dataForm.id ? 'JSON数据集编辑' : 'JSON数据集新增' }}
+                {{ !isEdit ? 'JSON数据集详情' : dataForm.id ? '编辑JSON数据集' : '新增JSON数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button
@@ -842,5 +842,12 @@ export default {
 .bs-table-box {
   height: 100% !important;
   margin-bottom: 0 !important;
+}
+
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
 }
 </style>

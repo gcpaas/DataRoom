@@ -22,6 +22,7 @@
                 class="bs-el-select"
                 popper-class="bs-el-select"
                 placeholder="请选择分组"
+                filterable
                 clearable
                 @change="reSearch"
               >
@@ -145,6 +146,7 @@
                 class="bs-el-select"
                 popper-class="bs-el-select"
                 placeholder="请选择分组"
+                filterable
                 clearable
                 @change="reSearch"
               >

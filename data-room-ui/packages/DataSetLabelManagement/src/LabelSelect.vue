@@ -51,6 +51,7 @@
               clearable
               class="bs-el-input"
               placeholder="请输入标签名称"
+              @clear="getDataList"
             />
           </el-form-item>
           <el-form-item
@@ -278,7 +279,7 @@ export default {
         labelName: '',
         labelType: ''
       },
-      sizeLabel: 20,
+      sizeLabel: 10,
       labelTypeList: [],
       labelCheckLoading: false
     }

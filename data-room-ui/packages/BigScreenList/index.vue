@@ -39,7 +39,7 @@
             <div class="add-big-screen-card">
               <div class="add-big-screen-card-inner">
                 <div class="add-big-screen-card-text">
-                  新建{{ type === 'bigScreenCatalog' ? '大屏' : '组件' }}
+                  新增{{ type === 'bigScreenCatalog' ? '大屏' : '组件' }}
                 </div>
               </div>
             </div>
