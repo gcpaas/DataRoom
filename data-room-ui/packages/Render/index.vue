@@ -481,7 +481,7 @@ export default {
   box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.5);
 }
 .multiple-selected {
-  border: 1px dashed #fff !important;
+  border: 1px solid #fff !important;
 }
 //调整拖拽插件的句柄样式
 //句柄公共样式
@@ -491,7 +491,7 @@ export default {
   position: absolute;
   box-sizing: border-box;
   //background: #fff;
-  border: 3px solid var(--bs-el-color-primary);
+  border: 3px solid #c8ff00;
 }
 // 每个句柄不同样式
 /deep/.bs-handle-class-tl{
