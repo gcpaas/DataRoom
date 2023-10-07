@@ -39,6 +39,8 @@
         zIndex: chart.z || 0,
       }"
       :grid="[1,1]"
+      :handles="handlesList"
+      class-name-handle="bs-handle-class"
       @activated="activated(...arguments, chart)"
       @dragging="onDrag(...arguments, chart)"
       @resizing="onResize(...arguments, chart)"
@@ -104,6 +106,7 @@ export default {
   },
   data () {
     return {
+      handlesList: ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'], // 缩放手柄的数组
       vLine: [],
       hLine: [],
       themeCss: '',
@@ -177,7 +180,7 @@ export default {
       const elementToHighlights = []
       // 获取需要高亮的元素的引用
       for (const code of this.activeCodes) {
-        if (this.$refs['RenderCard' + code] &&this.$refs['RenderCard' + code].length && this.$refs['RenderCard' + code][0]){
+        if (this.$refs['RenderCard' + code] && this.$refs['RenderCard' + code].length && this.$refs['RenderCard' + code][0]) {
           elementToHighlights.push(this.$refs['RenderCard' + code][0])
         }
       }
@@ -479,5 +482,84 @@ export default {
 }
 .multiple-selected {
   border: 1px dashed #fff !important;
+}
+//调整拖拽插件的句柄样式
+//句柄公共样式
+/deep/.bs-handle-class{
+  width: 16px!important;
+  height: 16px!important;
+  position: absolute;
+  box-sizing: border-box;
+  //background: #fff;
+  border: 3px solid var(--bs-el-color-primary);
+}
+// 每个句柄不同样式
+/deep/.bs-handle-class-tl{
+  top: -2px!important;
+  left: -2px!important;
+  display: block;
+  cursor: nw-resize;
+  border-right: none;
+  border-bottom: none;
+}
+/deep/.bs-handle-class-tm{
+  top: -2px!important;
+  left: calc(50% - 8px)!important;
+  display: block;
+  cursor: n-resize;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+/deep/.bs-handle-class-tr{
+  top: -2px!important;
+  right: -2px!important;
+  display: block;
+  cursor: ne-resize;
+  border-left: none;
+  border-bottom: none;
+}
+/deep/.bs-handle-class-mr{
+  top: calc(50% - 8px)!important;
+  right: -2px!important;
+  display: block;
+  cursor: e-resize;
+  border-left: none;
+  border-top: none;
+  border-bottom: none;
+}
+/deep/.bs-handle-class-br{
+  right: -2px!important;
+  bottom: -2px!important;
+  display: block;
+  cursor: se-resize;
+  border-left: none;
+  border-top: none;
+}
+/deep/.bs-handle-class-bm{
+  right: calc(50% - 8px)!important;
+  bottom: -2px!important;
+  display: block;
+  cursor: s-resize;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+/deep/.bs-handle-class-bl{
+  left: -2px!important;
+  bottom: -2px!important;
+  display: block;
+  cursor: sw-resize;
+  border-right: none;
+  border-top: none;
+}
+/deep/.bs-handle-class-ml{
+  top: calc(50% - 8px)!important;
+  left: -2px!important;
+  display: block;
+  cursor: w-resize;
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
 }
 </style>
