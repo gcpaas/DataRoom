@@ -64,6 +64,11 @@ export default {
     },
     'config.customize.type': {
       handler (val) {
+        this.$nextTick(() => {
+          if (!this.isPreview) {
+            document.querySelector(`.date-picker-${this.config.code}`).style.pointerEvents = 'none'
+          }
+        })
         if (['year', 'month', 'date', 'week', 'datetime'].includes(val)) {
           this.value = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
         } else {
