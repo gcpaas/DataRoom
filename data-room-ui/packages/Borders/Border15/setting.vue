@@ -93,16 +93,13 @@
             :step="1"
           />
         </el-form-item>
-        <el-form-item
-          label="不透明度"
-          label-width="100px"
-        >
-          <el-slider
+        <el-form-item label="不透明度">
+          <el-input-number
             v-model="config.customize.opacity"
-            class="bs-slider bs-el-input-number"
+            class="bs-el-input-number"
             :min="0"
             :max="100"
-            show-input
+            :step="1"
           />
         </el-form-item>
       </div>
