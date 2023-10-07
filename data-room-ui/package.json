@@ -1,6 +1,6 @@
 {
   "name": "@gcpaas/data-room-ui",
-  "version": "1.0.1-2023092601-Alpha",
+  "version": "1.0.1-2023092702-Alpha",
   "description": "自定义大屏",
   "author": "gcpaas",
   "license": "MIT",
@@ -58,6 +58,7 @@
     "echarts": "^5.2.2",
     "element-ui": "2.15.6",
     "es6-promise": "4.2.8",
+    "gc-vue-draggable-resizable": "^1.0.1",
     "html-to-image": "1.11.11",
     "image-conversion": "^2.1.1",
     "insert-css": "^2.0.0",

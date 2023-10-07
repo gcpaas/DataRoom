@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.common.utils.JSON;
+import com.gccloud.common.utils.QueryWrapperUtils;
 import com.gccloud.dataroom.core.module.map.dto.DataRoomMapRepeatDTO;
 import com.gccloud.dataroom.core.module.map.vo.DataRoomMapVO;
 import com.gccloud.dataroom.core.module.map.vo.MapChildVO;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -38,8 +40,36 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
 
     @Override
     public List<DataRoomMapVO> getList(MapSearchDTO searchDTO) {
-        return this.baseMapper.getList(searchDTO);
+        if (StringUtils.isNotBlank(searchDTO.getSearchKey())) {
+            searchDTO.setParentId(null);
+        }
+        LambdaQueryWrapper<DataRoomMapEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(DataRoomMapEntity::getParentId);
+        List<DataRoomMapEntity> list = this.list(queryWrapper);
+        Set<String> parentIds = list.stream().map(DataRoomMapEntity::getParentId).collect(Collectors.toSet());
+
+        LambdaQueryWrapper<DataRoomMapEntity> wrapper = QueryWrapperUtils.wrapperLike(new LambdaQueryWrapper<>(), searchDTO.getSearchKey(), DataRoomMapEntity::getName, DataRoomMapEntity::getMapCode);
+        wrapper.eq(searchDTO.getLevel() != null, DataRoomMapEntity::getLevel, searchDTO.getLevel());
+        wrapper.eq(StringUtils.isNotBlank(searchDTO.getParentId()), DataRoomMapEntity::getParentId, searchDTO.getParentId());
+        wrapper.eq(searchDTO.getUploadedGeoJson() != null, DataRoomMapEntity::getUploadedGeoJson, searchDTO.getUploadedGeoJson());
+        List<DataRoomMapEntity> entityList = this.list(wrapper);
+        List<String> idList = entityList.stream().map(DataRoomMapEntity::getId).collect(Collectors.toList());
+        List<DataRoomMapVO> voList = Lists.newArrayList();
+        for (DataRoomMapEntity entity : entityList) {
+            // 如果地图的直接父级也在列表中，那么不返回该地图
+            if (idList.contains(entity.getParentId())) {
+                continue;
+            }
+            DataRoomMapVO mapVO = BeanConvertUtils.convert(entity, DataRoomMapVO.class);
+            mapVO.setHasChildren(parentIds.contains(entity.getId()));
+            voList.add(mapVO);
+
+        }
+        return voList;
+//        return this.baseMapper.getList(searchDTO);
     }
+
+
 
     @Override
     public List<DataRoomMapVO> getAvailableTree(Integer level) {

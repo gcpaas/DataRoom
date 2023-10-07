@@ -11,7 +11,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? '存储过程数据集详情' : dataForm.id ? '存储过程数据集编辑' : '存储过程数据集新增' }}
+                {{ !isEdit ? '存储过程数据集详情' : dataForm.id ? '编辑存储过程数据集' : '新增存储过程数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button
@@ -120,7 +120,7 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item
-                  label="描述"
+                  label="备注"
                   prop="remark"
                 >
                   <el-input
@@ -798,9 +798,13 @@ export default {
       for (let i = 0; i < this.sourceList.length; i++) {
         if (this.sourceList[i].id === v) {
           if (this.sourceList[i].sourceType === 'sqlserver') {
-            this.dataForm.sqlProcess = 'exec '
+            if (this.dataForm.sqlProcess === 'call ') {
+              this.dataForm.sqlProcess = 'exec '
+            }
           } else {
-            this.dataForm.sqlProcess = 'call '
+            if (this.dataForm.sqlProcess === 'exec ') {
+              this.dataForm.sqlProcess = 'call '
+            }
           }
         }
       }
@@ -1048,7 +1052,7 @@ export default {
           this.$message.warning('参数名称不可以与字段名相同！')
           this.passTest = false
         } else {
-          if (val) this.$message.success('运行成功')
+          if (val) this.$message.success('脚本执行通过')
           this.exception = ''
           this.msg = ''
           this.passTest = true
@@ -1221,5 +1225,11 @@ export default {
 .bs-table-box {
   height: 100% !important;
   margin-bottom: 0 !important;
+}
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
 }
 </style>

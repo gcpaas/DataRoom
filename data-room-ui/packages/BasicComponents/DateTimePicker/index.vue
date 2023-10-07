@@ -395,10 +395,12 @@ export default {
   .popper__arrow {
     bottom: -6px ;
     border-bottom-color: var(--bgColor) !important;
+    border-top-color: var(--bgColor) !important;
 
     &::after {
       bottom: 0px ;
       border-bottom-color: var(--bgColor) !important;
+      border-top-color: var(--bgColor) !important;
     }
   }
 
@@ -441,6 +443,23 @@ export default {
       &:hover{
         color: var(--hoverFontColor) ;
       }
+    }
+  }
+  // 上月 下月 字体颜色置灰
+  .prev-month{
+  span{
+    color: #999 !important;
+    &:hover{
+      color: var(--hoverFontColor) !important;
+    }
+  }
+  }
+  .next-month{
+    span{
+      color: #999 !important;
+      &:hover{
+      color: var(--hoverFontColor) !important;
+    }
     }
   }
 }

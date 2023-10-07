@@ -173,7 +173,28 @@ export default {
       },
       dataFormRules: {
         name: [
-          { required: true, message: '名称不能为空', trigger: 'blur' }
+          { required: true, message: '名称不能为空', trigger: 'blur' },
+          // 名称重复自定义校验
+          {
+            validator: (rule, value, callback) => {
+              if (value) {
+                this.$dataRoomAxios.post('/bigScreen/design/name/repeat', {
+                  name: value,
+                  type: this.type,
+                  id: this.dataForm.id
+                }).then((resp) => {
+                  if (resp) {
+                    callback(new Error('名称已存在'))
+                  } else {
+                    callback()
+                  }
+                })
+              } else {
+                callback()
+              }
+            },
+            trigger: 'change'
+          }
         ]
       },
       sureLoading: false,
@@ -313,7 +334,7 @@ export default {
         addOrUpdateHandel(form)
           .then((code) => {
             this.formVisible = false
-            const message = this.dataForm.code ? '更新成功' : '新建成功'
+            const message = this.dataForm.code ? '更新成功' : '新增成功'
             this.$message.success(message)
             this.$emit('refreshData', form, this.dataForm.id)
             if (isToDesign) {

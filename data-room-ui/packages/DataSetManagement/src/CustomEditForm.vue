@@ -11,7 +11,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? '自助数据集详情' : dataForm.id ? '自助数据集编辑' : '自助数据集新增' }}
+                {{ !isEdit ? '自助数据集详情' : dataForm.id ? '编辑自助数据集' : '新增自助数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button
@@ -120,7 +120,7 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item
-                  label="描述"
+                  label="备注"
                   prop="remark"
                 >
                   <el-input
@@ -1244,7 +1244,7 @@ export default {
           this.$message.warning('参数名称不可以与字段名相同！')
           this.passTest = false
         } else {
-          if (val) this.$message.success('运行成功')
+          if (val) this.$message.success('脚本执行通过')
           this.exception = ''
           this.msg = ''
           this.passTest = true
@@ -1424,5 +1424,11 @@ export default {
     border: none;
     background: var(--bs-el-background-1);
   }
+}
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
 }
 </style>

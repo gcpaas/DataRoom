@@ -9,12 +9,12 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? 'HTTP数据集详情' : dataForm.id ? 'HTTP数据集编辑' : 'HTTP数据集新增' }}
+                {{ !isEdit ? 'HTTP数据集详情' : dataForm.id ? '编辑HTTP数据集' : '新增HTTP数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button
                   class="bs-el-button-default"
-                  @click="openNewWindow('https://www.yuque.com/chuinixiongkou/bigscreen/groovy_dataset')"
+                  @click="openNewWindow('https://www.yuque.com/chuinixiongkou/bigscreen/htag6vmt5oin15ib')"
                 >
                   帮助
                 </el-button>
@@ -49,7 +49,7 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item
-                  label="名称"
+                  label="数据集名称"
                   prop="name"
                 >
                   <el-input
@@ -63,6 +63,7 @@
               <el-col :span="12">
                 <el-form-item
                   label="分组"
+                  prop="typeId"
                 >
                   <el-select
                     ref="selectParentName"
@@ -70,6 +71,7 @@
                     class="bs-el-select"
                     popper-class="bs-el-select"
                     placeholder="请选择分组"
+                    filterable
                     clearable
                     :disabled="!isEdit"
                     @clear="clearType"
@@ -114,7 +116,7 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item
-                  label="描述"
+                  label="备注"
                   prop="remark"
                 >
                   <el-input
@@ -147,11 +149,12 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row :gutter="20">
-              <el-col :span="21">
+            <el-row>
+              <el-col :span="24">
                 <el-form-item
                   label="请求地址"
                   prop="config.url"
+                  class="bs-el-input-url"
                 >
                   <el-input
                     v-model="dataForm.config.url"
@@ -190,7 +193,7 @@
                   <LabelSelect
                     :dataset-id="datasetId"
                     :id-list="dataForm.labelIds"
-                    @commit="(ids) =>{dataForm.labelIds = ids}"
+                    @commit="(ids) => { dataForm.labelIds = ids }"
                   />
                 </el-form-item>
               </el-col>
@@ -239,7 +242,7 @@
                   label-width="0px"
                 >
                   <el-row
-                    v-for="(item,index) in dataForm.config.headers"
+                    v-for="(item, index) in dataForm.config.headers"
                     :key="index"
                     :gutter="10"
                     :span="24"
@@ -247,7 +250,7 @@
                     <el-col :span="11">
                       <el-form-item
                         label="键"
-                        :prop="'config.headers.'+index+'.key'"
+                        :prop="'config.headers.' + index + '.key'"
                         label-width="50px"
                         :rules="rules.key"
                       >
@@ -263,7 +266,7 @@
                     <el-col :span="11">
                       <el-form-item
                         label="值"
-                        :prop="'config.headers.'+index+'.value'"
+                        :prop="'config.headers.' + index + '.value'"
                         label-width="50px"
                         :rules="rules.value"
                       >
@@ -310,19 +313,18 @@
                 <el-form-item
                   prop="config.params"
                   label-width="0px"
-                  :rules="dataForm.config.method==='get'?rules.params:[{ required: false}]"
+                  :rules="dataForm.config.method === 'get' ? rules.params : [{ required: false }]"
                 >
                   <el-row
-                    v-for="(item,index) in dataForm.config.params"
+                    v-for="(item, index) in dataForm.config.params"
                     :key="index"
                     :gutter="10"
                     :span="24"
-                    style="margin-top: 10px"
                   >
                     <el-col :span="11">
                       <el-form-item
                         label="键"
-                        :prop="'config.params.'+index+'.key'"
+                        :prop="'config.params.' + index + '.key'"
                         label-width="50px"
                         :rules="rules.key"
                       >
@@ -338,7 +340,7 @@
                     <el-col :span="11">
                       <el-form-item
                         label="值"
-                        :prop="'config.params.'+index+'.value'"
+                        :prop="'config.params.' + index + '.value'"
                         label-width="50px"
                         :rules="rules.value"
                       >
@@ -391,11 +393,13 @@
                     v-model="dataForm.config.body"
                     class="bs-el-input"
                     type="textarea"
-                    :autosize="{ minRows: 10, maxRows: 10}"
+                    :autosize="{ minRows: 10, maxRows: 10 }"
                     clearable
                   />
                   <div class="bs-codemirror-bottom-text">
-                    <strong>请求体设置规则： 请在脚本中直接输入请求体内容，如涉及变量，请按照${XX}格式进行设置<br> 例如：<span style="color: red;">{"name":${name}}</span>
+                    <strong>请求体设置规则： 请在脚本中直接输入请求体内容，如涉及变量，请按照${XX}格式进行设置<br> 例如：<span
+                      style="color: red;"
+                    >{"name":${name}}</span>
                     </strong>
                   </div>
                 </el-form-item>
@@ -409,19 +413,25 @@
                   label-width="0px"
                 >
                   <codemirror
-                    v-if="activeName==='reqScript'"
+                    v-if="activeName === 'reqScript'"
                     v-model.trim="dataForm.config.requestScript"
                     :options="codemirrorOption"
                     class="code"
                   />
-                  <div
-                    class="bs-codemirror-bottom-text"
-                  >
+                  <div class="bs-codemirror-bottom-text">
                     <strong>请求脚本设置规则： 请求脚本已经内置参数req，可参考下面的示例进行配置:
-                      <br> 如修改请求地址中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.url.age=17</span>
-                      <br> 如修改请求头中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.headers.name='tom'</span>
-                      <br> 如修改请求参数中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.params.age=17</span>
-                      <br> 如修改请求体中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">req.data='{"name":"223"}'</span>
+                      <br> 如修改请求地址中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                        style="color: red;"
+                      >req.url.age=17</span>
+                      <br> 如修改请求头中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                        style="color: red;"
+                      >req.headers.name='tom'</span>
+                      <br> 如修改请求参数中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                        style="color: red;"
+                      >req.params.age=17</span>
+                      <br> 如修改请求体中对应参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                        style="color: red;"
+                      >req.data='{"name":"223"}'</span>
                     </strong>
                   </div>
                 </el-form-item>
@@ -435,7 +445,7 @@
                   label-width="0px"
                 >
                   <codemirror
-                    v-if="activeName==='respScript'"
+                    v-if="activeName === 'respScript'"
                     v-model.trim="dataForm.config.responseScript"
                     :options="codemirrorOption"
                     class="code"
@@ -444,7 +454,8 @@
                     v-if="dataForm.config.requestType === 'frontend'"
                     class="bs-codemirror-bottom-text"
                   >
-                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数resp中，可直接使用，但是必须要返回设置后的数据。<br> 例如：<span style="color: red;">return resp.data</span>
+                    <strong>响应脚本设置规则： 接口返回数据已经内置到参数resp中，可直接使用，但是必须要返回设置后的数据。<br> 例如：<span style="color: red;">return
+                      resp.data</span>
                     </strong>
                   </div>
                   <div
@@ -503,9 +514,9 @@
                   @click="openParamsSetDialog(false)"
                 >
                   <span>{{ param.name }}</span>&nbsp;<span
-                  v-show="param.remark"
-                  style="color: #909399;"
-                >
+                    v-show="param.remark"
+                    style="color: #909399;"
+                  >
                     ({{ param.remark }})
                   </span>
                   <el-button
@@ -530,9 +541,7 @@
                   配置
                 </el-button>
               </div>
-              <div
-                class="field-wrap bs-field-wrap bs-scrollbar"
-              >
+              <div class="field-wrap bs-field-wrap bs-scrollbar">
                 <div
                   v-for="(field, key) in outputFieldList"
                   :key="key"
@@ -597,9 +606,7 @@
         v-if="!isEdit"
         class="dataPreView"
       >
-        <el-tabs
-          v-model="activeName"
-        >
+        <el-tabs v-model="activeName">
           <el-tab-pane
             v-loading="tableLoading"
             label="数据预览"
@@ -803,6 +810,9 @@ export default {
         name: [
           { required: true, message: '请输入数据集名称', trigger: 'blur' },
           { validator: validateName, trigger: 'blur' }
+        ],
+        typeId: [
+          { required: true, message: '请选择分组', trigger: 'blur' }
         ],
         'config.requestType': [
           { required: true, message: '请选择调用方式', trigger: 'change' }
@@ -1135,7 +1145,7 @@ export default {
           this.dataPreviewList = res && Array.isArray(res) ? res : [{ ...res }]
           // 获取数据后更新输出字段
           this.updateOoutputFieldList(this.dataPreviewList)
-          this.$message.success('解析并执行成功')
+          this.$message.success('脚本执行通过')
         }).catch((e) => {
           // 未成功获取数据时，清空数据预览和输出字段
           this.dataPreviewList = []
@@ -1153,7 +1163,7 @@ export default {
           this.dataPreviewList = res.data && Array.isArray(res.data) ? res.data : [{ ...res.data }]
           // 获取数据后更新输出字段
           this.updateOoutputFieldList(this.dataPreviewList)
-          this.$message.success('解析并执行成功')
+          this.$message.success('脚本执行通过')
         }).catch((e) => {
           // 未成功获取数据时，清空数据预览和输出字段
           this.dataPreviewList = []
@@ -1384,28 +1394,34 @@ export default {
 .tree-box {
   padding: 0;
 }
-.tabs-box{
+
+.tabs-box {
   margin-left: 45px;
 }
-.add-btn{
+
+.add-btn {
   width: 100%;
   text-align: center;
   border: 1px dashed #696A6E;
   color: #fff;
-  &:hover{
+
+  &:hover {
     cursor: pointer;
     border: 1px dashed var(--bs-el-color-primary);
     color: var(--bs-el-color-primary);
   }
 }
-.delete-btn{
+
+.delete-btn {
   color: rgb(228, 116, 112);
-  &:hover{
+
+  &:hover {
     cursor: pointer;
   }
 }
-.preview-table{
-  max-height: 300px!important;
+
+.preview-table {
+  max-height: 300px !important;
 }
 
 /*滚动条样式*/
@@ -1414,8 +1430,29 @@ export default {
   border-radius: 4px;
   height: 4px;
 }
+
 ::v-deep ::-webkit-scrollbar-thumb {
   background: #fff !important;
   border-radius: 10px;
+}
+::v-deep .el-input__inner{
+  width: 230px !important;
+}
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
+}
+.bs-el-input-url{
+  // ::v-deep .el-form-item__content{
+  //   width: calc(100%) !important;
+  // }
+  .bs-el-input-url{
+    width: 100% !important;
+  }
+  ::v-deep .el-input__inner{
+    width:100% !important;
+  }
 }
 </style>

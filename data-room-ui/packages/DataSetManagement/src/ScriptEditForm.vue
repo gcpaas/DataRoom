@@ -10,7 +10,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? '脚本数据集详情' : dataForm.id ? '脚本数据集编辑' : '脚本数据集新增' }}
+                {{ !isEdit ? '脚本数据集详情' : dataForm.id ? '编辑脚本数据集' : '新增脚本数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button
@@ -119,7 +119,7 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item
-                  label="描述"
+                  label="备注"
                   prop="remark"
                 >
                   <el-input
@@ -180,7 +180,14 @@
           >
             <div>
               <el-button-group>
-                <el-button plain type="primary" class="bs-el-button-default" @click="example('es')">ES案例</el-button>
+                <el-button
+                  plain
+                  type="primary"
+                  class="bs-el-button-default"
+                  @click="example('es')"
+                >
+                  ES案例
+                </el-button>
               </el-button-group>
               <div class="code-out">
                 <codemirror
@@ -978,14 +985,14 @@ return ElasticsearchDsService.query(host, port, username, password, path, dsl);
     /**
      * 获取脚本案例
      */
-    example(type) {
+    example (type) {
       this.exampleVisible = true
       this.currentExample = this.exampleList[type]
     },
-    useExample() {
+    useExample () {
       this.dataForm.script = this.currentExample
       this.exampleVisible = false
-    },
+    }
   }
 }
 </script>
@@ -1150,5 +1157,12 @@ return ElasticsearchDsService.query(host, port, username, password, path, dsl);
 .bs-table-box {
   height: 100% !important;
   margin-bottom: 0 !important;
+}
+
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
 }
 </style>

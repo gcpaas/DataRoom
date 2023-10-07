@@ -62,11 +62,11 @@
       @click="catalogAdd"
     >
       <i class="el-icon-plus" />
-      <div>新建分组</div>
+      <div>新增分组</div>
     </div>
     <!-- 新增或编辑目录弹窗 -->
     <el-dialog
-      :title="currentCatalog.code ? '编辑分组' : '新建分组'"
+      :title="currentCatalog.code ? '编辑分组' : '新增分组'"
       :visible.sync="catalogVisible"
       custom-class="bs-el-dialog"
       width="30%"
@@ -175,7 +175,7 @@ export default {
         // 选中目录
         name: '',
         id: '',
-        code: '',
+        code: ''
       },
       formRules: {
         name: [

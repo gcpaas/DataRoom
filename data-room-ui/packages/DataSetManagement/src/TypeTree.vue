@@ -236,7 +236,7 @@ export default {
         this.$refs.categroyEditForm.dialogFormVisible = true
         this.$refs.categroyEditForm.init({ parentId: 0 }, true)
         this.$refs.categroyEditForm.radio = 0
-        this.$refs.categroyEditForm.title = '分组新增'
+        this.$refs.categroyEditForm.title = '新增分组'
       })
     },
     addDiyDom (treeId, treeNode) {
@@ -389,7 +389,7 @@ export default {
           this.$refs.categroyEditForm.type = 'dataset'
           this.$refs.categroyEditForm.dialogFormVisible = true
           this.$refs.categroyEditForm.init(this.rightClickForm.org, false)
-          this.$refs.categroyEditForm.title = '分组编辑'
+          this.$refs.categroyEditForm.title = '编辑分组'
         })
         return
       }
@@ -400,7 +400,7 @@ export default {
           this.$refs.categroyEditForm.dialogFormVisible = true
           this.$refs.categroyEditForm.init(this.rightClickForm.org, true, editType)
           this.$refs.categroyEditForm.radio = 0
-          this.$refs.categroyEditForm.title = '分组新增'
+          this.$refs.categroyEditForm.title = '新增分组'
         })
         return
       }
@@ -411,7 +411,7 @@ export default {
           this.$refs.categroyEditForm.dialogFormVisible = true
           this.$refs.categroyEditForm.init(this.rightClickForm.org, true, editType)
           this.$refs.categroyEditForm.radio = 1
-          this.$refs.categroyEditForm.title = '分组新增'
+          this.$refs.categroyEditForm.title = '新增分组'
         })
       }
     },

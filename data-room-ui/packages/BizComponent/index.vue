@@ -54,11 +54,11 @@
                 3D组件
               </div>
             </div>
-            <div class="upload-btn">
+            <!-- <div class="upload-btn">
               <CusBtn @click="upload('vueContent')">
                 上传
               </CusBtn>
-            </div>
+            </div> -->
           </div>
           <div class="code-tab-content">
             <!-- <MonacoEditor
@@ -78,11 +78,11 @@
             <div class="code-tab">
               组件配置
             </div>
-            <div class="upload-btn">
+            <!-- <div class="upload-btn">
               <CusBtn @click="upload('settingContent')">
                 上传
               </CusBtn>
-            </div>
+            </div> -->
           </div>
           <div class="code-tab-content">
             <!-- <MonacoEditor
@@ -306,10 +306,10 @@ export default {
 
       })
     },
-    upload (type) {
-      this.currentContentType = type
-      this.$refs[`${this.currentContentType}File`].click()
-    },
+    // upload (type) {
+    //   this.currentContentType = type
+    //   this.$refs[`${this.currentContentType}File`].click()
+    // },
     handleBatchUpload (source) {
       const file = source.target.files
       const reader = new FileReader() // 新建一个FileReader

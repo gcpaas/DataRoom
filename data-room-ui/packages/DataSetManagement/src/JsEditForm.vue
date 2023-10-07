@@ -9,12 +9,12 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? 'JS数据集详情' : dataForm.id ? 'JS数据集编辑' : 'JS数据集新增' }}
+                {{ !isEdit ? 'JS数据集详情' : dataForm.id ? '编辑JS数据集' : '新增JS数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button
                   class="bs-el-button-default"
-                  @click="openNewWindow('https://www.yuque.com/chuinixiongkou/bigscreen/groovy_dataset')"
+                  @click="openNewWindow('https://www.yuque.com/chuinixiongkou/bigscreen/kv26b7ytvvbq7twi')"
                 >
                   帮助
                 </el-button>
@@ -118,7 +118,7 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item
-                  label="描述"
+                  label="备注"
                   prop="remark"
                 >
                   <el-input
@@ -932,5 +932,12 @@ export default {
 
 .tree-box {
   padding: 0;
+}
+
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
 }
 </style>

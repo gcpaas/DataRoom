@@ -10,7 +10,7 @@
           <template slot="content">
             <div class="page-header">
               <div class="page-header-left">
-                {{ !isEdit ? '原始数据集详情' : dataForm.id ? '原始数据集编辑' : '原始数据集新增' }}
+                {{ !isEdit ? '原始数据集详情' : dataForm.id ? '编辑原始数据集' : '新增原始数据集' }}
               </div>
               <div class="page-header-right">
                 <el-button
@@ -229,9 +229,9 @@
                 >
                   <el-radio-group
                     v-model="dataForm.repeatStatus"
-                    @change="repeatStatusChange"
                     class="bs-el-radio-group"
                     :disabled="!isEdit"
+                    @change="repeatStatusChange"
                   >
                     <el-radio :label="1">
                       是
@@ -1103,5 +1103,12 @@ export default {
 // 修改el-select样式 loading 位置
 ::v-deep .el-loading-spinner{
   top: 75%;
+}
+
+.bs-el-select{
+  width: 100% !important;
+}
+::v-deep .el-input__inner{
+  width: 100% !important;
 }
 </style>
