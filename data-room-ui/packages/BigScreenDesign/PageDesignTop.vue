@@ -384,7 +384,9 @@ export default {
     // 预览
     async execRun () {
       this.save('preview').then((res) => {
-        this.preview(res)
+        if (res) {
+          this.preview(res)
+        }
       })
     },
     // 预览
@@ -417,9 +419,9 @@ export default {
     // 保存
     async save (type, hasPageTemplateId = false) {
       const pageInfo = cloneDeep(this.handleSaveData())
-      //保存时判断tabs组件里面的元素是否符合要求
+      // 保存时判断tabs组件里面的元素是否符合要求
       const flag = this.validateTabs(pageInfo?.chartList)
-      if (!flag){
+      if (!flag) {
         this.$message.warning('请完成tab项配置')
         return false
       }
