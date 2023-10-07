@@ -764,7 +764,7 @@ export default {
       const reg = /(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/
       if (!reg.test(value)) {
         // eslint-disable-next-line no-template-curly-in-string
-        callback(new Error('请输入请求地址'))
+        callback(new Error('请输入正确的请求地址'))
       } else {
         callback()
       }
@@ -1123,17 +1123,18 @@ export default {
           this.getData()
         }
       } else {
-        this.$refs.form.validate((valid) => {
-          if (valid) {
-            this.getPramsList()
-            // 每次执行时只要有动态参数就会打开参数配置的弹窗进行设置
-            if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && !isInit) {
-              this.openParamsSetDialog(true)
-            } else {
-              this.getData()
-            }
+        // 点击解析时校验是否填写请求地址
+        if (this.dataForm.config.url) {
+          this.getPramsList()
+          // 每次执行时只要有动态参数就会打开参数配置的弹窗进行设置
+          if (this.dataForm.config.paramsList && this.dataForm.config.paramsList.length && !isInit) {
+            this.openParamsSetDialog(true)
+          } else {
+            this.getData()
           }
-        })
+        } else {
+          this.$message.error('请输入请求地址')
+        }
       }
     },
     // 调接口
