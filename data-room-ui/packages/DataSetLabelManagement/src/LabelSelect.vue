@@ -101,7 +101,7 @@
           <el-form-item>
             <el-button
               type="primary"
-              @click="getDataList"
+              @click="current=1;getDataList()"
             >
               查询
             </el-button>
