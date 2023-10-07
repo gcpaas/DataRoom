@@ -36,7 +36,7 @@
             'font-weight':customize.firstWeight,
             'margin-bottom':customize.lineDistance +'px'
           }"
-        >{{ tableData?tableData:'' }}</span>
+        >{{ optionData}}</span>
         <span
           :style="{
             'font-size': customize.secondSize + 'px',
@@ -53,10 +53,13 @@
   </div>
 </template>
 <script>
-
+import commonMixins from 'data-room-ui/js/mixins/commonMixins'
+import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
+import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 export default {
   name: 'Card',
   components: {},
+  mixins: [paramsMixins, commonMixins, linkageMixins],
   props: {
     // 卡片的属性
     config: {
@@ -77,24 +80,33 @@ export default {
       return this.config?.option
     },
     optionData () {
-      return this.option?.data || []
+      return this.option?.data || 0
     },
     customize () {
-      return this.option?.customize
+      return this.config?.customize
     },
-    tableData () {
-      let dataList = ''
-      if (this.optionData instanceof Array && this.optionData.length > 0) {
-        dataList = this.option?.yField
-          ? this.optionData[0][this.option.yField]
-          : this.optionData[0]?.value
-      } else {
-        dataList = this.optionData ? this.optionData[this.option.yField] : ''
-      }
-      return dataList
-    }
   },
-  methods: { }
+  methods: {
+    dataFormatting (config, data) {
+      let dataList = ''
+      if(data.success){
+        if (data.data instanceof Array) {
+          dataList = config.dataSource.dimensionField
+            ? data.data[0][config.dataSource.dimensionField]
+            : data.data[0].value
+        } else {
+          dataList = data.data[config.dataSource.dimensionField]
+        }
+      }else{
+        dataList=0
+      }
+      config.option = {
+        ...config.option,
+        data: dataList
+      }
+      return config
+    }
+   }
 }
 </script>
 

@@ -27,8 +27,7 @@
           />
         </el-select>
         <el-button
-          size="small"
-          style="margin-right: 20px"
+          style="margin-right: 10px"
           type="primary"
           @click="reSearch"
         >
@@ -48,7 +47,6 @@
           :show-file-list="false"
         >
           <el-button
-            size="small"
             type="primary"
           >
             上传资源

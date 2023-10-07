@@ -32,7 +32,7 @@
               :predefine="predefineThemeColors"
             />
           </el-form-item>
-          <el-form-item label="装饰副颜色二">
+          <el-form-item label="装饰副颜色">
             <ColorPicker
               v-model="config.customize.decorationColor2"
               :predefine="predefineThemeColors"

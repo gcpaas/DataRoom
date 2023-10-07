@@ -270,7 +270,7 @@
               :style="{
                 display: remoteComponentsGridComputed ? 'grid' : 'flex',
                 justifyContent: remoteComponentsGridComputed ? 'space-around' : 'flex-start',
-                height: 'calc(100vh - 430px)'
+                height: 'calc(100vh - 385px)'
               }"
             >
               <div

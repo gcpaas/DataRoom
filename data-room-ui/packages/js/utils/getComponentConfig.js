@@ -285,6 +285,30 @@ export default function getComponentConfig (type) {
         y: 0,
         type
       }
+      case 'indicatorCard':
+        return {
+          name: '指标卡',
+          title: '指标卡',
+          icon: Icon.getNameList()[26],
+          className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndicatorCardChart',
+          w: 500,
+          h: 250,
+          x: 0,
+          y: 0,
+          type
+      }
+      case 'indexCard':
+        return {
+          name: '指标卡一',
+          title: '指标卡一',
+          icon: Icon.getNameList()[27],
+          className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndexCardChart',
+          w: 600,
+          h: 250,
+          x: 0,
+          y: 0,
+          type
+        }
     default:
       return {}
   }

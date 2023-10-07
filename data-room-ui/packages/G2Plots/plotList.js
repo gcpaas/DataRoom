@@ -66,7 +66,7 @@ export function getCustomPlots () {
       category: config.category,
       name: config.name,
       title: config.title,
-      border:{ type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [16, 16, 16, 16] },
+      border:{ type: '', titleHeight: 60, fontSize: 16 , isTitle: true, padding: [16, 16, 16, 16] },
       icon: null,
       img: config.img,
       className:
