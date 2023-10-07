@@ -8,6 +8,7 @@ import com.gccloud.dataroom.core.module.basic.dao.DataRoomPageDao;
 import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
 import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
 import com.gccloud.dataroom.core.module.chart.bean.Chart;
+import com.gccloud.dataroom.core.module.chart.bean.Linkage;
 import com.gccloud.dataroom.core.module.chart.components.datasource.DataSetDataSource;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomSearchDTO;
@@ -23,6 +24,7 @@ import com.gccloud.common.utils.AssertUtils;
 import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.common.vo.PageVO;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -36,6 +38,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -323,8 +326,31 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         config.setName(screenEntity.getName());
         config.setCode(screenEntity.getCode());
         List<Chart> chartList = config.getChartList();
+        // 新旧编码映射
+        Map<String, String> chartCodeMap = Maps.newHashMap();
         for (Chart chart : chartList) {
+            String oldChartCode = chart.getCode();
             chart.setCode(CodeGenerateUtils.generate(chart.getType() == null ? "chart" : chart.getType()));
+            chartCodeMap.put(oldChartCode, chart.getCode());
+        }
+        // 处理图表之间的联动
+        for (Chart chart : chartList) {
+            Linkage linkage = chart.getLinkage();
+            if (linkage == null) {
+                continue;
+            }
+            List<Linkage.Component> components = linkage.getComponents();
+            if (components == null || components.isEmpty()) {
+                continue;
+            }
+            for (Linkage.Component component : components) {
+                String componentKey = component.getComponentKey();
+                if (StringUtils.isBlank(componentKey)) {
+                    continue;
+                }
+                String newCode = chartCodeMap.get(componentKey);
+                component.setComponentKey(newCode);
+            }
         }
         boolean copy = this.copyCoverPicture(oldCode, screenEntity.getCode());
         if (!copy) {

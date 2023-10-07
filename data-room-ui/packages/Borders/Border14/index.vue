@@ -65,7 +65,7 @@ export default {
       return this.config.customize.gradientDirection
     },
     opacity () {
-      return this.config.customize.opacity || 100
+      return (this.config.customize.opacity === 0 || this.config.customize.opacity) ? this.config.customize.opacity : 100
     }
   },
   watch: {},
