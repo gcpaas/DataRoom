@@ -692,23 +692,6 @@ const option = {
       barGap: '20%',
       barWidth: 30,
       color: '#115ba6',
-      // itemStyle: {
-      //   normal: {
-      //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-      //       {
-      //         offset: 0,
-      //         color: '#115ba6'
-      //       },
-      //       {
-      //         offset: 1,
-      //         color: '#1db0dd'
-      //       }
-      //     ]),
-      //     opacity: 0.8,
-      //     shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
-      //     shadowBlur: 0 // 阴影模糊值
-      //   }
-      // },
       label: {
         show: true,
         position: 'inside',
@@ -724,23 +707,6 @@ const option = {
       // barGap: '60%',
       barWidth: 30,
       color: '#73eccd',
-      // itemStyle: {
-      //   normal: {
-      //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-      //       {
-      //         offset: 0,
-      //         color: '#73eccd'
-      //       },
-      //       {
-      //         offset: 1,
-      //         color: '#4dd9e5'
-      //       }
-      //     ]),
-      //     opacity: 0.8,
-      //     shadowColor: 'rgba(0, 0, 0, 0.5)', // 阴影颜色
-      //     shadowBlur: 0 // 阴影模糊值
-      //   }
-      // },
       label: {
         show: true,
         position: 'inside',

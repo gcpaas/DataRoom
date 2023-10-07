@@ -82,7 +82,6 @@ export default {
         config = this.seriesStyle(config)
         config.option && this.chart.setOption(config.option)
       }
-      // const config = this.observeChart(entries)
     })
     resizeObserver.observe(dragSelect)
   },
@@ -133,8 +132,6 @@ export default {
      * 控制底部阴影大小
      */
     observeChart (entries) {
-      // entries[0].contentRect.width:此时监测的盒子的宽度
-      // entries[0].contentRect.height:此时监测的盒子的高度
       const width = entries[0].contentRect.width
       const height = entries[0].contentRect.height
       const option = this.config.option
@@ -216,6 +213,7 @@ export default {
               }
             )
           } else if (optionField[0] === 'graphic') {
+            // 配置底部阴影颜色
             option.graphic.children.forEach(item => {
               item.style.fill = set.value
             })
@@ -233,7 +231,6 @@ export default {
           }
         }
       })
-      config.option = { ...config.option, ...option }
       return config
     },
     dataFormatting (config, data) {
@@ -262,21 +259,23 @@ export default {
       return config
     },
     getxDataAndYData (xField, yField, data) {
-      let list = []
       let xData = []
       let yData = []
 
-      const uniqueData = {}
-
-      // 遍历原始数据数组
-      data.forEach((item) => {
-        // 使用城市名称作为键，覆盖旧数据，始终保留最后一条数据
-        uniqueData[item[xField]] = item
+      // 获取所有x轴的分类
+      data.forEach(item => {
+        xData.push(item[xField])
       })
-      // 将唯一数据对象的值（即去重后的数据）转换回数组
-      list = Object.values(uniqueData)
-      xData = list.map(item => item[xField])
-      yData = list.map(item => item[yField])
+      xData = [...new Set(xData)]
+      xData.forEach(x => {
+        let max = 0
+        data.forEach(item => {
+          if (item[xField] === x) {
+            max = item[yField] > max ? item[yField] : max
+          }
+        })
+        yData.push(max)
+      })
       return { xData, yData }
     },
     // 格式化echarts的配置
