@@ -177,6 +177,15 @@ public interface PageDesignConstant {
              */
             String DATE_TIME_PICKER = "dateTimePicker";
 
+            /**
+             * 指标卡1
+             */
+            String INDEX_CARD = "indexCard";
+
+            /**
+             * 指标卡2
+             */
+            String INDICATOR_CARD = "indicatorCard";
 
         }
     }
