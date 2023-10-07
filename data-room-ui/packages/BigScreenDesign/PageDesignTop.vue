@@ -12,8 +12,8 @@
     <div class="head-btn-group">
       <span style="margin-right:8px;font-size:12px">缩放</span>
       <el-input-number
-        class="bs-el-input-number"
         ref="zoomInput"
+        class="bs-el-input-number"
         style="margin-right:10px"
         :value="zoom"
         :min="1"
@@ -221,11 +221,11 @@ export default {
       )
     }
   },
-  mounted() {
-    this.$refs.zoomInput.$el.addEventListener('mousewheel', this.handleMouseWheel);
+  mounted () {
+    this.$refs.zoomInput.$el.addEventListener('mousewheel', this.handleMouseWheel)
   },
-  beforeDestroy() {
-    this.$refs.zoomInput.$el.removeEventListener('mousewheel', this.handleMouseWheel);
+  beforeDestroy () {
+    this.$refs.zoomInput.$el.removeEventListener('mousewheel', this.handleMouseWheel)
   },
   methods: {
     ...mapActions({
@@ -238,12 +238,12 @@ export default {
       undoTimeLine: 'bigScreen/undoTimeLine',
       saveTimeLine: 'bigScreen/saveTimeLine'
     }),
-    handleMouseWheel() {
-      const delta = Math.sign(event.deltaY);
+    handleMouseWheel () {
+      const delta = Math.sign(event.deltaY)
       // 限制最小缩放比例为10
-      if (this.zoom <= 10 && delta > 0) return;
-      event.preventDefault();
-      let zoom1 = this.zoom - delta
+      if (this.zoom <= 10 && delta > 0) return
+      event.preventDefault()
+      const zoom1 = this.zoom - delta
       this.$emit('changeZoom', zoom1)
     },
     changeZoom (val) {
@@ -358,8 +358,8 @@ export default {
         type: 'warning',
         customClass: 'bs-el-message-box'
       }).then(async () => {
-        const flag =  await this.save()
-        if (flag){
+        const flag = await this.save()
+        if (flag) {
           await this.backManagement()
         }
       }).catch((action) => {
@@ -400,13 +400,13 @@ export default {
       window.open(href, '_blank')
     },
     // 保存时判断tabs组件里面的元素是否符合要求
-    validateTabs(chartList){
+    validateTabs (chartList) {
       let isValid = true
-      if(chartList.length){
-        for(let chart of chartList){
-          if(chart.type === 'chartTab' && chart.customize.tabList.length !== 0 ){
-            for(let tab of  chart.customize.tabList){
-              if((!tab.name) || (!tab.chartCode)){
+      if (chartList.length) {
+        for (const chart of chartList) {
+          if (chart.type === 'chartTab' && chart.customize.tabList.length !== 0) {
+            for (const tab of chart.customize.tabList) {
+              if ((!tab.name) || (!tab.chartCode)) {
                 isValid = false
                 return isValid
               }

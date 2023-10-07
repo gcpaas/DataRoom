@@ -7,7 +7,7 @@
       label-position="left"
       class="setting-body bs-el-form"
     >
-      <SettingTitle>基础</SettingTitle>
+      <SettingTitle>标题</SettingTitle>
       <el-form-item
         class="lc-field-body"
         label="名称"
@@ -17,15 +17,17 @@
           clearable
         />
       </el-form-item>
-       <SettingTitle v-if="config.border">边框</SettingTitle>
-          <div class="lc-field-body">
-            <BorderSetting
-              v-if="config.border"
-              label-width="120px"
-              :config="config.border"
-              :bigTitle='config.title'
-            />
-          </div>
+      <SettingTitle v-if="config.border">
+        边框
+      </SettingTitle>
+      <div class="lc-field-body">
+        <BorderSetting
+          v-if="config.border"
+          label-width="120px"
+          :config="config.border"
+          :big-title="config.title"
+        />
+      </div>
       <SettingTitle>位置</SettingTitle>
       <div class="lc-field-body">
         <PosWhSetting
@@ -34,77 +36,74 @@
         />
       </div>
       <SettingTitle>基础</SettingTitle>
-      <el-form-item
-        class="lc-field-body"
-        label="标题位置"
-        label-width="100px"
-      >
-        <el-select
-          v-model="config.customize.position"
-          placeholder="请选择标题位置"
-          popper-class="bs-el-select"
-          class="bs-el-select"
-          clearable
+      <div class="lc-field-body">
+        <el-form-item
+          label="标题位置"
+          label-width="100px"
         >
-          <el-option
-            v-for="item in positionList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+          <el-select
+            v-model="config.customize.position"
+            placeholder="请选择标题位置"
+            popper-class="bs-el-select"
+            class="bs-el-select"
+            clearable
+          >
+            <el-option
+              v-for="item in positionList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="字体大小"
+          label-width="100px"
+        >
+          <el-input-number
+            v-model="config.customize.fontSize"
+            class="bs-el-input-number"
+            placeholder="请输入字体大小"
+            :min="0"
           />
-        </el-select>
-      </el-form-item>
-      <el-form-item
-        class="lc-field-body"
-        label="字体大小"
-        label-width="100px"
-      >
-        <el-input-number
-          v-model="config.customize.fontSize"
-          class="bs-el-input-number"
-          placeholder="请输入字体大小"
-          :min="0"
-        />
-      </el-form-item>
-      <el-form-item
-        class="lc-field-body"
-        label="字体权重"
-        label-width="100px"
-      >
-        <el-input-number
-          v-model="config.customize.fontWeight"
-          class="bs-el-input-number"
-          placeholder="请输入字体权重"
-        />
-      </el-form-item>
-      <el-form-item
-        class="lc-field-body"
-        label="字体颜色"
-        label-width="100px"
-      >
-        <el-color-picker
-          v-model="config.customize.color"
-          class="bs-el-color-picker"
-          popper-class="bs-el-color-picker"
-        />
-      </el-form-item>
-      <el-form-item
-        class="lc-field-body"
-        label="分割线颜色"
-        label-width="100px"
-      >
-        <el-color-picker
-          v-model="config.customize.lineColor"
-          class="bs-el-color-picker"
-          popper-class="bs-el-color-picker"
-        />
-      </el-form-item>
+        </el-form-item>
+        <el-form-item
+          label="字体权重"
+          label-width="100px"
+        >
+          <el-input-number
+            v-model="config.customize.fontWeight"
+            class="bs-el-input-number"
+            placeholder="请输入字体权重"
+          />
+        </el-form-item>
+        <el-form-item
+          label="字体颜色"
+          label-width="100px"
+        >
+          <el-color-picker
+            v-model="config.customize.color"
+            class="bs-el-color-picker"
+            popper-class="bs-el-color-picker"
+          />
+        </el-form-item>
+        <el-form-item
+          label="分割线颜色"
+          label-width="100px"
+        >
+          <el-color-picker
+            v-model="config.customize.lineColor"
+            class="bs-el-color-picker"
+            popper-class="bs-el-color-picker"
+          />
+        </el-form-item>
+      </div>
       <SettingTitle>内容</SettingTitle>
       <div class="lc-field-body">
         <div class="select-item select-item-title">
           <span class="option-drag" />
-          <span class="input-wrap_left">标签页名称</span>
           <span class="input-wrap_left">图表类型</span>
+          <span class="input-wrap_left">标签名称</span>
         </div>
         <draggable
           :list="config.customize.tabList"
@@ -121,19 +120,6 @@
             >
               <div class="select-line-icon option-drag">
                 <i class="el-icon-rank" />
-              </div>
-              <div class="input-wrap">
-                <el-form-item
-                  :prop="'customize.tabList.' + index + '.name'"
-                  :rules="rules.name"
-                  label-width="0px"
-                >
-                  <el-input
-                    v-model="tab.name"
-                    placeholder="请输入标签页标题"
-                    size="mini"
-                  />
-                </el-form-item>
               </div>
               <div class="input-wrap">
                 <el-form-item
@@ -157,11 +143,18 @@
                   </el-select>
                 </el-form-item>
               </div>
-              <div
-                class="select-line-icon option-add"
-                @click="addTab(index)"
-              >
-                <i class="el-icon-circle-plus-outline" />
+              <div class="input-wrap">
+                <el-form-item
+                  :prop="'customize.tabList.' + index + '.name'"
+                  :rules="rules.name"
+                  label-width="0px"
+                >
+                  <el-input
+                    v-model="tab.name"
+                    placeholder="请输入标签名称"
+                    size="mini"
+                  />
+                </el-form-item>
               </div>
               <div
                 class="select-line-icon option-delete"
@@ -224,7 +217,7 @@ export default {
         name: [
           {
             required: true,
-            message: '请输入标签页标题',
+            message: '请输入标签名称',
             trigger: 'blur'
           }
         ],
@@ -258,7 +251,7 @@ export default {
     },
     addTab () {
       const newTab = {
-        chartCode:'',
+        chartCode: '',
         name: '',
         chart: { parentCode: this.config.code }
       }
