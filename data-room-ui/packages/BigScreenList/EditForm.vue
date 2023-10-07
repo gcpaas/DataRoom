@@ -2,7 +2,7 @@
   <div>
     <el-dialog
       :close-on-click-modal="false"
-      :title="title ? '编辑' : '新增'"
+      :title="title ? '编辑大屏' : '新增大屏'"
       :visible.sync="formVisible"
       :append-to-body="true"
       class="bs-dialog-wrap bs-el-dialog"

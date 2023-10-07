@@ -32,12 +32,12 @@
               :predefine="predefineThemeColors"
             />
           </el-form-item>
-          <el-form-item label="装饰副颜色">
+          <!-- <el-form-item label="装饰副颜色">
             <ColorPicker
               v-model="config.customize.decorationColor2"
               :predefine="predefineThemeColors"
             />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="单次动画时长">
             <el-input-number
               v-model="config.customize.dur"
