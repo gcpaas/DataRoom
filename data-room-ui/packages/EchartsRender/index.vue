@@ -71,6 +71,42 @@ export default {
           this.changeStyle(this.config, true)
         }
       }
+    },
+    'config.rotateX': {
+      deep: true,
+      handler (val) {
+        const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
+        const dom1 = document.querySelector('.bs-design-wrap')
+        const dom2 = document.querySelector('.render-item-wrap')
+        dom1.setAttribute('style', 'perspective: 500px;')
+        dom2.setAttribute('style', 'perspective: 500px;')
+        dom1.setAttribute('style', 'transform:' + rotate)
+        dom2.setAttribute('style', 'transform:' + rotate)
+      }
+    },
+    'config.rotateY': {
+      deep: true,
+      handler (val) {
+        const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
+        const dom1 = document.querySelector('.bs-design-wrap')
+        const dom2 = document.querySelector('.render-item-wrap')
+        dom1.setAttribute('style', 'perspective: 500px;')
+        dom2.setAttribute('style', 'perspective: 500px;')
+        dom1.setAttribute('style', 'transform:' + rotate)
+        dom2.setAttribute('style', 'transform:' + rotate)
+      }
+    },
+    'config.rotateZ': {
+      deep: true,
+      handler (val) {
+        const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
+        const dom1 = document.querySelector('.bs-design-wrap')
+        const dom2 = document.querySelector('.render-item-wrap')
+        dom1.setAttribute('style', 'perspective: 500px;')
+        dom2.setAttribute('style', 'perspective: 500px;')
+        dom1.setAttribute('style', 'transform:' + rotate)
+        dom2.setAttribute('style', 'transform:' + rotate)
+      }
     }
   },
   mounted () {
@@ -410,8 +446,8 @@ export default {
     seriesStyle (config) {
       const _config = CloneDeep(config)
       const seriesCustom = _config.option.seriesCustom
-      // const ids = ['barTopColor', 'barColor', 'barBottomColor', 'shadowColor', 'shadowTopColor']
       const ids = Object.keys(config.option.seriesCustom)
+      // 判断是否是分组柱状图
       const isGroup = _config.option.series.length !== 5
       // 宽度配置
       _config.option.series.forEach(item => {
