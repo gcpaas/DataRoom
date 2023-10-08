@@ -106,7 +106,7 @@
               />
             </el-form-item>
           </div>
-          <SettingTitle>时间格式</SettingTitle>
+          <SettingTitle>日期时间格式</SettingTitle>
           <div class="lc-field-body">
             <el-form-item label="时间显示格式化">
               <div class="description">
