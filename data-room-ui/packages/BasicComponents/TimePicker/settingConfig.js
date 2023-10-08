@@ -41,6 +41,8 @@ const customConfig = {
     dropDownSelectedFontColor: '#409EFF',
     // 时间格式化类型:时间戳（timestamp），自定义（custom）
     formatType: 'custom',
+    // 时间格式化
+    format: 'HH:mm:ss',
     // 绑定值的格式
     valueFormat: 'HH:mm:ss'
   }
