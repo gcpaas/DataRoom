@@ -605,6 +605,7 @@ export default {
   top: 0;
   overflow-x: hidden;
   overflow-y: scroll;
+  margin-right: 4px;
 }
 
 /* Webkit浏览器滚动条样式 */
