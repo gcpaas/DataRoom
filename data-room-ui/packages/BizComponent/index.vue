@@ -339,7 +339,7 @@ export default {
         }
       })
     },
-    async  save (pageJump = false) {
+    async save (pageJump = false) {
       this.loading = true
       let dataUrl = ''
       const node = document.querySelector('.remote-preview-inner-wrap')
@@ -435,7 +435,7 @@ export default {
   background: var(--bs-background-2);
   overflow: hidden;
 
-  > * {
+  >* {
     box-sizing: border-box;
   }
 
@@ -512,11 +512,13 @@ export default {
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
-            .code-tab-btn{
+
+            .code-tab-btn {
               // width: 90px;
               cursor: pointer;
               text-align: center;
             }
+
             .code-tab {
               font-size: 14px;
               align-items: center;
@@ -558,12 +560,14 @@ export default {
         height: 100%;
         background: var(--bs-background-1);
         position: relative;
-        .code-tab-header{
+
+        .code-tab-header {
           height: 40px;
           display: flex;
           flex-direction: row;
           align-items: center;
           background-color: var(--bs-background-2);
+
           .code-tab {
             font-size: 14px;
             align-items: center;
@@ -582,16 +586,60 @@ export default {
 }
 </style>
 <style>
-  .cm-s-material-darker.CodeMirror,
-  .cm-s-material-darker .CodeMirror-gutters
-  {
-    background: var(--bs-background-1) !important;
-  }
-  .CodeMirror-scroll {
-    background-color: var(--bs-background-1) !important;
-  }
-  .CodeMirror-gutters {
-    border-right: 1px solid var(--bs-background-1) !important;
-    background-color: var(--bs-background-1) !important;
-  }
+.cm-s-material-darker.CodeMirror,
+.cm-s-material-darker .CodeMirror-gutters {
+  background: var(--bs-background-1) !important;
+}
+
+.CodeMirror-scroll {
+  background-color: var(--bs-background-1) !important;
+}
+
+.CodeMirror-gutters {
+  border-right: 1px solid var(--bs-background-1) !important;
+  background-color: var(--bs-background-1) !important;
+}
+
+.CodeMirror-vscrollbar {
+  right: 0;
+  top: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+/* Webkit浏览器滚动条样式 */
+.CodeMirror-vscrollbar::-webkit-scrollbar {
+  width: 6px;
+  /* 滚动条宽度 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
+  background-color: #444851;
+  /* 滚动条滑块颜色 */
+  border-radius: 4px;
+  /* 滚动条滑块圆角 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #444851;
+  /* 滚动条滑块悬停时颜色 */
+}
+
+/* Firefox和新版Chrome浏览器滚动条样式 */
+.CodeMirror-vscrollbar {
+  scrollbar-width: thin;
+  /* 滚动条宽度 */
+  scrollbar-color: #444851 #444851;
+  /* 滚动条颜色 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
+  background-color: #444851;
+  /* 滚动条滑块颜色 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #444851;
+  /* 滚动条滑块悬停时颜色 */
+}
 </style>

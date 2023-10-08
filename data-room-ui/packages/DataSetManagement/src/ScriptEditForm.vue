@@ -1166,3 +1166,48 @@ return ElasticsearchDsService.query(host, port, username, password, path, dsl);
   width: 100% !important;
 }
 </style>
+
+<style>
+.CodeMirror-vscrollbar {
+  right: 0;
+  top: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+/* Webkit浏览器滚动条样式 */
+.CodeMirror-vscrollbar::-webkit-scrollbar {
+  width: 6px;
+  /* 滚动条宽度 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
+  background-color: #444851;
+  /* 滚动条滑块颜色 */
+  border-radius: 4px;
+  /* 滚动条滑块圆角 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #444851;
+  /* 滚动条滑块悬停时颜色 */
+}
+
+/* Firefox和新版Chrome浏览器滚动条样式 */
+.CodeMirror-vscrollbar {
+  scrollbar-width: thin;
+  /* 滚动条宽度 */
+  scrollbar-color: #444851 #444851;
+  /* 滚动条颜色 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
+  background-color: #444851;
+  /* 滚动条滑块颜色 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #444851;
+  /* 滚动条滑块悬停时颜色 */
+}
+</style>
