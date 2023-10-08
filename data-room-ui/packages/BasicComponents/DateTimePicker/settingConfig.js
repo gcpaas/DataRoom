@@ -32,7 +32,8 @@ const customConfig = {
     type: 'datetimerange',
     // 时间格式化类型:时间戳（timestamp），自定义（custom）
     formatType: 'custom',
-    // 绑定值的格式
+    format: 'yyyy-MM-dd HH:mm:ss',
+    // 时间数据格式
     valueFormat: 'yyyy-MM-dd HH:mm:ss',
     // 下拉框
     dropDownBox: {

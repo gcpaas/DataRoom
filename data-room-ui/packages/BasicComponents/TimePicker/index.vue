@@ -6,6 +6,7 @@
     clearable
     :class="['basic-component-time-picker', `time-picker-${config.code}`]"
     :popper-class="'basic-component-time-picker time-picker-popper-' + config.code"
+    :format="config.customize.format"
     :value-format="config.customize.valueFormat"
     :default-value="value"
     @focus="focusEvent"

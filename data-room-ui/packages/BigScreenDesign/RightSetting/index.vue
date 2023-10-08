@@ -56,6 +56,7 @@ import { resolveComponentType } from 'data-room-ui/js/utils'
 import DataSetting from './DataSetting.vue'
 import rightSetting from 'data-room-ui/js/utils/rightSettingImport'
 import CustomComponent from './G2CustomSetting.vue'
+import EchartsCustomSetting from './EchartsCustomSetting.vue'
 import Svgs from 'data-room-ui/Svgs/setting.vue'
 import { mapState, mapMutations } from 'vuex'
 // import _ from 'lodash'
@@ -78,7 +79,7 @@ export default {
     Svgs,
     // 远程组件的样式配置也和g2Plot的样式配置一样，采用属性配置, 故使用一个组件
     RemoteComponent: CustomComponent,
-    EchartsComponent: CustomComponent
+    EchartsComponent: EchartsCustomSetting
   },
   data () {
     return {
@@ -114,6 +115,9 @@ export default {
         x: this.config?.x,
         y: this.config?.y,
         z: this.config?.z,
+        rotateX: this.config?.rotateX,
+        rotateY: this.config?.rotateY,
+        rotateZ: this.config?.rotateZ,
         setting: cloneDeep(this.config?.setting),
         customize: cloneDeep(this.config?.customize),
         url: this.config?.url,
