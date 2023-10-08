@@ -885,7 +885,7 @@ export default {
           this.newParamsList = cloneDeep(paramsList)
           this.codemirrorOption.mode = this.dataForm.config.requestType === 'frontend' ? 'text/javascript' : 'text/x-groovy'
           // this.replaceParams(paramsList)
-          this.scriptExecute(true)
+          // this.scriptExecute(true)
         })
       }
     },

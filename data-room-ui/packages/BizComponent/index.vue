@@ -339,69 +339,57 @@ export default {
         }
       })
     },
-    save (pageJump = false) {
+    async save (pageJump = false) {
       this.loading = true
+      let dataUrl = ''
       const node = document.querySelector('.remote-preview-inner-wrap')
       // 获取node下的第一个子节点
       const childrenNode = node.children[0]
-      toJpeg(childrenNode, { quality: 0.2 })
-        .then((dataUrl) => {
-          const that = this
-          if (showSize(dataUrl) > 200) {
-            const url = dataURLtoBlob(dataUrl)
-            // 压缩到500KB,这里的500就是要压缩的大小,可自定义
-            imageConversion
-              .compressAccurately(url, {
-                size: 200, // 图片大小压缩到100kb
-                width: 1280, // 宽度压缩到1280
-                height: 720 // 高度压缩到720
-              })
-              .then((res) => {
-                translateBlobToBase64(res, function (e) {
-                  this.form.coverPicture = e.result
-                  updateBizComponent(this.form)
-                    .then(() => {
-                      this.$message({
-                        message: '保存成功',
-                        type: 'success',
-                        duration: 800,
-                        onClose: () => {
-                          // 此处写提示关闭后需要执行的函数
-                          if (pageJump) {
-                            this.pageJump()
-                          }
-                        }
-                      })
-                    })
-                    .finally(() => {
-                      that.loading = false
-                    })
-                })
-              })
-          } else {
-            this.form.coverPicture = dataUrl
-            updateBizComponent(this.form)
-              .then(() => {
-                this.$message({
-                  message: '保存成功',
-                  type: 'success',
-                  duration: 800,
-                  onClose: () => {
-                    // 此处写提示关闭后需要执行的函数
-                    if (pageJump) {
-                      this.pageJump()
-                    }
-                  }
-                })
-              })
-              .finally(() => {
-                this.loading = false
-              })
+      try {
+        dataUrl = await toJpeg(childrenNode, { quality: 0.2 })
+      } catch (error) {
+        console.info(error)
+      }
+      console.log(dataUrl)
+      if (dataUrl) {
+        if (showSize(dataUrl) > 200) {
+          const url = dataURLtoBlob(dataUrl)
+          // 压缩到500KB,这里的500就是要压缩的大小,可自定义
+          imageConversion.compressAccurately(
+            url,
+            {
+              size: 200, // 图片大小压缩到100kb
+              width: 1280, // 宽度压缩到1280
+              height: 720 // 高度压缩到720
+            }
+          ).then((res) => {
+            translateBlobToBase64(res, (e) => {
+              this.form.coverPicture = e.result
+            })
+          })
+        } else {
+          this.form.coverPicture = dataUrl
+        }
+      } else {
+        this.form.coverPicture = ''
+      }
+      updateBizComponent(this.form).then(() => {
+        this.$message({
+          message: '保存成功',
+          type: 'success',
+          duration: 800,
+          onClose: () => {
+            // 此处写提示关闭后需要执行的函数
+            if (pageJump) {
+              this.pageJump()
+            }
           }
         })
-        .catch(() => {
-          this.loading = false
-        })
+        this.loading = false
+      }).catch((error) => {
+        console.info(error)
+        this.loading = false
+      })
     },
     createdImg () {
       this.loading = true
@@ -421,7 +409,8 @@ export default {
           })
           this.loading = false
         })
-        .catch(() => {
+        .catch((error) => {
+          console.info(error)
           this.$message.warning('出现未知错误，请重试')
           this.loading = false
         })
@@ -446,7 +435,7 @@ export default {
   background: var(--bs-background-2);
   overflow: hidden;
 
-  > * {
+  >* {
     box-sizing: border-box;
   }
 
@@ -523,11 +512,13 @@ export default {
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
-            .code-tab-btn{
+
+            .code-tab-btn {
               // width: 90px;
               cursor: pointer;
               text-align: center;
             }
+
             .code-tab {
               font-size: 14px;
               align-items: center;
@@ -569,12 +560,14 @@ export default {
         height: 100%;
         background: var(--bs-background-1);
         position: relative;
-        .code-tab-header{
+
+        .code-tab-header {
           height: 40px;
           display: flex;
           flex-direction: row;
           align-items: center;
           background-color: var(--bs-background-2);
+
           .code-tab {
             font-size: 14px;
             align-items: center;
@@ -593,16 +586,60 @@ export default {
 }
 </style>
 <style>
-  .cm-s-material-darker.CodeMirror,
-  .cm-s-material-darker .CodeMirror-gutters
-  {
-    background: var(--bs-background-1) !important;
-  }
-  .CodeMirror-scroll {
-    background-color: var(--bs-background-1) !important;
-  }
-  .CodeMirror-gutters {
-    border-right: 1px solid var(--bs-background-1) !important;
-    background-color: var(--bs-background-1) !important;
-  }
+.cm-s-material-darker.CodeMirror,
+.cm-s-material-darker .CodeMirror-gutters {
+  background: var(--bs-background-1) !important;
+}
+
+.CodeMirror-scroll {
+  background-color: var(--bs-background-1) !important;
+}
+
+.CodeMirror-gutters {
+  border-right: 1px solid var(--bs-background-1) !important;
+  background-color: var(--bs-background-1) !important;
+}
+
+.CodeMirror-vscrollbar {
+  right: 0;
+  top: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+/* Webkit浏览器滚动条样式 */
+.CodeMirror-vscrollbar::-webkit-scrollbar {
+  width: 6px;
+  /* 滚动条宽度 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
+  background-color: #444851;
+  /* 滚动条滑块颜色 */
+  border-radius: 4px;
+  /* 滚动条滑块圆角 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #444851;
+  /* 滚动条滑块悬停时颜色 */
+}
+
+/* Firefox和新版Chrome浏览器滚动条样式 */
+.CodeMirror-vscrollbar {
+  scrollbar-width: thin;
+  /* 滚动条宽度 */
+  scrollbar-color: #444851 #444851;
+  /* 滚动条颜色 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
+  background-color: #444851;
+  /* 滚动条滑块颜色 */
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #444851;
+  /* 滚动条滑块悬停时颜色 */
+}
 </style>

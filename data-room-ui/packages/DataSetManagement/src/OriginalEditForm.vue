@@ -358,7 +358,7 @@
           <el-table
             align="center"
             :data="dataPreviewList"
-            max-height="400"
+            max-height="100%"
             :border="true"
             class="bs-el-table bs-scrollbar"
           >

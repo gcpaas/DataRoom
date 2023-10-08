@@ -8,6 +8,7 @@
     :class="['basic-component-date-picker', `date-picker-${config.code}`]"
     :popper-class="'basic-component-date-picker date-picker-popper-' + config.code"
     :value-format="config.customize.valueFormat"
+    :format="config.customize.format"
     :default-value="value"
     size="large"
     @focus="focusEvent"

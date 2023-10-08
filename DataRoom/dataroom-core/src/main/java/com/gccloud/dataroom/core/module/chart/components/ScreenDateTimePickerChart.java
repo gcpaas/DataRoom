@@ -43,6 +43,9 @@ public class ScreenDateTimePickerChart extends Chart {
         @ApiModelProperty(notes = "绑定值的格式")
         private String valueFormat;
 
+        @ApiModelProperty(notes = "显示的格式")
+        private String format;
+
         @ApiModelProperty(notes = "下拉框")
         private Map<String, Object> dropDownBox;
 

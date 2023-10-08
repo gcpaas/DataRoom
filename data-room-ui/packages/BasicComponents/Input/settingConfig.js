@@ -25,7 +25,7 @@ const customConfig = {
 
     titleStyle: {
       // 标题大小
-      fontSize: 14,
+      fontSize: 18,
       // 标题颜色
       color: '#fff',
       // 标题间距

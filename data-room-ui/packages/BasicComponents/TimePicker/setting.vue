@@ -84,25 +84,69 @@
           </div>
           <SettingTitle>时间格式</SettingTitle>
           <div class="lc-field-body">
-            <el-form-item label="时间格式化类型">
-              <el-select
-                v-model="config.customize.formatType"
-                class="bs-el-select"
-                popper-class="bs-el-select"
-              >
-                <el-option
-                  v-for="(type) in formatTypeOptions"
-                  :key="type.value"
-                  :label="type.label"
-                  :value="type.value"
+            <el-form-item label="时间显示格式化">
+              <div class="description">
+                <el-input
+                  v-model="config.customize.format"
+                  placeholder="例如：HH:mm:ss"
+                  clearable
                 />
-              </el-select>
+                <el-tooltip
+                  placement="top"
+                >
+                  <span
+                    class="el-icon-question"
+                    style="color:#9e9e9e"
+                  />
+                  <div slot="content">
+                    小时：H，表示小时（24小时制），不补0，例如：3<br>
+                    小时：HH，表示小时（24小时制），补0，例如：03<br>
+                    小时：h，表示小时（12小时制），须和 A 或 a 使用，不补0，例如：3<br>
+                    小时：hh，表示小时（12小时制），须和 A 或 a 使用，补0，例如：03<br>
+                    分钟：m，表示分钟，不补0，例如：4<br>
+                    分钟：mm，表示分钟，补0，例如：04<br>
+                    秒：s，表示秒钟，不补0，例如：5<br>
+                    秒：ss，表示秒钟，补0，例如：05<br>
+                    JS时间戳：timestamp，仅 value-format 可用，组件绑定值为number类型，例如：1483326245000<br>
+                    不需要格式化字符：[MM]，使用方括号标识不需要格式化的字符，例如：MM<br>
+                    具体的时间格式化字符和使用方式，可以参考Element-UI官网的日期选择器的时间格式化部分。
+                  </div>
+                </el-tooltip>
+              </div>
+            </el-form-item>
+            <el-form-item label="时间数据类型">
+              <div class="description">
+                <el-select
+                  v-model="config.customize.formatType"
+                  class="bs-el-select"
+                  popper-class="bs-el-select"
+                >
+                  <el-option
+                    v-for="(type) in formatTypeOptions"
+                    :key="type.value"
+                    :label="type.label"
+                    :value="type.value"
+                  />
+                </el-select>
+                <el-tooltip
+                  placement="top"
+                >
+                  <span
+                    class="el-icon-question"
+                    style="color:#9e9e9e"
+                  />
+                  <div slot="content">
+                    时间戳：从1970年1月1日开始计算的秒数，数据类型为数值型，例如：1483326245000。<br>
+                    自定义：通过输入特定的格式字符串来指定时间的数据格式，例如：HH:mm:ss对应数据为 09:30:00。<br>
+                  </div>
+                </el-tooltip>
+              </div>
             </el-form-item>
             <el-form-item
               v-if="config.customize.formatType === 'custom'"
-              label="自定义时间格式"
+              label="时间数据格式化"
             >
-              <div class="time-format-description">
+              <div class="description">
                 <el-input
                   v-model="config.customize.valueFormat"
                   placeholder="例如：HH:mm:ss"
@@ -116,11 +160,17 @@
                     style="color:#9e9e9e"
                   />
                   <div slot="content">
-                    时间格式示例：<br>
-                    HH：表示小时（24小时制），<br>
-                    mm：表示分钟，<br>
-                    ss：表示秒，
-                    具体可参考Element-UI官网的日期选择器的时间格式化部分。
+                    小时：H，表示小时（24小时制），不补0，例如：3<br>
+                    小时：HH，表示小时（24小时制），补0，例如：03<br>
+                    小时：h，表示小时（12小时制），须和 A 或 a 使用，不补0，例如：3<br>
+                    小时：hh，表示小时（12小时制），须和 A 或 a 使用，补0，例如：03<br>
+                    分钟：m，表示分钟，不补0，例如：4<br>
+                    分钟：mm，表示分钟，补0，例如：04<br>
+                    秒：s，表示秒钟，不补0，例如：5<br>
+                    秒：ss，表示秒钟，补0，例如：05<br>
+                    JS时间戳：timestamp，仅 value-format 可用，组件绑定值为number类型，例如：1483326245000<br>
+                    不需要格式化字符：[MM]，使用方括号标识不需要格式化的字符，例如：MM<br>
+                    具体的时间格式化字符和使用方式，可以参考Element-UI官网的日期选择器的时间格式化部分。
                   </div>
                 </el-tooltip>
               </div>
@@ -184,7 +234,7 @@ export default {
     width: 97%;
     padding: 16px;
   }
-  .time-format-description{
+  .description{
     display: flex;
     align-items: center;
     .el-tooltip{
