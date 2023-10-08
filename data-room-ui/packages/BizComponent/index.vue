@@ -339,69 +339,57 @@ export default {
         }
       })
     },
-    save (pageJump = false) {
+    async  save (pageJump = false) {
       this.loading = true
+      let dataUrl = ''
       const node = document.querySelector('.remote-preview-inner-wrap')
       // 获取node下的第一个子节点
       const childrenNode = node.children[0]
-      toJpeg(childrenNode, { quality: 0.2 })
-        .then((dataUrl) => {
-          const that = this
-          if (showSize(dataUrl) > 200) {
-            const url = dataURLtoBlob(dataUrl)
-            // 压缩到500KB,这里的500就是要压缩的大小,可自定义
-            imageConversion
-              .compressAccurately(url, {
-                size: 200, // 图片大小压缩到100kb
-                width: 1280, // 宽度压缩到1280
-                height: 720 // 高度压缩到720
-              })
-              .then((res) => {
-                translateBlobToBase64(res, function (e) {
-                  this.form.coverPicture = e.result
-                  updateBizComponent(this.form)
-                    .then(() => {
-                      this.$message({
-                        message: '保存成功',
-                        type: 'success',
-                        duration: 800,
-                        onClose: () => {
-                          // 此处写提示关闭后需要执行的函数
-                          if (pageJump) {
-                            this.pageJump()
-                          }
-                        }
-                      })
-                    })
-                    .finally(() => {
-                      that.loading = false
-                    })
-                })
-              })
-          } else {
-            this.form.coverPicture = dataUrl
-            updateBizComponent(this.form)
-              .then(() => {
-                this.$message({
-                  message: '保存成功',
-                  type: 'success',
-                  duration: 800,
-                  onClose: () => {
-                    // 此处写提示关闭后需要执行的函数
-                    if (pageJump) {
-                      this.pageJump()
-                    }
-                  }
-                })
-              })
-              .finally(() => {
-                this.loading = false
-              })
+      try {
+        dataUrl = await toJpeg(childrenNode, { quality: 0.2 })
+      } catch (error) {
+        console.info(error)
+      }
+      console.log(dataUrl)
+      if (dataUrl) {
+        if (showSize(dataUrl) > 200) {
+          const url = dataURLtoBlob(dataUrl)
+          // 压缩到500KB,这里的500就是要压缩的大小,可自定义
+          imageConversion.compressAccurately(
+            url,
+            {
+              size: 200, // 图片大小压缩到100kb
+              width: 1280, // 宽度压缩到1280
+              height: 720 // 高度压缩到720
+            }
+          ).then((res) => {
+            translateBlobToBase64(res, (e) => {
+              this.form.coverPicture = e.result
+            })
+          })
+        } else {
+          this.form.coverPicture = dataUrl
+        }
+      } else {
+        this.form.coverPicture = ''
+      }
+      updateBizComponent(this.form).then(() => {
+        this.$message({
+          message: '保存成功',
+          type: 'success',
+          duration: 800,
+          onClose: () => {
+            // 此处写提示关闭后需要执行的函数
+            if (pageJump) {
+              this.pageJump()
+            }
           }
         })
-        .catch(() => {
-          this.loading = false
-        })
+        this.loading = false
+      }).catch((error) => {
+        console.info(error)
+        this.loading = false
+      })
     },
     createdImg () {
       this.loading = true
@@ -421,7 +409,8 @@ export default {
           })
           this.loading = false
         })
-        .catch(() => {
+        .catch((error) => {
+          console.info(error)
           this.$message.warning('出现未知错误，请重试')
           this.loading = false
         })
