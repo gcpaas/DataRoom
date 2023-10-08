@@ -764,6 +764,19 @@ export default {
                 })
               }
             }
+            if (res.params) {
+              // 如果数据集中有新增的参数，需要显示出来
+              res.params.forEach(param => {
+                if (!this.params.find(item => item.name === param.name)) {
+                  this.params.push({
+                    name: param.name,
+                    value: param.value,
+                    type: param.type,
+                    remark: param.remark
+                  })
+                }
+              })
+            }
             deleteKeys.forEach(key => {
               delete this.config.dataSource.params[key]
             })
