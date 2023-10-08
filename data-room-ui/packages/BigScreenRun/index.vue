@@ -94,7 +94,7 @@ export default {
       return this.config.fitMode || this.stateFitMode
     },
     fitSelector () {
-      return this.config.fitSelector
+            return this.config.fitSelector
     },
     pageLoading () {
       return this.$store.state.bigScreen.pageLoading
@@ -307,7 +307,7 @@ export default {
       let overflowX = 'auto'
       let overflowY = 'auto'
       // 自适应模式, 画布等比例自适应后保持一屏展示，会存在某一个方向两边留白，留白部分颜色背景和画布中的背景色一致
-      if (this.fitMode === 'auto') {
+      if (pageConfig.fitMode === 'auto') {
         const scaleW = this.innerWidth / w
         const scaleH = this.innerHeight / h
         scaleX = Math.min(scaleW, scaleH)
@@ -318,9 +318,9 @@ export default {
       }
 
       // 宽度铺满 预览时画布横向铺满，纵向超出时出现滚动条
-      if (this.fitMode === 'fitWidth') {
+      if (pageConfig.fitMode === 'fitWidth') {
         scaleX = this.innerWidth / w
-        // 如果实际高度小于屏幕，纵向居中
+                // 如果实际高度小于屏幕，纵向居中
         if (this.innerHeight > h) {
           translate = `${((this.innerWidth - w) / 2) / scaleX}px, ${((this.innerHeight - h) / 2) / scaleY}px`
         } else {
@@ -330,7 +330,7 @@ export default {
       }
 
       // 高度铺满 预览时画布纵向铺满，横向超出时出现滚动条
-      if (this.fitMode === 'fitHeight') {
+      if (pageConfig.fitMode === 'fitHeight') {
         scaleY = this.innerHeight / h
         // 如果实际宽度小于屏幕，横向居中
         if (this.innerWidth > w) {
@@ -342,7 +342,7 @@ export default {
       }
 
       // 双向铺满 预览时画布横向纵向铺满，无滚动条，但是元素可能会出现拉伸情况
-      if (this.fitMode === 'cover') {
+      if (pageConfig.fitMode === 'cover') {
         scaleX = this.innerWidth / w
         scaleY = this.innerHeight / h
         translate = `${((this.innerWidth - w) / 2) / scaleX}px, ${((this.innerHeight - h) / 2) / scaleY}px`

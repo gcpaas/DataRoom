@@ -2,7 +2,7 @@
   <div>
     <el-dialog
       :close-on-click-modal="false"
-      :title="title ? '编辑组件' : '新增组件'"
+      :title="title ? '编辑组件' : '新建组件'"
       :visible.sync="formVisible"
       :append-to-body="true"
       class="bs-dialog-wrap bs-el-dialog"
@@ -30,7 +30,7 @@
           />
         </el-form-item>
         <el-form-item
-          v-if="type === 'bizComponent'"
+          v-if="type === 'bizComponent'&&!title"
           label="组件类型"
         >
           <el-select
@@ -151,7 +151,7 @@ export default {
       BizList: [
         {
           label: 'echarts组件',
-          value: 'echarts'
+          value: 'echart'
         }, {
           label: 'g2Plot组件',
           value: 'g2plot'
