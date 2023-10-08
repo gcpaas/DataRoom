@@ -353,7 +353,7 @@ export default {
         }
       })
       // 新窗口打开
-      window.open(href, '_blank')
+      window.open(href, '_self')
     },
     add () {
       const page = {

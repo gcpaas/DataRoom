@@ -477,7 +477,7 @@ export default {
     // 跳转设计态
     toDesign (form) {
       const path = this.type === 'component' ? (window.BS_CONFIG?.routers?.designUrl || '/big-screen/design') : 'big-screen-biz-component-design'
-      const { href: bigScreenHref } = this.type == 'bizComponent' ? this.$router.resolve({
+      const { href: bigScreenHref } = this.type === 'bizComponent' ? this.$router.resolve({
         path,
         query: {
           code: form.code,
@@ -490,7 +490,7 @@ export default {
         }
       })
       // 新窗口打开
-      window.open(bigScreenHref, '_blank')
+      window.open(bigScreenHref, '_self')
     }
   }
 }
