@@ -438,26 +438,32 @@ export default {
           pageInfo.isPreview = false
           this.saveLoading = true
           const node = document.querySelector('.render-theme-wrap')
-          const dataUrl = await toJpeg(node, { quality: 0.2 })
-          if (showSize(dataUrl) > 200) {
-            const url = dataURLtoBlob(dataUrl)
-            // 压缩到500KB,这里的500就是要压缩的大小,可自定义
-            const imgRes = await imageConversion.compressAccurately(url, {
-              size: 200, // 图片大小压缩到100kb
-              width: 1280, // 宽度压缩到1280
-              height: 720 // 高度压缩到720
-            })
-            const base64 = await translateBlobToBase64(imgRes)
-            pageInfo.coverPicture = base64.result
-            const res = await saveScreen(pageInfo)
-            this.$message.success('保存成功')
-            return res
-          } else {
-            pageInfo.coverPicture = dataUrl
-            const res = await saveScreen(pageInfo)
-            this.$message.success('保存成功')
-            return res
+          let dataUrl = ''
+          try {
+            dataUrl = await toJpeg(node, { quality: 0.2 })
+          } catch (error) {
+            console.info(error)
           }
+          if (dataUrl) {
+            if (showSize(dataUrl) > 200) {
+              const url = dataURLtoBlob(dataUrl)
+              // 压缩到500KB,这里的500就是要压缩的大小,可自定义
+              const imgRes = await imageConversion.compressAccurately(url, {
+                size: 200, // 图片大小压缩到100kb
+                width: 1280, // 宽度压缩到1280
+                height: 720 // 高度压缩到720
+              })
+              const base64 = await translateBlobToBase64(imgRes)
+              pageInfo.coverPicture = base64.result
+            } else {
+              pageInfo.coverPicture = dataUrl
+            }
+          } else {
+            pageInfo.coverPicture = ''
+          }
+          const res = await saveScreen(pageInfo)
+          this.$message.success('保存成功')
+          return res
         }
       } catch (error) {
         console.error(error)
