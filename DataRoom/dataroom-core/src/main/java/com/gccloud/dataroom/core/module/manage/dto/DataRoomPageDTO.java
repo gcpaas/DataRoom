@@ -1,10 +1,12 @@
 package com.gccloud.dataroom.core.module.manage.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.gccloud.common.utils.EmptyAsNullDeserializer;
+import com.gccloud.common.validator.group.Insert;
+import com.gccloud.common.validator.group.Update;
 import com.gccloud.dataroom.core.constant.PageDesignConstant;
 import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
 import com.gccloud.dataroom.core.module.chart.bean.Chart;
-import com.gccloud.common.validator.group.Insert;
-import com.gccloud.common.validator.group.Update;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -20,6 +22,7 @@ import java.util.List;
 @Data
 public class DataRoomPageDTO extends BasePageDTO {
 
+    @JsonDeserialize(using = EmptyAsNullDeserializer.class)
     @NotBlank(message = "id不能为空", groups = Update.class)
     @ApiModelProperty(notes = "主键id")
     private String id;

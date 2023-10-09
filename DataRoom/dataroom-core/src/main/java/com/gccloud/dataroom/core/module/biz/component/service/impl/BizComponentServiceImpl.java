@@ -248,10 +248,11 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
     @Override
     public boolean checkName(String id, String name) {
         LambdaQueryWrapper<BizComponentEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(BizComponentEntity::getId);
         queryWrapper.eq(BizComponentEntity::getName, name);
         if (StringUtils.isNotBlank(id)) {
             queryWrapper.ne(BizComponentEntity::getId, id);
         }
-        return this.count(queryWrapper) > 0;
+        return this.list(queryWrapper).size() > 0;
     }
 }

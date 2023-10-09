@@ -79,18 +79,20 @@ public class TypeServiceImpl extends ServiceImpl<DataRoomTypeDao, TypeEntity> im
     @Override
     public boolean checkCodeRepeat(String id, String type, String code) {
         LambdaQueryWrapper<TypeEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(TypeEntity::getId);
         queryWrapper.eq(TypeEntity::getType, type);
         queryWrapper.eq(TypeEntity::getCode, code);
         queryWrapper.ne(StringUtils.isNotBlank(id), TypeEntity::getId, id);
-        return this.count(queryWrapper) > 0;
+        return this.list(queryWrapper).size() > 0;
     }
 
     @Override
     public boolean checkNameRepeat(String id, String type, String name) {
         LambdaQueryWrapper<TypeEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(TypeEntity::getId);
         queryWrapper.eq(TypeEntity::getName, name);
         queryWrapper.eq(TypeEntity::getType, type);
         queryWrapper.ne(StringUtils.isNotBlank(id), TypeEntity::getId, id);
-        return this.count(queryWrapper) > 0;
+        return this.list(queryWrapper).size() > 0;
     }
 }

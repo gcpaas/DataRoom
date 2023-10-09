@@ -1,6 +1,8 @@
 package com.gccloud.dataroom.core.module.biz.component.controller;
 
 import com.gccloud.common.permission.ApiPermission;
+import com.gccloud.common.utils.BeanConvertUtils;
+import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentDTO;
 import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentSearchDTO;
 import com.gccloud.dataroom.core.module.biz.component.entity.BizComponentEntity;
 import com.gccloud.dataroom.core.module.biz.component.service.IBizComponentService;
@@ -46,7 +48,8 @@ public class BizComponentController {
     @ApiPermission(permissions = {Permission.Component.ADD})
     @PostMapping("/add")
     @ApiOperation(value = "新增", notes = "新增", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<String> add(@ApiParam(name = "新增", value = "传入新增的业务条件", required = true) @RequestBody BizComponentEntity entity) {
+    public R<String> add(@ApiParam(name = "新增", value = "传入新增的业务条件", required = true) @RequestBody BizComponentDTO dto) {
+        BizComponentEntity entity = BeanConvertUtils.convert(dto, BizComponentEntity.class);
         String code = bizComponentService.add(entity);
         return R.success(code);
     }
@@ -55,7 +58,8 @@ public class BizComponentController {
     @ApiPermission(permissions = {Permission.Component.UPDATE})
     @PostMapping("/update")
     @ApiOperation(value = "修改", notes = "修改", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<Void> update(@ApiParam(name = "修改", value = "传入修改的业务条件", required = true) @RequestBody BizComponentEntity entity) {
+    public R<Void> update(@ApiParam(name = "修改", value = "传入修改的业务条件", required = true) @RequestBody BizComponentDTO dto) {
+        BizComponentEntity entity = BeanConvertUtils.convert(dto, BizComponentEntity.class);
         bizComponentService.update(entity);
         return R.success();
     }
@@ -87,8 +91,8 @@ public class BizComponentController {
     @ApiPermission(permissions = {Permission.Component.VIEW})
     @PostMapping("/name/repeat")
     @ApiOperation(value = "名称查重", notes = "名称查重", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<Boolean> nameRepeat(@RequestBody BizComponentEntity entity) {
-        return R.success(bizComponentService.checkName(entity.getId(), entity.getName()));
+    public R<Boolean> nameRepeat(@RequestBody BizComponentDTO dto) {
+        return R.success(bizComponentService.checkName(dto.getId(), dto.getName()));
     }
 
 }
