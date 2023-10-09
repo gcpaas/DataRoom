@@ -67,6 +67,22 @@
             class="bs-el-input-number"
           />
         </el-form-item>
+        <el-form-item label="分组">
+          <el-select
+            v-model="dataForm.parentCode"
+            class="bs-el-select"
+            popper-class="bs-el-select"
+            clearable
+            filterable
+          >
+            <el-option
+              v-for="catalogItem in catalogList"
+              :key="catalogItem.id"
+              :label="catalogItem.name"
+              :value="catalogItem.code"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="排序">
           <el-input-number
             v-model="dataForm.orderNum"
@@ -125,6 +141,7 @@ export default {
     return {
       resolutionRatioValue: '',
       resolutionRatio: {},
+      catalogList: [],
       resolutionRatioOptions: [
         {
           value: '1024*768',
@@ -245,6 +262,9 @@ export default {
       const code = nodeData ? nodeData.code : ''
       this.formVisible = true
       this.$nextTick(() => {
+        this.$dataRoomAxios.get('/bigScreen/type/list/bigScreenCatalog').then((resp) => {
+          this.catalogList = resp
+        })
         if (code) {
           this.$dataRoomAxios.get(`/bigScreen/design/info/code/${code}`).then((resp) => {
             this.$set(this, 'title', resp.name)
