@@ -289,7 +289,7 @@
               </div>
               <div class="field-wrap bs-field-wrap bs-scrollbar">
                 <div
-                  v-for="field in structurePreviewList"
+                  v-for="field in sortedStructurePreviewList"
                   :key="field.fieldName"
                   class="field-item"
                   @click="fieldsetVisible = true"
@@ -329,15 +329,15 @@
             class="bs-el-table bs-scrollbar"
           >
             <el-table-column
-              v-for="(value, key) in dataPreviewList[0] ? dataPreviewList[0] : noDataTableDisplayFields"
+              v-for="(value, key) in sortedTablePreviewList"
               :key="key"
-              :label="key"
+              :label="value"
               align="center"
               show-overflow-tooltip
               :render-header="renderHeader"
             >
               <template slot-scope="scope">
-                <span>{{ scope.row[key] }}</span>
+                <span>{{ scope.row[value] }}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -907,6 +907,22 @@ export default {
         tableColumnObject[item.fieldName] = ''
       })
       return tableColumnObject
+    },
+    // 输出字段根据orderNum排序
+    sortedStructurePreviewList () {
+      const list = this.structurePreviewList
+      list.sort((a, b) => {
+        return a.orderNum - b.orderNum
+      })
+      return list
+    },
+    sortedTablePreviewList () {
+      const tableList = this.dataPreviewList[0] ? this.dataPreviewList[0] : this.noDataTableDisplayFields
+      const list = Object.keys(tableList)
+      list.sort((a, b) => {
+        return this.structurePreviewListCopy.findIndex(item => item.fieldName === a) - this.structurePreviewListCopy.findIndex(item => item.fieldName === b)
+      })
+      return list
     }
   },
   watch: {
@@ -1262,6 +1278,9 @@ export default {
           })
         }
         this.structurePreviewListCopy = cloneDeep(this.structurePreviewList)
+        this.structurePreviewListCopy = this.structurePreviewListCopy.sort((a, b) => {
+          return a.orderNum - b.orderNum
+        })
         let paramsNameCheck = false
         this.dataForm.paramsList.forEach(param => {
           const checkList = this.structurePreviewList.filter(item => item.fieldName === param.name)
@@ -1465,13 +1484,14 @@ export default {
   width: 100% !important;
 }
 
-::v-deep .el-table__row{
+::v-deep .el-table__row {
   height: 58px;
-  .cell{
+
+  .cell {
     width: 100%;
     margin: 0 auto;
     position: absolute;
-    top:8px;
+    top: 8px;
   }
 }
 </style>
