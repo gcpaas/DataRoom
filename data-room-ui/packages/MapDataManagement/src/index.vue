@@ -272,19 +272,24 @@ export default {
     },
     getDataList() {
       this.lazyResolveMap.clear()
-      this.searchLoading = true
-      this.loadingText = '正在加载地图数据...'
-      mapList(this.searchForm).then(res => {
-        this.mapList = res
-        this.searchLoading = false
-      }).catch(err => {
-        this.searchLoading = false
+      this.$nextTick(() => {
+        this.mapList = []
       })
-      // 清除展开状态
-      for (let i = 0; i < this.lazyResolveIds.length; i++) {
-        this.$refs.table.store.states.treeData[this.lazyResolveIds[i]].loaded = false;
-        this.$refs.table.store.states.treeData[this.lazyResolveIds[i]].expanded = false
-      }
+      this.$nextTick(() => {
+        this.searchLoading = true
+        this.loadingText = '正在加载地图数据...'
+        mapList(this.searchForm).then(res => {
+          this.mapList = res
+          this.searchLoading = false
+        }).catch(err => {
+          this.searchLoading = false
+        })
+        // 清除展开状态
+        for (let i = 0; i < this.lazyResolveIds.length; i++) {
+          this.$refs.table.store.states.treeData[this.lazyResolveIds[i]].loaded = false;
+          this.$refs.table.store.states.treeData[this.lazyResolveIds[i]].expanded = false
+        }
+      })
     },
     /**
      * 新增、删除、修改等操作成功后刷新数据,不改变展开状态
@@ -295,7 +300,6 @@ export default {
       if (this.lazyResolveMap.get(parentId)) {
         // 刷新父节点
         const { data, treeNode, resolve } = this.lazyResolveMap.get(parentId)
-        // debugger
         this.$set(this.$refs.table.store.states.lazyTreeNodeMap, parentId, [])
         this.load(data, treeNode, resolve)
         return
@@ -330,8 +334,20 @@ export default {
       this.lazyResolveIds.push(data.id)
       mapList({
         parentId: data.id
-      }).then(res => {
-        resolve(res)
+      }).then(childList => {
+        // 解决同一页中同一条数据同时出现，如果懒加载中存在，那么将之前查询出来的数据删除
+        let deleteIdList = []
+        childList.forEach((child) => {
+          this.mapList.forEach((mapInfo) => {
+            if (mapInfo.id === child.id) {
+              deleteIdList.push(mapInfo.id)
+            }
+          })
+        })
+        this.mapList = this.mapList.filter((map) => {
+          return deleteIdList.indexOf(map.id) === -1
+        })
+        resolve(childList)
       }).catch(err => {
         resolve([])
       })
