@@ -3,18 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.12.RELEASE</version>
-        <relativePath/>
-    </parent>
-
     <groupId>com.gccloud</groupId>
     <artifactId>dataroom</artifactId>
-    <version>1.0.1.2023092701.Alpha</version>
+    <version>1.0.1.2023100901.Alpha</version>
 
     <packaging>pom</packaging>
+    <name>dataroom</name>
     <description>基于G2Plot、Echarts的大屏设计服务端，具备设计、预览能力，支持MySQL、Oracle、PostgreSQL、Groovy等数据集接入
     </description>
     <url>https://github.com/gcpaas/DataRoom</url>
@@ -26,7 +20,16 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
-
+    <scm>
+        <url>https://github.com/gcpaas/DataRoom</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>gcpaas</id>
+            <name>gcpaas</name>
+            <email>tech@ustcinfo.com</email>
+        </developer>
+    </developers>
     <modules>
         <module>dataroom-core</module>
         <module>dataroom-server</module>
@@ -36,41 +39,14 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
-        <swagger.annotations.version>1.5.20</swagger.annotations.version>
-        <swagger.bootstrap.version>1.9.6</swagger.bootstrap.version>
+        <spring-boot.version>2.7.16</spring-boot.version>
         <swagger.version>2.9.2</swagger.version>
         <swagger-models.version>1.5.21</swagger-models.version>
-        <mybatis.plus.version>3.3.2</mybatis.plus.version>
-        <mybatis.version>3.5.6</mybatis.version>
-        <mybatis-spring.version>2.0.6</mybatis-spring.version>
-        <commons-lang3.version>3.10</commons-lang3.version>
-        <commons-collections4.version>4.1</commons-collections4.version>
-        <commons-collections.version>3.2.2</commons-collections.version>
-        <hanlp.version>portable-1.7.8</hanlp.version>
-        <hutool.version>5.3.1</hutool.version>
-        <guava.version>20.0</guava.version>
         <jackson.version.core>2.13.3</jackson.version.core>
         <json.version>20220320</json.version>
-        <druid.version>1.2.11</druid.version>
-        <p6spy.version>3.9.0</p6spy.version>
-        <oracle-database.version>12.2.0.1</oracle-database.version>
-        <mysql.version>5.1.49</mysql.version>
-        <postgresql.version>42.3.3</postgresql.version>
-        <clickhouse.version>0.3.2</clickhouse.version>
-        <commons-io.version>2.2</commons-io.version>
-        <okhttp3.version>4.9.1</okhttp3.version>
-        <dataset.core.version>1.0.1.2023092201.Alpha</dataset.core.version>
+        <dataset.core.version>1.0.1.2023100901.Alpha</dataset.core.version>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     </properties>
-
-    <dependencies>
-        <!-- excel解析  -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>easyexcel</artifactId>
-            <version>2.2.5</version>
-        </dependency>
-    </dependencies>
 
     <dependencyManagement>
         <dependencies>
