@@ -214,7 +214,11 @@ export default {
           {
             validator: (rule, value, callback) => {
               if (value) {
-                this.$dataRoomAxios.post('/bigScreen/design/name/repeat', {
+                const reqUrl = {
+                  component: '/bigScreen/design/name/repeat',
+                  bizComponent: '/bigScreen/bizComponent/name/repeat'
+                }
+                this.$dataRoomAxios.post(reqUrl[this.type], {
                   name: value,
                   type: this.type,
                   id: this.dataForm.id
@@ -229,7 +233,7 @@ export default {
                 callback()
               }
             },
-            trigger: 'change'
+            trigger: ['blur', 'change']
           }
         ]
       },
