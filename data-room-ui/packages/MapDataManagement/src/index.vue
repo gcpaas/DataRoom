@@ -316,6 +316,8 @@ export default {
           const { data, treeNode, resolve } = this.lazyResolveMap.get(parentId)
           this.$set(this.$refs.table.store.states.lazyTreeNodeMap, parentId, [])
           this.load(data, treeNode, resolve)
+          // 展开该父节点
+          this.$refs.table.toggleRowExpansion(parentId, true);
         } else {
           // 刷新根节点
           this.getDataList()
