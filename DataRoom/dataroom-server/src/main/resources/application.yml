@@ -17,6 +17,7 @@ spring:
       # 字符串转允许List，否则导致 @RequestBody List<T> list 类型无法解析
       ACCEPT_SINGLE_VALUE_AS_ARRAY: true
   resources:
+    # 自springboot 2.5.5之后，该属性已经被废弃，使用web.resources.static-locations代替
     static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/META-INF/resources/webjars/,file:${gc.starter.file.basePath}
   # 静态资源配置
   mvc:
@@ -26,6 +27,11 @@ spring:
     view:
       prefix: classpath:/static/
       suffix: .html
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/META-INF/resources/webjars/,file:${gc.starter.file.basePath}
 
 mybatis-plus:
   # mybatis plus xml配置文件扫描，多个通过分号隔开
@@ -35,4 +41,4 @@ mybatis-plus:
   global-config:
     db-config:
       #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"唯一ID";
-      id-type: 0
+      id-type: AUTO
