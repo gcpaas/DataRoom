@@ -148,12 +148,12 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
 
     /* 滚动条样式设置*/
     .el-table__body-wrapper::-webkit-scrollbar {
-      width: 12px !important;
-      height: 12px !important;
-    }
+        width: 6px !important; 
+        height: 6px !important;
+        }
 
     .el-table__body-wrapper::-webkit-scrollbar-corner {
-      background: transparent !important;
+      background: #444851 !important;
     }
 
     .el-table__body-wrapper::-webkit-scrollbar-track {
@@ -163,9 +163,9 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
     .el-table__body-wrapper::-webkit-scrollbar-thumb {
       min-height: 20px !important;
       background-clip: content-box !important;
-      border: 2px solid transparent !important;
-      border-radius: 10px !important;
-      // background-color: #ddd;
+      border: 1px solid #444851 !important;
+      border-radius: 6px !important;
+      background: #444851 !important;
     }
 
     .el-table__fixed::before,
