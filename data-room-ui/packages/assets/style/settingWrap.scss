@@ -242,15 +242,28 @@
   margin-right: 10px;
 }
 
+// 表格边框
+
 ::v-deep .el-table {
   background: var(--bs-el-background-1);
-  border-bottom: 1px solid var(--bs-el-title);
+  // 底部
+  border-bottom: 0 solid var(--bs-el-border);
 }
 
 ::v-deep .el-table__cell {
   background: var(--bs-el-background-1) !important;
   color: var(--bs-el-title) !important;
-  border-color: var(--bs-el-text) !important;
+  // 中间边框
+  border-width: 2px;
+  border-color: var(--bs-background-2) !important;
+}
+.el-table--group::after, .el-table--border::after, .el-table::before {
+  // 右侧、底部边框
+  background-color: var(--bs-el-border);
+}
+
+.el-table--group, .el-table--border {
+  border: var(--bs-el-border);
 }
 
 ::v-deep .el-select {

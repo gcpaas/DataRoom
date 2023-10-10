@@ -1,6 +1,7 @@
 package com.gccloud;
 
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.gccloud.common.constant.CommonConst;
 import com.gccloud.dataroom.core.constant.DataRoomConst;
 import com.gccloud.dataset.constant.DatasetConstant;
@@ -28,10 +29,12 @@ public class DataRoomApplication {
     /**
      * 分页插件
      *
-     * @return
+     * @return PaginationInterceptor
      */
     @Bean
-    public PaginationInterceptor paginationInterceptor() {
-        return new PaginationInterceptor();
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
+        return interceptor;
     }
 }

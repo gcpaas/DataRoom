@@ -32,25 +32,22 @@ export const settingConfig = {
   }
 }
 const customConfig = {
-  type: 'indexCard',
+  type: 'indicatorCard2',
   root: {
     version: '2023071001',
     contribution: false,
     loading: false
   },
   customize: {
-    src: 'http://60.174.249.206:11080/upload/webDesign/uiSucai/dir/icon/icon_top6.png',
     borderRadius: 0,
     borderWidth: 0,
-    lineDistance: 6,
+    lineDistance: 25,
     borderColor: '',
-    bgColor: 'rgba(0, 122, 255, 0.07)',
-    distance: 30,
-    imgSize: 80,
-    firstSize: 64,
-    firstColor: '#007aff',
+    bgColor: 'rgba(0, 122, 255, 1)',
+    firstSize: 32,
+    firstColor: '#ffffff',
     firstWeight: 500,
-    secondSize: 21,
+    secondSize: 50,
     secondColor: '#ffffff',
     secondWeight: 500,
     secondLine: '装机处理及时率',

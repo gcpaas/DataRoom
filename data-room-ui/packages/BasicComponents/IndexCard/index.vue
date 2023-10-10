@@ -36,7 +36,17 @@
             'font-weight':customize.firstWeight,
             'margin-bottom':customize.lineDistance +'px'
           }"
-        >{{ optionData}}</span>
+        >
+        {{ optionData}}
+        <span
+        :style="{
+            'margin-left':'10px',
+            'font-size': customize.unitSize + 'px',
+            color:customize.unitColor,
+          }">
+          {{unit}}
+        </span>
+        </span>
         <span
           :style="{
             'font-size': customize.secondSize + 'px',
@@ -76,11 +86,14 @@ export default {
   mounted () {
   },
   computed: {
+     unit(){
+      return this.config?.customize.unit || ''
+    },
     option () {
       return this.config?.option
     },
     optionData () {
-      return this.option?.data || 0
+      return this.option?.data || 80
     },
     customize () {
       return this.config?.customize
@@ -98,7 +111,7 @@ export default {
           dataList = data.data[config.dataSource.dimensionField]
         }
       }else{
-        dataList=0
+        dataList=80
       }
       config.option = {
         ...config.option,

@@ -14,38 +14,38 @@
       <div
         class="content-right-first"
         :style="{
-          'height': customize.firstSize + 'px',
-        }"
-      >
-        <span
-        :style="{
           'font-size': customize.firstSize + 'px',
+          'height':customize.firstSize + 'px',
           color:customize.firstColor,
           'font-weight':customize.firstWeight,
           'margin-bottom':customize.lineDistance +'px'
         }"
-        >{{ optionData }}</span>
+      >
+      {{ customize.secondLine }}
+      </div>
+      <div
+        :style="{
+          'height': customize.secondSize + 'px',
+        }"
+        class="content-right-second"
+      >
+      <span
+      :style="{
+          'font-size': customize.secondSize + 'px',
+          color:customize.secondColor,
+          'font-weight':customize.secondWeight,
+        }">
+        {{ optionData }}
+      </span>
         <span
         :style="{
              'margin-left':'10px',
             'font-size': customize.unitSize + 'px',
             'line-height':customize.unitSize + 'px',
             color:customize.unitColor,
-            'margin-bottom':customize.lineDistance +'px'
           }">
           {{unit}}
         </span>
-      </div>
-      <div
-        :style="{
-          'font-size': customize.secondSize + 'px',
-          'height':customize.secondSize + 'px',
-          color:customize.secondColor,
-          'font-weight':customize.secondWeight,
-        }"
-        class="content-right-second"
-      >
-        {{ customize.secondLine }}
       </div>
     </div>
   </div>
@@ -76,7 +76,7 @@ export default {
     // this.chartInit()
   },
   computed: {
-    unit(){
+     unit(){
       return this.config?.customize.unit || ''
     },
     option () {
@@ -112,7 +112,7 @@ export default {
           dataList = data.data[config.dataSource.dimensionField]
         }
       }else{
-        dataList=80
+        dataList=0
       }
       config.option = {
         ...config.option,
@@ -133,15 +133,14 @@ export default {
   text-align: center;
   justify-content: center;
   .content-right-first{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 5px;
+  }
+  .content-right-second{
     display: flex;
     justify-content: center;
     align-items: center;
-    // width: 100%;
-    // text-align: center;
-  }
-  .content-right-second{
-    width: 100%;
-    text-align: center;
   }
 }
 </style>

@@ -12,40 +12,50 @@
       class="content"
     >
       <div
-        class="content-right-first"
         :style="{
-          'height': customize.firstSize + 'px',
+          'margin-right':customize.distance + 'px'
         }"
+        class="content-left"
       >
+        <el-image
+          :style="{
+            width: customize.imgSize + 'px',
+            height: customize.imgSize + 'px',
+          }"
+          :src="customize.src"
+          fit="contain"
+        />
+      </div>
+      <div class="content-right">
         <span
-        :style="{
-          'font-size': customize.firstSize + 'px',
-          color:customize.firstColor,
-          'font-weight':customize.firstWeight,
-          'margin-bottom':customize.lineDistance +'px'
-        }"
-        >{{ optionData }}</span>
+          class="content-right-first"
+          :style="{
+            'font-size': customize.firstSize + 'px',
+            'height':customize.firstSize + 'px',
+            color:customize.firstColor,
+            'font-weight':customize.firstWeight,
+            'margin-bottom':customize.lineDistance +'px'
+          }"
+        >{{ customize.secondLine }}</span>
+        <span
+          :style="{
+            'font-size': customize.secondSize + 'px',
+            'height':customize.secondSize + 'px',
+            color:customize.secondColor,
+            'font-weight':customize.secondWeight,
+          }"
+          class="content-right-second"
+        >
+        {{ optionData}}
         <span
         :style="{
              'margin-left':'10px',
             'font-size': customize.unitSize + 'px',
-            'line-height':customize.unitSize + 'px',
             color:customize.unitColor,
-            'margin-bottom':customize.lineDistance +'px'
           }">
           {{unit}}
         </span>
-      </div>
-      <div
-        :style="{
-          'font-size': customize.secondSize + 'px',
-          'height':customize.secondSize + 'px',
-          color:customize.secondColor,
-          'font-weight':customize.secondWeight,
-        }"
-        class="content-right-second"
-      >
-        {{ customize.secondLine }}
+        </span>
       </div>
     </div>
   </div>
@@ -54,7 +64,6 @@
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
-
 export default {
   name: 'Card',
   components: {},
@@ -73,7 +82,6 @@ export default {
   },
   watch: {},
   mounted () {
-    // this.chartInit()
   },
   computed: {
     unit(){
@@ -88,17 +96,6 @@ export default {
     customize () {
       return this.config?.customize
     },
-    // tableData () {
-    //   let dataList = ''
-    //   if (this.optionData instanceof Array && this.optionData.length > 0) {
-    //     dataList = this.option?.yField
-    //       ? this.optionData[0][this.option.yField]
-    //       : this.optionData[0]?.value
-    //   } else {
-    //     dataList = this.optionData ? this.optionData[this.option.yField] : ''
-    //   }
-    //   return dataList
-    // }
   },
   methods: {
     dataFormatting (config, data) {
@@ -127,21 +124,33 @@ export default {
 <style lang="scss" scoped>
 .content{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: 100%;
   width: 100%;
-  text-align: center;
+  // background-color: aliceblue;
   justify-content: center;
+  .content-left{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    align-items: center;
+  }
+  .content-right{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+  }
   .content-right-first{
     display: flex;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
-    // width: 100%;
-    // text-align: center;
+    padding-bottom: 5px;
   }
   .content-right-second{
-    width: 100%;
-    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 }
 </style>

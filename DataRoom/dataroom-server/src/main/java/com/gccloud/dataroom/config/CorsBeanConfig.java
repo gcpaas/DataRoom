@@ -22,7 +22,8 @@ public class CorsBeanConfig implements WebMvcConfigurer {
         Cors cors = new Cors();
         CorsRegistration corsRegistration = registry.addMapping(cors.getMapping());
         corsRegistration
-                .allowedOrigins(cors.getAllowedOrigins().toArray(new String[cors.getAllowedOrigins().size()]))
+                // change 由allowedOrigins改为allowedOriginPatterns，springboot新版本中allowedOrigins不允许设置*，只能设置具体的域名
+                .allowedOriginPatterns(cors.getAllowedOrigins().toArray(new String[cors.getAllowedOrigins().size()]))
                 .allowCredentials(cors.getAllowCredentials())
                 .allowedMethods(cors.getAllowedMethods().toArray(new String[cors.getAllowedMethods().size()]))
                 .maxAge(cors.getMaxAge());

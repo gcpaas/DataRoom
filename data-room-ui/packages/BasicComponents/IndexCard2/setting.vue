@@ -77,7 +77,7 @@
             >
             </el-input>
           </el-form-item>
-          <el-form-item
+           <el-form-item
             label="单位"
             label-width="100px"
           >

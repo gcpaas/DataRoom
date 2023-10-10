@@ -30,7 +30,7 @@
           />
         </el-form-item>
         <el-form-item
-          v-if="type === 'bizComponent'"
+          v-if="type === 'bizComponent'&&!title"
           label="组件类型"
         >
           <el-select
@@ -88,6 +88,40 @@
             :max="8000"
             class="bs-el-input-number"
           />
+        </el-form-item>
+        <el-form-item label="分组">
+          <div v-if="type === 'component'">
+            <el-select
+              v-model="dataForm.parentCode"
+              class="bs-el-select"
+              popper-class="bs-el-select"
+              clearable
+              filterable
+            >
+              <el-option
+                v-for="catalogItem in catalogList"
+                :key="catalogItem.id"
+                :label="catalogItem.name"
+                :value="catalogItem.code"
+              />
+            </el-select>
+          </div>
+          <div v-else>
+            <el-select
+              v-model="dataForm.type"
+              class="bs-el-select"
+              popper-class="bs-el-select"
+              clearable
+              filterable
+            >
+              <el-option
+                v-for="catalogItem in catalogList"
+                :key="catalogItem.id"
+                :label="catalogItem.name"
+                :value="catalogItem.code"
+              />
+            </el-select>
+          </div>
         </el-form-item>
         <el-form-item label="排序">
           <el-input-number
@@ -148,10 +182,11 @@ export default {
       bizType: 'native',
       resolutionRatioValue: '',
       resolutionRatio: {},
+      catalogList: [],
       BizList: [
         {
           label: 'echarts组件',
-          value: 'echarts'
+          value: 'echart'
         }, {
           label: 'g2Plot组件',
           value: 'g2plot'
@@ -198,6 +233,7 @@ export default {
         name: '',
         icon: '',
         code: '',
+        parentCode: '',
         remark: '',
         iconColor: '#007aff',
         components: '',
@@ -214,7 +250,11 @@ export default {
           {
             validator: (rule, value, callback) => {
               if (value) {
-                this.$dataRoomAxios.post('/bigScreen/design/name/repeat', {
+                const reqUrl = {
+                  component: '/bigScreen/design/name/repeat',
+                  bizComponent: '/bigScreen/bizComponent/name/repeat'
+                }
+                this.$dataRoomAxios.post(reqUrl[this.type], {
                   name: value,
                   type: this.type,
                   id: this.dataForm.id
@@ -229,7 +269,7 @@ export default {
                 callback()
               }
             },
-            trigger: 'change'
+            trigger: ['blur', 'change']
           }
         ]
       },
@@ -289,6 +329,9 @@ export default {
       const code = nodeData ? nodeData.code : ''
       this.formVisible = true
       this.$nextTick(() => {
+        this.$dataRoomAxios.get('/bigScreen/type/list/bizComponentCatalog').then((resp) => {
+          this.catalogList = resp
+        })
         if (code) {
           this.$dataRoomAxios.get(`/bigScreen/bizComponent/info/${code}`).then((resp) => {
             this.$set(this, 'title', resp.name)
@@ -297,6 +340,7 @@ export default {
             this.$set(this.dataForm, 'orderNum', nodeData.orderNum)
             this.$set(this.dataForm, 'type', resp.type)
             this.$set(this.dataForm, 'id', resp.id)
+            this.$set(this.dataForm, 'parentCode', resp.parentCode)
           })
         } else {
           this.$set(this.dataForm, 'name', '')
@@ -304,6 +348,7 @@ export default {
           this.$set(this.dataForm, 'type', parentCode)
           this.$set(this.dataForm, 'orderNum', 0)
           this.$set(this.dataForm, 'id', '')
+          this.$set(this.dataForm, 'parentCode', parentCode)
         }
       })
     },
@@ -312,6 +357,9 @@ export default {
       const code = nodeData ? nodeData.code : ''
       this.formVisible = true
       this.$nextTick(() => {
+        this.$dataRoomAxios.get('/bigScreen/type/list/componentCatalog').then((resp) => {
+          this.catalogList = resp
+        })
         if (code) {
           this.$dataRoomAxios.get(`/bigScreen/design/info/code/${code}`).then((resp) => {
             this.$set(this, 'title', resp.name)
@@ -328,6 +376,7 @@ export default {
             this.$set(this.dataForm, 'orderNum', nodeData.orderNum)
             this.$set(this.dataForm, 'pageTemplateId', resp?.pageTemplateId)
             this.$set(this.dataForm, 'pageConfig', resp?.pageConfig)
+            this.$set(this.dataForm, 'parentCode', resp?.parentCode)
             const { w, h } = resp.pageConfig
             this.resolutionRatio.w = w
             this.resolutionRatio.h = h

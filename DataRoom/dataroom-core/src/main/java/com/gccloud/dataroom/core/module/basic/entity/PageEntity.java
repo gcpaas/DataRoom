@@ -44,12 +44,6 @@ public class PageEntity extends SuperEntity implements Serializable {
     @ApiModelProperty(notes = "大屏首页封面")
     private String coverPicture;
 
-    @ApiModelProperty(notes = "页面图标")
-    private String icon;
-
-    @ApiModelProperty(notes = "图标颜色")
-    private String iconColor;
-
     @ApiModelProperty(notes = "具体组件配置、JSON格式")
     @TableField(typeHandler = BasePageDTOTypeHandler.class)
     private BasePageDTO config;

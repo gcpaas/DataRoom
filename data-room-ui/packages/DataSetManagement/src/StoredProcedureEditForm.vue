@@ -310,27 +310,28 @@
         <div class="result-view">
           数据预览
         </div>
-        <div class="bs-table-box is-Edit bs-scrollbar">
+        <div class="bs-table-box is-Edit">
           <el-table
             align="center"
             :data="dataPreviewList"
-            max-height="400"
-            class="bs-el-table bs-scrollbar"
+            max-height="100%"
+            class="bs-el-table"
           >
+            <!-- 第一个表格列固定 -->
             <el-table-column
               v-for="(value, key) in dataPreviewList[0] ? dataPreviewList[0] : noDataTableDisplayFields"
               :key="key"
               :label="key"
+              :fixed="left"
               align="center"
               show-overflow-tooltip
-              :render-header="renderHeader"
             >
               <template slot-scope="scope">
                 <span>{{ scope.row[key] }}</span>
               </template>
             </el-table-column>
           </el-table>
-          <div style="padding: 12px 0 0;color:var(--bs-el-text)">
+          <div style="margin: 8px 0;color:var(--bs-el-text)">
             <span v-show="dataPreviewList.length">数据预览中，存储过程仅展示20条数据</span>
           </div>
         </div>

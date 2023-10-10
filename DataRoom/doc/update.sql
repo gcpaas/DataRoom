@@ -144,3 +144,9 @@ CREATE TABLE `big_screen_page_preview`
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='页面预览缓存表，每日定时删除';
+
+# 20231009 移除大屏页面表中的冗余字段
+alter table big_screen_page drop column icon;
+alter table big_screen_page drop column icon_color;
+alter table big_screen_page drop column layout;
+alter table big_screen_page drop column model_code;

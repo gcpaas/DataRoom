@@ -1,5 +1,7 @@
 package com.gccloud.dataroom.core.module.template.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.gccloud.common.utils.EmptyAsNullDeserializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -11,6 +13,7 @@ import lombok.Data;
 @Data
 public class PageTemplateDTO {
 
+    @JsonDeserialize(using = EmptyAsNullDeserializer.class)
     @ApiModelProperty(notes = "主键")
     private String id;
 

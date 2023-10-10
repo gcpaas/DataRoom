@@ -6,17 +6,19 @@
     <parent>
         <groupId>com.gccloud</groupId>
         <artifactId>dataroom</artifactId>
-        <version>1.0.1.2023092701.Alpha</version>
+        <version>1.0.1.2023100901.Alpha</version>
     </parent>
 
     <artifactId>dataroom-server</artifactId>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--    版本发布时，跳过该模块    -->
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
+
 
     <dependencies>
         <!--h2database-->
@@ -29,7 +31,7 @@
         <dependency>
             <groupId>com.gccloud</groupId>
             <artifactId>dataroom-core</artifactId>
-            <version>1.0.1.2023092701.Alpha</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
@@ -51,7 +53,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>2.3.12.RELEASE</version>
         </dependency>
     </dependencies>
 
@@ -65,6 +66,7 @@
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
+                        <version>2.7.16</version>
                         <!--下面的代码可以将依赖的第三方jar包通过maven插件打入工程的lib中-->
                         <executions>
                             <execution>
@@ -82,16 +84,19 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.22.2</version>
                         <configuration>
                             <skipTests>true</skipTests>
                         </configuration>
                     </plugin>
                     <plugin>
                         <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.8.1</version>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
+                        <version>3.2.1</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>

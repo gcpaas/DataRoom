@@ -32,7 +32,7 @@ export const settingConfig = {
   }
 }
 const customConfig = {
-  type: 'indexCard',
+  type: 'indexCard2',
   root: {
     version: '2023071001',
     contribution: false,
@@ -47,11 +47,11 @@ const customConfig = {
     bgColor: 'rgba(0, 122, 255, 0.07)',
     distance: 30,
     imgSize: 80,
-    firstSize: 64,
-    firstColor: '#007aff',
+    firstSize: 21,
+    firstColor: '#ffffff',
     firstWeight: 500,
-    secondSize: 21,
-    secondColor: '#ffffff',
+    secondSize: 64,
+    secondColor: '#007aff',
     secondWeight: 500,
     secondLine: '装机处理及时率',
     unit: '',

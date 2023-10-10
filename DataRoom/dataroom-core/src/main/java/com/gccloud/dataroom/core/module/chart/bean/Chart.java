@@ -88,4 +88,10 @@ public class Chart {
     @ApiModelProperty(notes = "边框配置")
     private Map<String, Object> border;
 
+    @ApiModelProperty(notes = "计算表达式")
+    private String expression;
+
+    @ApiModelProperty(notes = "表达式关联的组件的code集合")
+    private List<String> expressionCodes;
+
 }
