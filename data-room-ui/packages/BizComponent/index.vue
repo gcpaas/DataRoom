@@ -350,7 +350,6 @@ export default {
       } catch (error) {
         console.info(error)
       }
-      console.log(dataUrl)
       if (dataUrl) {
         if (showSize(dataUrl) > 200) {
           const url = dataURLtoBlob(dataUrl)

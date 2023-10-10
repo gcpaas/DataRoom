@@ -206,7 +206,6 @@ export default {
   },
   watch: {
     chartList (val) {
-      // console.log(val,this.activeCode)
       // if(val.findIndex(item=>item.code==this.activeCode)==-1){
       //   this.updateRightVisiable(false)
       // }

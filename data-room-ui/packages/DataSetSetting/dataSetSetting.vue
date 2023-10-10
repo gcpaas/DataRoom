@@ -195,13 +195,14 @@ export default {
 
 .data-set-wrap {
   ::v-deep .el-dialog__body {
-    position: relative;
+    height: 100% !important;
     padding: 0 !important;
+    min-width: 515px !important;
     // min-height: 550px;
-    overflow: hidden;
+    overflow: hidden !important;
 
     .bs-pagination {
-      position: relative !important;
+      position: none !important;
       padding-right: 16px !important;
     }
   }
@@ -245,7 +246,7 @@ export default {
     }
 
     ::v-deep .data-set-scrollbar {
-      height: 515px !important;
+      overflow-y: auto !important;
     }
   }
 }
