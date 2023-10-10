@@ -43,7 +43,6 @@
                 @keyup.enter.native="reSearch"
               />
               <el-button
-                size="small"
                 type="primary"
                 @click="reSearch"
               >
@@ -167,7 +166,6 @@
                 @keyup.enter.native="reSearch"
               />
               <el-button
-                size="small"
                 type="primary"
                 @click="reSearch"
               >

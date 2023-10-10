@@ -15,26 +15,26 @@ const customConfig = {
     // 边框线颜色
     borderColor: '#87888e',
     // 边框线宽度
-    borderWidth: 2,
+    borderWidth: 10,
     // 边框背景颜色
     backgroundColor: '#232832',
     colorType: 'single',
     // 渐变色0值
-    gradientColor0: '#83bff6',
+    gradientColor0: '',
     // 渐变色1值
-    gradientColor1: '#188df0',
+    gradientColor1: '',
     // 渐变色色值改变方向
     gradientDirection: 'to right',
     // 透明度
     opacity: 100,
     // 左上圆角
-    radiusLeftTop: 2,
+    radiusLeftTop: 14,
     // 右上圆角
-    radiusRightTop: 2,
+    radiusRightTop: 14,
     // 左下圆角
-    radiusLeftBottom: 2,
+    radiusLeftBottom: 14,
     // 右下圆角
-    radiusRightBottom: 2
+    radiusRightBottom: 14
   }
 }
 export const dataConfig = {

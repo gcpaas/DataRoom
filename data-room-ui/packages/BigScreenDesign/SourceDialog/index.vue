@@ -37,7 +37,6 @@
             />
           </el-select>
           <el-button
-            size="small"
             type="primary"
             @click="reSearch"
           >

@@ -74,7 +74,15 @@ export default {
       return this.rightVisiable && this.activeCode
     },
     title () {
-      return this.activeItem?.title || ''
+      if(this.activeItem.type=='customComponent'){
+        return this.activeItem?.category
+      }else if(this.activeItem.type=='"remoteComponent"'){
+        return this.activeItem?.title
+      }
+      else{
+        return this.activeItem?.name
+      }
+      // if(this.activeItem)
     }
   },
   mounted () { },
