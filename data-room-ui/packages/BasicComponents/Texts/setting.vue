@@ -31,15 +31,17 @@
       <div class="lc-field-body">
         <PosWhSetting :config="config" />
       </div>
-       <SettingTitle v-if="config.border">边框</SettingTitle>
-          <div class="lc-field-body">
-            <BorderSetting
-              v-if="config.border"
-              label-width="100px"
-              :config="config.border"
-              :bigTitle='config.title'
-            />
-          </div>
+      <SettingTitle v-if="config.border">
+        边框
+      </SettingTitle>
+      <div class="lc-field-body">
+        <BorderSetting
+          v-if="config.border"
+          label-width="100px"
+          :config="config.border"
+          :big-title="config.title"
+        />
+      </div>
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
@@ -103,22 +105,27 @@ export default {
   },
   data () {
     return {
-      fontFamilyList: [{
-        label: 'ds-digitalbold_italic',
-        value: 'ds-digitalbold_italic'
-      },
-      {
-        label: 'ds-digitalbold',
-        value: 'ds-digitalbold'
-      },
-      {
-        label: 'ds-digitalitalic',
-        value: 'ds-digitalitalic'
-      },
-      {
-        label: 'ds-digitalnormal',
-        value: 'ds-digitalnormal'
-      }],
+      fontFamilyList: [
+        {
+          label: '默认',
+          value: ''
+        },
+        {
+          label: '时钟加粗倾斜',
+          value: 'ds-digitalbold_italic'
+        },
+        {
+          label: '时钟加粗正常',
+          value: 'ds-digitalbold'
+        },
+        {
+          label: '时钟倾斜',
+          value: 'ds-digitalitalic'
+        },
+        {
+          label: '时钟正常',
+          value: 'ds-digitalnormal'
+        }],
       rules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }
