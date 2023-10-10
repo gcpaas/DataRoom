@@ -25,14 +25,27 @@
       </div>
       <div
         :style="{
-          'font-size': customize.secondSize + 'px',
-          'height':customize.secondSize + 'px',
-          color:customize.secondColor,
-          'font-weight':customize.secondWeight,
+          'height': customize.secondSize + 'px',
         }"
         class="content-right-second"
       >
+      <span
+      :style="{
+          'font-size': customize.secondSize + 'px',
+          color:customize.secondColor,
+          'font-weight':customize.secondWeight,
+        }">
         {{ optionData }}
+      </span>
+        <span
+        :style="{
+             'margin-left':'10px',
+            'font-size': customize.unitSize + 'px',
+            'line-height':customize.unitSize + 'px',
+            color:customize.unitColor,
+          }">
+          {{unit}}
+        </span>
       </div>
     </div>
   </div>
@@ -63,6 +76,9 @@ export default {
     // this.chartInit()
   },
   computed: {
+     unit(){
+      return this.config?.customize.unit || ''
+    },
     option () {
       return this.config?.option
     },
@@ -122,8 +138,9 @@ export default {
     padding-bottom: 5px;
   }
   .content-right-second{
-    width: 100%;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>

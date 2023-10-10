@@ -43,14 +43,17 @@ const customConfig = {
     borderWidth: 0,
     lineDistance: 25,
     borderColor: '',
-    bgColor: '',
-    firstSize: 50,
+    bgColor: 'rgba(0, 122, 255, 1)',
+    firstSize: 32,
     firstColor: '#ffffff',
     firstWeight: 500,
     secondSize: 50,
     secondColor: '#ffffff',
     secondWeight: 500,
-    secondLine: '装机处理及时率'
+    secondLine: '装机处理及时率',
+    unit: '',
+    unitSize: 32,
+    unitColor:'#fff'
   }
 }
 export const dataConfig = {

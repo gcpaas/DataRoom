@@ -14,14 +14,27 @@
       <div
         class="content-right-first"
         :style="{
+          'height': customize.firstSize + 'px',
+        }"
+      >
+        <span
+        :style="{
           'font-size': customize.firstSize + 'px',
-          'height':customize.firstSize + 'px',
           color:customize.firstColor,
           'font-weight':customize.firstWeight,
           'margin-bottom':customize.lineDistance +'px'
         }"
-      >
-        {{ optionData }}
+        >{{ optionData }}</span>
+        <span
+        :style="{
+             'margin-left':'10px',
+            'font-size': customize.unitSize + 'px',
+            'line-height':customize.unitSize + 'px',
+            color:customize.unitColor,
+            'margin-bottom':customize.lineDistance +'px'
+          }">
+          {{unit}}
+        </span>
       </div>
       <div
         :style="{
@@ -63,6 +76,9 @@ export default {
     // this.chartInit()
   },
   computed: {
+    unit(){
+      return this.config?.customize.unit || ''
+    },
     option () {
       return this.config?.option
     },
@@ -117,9 +133,11 @@ export default {
   text-align: center;
   justify-content: center;
   .content-right-first{
-    width: 100%;
-    text-align: center;
-    padding-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // width: 100%;
+    // text-align: center;
   }
   .content-right-second{
     width: 100%;

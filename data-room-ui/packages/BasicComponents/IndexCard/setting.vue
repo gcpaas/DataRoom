@@ -77,6 +77,31 @@
             >
             </el-input>
           </el-form-item>
+          <el-form-item
+            label="单位"
+            label-width="100px"
+          >
+            <el-input
+              v-model="config.customize.unit"
+              clearable
+              placeholder="请输入单位"
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item label-width="100px" label="单位字体大小">
+            <el-input-number
+              v-model="config.customize.unitSize"
+              :precision="0"
+              class="bs-el-input-number"
+              label="请输入单位字体大小"
+            />
+          </el-form-item>
+          <el-form-item label-width="100px" label="单位字体颜色">
+            <ColorPicker
+              v-model="config.customize.unitColor"
+              :predefine="predefineThemeColors"
+            />
+          </el-form-item>
           <el-form-item label-width="100px" label="左右间距">
             <el-input-number
               v-model="config.customize.distance"

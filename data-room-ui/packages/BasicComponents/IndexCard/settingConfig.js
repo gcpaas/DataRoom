@@ -42,18 +42,21 @@ const customConfig = {
     src: 'http://60.174.249.206:11080/upload/webDesign/uiSucai/dir/icon/icon_top6.png',
     borderRadius: 0,
     borderWidth: 0,
-    lineDistance: 25,
+    lineDistance: 6,
     borderColor: '',
-    bgColor: '',
+    bgColor: 'rgba(0, 122, 255, 0.07)',
     distance: 30,
-    imgSize: 110,
-    firstSize: 50,
-    firstColor: '#ffffff',
+    imgSize: 80,
+    firstSize: 64,
+    firstColor: '#007aff',
     firstWeight: 500,
-    secondSize: 50,
+    secondSize: 21,
     secondColor: '#ffffff',
     secondWeight: 500,
-    secondLine: '装机处理及时率'
+    secondLine: '装机处理及时率',
+    unit: '',
+    unitSize: 32,
+    unitColor:'#fff'
   }
 }
 export const dataConfig = {

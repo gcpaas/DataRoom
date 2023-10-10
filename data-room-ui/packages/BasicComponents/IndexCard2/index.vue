@@ -47,6 +47,14 @@
           class="content-right-second"
         >
         {{ optionData}}
+        <span
+        :style="{
+             'margin-left':'10px',
+            'font-size': customize.unitSize + 'px',
+            color:customize.unitColor,
+          }">
+          {{unit}}
+        </span>
         </span>
       </div>
     </div>
@@ -76,6 +84,9 @@ export default {
   mounted () {
   },
   computed: {
+    unit(){
+      return this.config?.customize.unit || ''
+    },
     option () {
       return this.config?.option
     },
