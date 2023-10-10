@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023092201'
+const version = '2023101001'
 // 分类
 const category = 'WordCloud'
 // 标题
@@ -65,6 +65,24 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
+  {
+    label: '最小字体',
+    type: 'inputNumber',
+    field: 'fontSizeMin',
+    optionField: 'fontSizeMin',
+    value: 24,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '最大字体',
+    type: 'inputNumber',
+    field: 'fontSizeMax',
+    optionField: 'fontSizeMax',
+    value: 80,
+    tabName: 'custom',
+    groupName: 'graph'
+  }
   // 图例 legend
   // 边距 padding
 ]
@@ -569,7 +587,7 @@ const data = [
 ]
 
 // 配置处理脚本
-const optionHandler = ''
+const optionHandler = 'option.wordStyle.fontSize = [option.fontSizeMin, option.fontSizeMax]'
 
 // 数据处理脚本
 const dataHandler = 'let wordFieldValue = setting.find(settingItem=>settingItem.field === \'wordField\').value\n' +
@@ -590,6 +608,8 @@ const option = {
     fontFamily: 'Verdana',
     fontSize: [24, 80]
   },
+  fontSizeMin: 24,
+  fontSizeMax: 80,
   imageMask: '',
   // 设置交互类型
   interactions: [{ type: 'element-active' }],
