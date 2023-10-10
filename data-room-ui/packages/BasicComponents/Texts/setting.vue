@@ -66,6 +66,23 @@
             placeholder="请输入标题字体权重"
           />
         </el-form-item>
+        <el-form-item
+          label="标题字体类型"
+          label-width="100px"
+        >
+          <el-select
+            v-model="config.customize.fontFamily"
+            popper-class="bs-el-select"
+            class="bs-el-select"
+          >
+            <el-option
+              v-for="item in fontFamilyList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
         <TextGradient v-model="config.customize.color" />
       </div>
     </el-form>
@@ -86,6 +103,22 @@ export default {
   },
   data () {
     return {
+      fontFamilyList: [{
+        label: 'ds-digitalbold_italic',
+        value: 'ds-digitalbold_italic'
+      },
+      {
+        label: 'ds-digitalbold',
+        value: 'ds-digitalbold'
+      },
+      {
+        label: 'ds-digitalitalic',
+        value: 'ds-digitalitalic'
+      },
+      {
+        label: 'ds-digitalnormal',
+        value: 'ds-digitalnormal'
+      }],
       rules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }

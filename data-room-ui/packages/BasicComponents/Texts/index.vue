@@ -5,7 +5,7 @@
   >
     <div
       class="content-box"
-      :style="{'font-size': config.customize.fontSize +'px','font-weight': +config.customize.fontWeight,'background-image': `-webkit-linear-gradient(${config.customize.color})`}"
+      :style="{'font-family': config.customize.fontFamily,'font-size': config.customize.fontSize +'px','font-weight': +config.customize.fontWeight,'background-image': `-webkit-linear-gradient(${config.customize.color})`}"
     >
       {{ config.customize.title }}
     </div>
@@ -30,12 +30,24 @@ export default {
       customClass: {}
     }
   },
-  watch: {
+
+  computed: {
   },
   mounted () {
     this.chartInit()
   },
   methods: {
+    // 通过表达式计算得来的值
+    // getDataByExpression (config) {
+    //   if (this.config.expression) {
+    //   // eslint-disable-next-line no-new-func
+    //     const result = new Function('dataset', this.config.expression)
+    //     config.customize.title = result(this.dataset)
+    //     // 同时将计算得来的值保存到公共的数据存储的地方
+    //     this.updateDataset({ code: config.code, title: config.title, data: [{ title: config.customize.title }] })
+    //     this.changeChartConfig(config)
+    //   }
+    // },
     dataFormatting (config, data) {
       // 文本数据配置原则：选择数据集则以后端返回的数据为主，否则以设置面板中标题设置为准
       if (config.dataSource.businessKey) {
@@ -48,6 +60,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/fonts/numberFont/stylesheet.css";
   .bs-design-wrap{
     width: 100%;
     display: flex;
