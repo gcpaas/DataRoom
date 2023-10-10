@@ -17,8 +17,8 @@
       <div class="table-box">
         <el-table
           ref="table"
-          max-height="500"
           v-loading="loading"
+          max-height="500"
           class="bs-table bs-el-table fixed-header-table"
           :data="dataList"
         >
@@ -219,7 +219,7 @@ export default {
 
 <style lang="scss" scoped>
 .bs-data-view-dialog{
-  /deep/.el-dialog__body{
+  ::v-deep .el-dialog__body{
     background-color: var(--bs-background-2) !important;
     overflow: hidden;
     max-height: 540px!important;
@@ -236,62 +236,62 @@ export default {
       overflow-y: hidden;
     }
   }
-  /deep/ .el-table__body-wrapper{
+  ::v-deep  .el-table__body-wrapper{
     min-height: 200px !important;
   }
- .el-table th.el-table__cell.is-leaf, .el-table /deep/td.el-table__cell{
+ .el-table th.el-table__cell.is-leaf, .el-table ::v-deep td.el-table__cell{
     border-bottom:none;
   }
-  /deep/.el-loading-mask{
+  ::v-deep .el-loading-mask{
     background-color: var(--bs-background-2) !important;
   }
-  .el-table /deep/thead{
+  .el-table ::v-deep thead{
     color: var(--bs-el-title);
   }
-  .bs-el-table /deep/td.el-table__cell{
+  .bs-el-table ::v-deep td.el-table__cell{
     color: #bcc9d4;
   }
-  .el-table--scrollable-y /deep/.el-table__body-wrapper{
+  .el-table--scrollable-y ::v-deep .el-table__body-wrapper{
     overflow: auto!important;
   }
   /* 修改滚动条的样式 */
-  /deep/.el-dialog__body::-webkit-scrollbar {
+  ::v-deep .el-dialog__body::-webkit-scrollbar {
     width: 8px; /* 滚动条宽度 */
   }
 
- /deep/.el-dialog__body::-webkit-scrollbar-thumb {
+ ::v-deep .el-dialog__body::-webkit-scrollbar-thumb {
     background-color: #888; /* 滚动条拖动块颜色 */
     height: 6px;
     border-radius: 5px;
   }
 
-  /deep/.el-dialog__body::-webkit-scrollbar-track {
+  ::v-deep .el-dialog__body::-webkit-scrollbar-track {
     background-color: transparent; /* 滚动条轨道颜色 */
   }
 
   /* 鼠标悬停在滚动条上时的样式 */
-  /deep/.el-dialog__body::-webkit-scrollbar-thumb:hover {
+  ::v-deep .el-dialog__body::-webkit-scrollbar-thumb:hover {
     background-color: #555;
   }
 }
 /* 自定义滚动条样式 */
-/deep/.el-table__body-wrapper::-webkit-scrollbar {
+::v-deep .el-table__body-wrapper::-webkit-scrollbar {
   width: 6px; /* 滚动条宽度 */
   height: 6px;
 }
 
-/deep/.el-table__body-wrapper::-webkit-scrollbar-thumb {
+::v-deep .el-table__body-wrapper::-webkit-scrollbar-thumb {
   background-color: #888; /* 滚动条拖动块颜色 */
   height: 100px;
   border-radius: 5px;
 }
 
-/deep/.el-table__body-wrapper::-webkit-scrollbar-track {
+::v-deep .el-table__body-wrapper::-webkit-scrollbar-track {
   background-color: transparent; /* 滚动条轨道颜色 */
 }
 
 /* 鼠标悬停在滚动条上时的样式 */
-/deep/.el-table__body-wrapper::-webkit-scrollbar-thumb:hover {
+::v-deep .el-table__body-wrapper::-webkit-scrollbar-thumb:hover {
   background-color: #555;
   cursor: pointer;
 }
