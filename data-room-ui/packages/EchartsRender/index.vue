@@ -512,9 +512,8 @@ export default {
         this.changeActiveItemConfig(config)
       }
       if (this.chart) {
-        // this.chart.setOption(config.option)
+        this.chart.setOption(config.option)
       }
-      // this.createRotate(config.code)
       return config
     }
   }

@@ -3,7 +3,7 @@ const version = '2023091901'
 // 标题
 const title = '3D基础柱状图'
 // 用于标识，唯一，和文件夹名称一致
-const name = '3DJiChuZhuZhuangTu'
+const name = '3D基础柱状图'
 // 右侧配置项
 const setting = [
   {
