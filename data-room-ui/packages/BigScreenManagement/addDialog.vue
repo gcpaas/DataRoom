@@ -199,13 +199,9 @@ export default {
         id: '',
         type: '',
         name: '',
-        icon: '',
         code: '',
         remark: '',
-        iconColor: '#007aff',
         components: '',
-        style: '',
-        modelCode: '',
         formType: '',
         formConfig: '',
         pageTemplateId: ''
@@ -294,12 +290,9 @@ export default {
               this.$set(this.dataForm, 'name', resp.name)
               this.$set(this.dataForm, 'chartList', resp.chartList)
               this.$set(this.dataForm, 'code', resp.code)
-              this.$set(this.dataForm, 'icon', resp.icon)
-              this.$set(this.dataForm, 'iconColor', resp.iconColor)
               this.$set(this.dataForm, 'id', resp.id)
               this.$set(this.dataForm, 'parentCode', resp.parentCode === '0' ? '' : resp.parentCode)
               this.$set(this.dataForm, 'remark', resp.remark)
-              this.$set(this.dataForm, 'style', resp.style)
               this.$set(this.dataForm, 'type', resp.type)
               this.$set(this.dataForm, 'orderNum', nodeData.orderNum)
               this.$set(this.dataForm, 'pageTemplateId', resp?.pageTemplateId)
@@ -315,12 +308,9 @@ export default {
             this.$set(this.dataForm, 'name', '')
             this.$set(this.dataForm, 'chartList', [])
             this.$set(this.dataForm, 'code', '')
-            this.$set(this.dataForm, 'icon', Icon.getNameList()[0])
-            this.$set(this.dataForm, 'iconColor', '#007aff')
             this.$set(this.dataForm, 'id', '')
             this.$set(this.dataForm, 'parentCode', parentNode.code)
             this.$set(this.dataForm, 'remark', '')
-            this.$set(this.dataForm, 'style', '')
             this.$set(this.dataForm, 'type', this.dataForm.type)
             this.$set(this.dataForm, 'orderNum', 0)
             this.$set(this.dataForm, 'pageTemplateId', '')
@@ -352,13 +342,10 @@ export default {
           className: 'com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO',
           chartList: this.dataForm.chartList,
           code: this.dataForm.code,
-          icon: this.dataForm.icon,
-          iconColor: this.dataForm.iconColor,
           id: this.dataForm.id,
           name: this.dataForm.name,
           parentCode: this.dataForm.parentCode,
           remark: this.dataForm.remark,
-          style: this.dataForm.style,
           type: 'bigScreen',
           orderNum: this.dataForm.orderNum,
           pageConfig: {
