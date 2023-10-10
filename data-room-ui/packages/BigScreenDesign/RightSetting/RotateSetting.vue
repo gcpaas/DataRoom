@@ -6,6 +6,17 @@
   <div>
     <el-form-item
       :label-width="labelWidth"
+      label="透视距离"
+    >
+      <el-input-number
+        v-model="config.perspective"
+        class="bs-el-input-number"
+        :min="0"
+        :step="1"
+      />
+    </el-form-item>
+    <el-form-item
+      :label-width="labelWidth"
       label="绕x轴旋转角度"
     >
       <el-input-number
@@ -27,7 +38,8 @@
         :max="360"
         :step="1"
       />
-    </el-form-item> <el-form-item
+    </el-form-item>
+    <el-form-item
       :label-width="labelWidth"
       label="绕z轴旋转角度"
     >
@@ -50,7 +62,8 @@ export default {
       default: () => ({
         rotateX: 0,
         rotateY: 0,
-        rotateZ: 0
+        rotateZ: 0,
+        perspective: 500
       })
     },
     labelWidth: {
