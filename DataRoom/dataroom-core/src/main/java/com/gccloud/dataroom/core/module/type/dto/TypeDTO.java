@@ -1,5 +1,7 @@
 package com.gccloud.dataroom.core.module.type.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.gccloud.common.utils.EmptyAsNullDeserializer;
 import com.gccloud.dataroom.core.constant.PageDesignConstant;
 import com.gccloud.common.validator.group.Insert;
 import com.gccloud.common.validator.group.Update;
@@ -17,6 +19,7 @@ import javax.validation.constraints.NotBlank;
 public class TypeDTO {
 
     @ApiModelProperty(notes = "主键")
+    @JsonDeserialize(using = EmptyAsNullDeserializer.class)
     @NotBlank(message = "id不能为空", groups = Update.class)
     private String id;
 

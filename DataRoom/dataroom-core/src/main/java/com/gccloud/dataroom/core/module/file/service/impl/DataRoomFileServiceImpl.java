@@ -32,9 +32,6 @@ public class DataRoomFileServiceImpl extends ServiceImpl<DataRoomFileDao, DataRo
         queryWrapper.eq(StringUtils.isNotBlank(searchDTO.getModule()), DataRoomFileEntity::getModule, searchDTO.getModule());
         queryWrapper.eq(StringUtils.isNotBlank(searchDTO.getExtension()), DataRoomFileEntity::getExtension, searchDTO.getExtension());
         queryWrapper.orderByDesc(DataRoomFileEntity::getCreateDate);
-        Map<String, String> aliasMap = Maps.newHashMap();
-        aliasMap.put("space", "size");
-        QueryWrapperUtils.wrapperSort(null, DataRoomFileEntity.class, queryWrapper, searchDTO, aliasMap, DataRoomFileEntity::getOriginalName, DataRoomFileEntity::getCreateDate, DataRoomFileEntity::getSize, DataRoomFileEntity::getDownloadCount);
         return page(searchDTO, queryWrapper);
     }
 

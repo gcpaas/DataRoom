@@ -192,7 +192,7 @@
                   <LabelSelect
                     :dataset-id="datasetId"
                     :id-list="dataForm.labelIds"
-                    @commit="(ids) =>{dataForm.labelIds = ids}"
+                    @commit="(ids) => { dataForm.labelIds = ids }"
                   />
                 </el-form-item>
               </el-col>
@@ -289,7 +289,7 @@
               </div>
               <div class="field-wrap bs-field-wrap bs-scrollbar">
                 <div
-                  v-for="field in structurePreviewList"
+                  v-for="field in sortedStructurePreviewList"
                   :key="field.fieldName"
                   class="field-item"
                   @click="fieldsetVisible = true"
@@ -329,15 +329,15 @@
             class="bs-el-table bs-scrollbar"
           >
             <el-table-column
-              v-for="(value, key) in dataPreviewList[0] ? dataPreviewList[0] : noDataTableDisplayFields"
+              v-for="(value, key) in sortedTablePreviewList"
               :key="key"
-              :label="key"
+              :label="value"
               align="center"
               show-overflow-tooltip
               :render-header="renderHeader"
             >
               <template slot-scope="scope">
-                <span>{{ scope.row[key] }}</span>
+                <span>{{ scope.row[value] }}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -708,20 +708,32 @@
               align="center"
             >
               <template slot-scope="scope">
-                <el-date-picker
-                  v-if="scope.row.type === 'Date'"
-                  v-model="scope.row.value"
-                  type="datetime"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  placeholder="选择日期时间"
-                />
-                <el-input
-                  v-else
-                  v-model="scope.row.value"
-                  class="bs-el-input"
-                  clearable
-                  placeholder="请输入值"
-                />
+                <el-form
+                  ref="form"
+                  :model="scope.row"
+                >
+                  <el-form-item
+                    :show-message="scope.row.require === 1"
+                    class="form-item-value"
+                    prop="value"
+                    :rules="getRules(scope.row)"
+                  >
+                    <el-date-picker
+                      v-if="scope.row.type === 'Date'"
+                      v-model="scope.row.value"
+                      type="datetime"
+                      value-format="yyyy-MM-dd HH:mm:ss"
+                      placeholder="选择日期时间"
+                    />
+                    <el-input
+                      v-else
+                      v-model="scope.row.value"
+                      class="bs-el-input"
+                      clearable
+                      placeholder="请输入值"
+                    />
+                  </el-form-item>
+                </el-form>
               </template>
             </el-table-column>
             <el-table-column
@@ -775,11 +787,15 @@
           <el-button
             class="bs-el-button-default"
             @click="cancelParam"
-          >取消</el-button>
+          >
+            取消
+          </el-button>
           <el-button
             type="primary"
             @click="setParam"
-          >确定</el-button>
+          >
+            确定
+          </el-button>
         </span>
       </el-dialog>
     </el-scrollbar>
@@ -891,6 +907,22 @@ export default {
         tableColumnObject[item.fieldName] = ''
       })
       return tableColumnObject
+    },
+    // 输出字段根据orderNum排序
+    sortedStructurePreviewList () {
+      const list = this.structurePreviewList
+      list.sort((a, b) => {
+        return a.orderNum - b.orderNum
+      })
+      return list
+    },
+    sortedTablePreviewList () {
+      const tableList = this.dataPreviewList[0] ? this.dataPreviewList[0] : this.noDataTableDisplayFields
+      const list = Object.keys(tableList)
+      list.sort((a, b) => {
+        return this.structurePreviewListCopy.findIndex(item => item.fieldName === a) - this.structurePreviewListCopy.findIndex(item => item.fieldName === b)
+      })
+      return list
     }
   },
   watch: {
@@ -963,6 +995,13 @@ export default {
         this.datasetTest(false)
       })
     },
+    getRules (row) {
+      return [{
+        required: row.require === 1,
+        message: '参数值不能为空',
+        trigger: ['blur', 'change']
+      }]
+    },
     /**
      * 获取数据源列表
      */
@@ -1014,6 +1053,13 @@ export default {
      * 保存参数设置
      */
     setParam () {
+      for (let i = 0; i < this.paramsListCopy.length; i++) {
+        const row = this.paramsListCopy[i]
+        if (row.require === 1 && (row.value === '' || row.value === null)) {
+          this.$message.error(`第${i + 1}行参数值不能为空`)
+          return
+        }
+      }
       this.dataForm.paramsList = cloneDeep(this.paramsListCopy)
       if (this.isTest) {
         this.datasetTest()
@@ -1232,6 +1278,9 @@ export default {
           })
         }
         this.structurePreviewListCopy = cloneDeep(this.structurePreviewList)
+        this.structurePreviewListCopy = this.structurePreviewListCopy.sort((a, b) => {
+          return a.orderNum - b.orderNum
+        })
         let paramsNameCheck = false
         this.dataForm.paramsList.forEach(param => {
           const checkList = this.structurePreviewList.filter(item => item.fieldName === param.name)
@@ -1419,16 +1468,30 @@ export default {
 .bs-pagination {
   padding: 16px !important;
   position: unset !important;
+
   ::v-deep .el-input__inner {
     width: 110px !important;
     border: none;
     background: var(--bs-el-background-1);
   }
 }
-.bs-el-select{
+
+.bs-el-select {
   width: 100% !important;
 }
-::v-deep .el-input__inner{
+
+::v-deep .el-input__inner {
   width: 100% !important;
+}
+
+::v-deep .el-table__row {
+  height: 58px;
+
+  .cell {
+    width: 100%;
+    margin: 0 auto;
+    position: absolute;
+    top: 8px;
+  }
 }
 </style>
