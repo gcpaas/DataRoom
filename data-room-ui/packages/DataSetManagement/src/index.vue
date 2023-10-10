@@ -811,10 +811,12 @@ export default {
   padding-left: 16px !important;
 }
 .bs-pagination {
-  padding: 0 !important;
-  right: 16px !important;
-  bottom: 16px !important;
-  position: absolute !important;
+  margin-top: 4px;
+  padding-right: 16px;
+  // padding: 0 !important;
+  // right: 16px !important;
+  // bottom: 16px !important;
+  // position: absolute !important;
   ::v-deep .el-input__inner {
     width: 110px !important;
     border:none;

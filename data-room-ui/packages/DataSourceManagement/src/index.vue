@@ -325,10 +325,8 @@ export default {
 @import '../../assets/style/bsTheme.scss';
 
 .bs-pagination {
-  padding: 0 !important;
-  right: 16px !important;
-  bottom: 16px !important;
-  position: absolute !important;
+  margin-top: 4px;
+  padding-right: 16px;
   ::v-deep .el-input__inner {
 
     width: 110px !important;

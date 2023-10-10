@@ -303,7 +303,7 @@
   }
 
   ::v-deep .el-scrollbar {
-    height: 300px;
+    max-height: 440px !important;
     overflow-x: hidden !important;
 
     .el-scrollbar__view {

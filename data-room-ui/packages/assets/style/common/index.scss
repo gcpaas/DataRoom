@@ -39,10 +39,10 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
 
     // page页样式
     .bs-pagination {
-      position: absolute;
-      right: 0;
-      bottom: 16px;
-      padding: 0 10px 0px 16px;
+      // position: absolute;
+      // right: 0;
+      // bottom: 16px;
+      padding-right: 16px;
     }
 
     //输入框样式
@@ -280,7 +280,7 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
 
   .el-dialog__body {
     padding: 16px !important;
-    max-height: calc(90vh - 165px) !important;
+    max-height: calc(90vh - 150px) !important;
     min-height: 200px;
     overflow-y: auto;
   }
@@ -333,5 +333,5 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
 }
 
 .el-dialog__footer{
-  padding: 16px !important;
+  padding: 12px 16px !important;
 }

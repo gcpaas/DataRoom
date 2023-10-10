@@ -30,12 +30,15 @@ const customConfig = {
   type: 'texts',
   root: {
     version: '2023071001',
-    url: 'https://www.runoob.com/'
+    url: 'https://www.runoob.com/',
+    expression: 'return ',
+    expressionCodes: []
   },
   customize: {
     title: '文本标签占位符',
     fontSize: 20,
     fontWeight: 700,
+    fontFamily: '', // 字体类型
     color: 'left,#ffffff,#ffffff'
   }
 
