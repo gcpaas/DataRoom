@@ -485,7 +485,7 @@ export default {
 }
 //调整拖拽插件的句柄样式
 //句柄公共样式
-/deep/.bs-handle-class{
+::v-deep .bs-handle-class{
   width: 16px!important;
   height: 16px!important;
   position: absolute;
@@ -494,7 +494,7 @@ export default {
   border: 3px solid #c8ff00;
 }
 // 每个句柄不同样式
-/deep/.bs-handle-class-tl{
+::v-deep .bs-handle-class-tl{
   top: -2px!important;
   left: -2px!important;
   display: block;
@@ -502,7 +502,7 @@ export default {
   border-right: none;
   border-bottom: none;
 }
-/deep/.bs-handle-class-tm{
+::v-deep .bs-handle-class-tm{
   top: -2px!important;
   left: calc(50% - 8px)!important;
   display: block;
@@ -511,7 +511,7 @@ export default {
   border-right: none;
   border-bottom: none;
 }
-/deep/.bs-handle-class-tr{
+::v-deep .bs-handle-class-tr{
   top: -2px!important;
   right: -2px!important;
   display: block;
@@ -519,7 +519,7 @@ export default {
   border-left: none;
   border-bottom: none;
 }
-/deep/.bs-handle-class-mr{
+::v-deep .bs-handle-class-mr{
   top: calc(50% - 8px)!important;
   right: -2px!important;
   display: block;
@@ -528,7 +528,7 @@ export default {
   border-top: none;
   border-bottom: none;
 }
-/deep/.bs-handle-class-br{
+::v-deep .bs-handle-class-br{
   right: -2px!important;
   bottom: -2px!important;
   display: block;
@@ -536,7 +536,7 @@ export default {
   border-left: none;
   border-top: none;
 }
-/deep/.bs-handle-class-bm{
+::v-deep .bs-handle-class-bm{
   right: calc(50% - 8px)!important;
   bottom: -2px!important;
   display: block;
@@ -545,7 +545,7 @@ export default {
   border-right: none;
   border-top: none;
 }
-/deep/.bs-handle-class-bl{
+::v-deep .bs-handle-class-bl{
   left: -2px!important;
   bottom: -2px!important;
   display: block;
@@ -553,7 +553,7 @@ export default {
   border-right: none;
   border-top: none;
 }
-/deep/.bs-handle-class-ml{
+::v-deep .bs-handle-class-ml{
   top: calc(50% - 8px)!important;
   left: -2px!important;
   display: block;

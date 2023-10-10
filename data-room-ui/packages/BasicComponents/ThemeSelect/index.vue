@@ -113,7 +113,7 @@ export default {
 .theme-dropdown-menu{
   background-color: var(--bs-background-2)!important;
   border: 1px solid var(--bs-border-1);
-  /deep/ .popper__arrow{
+  ::v-deep  .popper__arrow{
     //background-color: var(--bs-background-2)!important;
     background-color: transparent!important;
     border-bottom-color:transparent!important;
@@ -121,7 +121,7 @@ export default {
       border-bottom-color: var(--bs-background-2)!important;
     }
   }
-  /deep/ .el-dropdown-menu__item{
+  ::v-deep  .el-dropdown-menu__item{
     background-color: var(--bs-background-2)!important;
     color: rgb(188, 201, 212)!important;
     &:hover {

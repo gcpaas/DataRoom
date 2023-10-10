@@ -664,11 +664,11 @@ export default {
   .theme-switch {
     margin-right: 10px;
 
-    /deep/.el-switch__label {
+    ::v-deep .el-switch__label {
       color: #bcc9d4 !important;
     }
 
-    /deep/.el-switch__label.is-active {
+    ::v-deep .el-switch__label.is-active {
       color: var(--bs-el-color-primary) !important;
     }
   }
@@ -685,7 +685,7 @@ export default {
   background-color: var(--bs-background-2) !important;
   border: 1px solid var(--bs-border-1);
 
-  /deep/ .el-dropdown-menu__item {
+  ::v-deep  .el-dropdown-menu__item {
     background-color: var(--bs-background-2) !important;
 
     &:hover {
