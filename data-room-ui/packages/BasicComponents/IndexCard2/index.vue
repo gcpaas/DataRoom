@@ -36,7 +36,7 @@
             'font-weight':customize.firstWeight,
             'margin-bottom':customize.lineDistance +'px'
           }"
-        >{{ optionData}}</span>
+        >{{ customize.secondLine }}</span>
         <span
           :style="{
             'font-size': customize.secondSize + 'px',
@@ -46,7 +46,7 @@
           }"
           class="content-right-second"
         >
-          {{ customize.secondLine }}
+        {{ optionData}}
         </span>
       </div>
     </div>

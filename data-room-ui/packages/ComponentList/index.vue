@@ -64,7 +64,7 @@
             <div class="add-big-screen-card">
               <div class="add-big-screen-card-inner">
                 <div class="add-big-screen-card-text">
-                  新建组件
+                  新增组件
                 </div>
               </div>
             </div>

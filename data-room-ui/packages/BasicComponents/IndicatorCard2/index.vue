@@ -12,42 +12,27 @@
       class="content"
     >
       <div
+        class="content-right-first"
         :style="{
-          'margin-right':customize.distance + 'px'
+          'font-size': customize.firstSize + 'px',
+          'height':customize.firstSize + 'px',
+          color:customize.firstColor,
+          'font-weight':customize.firstWeight,
+          'margin-bottom':customize.lineDistance +'px'
         }"
-        class="content-left"
       >
-        <el-image
-          :style="{
-            width: customize.imgSize + 'px',
-            height: customize.imgSize + 'px',
-          }"
-          :src="customize.src"
-          fit="contain"
-        />
+      {{ customize.secondLine }}
       </div>
-      <div class="content-right">
-        <span
-          class="content-right-first"
-          :style="{
-            'font-size': customize.firstSize + 'px',
-            'height':customize.firstSize + 'px',
-            color:customize.firstColor,
-            'font-weight':customize.firstWeight,
-            'margin-bottom':customize.lineDistance +'px'
-          }"
-        >{{ optionData}}</span>
-        <span
-          :style="{
-            'font-size': customize.secondSize + 'px',
-            'height':customize.secondSize + 'px',
-            color:customize.secondColor,
-            'font-weight':customize.secondWeight,
-          }"
-          class="content-right-second"
-        >
-          {{ customize.secondLine }}
-        </span>
+      <div
+        :style="{
+          'font-size': customize.secondSize + 'px',
+          'height':customize.secondSize + 'px',
+          color:customize.secondColor,
+          'font-weight':customize.secondWeight,
+        }"
+        class="content-right-second"
+      >
+        {{ optionData }}
       </div>
     </div>
   </div>
@@ -56,6 +41,7 @@
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
+
 export default {
   name: 'Card',
   components: {},
@@ -74,6 +60,7 @@ export default {
   },
   watch: {},
   mounted () {
+    // this.chartInit()
   },
   computed: {
     option () {
@@ -85,6 +72,17 @@ export default {
     customize () {
       return this.config?.customize
     },
+    // tableData () {
+    //   let dataList = ''
+    //   if (this.optionData instanceof Array && this.optionData.length > 0) {
+    //     dataList = this.option?.yField
+    //       ? this.optionData[0][this.option.yField]
+    //       : this.optionData[0]?.value
+    //   } else {
+    //     dataList = this.optionData ? this.optionData[this.option.yField] : ''
+    //   }
+    //   return dataList
+    // }
   },
   methods: {
     dataFormatting (config, data) {
@@ -98,7 +96,7 @@ export default {
           dataList = data.data[config.dataSource.dimensionField]
         }
       }else{
-        dataList=80
+        dataList=0
       }
       config.option = {
         ...config.option,
@@ -113,33 +111,19 @@ export default {
 <style lang="scss" scoped>
 .content{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 100%;
   width: 100%;
-  // background-color: aliceblue;
+  text-align: center;
   justify-content: center;
-  .content-left{
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-    align-items: center;
-  }
-  .content-right{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: center;
-  }
   .content-right-first{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    width: 100%;
+    text-align: center;
     padding-bottom: 5px;
   }
   .content-right-second{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    width: 100%;
+    text-align: center;
   }
 }
 </style>

@@ -2,7 +2,7 @@
   <div>
     <el-dialog
       :close-on-click-modal="false"
-      :title="title ? '编辑组件' : '新建组件'"
+      :title="title ? '编辑组件' : '新增组件'"
       :visible.sync="formVisible"
       :append-to-body="true"
       class="bs-dialog-wrap bs-el-dialog"

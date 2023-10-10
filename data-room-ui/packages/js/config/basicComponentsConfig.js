@@ -35,7 +35,10 @@ const typeList = [
   'timePicker',
   'dateTimePicker',
   'indicatorCard',
-  'indexCard'
+  'indexCard',
+  'indicatorCard2',
+  'indexCard2'
+
 ]
 let basicConfigList = []
 basicConfigList = typeList.map((type) => {

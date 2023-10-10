@@ -67,7 +67,7 @@ export default {
       return this.config?.option
     },
     optionData () {
-      return this.option?.data || 0
+      return this.option?.data || 80
     },
     customize () {
       return this.config?.customize
@@ -96,7 +96,7 @@ export default {
           dataList = data.data[config.dataSource.dimensionField]
         }
       }else{
-        dataList=0
+        dataList=80
       }
       config.option = {
         ...config.option,
