@@ -28,6 +28,9 @@ public class ScreenTextChart extends Chart {
         @ApiModelProperty(notes = "字体粗细")
         private Integer fontWeight;
 
+        @ApiModelProperty(notes = "字体")
+        private String fontFamily;
+
         @ApiModelProperty(notes = "字体颜色")
         private String color;
 
