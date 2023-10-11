@@ -53,6 +53,7 @@
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@antv/g2plot": "2.4.0",
+    "@gcpaas/vue-draggable-resizable-gorkys": "^1.0.1-2023101102-Alpha",
     "@jiaminghi/data-view": "2.10.0",
     "axios": "0.18.1",
     "echarts": "^5.2.2",
