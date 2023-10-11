@@ -385,6 +385,9 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
             return Lists.newArrayList();
         }
         JSONObject geoObj = JSON.parseObject(geoJson);
+        if (!geoObj.has("features")) {
+            throw new GlobalException("geoJson格式错误，缺少features");
+        }
         JSONArray features = geoObj.getJSONArray("features");
         if (features == null || features.length() == 0) {
             return Lists.newArrayList();
