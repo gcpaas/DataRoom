@@ -57,7 +57,7 @@ const setting = [
     optionField: 'gradientDirection',
     // 是否多选
     multiple: false,
-    value: '',
+    value: 'to right',
     options: [
       {
         label: '从左到右',

@@ -131,7 +131,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item
-                  label="数据缓存"
+                  label="缓存"
                   prop="cache"
                 >
                   <el-radio-group

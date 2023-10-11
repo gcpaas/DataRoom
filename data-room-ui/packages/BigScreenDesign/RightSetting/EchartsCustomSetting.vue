@@ -118,11 +118,6 @@
                   class="bs-el-color-picker"
                   show-alpha
                 />
-                <!-- 渐变色设置 -->
-                <GradualSetting
-                  v-else-if="setting.type === 'gradual'"
-                  v-model="setting.value"
-                />
                 <el-input-number
                   v-else-if="setting.type === 'inputNumber'"
                   v-model="setting.value"
@@ -179,7 +174,6 @@ import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
 import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
 // import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PaddingSetting from 'data-room-ui/BigScreenDesign/RightSetting/PaddingSetting/index.vue'
-import GradualSetting from 'data-room-ui/BigScreenDesign/RightSetting/GradualSetting/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
@@ -188,7 +182,6 @@ export default {
     ColorSelect,
     // ColorPicker,
     PaddingSetting,
-    GradualSetting,
     PosWhSetting,
     BorderSetting,
     SettingTitle,

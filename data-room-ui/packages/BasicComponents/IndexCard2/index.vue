@@ -22,7 +22,7 @@
             width: customize.imgSize + 'px',
             height: customize.imgSize + 'px',
           }"
-          :src="customize.src"
+          :src="customize.src?customize.src:imgUrl"
           fit="contain"
         />
       </div>
@@ -77,6 +77,7 @@ export default {
   },
   data () {
     return {
+      imgUrl:require('data-room-ui/assets/images/cardImg/cardicon.png'),
       customClass: {}
     }
   },

@@ -15,14 +15,14 @@ const customConfig = {
     // 边框线颜色
     borderColor: '#87888e',
     // 边框线宽度
-    borderWidth: 2,
+    borderWidth: 10,
     // 边框背景颜色
     backgroundColor: '#232832',
     colorType: 'single',
     // 渐变色0值
-    gradientColor0: '#83bff6',
+    gradientColor0: '',
     // 渐变色1值
-    gradientColor1: '#188df0',
+    gradientColor1: '',
     // 渐变色色值改变方向
     gradientDirection: 'to right',
     // 透明度
@@ -34,7 +34,7 @@ const customConfig = {
     // 字体粗细
     fontWeight: 500,
     // 中心文本
-    text: '文本'
+    text: ''
   }
 }
 export const dataConfig = {

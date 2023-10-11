@@ -39,7 +39,7 @@ const customConfig = {
     loading: false
   },
   customize: {
-    src: 'http://60.174.249.206:11080/upload/webDesign/uiSucai/dir/icon/icon_top6.png',
+    src: '',
     borderRadius: 0,
     borderWidth: 0,
     lineDistance: 6,

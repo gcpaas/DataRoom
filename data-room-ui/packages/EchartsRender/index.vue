@@ -75,37 +75,42 @@ export default {
     'config.rotateX': {
       deep: true,
       handler (val) {
+        const dom = document.querySelector('#' + this.config.code)
         const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
-        const dom1 = document.querySelector('.bs-design-wrap')
-        const dom2 = document.querySelector('.render-item-wrap')
-        dom1.setAttribute('style', 'perspective: 500px;')
-        dom2.setAttribute('style', 'perspective: 500px;')
-        dom1.setAttribute('style', 'transform:' + rotate)
-        dom2.setAttribute('style', 'transform:' + rotate)
+        const regex = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g
+        // 提取出原本的transform属性内容
+        const result = dom.style.transform.replace(regex, '')
+        dom.style.transform = result + ' ' + rotate
       }
     },
     'config.rotateY': {
       deep: true,
       handler (val) {
+        const dom = document.querySelector('#' + this.config.code)
         const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
-        const dom1 = document.querySelector('.bs-design-wrap')
-        const dom2 = document.querySelector('.render-item-wrap')
-        dom1.setAttribute('style', 'perspective: 500px;')
-        dom2.setAttribute('style', 'perspective: 500px;')
-        dom1.setAttribute('style', 'transform:' + rotate)
-        dom2.setAttribute('style', 'transform:' + rotate)
+        const regex = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g;
+        const result = dom.style.transform.replace(regex, '')
+        dom.style.transform = result + ' ' + rotate
       }
     },
     'config.rotateZ': {
       deep: true,
       handler (val) {
+        const dom = document.querySelector('#' + this.config.code)
         const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
-        const dom1 = document.querySelector('.bs-design-wrap')
-        const dom2 = document.querySelector('.render-item-wrap')
-        dom1.setAttribute('style', 'perspective: 500px;')
-        dom2.setAttribute('style', 'perspective: 500px;')
-        dom1.setAttribute('style', 'transform:' + rotate)
-        dom2.setAttribute('style', 'transform:' + rotate)
+        const regex = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g;
+        const result = dom.style.transform.replace(regex, '')
+        dom.style.transform = result + ' ' + rotate
+      }
+    },
+    'config.perspective': {
+      deep: true,
+      handler (val) {
+        const dom = document.querySelector('#' + this.config.code)
+        const regex = /perspective\(\d+px\)/g
+        const result = dom.style.transform.replace(regex, '')
+        const transform = result + ' ' + 'perspective(' + this.config.perspective + 'px)'
+        dom.style.transform = transform
       }
     }
   },

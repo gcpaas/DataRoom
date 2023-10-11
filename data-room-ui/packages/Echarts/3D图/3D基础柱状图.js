@@ -3,7 +3,7 @@ const version = '2023091901'
 // 标题
 const title = '3D基础柱状图'
 // 用于标识，唯一，和文件夹名称一致
-const name = '3DJiChuZhuZhuangTu'
+const name = '3D基础柱状图'
 // 右侧配置项
 const setting = [
   {
@@ -193,6 +193,57 @@ const setting = [
     groupName: 'xAxis'
   },
   {
+    label: '名称',
+    type: 'input',
+    field: 'xAxis_name',
+    optionField: 'xAxis.name',
+    value: '',
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '名称位置',
+    type: 'select',
+    field: 'xAxis_nameLocation',
+    optionField: 'xAxis.nameLocation',
+    value: 'start',
+    tabName: 'custom',
+    options: [
+      {
+        label: '左',
+        value: 'start'
+      },
+      {
+        label: '中',
+        value: 'center'
+      },
+      {
+        label: '右',
+        value: 'end'
+      }],
+    groupName: 'xAxis'
+  },
+  {
+    label: '名称字体大小',
+    type: 'inputNumber',
+    field: 'xAxis_nameTextStyle_fontSize',
+    optionField: 'xAxis.nameTextStyle.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '名称颜色',
+    type: 'colorPicker',
+    field: 'xAxis_nameTextStyle_color',
+    optionField: 'xAxis.nameTextStyle.color',
+    // 是否多选
+    multiple: false,
+    value: '#8C8C8C',
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
     label: '轴线显示',
     type: 'switch',
     field: 'xAxis_axisLine_show',
@@ -211,6 +262,15 @@ const setting = [
     // 是否多选
     multiple: false,
     value: '#333',
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '轴线宽度',
+    type: 'inputNumber',
+    field: 'xAxis_axisLine_lineStyle_width',
+    optionField: 'xAxis.axisLine.lineStyle.width',
+    value: 1,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -254,57 +314,6 @@ const setting = [
     tabName: 'custom',
     groupName: 'xAxis'
   },
-  {
-    label: '标题',
-    type: 'input',
-    field: 'xAxis_name',
-    optionField: 'xAxis.name',
-    value: '',
-    tabName: 'custom',
-    groupName: 'xAxis'
-  },
-  {
-    label: '标题颜色',
-    type: 'colorPicker',
-    field: 'xAxis_nameTextStyle_color',
-    optionField: 'xAxis.nameTextStyle.color',
-    // 是否多选
-    multiple: false,
-    value: '#8C8C8C',
-    tabName: 'custom',
-    groupName: 'xAxis'
-  },
-  {
-    label: '标题大小',
-    type: 'inputNumber',
-    field: 'xAxis_nameTextStyle_fontSize',
-    optionField: 'xAxis.nameTextStyle.fontSize',
-    value: 12,
-    tabName: 'custom',
-    groupName: 'xAxis'
-  },
-  {
-    label: '标题位置',
-    type: 'select',
-    field: 'xAxis_nameLocation',
-    optionField: 'xAxis.nameLocation',
-    value: 'start',
-    tabName: 'custom',
-    options: [
-      {
-        label: '左',
-        value: 'start'
-      },
-      {
-        label: '中',
-        value: 'center'
-      },
-      {
-        label: '右',
-        value: 'end'
-      }],
-    groupName: 'xAxis'
-  },
   // Y轴 yAxis
   {
     label: '显示',
@@ -314,6 +323,57 @@ const setting = [
     value: 1,
     active: 1,
     inactive: 0,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '名称',
+    type: 'input',
+    field: 'yAxis_name',
+    optionField: 'yAxis.name',
+    value: '',
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '名称位置',
+    type: 'select',
+    field: 'yAxis_nameLocation',
+    optionField: 'yAxis.nameLocation',
+    value: 'end',
+    tabName: 'custom',
+    options: [
+      {
+        label: '下',
+        value: 'start'
+      },
+      {
+        label: '中',
+        value: 'center'
+      },
+      {
+        label: '上',
+        value: 'end'
+      }],
+    groupName: 'yAxis'
+  },
+  {
+    label: '名称字体大小',
+    type: 'inputNumber',
+    field: 'yAxis_nameTextStyle_fontSize',
+    optionField: 'yAxis.nameTextStyle.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '名称颜色',
+    type: 'colorPicker',
+    field: 'yAxis_nameTextStyle_color',
+    optionField: 'yAxis.nameTextStyle.color',
+    // 是否多选
+    multiple: false,
+    value: '#8C8C8C',
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -340,34 +400,10 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '刻度显示',
-    type: 'switch',
-    field: 'yAxis_axisTick_show',
-    optionField: 'yAxis.axisTick.show',
-    value: 1,
-    active: 1,
-    inactive: 0,
-    tabName: 'custom',
-    groupName: 'yAxis'
-  },
-  {
-    label: '刻度颜色',
-    type: 'colorPicker',
-    field: 'yAxis_axisTick_lineStyle_color',
-    optionField: 'yAxis.axisTick.lineStyle.color',
-    // 是否多选
-    multiple: false,
-    value: '#fff',
-    tabName: 'custom',
-    groupName: 'yAxis'
-  },
-  {
-    label: '刻度宽度',
+    label: '轴线宽度',
     type: 'inputNumber',
-    field: 'yAxis_axisTick_lineStyle_width',
-    optionField: 'yAxis.axisTick.lineStyle.width',
-    // 是否多选
-    multiple: false,
+    field: 'yAxis_axisLine_lineStyle_width',
+    optionField: 'yAxis.axisLine.lineStyle.width',
     value: 1,
     tabName: 'custom',
     groupName: 'yAxis'
@@ -413,54 +449,36 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '标题',
-    type: 'input',
-    field: 'yAxis_name',
-    optionField: 'yAxis.name',
-    value: '',
+    label: '刻度显示',
+    type: 'switch',
+    field: 'yAxis_axisTick_show',
+    optionField: 'yAxis.axisTick.show',
+    value: 1,
+    active: 1,
+    inactive: 0,
     tabName: 'custom',
     groupName: 'yAxis'
   },
   {
-    label: '标题颜色',
+    label: '刻度颜色',
     type: 'colorPicker',
-    field: 'yAxis_nameTextStyle_color',
-    optionField: 'yAxis.nameTextStyle.color',
+    field: 'yAxis_axisTick_lineStyle_color',
+    optionField: 'yAxis.axisTick.lineStyle.color',
     // 是否多选
     multiple: false,
-    value: '#8C8C8C',
+    value: '#fff',
     tabName: 'custom',
     groupName: 'yAxis'
   },
   {
-    label: '标题大小',
+    label: '刻度长度',
     type: 'inputNumber',
-    field: 'yAxis_nameTextStyle_fontSize',
-    optionField: 'yAxis.nameTextStyle.fontSize',
-    value: 12,
+    field: 'yAxis_axisTick_length',
+    optionField: 'yAxis.axisTick.length',
+    // 是否多选
+    multiple: false,
+    value: 1,
     tabName: 'custom',
-    groupName: 'yAxis'
-  },
-  {
-    label: '标题位置',
-    type: 'select',
-    field: 'yAxis_nameLocation',
-    optionField: 'yAxis.nameLocation',
-    value: 'end',
-    tabName: 'custom',
-    options: [
-      {
-        label: '下',
-        value: 'start'
-      },
-      {
-        label: '中',
-        value: 'center'
-      },
-      {
-        label: '上',
-        value: 'end'
-      }],
     groupName: 'yAxis'
   }
 ]
@@ -534,13 +552,18 @@ const option = {
       // 坐标轴刻度设置
       axisTick: {
         show: false,
-        alignWithLabel: true
+        alignWithLabel: true,
+        lineStyle: {
+          width: 1,
+          color: '#333'
+        }
       },
       // 是否显示坐标轴的轴线
       axisLine: {
         show: false,
         lineStyle: {
-          color: '#333'
+          color: '#333',
+          width: 1
         }
       },
       // 坐标轴刻度标签
@@ -593,6 +616,7 @@ const option = {
     },
     axisTick: {
       show: true,
+      length: 1,
       lineStyle: {
         color: '#fff',
         width: 1
@@ -610,7 +634,8 @@ const option = {
     axisLine: {
       show: true,
       lineStyle: {
-        color: '#333'
+        color: '#333',
+        width: 1
       }
 
     }

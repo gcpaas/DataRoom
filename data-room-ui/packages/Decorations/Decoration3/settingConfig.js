@@ -20,8 +20,8 @@ const customConfig = {
     contribution: false
   },
   customize: {
-    decorationColor1: null,
-    decorationColor2: null,
+    decorationColor1: '#7acaec',
+    decorationColor2: '#000',
     reverse: false,
     dur: 3,
     scanDur: 3,
