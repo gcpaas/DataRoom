@@ -257,13 +257,13 @@ export default {
       })
       // 找到选中组件内的xy最大最小值
       const maxXW = Math.max.apply(Math, activeChartList.map(item => { return item.x + item.w }))
-      let maxX = Math.max.apply(Math, activeChartList.map(item => { return item.x }))
-      const minX = Math.min.apply(Math, activeChartList.map(item => { return item.x }))
       const maxYH = Math.max.apply(Math, activeChartList.map(item => { return item.y + item.h }))
-      const maxY = Math.max.apply(Math, activeChartList.map(item => { return item.y }))
+      let maxX = Math.max.apply(Math, activeChartList.map(item => { return item.x }))
+      let maxY = Math.max.apply(Math, activeChartList.map(item => { return item.y }))
+      const minX = Math.min.apply(Math, activeChartList.map(item => { return item.x }))
       const minY = Math.min.apply(Math, activeChartList.map(item => { return item.y }))
       const centerW = maxXW - minX
-      const centerH = maxY - minY
+      const centerH = maxYH - minY
       switch (command) {
         case 'left':
           activeChartList.forEach((chart) => {
@@ -323,6 +323,7 @@ export default {
           activeChartList = activeChartList.sort(this.compare('y'))
           // eslint-disable-next-line no-case-declarations
           const minYH = activeChartList[0].y + activeChartList[0].h
+          maxY = Math.max.apply(Math, activeChartList.map(item => { return item.y }))
           // eslint-disable-next-line no-case-declarations
           let totalH = 0
           for (let i = 1; i < activeChartList.length - 1; i++) {
