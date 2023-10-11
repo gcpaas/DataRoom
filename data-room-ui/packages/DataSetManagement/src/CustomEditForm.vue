@@ -157,7 +157,7 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item
-                  label="缓存"
+                  label="数据缓存"
                   prop="cache"
                 >
                   <el-radio-group
@@ -852,7 +852,7 @@ export default {
         // 以下为config配置
         sourceId: '',
         cache: 0,
-        sqlProcess: 'select ',
+        sqlProcess: 'select * from 表名称',
         paramsList: [],
         fieldDesc: {},
         fieldList: [],
