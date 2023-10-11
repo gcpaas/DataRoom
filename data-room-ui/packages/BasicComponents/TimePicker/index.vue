@@ -50,15 +50,15 @@ export default {
     }
   },
   watch: {
-
     'config.customize.formatType': {
       handler (val) {
         if (val === 'timestamp') {
-          this.value = 0
-          this.config.customize.valueFormat = 'timestamp'
+          this.value = new Date().getTime()
+          // this.config.customize.format = 'timestamp'
+          // this.config.customize.valueFormat = 'timestamp'
         } else if (val === 'custom') {
-          this.config.customize.valueFormat = 'HH:mm:ss'
-          this.value = ''
+          // this.config.customize.valueFormat = 'HH:mm:ss'
+          this.value = moment(new Date()).format('HH:mm:ss')
         }
       },
       immediate: true

@@ -214,6 +214,20 @@ export default {
       }
     }
   },
+  watch: {
+    'config.customize.formatType': {
+      handler (val) {
+        if (val === 'timestamp') {
+          this.config.customize.format = 'timestamp'
+          this.config.customize.valueFormat = 'timestamp'
+        } else if (val === 'custom') {
+          this.config.customize.format = 'HH:mm:ss'
+          this.config.customize.valueFormat = 'HH:mm:ss'
+        }
+      },
+      immediate: true
+    }
+  },
   data () {
     return {
       // 时间格式化类型选项
@@ -223,7 +237,6 @@ export default {
       ]
     }
   },
-  watch: {},
   mounted () {},
   methods: { }
 }
