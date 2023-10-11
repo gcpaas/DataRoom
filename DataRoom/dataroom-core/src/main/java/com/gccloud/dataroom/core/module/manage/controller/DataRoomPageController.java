@@ -84,9 +84,6 @@ public class DataRoomPageController {
     public R<String> add(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
         ValidatorUtils.validateEntity(bigScreenPageDTO, Insert.class);
         bigScreenPageService.add(bigScreenPageDTO);
-        if (StringUtils.isBlank(bigScreenPageDTO.getParentCode())) {
-            bigScreenPageDTO.setParentCode("0");
-        }
         return R.success(bigScreenPageDTO.getCode());
     }
 
@@ -100,9 +97,6 @@ public class DataRoomPageController {
             return R.success(code);
         }
         ValidatorUtils.validateEntity(bigScreenPageDTO, Update.class);
-        if (StringUtils.isBlank(bigScreenPageDTO.getParentCode())) {
-            bigScreenPageDTO.setParentCode("0");
-        }
         bigScreenPageService.update(bigScreenPageDTO);
         return R.success(bigScreenPageDTO.getCode());
     }
@@ -136,9 +130,6 @@ public class DataRoomPageController {
     @ApiOperation(value = "从模板新增大屏页", position = 20, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> addByTemplate(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
         String code = bigScreenPageService.addByTemplate(bigScreenPageDTO);
-        if (StringUtils.isBlank(bigScreenPageDTO.getParentCode())) {
-            bigScreenPageDTO.setParentCode("0");
-        }
         return R.success(code);
     }
 
