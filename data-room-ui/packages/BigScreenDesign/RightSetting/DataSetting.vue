@@ -23,6 +23,23 @@
           </div>
           <div class="lc-field-body">
             <el-form-item
+              v-if="config.option.displayOption.expression && config.option.displayOption.expression.enable"
+              label="数据来源"
+            >
+              <el-radio-group
+                v-model="dataSourceStyle"
+                class="bs-el-radio-group"
+              >
+                <el-radio label="dataset">
+                  数据集
+                </el-radio>
+                <el-radio label="expression">
+                  表达式
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item
+              v-if="dataSourceStyle === 'dataset'"
               label="数据集"
             >
               <data-set-select
@@ -39,6 +56,15 @@
               </data-set-select>
             </el-form-item>
             <el-form-item
+              v-if="dataSourceStyle === 'expression' && config.option.displayOption.expression && config.option.displayOption.expression.enable"
+              label="表达式"
+            >
+              <i
+                class="el-icon-edit expression"
+                @click="openExpression"
+              />
+            </el-form-item>
+            <el-form-item
               v-if="config.option.displayOption.text && config.option.displayOption.text.enable"
               label="文本内容"
             >
@@ -46,15 +72,6 @@
                 v-model="config.customize.title"
                 placeholder="请输入文本内容"
                 clearable
-              />
-            </el-form-item>
-            <el-form-item
-              v-if="config.option.displayOption.expression && config.option.displayOption.expression.enable"
-              label="表达式"
-            >
-              <i
-                class="el-icon-edit expression"
-                @click="openExpression"
               />
             </el-form-item>
           </div>
@@ -624,6 +641,7 @@ export default {
   },
   data () {
     return {
+      dataSourceStyle: 'dataset', // 数据来源方式
       fieldsList: [],
       params: [], // 参数配置
       datasetName: '',
