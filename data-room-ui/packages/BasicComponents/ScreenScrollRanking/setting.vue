@@ -26,15 +26,21 @@
         <div class="lc-field-body">
           <PosWhSetting :config="config" />
         </div>
-         <SettingTitle v-if="config.border">边框</SettingTitle>
-          <div class="lc-field-body">
-            <BorderSetting
-              v-if="config.border"
-              label-width="100px"
-              :config="config.border"
-              :bigTitle='config.title'
-            />
-          </div>
+        <SettingTitle v-if="config.border">边框</SettingTitle>
+        <div class="lc-field-body">
+          <BorderSetting
+            v-if="config.border"
+            label-width="100px"
+            :config="config.border"
+            :bigTitle='config.title'
+          />
+        </div>
+        <SettingTitle>旋转</SettingTitle>
+        <div class="lc-field-body">
+          <RotateSetting
+            :config="config"
+          />
+        </div>
         <SettingTitle>基础</SettingTitle>
         <div class="lc-field-body">
           <el-form-item
@@ -81,12 +87,14 @@
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
   name: 'BarSetting',
   components: {
     PosWhSetting,
     SettingTitle,
-    BorderSetting
+    BorderSetting,
+    RotateSetting
   },
   data () {
     return {

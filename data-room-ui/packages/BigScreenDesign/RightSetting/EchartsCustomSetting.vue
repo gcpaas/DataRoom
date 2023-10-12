@@ -111,6 +111,7 @@
                     />
                   </div>
                 </template>
+
                 <el-color-picker
                   v-else-if="setting.type === 'colorPicker'"
                   v-model="setting.value"
