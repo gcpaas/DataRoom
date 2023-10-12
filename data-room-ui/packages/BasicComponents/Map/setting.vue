@@ -445,7 +445,7 @@ export default {
 .lc-field-body {
   padding: 12px 16px;
 }
-/deep/.bs-el-slider-dark {
+::v-deep.bs-el-slider-dark {
 
   .el-slider__runway {
     background-color: var(--bs-el-background-1) !important;
