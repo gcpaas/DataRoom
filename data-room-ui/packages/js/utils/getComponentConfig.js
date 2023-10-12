@@ -15,6 +15,19 @@ export default function getComponentConfig (type) {
         y: 0,
         type
       }
+    case 'numbers':
+      return {
+        name: '数字',
+        title: '数字',
+        icon: Icon.getNameList()[28],
+        className:
+          'com.gccloud.dataroom.core.module.chart.components.ScreenNumbersChart',
+        w: 200,
+        h: 60,
+        x: 0,
+        y: 0,
+        type
+      }
     case 'linkChart':
       return {
         name: '超链接',
