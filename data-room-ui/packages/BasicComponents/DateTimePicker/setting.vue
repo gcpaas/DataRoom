@@ -114,6 +114,35 @@
           </div>
           <SettingTitle>日期时间格式</SettingTitle>
           <div class="lc-field-body">
+            <el-form-item label="时间数据类型">
+              <div class="description">
+                <el-select
+                  v-model="config.customize.formatType"
+                  class="bs-el-select"
+                  popper-class="bs-el-select"
+                  clearable
+                >
+                  <el-option
+                    v-for="(type) in formatTypeOptions"
+                    :key="type.value"
+                    :label="type.label"
+                    :value="type.value"
+                  />
+                </el-select>
+                <el-tooltip
+                  placement="top"
+                >
+                  <span
+                    class="el-icon-question"
+                    style="color:#9e9e9e"
+                  />
+                  <div slot="content">
+                    时间戳：从1970年1月1日开始计算的秒数，数据类型为数值型，例如：1483326245000。<br>
+                    自定义：通过输入特定的格式字符串来指定时间的数据格式，例如：yyyy-MM-dd HH:mm:ss对应数据为 2023-10-08 09:30:00。<br>
+                  </div>
+                </el-tooltip>
+              </div>
+            </el-form-item>
             <el-form-item label="时间显示格式化">
               <div class="description">
                 <el-input
@@ -147,35 +176,6 @@
                     JS时间戳：timestamp，仅 value-format 可用，组件绑定值为number类型，例如：1483326245000<br>
                     不需要格式化字符：[MM]，使用方括号标识不需要格式化的字符，例如：MM<br>
                     具体的时间格式化字符和使用方式，可以参考Element-UI官网的日期选择器的时间格式化部分。
-                  </div>
-                </el-tooltip>
-              </div>
-            </el-form-item>
-            <el-form-item label="时间数据类型">
-              <div class="description">
-                <el-select
-                  v-model="config.customize.formatType"
-                  class="bs-el-select"
-                  popper-class="bs-el-select"
-                  clearable
-                >
-                  <el-option
-                    v-for="(type) in formatTypeOptions"
-                    :key="type.value"
-                    :label="type.label"
-                    :value="type.value"
-                  />
-                </el-select>
-                <el-tooltip
-                  placement="top"
-                >
-                  <span
-                    class="el-icon-question"
-                    style="color:#9e9e9e"
-                  />
-                  <div slot="content">
-                    时间戳：从1970年1月1日开始计算的秒数，数据类型为数值型，例如：1483326245000。<br>
-                    自定义：通过输入特定的格式字符串来指定时间的数据格式，例如：yyyy-MM-dd HH:mm:ss对应数据为 2023-10-08 09:30:00。<br>
                   </div>
                 </el-tooltip>
               </div>

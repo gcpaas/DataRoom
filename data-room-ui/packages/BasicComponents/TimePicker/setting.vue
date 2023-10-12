@@ -90,6 +90,34 @@
           </div>
           <SettingTitle>时间格式</SettingTitle>
           <div class="lc-field-body">
+            <el-form-item label="时间数据类型">
+              <div class="description">
+                <el-select
+                  v-model="config.customize.formatType"
+                  class="bs-el-select"
+                  popper-class="bs-el-select"
+                >
+                  <el-option
+                    v-for="(type) in formatTypeOptions"
+                    :key="type.value"
+                    :label="type.label"
+                    :value="type.value"
+                  />
+                </el-select>
+                <el-tooltip
+                  placement="top"
+                >
+                  <span
+                    class="el-icon-question"
+                    style="color:#9e9e9e"
+                  />
+                  <div slot="content">
+                    时间戳：从1970年1月1日开始计算的秒数，数据类型为数值型，例如：1483326245000。<br>
+                    自定义：通过输入特定的格式字符串来指定时间的数据格式，例如：HH:mm:ss对应数据为 09:30:00。<br>
+                  </div>
+                </el-tooltip>
+              </div>
+            </el-form-item>
             <el-form-item label="时间显示格式化">
               <div class="description">
                 <el-input
@@ -120,34 +148,7 @@
                 </el-tooltip>
               </div>
             </el-form-item>
-            <el-form-item label="时间数据类型">
-              <div class="description">
-                <el-select
-                  v-model="config.customize.formatType"
-                  class="bs-el-select"
-                  popper-class="bs-el-select"
-                >
-                  <el-option
-                    v-for="(type) in formatTypeOptions"
-                    :key="type.value"
-                    :label="type.label"
-                    :value="type.value"
-                  />
-                </el-select>
-                <el-tooltip
-                  placement="top"
-                >
-                  <span
-                    class="el-icon-question"
-                    style="color:#9e9e9e"
-                  />
-                  <div slot="content">
-                    时间戳：从1970年1月1日开始计算的秒数，数据类型为数值型，例如：1483326245000。<br>
-                    自定义：通过输入特定的格式字符串来指定时间的数据格式，例如：HH:mm:ss对应数据为 09:30:00。<br>
-                  </div>
-                </el-tooltip>
-              </div>
-            </el-form-item>
+
             <el-form-item
               v-if="config.customize.formatType === 'custom'"
               label="时间数据格式化"
