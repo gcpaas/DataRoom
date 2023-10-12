@@ -223,7 +223,7 @@ export default {
       // 时间格式化类型选项
       formatTypeOptions: [
         { label: '时间戳', value: 'timestamp' },
-        { label: '自定义', value: 'custom' }
+        { label: '自定义格式', value: 'custom' }
       ]
     }
   },
