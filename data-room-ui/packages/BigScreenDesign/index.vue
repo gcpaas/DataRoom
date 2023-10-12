@@ -284,7 +284,9 @@ export default {
       'saveTimeLine',
       'changeIframeDialog',
       'changePageInfo',
-      'changeActiveItemConfig'
+      'changeActiveItemConfig',
+      'emptyDataset',
+      'emptyComputedDatas'
     ]),
     // 判断页面权限
     permission () {
@@ -426,6 +428,9 @@ export default {
       })
         .then(() => {
           this.changeLayout([])
+          // 清空缓存的数据库的内容
+          this.emptyDataset()
+          this.emptyComputedDatas()
           this.resetPresetLine()
           this.saveTimeLine('清空画布')
         })
