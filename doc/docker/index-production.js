@@ -1,6 +1,7 @@
 window.ENV = 'production'
 var productionConfig = {
-  baseUrl: getIpPort()
+  baseUrl: getIpPort(),
+  fileUrlPrefix: getIpPort() + '/dataroom',
 }
 // 必须的
 window.CONFIG = configDeepMerge(window.CONFIG, productionConfig)
