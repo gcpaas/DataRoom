@@ -41,8 +41,8 @@ public class CustomComponentChart extends Chart {
     @ApiModelProperty(notes = "右侧面板自定义配置")
     private List<Map<String, Object>> setting;
 
-    @ApiModelProperty(notes = "组件的唯一名称")
-    private String name;
+    @ApiModelProperty(notes = "组件类别")
+    private String category;
 
     @Data
     public static class Setting {

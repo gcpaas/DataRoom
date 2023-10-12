@@ -36,6 +36,9 @@ public class Chart {
     @ApiModelProperty(notes = "图表标题")
     private String title;
 
+    @ApiModelProperty(notes = "名称")
+    private String name;
+
     @ApiModelProperty(notes = "组件类型")
     private String type;
 

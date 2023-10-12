@@ -852,7 +852,7 @@ export default {
         // 以下为config配置
         sourceId: '',
         cache: 0,
-        sqlProcess: 'select ',
+        sqlProcess: 'select * from 表名称',
         paramsList: [],
         fieldDesc: {},
         fieldList: [],

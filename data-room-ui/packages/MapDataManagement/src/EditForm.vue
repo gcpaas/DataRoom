@@ -173,7 +173,7 @@ export default {
   computed: {
     autoParseNextLevelShow () {
       // geoJson 不为空，且未上传过（说明是刚上传的）
-      return !this.isWhitespace(this.mapForm.geoJson) && this.mapForm.uploadedGeoJson === 0
+      return !this.isWhitespace(this.mapForm.geoJson) && !this.isEmpty(this.mapForm.geoJson) && this.mapForm.uploadedGeoJson === 0
     },
     outRangeLabel() {
       return `级别${this.mapForm.level + 1}`;
@@ -264,6 +264,8 @@ export default {
       this.mapForm = _.cloneDeep(map)
       if (!this.isWhitespace(this.mapForm.geoJson)) {
         this.mapForm.geoJson = JSON.parse(this.mapForm.geoJson)
+      } else {
+        this.mapForm.geoJson = {}
       }
     },
     handleClose () {
@@ -275,7 +277,7 @@ export default {
           return false
         }
         let geoJson
-        // 如果geoJson是空的，包括空字符串，纯空格、空对象，空数组，都不允许提交
+        // 如果geoJson是空的，包括空字符串，纯空格、空对象，空数组，都置为空字符串
         if (this.isWhitespace(this.mapForm.geoJson) || this.mapForm.geoJson === '{}' || this.mapForm.geoJson === '[]') {
           geoJson = ''
         } else {
@@ -299,6 +301,15 @@ export default {
         return true
       }
       return /^\s*$/.test(str)
+    },
+    isEmpty (obj) {
+      if (typeof obj === 'object') {
+        return Object.keys(obj).length === 0 && obj.constructor === Object
+      }
+      if (typeof obj === 'string') {
+        return /^\s*$/.test(obj)
+      }
+      return Array.isArray(obj) && obj.length === 0
     },
     upload () {
       this.$refs.geoJsonFile.click()
