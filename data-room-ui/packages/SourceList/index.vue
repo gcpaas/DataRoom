@@ -203,6 +203,7 @@ export default {
       upLoadUrl: window.BS_CONFIG?.httpConfigs?.baseURL + '/bigScreen/file/upload',
       searchKey: '',
       extend: '',
+      sourceExtends: window.BS_CONFIG?.sourceExtends || [],
       options: [],
       list: [],
       fileUploadParam: {},
@@ -215,7 +216,7 @@ export default {
       otherExtends: {
         video: ['mp4', 'avi', 'mov', 'wmv', 'flv', 'f4v', 'rmvb', 'rm', '3gp', 'dat', 'ts', 'mts', 'vob'],
         audio: ['mp3', 'wav', 'wma', 'ogg', 'aac', 'flac', 'ape', 'm4a', 'm4r', 'amr', 'ac3'],
-        excel: ['xls', 'xlsx'],
+        excel: ['xls', 'xlsx', 'csv'],
         word: ['doc', 'docx'],
         ppt: ['ppt', 'pptx'],
         pdf: ['pdf']
@@ -270,14 +271,13 @@ export default {
       })
     },
     beforeUpload(file) {
-      const isImage = file.type.startsWith('image/')
-      const isVideo = file.type.startsWith('video/')
-      const isValidFileType = isImage || isVideo
-
+      // 获取文件后缀
+      const extension = file.name.split('.').pop()
+      // 判断文件类型是否符合要求
+      const isValidFileType = this.sourceExtends.includes(extension)
       if (!isValidFileType) {
-        this.$message.error('只能上传图片或视频文件')
+        this.$message.error('不支持的文件类型：' + extension)
       }
-
       return isValidFileType
     },
     uploadSuccess(response, file, fileList) {
@@ -295,13 +295,8 @@ export default {
       }
     },
     getOptions() {
-      this.$dataRoomAxios.get('/bigScreen/file/getAllFileSuffix').then((data) => {
-        this.options = []
-        this.options.push({label: '全部', value: ''})
-        // 过滤data的空数据
-        data = data.filter((item) => item)
-        data.forEach((item) => this.options.push({label: item, value: item}))
-      })
+      this.options.push({label: '全部', value: ''})
+      this.sourceExtends.forEach((ext) => this.options.push({label: ext, value: ext}))
     },
     getDataList() {
       this.loading = true
