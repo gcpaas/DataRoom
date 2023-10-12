@@ -97,4 +97,18 @@ public class Chart {
     @ApiModelProperty(notes = "表达式关联的组件的code集合")
     private List<String> expressionCodes;
 
+    @ApiModelProperty(notes = "旋转x")
+    private Integer rotateX;
+
+    @ApiModelProperty(notes = "旋转y")
+    private Integer rotateY;
+
+    @ApiModelProperty(notes = "旋转z")
+    private Integer rotateZ;
+
+    @ApiModelProperty(notes = "透视")
+    private Integer perspective;
+
+
+
 }
