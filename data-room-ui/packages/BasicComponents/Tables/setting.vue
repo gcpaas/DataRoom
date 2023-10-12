@@ -19,20 +19,26 @@
           />
         </el-form-item>
       </div>
-       <SettingTitle v-if="config.border">边框</SettingTitle>
-          <div class="lc-field-body">
-            <BorderSetting
-              v-if="config.border"
-              label-width="120px"
-              :config="config.border"
-              :bigTitle='config.title'
-            />
-          </div>
+      <SettingTitle v-if="config.border">边框</SettingTitle>
+      <div class="lc-field-body">
+        <BorderSetting
+          v-if="config.border"
+          label-width="120px"
+          :config="config.border"
+          :bigTitle='config.title'
+        />
+      </div>
       <SettingTitle>位置</SettingTitle>
       <div class="lc-field-body">
         <PosWhSetting
           :config="config"
           label-width="120px"
+        />
+      </div>
+      <SettingTitle>旋转</SettingTitle>
+      <div class="lc-field-body">
+        <RotateSetting
+          :config="config"
         />
       </div>
       <SettingTitle>基础</SettingTitle>
@@ -108,12 +114,14 @@ import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
   components: {
     ColorPicker,
     PosWhSetting,
     SettingTitle,
-    BorderSetting
+    BorderSetting,
+    RotateSetting
   },
   mixins: [chartSettingMixins],
   data () {

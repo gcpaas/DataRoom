@@ -4,6 +4,8 @@ example/
 dist/
 lib/
 hooks/
+dataRoomUi/
+dataRoomPro/
 
 # 只包含packages和public文件
 !packages/

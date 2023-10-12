@@ -7,7 +7,7 @@
     clearable
     :class="['basic-component-date-picker', `date-picker-${config.code}`]"
     :popper-class="'basic-component-date-picker date-picker-popper-' + config.code"
-    :value-format="config.customize.valueFormat"
+    :value-format="config.customize.format"
     :format="config.customize.format"
     :default-value="value"
     size="large"
@@ -53,12 +53,26 @@ export default {
   watch: {
     'config.customize.formatType': {
       handler (val) {
+        const newFomat = this.config.customize.format.replace(/y/g, 'Y').replace(/d/g, 'D')
         if (val === 'timestamp') {
-          this.value = 0
-          this.valueFormat = 'timestamp'
+          // this.value = 0
+          if (['year', 'month', 'date', 'week', 'datetime'].includes(this.config.customize.type)) {
+            this.value = moment(new Date()).format(newFomat)
+          } else {
+            this.value = [
+              moment(new Date()).subtract(7, 'days').valueOf(),
+              moment(new Date()).valueOf()
+            ]
+          }
         } else if (val === 'custom') {
-          this.value = ''
-          this.valueFormat = 'YYYY-MM-DD HH:mm:ss'
+          if (['year', 'month', 'date', 'week', 'datetime'].includes(this.config.customize.type)) {
+            this.value = moment(new Date()).format(newFomat)
+          } else {
+            this.value = [
+              moment(new Date()).subtract(7, 'days').format(newFomat),
+              moment(new Date()).format(newFomat)
+            ]
+          }
         }
       },
       immediate: true
@@ -70,16 +84,58 @@ export default {
             document.querySelector(`.date-picker-${this.config.code}`).style.pointerEvents = 'none'
           }
         })
+        const newFomat = this.config.customize.format.replace(/y/g, 'Y').replace(/d/g, 'D')
         if (['year', 'month', 'date', 'week', 'datetime'].includes(val)) {
-          this.value = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+          if (this.config.customize.formatType === 'timestamp') {
+            this.value = moment(new Date()).valueOf()
+          } else {
+            this.value = moment(new Date()).format(newFomat)
+          }
         } else {
-          this.value = [
-            moment(new Date()).subtract(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
-            moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-          ]
+          if (this.config.customize.formatType === 'timestamp') {
+            this.value = [
+              moment(new Date()).subtract(7, 'days').valueOf(),
+              moment(new Date()).valueOf()
+            ]
+          } else {
+            this.value = [
+              moment(new Date()).subtract(7, 'days').format(newFomat),
+              moment(new Date()).format(newFomat)
+            ]
+          }
         }
       },
       immediate: true
+    },
+    'config.customize.format': {
+      handler (val) {
+        this.$nextTick(() => {
+          if (!this.isPreview) {
+            document.querySelector(`.date-picker-${this.config.code}`).style.pointerEvents = 'none'
+          }
+        })
+        const newFomat = val?.replace(/y/g, 'Y')?.replace(/d/g, 'D')
+        if (['year', 'month', 'date', 'week', 'datetime'].includes(this.config.customize.type)) {
+          this.value = moment(new Date()).format(newFomat)
+          if (this.config.customize.formatType === 'timestamp') {
+            this.value = moment(new Date()).valueOf()
+          } else {
+            this.value = moment(new Date()).format(newFomat)
+          }
+        } else {
+          if (this.config.customize.formatType === 'timestamp') {
+            this.value = [
+              moment(new Date()).subtract(7, 'days').valueOf(),
+              moment(new Date()).valueOf()
+            ]
+          } else {
+            this.value = [
+              moment(new Date()).subtract(7, 'days').format(newFomat),
+              moment(new Date()).format(newFomat)
+            ]
+          }
+        }
+      }
     }
   },
   created () { },
@@ -89,9 +145,10 @@ export default {
     }
     this.changeStyle(this.config)
     if (this.value === '') {
+      const newFomat = this.config.customize.format.replace(/y/g, 'Y').replace(/d/g, 'D')
       this.value = [
-        moment(new Date()).subtract(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
-        moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+        moment(new Date()).subtract(7, 'days').format(newFomat),
+        moment(new Date()).format(newFomat)
       ]
     }
   },
@@ -116,7 +173,7 @@ export default {
         // 时间选择器输入框元素
         const timePickerInput = timePickerEl.querySelector('.el-input__inner')
         if (timePickerInput) {
-        // 时间选择器输入框背景颜色
+          // 时间选择器输入框背景颜色
           timePickerInput.style.backgroundColor = bgColor
           // 时间选择器输入框字体颜色
           timePickerInput.style.color = fontColor
@@ -126,7 +183,7 @@ export default {
         // 时间范围选择器输入框元素
         const timePickerRangeInput = timePickerEl.querySelectorAll('.el-range-input')
         if (timePickerRangeInput.length > 0) {
-        // 连接符
+          // 连接符
           const timePickerRangeSeparator = timePickerEl.querySelector('.el-range-separator')
           if (timePickerRangeSeparator) {
             // 宽度和字体大小保持一致
@@ -135,7 +192,7 @@ export default {
             timePickerRangeSeparator.style.fontSize = fontSize + 'px'
           }
           timePickerRangeInput.forEach((el) => {
-          // 时间范围选择器输入框背景颜色
+            // 时间范围选择器输入框背景颜色
             el.style.backgroundColor = bgColor
             // 时间范围选择器输入框字体颜色
             el.style.color = fontColor
@@ -218,106 +275,121 @@ export default {
 <style lang="scss">
 .basic-component-date-picker {
   color: '';
+
   // 清空图标
   .el-icon-circle-close {
-    display: flex ;
-    align-items: center ;
+    display: flex;
+    align-items: center;
   }
 
   // 时间选择器
   .el-icon-time {
-    display: flex ;
-    align-items: center ;
+    display: flex;
+    align-items: center;
   }
 
   .el-time-panel {
-    border: none ;
-    background-color: var(--bgColor) ;
+    border: none;
+    background-color: var(--bgColor);
   }
 
   // 选择日期 时间区域
   .el-date-picker__time-header {
-    border-bottom: var(--bgColor) ;
+    border-bottom: var(--bgColor);
 
     .el-input__inner {
-      border: none ;
+      border: none;
       // 添加一点阴影
-      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1) ;
-      color: var(--fontColor) ;
-      background-color: var(--inputBgColor) ;
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+      color: var(--fontColor);
+      background-color: var(--inputBgColor);
     }
 
   }
 
   // 头部，修改文字颜色和图标颜色
   .el-date-picker__header {
-    color: var(--fontColor) ;
+    color: var(--fontColor);
 
     .el-date-picker__header-label {
-      color: var(--fontColor) ;
+      color: var(--fontColor);
     }
 
     // 左右箭头图标颜色
     .el-picker-panel__icon-btn {
-      color: var(--fontColor) ;
+      color: var(--fontColor);
     }
   }
+
   // datetimerange
   .el-date-range-picker__time-header {
     border-color: var(--fontColor);
 
     // 中间箭头图标颜色
     .el-icon-arrow-right {
-      color: var(--fontColor) ;
+      color: var(--fontColor);
     }
+
     // 时间选择器输入框
-    .el-input__inner{
+    .el-input__inner {
       border: none;
       color: var(--fontColor);
       // 添加一点阴影
-      background-color: var(--inputBgColor) ;
-      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1) ;
+      background-color: var(--inputBgColor);
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
     }
   }
+
   // datetimerange
-  .el-picker-panel__content{
-    .el-icon-d-arrow-left{
-      color: var(--fontColor) ;
-      &:after{
-        color: var(--fontColor) ;
+  .el-picker-panel__content {
+    .el-icon-d-arrow-left {
+      color: var(--fontColor);
+
+      &:after {
+        color: var(--fontColor);
       }
     }
-    .el-icon-arrow-left{
-      color: var(--fontColor) ;
-      &:after{
-        color: var(--fontColor) ;
+
+    .el-icon-arrow-left {
+      color: var(--fontColor);
+
+      &:after {
+        color: var(--fontColor);
       }
     }
-    .el-icon-d-arrow-right{
-      color: var(--fontColor) ;
-      &:after{
-        color: var(--fontColor) ;
+
+    .el-icon-d-arrow-right {
+      color: var(--fontColor);
+
+      &:after {
+        color: var(--fontColor);
       }
     }
-    .el-icon-arrow-right{
-      color: var(--fontColor) ;
-      &:after{
-        color: var(--fontColor) ;
+
+    .el-icon-arrow-right {
+      color: var(--fontColor);
+
+      &:after {
+        color: var(--fontColor);
       }
     }
   }
-  .el-date-range-picker__content.is-left{
-    border-color: var(--fontColor) ;
+
+  .el-date-range-picker__content.is-left {
+    border-color: var(--fontColor);
   }
-  .el-date-table{
-    th{
-      border-color: var(--fontColor) ;
+
+  .el-date-table {
+    th {
+      border-color: var(--fontColor);
     }
-    td{
-      div{
-        color: var(--fontColor) ;
-        &:hover{
-          color: var(--hoverFontColor) ;
+
+    td {
+      div {
+        color: var(--fontColor);
+
+        &:hover {
+          color: var(--hoverFontColor);
         }
       }
     }
@@ -352,66 +424,67 @@ export default {
     border-top: 1px solid var(--fontColor);
     border-bottom: 1px solid var(--fontColor);
   }
+
   // 脚部
   .el-picker-panel__footer {
     border-color: var(--fontColor);
-    background-color: var(--bgColor) ;
+    background-color: var(--bgColor);
 
     // 清空按钮
     .el-picker-panel__link-btn {
       span {
-        color: var(--fontColor) ;
+        color: var(--fontColor);
       }
     }
 
     // 确定按钮
     .el-button--default {
-      border: none ;
-      color: var(--fontColor) ;
-      background-color: var(--bgColor) ;
+      border: none;
+      color: var(--fontColor);
+      background-color: var(--bgColor);
     }
 
     .is-disabled {
       span {
-        color: #999 ;
+        color: #999;
       }
     }
   }
 
   .el-time-spinner {
-    margin-bottom: 0px ;
+    margin-bottom: 0px;
 
     .el-time-spinner__item {
       &:hover {
-        color: var(--hoverFontColor) ;
-        background-color: var(--hoverBgColor) ;
+        color: var(--hoverFontColor);
+        background-color: var(--hoverBgColor);
       }
     }
 
     .active {
-      color: var(--selectedFontColor) ;
+      color: var(--selectedFontColor);
 
       &:hover {
-        color: var(--selectedFontColor) ;
-        background-color: transparent ;
+        color: var(--selectedFontColor);
+        background-color: transparent;
       }
     }
   }
 
   .popper__arrow {
-    bottom: -6px ;
+    bottom: -6px;
     border-bottom-color: var(--bgColor) !important;
     border-top-color: var(--bgColor) !important;
 
     &::after {
-      bottom: 0px ;
+      bottom: 0px;
       border-bottom-color: var(--bgColor) !important;
       border-top-color: var(--bgColor) !important;
     }
   }
 
   .cancel {
-    color: var(--fontColor) ;
+    color: var(--fontColor);
   }
 
   .confirm {
@@ -419,53 +492,62 @@ export default {
   }
 
   .el-time-panel__footer {
-    border-top: 1px solid var(--fontColor) ;
+    border-top: 1px solid var(--fontColor);
+
     .cancel {
       span {
-        color: var(--fontColor) ;
+        color: var(--fontColor);
       }
     }
 
     // 确定按钮
     .confirm {
-      border: none ;
-      color: var(--fontColor) ;
-      background-color: var(--bgColor) ;
+      border: none;
+      color: var(--fontColor);
+      background-color: var(--bgColor);
     }
   }
+
   // 年选择器
   .el-year-table {
-    a{
-      color: var(--fontColor) ;
-      &:hover{
-        color: var(--hoverFontColor) ;
+    a {
+      color: var(--fontColor);
+
+      &:hover {
+        color: var(--hoverFontColor);
       }
     }
   }
+
   // 月选择器
   .el-month-table {
-    a{
-      color: var(--fontColor) ;
-      &:hover{
-        color: var(--hoverFontColor) ;
+    a {
+      color: var(--fontColor);
+
+      &:hover {
+        color: var(--hoverFontColor);
       }
     }
   }
+
   // 上月 下月 字体颜色置灰
-  .prev-month{
-  span{
-    color: #999 !important;
-    &:hover{
-      color: var(--hoverFontColor) !important;
-    }
-  }
-  }
-  .next-month{
-    span{
+  .prev-month {
+    span {
       color: #999 !important;
-      &:hover{
-      color: var(--hoverFontColor) !important;
+
+      &:hover {
+        color: var(--hoverFontColor) !important;
+      }
     }
+  }
+
+  .next-month {
+    span {
+      color: #999 !important;
+
+      &:hover {
+        color: var(--hoverFontColor) !important;
+      }
     }
   }
 }
@@ -497,7 +579,7 @@ export default {
   height: 100% !important;
   line-height: 100% !important;
 }
-::v-deep .el-range-input{
+
+::v-deep .el-range-input {
   width: 45% !important;
-}
-</style>
+}</style>

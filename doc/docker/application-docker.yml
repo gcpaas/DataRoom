@@ -3,8 +3,9 @@ server:
   servlet:
     context-path:
 spring:
-  resources:
-    static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/META-INF/resources/webjars/,file:${gc.starter.file.basePath},file:${gc.starter.file.uiPath}
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/META-INF/resources/webjars/,file:${gc.starter.file.basePath},file:${gc.starter.file.uiPath}
   mvc:
     throw-exception-if-no-handler-found: true
     # 静态资源访问接口前缀

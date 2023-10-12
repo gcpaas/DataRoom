@@ -42,6 +42,12 @@
           :big-title="config.title"
         />
       </div>
+      <SettingTitle>旋转</SettingTitle>
+      <div class="lc-field-body">
+        <RotateSetting
+          :config="config"
+        />
+      </div>
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
@@ -95,13 +101,15 @@ import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import TextGradient from 'data-room-ui/BigScreenDesign/RightSetting/TextGradient/index'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
   name: 'TextSetting',
   components: {
     TextGradient,
     PosWhSetting,
     SettingTitle,
-    BorderSetting
+    BorderSetting,
+    RotateSetting
   },
   data () {
     return {

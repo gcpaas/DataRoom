@@ -98,7 +98,7 @@ export default {
       handler (val) {
         const dom = document.querySelector('#' + this.config.code)
         const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
-        const regex = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g;
+        const regex = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g
         const result = dom.style.transform.replace(regex, '')
         dom.style.transform = result + ' ' + rotate
       }
@@ -107,9 +107,12 @@ export default {
       deep: true,
       handler (val) {
         const dom = document.querySelector('#' + this.config.code)
-        const regex = /perspective\(\d+px\)/g
-        const result = dom.style.transform.replace(regex, '')
-        const transform = result + ' ' + 'perspective(' + this.config.perspective + 'px)'
+        // 获取translate属性
+        const translateReg = /translate\((.*?)\)/
+        const translateResult = dom.style.transform.match(translateReg)
+        const rotateReg = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g
+        const rotateResult = dom.style.transform.match(rotateReg)
+        const transform = translateResult[0] + ' ' + 'perspective(' + this.config.perspective + 'px)' + ' ' + rotateResult[0]
         dom.style.transform = transform
       }
     }

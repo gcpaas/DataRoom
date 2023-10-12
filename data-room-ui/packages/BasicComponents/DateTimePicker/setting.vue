@@ -19,6 +19,12 @@
           <div class="lc-field-body">
             <PosWhSetting :config="config" />
           </div>
+          <SettingTitle>旋转</SettingTitle>
+          <div class="lc-field-body">
+            <RotateSetting
+              :config="config"
+            />
+          </div>
           <SettingTitle>基础</SettingTitle>
           <div class="lc-field-body">
             <el-form-item label="组件类型">
@@ -26,6 +32,7 @@
                 v-model="config.customize.type"
                 class="bs-el-select"
                 popper-class="bs-el-select"
+                @change="changeType"
               >
                 <el-option
                   v-for="(type) in displayTypeOptions"
@@ -97,7 +104,7 @@
             </el-form-item>
             <!-- 选中范围背景颜色 -->
             <el-form-item
-              v-if="['daterange','datetimerange'].includes(config.customize.type)"
+              v-if="['daterange', 'datetimerange'].includes(config.customize.type)"
               label="范围背景颜色"
             >
               <ColorPicker
@@ -108,45 +115,14 @@
           </div>
           <SettingTitle>日期时间格式</SettingTitle>
           <div class="lc-field-body">
-            <el-form-item label="时间数据类型">
-              <div class="description">
-                <el-select
-                  v-model="config.customize.formatType"
-                  class="bs-el-select"
-                  popper-class="bs-el-select"
-                  clearable
-                >
-                  <el-option
-                    v-for="(type) in formatTypeOptions"
-                    :key="type.value"
-                    :label="type.label"
-                    :value="type.value"
-                  />
-                </el-select>
-                <el-tooltip
-                  placement="top"
-                >
-                  <span
-                    class="el-icon-question"
-                    style="color:#9e9e9e"
-                  />
-                  <div slot="content">
-                    时间戳：从1970年1月1日开始计算的秒数，数据类型为数值型，例如：1483326245000。<br>
-                    自定义：通过输入特定的格式字符串来指定时间的数据格式，例如：yyyy-MM-dd HH:mm:ss对应数据为 2023-10-08 09:30:00。<br>
-                  </div>
-                </el-tooltip>
-              </div>
-            </el-form-item>
-            <el-form-item label="时间显示格式化">
+            <!-- <el-form-item label="时间显示格式化">
               <div class="description">
                 <el-input
                   v-model="config.customize.format"
                   placeholder="例如：yyyy-MM-dd HH:mm:ss"
                   clearable
                 />
-                <el-tooltip
-                  placement="top"
-                >
+                <el-tooltip placement="top">
                   <span
                     class="el-icon-question"
                     style="color:#9e9e9e"
@@ -173,22 +149,48 @@
                   </div>
                 </el-tooltip>
               </div>
+            </el-form-item> -->
+            <el-form-item label="时间类型">
+              <div class="description">
+                <el-select
+                  v-model="config.customize.formatType"
+                  class="bs-el-select"
+                  popper-class="bs-el-select"
+                  clearable
+                  @change="changeFormatType"
+                >
+                  <el-option
+                    v-for="(type) in formatTypeOptions"
+                    :key="type.value"
+                    :label="type.label"
+                    :value="type.value"
+                  />
+                </el-select>
+                <el-tooltip placement="top">
+                  <span
+                    class="el-icon-question"
+                    style="color:#9e9e9e"
+                  />
+                  <div slot="content">
+                    时间戳：从1970年1月1日开始计算的秒数，数据类型为数值型，例如：1483326245000。<br>
+                    自定义：通过输入特定的格式字符串来指定时间的数据格式，例如：yyyy-MM-dd HH:mm:ss对应数据为 2023-10-08 09:30:00。<br>
+                  </div>
+                </el-tooltip>
+              </div>
             </el-form-item>
             <el-form-item
               v-if="config.customize.formatType === 'custom'"
-              label="时间数据格式化"
+              label="时间格式"
             >
               <!-- year/month/date/week/ datetime/datetimerange/daterange -->
               <div class="description">
                 <el-input
-                  v-model="config.customize.valueFormat"
+                  v-model="config.customize.format"
                   placeholder="例如：yyyy-MM-dd HH:mm:ss"
                   clearable
                 />
                 <!-- HH表示小时（24小时制），mm表示分钟，ss表示秒 -->
-                <el-tooltip
-                  placement="top"
-                >
+                <el-tooltip placement="top">
                   <span
                     class="el-icon-question"
                     style="color:#9e9e9e"
@@ -228,12 +230,14 @@
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
   name: 'Border14Setting',
   components: {
     ColorPicker,
     PosWhSetting,
-    SettingTitle
+    SettingTitle,
+    RotateSetting
   },
   props: {
     config: {
@@ -257,6 +261,7 @@ export default {
       }
     }
   },
+
   data () {
     return {
       hour: 'HH',
@@ -265,7 +270,7 @@ export default {
       // 时间格式化类型选项
       formatTypeOptions: [
         { label: '时间戳', value: 'timestamp' },
-        { label: '自定义', value: 'custom' }
+        { label: '自定义格式', value: 'custom' }
       ],
       // 时间显示类型选项 :year/month/date/week/ datetime/datetimerange/daterange
       displayTypeOptions: [
@@ -279,21 +284,58 @@ export default {
     }
   },
   watch: {},
-  mounted () {},
-  methods: { }
+  mounted () { },
+  methods: {
+    changeType (val) {
+      if (val === 'year') {
+        if (this.config.customize.formatType === 'custom') {
+          this.config.customize.format = 'yyyy'
+        }
+      } else if (val === 'month') {
+        if (this.config.customize.formatType === 'custom') {
+          this.config.customize.format = 'yyyy-MM'
+        }
+      } else if (val === 'date') {
+        if (this.config.customize.formatType === 'custom') {
+          this.config.customize.format = 'yyyy-MM-dd'
+        }
+      } else if (val === 'datetime') {
+        if (this.config.customize.formatType === 'custom') {
+          this.config.customize.format = 'yyyy-MM-dd HH:mm:ss'
+        }
+      } else if (val === 'datetimerange') {
+        if (this.config.customize.formatType === 'custom') {
+          this.config.customize.format = 'yyyy-MM-dd HH:mm:ss'
+        }
+      } else if (val === 'daterange') {
+        if (this.config.customize.formatType === 'custom') {
+          this.config.customize.format = 'yyyy-MM-dd'
+        }
+      }
+    },
+    changeFormatType (val) {
+      if (val === 'timestamp') {
+        this.config.customize.format = 'timestamp'
+      } else if (val === 'custom') {
+        this.config.customize.format = 'yyyy-MM-dd HH:mm:ss'
+      }
+    }
+  }
 }
 </script>
 
-  <style lang="scss" scoped>
-  .lc-field-body {
-    width: 97%;
-    padding: 16px;
+<style lang="scss" scoped>
+.lc-field-body {
+  width: 97%;
+  padding: 16px;
+}
+
+.description {
+  display: flex;
+  align-items: center;
+
+  .el-tooltip {
+    margin-left: 5px;
   }
-  .description{
-    display: flex;
-    align-items: center;
-    .el-tooltip{
-      margin-left: 5px;
-    }
-  }
-  </style>
+}
+</style>

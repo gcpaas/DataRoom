@@ -23,7 +23,7 @@
       </div>
       <SettingTitle>边框</SettingTitle>
       <div class="lc-field-body">
-         <BorderSetting
+        <BorderSetting
           v-if="config.border"
           label-width="120px"
           :config="config.border"
@@ -34,6 +34,12 @@
       <div class="lc-field-body">
         <PosWhSetting
           label-width="120px"
+          :config="config"
+        />
+      </div>
+      <SettingTitle>旋转</SettingTitle>
+      <div class="lc-field-body">
+        <RotateSetting
           :config="config"
         />
       </div>
@@ -175,6 +181,7 @@ import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
 import PaddingSetting from 'data-room-ui/BigScreenDesign/RightSetting/PaddingSetting/index.vue'
 import GradualSetting from 'data-room-ui/BigScreenDesign/RightSetting/GradualSetting/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
   name: 'CustomComponentSetting',
   components: {
@@ -184,7 +191,8 @@ export default {
     GradualSetting,
     PosWhSetting,
     BorderSetting,
-    SettingTitle
+    SettingTitle,
+    RotateSetting
   },
   mixins: [chartSettingMixins],
   data () {

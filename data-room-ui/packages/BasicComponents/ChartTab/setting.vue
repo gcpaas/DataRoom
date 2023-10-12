@@ -35,6 +35,12 @@
           label-width="120px"
         />
       </div>
+      <SettingTitle>旋转</SettingTitle>
+      <div class="lc-field-body">
+        <RotateSetting
+          :config="config"
+        />
+      </div>
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
@@ -185,12 +191,14 @@ import CloneDeep from 'lodash-es/cloneDeep'
 import plotList from 'data-room-ui/G2Plots/plotList'
 import { randomString } from 'data-room-ui/js/utils'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
   components: {
     PosWhSetting,
     SettingTitle,
     draggable,
-    BorderSetting
+    BorderSetting,
+    RotateSetting
   },
   mixins: [chartSettingMixins],
   data () {

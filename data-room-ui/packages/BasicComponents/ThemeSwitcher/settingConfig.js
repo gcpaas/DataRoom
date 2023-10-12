@@ -18,7 +18,15 @@ export const settingConfig = {
 const customConfig = {
   type: 'themeSwitcher',
   root: {
-    version: '2023071001'
+    version: '2023071001',
+    // 绕x轴旋转角度
+    rotateX: 0,
+    // 绕y轴旋转角度
+    rotateY: 0,
+    // 绕z轴旋转角度
+    rotateZ: 0,
+    // 透视距离
+    perspective: 500
   },
   customize: {
     activeColor: '#007aff', // 单选框字体激活状态

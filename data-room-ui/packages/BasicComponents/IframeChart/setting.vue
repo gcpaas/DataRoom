@@ -29,6 +29,12 @@
       <div class="setting-wrap">
         <PosWhSetting :config="config" />
       </div>
+      <SettingTitle>旋转</SettingTitle>
+      <div class="lc-field-body">
+        <RotateSetting
+          :config="config"
+        />
+      </div>
        <SettingTitle v-if="config.border">边框</SettingTitle>
           <div class="lc-field-body">
             <BorderSetting
@@ -59,12 +65,15 @@
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+
 export default {
   name: 'IframeChartSetting',
   components: {
     PosWhSetting,
     SettingTitle,
-    BorderSetting
+    BorderSetting,
+    RotateSetting
   },
   data () {
     return {

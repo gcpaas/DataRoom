@@ -53,6 +53,12 @@
             />
           </el-form-item>
         </div>
+        <SettingTitle>旋转</SettingTitle>
+        <div class="lc-field-body">
+          <RotateSetting
+            :config="config"
+          />
+        </div>
       </el-form>
     </el-form>
   </div>
@@ -60,12 +66,14 @@
 <script>
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 export default {
   name: 'BarSetting',
   components: {
     ColorPicker,
     PosWhSetting,
+    RotateSetting,
     SettingTitle
   },
   data () {

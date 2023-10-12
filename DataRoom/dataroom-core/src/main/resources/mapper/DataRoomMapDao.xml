@@ -3,50 +3,6 @@
 
 <mapper namespace="com.gccloud.dataroom.core.module.map.dao.DataRoomMapDao">
 
-    <!--  查询地图数据  -->
-    <select id="getList" resultType="com.gccloud.dataroom.core.module.map.vo.DataRoomMapVO">
-        SELECT id,
-               parent_id,
-               map_code,
-               name,
-               level,
-               geo_json,
-               uploaded_geo_json,
-               create_date,
-               update_date,
-               create_by,
-               update_by,
-               del_flag,
-               id as curentMapId,
-               CASE WHEN EXISTS(SELECT 1
-                                FROM big_screen_map
-                                WHERE parent_id = curentMapId
-                                  AND del_flag = 0)
-                   THEN 1
-               ELSE 0 END AS has_children
-        FROM big_screen_map
-        WHERE del_flag = 0
-        <if test="searchDTO != null">
-            <if test="searchDTO.parentId != null and searchDTO.parentId != ''">
-                AND parent_id = #{searchDTO.parentId}
-            </if>
-            <if test="searchDTO.searchKey != null and searchDTO.searchKey != ''">
-                AND (
-                    name like concat('%', #{searchDTO.searchKey}, '%')
-                    OR map_code like concat('%', #{searchDTO.searchKey}, '%')
-                    )
-            </if>
-            <if test="searchDTO.level != null">
-                AND level = #{searchDTO.level}
-            </if>
-            <if test="searchDTO.uploadedGeoJson != null">
-                AND uploaded_geo_json = #{searchDTO.uploadedGeoJson}
-            </if>
-
-        </if>
-
-    </select>
-
     <select id="getMapByLevel" resultType="com.gccloud.dataroom.core.module.map.entity.DataRoomMapEntity">
         select id, level, parent_id, map_code
         from big_screen_map
@@ -56,7 +12,6 @@
         OR level = #{level}
         and del_flag = 0
     </select>
-
 
 
 </mapper>

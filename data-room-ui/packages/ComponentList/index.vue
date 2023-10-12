@@ -122,7 +122,7 @@
             </div>
             <div class="big-screen-card-img">
               <el-image
-                :src="catalogInfo !== 'system' ? screen.coverPicture : screen.img"
+                :src="catalogInfo !== 'system' ? getCoverPicture(screen.coverPicture) : screen.img"
                 fit="fill"
                 style="width: 100%; height: 100%"
               >
@@ -196,6 +196,7 @@
 </template>
 <script>
 import { pageMixins } from 'data-room-ui/js/mixins/page'
+import { getFileUrl } from 'data-room-ui/js/utils/file'
 import EditForm from './EditForm.vue'
 import CatalogEditForm from './CatalogEditForm'
 import innerRemoteComponents, { getRemoteComponents } from 'data-room-ui/RemoteComponents/remoteComponentsList'
@@ -216,7 +217,6 @@ export default {
       templateLoading: false,
       searchKey: '',
       list: [],
-      defaultImg: require('./images/defaultImg.png'),
       loading: false,
       catalogList: [], // 分组列表
       catalogCode: ''
@@ -418,7 +418,15 @@ export default {
         .catch((e) => {
           console.error(e)
         })
-    }
+    },
+    /**
+     * 获取封面图片,如果是相对路径则拼接上文件访问前缀地址
+     * @param url
+     * @returns {*}
+     */
+    getCoverPicture (url) {
+      return getFileUrl(url)
+    },
   }
 }
 </script>

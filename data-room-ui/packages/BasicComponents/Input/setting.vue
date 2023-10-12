@@ -1,4 +1,4 @@
-<template>
+1<template>
   <div class="bs-setting-wrap">
     <el-form
       ref="form"
@@ -79,6 +79,12 @@
               label-width="100px"
               :config="config.border"
               :bigTitle='config.title'
+            />
+          </div>
+          <SettingTitle>旋转</SettingTitle>
+          <div class="lc-field-body">
+            <RotateSetting
+              :config="config"
             />
           </div>
           <SettingTitle>基础</SettingTitle>
@@ -194,6 +200,7 @@ import IconPicker from 'data-room-ui/IconPicker/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
   name: 'InputSetting',
   components: {
@@ -201,7 +208,8 @@ export default {
     IconPicker,
     PosWhSetting,
     SettingTitle,
-    BorderSetting
+    BorderSetting,
+    RotateSetting
   },
   props: {
     config: {

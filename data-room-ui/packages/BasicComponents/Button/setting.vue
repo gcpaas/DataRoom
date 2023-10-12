@@ -28,6 +28,12 @@
               :bigTitle='config.title'
             />
           </div>
+          <SettingTitle>旋转</SettingTitle>
+          <div class="lc-field-body">
+            <RotateSetting
+              :config="config"
+            />
+          </div>
           <SettingTitle>基础</SettingTitle>
           <div class="lc-field-body">
             <el-form-item label="按钮名称">
@@ -128,6 +134,8 @@ import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetti
 import IconPicker from 'data-room-ui/IconPicker/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+
 export default {
   name: 'Border14Setting',
   components: {
@@ -135,7 +143,8 @@ export default {
     ColorPicker,
     PosWhSetting,
     SettingTitle,
-    BorderSetting
+    BorderSetting,
+    RotateSetting
   },
   props: {
     config: {

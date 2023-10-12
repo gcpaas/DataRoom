@@ -65,12 +65,10 @@ public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
         }
         fileEntity.setOriginalName(originalFilename);
         fileEntity.setNewName(newFileName);
-        // 如果想存储到其他目录下、可以重写
         fileEntity.setPath(basePath);
         fileEntity.setSize(size);
         fileEntity.setExtension(extension);
-        String urlPrefix = bigScreenConfig.getFile().getUrlPrefix();
-        fileEntity.setUrl(urlPrefix + "/" + newFileName);
+        fileEntity.setUrl("/" + newFileName);
         return fileEntity;
     }
 
