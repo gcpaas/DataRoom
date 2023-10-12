@@ -188,7 +188,7 @@ import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
-  name: 'Border14Setting',
+  name: 'TimePickerSetting',
   components: {
     ColorPicker,
     PosWhSetting,

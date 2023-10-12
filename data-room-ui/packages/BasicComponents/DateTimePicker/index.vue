@@ -26,7 +26,7 @@ import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
 import { mapState } from 'vuex'
 window.dataSetFields = []
 export default {
-  name: 'BasicComponentSelect',
+  name: 'BasicComponentsDateTimePicker',
   components: {},
   mixins: [commonMixins, linkageMixins],
   props: {

@@ -23,8 +23,6 @@ const cdn = {
 }
 const port = process.env.port || process.env.npm_config_port || 7521 // dev port
 
-console.log('process.env', process.env)
-
 const plugins = [
   new webpack.ProvidePlugin({
     jQuery: 'jquery',
