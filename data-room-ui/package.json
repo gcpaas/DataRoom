@@ -29,6 +29,7 @@
     "build:history": "vue-cli-service build --mode history",
     "build:hash:pro": "vue-cli-service build --name dataRoomPro",
     "build:history:pro": "vue-cli-service build --mode=pro.history",
+    "build:history:all": "vue-cli-service build --mode history && vue-cli-service build --mode=pro.history", 
 
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue packages",
