@@ -64,7 +64,11 @@ export const defaultData = {
   zoom: 100,
   // 自适应下的缩放比例
   fitZoom: 100,
-  iframeDialog: false
+  iframeDialog: false,
+  // 页面上所有组件的数据集的数据信息
+  dataset: {},
+  // 页面上所有组件的数据集的数据信息
+  computedDatas: {}
 }
 
 export default () => ({

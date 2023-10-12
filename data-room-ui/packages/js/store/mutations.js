@@ -163,16 +163,18 @@ export default {
         EventBus.$emit('deleteComponent', codes)
       }
       state.pageInfo.chartList = state.pageInfo.chartList.filter(chart => codes !== chart.code)
+      // 删除组件时，将该组件的缓存数据库中的数据也删除
+      deldataset(state, 'dataset', codes)
+      deldataset(state, 'computedDatas', codes)
     }
     // 存储删除后的状态
     saveTimeLineFunc(state, '删除组件')
-    if (state.pageInfo.chartList.findIndex(item=>item.code===state.activeCode)==-1) {
+    if (state.pageInfo.chartList.findIndex(item => item.code === state.activeCode) == -1) {
       state.activeItemConfig = null
       state.activeCode = null
       EventBus.$emit('closeRightPanel')
     }
     // 发送事件，关闭配置面板
-
   },
   changePageConfig (state, pageConfig) {
     Vue.set(state.pageInfo, 'pageConfig', cloneDeep(pageConfig))
@@ -367,6 +369,33 @@ export default {
     })
     // 将复制的组件添加到chartList中
     state.pageInfo.chartList = [...copyCharts, ...state.pageInfo.chartList]
+  },
+  // 更新数据集库中的内容
+  updateDataset (state, res) {
+    Vue.set(state.dataset, res.title + res.code, res.data)
+  },
+  // 更新数据集库中的内容
+  updateComputedDatas (state, res) {
+    Vue.set(state.computedDatas, res.title + res.code, res.data)
+  },
+  // 清空数据集库
+  emptyDataset (state) {
+    state.dataset = {}
+  },
+  // 清空数据集库
+  emptyComputedDatas (state) {
+    state.computedDatas = {}
+  }
+}
+function deldataset (state, type, codes) {
+  const datasets = state[type]
+  for (const code of codes) {
+    for (const key in datasets) {
+      if (key.endsWith(code)) {
+        delete state[type][key]
+        break // 找到匹配的属性后，退出内层循环
+      }
+    }
   }
 }
 function changeZIndexFuc (state, list) {

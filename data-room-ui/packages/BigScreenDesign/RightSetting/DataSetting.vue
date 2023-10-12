@@ -38,6 +38,25 @@
                 </template>
               </data-set-select>
             </el-form-item>
+            <el-form-item
+              v-if="config.option.displayOption.text && config.option.displayOption.text.enable"
+              label="文本内容"
+            >
+              <el-input
+                v-model="config.customize.title"
+                placeholder="请输入文本内容"
+                clearable
+              />
+            </el-form-item>
+            <el-form-item
+              v-if="config.option.displayOption.expression && config.option.displayOption.expression.enable"
+              label="表达式"
+            >
+              <i
+                class="el-icon-edit expression"
+                @click="openExpression"
+              />
+            </el-form-item>
           </div>
         </div>
         <div
@@ -575,6 +594,10 @@ data.forEach(item => {
           :config="config"
           :source-field-list="sourceFieldList"
         />
+        <expression-dialog
+          ref="expressionDialog"
+          :config="config"
+        />
       </div>
     </el-form>
   </div>
@@ -589,13 +612,15 @@ import ComponentBinding from 'data-room-ui/BigScreenDesign/RightSetting/Componen
 import dataSetSelect from 'data-room-ui/DataSetSetting/index.vue'
 import { mapState } from 'vuex'
 import { getDataSetDetails } from 'data-room-ui/js/api/bigScreenApi'
+import ExpressionDialog from 'data-room-ui/BigScreenDesign/RightSetting/ExpressionDialog.vue'
 export default {
   name: 'DataSetting',
   components: {
     ComponentRelation,
     ComponentBinding,
     dataSetSelect,
-    ElDragSelect
+    ElDragSelect,
+    ExpressionDialog
   },
   data () {
     return {
@@ -720,6 +745,10 @@ export default {
     }
   },
   methods: {
+    // 打开表达式弹窗
+    openExpression () {
+      this.$refs.expressionDialog.init()
+    },
     // 切换前后端分页
     serverPaginationChange (val) {
       this.config.customize.webPagination = !val
@@ -750,7 +779,7 @@ export default {
           this.fieldsList = res.fields
           // 初始化时以组件本来的参数设置为主
           if (type === 'initial') {
-            let deleteKeys = []
+            const deleteKeys = []
             for (const key in this.config.dataSource.params) {
               const param = res?.params?.find(field => field.name === key)
               // 如果组件参数在数据集中找不到，说明参数已经被删除，不需要再显示
@@ -923,6 +952,12 @@ export default {
     .opt-wrap {
       display: flex;
       justify-content: center;
+    }
+  }
+  //表达式样式
+  .expression{
+    &:hover{
+      cursor: pointer;
     }
   }
   // 修改设置面板样式

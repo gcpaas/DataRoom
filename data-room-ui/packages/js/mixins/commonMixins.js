@@ -19,12 +19,70 @@ export default {
       dataLoading: false
     }
   },
+  watch: {
+    'config.expression': { // 表达式发生变化
+      handler (val) {
+        this.getDataByExpression(this.config)
+      }
+    },
+    currentDataset: { // 关联的数据发生变化
+      handler (val) {
+        if (val && Object.keys(val).length) {
+          this.getDataByExpression(this.config)
+        }
+      },
+      deep: true,
+      immediate: true
+    },
+    currentComputedDatas: { // 关联的数据发生变化
+      handler (val) {
+        if (val && Object.keys(val).length) {
+          this.getDataByExpression(this.config)
+        }
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   computed: {
     ...mapState({
       pageCode: state => state.bigScreen.pageInfo.code,
       customTheme: state => state.bigScreen.pageInfo.pageConfig.customTheme,
       activeCode: state => state.bigScreen.activeCode
+      // dataset: state => state.bigScreen.dataset
     }),
+    // 所有组件的数据集合
+    dataset () {
+      return this.$store.state.bigScreen.dataset
+    },
+    // 所有组件的数据集合
+    computedDatas () {
+      return this.$store.state.bigScreen.computedDatas
+    },
+    // 跟当前组件计算表达式关联的组件的数据集合
+    currentDataset () {
+      // ['RiTkJGDa','PEKwsHbf']this.config.expressionCodes
+      const newDataset = this.config.expressionCodes?.map(code => {
+        return this.dataset[code]
+      })
+      if (newDataset?.some(item => !item)) {
+        return null
+      } else {
+        return newDataset
+      }
+    },
+    // 跟当前组件计算表达式关联的组件的数据集合
+    currentComputedDatas () {
+      // ['RiTkJGDa','PEKwsHbf']this.config.expressionCodes
+      const newDataset = this.config.expressionCodes?.map(code => {
+        return this.computedDatas[code]
+      })
+      if (newDataset?.some(item => !item)) {
+        return null
+      } else {
+        return newDataset
+      }
+    },
     // 组件数据加载时的背景颜色
     loadingBackground () {
       return this.customTheme === 'light' ? '#ffffff' : '#151A26'
@@ -33,6 +91,7 @@ export default {
       return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
     }
   },
+
   mounted () {
     if (!['tables', 'flyMap', 'map'].includes(this.config.type)) {
       this.chartInit()
@@ -42,7 +101,9 @@ export default {
   methods: {
     ...mapMutations({
       changeChartConfig: 'bigScreen/changeChartConfig',
-      changeActiveItemConfig: 'bigScreen/changeActiveItemConfig'
+      changeActiveItemConfig: 'bigScreen/changeActiveItemConfig',
+      updateDataset: 'bigScreen/updateDataset',
+      updateComputedDatas: 'bigScreen/updateComputedDatas'
     }),
     /**
      * 初始化组件
@@ -110,6 +171,10 @@ export default {
               }
             }
           }
+          // 将后端返回的数据保存
+          if (_res.success) {
+            this.updateDataset({ code: config.code, title: config.title, data: _res?.data })
+          }
           config = this.dataFormatting(config, _res)
           this.changeChartConfig(config)
         }).catch((err) => {
@@ -173,6 +238,10 @@ export default {
               }
             }
           }
+          // 将后端返回的数据保存
+          if (_res.success) {
+            this.updateDataset({ code: config.code, title: config.title, data: _res?.data })
+          }
           config = this.dataFormatting(config, _res)
           if (this.chart) {
             // 单指标组件和多指标组件的changeData传参不同
@@ -207,6 +276,10 @@ export default {
       // 覆盖
     },
     newChart (option) {
+      // 覆盖
+    },
+    // 通过表达式计算获取组件的值
+    getDataByExpression (config) {
       // 覆盖
     },
     changeStyle (config) {

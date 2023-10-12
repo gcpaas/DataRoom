@@ -23,6 +23,14 @@ export const settingConfig = {
       label: '维度', // 维度/查询字段
       enable: false,
       multiple: true // 是否多选
+    },
+    text: { // 文本占位符
+      label: '文本内容', // 维度/查询字段
+      enable: true
+    },
+    expression: { // 文本占位符
+      label: '表达式', // 维度/查询字段
+      enable: true
     }
   }
 }

@@ -38,16 +38,17 @@ export default {
   },
   methods: {
     // 通过表达式计算得来的值
-    // getDataByExpression (config) {
-    //   if (this.config.expression) {
-    //   // eslint-disable-next-line no-new-func
-    //     const result = new Function('dataset', this.config.expression)
-    //     config.customize.title = result(this.dataset)
-    //     // 同时将计算得来的值保存到公共的数据存储的地方
-    //     this.updateDataset({ code: config.code, title: config.title, data: [{ title: config.customize.title }] })
-    //     this.changeChartConfig(config)
-    //   }
-    // },
+    getDataByExpression (config) {
+      // 如果表达式是由其他组件的值构成的
+      if (this.config.expressionCodes && this.config.expressionCodes.length) {
+      // eslint-disable-next-line no-new-func
+        const result = new Function('dataset', 'computedDatas', this.config.expression)
+        config.customize.title = result(this.dataset, this.computedDatas)
+        // 同时将计算得来的值保存到公共的数据存储的地方
+        this.updateComputedDatas({ code: config.code, title: config.title, data: config.customize.title })
+      // this.changeChartConfig(config)
+      }
+    },
     dataFormatting (config, data) {
       // 文本数据配置原则：选择数据集则以后端返回的数据为主，否则以设置面板中标题设置为准
       if (config.dataSource.businessKey) {
