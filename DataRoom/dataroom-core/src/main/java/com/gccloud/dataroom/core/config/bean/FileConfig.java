@@ -22,22 +22,12 @@ public class FileConfig {
      * 允许的上传文件后缀类型
      */
     private Set<String> allowedFileExtensionName = Sets.newHashSet(
-            "txt",
-            "pdf",
-            "xls",
-            "xlsx",
-            "csv",
-            "doc",
-            "docx",
-            "png",
-            "jpg",
-            "gif",
-            "mp4",
-            "mov",
-            "mp3",
-            "rar",
-            "zip",
-            "ppt",
-            "svg"
+            "jpg", "jpeg", "png", "gif", "bmp", "svg", "webp", "ico",
+            "xls", "xlsx", "csv",
+            "ppt", "pptx",
+            "doc", "docx",
+            "txt", "pdf",
+            "mp4", "mov", "mp3",
+            "rar", "zip"
     );
 }
