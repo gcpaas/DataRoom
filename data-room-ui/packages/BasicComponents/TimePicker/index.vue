@@ -7,7 +7,7 @@
     :class="['basic-component-time-picker', `time-picker-${config.code}`]"
     :popper-class="'basic-component-time-picker time-picker-popper-' + config.code"
     :format="config.customize.format"
-    :value-format="config.customize.valueFormat"
+    :value-format="config.customize.format"
     :default-value="value"
     @focus="focusEvent"
     @change="changeValue"
@@ -54,16 +54,24 @@ export default {
       handler (val) {
         if (val === 'timestamp') {
           this.value = new Date().getTime()
-          // this.config.customize.format = 'timestamp'
-          // this.config.customize.valueFormat = 'timestamp'
         } else if (val === 'custom') {
-          // this.config.customize.valueFormat = 'HH:mm:ss'
-          this.value = moment(new Date()).format('HH:mm:ss')
+          const newFomat = this.config.customize.format.replace(/y/g, 'Y').replace(/d/g, 'D')
+          this.value = moment(new Date()).format(newFomat)
+        }
+      },
+      immediate: true
+    },
+    'config.customize.format': {
+      handler (val) {
+        if (this.config.customize.formatType === 'timestamp') {
+          this.value = new Date().getTime()
+        } else if (this.config.customize.formatType === 'custom') {
+          const newFomat = val.replace(/y/g, 'Y').replace(/d/g, 'D')
+          this.value = moment(new Date()).format(newFomat)
         }
       },
       immediate: true
     }
-
   },
   created () { },
   mounted () {
@@ -71,7 +79,8 @@ export default {
       document.querySelector(`.time-picker-${this.config.code}`).style.pointerEvents = 'none'
     }
     if (this.value === '') {
-      this.value = moment(new Date()).format(this.config.customize.valueFormat)
+      const newFomat = this.config.customize.format.replace(/y/g, 'Y').replace(/d/g, 'D')
+      this.value = moment(new Date()).format(newFomat)
     }
     this.changeStyle(this.config)
   },
