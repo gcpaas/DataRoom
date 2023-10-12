@@ -295,6 +295,7 @@ export default {
       }
     },
     getOptions() {
+      this.options = []
       this.options.push({label: '全部', value: ''})
       this.sourceExtends.forEach((ext) => this.options.push({label: ext, value: ext}))
     },
