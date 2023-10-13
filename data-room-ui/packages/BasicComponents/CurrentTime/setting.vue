@@ -67,6 +67,23 @@
           />
         </el-form-item>
         <el-form-item
+          label="字体类型"
+          label-width="100px"
+        >
+          <el-select
+            v-model="config.customize.fontFamily"
+            popper-class="bs-el-select"
+            class="bs-el-select"
+          >
+            <el-option
+              v-for="item in fontFamilyList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
           label="字体颜色"
           label-width="100px"
         >
@@ -102,6 +119,7 @@ import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+import fontList from 'data-room-ui/js/utils/fontList'
 export default {
   name: 'CurrentTimeSetting',
   components: {
@@ -112,6 +130,7 @@ export default {
   },
   data () {
     return {
+      fontFamilyList: fontList,
       activeName: 'data',
       dateFormatList: [
         { label: '年-月-日 时:分:秒', value: 'YYYY-MM-DD HH:mm:ss' },

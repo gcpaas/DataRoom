@@ -23,7 +23,9 @@
           'px;color:' +
           config.customize.color +
           ';font-weight:' +
-          config.customize.fontWeight
+          config.customize.fontWeight +
+          ';font-family:' +
+          config.customize.fontFamily
       "
     >
       {{ dateDiff }}
@@ -34,8 +36,8 @@
 <script>
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
-import cloneDeep from "lodash/cloneDeep";
-import {mapMutations, mapState} from "vuex";
+import cloneDeep from 'lodash/cloneDeep'
+import { mapMutations, mapState } from 'vuex'
 export default {
   name: 'TimeCountDown',
   mixins: [paramsMixins],
@@ -161,6 +163,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../BasicComponents/fonts/index.css";
+@import "../../assets/fonts/numberFont/stylesheet.css";
 .bs-design-wrap{
   width: 100%;
 }
