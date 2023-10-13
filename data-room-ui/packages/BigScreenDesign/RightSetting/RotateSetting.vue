@@ -22,8 +22,8 @@
       <el-input-number
         v-model="config.rotateX"
         class="bs-el-input-number"
-        :min="0"
-        :max="360"
+        :min="-180"
+        :max="180"
         :step="1"
       />
     </el-form-item>
@@ -34,8 +34,8 @@
       <el-input-number
         v-model="config.rotateY"
         class="bs-el-input-number"
-        :min="0"
-        :max="360"
+        :min="-180"
+        :max="180"
         :step="1"
       />
     </el-form-item>
@@ -46,8 +46,8 @@
       <el-input-number
         v-model="config.rotateZ"
         class="bs-el-input-number"
-        :min="0"
-        :max="360"
+        :min="-180"
+        :max="180"
         :step="1"
       />
     </el-form-item>
