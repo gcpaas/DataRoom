@@ -42,3 +42,16 @@ mybatis-plus:
     db-config:
       #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"唯一ID";
       id-type: AUTO
+
+# Minio配置
+minio:
+  # 服务地址,端口默认9000
+  url: http://192.168.20.98:9000
+  # 类似于Amazon S3。访问密钥
+  accessKey: admin
+  # 私有密钥
+  secretKey: 123456
+  # 桶名
+  bucketName: mybucket
+  # 存储目录
+  template_path: templateDownload/
