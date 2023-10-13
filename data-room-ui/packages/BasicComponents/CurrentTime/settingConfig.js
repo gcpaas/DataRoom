@@ -29,6 +29,7 @@ const customConfig = {
   customize: {
     fontSize: 28,
     fontWeight: 700,
+    fontFamily: '', // 字体类型
     color: 'rgb(155 159 172)'
   }
 

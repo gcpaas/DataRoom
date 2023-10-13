@@ -19,7 +19,9 @@
           'px;color:' +
           config.customize.color +
           ';font-weight:' +
-          config.customize.fontWeight
+          config.customize.fontWeight+
+          ';font-family:' +
+          config.customize.fontFamily
       "
     >
       {{ nowTime }}
@@ -101,6 +103,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../BasicComponents/fonts/index.css";
+@import "../../assets/fonts/numberFont/stylesheet.css";
 .bs-design-wrap{
   width: 100%;
 }
