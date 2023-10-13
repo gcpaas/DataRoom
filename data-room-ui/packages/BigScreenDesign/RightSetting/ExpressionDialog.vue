@@ -13,13 +13,33 @@
           ref="tree"
           :data="treeData"
           :indent="0"
-          :props="{ label: 'label', children: 'children' }"
+          :props="defaultProps"
           :default-expand-all="true"
           :highlight-current="true"
           :expand-on-click-node="false"
           class="bs-el-tree tree-box"
           @node-click="handleNodeClick"
-        />
+        >
+          <template #default="{ node, data }">
+            <!-- Check if the node is a top-level node -->
+            <span
+              v-if="node.level === 1"
+              :class="{ 'disabled': node.disabled}"
+            >
+              <i
+                class="el-icon-folder"
+              />
+              {{ data.label }}
+            </span>
+            <span
+              v-else
+              :class="{ 'disabled': node.disabled}"
+              style="padding-left: 20px"
+            >
+              {{ data.label }}
+            </span>
+          </template>
+        </el-tree>
       </div>
       <div class="right-box">
         <div class="codemirror-wrap">
@@ -96,7 +116,8 @@ export default {
         hintOptions: {
           completeSingle: true
         }
-      }
+      },
+      defaultProps: { label: 'label', children: 'children' }
     }
   },
   computed: {
@@ -113,13 +134,15 @@ export default {
           return {
             label: field,
             code: item,
-            value: `dataset.${item}[0].${field}`
+            value: `dataset.${item}[0].${field}`,
+            disabled: item.includes(this.config.code)
           }
         })
         list.push({
           label: item,
           code: item,
           value: `dataset.${item}`,
+          disabled: item.includes(this.config.code),
           children
         })
       }
@@ -127,7 +150,8 @@ export default {
         list.push({
           label: item,
           code: item,
-          value: `computedDatas.${item}`
+          value: `computedDatas.${item}`,
+          disabled: item.includes(this.config.code)
         })
       }
       return list
@@ -154,9 +178,9 @@ export default {
     },
     // 点击树节点将数据添加到脚本编辑器中
     handleNodeClick (node, data, nodeObj) {
-      console.log(node, data, nodeObj)
       const str = node.value
       const code = node.code
+      if (node.disabled) return
       this.$refs.codemirrorRef.codemirror.setValue(this.currentConfig.expression + ' +  ' + str)
       // 同时将点击的数据存在expressionCodes中
       if (this.currentConfig.expressionCodes && Array.isArray(this.currentConfig.expressionCodes)) {
@@ -217,5 +241,8 @@ export default {
       }
     }
   }
-
+.disabled{
+  cursor: not-allowed;
+  color: #666666;
+}
 </style>
