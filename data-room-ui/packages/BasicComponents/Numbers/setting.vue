@@ -51,12 +51,12 @@
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
-          label="标题字体大小"
+          label="数字大小"
           label-width="100px"
         >
           <el-input
             v-model="config.customize.fontSize"
-            placeholder="请输入标题字体大小"
+            placeholder="请输入数字大小"
             clearable
           >
             <template slot="append">
@@ -65,17 +65,17 @@
           </el-input>
         </el-form-item>
         <el-form-item
-          label="标题字体权重"
+          label="数字权重"
           label-width="100px"
         >
           <el-input-number
             v-model="config.customize.fontWeight"
             class="bs-el-input-number"
-            placeholder="请输入标题字体权重"
+            placeholder="请输入数字权重"
           />
         </el-form-item>
         <el-form-item
-          label="标题字体类型"
+          label="数字类型"
           label-width="100px"
         >
           <el-select
@@ -91,7 +91,10 @@
             />
           </el-select>
         </el-form-item>
-        <TextGradient v-model="config.customize.color" />
+        <TextGradient
+          v-model="config.customize.color"
+          label="数字"
+        />
       </div>
     </el-form>
   </div>
