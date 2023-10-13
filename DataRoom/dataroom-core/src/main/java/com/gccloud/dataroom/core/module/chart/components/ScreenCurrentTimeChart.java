@@ -33,5 +33,8 @@ public class ScreenCurrentTimeChart extends Chart {
 
         @ApiModelProperty(notes = "字体颜色")
         private String color;
+
+        @ApiModelProperty(notes = "字体")
+        private String fontFamily;
     }
 }
