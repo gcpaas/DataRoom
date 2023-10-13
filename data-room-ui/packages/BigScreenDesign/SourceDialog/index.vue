@@ -25,7 +25,7 @@
             v-model="code"
             class="bs-el-select"
             popper-class="bs-el-select"
-            placeholder="请选择类型"
+            placeholder="请选择分组"
             clearable
             @change="reSearch"
           >
@@ -71,7 +71,7 @@
             >
               <div class="big-screen-card-img">
                 <el-image
-                  :src="screen.url"
+                  :src="getCoverPicture(screen.url)"
                   fit="contain"
                   style="width: 100%; height: 100%"
                 >
@@ -147,8 +147,9 @@
 </template>
 <script>
 import { pageMixins } from 'data-room-ui/js/mixins/page'
-// import _ from 'lodash'
 import cloneDeep from 'lodash/cloneDeep'
+import { getFileUrl } from 'data-room-ui/js/utils/file'
+
 export default {
   name: 'SourceDialog',
   mixins: [pageMixins],
@@ -161,7 +162,8 @@ export default {
       code: '',
       focus: -1,
       list: [],
-      searchKey: ''
+      searchKey: '',
+      imgExtends: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico']
     }
   },
   computed: {
@@ -200,7 +202,8 @@ export default {
         module: this.code,
         current: this.current,
         size: this.size,
-        extension: '',
+        // 资源库中只显示图片类型的文件
+        extensionList: this.imgExtends,
         searchKey: this.searchKey
       })
         .then((data) => {
@@ -218,7 +221,15 @@ export default {
           this.options = data
         })
         .catch(() => { })
-    }
+    },
+    /**
+     * 获取文件访问地址,如果是相对路径则拼接上文件访问前缀地址
+     * @param url
+     * @returns {*}
+     */
+    getCoverPicture (url) {
+      return getFileUrl(url)
+    },
   }
 }
 </script>
