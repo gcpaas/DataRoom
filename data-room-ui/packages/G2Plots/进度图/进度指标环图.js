@@ -1,3 +1,4 @@
+import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
 const version = '2023092201'
 // 分类
@@ -124,6 +125,21 @@ const setting = [
     groupName: 'graph'
   },
   {
+    label: '指标字体类型',
+    // 设置组件类型
+    type: 'select',
+    // 字段
+    field: 'statistic_content_style_fontFamily',
+    // 对应options中的字段
+    optionField: 'statistic.content.style.fontFamily',
+    // 是否多选
+    multiple: false,
+    value: '',
+    tabName: 'custom',
+    options: fontList,
+    groupName: 'graph'
+  },
+  {
     label: '指标位置',
     // 设置组件类型
     type: 'inputNumber',
@@ -169,7 +185,7 @@ const option = {
     //   offsetY: 0
     // },
     content: {
-      style: { fill: '#fafafa', fontSize: 28, lineHeight: 2 },
+      style: { fill: '#fafafa', fontSize: 28, fontFamily: '', lineHeight: 2 },
       offsetY: 0
     }
   }
