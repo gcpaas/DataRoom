@@ -42,7 +42,7 @@ module.exports = {
   },
   publicPath:
     process.env.VUE_APP_HISTORY === 'y' ? process.env.VUE_APP_BASE : './',
-  outputDir: 'dataRoomUi',
+  outputDir: process.env.VUE_APP_OUTPUT_DIR || 'dist',
   assetsDir: 'static',
   lintOnSave: false,
   productionSourceMap: false,

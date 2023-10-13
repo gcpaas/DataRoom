@@ -52,6 +52,7 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
         wrapper.eq(searchDTO.getLevel() != null, DataRoomMapEntity::getLevel, searchDTO.getLevel());
         wrapper.eq(StringUtils.isNotBlank(searchDTO.getParentId()), DataRoomMapEntity::getParentId, searchDTO.getParentId());
         wrapper.eq(searchDTO.getUploadedGeoJson() != null, DataRoomMapEntity::getUploadedGeoJson, searchDTO.getUploadedGeoJson());
+        wrapper.orderByDesc(DataRoomMapEntity::getCreateDate);
         List<DataRoomMapEntity> entityList = this.list(wrapper);
         List<String> idList = entityList.stream().map(DataRoomMapEntity::getId).collect(Collectors.toList());
         List<DataRoomMapVO> voList = Lists.newArrayList();
@@ -66,7 +67,6 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
 
         }
         return voList;
-//        return this.baseMapper.getList(searchDTO);
     }
 
 
@@ -217,6 +217,9 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
      */
     private void parseNextLevelAndSave(DataRoomMapEntity mapEntity, String geoJson) {
         JSONObject jsonObject = new JSONObject(geoJson);
+        if (!jsonObject.has("features")) {
+            throw new GlobalException("GeoJson格式不正确，自动解析失败");
+        }
         JSONArray features = jsonObject.getJSONArray("features");
         if (features == null || features.length() == 0) {
             throw new GlobalException("GeoJson格式不正确，自动解析失败");
@@ -385,6 +388,9 @@ public class DataRoomMapServiceImpl extends ServiceImpl<DataRoomMapDao, DataRoom
             return Lists.newArrayList();
         }
         JSONObject geoObj = JSON.parseObject(geoJson);
+        if (!geoObj.has("features")) {
+            throw new GlobalException("geoJson格式错误，缺少features");
+        }
         JSONArray features = geoObj.getJSONArray("features");
         if (features == null || features.length() == 0) {
             return Lists.newArrayList();

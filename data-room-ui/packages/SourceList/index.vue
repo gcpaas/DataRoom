@@ -5,18 +5,18 @@
         <el-input
           v-model="searchKey"
           class="bs-el-input"
+          clearable
           placeholder="请输入图片名称"
           prefix-icon="el-icon-search"
-          clearable
           @clear="reSearch"
           @keyup.enter.native="reSearch"
         />
         <el-select
           v-model="extend"
           class="bs-el-select"
-          popper-class="bs-el-select"
-          placeholder="请选择图片格式"
           clearable
+          placeholder="请选择图片格式"
+          popper-class="bs-el-select"
           @change="reSearch"
         >
           <el-option
@@ -34,17 +34,16 @@
           搜索
         </el-button>
         <el-upload
-          accept="image/*, video/*"
-          class="upload-demo"
           :action="upLoadUrl"
-          :headers="headers"
-          :data="{ module: code }"
           :before-upload="beforeUpload"
-          :on-success="uploadSuccess"
-          :on-error="uploadError"
-          multiple
+          :data="{ module: code }"
           :file-list="fileList"
+          :headers="headers"
+          :on-error="uploadError"
+          :on-success="uploadSuccess"
           :show-file-list="false"
+          class="upload-demo"
+          multiple
         >
           <el-button
             type="primary"
@@ -56,21 +55,21 @@
       <div
         v-if="list.length !== 0"
         v-loading="loading"
-        class="list-wrap bs-scrollbar"
-        element-loading-text="加载中"
         :style="{
           display: gridComputed ? 'grid' : 'flex',
           justifyContent: gridComputed ? 'space-around' : 'flex-start'
         }"
+        class="list-wrap bs-scrollbar"
+        element-loading-text="加载中"
       >
         <!-- <div v-if="list.length !== 0"> -->
         <div
           v-for="screen in list"
           :key="screen.id"
-          class="big-screen-card-wrap"
           :style="{
             width: gridComputed ? 'auto' : '290px'
           }"
+          class="big-screen-card-wrap"
         >
           <div class="big-screen-card-inner">
             <div class="screen-card__hover">
@@ -103,9 +102,23 @@
                 </div>
               </div>
             </div>
-            <div class="big-screen-card-img">
+            <div v-if="imgExtends.includes(screen.extension)" class="big-screen-card-img">
               <el-image
-                :src="screen.url"
+                :src="getCoverPicture(screen.url)"
+                fit="contain"
+                style="width: 100%; height: 100%"
+              >
+                <div
+                  slot="placeholder"
+                  class="image-slot"
+                >
+                  加载中···
+                </div>
+              </el-image>
+            </div>
+            <div v-else class="big-screen-card-img">
+              <el-image
+                :src="getUrl(screen)"
                 fit="contain"
                 style="width: 100%; height: 100%"
               >
@@ -119,8 +132,8 @@
             </div>
             <div class="big-screen-bottom">
               <div
-                class="left-bigscreen-title"
                 :title="screen.originalName"
+                class="left-bigscreen-title"
               >
                 {{ screen.originalName }}
               </div>
@@ -141,16 +154,16 @@
       </div> -->
         <div class="bs-pagination">
           <el-pagination
-            class="bs-el-pagination"
-            popper-class="bs-el-pagination"
-            background
-            layout="total, prev, pager, next, sizes"
-            :page-size="size"
-            prev-text="上一页"
-            next-text="下一页"
-            :total="totalCount"
-            :page-sizes="[10, 20, 50, 100]"
             :current-page="current"
+            :page-size="size"
+            :page-sizes="[10, 20, 50, 100]"
+            :total="totalCount"
+            background
+            class="bs-el-pagination"
+            layout="total, prev, pager, next, sizes"
+            next-text="下一页"
+            popper-class="bs-el-pagination"
+            prev-text="上一页"
             @current-change="currentChangeHandle"
             @size-change="sizeChangeHandle"
           />
@@ -166,8 +179,10 @@
   </div>
 </template>
 <script>
-import { pageMixins } from 'data-room-ui/js/mixins/page'
+import {pageMixins} from 'data-room-ui/js/mixins/page'
 import EditForm from './EditForm.vue'
+import { getFileUrl } from 'data-room-ui/js/utils/file'
+
 export default {
   name: 'BigScreenList',
   mixins: [pageMixins],
@@ -178,15 +193,17 @@ export default {
     },
     catalogInfo: {
       type: Object,
-      default: () => { }
+      default: () => {
+      }
     }
   },
-  components: { EditForm },
-  data () {
+  components: {EditForm},
+  data() {
     return {
       upLoadUrl: window.BS_CONFIG?.httpConfigs?.baseURL + '/bigScreen/file/upload',
       searchKey: '',
       extend: '',
+      sourceExtends: window.BS_CONFIG?.sourceExtends || [],
       options: [],
       list: [],
       fileUploadParam: {},
@@ -194,47 +211,76 @@ export default {
         ...window.BS_CONFIG?.httpConfigs?.headers
       },
       fileList: [],
-      defaultImg: require('./images/defaultImg.png'),
-      loading: false
+      loading: false,
+      imgExtends: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico'],
+      otherExtends: {
+        video: ['mp4', 'avi', 'mov', 'wmv', 'flv', 'f4v', 'rmvb', 'rm', '3gp', 'dat', 'ts', 'mts', 'vob'],
+        audio: ['mp3', 'wav', 'wma', 'ogg', 'aac', 'flac', 'ape', 'm4a', 'm4r', 'amr', 'ac3'],
+        excel: ['xls', 'xlsx', 'csv'],
+        word: ['doc', 'docx'],
+        ppt: ['ppt', 'pptx'],
+        pdf: ['pdf']
+      }
     }
   },
   computed: {
-    code () {
+    code() {
       return this.catalogInfo?.page?.code
     },
-    gridComputed () {
+    gridComputed() {
       return this.list.length > 3
     }
   },
   watch: {
-    code (value) {
+    code(value) {
       this.current = 1
       this.getDataList()
     }
   },
-  mounted () {
+  mounted() {
     this.getOptions()
     this.getDataList()
   },
   methods: {
-    uploadError () {
+    getUrl(file) {
+      let extension = file.extension
+      if (this.otherExtends.video.includes(extension)) {
+        return require('./images/video.svg')
+      }
+      if (this.otherExtends.audio.includes(extension)) {
+        return require('./images/audio.svg')
+      }
+      if (this.otherExtends.excel.includes(extension)) {
+        return require('./images/excel.svg')
+      }
+      if (this.otherExtends.word.includes(extension)) {
+        return require('./images/word.svg')
+      }
+      if (this.otherExtends.ppt.includes(extension)) {
+        return require('./images/ppt.svg')
+      }
+      if (this.otherExtends.pdf.includes(extension)) {
+        return require('./images/pdf.svg')
+      }
+      return require('./images/unknown.svg')
+    },
+    uploadError() {
       this.$message({
         type: 'error',
         message: '上传失败'
       })
     },
-    beforeUpload (file) {
-      const isImage = file.type.startsWith('image/')
-      const isVideo = file.type.startsWith('video/')
-      const isValidFileType = isImage || isVideo
-
+    beforeUpload(file) {
+      // 获取文件后缀
+      const extension = file.name.split('.').pop()
+      // 判断文件类型是否符合要求
+      const isValidFileType = this.sourceExtends.includes(extension)
       if (!isValidFileType) {
-        this.$message.error('只能上传图片或视频文件')
+        this.$message.error('不支持的文件类型：' + extension)
       }
-
       return isValidFileType
     },
-    uploadSuccess (response, file, fileList) {
+    uploadSuccess(response, file, fileList) {
       if (response.code === 200) {
         this.$message({
           type: 'success',
@@ -248,16 +294,12 @@ export default {
         })
       }
     },
-    getOptions () {
-      this.$dataRoomAxios.get('/bigScreen/file/getAllFileSuffix').then((data) => {
-        this.options = []
-        this.options.push({ label: '全部', value: '' })
-        // 过滤data的空数据
-        data = data.filter((item) => item)
-        data.forEach((item) => this.options.push({ label: item, value: item }))
-      })
+    getOptions() {
+      this.options = []
+      this.options.push({label: '全部', value: ''})
+      this.sourceExtends.forEach((ext) => this.options.push({label: ext, value: ext}))
     },
-    getDataList () {
+    getDataList() {
       this.loading = true
       this.$dataRoomAxios.get('/bigScreen/file', {
         module: this.catalogInfo.page.code,
@@ -274,13 +316,13 @@ export default {
           this.loading = false
         })
     },
-    preview (screen) {
-      window.open(screen.url, '_blank')
+    preview(screen) {
+      window.open(getFileUrl(screen.url), '_blank')
     },
-    downLoad (screen) {
+    downLoad(screen) {
       this.$dataRoomAxios.download(`/bigScreen/file/download/${screen.id}`)
     },
-    del (screen) {
+    del(screen) {
       this.$confirm('确定删除该资源？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -305,11 +347,11 @@ export default {
         })
         .catch()
     },
-    copy (screen) {
+    copy(screen) {
       this.$message.success('复制成功')
       const transfer = document.createElement('input')
       document.body.appendChild(transfer)
-      transfer.value = screen.url // 这里表示想要复制的内容
+      transfer.value = getFileUrl(screen.url) // 这里表示想要复制的内容
       transfer.focus()
       transfer.select()
       if (document.execCommand('copy')) {
@@ -317,7 +359,15 @@ export default {
       }
       transfer.blur()
       transfer.style.display = 'none'
-    }
+    },
+    /**
+     * 获取封面图片,如果是相对路径则拼接上文件访问前缀地址
+     * @param url
+     * @returns {*}
+     */
+    getCoverPicture (url) {
+      return getFileUrl(url)
+    },
   }
 }
 </script>

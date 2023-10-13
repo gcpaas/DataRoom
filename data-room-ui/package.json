@@ -1,6 +1,6 @@
 {
   "name": "@gcpaas/data-room-ui",
-  "version": "1.0.1-2023092702-Alpha",
+  "version": "1.0.1-2023101101-Alpha",
   "description": "自定义大屏",
   "author": "gcpaas",
   "license": "MIT",
@@ -22,10 +22,15 @@
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "serve:max": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js serve --open",
-    "build:hash": "vue-cli-service build",
+
     "build": "vue-cli-service build",
     "build:stage": "vue-cli-service build --mode staging",
+    "build:hash": "vue-cli-service build",
     "build:history": "vue-cli-service build --mode history",
+    "build:hash:pro": "vue-cli-service build --name dataRoomPro",
+    "build:history:pro": "vue-cli-service build --mode=pro.history",
+    "build:history:all": "vue-cli-service build --mode history && vue-cli-service build --mode=pro.history", 
+
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue packages",
     "lint:fix": "eslint --ext .js,.vue packages --fix",
@@ -53,6 +58,7 @@
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@antv/g2plot": "2.4.0",
+    "@gcpaas/vue-draggable-resizable-gorkys": "^1.0.1-2023101102-Alpha",
     "@jiaminghi/data-view": "2.10.0",
     "axios": "0.18.1",
     "echarts": "^5.2.2",

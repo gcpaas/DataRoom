@@ -40,7 +40,9 @@ registerConfig(
       componentUrl: '/big-screen-components'
     },
     httpConfigs: {
-      baseURL: window.CONFIG?.baseUrl
+      baseURL: window.CONFIG?.baseUrl,
+      // 现在文件路径保存的是相对路径，所以需要加上前缀,这个值一般和后端的gc.starter.file.urlPrefix一致
+      fileUrlPrefix: window.CONFIG.fileUrlPrefix ? window.CONFIG.fileUrlPrefix : window.CONFIG?.baseUrl + '/static',
     },
     customTheme: {
       '--bs-background-1': '#151a26', // 整体背景色
@@ -54,6 +56,8 @@ registerConfig(
       '--bs-el-color-primary-active': '64, 158, 255', // 主要激活 => rgba(64, 158, 255, 1) = #409EFF
       '--bs-el-border': 'transparent' // 边框颜色
     },
+    // 允许上传的资源库文件类型
+    sourceExtends: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'xls', 'xlsx', 'csv'],
     // datasetAuth: ['unAdd', 'unEdit', 'unDelete'], // 数据集按钮权限 新增 编辑 删除
     // datasetTypeList: ['original', 'custom', 'http'],
     // customPlots: [],

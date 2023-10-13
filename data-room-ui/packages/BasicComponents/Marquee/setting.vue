@@ -40,6 +40,12 @@
               :bigTitle='config.title'
             />
           </div>
+      <SettingTitle>旋转</SettingTitle>
+      <div class="lc-field-body">
+        <RotateSetting
+          :config="config"
+        />
+      </div>
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
@@ -322,6 +328,7 @@ import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 import IconSvg from 'data-room-ui/SvgIcon'
 export default {
   name: 'TextSetting',
@@ -329,6 +336,7 @@ export default {
     PosWhSetting,
     ColorPicker,
     SettingTitle,
+    RotateSetting,
     IconSvg,
     BorderSetting
   },

@@ -19,15 +19,10 @@
           <div class="lc-field-body">
             <PosWhSetting :config="config" />
           </div>
-          <SettingTitle v-if="config.border">
-            边框
-          </SettingTitle>
+          <SettingTitle>旋转</SettingTitle>
           <div class="lc-field-body">
-            <BorderSetting
-              v-if="config.border"
-              label-width="100px"
-              :config="config.border"
-              :bigTitle='config.title'
+            <RotateSetting
+              :config="config"
             />
           </div>
           <SettingTitle>基础</SettingTitle>
@@ -97,12 +92,14 @@ import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetti
 // import IconPicker from 'data-room-ui/IconPicker/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
   name: 'Border14Setting',
   components: {
     // IconPicker,
     ColorPicker,
     PosWhSetting,
+    RotateSetting,
     SettingTitle,
     BorderSetting
   },

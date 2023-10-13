@@ -30,7 +30,15 @@ const customConfig = {
   type: 'linkChart',
   root: {
     version: '2023071001',
-    url: 'https://www.runoob.com/'
+    url: 'https://www.runoob.com/',
+    // 绕x轴旋转角度
+    rotateX: 0,
+    // 绕y轴旋转角度
+    rotateY: 0,
+    // 绕z轴旋转角度
+    rotateZ: 0,
+    // 透视距离
+    perspective: 500
   },
   customize: {
     title: '超链接占位符',

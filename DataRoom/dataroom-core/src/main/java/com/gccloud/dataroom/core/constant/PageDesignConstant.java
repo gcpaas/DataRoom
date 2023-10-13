@@ -187,6 +187,11 @@ public interface PageDesignConstant {
              */
             String INDICATOR_CARD = "indicatorCard";
 
+            /**
+             * 数字
+             */
+            String NUMBER = "number";
+
         }
     }
 

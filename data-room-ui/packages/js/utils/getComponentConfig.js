@@ -15,6 +15,19 @@ export default function getComponentConfig (type) {
         y: 0,
         type
       }
+    case 'numbers':
+      return {
+        name: '数字',
+        title: '数字',
+        icon: Icon.getNameList()[28],
+        className:
+          'com.gccloud.dataroom.core.module.chart.components.ScreenNumbersChart',
+        w: 200,
+        h: 60,
+        x: 0,
+        y: 0,
+        type
+      }
     case 'linkChart':
       return {
         name: '超链接',
@@ -209,18 +222,6 @@ export default function getComponentConfig (type) {
             'com.gccloud.dataroom.core.module.chart.components.ScreenMarqueeChart',
         w: 250,
         h: 150,
-        x: 0,
-        y: 0,
-        type
-      }
-    case 'themeSwitcher':
-      return {
-        name: '主题切换',
-        title: '主题切换',
-        icon: Icon.getNameList()[17],
-        className: 'com.gccloud.dataroom.core.module.chart.components.ThemeSwitcherChart',
-        w: 260,
-        h: 100,
         x: 0,
         y: 0,
         type

@@ -13,6 +13,7 @@ import getComponentConfig from 'data-room-ui/js/utils/getComponentConfig'
 import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
 const typeList = [
   'texts',
+  'numbers',
   'linkChart',
   'horizontalLine', // 横线
   'verticalLine', // 竖线

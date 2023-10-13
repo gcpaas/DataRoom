@@ -289,7 +289,7 @@ export default {
       let mapInfoUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/map/info/${config.customize.mapId}`
       // 如果设置了地图id，就用地图id获取地图数据，否则用默认的世界地图
       if (!hasMapId) {
-        mapInfoUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/static/chinaMap/country/中华人民共和国.json`
+        mapInfoUrl = `${window.BS_CONFIG?.httpConfigs?.fileUrlPrefix}/chinaMap/country/中华人民共和国.json`
       }
       const mapResp = await this.$dataRoomAxios.get(decodeURI(mapInfoUrl), {}, true)
       const map = hasMapId ? JSON.parse(mapResp.data.geoJson) : mapResp

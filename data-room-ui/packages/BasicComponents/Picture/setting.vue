@@ -31,15 +31,21 @@
       <div class="lc-field-body">
         <PosWhSetting :config="config" />
       </div>
-       <SettingTitle v-if="config.border">边框</SettingTitle>
-          <div class="lc-field-body">
-            <BorderSetting
-              v-if="config.border"
-              label-width="100px"
-              :config="config.border"
-              :bigTitle='config.title'
-            />
-          </div>
+      <SettingTitle v-if="config.border">边框</SettingTitle>
+      <div class="lc-field-body">
+        <BorderSetting
+          v-if="config.border"
+          label-width="100px"
+          :config="config.border"
+          :bigTitle='config.title'
+        />
+      </div>
+      <SettingTitle>旋转</SettingTitle>
+      <div class="lc-field-body">
+        <RotateSetting
+          :config="config"
+        />
+      </div>
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
@@ -73,7 +79,7 @@
             >
               <img
                 class="el-upload-list__item-thumbnail"
-                :src="file.url"
+                :src="getCoverPicture(file.url)"
                 alt=""
               >
               <span class="el-upload-list__item-actions">
@@ -114,14 +120,17 @@
 </template>
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
- import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
+import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import { getFileUrl } from 'data-room-ui/js/utils/file'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
   name: 'PicSetting',
   components: {
     PosWhSetting,
     SettingTitle,
-    BorderSetting
+    BorderSetting,
+    RotateSetting
   },
   data () {
     return {
@@ -138,22 +147,22 @@ export default {
       hideUpload: false,
       rules: {
         'customize.url': [
-          // 地址校验
-          {
-            validator: (rule, value, callback) => {
-              if (value) {
-                const reg = /^(http|https):\/\/([\w.]+\/?)\S*/
-                if (!reg.test(value)) {
-                  callback(new Error('请输入正确的URL地址'))
-                } else {
-                  callback()
-                }
-              } else {
-                callback()
-              }
-            },
-            trigger: 'blur'
-          }
+          // 地址校验 NOTE 暂时移除校验，因为通过系统上传的图片，url是相对路径，无法通过校验
+          // {
+          //   validator: (rule, value, callback) => {
+          //     if (value) {
+          //       const reg = /^(http|https):\/\/([\w.]+\/?)\S*/
+          //       if (!reg.test(value)) {
+          //         callback(new Error('请输入正确的URL地址'))
+          //       } else {
+          //         callback()
+          //       }
+          //     } else {
+          //       callback()
+          //     }
+          //   },
+          //   trigger: 'blur'
+          // }
         ]
       }
     }
@@ -222,7 +231,15 @@ export default {
         this.$message.error('上传图片大小不能超过 2MB!')
       }
       return isLt2M
-    }
+    },
+    /**
+     * 获取图片访问地址,如果是相对路径则拼接上文件访问前缀地址
+     * @param url
+     * @returns {*}
+     */
+    getCoverPicture (url) {
+      return getFileUrl(url)
+    },
   }
 }
 </script>

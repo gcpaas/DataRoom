@@ -26,7 +26,14 @@ const customConfig = {
   type: 'select',
   // 名称
   root: {
-    version: '2023091402'
+    version: '2023091402',
+    rotateX: 0,
+    // 绕y轴旋转角度
+    rotateY: 0,
+    // 绕z轴旋转角度
+    rotateZ: 0,
+    // 透视距离
+    perspective: 500
   },
   // 自定义属性
   customize: {
