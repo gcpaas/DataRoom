@@ -35,8 +35,8 @@ const typeList = [
   'timePicker',
   'dateTimePicker',
   'indicatorCard',
-  'indexCard',
   'indicatorCard2',
+  'indexCard',
   'indexCard2'
 
 ]
