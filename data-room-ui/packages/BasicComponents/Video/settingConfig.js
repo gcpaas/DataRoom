@@ -20,7 +20,9 @@ const customConfig = {
     // 绕z轴旋转角度
     rotateZ: 0,
     // 透视距离
-    perspective: 500
+    perspective: 0,
+    skewX: 0,
+    skewY: 0
   },
   customize: {
     videoType: 'application/x-mpegURL',

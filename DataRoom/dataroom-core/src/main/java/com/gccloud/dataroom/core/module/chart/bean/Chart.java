@@ -109,6 +109,11 @@ public class Chart {
     @ApiModelProperty(notes = "透视")
     private Integer perspective;
 
+    @ApiModelProperty(notes = "倾斜x")
+    private Integer skewX;
+
+    @ApiModelProperty(notes = "倾斜y")
+    private Integer skewY;
 
 
 }

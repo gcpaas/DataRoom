@@ -72,15 +72,6 @@
           <div class="lc-field-body">
             <PosWhSetting :config="config" />
           </div>
-           <SettingTitle v-if="config.border">边框</SettingTitle>
-          <div class="lc-field-body">
-            <BorderSetting
-              v-if="config.border"
-              label-width="100px"
-              :config="config.border"
-              :bigTitle='config.title'
-            />
-          </div>
           <SettingTitle>旋转</SettingTitle>
           <div class="lc-field-body">
             <RotateSetting

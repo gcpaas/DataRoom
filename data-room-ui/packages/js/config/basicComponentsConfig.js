@@ -20,6 +20,7 @@ const typeList = [
   'picture',
   'timeCountDown',
   'currentTime',
+  'customHtml',
   'iframeChart',
   'digitalFlop',
   'tables',

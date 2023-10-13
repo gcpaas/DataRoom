@@ -1157,7 +1157,7 @@ export default {
         const script = JSON.stringify(this.dataForm.config)
         const executeParams = {
           script,
-          params: this.dataForm.config.paramsList,
+          params: this.newParamsList,
           dataSetType: 'http'
         }
         datasetExecuteTest(executeParams).then(res => {

@@ -192,6 +192,11 @@ public interface PageDesignConstant {
              */
             String NUMBER = "number";
 
+            /**
+             * 自定义html
+             */
+            String CUSTOM_HTML = "customHtml";
+
         }
     }
 

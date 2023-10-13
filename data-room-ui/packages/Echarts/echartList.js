@@ -34,7 +34,9 @@ function getEchartsList (files) {
       rotateX: config.rotateX || 0,
       rotateY: config.rotateY || 0,
       rotateZ: config.rotateZ || 0,
-      perspective: config.perspective || 500,
+      perspective: config.perspective || 0,
+      skewX: config.skewX || 0,
+      skewY: config.skewY || 0,
       type: 'echartsComponent',
       loading: false,
       // 把默认右侧配置与自定义右侧配置集合

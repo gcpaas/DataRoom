@@ -116,7 +116,7 @@ export default {
           })
         }
       })
-      layouts = layouts?.filter(item => item.code !== code && !['Tabs', 'titles', 'currentTime', 'timeCountDown', 'iframeChart', 'linkChart', 'carousel', 'themeSwitcher', 'themeSelect'].includes(item.type))
+      layouts = layouts?.filter(item => item.code !== code && !['Tabs', 'titles', 'currentTime', 'timeCountDown', 'iframeChart', 'linkChart', 'carousel', 'themeSwitcher', 'themeSelect', 'customHtml'].includes(item.type))
       layouts = [...layouts, ...tabComponents]?.map(item => ({
         name: item.code,
         comment: item.title

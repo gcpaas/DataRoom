@@ -1,4 +1,4 @@
-
+import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
 const version = '2023092201'
 // 分类
@@ -93,6 +93,21 @@ const setting = [
     groupName: 'graph'
   },
   {
+    label: '字体类型',
+    // 设置组件类型
+    type: 'select',
+    // 字段
+    field: 'statistic_content_style_fontFamily',
+    // 对应options中的字段
+    optionField: 'statistic.content.style.fontFamily',
+    // 是否多选
+    multiple: false,
+    value: '',
+    tabName: 'custom',
+    options: fontList,
+    groupName: 'graph'
+  },
+  {
     label: '边框宽度',
     // 设置组件类型
     type: 'inputNumber',
@@ -136,7 +151,7 @@ const setting = [
     value: '#598BF2',
     tabName: 'custom',
     groupName: 'graph'
-  },
+  }
 ]
 
 const data = [
@@ -187,7 +202,8 @@ const option = {
       style: {
         fontSize: 20,
         lineHeight: 1,
-        fill: '#d0d0d0'
+        fill: '#d0d0d0',
+        fontFamily: ''
       }
     }
   }

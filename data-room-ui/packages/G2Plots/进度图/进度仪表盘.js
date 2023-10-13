@@ -1,4 +1,4 @@
-
+import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
 const version = '2023092201'
 // 分类
@@ -61,6 +61,21 @@ const setting = [
     optionField: 'statistic.title.style.fontSize',
     value: 20,
     tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '指标字体类型',
+    // 设置组件类型
+    type: 'select',
+    // 字段
+    field: 'statistic_title_style_fontFamily',
+    // 对应options中的字段
+    optionField: 'statistic.title.style.fontFamily',
+    // 是否多选
+    multiple: false,
+    value: '',
+    tabName: 'custom',
+    options: fontList,
     groupName: 'graph'
   },
   {
@@ -140,6 +155,7 @@ const option = {
       style: {
         fontSize: 20,
         lineHeight: 2,
+        fontFamily: '',
         color: '#d0d0d0'
       },
       formatter: ({ percent }) => `${(percent * 100).toFixed(0)}%`

@@ -72,7 +72,10 @@ export function themeToSetting (chartList, type) {
 }
 // 对单个组件进行主题设置（从theme到Setting）
 function chartThemeToSetting (chart, type) {
-  chart.option.theme = type === 'dark' ? 'transparent' : 'light'
+  if (chart.option && chart.option.theme) {
+    chart.option.theme = type === 'dark' ? 'transparent' : 'light'
+  }
+
   if (chart.theme && chart.theme[type]) {
     // 如果是g2组件或者远程组件
     if (['customComponent', 'remoteComponent', 'echartsComponent'].includes(chart.type)) {

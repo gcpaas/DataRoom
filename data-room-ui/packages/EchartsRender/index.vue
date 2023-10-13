@@ -71,50 +71,6 @@ export default {
           this.changeStyle(this.config, true)
         }
       }
-    },
-    'config.rotateX': {
-      deep: true,
-      handler (val) {
-        const dom = document.querySelector('#' + this.config.code)
-        const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
-        const regex = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g
-        // 提取出原本的transform属性内容
-        const result = dom.style.transform.replace(regex, '')
-        dom.style.transform = result + ' ' + rotate
-      }
-    },
-    'config.rotateY': {
-      deep: true,
-      handler (val) {
-        const dom = document.querySelector('#' + this.config.code)
-        const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
-        const regex = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g;
-        const result = dom.style.transform.replace(regex, '')
-        dom.style.transform = result + ' ' + rotate
-      }
-    },
-    'config.rotateZ': {
-      deep: true,
-      handler (val) {
-        const dom = document.querySelector('#' + this.config.code)
-        const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
-        const regex = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g
-        const result = dom.style.transform.replace(regex, '')
-        dom.style.transform = result + ' ' + rotate
-      }
-    },
-    'config.perspective': {
-      deep: true,
-      handler (val) {
-        const dom = document.querySelector('#' + this.config.code)
-        // 获取translate属性
-        const translateReg = /translate\((.*?)\)/
-        const translateResult = dom.style.transform.match(translateReg)
-        const rotateReg = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g
-        const rotateResult = dom.style.transform.match(rotateReg)
-        const transform = translateResult[0] + ' ' + 'perspective(' + this.config.perspective + 'px)' + ' ' + rotateResult[0]
-        dom.style.transform = transform
-      }
     }
   },
   mounted () {
@@ -346,6 +302,13 @@ export default {
         const seriesFieldList = [...new Set(data.map(item => item[seriesField]))]
         option.series = []
         const barWidth = option.seriesCustom.barWidth
+        // 获取数据标签展示情况
+        let labelShow = 0
+        config.setting.forEach(set => {
+          if (set.field === 'series_barColor_label_show') {
+            labelShow = set.value
+          }
+        })
         // 偏移量数组
         const offsetArr = []
         let index = 0
@@ -391,8 +354,7 @@ export default {
               barWidth: barWidth,
               color: '#115ba6',
               label: {
-                show: false
-
+                show: labelShow
               },
               zlevel: 2,
               z: 12,

@@ -51,12 +51,12 @@
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
-          label="标题字体大小"
+          label="文字大小"
           label-width="100px"
         >
           <el-input
             v-model="config.customize.fontSize"
-            placeholder="请输入标题字体大小"
+            placeholder="请输入文字大小"
             clearable
           >
             <template slot="append">
@@ -65,17 +65,17 @@
           </el-input>
         </el-form-item>
         <el-form-item
-          label="标题字体权重"
+          label="文字权重"
           label-width="100px"
         >
           <el-input-number
             v-model="config.customize.fontWeight"
             class="bs-el-input-number"
-            placeholder="请输入标题字体权重"
+            placeholder="请输入文字权重"
           />
         </el-form-item>
         <el-form-item
-          label="标题字体类型"
+          label="文字类型"
           label-width="100px"
         >
           <el-select
@@ -102,6 +102,7 @@ import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetti
 import TextGradient from 'data-room-ui/BigScreenDesign/RightSetting/TextGradient/index'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+import fontList from 'data-room-ui/js/utils/fontList'
 export default {
   name: 'TextSetting',
   components: {
@@ -113,27 +114,7 @@ export default {
   },
   data () {
     return {
-      fontFamilyList: [
-        {
-          label: '默认',
-          value: ''
-        },
-        {
-          label: '时钟加粗倾斜',
-          value: 'ds-digitalbold_italic'
-        },
-        {
-          label: '时钟加粗正常',
-          value: 'ds-digitalbold'
-        },
-        {
-          label: '时钟倾斜',
-          value: 'ds-digitalitalic'
-        },
-        {
-          label: '时钟正常',
-          value: 'ds-digitalnormal'
-        }],
+      fontFamilyList: fontList,
       rules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }

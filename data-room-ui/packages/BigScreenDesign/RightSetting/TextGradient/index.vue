@@ -2,7 +2,7 @@
 <template>
   <div class="bs-gradual-wrap">
     <el-form-item
-      label="文字渐变方向"
+      :label="`${customLabel}渐变方向`"
       label-width="100px"
     >
       <el-radio-group
@@ -18,7 +18,7 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item
-      label="文字渐变颜色"
+      :label="`${customLabel}渐变颜色`"
       label-width="100px"
     >
       <div class="color-picker-box">
@@ -51,6 +51,10 @@ export default {
     colors: {
       type: String,
       default: ''
+    },
+    label: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -65,6 +69,9 @@ export default {
   computed: {
     newColors () {
       return cloneDeep(this.colors)
+    },
+    customLabel () {
+      return this.label || '文字'
     }
   },
   watch: {

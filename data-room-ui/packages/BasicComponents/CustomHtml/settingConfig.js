@@ -12,10 +12,10 @@ export const settingConfig = {
   }
 }
 const customConfig = {
-  type: 'timeCountDown',
+
+  type: 'customHtml',
   root: {
     version: '2023071001',
-    endTime: '',
     // 绕x轴旋转角度
     rotateX: 0,
     // 绕y轴旋转角度
@@ -28,10 +28,7 @@ const customConfig = {
     skewY: 0
   },
   customize: {
-    fontSize: 28,
-    fontWeight: 700,
-    fontFamily: '', // 字体类型
-    color: 'rgb(155 159 172)'
+    htmlStr: '<h1 style="color:#ffffff;font-size: 30px">我是自定义html内容</h1>' // html的内容
   }
 
 }
