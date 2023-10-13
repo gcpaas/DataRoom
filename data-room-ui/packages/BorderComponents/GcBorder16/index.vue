@@ -2,10 +2,9 @@
   <div
     style="width: 100%;height: 100%"
     class="bs-design-wrap"
+    :id="'border'+ config.code"
     :style="{
-      'background-image-source':`url(${img})`,
-      border:'100px solid #000',
-      borderImageSlice:'100 100 100 100',
+      borderImageSlice:'100 100 100 100 fill',
       borderImageWidth:'100px 100px 100px 100px',
     }"
   >
@@ -19,6 +18,10 @@ export default {
   },
   mixins: [refreshComponentMixin],
   props: {
+    id:{
+      type: String,
+      default: 'name'
+    },
     // 卡片的属性
     config: {
       type: Object,
@@ -27,17 +30,15 @@ export default {
   },
   data () {
     return {
-
     }
   },
   computed: {
-    img(){
-      return 'component.png'
-    }
   },
   watch: {
   },
   mounted () {
+    const a =document.getElementById('border'+ this.config.code)
+    // a.style['border-image-source']=`url(http://127.0.0.1:8081//bigScreenServer/static/1704043211902484481.png)`
   },
   methods: {
   }
@@ -46,6 +47,7 @@ export default {
 
 <style lang="scss" scoped>
 .bs-design-wrap {
+  border-image-source:url(component.png);
   width: 100%;
   height: 100%;
   position: absolute;

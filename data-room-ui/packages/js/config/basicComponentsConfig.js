@@ -30,7 +30,7 @@ const typeList = [
   // 'button',
   'marquee',
   'chartTab',
-  'themeSwitcher',
+  // 'themeSwitcher',
   'themeSelect',
   'select',
   'timePicker',

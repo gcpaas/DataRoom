@@ -5,7 +5,9 @@
   >
     <div
       :style="{
-        'background-color':customize.bgColor,
+        'background-image': `linear-gradient(${customize.gradientDirection}, ${
+            gradientColor0 ? gradientColor0 : gradientColor1
+          } , ${gradientColor1 ? gradientColor1 : gradientColor0})`,
         'border-radius':customize.borderRadius + 'px',
         border:`${customize.borderWidth}px solid ${customize.borderColor}`,
       }"
@@ -76,6 +78,12 @@ export default {
     // this.chartInit()
   },
   computed: {
+    gradientColor0 () {
+      return this.config.customize.gradientColor0 || this.config.customize.gradientColor1 || 'transparent'
+    },
+    gradientColor1 () {
+       return this.config.customize.gradientColor1 || this.config.customize.gradientColor0 || 'transparent'
+    },
     unit(){
       return this.config?.customize.unit || ''
     },

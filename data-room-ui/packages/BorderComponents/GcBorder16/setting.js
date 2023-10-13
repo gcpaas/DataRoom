@@ -1,7 +1,7 @@
 
-const type = 'GcBorder15'
+const type = 'GcBorder16'
 
-const name = '边框15'
+const name = '边框16'
 
 const isTitle = true
 

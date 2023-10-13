@@ -25,7 +25,7 @@ const customConfig = {
     // 边框线颜色
     borderColor: '#87888e',
     // 边框线宽度
-    borderWidth: 10,
+    borderWidth: 2,
     // 边框背景颜色
     backgroundColor: '#232832',
     colorType: 'single',
