@@ -43,6 +43,8 @@ export function getRemoteComponents (comList) {
       rotateY: config.rotateY || 0,
       rotateZ: config.rotateZ || 0,
       perspective: config.perspective || 500,
+      skewX: config.skewX || 0,
+      skewY: config.skewY || 0,
       type: 'remoteComponent',
       option: {
         ...cloneDeep(settingConfig),
@@ -79,6 +81,8 @@ export function getRemoteComponentConfig (code, name) {
     rotateY: 0,
     rotateZ: 0,
     perspective: 0,
+    skewX: 0,
+    skewY: 0,
     type: 'remoteComponent',
     option: {
       ...cloneDeep(settingConfig)

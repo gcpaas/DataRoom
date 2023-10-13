@@ -51,6 +51,30 @@
         :step="1"
       />
     </el-form-item>
+    <el-form-item
+      :label-width="labelWidth"
+      label="沿x轴扭曲角度"
+    >
+      <el-input-number
+        v-model="config.skewX"
+        class="bs-el-input-number"
+        :min="-180"
+        :max="180"
+        :step="1"
+      />
+    </el-form-item>
+    <el-form-item
+      :label-width="labelWidth"
+      label="绕y轴扭曲角度"
+    >
+      <el-input-number
+        v-model="config.skewY"
+        class="bs-el-input-number"
+        :min="-180"
+        :max="180"
+        :step="1"
+      />
+    </el-form-item>
   </div>
 </template>
 <script>
@@ -63,7 +87,9 @@ export default {
         rotateX: 0,
         rotateY: 0,
         rotateZ: 0,
-        perspective: 0
+        perspective: 0,
+        skewX: 0,
+        skewY: 0
       })
     },
     labelWidth: {

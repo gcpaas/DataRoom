@@ -119,6 +119,8 @@ export default {
         rotateY: this.config?.rotateY,
         rotateZ: this.config?.rotateZ,
         perspective: this.config?.perspective,
+        skewX: this.config?.skewX,
+        skewY: this.config?.skewY,
         setting: cloneDeep(this.config?.setting),
         customize: cloneDeep(this.config?.customize),
         url: this.config?.url,
