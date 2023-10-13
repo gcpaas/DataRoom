@@ -78,7 +78,7 @@ export function getRemoteComponentConfig (code, name) {
     rotateX: 0,
     rotateY: 0,
     rotateZ: 0,
-    perspective: 500,
+    perspective: 0,
     type: 'remoteComponent',
     option: {
       ...cloneDeep(settingConfig)

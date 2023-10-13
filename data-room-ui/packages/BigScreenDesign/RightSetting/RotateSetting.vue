@@ -63,7 +63,7 @@ export default {
         rotateX: 0,
         rotateY: 0,
         rotateZ: 0,
-        perspective: 500
+        perspective: 0
       })
     },
     labelWidth: {

@@ -48,7 +48,7 @@ const customConfig = {
     // 绕z轴旋转角度
     rotateZ: 0,
     // 透视距离
-    perspective: 500
+    perspective: 0
   },
   customize: {
     title: '数字标签占位符',

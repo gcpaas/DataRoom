@@ -249,6 +249,15 @@ const setting = [
     groupName: 'xAxis'
   },
   {
+    label: '名称到轴线距离',
+    type: 'inputNumber',
+    field: 'xAxis_nameGap',
+    optionField: 'xAxis.nameGap',
+    value: 10,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
     label: '名称字体大小',
     type: 'inputNumber',
     field: 'xAxis_nameTextStyle_fontSize',
@@ -380,6 +389,15 @@ const setting = [
         label: '上',
         value: 'end'
       }],
+    groupName: 'yAxis'
+  },
+  {
+    label: '名称到轴线距离',
+    type: 'inputNumber',
+    field: 'yAxis_nameGap',
+    optionField: 'yAxis.nameGap',
+    value: 10,
+    tabName: 'custom',
     groupName: 'yAxis'
   },
   {
@@ -526,17 +544,17 @@ const option = {
     show: true
   },
   grid: {
-    left: '15%',
-    right: '5%',
-    bottom: '15%',
+    left: '12%',
+    right: '8%',
+    bottom: '20%',
     z: 100,
     containLabel: false,
     show: false
   },
   graphic: {
     type: 'group',
-    bottom: '5%',
-    left: '10%',
+    bottom: '10%',
+    left: '7%',
     z: 100,
     children: [
       {
@@ -569,6 +587,7 @@ const option = {
     {
       show: true,
       name: '',
+      nameGap: 10,
       type: 'category',
       data: xData,
       nameTextStyle: {
@@ -621,6 +640,7 @@ const option = {
   ],
   yAxis: {
     name: '',
+    nameGap: 10,
     nameTextStyle: {
       color: '',
       fontSize: 12
