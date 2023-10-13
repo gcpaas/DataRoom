@@ -31,6 +31,9 @@ public class DataRoomFileServiceImpl extends ServiceImpl<DataRoomFileDao, DataRo
         LambdaQueryWrapper<DataRoomFileEntity> queryWrapper = QueryWrapperUtils.wrapperLike(new LambdaQueryWrapper(), searchDTO.getSearchKey(), DataRoomFileEntity::getOriginalName);
         queryWrapper.eq(StringUtils.isNotBlank(searchDTO.getModule()), DataRoomFileEntity::getModule, searchDTO.getModule());
         queryWrapper.eq(StringUtils.isNotBlank(searchDTO.getExtension()), DataRoomFileEntity::getExtension, searchDTO.getExtension());
+        if (searchDTO.getExtensionList() != null && searchDTO.getExtensionList().size() > 0) {
+            queryWrapper.in(DataRoomFileEntity::getExtension, searchDTO.getExtensionList());
+        }
         queryWrapper.orderByDesc(DataRoomFileEntity::getCreateDate);
         return page(searchDTO, queryWrapper);
     }
