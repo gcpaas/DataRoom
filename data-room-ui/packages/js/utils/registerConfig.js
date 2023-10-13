@@ -170,7 +170,10 @@ function registerTheme (config) {
 export default function (config, router) {
   window.BS_CONFIG = {}
   window.BS_CONFIG = configDeepMerge(window.BS_CONFIG, config)
-
+  if (!config?.httpConfigs?.fileUrlPrefix) {
+    // 如果没有配置文件访问前缀，使用baseURL加上/static作为文件前缀
+    window.BS_CONFIG.httpConfigs.fileUrlPrefix = window.BS_CONFIG.httpConfigs.baseURL + '/static'
+  }
   // 注册路由
   registerRouters(config, router)
   // 注册自定义主题
