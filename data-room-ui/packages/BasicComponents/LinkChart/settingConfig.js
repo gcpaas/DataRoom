@@ -38,7 +38,9 @@ const customConfig = {
     // 绕z轴旋转角度
     rotateZ: 0,
     // 透视距离
-    perspective: 0
+    perspective: 0,
+    skewX: 0,
+    skewY: 0
   },
   customize: {
     title: '超链接占位符',

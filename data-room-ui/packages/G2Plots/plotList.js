@@ -45,6 +45,8 @@ function getPlotList (files) {
       rotateY: config.rotateY || 0,
       rotateZ: config.rotateZ || 0,
       perspective: config.perspective || 0,
+      skewX: config.skewX || 0,
+      skewY: config.skewY || 0,
       type: 'customComponent',
       chartType: config.chartType,
       loading: false,
