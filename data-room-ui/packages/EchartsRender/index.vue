@@ -302,6 +302,13 @@ export default {
         const seriesFieldList = [...new Set(data.map(item => item[seriesField]))]
         option.series = []
         const barWidth = option.seriesCustom.barWidth
+        // 获取数据标签展示情况
+        let labelShow = 0
+        config.setting.forEach(set => {
+          if (set.field === 'series_barColor_label_show') {
+            labelShow = set.value
+          }
+        })
         // 偏移量数组
         const offsetArr = []
         let index = 0
@@ -347,8 +354,7 @@ export default {
               barWidth: barWidth,
               color: '#115ba6',
               label: {
-                show: false
-
+                show: labelShow
               },
               zlevel: 2,
               z: 12,

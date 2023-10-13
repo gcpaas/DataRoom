@@ -218,7 +218,7 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '名称',
+    label: '标题',
     type: 'input',
     field: 'xAxis_name',
     optionField: 'xAxis.name',
@@ -227,7 +227,7 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '名称位置',
+    label: '标题位置',
     type: 'select',
     field: 'xAxis_nameLocation',
     optionField: 'xAxis.nameLocation',
@@ -249,7 +249,7 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '名称到轴线距离',
+    label: '标题到轴线距离',
     type: 'inputNumber',
     field: 'xAxis_nameGap',
     optionField: 'xAxis.nameGap',
@@ -258,7 +258,7 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '名称字体大小',
+    label: '标题字体大小',
     type: 'inputNumber',
     field: 'xAxis_nameTextStyle_fontSize',
     optionField: 'xAxis.nameTextStyle.fontSize',
@@ -267,7 +267,7 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '名称颜色',
+    label: '标题颜色',
     type: 'colorPicker',
     field: 'xAxis_nameTextStyle_color',
     optionField: 'xAxis.nameTextStyle.color',
@@ -361,7 +361,7 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '名称',
+    label: '标题',
     type: 'input',
     field: 'yAxis_name',
     optionField: 'yAxis.name',
@@ -370,7 +370,7 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '名称位置',
+    label: '标题位置',
     type: 'select',
     field: 'yAxis_nameLocation',
     optionField: 'yAxis.nameLocation',
@@ -392,7 +392,7 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '名称到轴线距离',
+    label: '标题到轴线距离',
     type: 'inputNumber',
     field: 'yAxis_nameGap',
     optionField: 'yAxis.nameGap',
@@ -401,7 +401,7 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '名称字体大小',
+    label: '标题字体大小',
     type: 'inputNumber',
     field: 'yAxis_nameTextStyle_fontSize',
     optionField: 'yAxis.nameTextStyle.fontSize',
@@ -410,7 +410,7 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '名称颜色',
+    label: '标题颜色',
     type: 'colorPicker',
     field: 'yAxis_nameTextStyle_color',
     optionField: 'yAxis.nameTextStyle.color',

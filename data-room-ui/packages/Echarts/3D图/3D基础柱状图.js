@@ -489,7 +489,7 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '刻度长度',
+    label: '刻度宽度',
     type: 'inputNumber',
     field: 'yAxis_axisTick_length',
     optionField: 'yAxis.axisTick.length',
