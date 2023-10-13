@@ -71,50 +71,6 @@ export default {
           this.changeStyle(this.config, true)
         }
       }
-    },
-    'config.rotateX': {
-      deep: true,
-      handler (val) {
-        const dom = document.querySelector('#' + this.config.code)
-        const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
-        const regex = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g
-        // 提取出原本的transform属性内容
-        const result = dom.style.transform.replace(regex, '')
-        dom.style.transform = result + ' ' + rotate
-      }
-    },
-    'config.rotateY': {
-      deep: true,
-      handler (val) {
-        const dom = document.querySelector('#' + this.config.code)
-        const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
-        const regex = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g;
-        const result = dom.style.transform.replace(regex, '')
-        dom.style.transform = result + ' ' + rotate
-      }
-    },
-    'config.rotateZ': {
-      deep: true,
-      handler (val) {
-        const dom = document.querySelector('#' + this.config.code)
-        const rotate = `rotateX(${this.config.rotateX}deg) rotateY(${this.config.rotateY}deg)  rotateZ(${this.config.rotateZ}deg)`
-        const regex = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g
-        const result = dom.style.transform.replace(regex, '')
-        dom.style.transform = result + ' ' + rotate
-      }
-    },
-    'config.perspective': {
-      deep: true,
-      handler (val) {
-        const dom = document.querySelector('#' + this.config.code)
-        // 获取translate属性
-        const translateReg = /translate\((.*?)\)/
-        const translateResult = dom.style.transform.match(translateReg)
-        const rotateReg = /rotateX\(\d+deg\) rotateY\(\d+deg\) rotateZ\(\d+deg\)/g
-        const rotateResult = dom.style.transform.match(rotateReg)
-        const transform = translateResult[0] + ' ' + 'perspective(' + this.config.perspective + 'px)' + ' ' + rotateResult[0]
-        dom.style.transform = transform
-      }
     }
   },
   mounted () {
