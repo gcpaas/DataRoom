@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023092501'
+const version = '2023101401'
 // 分类
 const category = 'Pie'
 // 标题

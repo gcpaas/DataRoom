@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023092201'
+const version = '2023101401'
 // 分类
 const category = 'Progress'
 // 标题
