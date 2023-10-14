@@ -432,6 +432,7 @@ export default {
       })
     }
     return {
+      autoFill: true,
       dataForm: {
         id: '',
         name: '',
@@ -642,7 +643,9 @@ export default {
         try {
           const scriptAfterReplacement = javascript.replace(/\${(.*?)}/g, (match, p) => {
             const value = this.dataForm.config.paramsList.find(param => param.name === p).value
-            if (!isNaN(value)) {
+            if (value === null || value === undefined || value === '') {
+              return "''"
+            } else if (!isNaN(value)) {
               return value
             } else {
               return `'${value}'`
@@ -654,8 +657,8 @@ export default {
           this.passTest = false
           const javascriptParams = javascript.match(/\${(.*?)}/g)
           // 取出${}中的参数名
+          let paramList = []
           if (javascriptParams) {
-            const paramList = []
             javascriptParams.forEach(item => {
               const name = item.replace(/\${(.*?)}/g, '$1')
               const param = this.dataForm.config.paramsList.find(param => param.name === name)
@@ -664,24 +667,12 @@ export default {
                 paramList.push(name)
               }
             })
-            this.$confirm(`脚本中的参数${paramList.join(',')}不存在，是否添加？`, '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              customClass: 'bs-el-message-box',
-              type: 'warning'
-            }).then(() => {
-              paramList.forEach(name => {
-                this.dataForm.config.paramsList.push({
-                  name,
-                  type: '',
-                  value: '',
-                  status: 1,
-                  require: 0,
-                  remark: ''
-                })
-              })
-            }).catch(() => {})
+            if (this.autoFill && paramList.length > 0) {
+              this.addParams(paramList)
+              paramList = []
+            }
           } else {
+            console.info(error)
             this.$message.error(`脚本执行错误，请检查脚本，具体错误：${error}`)
           }
           return
@@ -761,6 +752,19 @@ export default {
         this.passTest = false
         this.$message.error('请填写脚本')
       }
+    },
+    addParams (paramList) {
+      this.$refs.paramsSettingDialog.open()
+      paramList.forEach(name => {
+        this.dataForm.config.paramsList.push({
+          name,
+          type: '',
+          value: '',
+          status: 1,
+          require: 0,
+          remark: ''
+        })
+      })
     },
     // 执行事件
     // toExecute () {

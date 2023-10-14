@@ -156,8 +156,9 @@ export default {
               try {
                 const scriptAfterReplacement = res.data.script.replace(/\${(.*?)}/g, (match, p) => {
                   const value = this.config.dataSource?.params[p]
-
-                  if (!isNaN(value)) {
+                  if (value === null || value === undefined || value === '') {
+                    return "''"
+                  } else if (!isNaN(value)) {
                     return value || p
                   } else {
                     return `'${value}' || '${p}'`
@@ -224,7 +225,9 @@ export default {
               try {
                 const scriptAfterReplacement = res.data.script.replace(/\${(.*?)}/g, (match, p) => {
                   const value = this.config.dataSource?.params[p]
-                  if (!isNaN(value)) {
+                  if (value === null || value === undefined || value === '') {
+                    return "''"
+                  } else if (!isNaN(value)) {
                     return value || p
                   } else {
                     return `'${value}' || '${p}'`

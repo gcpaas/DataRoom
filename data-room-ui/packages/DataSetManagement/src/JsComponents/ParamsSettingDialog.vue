@@ -171,6 +171,11 @@ export default {
       default: () => []
     }
   },
+  computed: {
+    innerParamsList () {
+      return cloneDeep(this.paramsList)
+    }
+  },
   data () {
     return {
       dialogVisible: false
@@ -187,7 +192,7 @@ export default {
       this.dialogVisible = false
     },
     addParam () {
-      this.paramsList.push({
+      this.innerParamsList.push({
         name: '',
         type: '',
         value: '',
@@ -197,10 +202,10 @@ export default {
       })
     },
     delRow (index) {
-      this.paramsList.splice(index, 1)
+      this.innerParamsList.splice(index, 1)
     },
     checkParamsName (value) {
-      const checkList = this.paramsList.filter(item => item.fieldName === value.name)
+      const checkList = this.innerParamsList.filter(item => item.fieldName === value.name)
       if (checkList.length) {
         this.$message.warning('参数名称不可以与字段名相同！')
         value.name = ''
@@ -210,7 +215,7 @@ export default {
       this.dialogVisible = false
     },
     confirm () {
-      this.$emit('saveParams', cloneDeep(this.paramsList))
+      this.$emit('saveParams', this.innerParamsList)
       this.dialogVisible = false
     }
   }
