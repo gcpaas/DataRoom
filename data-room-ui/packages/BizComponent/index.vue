@@ -172,6 +172,7 @@ export default {
   props: {},
   data () {
     return {
+      initialCoverPicture: '',
       form: {
         name: '',
         coverPicture: '',
@@ -237,6 +238,7 @@ export default {
       const type = this.$route.query.type
       if (code) {
         getBizComponentInfo(code).then(data => {
+          this.initialCoverPicture = data.coverPicture || ''
           if (type && type === 'g2plot') {
             this.form = {
               ...data,
@@ -370,7 +372,8 @@ export default {
           this.form.coverPicture = dataUrl
         }
       } else {
-        this.form.coverPicture = ''
+        this.$message.warning('保存封面失败，将使用上次保存的封面')
+        this.form.coverPicture = this.initialCoverPicture
       }
       updateBizComponent(this.form).then(() => {
         this.$message({

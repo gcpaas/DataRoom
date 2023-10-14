@@ -191,6 +191,7 @@ export default {
           value: 'verticalAround'
         }
       ],
+      initialCoverPicture: '',
       appInfo: '',
       saveLoading: false,
       createdImgLoading: false,
@@ -222,6 +223,7 @@ export default {
     }
   },
   mounted () {
+    this.initialCoverPicture = this.pageInfo.coverPicture || ''
     this.$refs.zoomInput.$el.addEventListener('mousewheel', this.handleMouseWheel)
   },
   beforeDestroy () {
@@ -460,7 +462,8 @@ export default {
               pageInfo.coverPicture = dataUrl
             }
           } else {
-            pageInfo.coverPicture = ''
+            this.$message.warning('保存封面失败，将使用上次保存的封面')
+            pageInfo.coverPicture = this.initialCoverPicture
           }
           const res = await saveScreen(pageInfo)
           this.$message.success('保存成功')
