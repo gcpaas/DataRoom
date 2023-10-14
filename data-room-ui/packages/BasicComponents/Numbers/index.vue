@@ -45,7 +45,7 @@ export default {
         const result = new Function('dataset', 'computedDatas', this.config.expression)
         config.customize.title = result(this.dataset, this.computedDatas)
         // 同时将计算得来的值保存到公共的数据存储的地方
-        this.updateComputedDatas({ code: config.code, title: config.title, data: config.customize.title })
+        this.updateComputedDatas({ code: config.code, name: config.name, data: config.customize.title })
       // this.changeChartConfig(config)
       }
     },

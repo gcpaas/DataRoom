@@ -174,7 +174,7 @@ export default {
           }
           // 将后端返回的数据保存
           if (_res.success) {
-            this.updateDataset({ code: config.code, title: config.title, data: _res?.data })
+            this.updateDataset({ code: config.code, name: config.name, data: _res?.data })
           }
           config = this.dataFormatting(config, _res)
           this.changeChartConfig(config)
@@ -243,7 +243,7 @@ export default {
           }
           // 将后端返回的数据保存
           if (_res.success) {
-            this.updateDataset({ code: config.code, title: config.title, data: _res?.data })
+            this.updateDataset({ code: config.code, name: config.name, data: _res?.data })
           }
           config = this.dataFormatting(config, _res)
           if (this.chart) {
