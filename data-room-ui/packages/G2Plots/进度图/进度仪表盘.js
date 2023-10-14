@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023101401'
+const version = '2023101402'
 // 分类
 const category = 'Gauge'
 // 标题
@@ -79,19 +79,6 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '指标位置',
-    // 设置组件类型
-    type: 'inputNumber',
-    // 字段
-    field: 'statistic_title_offsetY',
-    // 对应options中的字段
-    optionField: 'statistic.title.offsetY',
-    value: -36,
-    min: -100,
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
     label: '标签内容',
     // 设置组件类型
     type: 'input',
@@ -126,6 +113,32 @@ const setting = [
     value: 20,
     tabName: 'custom',
     groupName: 'graph'
+  },
+  {
+    label: '标签间距大小',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'statistic_content_offsetY',
+    // 对应options中的字段
+    optionField: 'statistic.content.offsetY',
+    value: -30,
+    min:-100,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '指标间距大小',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'statistic_title_offsetY',
+    // 对应options中的字段
+    optionField: 'statistic.title.offsetY',
+    value: 0,
+    min:-100,
+    tabName: 'custom',
+    groupName: 'graph'
   }
   // 边距 padding
 ]
@@ -151,7 +164,7 @@ const option = {
   indicator: null,
   statistic: {
     title: {
-      offsetY: -36,
+      offsetY: 0,
       style: {
         fontSize: 20,
         lineHeight: 2,
@@ -161,6 +174,7 @@ const option = {
       formatter: ({ percent }) => `${(percent * 100).toFixed(0)}%`
     },
     content: {
+      offsetY: -30,
       content: '占比',
       style: {
         fontSize: 20,
