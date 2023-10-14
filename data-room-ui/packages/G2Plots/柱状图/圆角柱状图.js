@@ -473,38 +473,86 @@ const setting = [
 
 // 模拟数据
 const data = [
-  { city: '石家庄', type: '水果', value: 14500 },
-  { city: '石家庄', type: '米面', value: 8500 },
-  { city: '石家庄', type: '特产零食', value: 10000 },
-  { city: '石家庄', type: '茶叶', value: 7000 },
-  { city: '深圳', type: '水果', value: 9000 },
-  { city: '深圳', type: '米面', value: 8500 },
-  { city: '深圳', type: '特产零食', value: 11000 },
-  { city: '深圳', type: '茶叶', value: 6000 },
-  { city: '温州', type: '水果', value: 16000 },
-  { city: '温州', type: '米面', value: 5000 },
-  { city: '温州', type: '特产零食', value: 6000 },
-  { city: '温州', type: '茶叶', value: 10000 },
-  { city: '宁波', type: '水果', value: 14000 },
-  { city: '宁波', type: '米面', value: 9000 },
-  { city: '宁波', type: '特产零食', value: 10000 },
-  { city: '宁波', type: '茶叶', value: 9000 },
-  { city: '无锡', type: '水果', value: 14000 },
-  { city: '无锡', type: '米面', value: 9000 },
-  { city: '无锡', type: '特产零食', value: 10000 },
-  { city: '无锡', type: '茶叶', value: 6000 },
-  { city: '杭州', type: '水果', value: 9000 },
-  { city: '杭州', type: '米面', value: 8500 },
-  { city: '杭州', type: '特产零食', value: 10000 },
-  { city: '杭州', type: '茶叶', value: 6000 },
-  { city: '北京', type: '水果', value: 17000 },
-  { city: '北京', type: '米面', value: 6000 },
-  { city: '北京', type: '特产零食', value: 7000 },
-  { city: '北京', type: '茶叶', value: 10000 },
-  { city: '上海', type: '水果', value: 18000 },
-  { city: '上海', type: '米面', value: 11000 },
-  { city: '上海', type: '特产零食', value: 15000 },
-  { city: '上海', type: '茶叶', value: 14000 }
+  {
+    year:'1',
+    value:100,
+    type:'今年'
+  },
+  {
+    year:'2',
+    value:200,
+    type:'今年'
+  },
+  {
+    year:'3',
+    value:300,
+    type:'今年'
+  },
+  {
+    year:'4',
+    value:200,
+    type:'今年'
+  },
+  {
+    year:'5',
+    value:100,
+    type:'今年'
+  },
+  {
+    year:'6',
+    value:200,
+    type:'今年'
+  },
+  {
+    year:'7',
+    value:300,
+    type:'今年'
+  },
+  {
+    year:'8',
+    value:400,
+    type:'今年'
+  },
+  {
+    year:'1',
+    value:400,
+    type:'去年'
+  },
+  {
+    year:'2',
+    value:100,
+    type:'去年'
+  },
+  {
+    year:'3',
+    value:200,
+    type:'去年'
+  },
+  {
+    year:'4',
+    value:300,
+    type:'去年'
+  },
+  {
+    year:'5',
+    value:200,
+    type:'去年'
+  },
+  {
+    year:'6',
+    value:100,
+    type:'去年'
+  },
+  {
+    year:'7',
+    value:200,
+    type:'去年'
+  },
+  {
+    year:'8',
+    value:300,
+    type:'去年'
+  }
 ]
 
 // 配置处理脚本
@@ -522,7 +570,7 @@ const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
   data,
-  xField: 'city',
+  xField: 'year',
   yField: 'value',
   seriesField: 'type',
   isGroup: 'true',
