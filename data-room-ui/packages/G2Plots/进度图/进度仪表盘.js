@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023101402'
+const version = '2023101403'
 // 分类
 const category = 'Gauge'
 // 标题
@@ -32,10 +32,22 @@ const setting = [
     // 设置组件类型
     type: 'gradual',
     // 字段
-    field: 'range_color',
+    field: 'color1',
     // 对应options中的字段
-    optionField: 'range.color',
+    optionField: 'color1',
     value: 'l(0) 0:#6b74e4 1:#4391f4',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '表盘背景颜色',
+    // 设置组件类型
+    type: 'colorPicker',
+    // 字段
+    field: 'color2',
+    // 对应options中的字段
+    optionField: 'color2',
+    value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -147,6 +159,8 @@ const data = [
     percent: 0.75
   }
 ]
+// 配置处理脚本
+const optionHandler ='option.range.color = [option.color1, option.color2]'
 // 数据处理脚本
 const dataHandler = '// 取返回数据列表的第一项指标值\noption.percent = data[0][setting.filter(settingItem=>settingItem.field === \'percent\')[0].value]'
 
@@ -156,8 +170,10 @@ const option = {
   dataKey: 'percent',
   data,
   percent: 0.75,
+  color1: 'l(0) 0:#6b74e4 1:#4391f4',
+  color2: '#d0d0d0',
   range: {
-    color: 'l(0) 0:#6b74e4 1:#4391f4'
+    color: ['l(0) 0:#6b74e4 1:#4391f4','#d0d0d0']
   },
   startAngle: Math.PI,
   endAngle: 2 * Math.PI,
@@ -192,5 +208,6 @@ export default {
   name,
   option,
   setting,
-  dataHandler
+  dataHandler,
+  optionHandler
 }
