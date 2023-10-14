@@ -3,9 +3,10 @@ package com.gccloud.dataroom.core.module.file.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.dataroom.core.config.DataRoomConfig;
-import com.gccloud.dataroom.core.config.MinioConfig;
 import com.gccloud.dataroom.core.config.bean.FileConfig;
+import com.gccloud.dataroom.core.module.file.config.MinioConfig;
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
+import com.gccloud.dataroom.core.module.file.service.FileOperationStrategy;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomFileService;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomOssService;
 import com.gccloud.dataroom.core.utils.FileUploadUtils;
@@ -17,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,14 +31,14 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @description Minio文件管理
- * @author Acechengui
- * @date Created in 2023-10-13
+ * @Description Description
+ * @Author Acechengui
+ * @Date Created in 2023-10-14
  */
-@Service
+@Service("minioFileService")
+@Conditional(FileOperationStrategy.MinioFileCondition.class)
 @Slf4j
-@Primary
-public class DataRoomOssServiceImpl implements IDataRoomOssService {
+public class DataRoomMinioServiceImpl implements IDataRoomOssService {
 
     @Resource
     private MinioConfig minioConfig;

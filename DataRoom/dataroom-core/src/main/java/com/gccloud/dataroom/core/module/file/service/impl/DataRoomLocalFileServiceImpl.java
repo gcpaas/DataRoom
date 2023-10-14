@@ -12,6 +12,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Conditional;
+import com.gccloud.dataroom.core.module.file.service.FileOperationStrategy;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +30,8 @@ import java.net.URLEncoder;
 /**
  * 文件管理
  */
-@Service
+@Conditional(FileOperationStrategy.LocalFileCondition.class)
+@Service("localFileService")
 @Slf4j
 @ConditionalOnProperty(prefix = "gc.starter.dataroom.component", name = "IDataRoomOssService", havingValue = "DataRoomLocalFileServiceImpl", matchIfMissing = true)
 public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
@@ -37,6 +40,8 @@ public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
     private DataRoomConfig bigScreenConfig;
     @Resource
     private IDataRoomFileService sysFileService;
+
+
 
     @Override
     public DataRoomFileEntity upload(MultipartFile file, DataRoomFileEntity fileEntity, HttpServletResponse response, HttpServletRequest request) {
