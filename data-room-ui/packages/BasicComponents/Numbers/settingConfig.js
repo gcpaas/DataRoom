@@ -8,6 +8,7 @@ import { commonConfig, displayOption } from 'data-room-ui/js/config'
 
 export const settingConfig = {
   theme: 'dark',
+  data:[],
   text: '文本标签占位符', // text内容
   // 设置面板属性的显隐
   displayOption: {
