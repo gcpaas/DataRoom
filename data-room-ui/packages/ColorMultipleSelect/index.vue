@@ -53,19 +53,19 @@ export default {
       colorList: [
         {
           label: '配色1',
-          value: JSON.stringify(['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'])
+          value: JSON.stringify(['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'])
         },
         {
           label: '配色2',
-          value: JSON.stringify(['#FF6B3B', '#626681', '#FFC100', '#9FB40F', '#76523B', '#DAD5B5', '#0E8E89', '#E19348', '#F383A2', '#247FEA'])
+          value: JSON.stringify(['#FF6B3B', '#626681', '#FFC100', '#9FB40F', '#76523B'])
         },
         {
           label: '配色3',
-          value: JSON.stringify(['#025DF4', '#DB6BCF', '#2498D1', '#BBBDE6', '#4045B2', '#21A97A', '#FF745A', '#007E99', '#FFA8A8', '#2391FF'])
+          value: JSON.stringify(['#025DF4', '#DB6BCF', '#2498D1', '#BBBDE6', '#4045B2'])
         },
         {
           label: '配色4',
-          value: JSON.stringify(['#FF4500', '#1AAF8B', '#406C85', '#F6BD16', '#B40F0F', '#2FB8FC', '#4435FF', '#FF5CA2', '#BBE800', '#FE8A26'])
+          value: JSON.stringify(['#FF4500', '#1AAF8B', '#406C85', '#F6BD16', '#B40F0F'])
         }
       ],
       colorValue: []
