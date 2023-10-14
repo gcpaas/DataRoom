@@ -205,6 +205,12 @@ const option = {
   yAxis: {
     label: false,
     grid: {
+      line: {
+        type: 'line',
+        style: {
+          lineDash: null,
+        },
+      },
       alternateColor: 'rgba(0, 0, 0, 0.04)'
     }
   },

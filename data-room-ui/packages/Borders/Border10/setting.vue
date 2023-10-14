@@ -9,6 +9,7 @@
 </template>
 <script>
 import BorderSetting from 'data-room-ui/BigScreenDesign/BorderSetting.vue'
+import {predefineColors} from "data-room-ui/js/utils/colorList";
 export default {
   name: 'Border10Setting',
   components: {
@@ -17,17 +18,7 @@ export default {
   data () {
     return {
       // 预设主题色
-      predefineThemeColors: [
-        '#007aff',
-        '#1aa97b',
-        '#ff4d53',
-        '#1890FF',
-        '#DF0E1B',
-        '#0086CC',
-        '#2B74CF',
-        '#00BC9D',
-        '#ED7D32'
-      ]
+      predefineThemeColors: predefineColors
     }
   },
   computed: {

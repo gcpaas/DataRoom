@@ -72,7 +72,7 @@ const setting = [
     field: 'color',
     // 对应options中的字段
     optionField: 'color',
-    value: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
+    value: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -431,30 +431,86 @@ const setting = [
 
 // 模拟数据
 const data = [
-  { month: 'Jan', key: 'series1', value: 125 },
-  { month: 'Jan', key: 'series2', value: 51 },
-  { month: 'Feb', key: 'series1', value: 132 },
-  { month: 'Feb', key: 'series2', value: 91 },
-  { month: 'Mar', key: 'series1', value: 141 },
-  { month: 'Mar', key: 'series2', value: 34 },
-  { month: 'Apr', key: 'series1', value: 158 },
-  { month: 'Apr', key: 'series2', value: 47 },
-  { month: 'May', key: 'series1', value: 133 },
-  { month: 'May', key: 'series2', value: 63 },
-  { month: 'June', key: 'series1', value: 143 },
-  { month: 'June', key: 'series2', value: 58 },
-  { month: 'July', key: 'series1', value: 176 },
-  { month: 'July', key: 'series2', value: 56 },
-  { month: 'Aug', key: 'series1', value: 194 },
-  { month: 'Aug', key: 'series2', value: 77 },
-  { month: 'Sep', key: 'series1', value: 115 },
-  { month: 'Sep', key: 'series2', value: 99 },
-  { month: 'Oct', key: 'series1', value: 134 },
-  { month: 'Oct', key: 'series2', value: 106 },
-  { month: 'Nov', key: 'series1', value: 110 },
-  { month: 'Nov', key: 'series2', value: 88 },
-  { month: 'Dec', key: 'series1', value: 91 },
-  { month: 'Dec', key: 'series2', value: 56 }
+  {
+    year:'1',
+    value:100,
+    type:'今年'
+  },
+  {
+    year:'2',
+    value:200,
+    type:'今年'
+  },
+  {
+    year:'3',
+    value:300,
+    type:'今年'
+  },
+  {
+    year:'4',
+    value:200,
+    type:'今年'
+  },
+  {
+    year:'5',
+    value:100,
+    type:'今年'
+  },
+  {
+    year:'6',
+    value:200,
+    type:'今年'
+  },
+  {
+    year:'7',
+    value:300,
+    type:'今年'
+  },
+  {
+    year:'8',
+    value:400,
+    type:'今年'
+  },
+  {
+    year:'1',
+    value:400,
+    type:'去年'
+  },
+  {
+    year:'2',
+    value:100,
+    type:'去年'
+  },
+  {
+    year:'3',
+    value:200,
+    type:'去年'
+  },
+  {
+    year:'4',
+    value:300,
+    type:'去年'
+  },
+  {
+    year:'5',
+    value:200,
+    type:'去年'
+  },
+  {
+    year:'6',
+    value:100,
+    type:'去年'
+  },
+  {
+    year:'7',
+    value:200,
+    type:'去年'
+  },
+  {
+    year:'8',
+    value:300,
+    type:'去年'
+  }
 ]
 
 // 配置处理脚本
@@ -473,8 +529,9 @@ const option = {
   dataKey: 'data',
   renderer: 'canvas',
   data,
-  xField: 'month',
+  xField: 'year',
   yField: 'value',
+  seriesField: 'type',
   legendEnable: false,
   legendLayout: 'vertical',
   legendPosition: 'top',
@@ -486,8 +543,7 @@ const option = {
       fontWeight: 400
     }
   },
-  color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
-  seriesField: 'key',
+  color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
   stepType: 'hvh',
   xAxis: {
     title: {

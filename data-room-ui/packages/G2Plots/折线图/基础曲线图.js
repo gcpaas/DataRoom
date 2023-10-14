@@ -387,7 +387,7 @@ const option = {
   smooth: true,
   lineStyle: {
     lineWidth: 2,
-    stroke: 'l(0) 0:#5F92F9 1:#62FF00'
+    stroke: 'l(0) 0:#6b74e4 1:#4391f4'
   },
   xAxis: {
     title: {
