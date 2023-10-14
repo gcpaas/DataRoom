@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import {predefineColors} from 'data-room-ui/js/utils/colorList'
 export default {
   name: 'ColorPicker',
   props: {
@@ -31,17 +32,7 @@ export default {
     }, // 输入框的占位文本
     predefineColors: { // 预定义的主题颜色
       type: Array,
-      default: () => [
-        '#007aff',
-        '#1aa97b',
-        '#ff4d53',
-        '#1890FF',
-        '#DF0E1B',
-        '#0086CC',
-        '#2B74CF',
-        '#00BC9D',
-        '#ED7D32'
-      ]
+      default: () => predefineColors
     }
   },
   data () {

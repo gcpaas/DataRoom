@@ -333,7 +333,7 @@ export default function getComponentConfig (type) {
           img: require('data-room-ui/assets/images/cardImg/indicard.png'),
           className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndexCardChart',
           w: 400,
-          h: 200,
+          h: 170,
           x: 0,
           y: 0,
           type
@@ -346,7 +346,7 @@ export default function getComponentConfig (type) {
             img: require('data-room-ui/assets/images/cardImg/indcard2.png'),
             className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndexCardChart',
             w: 400,
-            h: 200,
+            h: 170,
             x: 0,
             y: 0,
             type

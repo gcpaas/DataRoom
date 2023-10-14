@@ -44,12 +44,32 @@
           </div> -->
         <SettingTitle>基础</SettingTitle>
         <div class="lc-field-body">
-          <el-form-item label-width="100px" label="背景色">
+          <el-form-item label-width="100px" label="渐变背景色一">
             <ColorPicker
-              v-model="config.customize.bgColor"
+              v-model="config.customize.gradientColor0"
               :predefine="predefineThemeColors"
             />
           </el-form-item>
+          <el-form-item label-width="100px" label="渐变背景色二">
+            <ColorPicker
+              v-model="config.customize.gradientColor1"
+              :predefine="predefineThemeColors"
+            />
+          </el-form-item>
+          <el-form-item label-width="100px" label="渐变色方向">
+              <el-select
+                v-model="config.customize.gradientDirection"
+                popper-class="bs-el-select"
+                class="bs-el-select"
+              >
+                <el-option
+                  v-for="iconPosition in options"
+                  :key="iconPosition.value"
+                  :label="iconPosition.label"
+                  :value="iconPosition.value"
+                />
+              </el-select>
+            </el-form-item>
           <el-form-item label-width="100px" label="边框颜色">
             <ColorPicker
               v-model="config.customize.borderColor"
@@ -150,6 +170,7 @@
             <el-input-number
               v-model="config.customize.firstWeight"
               :precision="0"
+              :step="100"
               class="bs-el-input-number"
               label="请输入首行字体粗细"
             />
@@ -182,6 +203,7 @@
             <el-input-number
               v-model="config.customize.secondWeight"
               :precision="0"
+              :step="100"
               class="bs-el-input-number"
               label="请输入第二行字体粗细"
             />
@@ -208,18 +230,42 @@ export default {
   },
   data () {
     return {
+      options: [
+      {
+        label: '从左到右',
+        value: 'to right'
+      },
+      {
+        label: '从右到左',
+        value: 'to left'
+      },
+      {
+        label: '从上到下',
+        value: 'to bottom'
+      },
+      {
+        label: '从下到上',
+        value: 'to top'
+      },
+      {
+        label: '从左上到右下',
+        value: 'to bottom right'
+      },
+      {
+        label: '从右上到左下',
+        value: 'to bottom left'
+      },
+      {
+        label: '从左下到右上',
+        value: 'to top right'
+      },
+      {
+        label: '从右下到左上',
+        value: 'to top left'
+      }
+    ],
       // 预设主题色
-      predefineThemeColors: [
-        '#007aff',
-        '#1aa97b',
-        '#ff4d53',
-        '#1890FF',
-        '#DF0E1B',
-        '#0086CC',
-        '#2B74CF',
-        '#00BC9D',
-        '#ED7D32'
-      ]
+      predefineThemeColors: predefineColors
     }
   },
   computed: {

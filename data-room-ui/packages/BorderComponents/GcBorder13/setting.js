@@ -20,7 +20,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: '',
+    value: '#83bff6',
   },
   {
     label:'边框副颜色',
@@ -32,7 +32,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: '',
+    value: '#00CED1',
   },
   {
     label:'背景色',

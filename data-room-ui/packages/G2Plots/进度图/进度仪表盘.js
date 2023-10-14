@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023092201'
+const version = '2023101401'
 // 分类
 const category = 'Gauge'
 // 标题
@@ -35,7 +35,7 @@ const setting = [
     field: 'range_color',
     // 对应options中的字段
     optionField: 'range.color',
-    value: 'l(0) 0:#6B74E3 1:#38BBE5',
+    value: 'l(0) 0:#6b74e4 1:#4391f4',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -144,7 +144,7 @@ const option = {
   data,
   percent: 0.75,
   range: {
-    color: 'l(0) 0:#6B74E3 1:#38BBE5'
+    color: 'l(0) 0:#6b74e4 1:#4391f4'
   },
   startAngle: Math.PI,
   endAngle: 2 * Math.PI,

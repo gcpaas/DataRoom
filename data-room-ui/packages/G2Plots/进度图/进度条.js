@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023092201'
+const version = '2023101401'
 // 分类
 const category = 'Progress'
 // 标题
@@ -47,7 +47,7 @@ const setting = [
     field: 'frontColor',
     // 对应options中的字段
     optionField: 'frontColor',
-    value: 'l(0) 0:#6B74E3 1:#38BBE5',
+    value: 'l(0) 0:#6b74e4 1:#4391f4',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -87,7 +87,7 @@ const option = {
   percent: 0.8,
   barWidthRatio: 0.3,
   backColor: '#EEEEEE',
-  frontColor: 'l(0) 0:#6B74E3 1:#38BBE5',
+  frontcolor: 'l(0) 0:#6b74e4 1:#4391f4',
   color: ['l(0) 0:#6B74E3 1:#38BBE5', '#fff'],
   progressStyle: {
     current: {

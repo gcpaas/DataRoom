@@ -189,6 +189,7 @@ import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BgImg from './BgImgDialog.vue'
 import { mapState, mapMutations } from 'vuex'
 import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
+import {predefineColors} from 'data-room-ui/js/utils/colorList'
 export default {
   name: 'OverallSetting',
   components: {
@@ -293,17 +294,7 @@ export default {
         fitMode: 'none'
       },
       // 预设主题色
-      predefineColors: [
-        '#007aff',
-        '#1aa97b',
-        '#ff4d53',
-        '#1890FF',
-        '#DF0E1B',
-        '#0086CC',
-        '#2B74CF',
-        '#00BC9D',
-        '#ED7D32'
-      ],
+      predefineColors,
       // 图表列表
       chartOptions: []
     }

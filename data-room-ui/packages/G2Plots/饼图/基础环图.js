@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023092501'
+const version = '2023101401'
 // 分类
 const category = 'Pie'
 // 标题
@@ -125,7 +125,7 @@ const setting = [
     field: 'color',
     // 对应options中的字段
     optionField: 'color',
-    value: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
+    value: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -347,7 +347,7 @@ const option = {
       fontWeight: 400
     }
   },
-  color: ['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'],
+  color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
   label: {
     type: 'inner',
     labelLine: {

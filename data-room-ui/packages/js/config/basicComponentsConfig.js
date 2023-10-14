@@ -31,14 +31,14 @@ const typeList = [
   // 'button',
   'marquee',
   'chartTab',
-  'themeSwitcher',
+  // 'themeSwitcher',
   'themeSelect',
   'select',
   'timePicker',
   'dateTimePicker',
   'indicatorCard',
-  'indexCard',
   'indicatorCard2',
+  'indexCard',
   'indexCard2'
 
 ]
