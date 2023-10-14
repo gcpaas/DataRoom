@@ -1277,8 +1277,7 @@ export default {
             item.sourceTable = this.tableNameList[0]
           })
         }
-        this.structurePreviewListCopy = cloneDeep(this.structurePreviewList)
-        this.structurePreviewListCopy = this.structurePreviewListCopy.sort((a, b) => {
+        this.structurePreviewListCopy = cloneDeep(this.structurePreviewList).sort((a, b) => {
           return a.orderNum - b.orderNum
         })
         let paramsNameCheck = false
