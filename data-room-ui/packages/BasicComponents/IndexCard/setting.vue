@@ -265,17 +265,7 @@ export default {
       }
     ],
       // 预设主题色
-      predefineThemeColors: [
-        '#007aff',
-        '#1aa97b',
-        '#ff4d53',
-        '#1890FF',
-        '#DF0E1B',
-        '#0086CC',
-        '#2B74CF',
-        '#00BC9D',
-        '#ED7D32'
-      ]
+      predefineThemeColors: predefineColors
     }
   },
   computed: {

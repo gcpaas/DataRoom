@@ -200,21 +200,9 @@ export default {
       type: Object,
       required: true
     },
-    predefineThemeColors: {
+     predefineThemeColors: {
       type: Array,
-      default: () => {
-        return [
-          '#007aff',
-          '#1aa97b',
-          '#ff4d53',
-          '#1890FF',
-          '#DF0E1B',
-          '#0086CC',
-          '#2B74CF',
-          '#00BC9D',
-          '#ED7D32'
-        ]
-      }
+      default: () => predefineColors
     }
   },
   watch: {},
