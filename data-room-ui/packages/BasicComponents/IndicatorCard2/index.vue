@@ -133,6 +133,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/fonts/numberFont/stylesheet.css";
 .content{
   display: flex;
   flex-direction: column;

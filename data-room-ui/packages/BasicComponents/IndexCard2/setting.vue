@@ -193,6 +193,23 @@
               label="请输入第二行文字大小"
             />
           </el-form-item>
+          <el-form-item
+            label="文字类型"
+            label-width="100px"
+          >
+            <el-select
+              v-model="config.customize.fontFamily"
+              popper-class="bs-el-select"
+              class="bs-el-select"
+            >
+              <el-option
+                v-for="item in fontFamilyList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
            <el-form-item label-width="100px" label="第二行字体颜色">
             <ColorPicker
               v-model="config.customize.secondColor"
@@ -215,10 +232,12 @@
 </template>
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
+import {predefineColors} from "data-room-ui/js/utils/colorList";
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+import fontList from 'data-room-ui/js/utils/fontList'
 export default {
   name: 'BarSetting',
   components: {
@@ -265,7 +284,8 @@ export default {
       }
     ],
       // 预设主题色
-      predefineThemeColors: predefineColors
+      predefineThemeColors: predefineColors,
+      fontFamilyList: fontList,
     }
   },
   computed: {
