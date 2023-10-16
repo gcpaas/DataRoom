@@ -59,6 +59,19 @@ public class ScreenIndicatorCardChart extends Chart {
         @ApiModelProperty(notes = "第二行字体内容")
         private String secondLine;
 
+        @ApiModelProperty(notes = "字体")
+        private String fontFamily;
+
+        @ApiModelProperty(notes = "单位")
+        private String unit;
+
+        @ApiModelProperty(notes = "单位字体大小")
+        private Integer unitSize;
+
+        @ApiModelProperty(notes = "单位字体颜色")
+        private String unitColor;
+
+
     }
 
 }
