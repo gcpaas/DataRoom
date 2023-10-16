@@ -177,8 +177,8 @@ export default function getComponentConfig (type) {
       }
     case 'customHtml':
       return {
-        name: '自定义html',
-        title: '自定义html',
+        name: '自定义HTML',
+        title: '自定义HTML',
         icon: Icon.getNameList()[29],
         className:
           'com.gccloud.dataroom.core.module.chart.components.ScreenCustomHtmlChart',
