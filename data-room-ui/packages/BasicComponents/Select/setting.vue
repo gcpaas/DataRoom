@@ -93,6 +93,7 @@ import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetti
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+import {predefineColors} from "data-room-ui/js/utils/colorList";
 export default {
   name: 'Border14Setting',
   components: {
