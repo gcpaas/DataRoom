@@ -449,7 +449,6 @@ export default {
           if (dataUrl) {
             if (showSize(dataUrl) > 200) {
               // const newData = compressImage(dataUrl, 800)
-              // console.log(111, newData)
               // const url = dataURLtoBlob(dataUrl)
               // // 压缩到500KB,这里的500就是要压缩的大小,可自定义
               // const imgRes = await imageConversion.compressAccurately(url, {
@@ -461,7 +460,6 @@ export default {
               // pageInfo.coverPicture = base64.result
               this.$message.info('由于封面图片过大，进行压缩中')
               const compressCoverPicture = await compressImage(dataUrl, { width: 1280, height: 720, size: 400, quality: 1 })
-              console.log(showSize(compressCoverPicture))
               pageInfo.coverPicture = compressCoverPicture
             } else {
               pageInfo.coverPicture = dataUrl

@@ -382,7 +382,6 @@ export default {
   },
   methods: {
     changeImg(val){
-      console.log(val)
       this.$set(this.config,'imgUrl',val.url)
     },
     init(){

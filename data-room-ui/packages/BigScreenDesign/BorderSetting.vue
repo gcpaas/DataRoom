@@ -27,12 +27,12 @@
         <div class="lc-field-body">
           <PosWhSetting :config="config" />
         </div>
-        <SettingTitle>旋转</SettingTitle>
+        <!-- <SettingTitle>旋转</SettingTitle>
         <div class="lc-field-body">
           <RotateSetting
             :config="config"
           />
-        </div>
+        </div> -->
         <SettingTitle>基础</SettingTitle>
         <div class="lc-field-body">
           <slot name="top" />
