@@ -187,6 +187,7 @@ import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+import {predefineColors} from "data-room-ui/js/utils/colorList";
 export default {
   name: 'TimePickerSetting',
   components: {
