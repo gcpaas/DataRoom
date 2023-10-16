@@ -5,9 +5,9 @@
       :config="config"
       :predefine-theme-colors="predefineThemeColors"
     />
-    <RotateSetting
+    <!-- <RotateSetting
       :config="config"
-    />
+    /> -->
   </div>
 </template>
 <script>
