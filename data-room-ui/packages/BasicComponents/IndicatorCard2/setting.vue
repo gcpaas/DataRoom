@@ -206,12 +206,11 @@
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
-import {predefineColors} from "data-room-ui/js/utils/colorList";
+import {predefineColors} from 'data-room-ui/js/utils/colorList';
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import fontList from 'data-room-ui/js/utils/fontList'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
-import {predefineColors} from "data-room-ui/js/utils/colorList";
 export default {
   name: 'BarSetting',
   components: {
