@@ -33,6 +33,7 @@
       >
       <span
       :style="{
+        'font-family': config.customize.fontFamily,
           'font-size': customize.secondSize + 'px',
           color:customize.secondColor,
           'font-weight':customize.secondWeight,

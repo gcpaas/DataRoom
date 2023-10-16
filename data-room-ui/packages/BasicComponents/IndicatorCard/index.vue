@@ -21,6 +21,7 @@
       >
         <span
         :style="{
+          'font-family': config.customize.fontFamily,
           'font-size': customize.firstSize + 'px',
           color:customize.firstColor,
           'font-weight':customize.firstWeight,
