@@ -21,6 +21,7 @@
       >
         <span
         :style="{
+          'font-family': config.customize.fontFamily,
           'font-size': customize.firstSize + 'px',
           color:customize.firstColor,
           'font-weight':customize.firstWeight,
@@ -133,6 +134,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/fonts/numberFont/stylesheet.css";
 .content{
   display: flex;
   flex-direction: column;

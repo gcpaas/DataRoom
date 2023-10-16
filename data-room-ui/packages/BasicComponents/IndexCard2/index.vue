@@ -41,6 +41,7 @@
         >{{ customize.secondLine }}</span>
         <span
           :style="{
+            'font-family': config.customize.fontFamily,
             'font-size': customize.secondSize + 'px',
             'height':customize.secondSize + 'px',
             color:customize.secondColor,
@@ -131,6 +132,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/fonts/numberFont/stylesheet.css";
 .content{
   display: flex;
   flex-direction: row;
