@@ -300,6 +300,7 @@ data.forEach(item => {
               <el-table-column
                 prop="width"
                 label="列宽"
+                width='90'
                 align="center"
               >
                 <template slot-scope="scope">
