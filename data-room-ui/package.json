@@ -64,7 +64,6 @@
     "es6-promise": "4.2.8",
     "gc-vue-draggable-resizable": "^1.0.1",
     "html-to-image": "1.11.11",
-    "image-conversion": "^2.1.1",
     "insert-css": "^2.0.0",
     "jquery": "^3.6.4",
     "lodash": "4.17.21",
