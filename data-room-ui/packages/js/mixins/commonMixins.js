@@ -61,27 +61,23 @@ export default {
     },
     // 跟当前组件计算表达式关联的组件的数据集合
     currentDataset () {
-      // ['RiTkJGDa','PEKwsHbf']this.config.expressionCodes
-      const newDataset = this.config.expressionCodes?.map(code => {
-        return this.dataset[code]
+      const newDataset = {}
+      this.config.expressionCodes?.forEach(code => {
+        if (this.dataset[code]) {
+          newDataset[code] = this.dataset[code]
+        }
       })
-      if (newDataset?.some(item => !item)) {
-        return null
-      } else {
-        return newDataset
-      }
+      return newDataset
     },
     // 跟当前组件计算表达式关联的组件的数据集合
     currentComputedDatas () {
-      // ['RiTkJGDa','PEKwsHbf']this.config.expressionCodes
-      const newDataset = this.config.expressionCodes?.map(code => {
-        return this.computedDatas[code]
+      const newDataset = {}
+      this.config.expressionCodes?.forEach(code => {
+        if (this.computedDatas[code]) {
+          newDataset[code] = this.computedDatas[code]
+        }
       })
-      if (newDataset?.some(item => !item)) {
-        return null
-      } else {
-        return newDataset
-      }
+      return newDataset
     },
     // 组件数据加载时的背景颜色
     loadingBackground () {
