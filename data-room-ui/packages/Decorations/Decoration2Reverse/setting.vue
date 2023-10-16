@@ -32,7 +32,7 @@
         </div>
         <SettingTitle>基础</SettingTitle>
         <div class="lc-field-body">
-          <el-form-item label="装饰主颜色">
+          <el-form-item label="装饰颜色">
             <ColorPicker
               v-model="config.customize.decorationColor1"
               :predefine="predefineThemeColors"

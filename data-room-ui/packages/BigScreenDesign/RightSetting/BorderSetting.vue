@@ -75,6 +75,7 @@
          <el-form-item
           :label-width="labelWidth"
           label="是否显示标题"
+          v-if="config.type!='GcBorder16'"
         >
           <el-switch
               v-model="config.isTitle"
@@ -146,6 +147,22 @@
           :placeholder="`请输入${setting.label}`"
           clearable
         />
+        <el-input
+          v-model="config[setting.field]"
+          v-else-if="setting.type === 'background'"
+          clearable
+          placeholder="请选择图片"
+        >
+          <template slot="append">
+            <el-button
+              size="small"
+              type="primary"
+              @click="initCard"
+            >
+              选择
+            </el-button>
+          </template>
+        </el-input>
         <el-select
           v-else-if="setting.type === 'select'"
           v-model="config[setting.field]"
@@ -249,6 +266,7 @@
         />
       </el-form-item>
       </div>
+      <SourceDialog ref="SourceDialog" @getImg='changeImg'  />
     </div>
   </div>
 </template>
@@ -258,12 +276,14 @@ import plotList from 'data-room-ui/BorderComponents/settingList.js'
 import BorderColorSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderColorSetting/index.vue'
 import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
 import BorderSelect from 'data-room-ui/BorderSelect/index.vue'
+import SourceDialog from '../SourceDialog/index.vue'
 export default {
   name: '',
   components: {
     BorderSelect,
     ColorSelect,
-    BorderColorSetting
+    BorderColorSetting,
+    SourceDialog
   },
   props: {
     bigTitle:{
@@ -361,9 +381,17 @@ export default {
     // }
   },
   methods: {
+    changeImg(val){
+      console.log(val)
+      this.$set(this.config,'imgUrl',val.url)
+    },
     init(){
       this.$refs.BorderSelect.init()
+    },
+    initCard(){
+      this.$refs.SourceDialog.init()
     }
+
   }
 }
 </script>

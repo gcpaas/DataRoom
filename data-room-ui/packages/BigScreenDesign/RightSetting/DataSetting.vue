@@ -792,6 +792,8 @@ export default {
     },
     // 根据数据集来获取数据集详情
     getDataSetDetailsById (id, type) {
+      this.clearVerify()
+      this.config.customize.columnConfig=[]
       if (id) {
         this.config.dataSource.businessKey = id
         getDataSetDetails(id).then(res => {

@@ -153,7 +153,16 @@ import { getFileUrl } from 'data-room-ui/js/utils/file'
 export default {
   name: 'SourceDialog',
   mixins: [pageMixins],
-  props: {},
+  props: {
+    imgUrl: {
+      type: String,
+      default: ''
+    }
+  },
+  model: {
+    prop: 'imgUrl',
+    event: 'change'
+  },
   data () {
     return {
       dialogVisible: false,
@@ -193,6 +202,7 @@ export default {
     confirm () {
       this.dialogVisible = false
       if (this.focus !== -1) {
+         this.$emit('change', this.focus)
         this.$emit('getImg', this.focus)
       }
     },
