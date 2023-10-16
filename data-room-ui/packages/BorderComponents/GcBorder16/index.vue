@@ -4,8 +4,8 @@
     class="bs-design-wrap"
     :id="'border'+ config.code"
     :style="{
-      borderImageSlice:'100 100 100 100 fill',
-      borderImageWidth:'100px 100px 100px 100px',
+      borderImageSlice:`${borderArray[0]} ${borderArray[1]} ${borderArray[2]} ${borderArray[3]} fill`,
+      borderImageWidth:`${borderArray[0]}px ${borderArray[1]}px ${borderArray[2]}px ${borderArray[3]}px`,
     }"
   >
   </div>
@@ -33,12 +33,26 @@ export default {
     }
   },
   computed: {
+    borderArray(){
+      return this.config.border.borderArray ? this.config.border.borderArray
+        : [100,100,100,100]
+    }
   },
   watch: {
+    'config.border.imgUrl': {
+      handler (val) {
+        if(val){
+          const a =document.getElementById('border'+ this.config.code)
+          a.style['border-image-source']=`url(${val})`
+        }
+      }
+    }
   },
   mounted () {
-    const a =document.getElementById('border'+ this.config.code)
-    // a.style['border-image-source']=`url(http://127.0.0.1:8081//bigScreenServer/static/1704043211902484481.png)`
+    if(this.config.border.imgUrl){
+      const a =document.getElementById('border'+ this.config.code)
+          a.style['border-image-source']=`url(${this.config.border.imgUrl})`
+    }
   },
   methods: {
   }
