@@ -80,6 +80,15 @@ public class ScreenIndexCardChart extends Chart {
         @ApiModelProperty(notes = "单位字体颜色")
         private String unitColor;
 
+        @ApiModelProperty(notes = "渐变方向")
+        private String gradientDirection;
+
+        @ApiModelProperty(notes = "渐变颜色0")
+        private String gradientColor0;
+
+        @ApiModelProperty(notes = "渐变颜色1")
+        private String gradientColor1;
+
     }
 
 }
