@@ -330,6 +330,7 @@ import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetti
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 import IconSvg from 'data-room-ui/SvgIcon'
+import {predefineColors} from "data-room-ui/js/utils/colorList";
 export default {
   name: 'TextSetting',
   components: {
