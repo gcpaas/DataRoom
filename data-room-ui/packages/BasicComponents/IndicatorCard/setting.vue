@@ -134,7 +134,7 @@
             />
           </el-form-item>
           <el-form-item
-            label="文字类型"
+            label="数据文字类型"
             label-width="100px"
           >
             <el-select
