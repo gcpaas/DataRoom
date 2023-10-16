@@ -38,7 +38,7 @@
       :style="{
         zIndex: chart.z || 0,
       }"
-      :transform="`perspective(${chart.perspective > 0? (chart.perspective + 'px') : 'none' }) rotateX(${chart.rotateX == undefined ? 0 : chart.rotateX}deg) rotateY(${chart.rotateY == undefined ? 0 : chart.rotateY}deg)  rotateZ(${chart.rotateZ == undefined ? 0 : chart.rotateZ}deg)`"
+      :transform="''"
       :grid="[1,1]"
       :handles="handlesList"
       class-name-handle="bs-handle-class"
