@@ -45,7 +45,7 @@
               <data-set-select
                 :dataset-name="datasetName"
                 :ds-id="config.dataSource.businessKey"
-                @getDsId="dsId => { getDataSetDetailsById(dsId, 'treeTable');}"
+                @getDsId="changeDsid"
               >
                 <template #dataSetSelect="{value}">
                   <slot
@@ -764,6 +764,12 @@ export default {
     }
   },
   methods: {
+    changeDsid(dsId){
+       this.clearVerify()
+      this.config.customize.columnConfig=[]
+      this.getDataSetDetailsById(dsId, 'treeTable')
+
+    },
     // 打开表达式弹窗
     openExpression () {
       this.$refs.expressionDialog.init()
@@ -792,8 +798,6 @@ export default {
     },
     // 根据数据集来获取数据集详情
     getDataSetDetailsById (id, type) {
-      this.clearVerify()
-      this.config.customize.columnConfig=[]
       if (id) {
         this.config.dataSource.businessKey = id
         getDataSetDetails(id).then(res => {
