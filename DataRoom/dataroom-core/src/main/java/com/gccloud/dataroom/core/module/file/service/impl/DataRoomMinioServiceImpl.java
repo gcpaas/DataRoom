@@ -9,7 +9,6 @@ import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
 import com.gccloud.dataroom.core.module.file.service.FileOperationStrategy;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomFileService;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomOssService;
-import com.gccloud.dataroom.core.utils.FileUploadUtils;
 import com.gccloud.dataroom.core.utils.MinioFileInterface;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -28,7 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @Description Description
@@ -75,9 +75,9 @@ public class DataRoomMinioServiceImpl implements IDataRoomOssService {
             fileEntity.setModule("other");
         }
         // 重命名
-        String id = IdWorker.getIdStr();
-        String newFileName = id + "." + extension;
-        String filePath = FileUploadUtils.extractFilename(file);
+        String newFileName = IdWorker.getIdStr() + "." + extension;
+        // 组装路径:获取当前日期并格式化为"yyyy/mm/dd"格式的字符串
+        String filePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) + "/" + newFileName;
         InputStream inputStream = file.getInputStream();
         PutObjectArgs args = PutObjectArgs.builder()
                 .bucket(minioConfig.getBucketName())
@@ -113,9 +113,9 @@ public class DataRoomMinioServiceImpl implements IDataRoomOssService {
         response.setContentType("multipart/form-data");
         // 不设置前端无法从header获取文件名
         response.setHeader("Access-Control-Expose-Headers", "filename");
-        response.setHeader("filename", URLEncoder.encode(fileEntity.getOriginalName(), StandardCharsets.UTF_8));
+        response.setHeader("filename", URLEncoder.encode(fileEntity.getOriginalName(), "UTF-8"));
         // 解决下载的文件不携带后缀
-        response.setHeader("Content-Disposition", "attachment;fileName="+URLEncoder.encode(fileEntity.getOriginalName(), StandardCharsets.UTF_8));
+        response.setHeader("Content-Disposition", "attachment;fileName="+URLEncoder.encode(fileEntity.getOriginalName(), "UTF-8"));
         try {
             InputStream is = minioFileInterface.download(fileEntity.getPath());
             IOUtils.copy(is, response.getOutputStream());

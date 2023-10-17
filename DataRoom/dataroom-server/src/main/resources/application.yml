@@ -52,12 +52,10 @@ gc:
 # Minio配置
 minio:
   # 服务地址,端口默认9000
-  url: http://192.168.20.98:9000
+  url: http://127.0.0.1:9000
   # 类似于Amazon S3。访问密钥
   accessKey: admin
   # 私有密钥
   secretKey: 123456
   # 桶名
   bucketName: mybucket
-  # 存储目录
-  template_path: templateDownload/
