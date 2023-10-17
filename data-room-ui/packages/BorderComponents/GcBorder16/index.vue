@@ -33,6 +33,9 @@ export default {
     }
   },
   computed: {
+    url(){
+      return require('data-room-ui/BorderComponents/GcBorder16/component.png')
+    },
     borderArray(){
       return this.config.border.borderArray ? this.config.border.borderArray
         : [100,100,100,100]
@@ -44,6 +47,9 @@ export default {
         if(val){
           const a =document.getElementById('border'+ this.config.code)
           a.style['border-image-source']=`url(${val})`
+        }else{
+          const a =document.getElementById('border'+ this.config.code)
+          a.style['border-image-source']=`url(${this.url})`
         }
       }
     }
@@ -52,6 +58,9 @@ export default {
     if(this.config.border.imgUrl){
       const a =document.getElementById('border'+ this.config.code)
           a.style['border-image-source']=`url(${this.config.border.imgUrl})`
+    }else{
+      const a =document.getElementById('border'+ this.config.code)
+          a.style['border-image-source']=`url(${this.url})`
     }
   },
   methods: {
@@ -61,7 +70,7 @@ export default {
 
 <style lang="scss" scoped>
 .bs-design-wrap {
-  border-image-source:url(component.png);
+  // border-image-source:url(component.png);
   width: 100%;
   height: 100%;
   position: absolute;

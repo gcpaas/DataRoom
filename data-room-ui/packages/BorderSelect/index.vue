@@ -29,7 +29,6 @@
             @click="chooseComponent(component)"
           >
             <div
-              v-if="component.title!='GcBorder16'"
               :class="component.title == focus.title ? 'focus' : ''"
               class="big-screen-card-inner"
             >
