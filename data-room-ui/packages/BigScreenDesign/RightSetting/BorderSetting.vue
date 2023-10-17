@@ -151,7 +151,7 @@
           v-model="config[setting.field]"
           v-else-if="setting.type === 'background'"
           clearable
-          placeholder="请选择图片"
+          placeholder="选择或输入链接"
         >
           <template slot="append">
             <el-button
@@ -163,6 +163,13 @@
             </el-button>
           </template>
         </el-input>
+        <el-button
+          v-else-if="setting.type === 'move'"
+          type="primary"
+          @click="initMove(config.imgUrl)"
+        >
+          图形切割
+        </el-button>
         <el-select
           v-else-if="setting.type === 'select'"
           v-model="config[setting.field]"
@@ -267,6 +274,7 @@
       </el-form-item>
       </div>
       <SourceDialog ref="SourceDialog" @getImg='changeImg'  />
+      <MoveDialog @getArray='changeBorder' ref="MoveDialog"/>
     </div>
   </div>
 </template>
@@ -277,13 +285,15 @@ import BorderColorSetting from 'data-room-ui/BigScreenDesign/RightSetting/Border
 import ColorSelect from 'data-room-ui/ColorMultipleSelect/index.vue'
 import BorderSelect from 'data-room-ui/BorderSelect/index.vue'
 import SourceDialog from '../SourceDialog/index.vue'
+import MoveDialog from './MoveDialog/index.vue'
 export default {
   name: '',
   components: {
     BorderSelect,
     ColorSelect,
     BorderColorSetting,
-    SourceDialog
+    SourceDialog,
+    MoveDialog
   },
   props: {
     bigTitle:{
@@ -381,6 +391,9 @@ export default {
     // }
   },
   methods: {
+    changeBorder(val){
+      this.$set(this.config,'borderArray',val)
+    },
     changeImg(val){
       this.$set(this.config,'imgUrl',val.url)
     },
@@ -389,6 +402,10 @@ export default {
     },
     initCard(){
       this.$refs.SourceDialog.init()
+    },
+    initMove(val){
+      console.log(val)
+      this.$refs.MoveDialog.init(val,this.config.borderArray)
     }
 
   }
