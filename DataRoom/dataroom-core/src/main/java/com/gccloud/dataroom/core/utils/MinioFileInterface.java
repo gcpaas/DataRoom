@@ -1,21 +1,12 @@
 package com.gccloud.dataroom.core.utils;
 
 import com.gccloud.dataroom.core.config.MinioConfig;
-import io.minio.BucketExistsArgs;
-import io.minio.GetObjectArgs;
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.RemoveObjectArgs;
-import io.minio.errors.ErrorResponseException;
-import io.minio.errors.InsufficientDataException;
-import io.minio.errors.InternalException;
-import io.minio.errors.InvalidResponseException;
-import io.minio.errors.ServerException;
-import io.minio.errors.XmlParserException;
+import io.minio.*;
+import io.minio.errors.*;
 import io.minio.http.Method;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.FastByteArrayOutputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,6 +45,28 @@ public class MinioFileInterface {
                 .object(objectName)
                 //.versionId("my-versionid") //还可以删除指定版本号的对象
                 .build());
+    }
+
+    /**
+     * 下载文件返回byte[]
+     * @param objectName 文件名（路径）
+     */
+    public byte[] downloadByte(String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        GetObjectArgs objectArgs = GetObjectArgs.builder().bucket(minioConfig.getBucketName())
+                .object(objectName).build();
+        MinioClient minioClient = init();
+        GetObjectResponse response = minioClient.getObject(objectArgs);
+        byte[] buf = new byte[1024];
+        int len;
+        try (FastByteArrayOutputStream os = new FastByteArrayOutputStream()) {
+            while ((len = response.read(buf)) != -1) {
+                os.write(buf, 0, len);
+            }
+            os.flush();
+            byte[] bytes = os.toByteArray();
+            os.close();
+            return bytes;
+        }
     }
 
     /**

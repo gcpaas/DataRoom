@@ -4,7 +4,6 @@ import io.minio.MinioClient;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Minio 配置信息
@@ -76,19 +75,8 @@ public class MinioConfig
     }
 
     @Bean
-    public MinioClient getMinioClient() {
-        if (StringUtils.isEmpty(url) || StringUtils.isEmpty(accessKey) || StringUtils.isEmpty(secretKey)) {
-            // 如果未配置Minio相关的配置项，则使用本地文件存储
-            // 或者返回一个默认的MinioClient实例，用于本地文件存储
-            return createDefaultMinioClient();
-        }
+    public MinioClient getMinioClient()
+    {
         return MinioClient.builder().endpoint(url).credentials(accessKey, secretKey).build();
-    }
-
-    private MinioClient createDefaultMinioClient() {
-        return MinioClient.builder()
-                .endpoint("http://minio.example.com")
-                .credentials("accessKey", "secretKey")
-                .build();
     }
 }

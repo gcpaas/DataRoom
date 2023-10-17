@@ -2,7 +2,7 @@ package com.gccloud.dataroom.core.module.file.service;
 
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
 import com.gccloud.dataroom.core.module.file.enums.FileUploadType;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author Acechengui
  */
 @Service
-@Slf4j
 public class FileOperationStrategy {
     private final IDataRoomOssService dataRoomOssService;
 
@@ -30,8 +29,10 @@ public class FileOperationStrategy {
         @Override
         public boolean matches(ConditionContext context, @NotNull AnnotatedTypeMetadata metadata) {
             String uploadType = context.getEnvironment().getProperty("gc.starter.file.uploadType");
-            return FileUploadType.LOCAL.getValue().equalsIgnoreCase(uploadType) ||
-                    !FileUploadType.MINIO.getValue().equalsIgnoreCase(uploadType);
+            if(StringUtils.isNotBlank(uploadType)){
+                return FileUploadType.LOCAL.getValue().equalsIgnoreCase(uploadType);
+            }
+            return true;
         }
     }
 
@@ -39,7 +40,10 @@ public class FileOperationStrategy {
         @Override
         public boolean matches(ConditionContext context, @NotNull AnnotatedTypeMetadata metadata) {
             String uploadType = context.getEnvironment().getProperty("gc.starter.file.uploadType");
-            return FileUploadType.MINIO.getValue().equalsIgnoreCase(uploadType);
+            if(StringUtils.isNotBlank(uploadType)){
+                return FileUploadType.MINIO.getValue().equalsIgnoreCase(uploadType);
+            }
+            return false;
         }
     }
 

@@ -1,9 +1,9 @@
 package com.gccloud.dataroom.core.module.file.enums;
 
 /**
- *  文件操作类型
- *  Description
- * @author Acechengui
+ * @Description Description
+ * @Author Acechengui
+ * @Date Created in 2023-10-14
  */
 public enum FileUploadType {
     LOCAL("local"),
