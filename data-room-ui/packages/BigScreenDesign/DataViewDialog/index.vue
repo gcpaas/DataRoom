@@ -107,7 +107,7 @@ export default {
     getDataList (config) {
       this.loading = true
       // 如果是G2组件并且未配置数据集的情况下，则需要从option里面取数据
-      if (['customComponent', 'remoteComponent', 'echartsComponent'].includes(config.type) && (!config.dataSource.businessKey)) {
+      if ((['customComponent', 'remoteComponent', 'echartsComponent'].includes(config.type) && (!config.dataSource.businessKey)) || (config.expressionCodes && config.expressionCodes.length)) {
         this.getDataByOption(config)
         this.fieldsFormat()
         this.loading = false
@@ -146,6 +146,8 @@ export default {
         list = config.option.data.children
       } else if (config.type === 'tables') {
         list = config.option.tableData
+      } else if (config.expressionCodes && config.expressionCodes.length) {
+        list = [{ title: config.customize.title }]
       } else {
         list = config.option.data
       }

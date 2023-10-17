@@ -27,7 +27,7 @@
               label="数据来源"
             >
               <el-radio-group
-                v-model="dataSourceStyle"
+                v-model="config.dataSource.source "
                 class="bs-el-radio-group"
               >
                 <el-radio label="dataset">
@@ -39,7 +39,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item
-              v-if="dataSourceStyle === 'dataset'"
+              v-if="config.dataSource.source === 'dataset'"
               label="数据集"
             >
               <data-set-select
@@ -56,7 +56,7 @@
               </data-set-select>
             </el-form-item>
             <el-form-item
-              v-if="dataSourceStyle === 'expression' && config.option.displayOption.expression && config.option.displayOption.expression.enable"
+              v-if="config.dataSource.source === 'expression' && config.option.displayOption.expression && config.option.displayOption.expression.enable"
               label="表达式"
             >
               <i
@@ -102,7 +102,7 @@ data.forEach(item => {
           </div>
         </div>
         <div
-          v-if="!['tree','multipleNumberChart','carousel'].includes(config.type) && config.option.displayOption.dataSourceType.enable "
+          v-if="!['tree','multipleNumberChart','carousel'].includes(config.type) && config.option.displayOption.dataSourceType.enable && config.dataSource.source !== 'expression'"
           class="data-setting-data-box"
         >
           <div class="lc-field-head">
@@ -300,7 +300,7 @@ data.forEach(item => {
               <el-table-column
                 prop="width"
                 label="列宽"
-                width='90'
+                width="90"
                 align="center"
               >
                 <template slot-scope="scope">
@@ -470,7 +470,7 @@ data.forEach(item => {
           </div>
         </div>
         <div
-          v-if="config.option.displayOption.params.enable"
+          v-if="config.option.displayOption.params.enable && config.dataSource.source !== 'expression'"
           class="data-setting-data-box"
         >
           <div class="lc-field-head">
@@ -642,7 +642,6 @@ export default {
   },
   data () {
     return {
-      dataSourceStyle: 'dataset', // 数据来源方式
       fieldsList: [],
       params: [], // 参数配置
       datasetName: '',
@@ -764,11 +763,10 @@ export default {
     }
   },
   methods: {
-    changeDsid(dsId){
-       this.clearVerify()
-      this.config.customize.columnConfig=[]
+    changeDsid (dsId) {
+      this.clearVerify()
+      this.config.customize.columnConfig = []
       this.getDataSetDetailsById(dsId, 'treeTable')
-
     },
     // 打开表达式弹窗
     openExpression () {
