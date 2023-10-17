@@ -45,7 +45,7 @@
               <data-set-select
                 :dataset-name="datasetName"
                 :ds-id="config.dataSource.businessKey"
-                @getDsId="dsId => { getDataSetDetailsById(dsId, 'treeTable');}"
+                @getDsId="changeDsid"
               >
                 <template #dataSetSelect="{value}">
                   <slot
@@ -300,6 +300,7 @@ data.forEach(item => {
               <el-table-column
                 prop="width"
                 label="列宽"
+                width='90'
                 align="center"
               >
                 <template slot-scope="scope">
@@ -763,6 +764,12 @@ export default {
     }
   },
   methods: {
+    changeDsid(dsId){
+       this.clearVerify()
+      this.config.customize.columnConfig=[]
+      this.getDataSetDetailsById(dsId, 'treeTable')
+
+    },
     // 打开表达式弹窗
     openExpression () {
       this.$refs.expressionDialog.init()

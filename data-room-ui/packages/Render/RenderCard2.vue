@@ -26,7 +26,8 @@ import CustomComponent from '../PlotRender/index.vue'
 import Svgs from '../Svgs/index.vue'
 import EchartsComponent from '../EchartsRender/index.vue'
 import RemoteComponent from 'data-room-ui/RemoteComponents/index.vue'
-import cloneDeep from 'lodash/cloneDeep'
+import Map  from 'data-room-ui/BasicComponents/Map/index.vue'
+import FlyMap from 'data-room-ui/BasicComponents/FlyMap/index.vue'
 const components = {}
 for (const key in pcComponent) {
   if (Object.hasOwnProperty.call(pcComponent, key)) {
@@ -40,6 +41,8 @@ export default {
     ...components,
     CustomComponent,
     Svgs,
+    Map,
+    FlyMap,
     RemoteComponent,
     EchartsComponent
   },

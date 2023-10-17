@@ -61,27 +61,23 @@ export default {
     },
     // 跟当前组件计算表达式关联的组件的数据集合
     currentDataset () {
-      // ['RiTkJGDa','PEKwsHbf']this.config.expressionCodes
-      const newDataset = this.config.expressionCodes?.map(code => {
-        return this.dataset[code]
+      const newDataset = {}
+      this.config.expressionCodes?.forEach(code => {
+        if (this.dataset[code]) {
+          newDataset[code] = this.dataset[code]
+        }
       })
-      if (newDataset?.some(item => !item)) {
-        return null
-      } else {
-        return newDataset
-      }
+      return newDataset
     },
     // 跟当前组件计算表达式关联的组件的数据集合
     currentComputedDatas () {
-      // ['RiTkJGDa','PEKwsHbf']this.config.expressionCodes
-      const newDataset = this.config.expressionCodes?.map(code => {
-        return this.computedDatas[code]
+      const newDataset = {}
+      this.config.expressionCodes?.forEach(code => {
+        if (this.computedDatas[code]) {
+          newDataset[code] = this.computedDatas[code]
+        }
       })
-      if (newDataset?.some(item => !item)) {
-        return null
-      } else {
-        return newDataset
-      }
+      return newDataset
     },
     // 组件数据加载时的背景颜色
     loadingBackground () {
@@ -156,8 +152,9 @@ export default {
               try {
                 const scriptAfterReplacement = res.data.script.replace(/\${(.*?)}/g, (match, p) => {
                   const value = this.config.dataSource?.params[p]
-
-                  if (!isNaN(value)) {
+                  if (value === null || value === undefined || value === '') {
+                    return "''"
+                  } else if (!isNaN(value)) {
                     return value || p
                   } else {
                     return `'${value}' || '${p}'`
@@ -173,7 +170,7 @@ export default {
           }
           // 将后端返回的数据保存
           if (_res.success) {
-            this.updateDataset({ code: config.code, title: config.title, data: _res?.data })
+            this.updateDataset({ code: config.code, name: config.name, data: _res?.data })
           }
           config = this.dataFormatting(config, _res)
           this.changeChartConfig(config)
@@ -224,7 +221,9 @@ export default {
               try {
                 const scriptAfterReplacement = res.data.script.replace(/\${(.*?)}/g, (match, p) => {
                   const value = this.config.dataSource?.params[p]
-                  if (!isNaN(value)) {
+                  if (value === null || value === undefined || value === '') {
+                    return "''"
+                  } else if (!isNaN(value)) {
                     return value || p
                   } else {
                     return `'${value}' || '${p}'`
@@ -240,7 +239,7 @@ export default {
           }
           // 将后端返回的数据保存
           if (_res.success) {
-            this.updateDataset({ code: config.code, title: config.title, data: _res?.data })
+            this.updateDataset({ code: config.code, name: config.name, data: _res?.data })
           }
           config = this.dataFormatting(config, _res)
           if (this.chart) {

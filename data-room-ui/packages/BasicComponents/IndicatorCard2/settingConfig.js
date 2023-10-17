@@ -50,6 +50,7 @@ const customConfig = {
   },
   customize: {
     borderRadius: 0,
+    fontFamily:'',
     borderWidth: 0,
     lineDistance: 25,
     borderColor: '',

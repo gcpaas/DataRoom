@@ -8,6 +8,7 @@ import { commonConfig, displayOption } from 'data-room-ui/js/config'
 
 export const settingConfig = {
   theme: 'dark',
+  data:[],
   text: '文本标签占位符', // text内容
   // 设置面板属性的显隐
   displayOption: {
@@ -37,7 +38,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'numbers',
   root: {
-    version: '2023071001',
+    version: '2023101401',
     url: 'https://www.runoob.com/',
     expression: 'return ',
     expressionCodes: [],

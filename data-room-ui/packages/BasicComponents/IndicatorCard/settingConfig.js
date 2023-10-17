@@ -53,6 +53,7 @@ const customConfig = {
     borderWidth: 0,
     lineDistance: 25,
     borderColor: '',
+    fontFamily:'',
     gradientDirection:'to right',
     gradientColor0: 'rgba(0, 122, 255, 1)',
     gradientColor1:'rgba(0, 122, 255, 1)',

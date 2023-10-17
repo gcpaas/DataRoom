@@ -304,9 +304,18 @@ export default {
         const barWidth = option.seriesCustom.barWidth
         // 获取数据标签展示情况
         let labelShow = 0
+        let labelPosition = 'inside'
+        let labelColor = '#fff'
+        let labelSize = 12
         config.setting.forEach(set => {
           if (set.field === 'series_barColor_label_show') {
             labelShow = set.value
+          } else if (set.field === 'series_barColor_label_position') {
+            labelPosition = set.value
+          } else if (set.field === 'series_barColor_label_color') {
+            labelColor = set.value
+          } else if (set.field === 'series_barColor_label_fontSize') {
+            labelSize = set.value
           }
         })
         // 偏移量数组
@@ -354,7 +363,11 @@ export default {
               barWidth: barWidth,
               color: '#115ba6',
               label: {
-                show: labelShow
+                fontStyle: 'normal',
+                show: labelShow,
+                position: labelPosition,
+                color: labelColor,
+                fontSize: labelSize
               },
               zlevel: 2,
               z: 12,

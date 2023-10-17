@@ -66,7 +66,7 @@ export default {
       if (config.customize.columnConfig.length === 0) {
         const key = []
         for (const i in data.columnData) {
-          header.push(data.columnData[i].remark)
+          header.push(data.columnData[i].remark||data.columnData[i].alias)
           key.push(i)
         }
         data.data.forEach((item) => {

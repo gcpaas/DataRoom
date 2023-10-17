@@ -1,6 +1,6 @@
 {
   "name": "@gcpaas/data-room-ui",
-  "version": "1.0.1-2023101301-Alpha",
+  "version": "2.0.1-2023101601-Alpha",
   "description": "自定义大屏",
   "author": "gcpaas",
   "license": "MIT",
@@ -56,7 +56,7 @@
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@antv/g2plot": "2.4.0",
-    "@gcpaas/vue-draggable-resizable-gorkys": "^1.0.1-2023101102-Alpha",
+    "@gcpaas/vue-draggable-resizable-gorkys": "^1.0.1-2023101602-Alpha",
     "@jiaminghi/data-view": "2.10.0",
     "axios": "0.18.1",
     "echarts": "^5.2.2",
@@ -64,7 +64,6 @@
     "es6-promise": "4.2.8",
     "gc-vue-draggable-resizable": "^1.0.1",
     "html-to-image": "1.11.11",
-    "image-conversion": "^2.1.1",
     "insert-css": "^2.0.0",
     "jquery": "^3.6.4",
     "lodash": "4.17.21",

@@ -156,10 +156,11 @@ import 'codemirror/mode/vue/vue.js'
 
 import {
   showSize,
-  dataURLtoBlob,
-  translateBlobToBase64
+  compressImage
+  // dataURLtoBlob,
+  // translateBlobToBase64
 } from 'data-room-ui/js/utils/compressImg'
-import * as imageConversion from 'image-conversion'
+// import * as imageConversion from 'image-conversion'
 
 export default {
   name: 'BizComponentDesign',
@@ -172,6 +173,7 @@ export default {
   props: {},
   data () {
     return {
+      initialCoverPicture: '',
       form: {
         name: '',
         coverPicture: '',
@@ -237,6 +239,7 @@ export default {
       const type = this.$route.query.type
       if (code) {
         getBizComponentInfo(code).then(data => {
+          this.initialCoverPicture = data.coverPicture || ''
           if (type && type === 'g2plot') {
             this.form = {
               ...data,
@@ -352,25 +355,28 @@ export default {
       }
       if (dataUrl) {
         if (showSize(dataUrl) > 200) {
-          const url = dataURLtoBlob(dataUrl)
+          // const url = dataURLtoBlob(dataUrl)
           // 压缩到500KB,这里的500就是要压缩的大小,可自定义
-          imageConversion.compressAccurately(
-            url,
-            {
-              size: 200, // 图片大小压缩到100kb
-              width: 1280, // 宽度压缩到1280
-              height: 720 // 高度压缩到720
-            }
-          ).then((res) => {
-            translateBlobToBase64(res, (e) => {
-              this.form.coverPicture = e.result
-            })
-          })
+          // imageConversion.compressAccurately(
+          //   url,
+          //   {
+          //     size: 200, // 图片大小压缩到100kb
+          //     width: 1280, // 宽度压缩到1280
+          //     height: 720 // 高度压缩到720
+          //   }
+          // ).then((res) => {
+          //   translateBlobToBase64(res, (e) => {
+          //     this.form.coverPicture = e.result
+          //   })
+          // })
+          this.$message.info('由于封面图片过大，进行压缩中')
+          this.form.coverPicture = await compressImage(dataUrl, { width: 1280, height: 720, size: 400, quality: 1 })
         } else {
           this.form.coverPicture = dataUrl
         }
       } else {
-        this.form.coverPicture = ''
+        this.$message.warning('保存封面失败，将使用上次保存的封面')
+        this.form.coverPicture = this.initialCoverPicture
       }
       updateBizComponent(this.form).then(() => {
         this.$message({
