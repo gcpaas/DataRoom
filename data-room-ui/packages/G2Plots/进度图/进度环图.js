@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023101401'
+const version = '2023101402'
 // 分类
 const category = 'RingProgress'
 // 标题
@@ -140,18 +140,32 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '指标位置',
+    label: '标签间距大小',
     // 设置组件类型
     type: 'inputNumber',
     // 字段
-    field: 'statistic_content_style_offsetY',
+    field: 'statistic_title_offsetY',
+    // 对应options中的字段
+    optionField: 'statistic.title.offsetY',
+    value: 0,
+    min:-100,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '指标间距大小',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'statistic_content_offsetY',
     // 对应options中的字段
     optionField: 'statistic.content.offsetY',
     value: 0,
-    min: -100,
+    min:-100,
     tabName: 'custom',
     groupName: 'graph'
   }
+
   // 边距 padding
 ]
 

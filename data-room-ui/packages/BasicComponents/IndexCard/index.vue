@@ -32,6 +32,7 @@
         <span
           class="content-right-first"
           :style="{
+            'font-family': config.customize.fontFamily,
             'font-size': customize.firstSize + 'px',
             'height':customize.firstSize + 'px',
             color:customize.firstColor,

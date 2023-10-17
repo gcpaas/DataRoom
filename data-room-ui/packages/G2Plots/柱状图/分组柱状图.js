@@ -473,22 +473,86 @@ const setting = [
 
 // 模拟数据
 const data = [
-  { name: 'London', 月份: 'Jan.', 月均降雨量: 18.9 },
-  { name: 'London', 月份: 'Feb.', 月均降雨量: 28.8 },
-  { name: 'London', 月份: 'Mar.', 月均降雨量: 39.3 },
-  { name: 'London', 月份: 'Apr.', 月均降雨量: 81.4 },
-  { name: 'London', 月份: 'May', 月均降雨量: 47 },
-  { name: 'London', 月份: 'Jun.', 月均降雨量: 20.3 },
-  { name: 'London', 月份: 'Jul.', 月均降雨量: 24 },
-  { name: 'London', 月份: 'Aug.', 月均降雨量: 35.6 },
-  { name: 'Berlin', 月份: 'Jan.', 月均降雨量: 12.4 },
-  { name: 'Berlin', 月份: 'Feb.', 月均降雨量: 23.2 },
-  { name: 'Berlin', 月份: 'Mar.', 月均降雨量: 34.5 },
-  { name: 'Berlin', 月份: 'Apr.', 月均降雨量: 99.7 },
-  { name: 'Berlin', 月份: 'May', 月均降雨量: 52.6 },
-  { name: 'Berlin', 月份: 'Jun.', 月均降雨量: 35.5 },
-  { name: 'Berlin', 月份: 'Jul.', 月均降雨量: 37.4 },
-  { name: 'Berlin', 月份: 'Aug.', 月均降雨量: 42.4 }
+  {
+    year:'1',
+    value:100,
+    type:'今年'
+  },
+  {
+    year:'2',
+    value:200,
+    type:'今年'
+  },
+  {
+    year:'3',
+    value:300,
+    type:'今年'
+  },
+  {
+    year:'4',
+    value:200,
+    type:'今年'
+  },
+  {
+    year:'5',
+    value:100,
+    type:'今年'
+  },
+  {
+    year:'6',
+    value:200,
+    type:'今年'
+  },
+  {
+    year:'7',
+    value:300,
+    type:'今年'
+  },
+  {
+    year:'8',
+    value:400,
+    type:'今年'
+  },
+  {
+    year:'1',
+    value:400,
+    type:'去年'
+  },
+  {
+    year:'2',
+    value:100,
+    type:'去年'
+  },
+  {
+    year:'3',
+    value:200,
+    type:'去年'
+  },
+  {
+    year:'4',
+    value:300,
+    type:'去年'
+  },
+  {
+    year:'5',
+    value:200,
+    type:'去年'
+  },
+  {
+    year:'6',
+    value:100,
+    type:'去年'
+  },
+  {
+    year:'7',
+    value:200,
+    type:'去年'
+  },
+  {
+    year:'8',
+    value:300,
+    type:'去年'
+  }
 ]
 
 // 配置处理脚本
@@ -519,9 +583,9 @@ const option = {
   legend: false,
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
   isGroup: true,
-  xField: '月份',
-  yField: '月均降雨量',
-  seriesField: 'name',
+  xField: 'year',
+  yField: 'value',
+  seriesField: 'type',
   /** 设置颜色 */
   // color: ['#1ca9e6', '#f88c24'],
   /** 设置间距 */

@@ -27,12 +27,12 @@
         <div class="lc-field-body">
           <PosWhSetting :config="config" />
         </div>
-        <SettingTitle>旋转</SettingTitle>
+        <!-- <SettingTitle>旋转</SettingTitle>
         <div class="lc-field-body">
           <RotateSetting
             :config="config"
           />
-        </div>
+        </div> -->
          <!-- <SettingTitle v-if="config.border">边框</SettingTitle>
           <div class="lc-field-body">
             <BorderSetting
@@ -133,6 +133,23 @@
               label="请输入首行文字大小"
             />
           </el-form-item>
+          <el-form-item
+            label="数据文字类型"
+            label-width="100px"
+          >
+            <el-select
+              v-model="config.customize.fontFamily"
+              popper-class="bs-el-select"
+              class="bs-el-select"
+            >
+              <el-option
+                v-for="item in fontFamilyList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
           <el-form-item label-width="100px" label="首行字体颜色">
             <ColorPicker
               v-model="config.customize.firstColor"
@@ -189,9 +206,11 @@
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
+import {predefineColors} from "data-room-ui/js/utils/colorList";
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+import fontList from 'data-room-ui/js/utils/fontList'
 export default {
   name: 'BarSetting',
   components: {
@@ -238,7 +257,8 @@ export default {
       }
     ],
       // 预设主题色
-      predefineThemeColors: predefineColors
+      predefineThemeColors: predefineColors,
+      fontFamilyList: fontList,
     }
   },
   computed: {

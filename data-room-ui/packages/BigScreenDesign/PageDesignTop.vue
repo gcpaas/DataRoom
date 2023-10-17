@@ -131,10 +131,9 @@ import icons from 'data-room-ui/assets/images/alignIcon/export'
 import IconSvg from 'data-room-ui/SvgIcon'
 import {
   showSize,
-  dataURLtoBlob,
-  translateBlobToBase64
+  compressImage
 } from 'data-room-ui/js/utils/compressImg'
-import * as imageConversion from 'image-conversion'
+// import * as imageConversion from 'image-conversion'
 export default {
   name: 'PageTopSetting',
   components: {
@@ -191,6 +190,7 @@ export default {
           value: 'verticalAround'
         }
       ],
+      initialCoverPicture: '',
       appInfo: '',
       saveLoading: false,
       createdImgLoading: false,
@@ -222,6 +222,7 @@ export default {
     }
   },
   mounted () {
+    this.initialCoverPicture = this.pageInfo.coverPicture || ''
     this.$refs.zoomInput.$el.addEventListener('mousewheel', this.handleMouseWheel)
   },
   beforeDestroy () {
@@ -447,20 +448,25 @@ export default {
           }
           if (dataUrl) {
             if (showSize(dataUrl) > 200) {
-              const url = dataURLtoBlob(dataUrl)
-              // 压缩到500KB,这里的500就是要压缩的大小,可自定义
-              const imgRes = await imageConversion.compressAccurately(url, {
-                size: 200, // 图片大小压缩到100kb
-                width: 1280, // 宽度压缩到1280
-                height: 720 // 高度压缩到720
-              })
-              const base64 = await translateBlobToBase64(imgRes)
-              pageInfo.coverPicture = base64.result
+              // const newData = compressImage(dataUrl, 800)
+              // const url = dataURLtoBlob(dataUrl)
+              // // 压缩到500KB,这里的500就是要压缩的大小,可自定义
+              // const imgRes = await imageConversion.compressAccurately(url, {
+              //   size: 200, // 图片大小压缩到100kb
+              //   width: 1280, // 宽度压缩到1280
+              //   height: 720 // 高度压缩到720
+              // })
+              // const base64 = await translateBlobToBase64(imgRes)
+              // pageInfo.coverPicture = base64.result
+              this.$message.info('由于封面图片过大，进行压缩中')
+              const compressCoverPicture = await compressImage(dataUrl, { width: 1280, height: 720, size: 400, quality: 1 })
+              pageInfo.coverPicture = compressCoverPicture
             } else {
               pageInfo.coverPicture = dataUrl
             }
           } else {
-            pageInfo.coverPicture = ''
+            this.$message.warning('保存封面失败，将使用上次保存的封面')
+            pageInfo.coverPicture = this.initialCoverPicture
           }
           const res = await saveScreen(pageInfo)
           this.$message.success('保存成功')

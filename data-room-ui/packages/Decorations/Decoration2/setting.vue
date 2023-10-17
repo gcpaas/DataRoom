@@ -24,12 +24,6 @@
         <div class="lc-field-body">
           <PosWhSetting :config="config" />
         </div>
-        <SettingTitle>旋转</SettingTitle>
-        <div class="lc-field-body">
-          <RotateSetting
-            :config="config"
-          />
-        </div>
         <SettingTitle>基础</SettingTitle>
         <div class="lc-field-body">
           <el-form-item label="装饰颜色">
@@ -60,7 +54,7 @@
 <script>
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
-import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+// import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import {predefineColors} from "data-room-ui/js/utils/colorList";
 export default {
@@ -68,8 +62,7 @@ export default {
   components: {
     ColorPicker,
     PosWhSetting,
-    SettingTitle,
-    RotateSetting
+    SettingTitle
   },
   data () {
     return {

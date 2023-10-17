@@ -27,12 +27,12 @@
         <div class="lc-field-body">
           <PosWhSetting :config="config" />
         </div>
-        <SettingTitle>旋转</SettingTitle>
+        <!-- <SettingTitle>旋转</SettingTitle>
         <div class="lc-field-body">
           <RotateSetting
             :config="config"
           />
-        </div>
+        </div> -->
          <!-- <SettingTitle v-if="config.border">边框</SettingTitle>
           <div class="lc-field-body">
             <BorderSetting
@@ -166,6 +166,23 @@
               label="请输入第二行文字大小"
             />
           </el-form-item>
+          <el-form-item
+            label="数据文字类型"
+            label-width="100px"
+          >
+            <el-select
+              v-model="config.customize.fontFamily"
+              popper-class="bs-el-select"
+              class="bs-el-select"
+            >
+              <el-option
+                v-for="item in fontFamilyList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
            <el-form-item label-width="100px" label="第二行字体颜色">
             <ColorPicker
               v-model="config.customize.secondColor"
@@ -189,8 +206,10 @@
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
+import {predefineColors} from 'data-room-ui/js/utils/colorList';
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import fontList from 'data-room-ui/js/utils/fontList'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
   name: 'BarSetting',
@@ -237,6 +256,7 @@ export default {
         value: 'to top left'
       }
     ],
+    fontFamilyList: fontList,
       // 预设主题色
       predefineThemeColors: predefineColors
     }

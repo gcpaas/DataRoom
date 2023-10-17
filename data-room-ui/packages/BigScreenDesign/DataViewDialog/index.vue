@@ -106,7 +106,7 @@ export default {
     // 获取数据列表
     getDataList (config) {
       this.loading = true
-      // 如果是G2组件则需要从option里面取数据
+      // 如果是G2组件并且未配置数据集的情况下，则需要从option里面取数据
       if (['customComponent', 'remoteComponent', 'echartsComponent'].includes(config.type) && (!config.dataSource.businessKey)) {
         this.getDataByOption(config)
         this.fieldsFormat()

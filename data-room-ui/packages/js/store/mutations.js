@@ -372,11 +372,11 @@ export default {
   },
   // 更新数据集库中的内容
   updateDataset (state, res) {
-    Vue.set(state.dataset, res.title + res.code, res.data)
+    Vue.set(state.dataset, res.name + res.code, res.data)
   },
   // 更新数据集库中的内容
   updateComputedDatas (state, res) {
-    Vue.set(state.computedDatas, res.title + res.code, res.data)
+    Vue.set(state.computedDatas, res.name + res.code, res.data)
   },
   // 清空数据集库
   emptyDataset (state) {

@@ -19,7 +19,7 @@ export function showSize (base64url) {
     // 判断后两位是否为00，如果是则删除00
     return sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2)
   }
-  return size
+  return Number(size)
 }
 
 export function dataURLtoFile (dataurl, filename) {
@@ -57,4 +57,44 @@ export function translateBlobToBase64 (blob, callback) {
   }
   reader.readAsDataURL(blob)
   // 读取后，result属性中将包含一个data:URL格式的Base64字符串用来表示所读取的文件
+}
+
+// 压缩方法
+export function compressImage (base64, { width: w = 1280, height: h = 720, size = 200, quality = 1 }) {
+  return new Promise((resolve, reject) => {
+    const newImage = new Image()
+    newImage.src = base64
+    newImage.setAttribute('crossOrigin', 'Anonymous')
+    let imgWidth, imgHeight
+    newImage.onload = function () {
+      imgWidth = 1280
+      imgHeight = 720
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      if (Math.max(imgWidth, imgHeight) > w) {
+        if (imgWidth > imgHeight) {
+          canvas.width = w
+          canvas.height = w * imgHeight / imgWidth
+        } else {
+          canvas.height = w
+          canvas.width = w * imgWidth / imgHeight
+        }
+      } else {
+        canvas.width = imgWidth
+        canvas.height = imgHeight
+        quality = 1
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(this, 0, 0, canvas.width, canvas.height)
+      let compressedBase64 = canvas.toDataURL('image/jpeg', quality) // 压缩语句
+      if (showSize(compressedBase64) > Number(size)) {
+        compressedBase64 = canvas.toDataURL('image/jpeg', quality - 0.2 > 0.4 ? quality - 0.2 : 0.4)
+      }
+      resolve(compressedBase64)
+    }
+    newImage.onerror = function () {
+      reject(new Error('Failed to load image'))
+    }
+  })
 }
