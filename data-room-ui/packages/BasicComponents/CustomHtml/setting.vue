@@ -37,12 +37,12 @@
           :bigTitle='config.title'
         />
       </div>
-      <!-- <SettingTitle>旋转</SettingTitle>
-      <div class="lc-field-body">
-        <RotateSetting
-          :config="config"
-        />
-      </div> -->
+      <SettingTitle>旋转</SettingTitle>
+          <div class="lc-field-body">
+            <RotateSetting
+              :config="config"
+            />
+          </div>
       <SettingTitle>基础</SettingTitle>
       <div class="setting-wrap">
         <el-form-item
