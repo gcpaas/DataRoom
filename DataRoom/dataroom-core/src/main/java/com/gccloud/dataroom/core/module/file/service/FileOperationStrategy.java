@@ -2,6 +2,7 @@ package com.gccloud.dataroom.core.module.file.service;
 
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
 import com.gccloud.dataroom.core.module.file.enums.FileUploadType;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
@@ -24,12 +25,14 @@ public class FileOperationStrategy {
         this.dataRoomOssService = localFileService != null ? localFileService : minioFileService;
     }
 
-
     public static class LocalFileCondition implements Condition {
         @Override
         public boolean matches(ConditionContext context, @NotNull AnnotatedTypeMetadata metadata) {
             String uploadType = context.getEnvironment().getProperty("gc.starter.file.uploadType");
-            return FileUploadType.LOCAL.getValue().equalsIgnoreCase(uploadType);
+            if(StringUtils.isNotBlank(uploadType)){
+                return FileUploadType.LOCAL.getValue().equalsIgnoreCase(uploadType);
+            }
+            return true;
         }
     }
 
@@ -37,7 +40,10 @@ public class FileOperationStrategy {
         @Override
         public boolean matches(ConditionContext context, @NotNull AnnotatedTypeMetadata metadata) {
             String uploadType = context.getEnvironment().getProperty("gc.starter.file.uploadType");
-            return FileUploadType.MINIO.getValue().equalsIgnoreCase(uploadType);
+            if(StringUtils.isNotBlank(uploadType)){
+                return FileUploadType.MINIO.getValue().equalsIgnoreCase(uploadType);
+            }
+            return false;
         }
     }
 

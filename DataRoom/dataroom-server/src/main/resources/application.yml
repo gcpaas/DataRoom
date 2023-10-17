@@ -47,9 +47,11 @@ gc:
   starter:
     file:
       # 文件存储 minio | local
+      # 默认为本地
       uploadType: local
 
 # Minio配置
+# 不配置则默认为本地
 minio:
   # 服务地址,端口默认9000
   url: http://127.0.0.1:9000
