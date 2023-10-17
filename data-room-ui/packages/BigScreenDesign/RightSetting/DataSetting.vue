@@ -102,7 +102,7 @@ data.forEach(item => {
           </div>
         </div>
         <div
-          v-if="!['tree','multipleNumberChart','carousel'].includes(config.type) && config.option.displayOption.dataSourceType.enable "
+          v-if="!['tree','multipleNumberChart','carousel'].includes(config.type) && config.option.displayOption.dataSourceType.enable && dataSourceStyle !== 'expression'"
           class="data-setting-data-box"
         >
           <div class="lc-field-head">
@@ -470,7 +470,7 @@ data.forEach(item => {
           </div>
         </div>
         <div
-          v-if="config.option.displayOption.params.enable"
+          v-if="config.option.displayOption.params.enable && dataSourceStyle !== 'expression'"
           class="data-setting-data-box"
         >
           <div class="lc-field-head">
