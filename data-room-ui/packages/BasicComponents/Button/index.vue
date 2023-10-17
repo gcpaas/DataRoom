@@ -30,6 +30,7 @@
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 import { mapState } from 'vuex'
+import {predefineColors} from "data-room-ui/js/utils/colorList";
 export default {
   name: 'BasicComponentButton',
   mixins: [commonMixins, linkageMixins],
@@ -44,21 +45,9 @@ export default {
       type: Object,
       default: () => ({})
     },
-    predefineThemeColors: {
+     predefineThemeColors: {
       type: Array,
-      default: () => {
-        return [
-          '#007aff',
-          '#1aa97b',
-          '#ff4d53',
-          '#1890FF',
-          '#DF0E1B',
-          '#0086CC',
-          '#2B74CF',
-          '#00BC9D',
-          '#ED7D32'
-        ]
-      }
+      default: () => predefineColors
     }
   },
   mounted () {

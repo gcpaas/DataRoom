@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023092201'
+const version = '2023101403'
 // 分类
 const category = 'Gauge'
 // 标题
@@ -56,10 +56,22 @@ const setting = [
     // 设置组件类型
     type: 'gradual',
     // 字段
-    field: 'range_color',
+    field: 'color1',
     // 对应options中的字段
-    optionField: 'range.color',
-    value: 'l(0) 0:#6B74E3 1:#38BBE5',
+    optionField: 'color1',
+    value: 'l(0) 0:#6b74e4 1:#4391f4',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '表盘背景颜色',
+    // 设置组件类型
+    type: 'colorPicker',
+    // 字段
+    field: 'color2',
+    // 对应options中的字段
+    optionField: 'color2',
+    value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -138,6 +150,32 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
+  {
+    label: '标签间距大小',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'statistic_content_offsetY',
+    // 对应options中的字段
+    optionField: 'statistic.content.offsetY',
+    value: -30,
+    min:-100,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '指标间距大小',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'statistic_title_offsetY',
+    // 对应options中的字段
+    optionField: 'statistic.title.offsetY',
+    value: 0,
+    min:-100,
+    tabName: 'custom',
+    groupName: 'graph'
+  }
   // 图例 legend
   // 边距 padding
 ]
@@ -146,6 +184,9 @@ const data = [
     percent: 0.75
   }
 ]
+// 配置处理脚本
+const optionHandler ='option.range.color = [option.color1, option.color2]'
+
 // 数据处理脚本
 const dataHandler = '// 取返回数据列表的第一项指标值\noption.percent = data[0][setting.filter(settingItem=>settingItem.field === \'percent\')[0].value]'
 
@@ -155,8 +196,10 @@ const option = {
   dataKey: 'percent',
   data,
   percent: 0.75,
+  color1: 'l(0) 0:#6b74e4 1:#4391f4',
+  color2: '#d0d0d0',
   range: {
-    color: 'l(0) 0:#6B74E3 1:#38BBE5'
+    color: ['l(0) 0:#6b74e4 1:#4391f4','#d0d0d0']
   },
   indicator: {
     pointer: {
@@ -185,7 +228,7 @@ const option = {
   // },
   statistic: {
     title: {
-      offsetY: -20,
+      offsetY: 0,
       style: {
         fontSize: 20,
         lineHeight: 2,
@@ -195,6 +238,7 @@ const option = {
       formatter: ({ percent }) => `${(percent * 100).toFixed(0)}%`
     },
     content: {
+      offsetY: -30,
       content: '占比',
       style: {
         fontSize: 20,
@@ -212,5 +256,6 @@ export default {
   name,
   option,
   setting,
-  dataHandler
+  dataHandler,
+  optionHandler
 }

@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023092201'
+const version = '2023101401'
 // 分类
 const category = 'RingProgress'
 // 标题
@@ -47,7 +47,7 @@ const setting = [
     field: 'color1',
     // 对应options中的字段
     optionField: 'color1',
-    value: 'l(0) 0:#6B74E3 1:#38BBE5',
+    value: 'l(0) 0:#6b74e4 1:#4391f4',
     tabName: 'custom',
     groupName: 'graph'
   },

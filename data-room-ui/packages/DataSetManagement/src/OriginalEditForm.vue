@@ -319,7 +319,7 @@
             </div>
             <div class="field-wrap bs-field-wrap bs-scrollbar">
               <div
-                v-for="field in structurePreviewList"
+                v-for="field in sortedStructurePreviewList"
                 :key="field.fieldName"
                 class="field-item"
                 @click="fieldsetVisible = true"
@@ -363,15 +363,15 @@
             class="bs-el-table bs-scrollbar"
           >
             <el-table-column
-              v-for="(value, key) in dataPreviewList[0] ? dataPreviewList[0] : noDataTableDisplayFields"
+              v-for="(value, key) in sortedTablePreviewList"
               :key="key"
-              :label="key"
+              :label="value"
               align="center"
               show-overflow-tooltip
               :render-header="renderHeader"
             >
               <template slot-scope="scope">
-                <span>{{ scope.row[key] }}</span>
+                <span>{{ scope.row[value] }}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -609,6 +609,21 @@ export default {
         tableColumnObject[item.fieldName] = ''
       })
       return tableColumnObject
+    },
+    sortedTablePreviewList () {
+      const tableList = this.dataPreviewList[0] ? this.dataPreviewList[0] : this.noDataTableDisplayFields
+      const list = Object.keys(tableList)
+      list.sort((a, b) => {
+        return this.structurePreviewListCopy.findIndex(item => item.fieldName === a) - this.structurePreviewListCopy.findIndex(item => item.fieldName === b)
+      })
+      return list
+    },
+    sortedStructurePreviewList () {
+      const list = this.structurePreviewList
+      list.sort((a, b) => {
+        return a.orderNum - b.orderNum
+      })
+      return list
     }
   },
   watch: {
@@ -630,8 +645,10 @@ export default {
       },
       deep: true,
       immediate: true
+    },
+    sortedStructurePreviewList (val) {
+      this.structurePreviewListCopy = cloneDeep(val)
     }
-
   },
   mounted () {
     this.init()
@@ -718,7 +735,7 @@ export default {
         if (this.dataForm.fieldList == null) {
           this.dataForm.fieldList = cloneDeep(data.structure)
         }
-        this.dataPreviewList = data.data.list
+        this.dataPreviewList = cloneDeep(data.data.list)
         this.totalCount = data.data.totalCount
         this.tableLoading = false
       }).catch(() => {
@@ -958,7 +975,9 @@ export default {
           })
         }
 
-        this.structurePreviewListCopy = cloneDeep(this.structurePreviewList)
+        this.structurePreviewListCopy = cloneDeep(this.structurePreviewList).sort((a, b) => {
+          return a.orderNum - b.orderNum
+        })
         this.totalCount = data.data.totalCount
         this.currentCount = data.data.currentCount
         this.tableLoading = false

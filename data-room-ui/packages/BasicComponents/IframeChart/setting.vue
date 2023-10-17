@@ -29,12 +29,12 @@
       <div class="setting-wrap">
         <PosWhSetting :config="config" />
       </div>
-      <SettingTitle>旋转</SettingTitle>
+      <!-- <SettingTitle>旋转</SettingTitle>
       <div class="lc-field-body">
         <RotateSetting
           :config="config"
         />
-      </div>
+      </div> -->
        <SettingTitle v-if="config.border">边框</SettingTitle>
           <div class="lc-field-body">
             <BorderSetting

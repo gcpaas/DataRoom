@@ -160,7 +160,7 @@ const setting = [
     type: 'gradual',
     field: 'lineStyle_stroke',
     optionField: 'lineStyle.stroke',
-    value: 'l(0) 0:#5F92F9 1:#62FF00',
+    value: 'l(0) 0:#6b74e4 1:#4391f4',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -509,7 +509,7 @@ const option = {
   },
   lineStyle: {
     lineWidth: 2,
-    stroke: 'l(0) 0:#5F92F9 1:#62FF00'
+    stroke: 'l(0) 0:#6b74e4 1:#4391f4'
   },
   xAxis: {
     title: {

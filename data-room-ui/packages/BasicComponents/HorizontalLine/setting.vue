@@ -28,12 +28,12 @@
           <div class="lc-field-body">
             <PosWhSetting :config="config" />
           </div>
-          <SettingTitle>旋转</SettingTitle>
+          <!-- <SettingTitle>旋转</SettingTitle>
           <div class="lc-field-body">
             <RotateSetting
               :config="config"
             />
-          </div>
+          </div> -->
           <SettingTitle v-if="config.border">边框</SettingTitle>
           <div class="lc-field-body">
             <BorderSetting
@@ -94,6 +94,7 @@ import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+import {predefineColors} from "data-room-ui/js/utils/colorList";
 
 export default {
   name: 'Border14Setting',
@@ -109,21 +110,9 @@ export default {
       type: Object,
       required: true
     },
-    predefineThemeColors: {
+     predefineThemeColors: {
       type: Array,
-      default: () => {
-        return [
-          '#007aff',
-          '#1aa97b',
-          '#ff4d53',
-          '#1890FF',
-          '#DF0E1B',
-          '#0086CC',
-          '#2B74CF',
-          '#00BC9D',
-          '#ED7D32'
-        ]
-      }
+      default: () => predefineColors
     }
   },
   data () {

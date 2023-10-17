@@ -36,12 +36,12 @@
               :bigTitle='config.title'
             />
           </div>
-        <SettingTitle>旋转</SettingTitle>
+        <!-- <SettingTitle>旋转</SettingTitle>
         <div class="lc-field-body">
           <RotateSetting
             :config="config"
           />
-        </div>
+        </div> -->
         <SettingTitle>基础</SettingTitle>
         <div class="lc-field-body">
           <el-form-item label="表头背景色">
@@ -129,6 +129,7 @@ import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+import {predefineColors} from "data-room-ui/js/utils/colorList";
 export default {
   name: 'BarSetting',
   components: {
@@ -141,17 +142,7 @@ export default {
   data () {
     return {
       // 预设主题色
-      predefineThemeColors: [
-        '#007aff',
-        '#1aa97b',
-        '#ff4d53',
-        '#1890FF',
-        '#DF0E1B',
-        '#0086CC',
-        '#2B74CF',
-        '#00BC9D',
-        '#ED7D32'
-      ]
+      predefineThemeColors: predefineColors
     }
   },
   computed: {
