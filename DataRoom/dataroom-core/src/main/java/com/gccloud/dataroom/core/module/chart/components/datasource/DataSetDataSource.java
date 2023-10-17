@@ -14,10 +14,13 @@ import java.util.List;
 @Data
 public class DataSetDataSource extends BaseChartDataSource {
 
+    @ApiModelProperty(notes = "数据来源，可能为数据集或者表达式")
+    private String source;
+
     @ApiModelProperty(notes = "数据集标识")
     private String businessKey;
 
-    @ApiModelProperty(notes = "数据源标识,仅用于出码时使用")
+    @ApiModelProperty(notes = "数据源标识")
     private String dataSourceKey;
 
     @ApiModelProperty(notes = "数据集类型")
