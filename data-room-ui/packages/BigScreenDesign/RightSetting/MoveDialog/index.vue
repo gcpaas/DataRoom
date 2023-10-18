@@ -139,13 +139,9 @@
 </template>
 <script>
 import { getFileUrl } from 'data-room-ui/js/utils/file'
-import InputCom from './component/input.vue'
 
 export default {
   name: 'SourceDialog',
-  components: {
-   InputCom
-  },
   data () {
     return {
       dialogVisible: false,
