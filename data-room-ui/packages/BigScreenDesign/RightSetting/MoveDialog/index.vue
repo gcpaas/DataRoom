@@ -3,6 +3,7 @@
     title="点九图"
     :visible.sync="dialogVisible"
     :modal="true"
+    width="75%"
     :modal-append-to-body="false"
     :appen-to-body="false"
     class="bs-dialog-wrap bs-el-dialog"
@@ -10,11 +11,55 @@
     @opened='getDom'
   >
     <div class="content">
+      <div>
+        <table border="1" cellspacing="0">
+          <tr>
+            <th>方向</th>
+            <th>描述</th>
+          </tr>
+          <tr>
+            <td>左上角</td>
+            <td>不能拉伸</td>
+          </tr>
+           <tr>
+            <td>右上角</td>
+            <td>不能拉伸</td>
+          </tr>
+           <tr>
+            <td>左下角</td>
+            <td>不能拉伸</td>
+          </tr>
+           <tr>
+            <td>右下角</td>
+            <td>不能拉伸</td>
+          </tr>
+           <tr>
+            <td>左侧</td>
+            <td>宽度不变，高度自动拉伸</td>
+          </tr>
+           <tr>
+            <td>右侧</td>
+            <td>宽度不变，高度自动拉伸</td>
+          </tr>
+           <tr>
+            <td>顶部</td>
+            <td>高度不变，宽度自动拉伸</td>
+          </tr>
+          <tr>
+            <td>底部</td>
+            <td>高度不变，宽度自动拉伸</td>
+          </tr>
+          <tr>
+            <td>中部</td>
+            <td>宽度，高度自动拉伸</td>
+          </tr>
+        </table>
+      </div>
       <div class="img">
         <span class="toptitle">
+          <!-- <InputCom @changeStyle='changeTop' :Fx="['上','下']" :number="top" /> -->
             <el-input-number
             @change='changeTop'
-            controls-position="right"
             v-model="top"
             class="bs-el-input-number"
             :step=" 1"
@@ -25,7 +70,6 @@
         <span class="righttitle">
             <el-input-number
             @change='changeRight'
-            controls-position="right"
             v-model="right"
             class="bs-el-input-number"
             :step=" 1"
@@ -36,7 +80,6 @@
         <span class="bottomtitle">
             <el-input-number
             @change='changeBottom'
-            controls-position="right"
             v-model="bottom"
             class="bs-el-input-number"
             :step=" 1"
@@ -47,7 +90,6 @@
         <span class="lefttitle">
             <el-input-number
             @change='changeLeft'
-            controls-position="right"
             v-model="left"
             class="bs-el-input-number"
             :step=" 1"
@@ -58,7 +100,7 @@
           <el-image
           style="max-width:550px"
           :src="this.imgUrl||url"
-          fit="none"></el-image>
+          fit="fill"></el-image>
           <div
            @mousedown="onMouseDown"
            @mouseup="onMouseUp"
@@ -97,9 +139,13 @@
 </template>
 <script>
 import { getFileUrl } from 'data-room-ui/js/utils/file'
+import InputCom from './component/input.vue'
 
 export default {
   name: 'SourceDialog',
+  components: {
+   InputCom
+  },
   data () {
     return {
       dialogVisible: false,
@@ -207,7 +253,7 @@ export default {
 ::v-deep .el-dialog__body{
   background-color: #232832;
   position: relative;
-  min-height: 400px;
+  min-height: 450px;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -215,6 +261,7 @@ export default {
 }
 .content{
   margin: 20px 0;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -223,22 +270,22 @@ export default {
     .toptitle{
         position: absolute;
         top: -30px;
-        left: 42%;
+        left: 34%;
       }
     .righttitle{
       position: absolute;
       top: 50%;
-      right: -75px;
+      right: -110px;
     }
     .bottomtitle{
       position: absolute;
       bottom: -30px;
-      left: 42%;
+      left: 34%;
     }
     .lefttitle{
       position: absolute;
       top: 50%;
-      left: -75px;
+      left: -110px;
     }
     // height: 100%;
     .top{
@@ -275,10 +322,21 @@ export default {
 
 }
 ::v-deep .el-input-number--mini{
-  width: 70px;
+  width: 100px;
   .el-input__inner{
     padding-right: 30px;
   }
+}
+table{
+  margin-right: 120px;
+  color: #fff;
+  border: 1px solid #fff;
+}
+th{
+  padding: 4px;
+}
+td{
+  padding: 8px;
 }
 
 </style>

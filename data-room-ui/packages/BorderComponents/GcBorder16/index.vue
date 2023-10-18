@@ -4,6 +4,7 @@
     class="bs-design-wrap"
     :id="'border'+ config.code"
     :style="{
+      opacity: opacity,
       borderImageSlice:`${borderArray[0]} ${borderArray[1]} ${borderArray[2]} ${borderArray[3]} fill`,
       borderImageWidth:`${borderArray[0]}px ${borderArray[1]}px ${borderArray[2]}px ${borderArray[3]}px`,
     }"
@@ -36,6 +37,9 @@ export default {
   computed: {
     url(){
       return require('data-room-ui/BorderComponents/GcBorder16/component.png')
+    },
+    opacity () {
+      return this.config.border.opacity || 100
     },
     borderArray(){
       return this.config.border.borderArray ? this.config.border.borderArray
