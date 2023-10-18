@@ -35,6 +35,16 @@ const setting = [
     value: '',
   },
   {
+    label: '不透明度',
+    // 设置组件类型
+    type: 'slider',
+    // 字段
+    field: 'opacity',
+    // 对应options中的字段
+    optionField: 'opacity.fillOpacity',
+    value: 1,
+  },
+  {
     label:'点九图背景切割',
     // 设置组件类型， select / input / colorPicker
     type: 'move',
@@ -44,7 +54,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: [100,100,100,100],
+    value: [50,50,50,50],
   },
 ]
 

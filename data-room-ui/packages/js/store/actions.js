@@ -18,6 +18,10 @@ export default {
         const pageInfo = handleResData(data)
         // 兼容边框配置
         pageInfo.chartList.forEach((item) => {
+          if (item.dataSource) {
+            item.dataSource.source = item.dataSource?.source || 'dataset'
+          }
+
           if (!item.border) {
             item.border = { type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [0, 0, 0, 0] }
           }

@@ -23,6 +23,8 @@ const BigScreenDesign = () => import('./BigScreenDesign')
 const DataSetManagement = () => import('./DataSetManagement')
 // 数据源管理页面
 const DataSourceManagement = () => import('./DataSourceManagement')
+// 地图数据管理页面
+const MapDataManagement = () => import('./MapDataManagement')
 
 // 存储组件列表
 const components = [
@@ -33,7 +35,8 @@ const components = [
   BigScreenRun,
   BigScreenDesign,
   DataSetManagement,
-  DataSourceManagement
+  DataSourceManagement,
+  MapDataManagement
 ]
 
 function install (Vue) {
@@ -52,6 +55,7 @@ export {
   BigScreenDesign,
   DataSetManagement,
   DataSourceManagement,
+  MapDataManagement,
   $dataRoomStore,
   $dataRoomAxios,
   registerConfig,
@@ -68,6 +72,7 @@ export default {
   BigScreenDesign,
   DataSetManagement,
   DataSourceManagement,
+  MapDataManagement,
   $dataRoomStore,
   $dataRoomAxios,
   registerConfig,

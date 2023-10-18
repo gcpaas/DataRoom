@@ -37,12 +37,12 @@
           :config="config"
         />
       </div>
-      <!-- <SettingTitle>旋转</SettingTitle>
-      <div class="lc-field-body">
-        <RotateSetting
-          :config="config"
-        />
-      </div> -->
+      <SettingTitle>旋转</SettingTitle>
+          <div class="lc-field-body">
+            <RotateSetting
+              :config="config"
+            />
+          </div>
       <template v-for="group in groupList">
         <div :key="group.groupName">
           <SettingTitle>   {{ group.groupName | filterGroupName }}</SettingTitle>

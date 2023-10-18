@@ -22,6 +22,12 @@
             />
           </el-form-item>
           <PosWhSetting :config="config" />
+          <SettingTitle>旋转</SettingTitle>
+          <div class="lc-field-body">
+            <RotateSetting
+              :config="config"
+            />
+          </div>
           <el-form-item label="文本">
             <el-input
               v-model="config.customize.text"
@@ -109,12 +115,14 @@
 <script>
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
+import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 import {predefineColors} from "data-room-ui/js/utils/colorList";
 export default {
   name: 'Border14Setting',
   components: {
     ColorPicker,
-    PosWhSetting
+    PosWhSetting,
+    RotateSetting
   },
   props: {
     config: {

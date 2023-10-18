@@ -203,6 +203,10 @@ export default {
       } else {
         // 数据返回失败则赋前端的模拟数据
         config.option.data = this.plotList?.find(plot => plot.name === config.name)?.option?.data || config?.option?.data
+        const _xField = this.plotList?.find(plot => plot.name === config.name)?.option?.xField || config?.option?.xField
+        const _yField = this.plotList?.find(plot => plot.name === config.name)?.option?.yField || config?.option?.yField
+        const _seriesField = this.plotList?.find(plot => plot.name === config.name)?.option?.seriesField || config?.option?.seriesField
+        config.option = _seriesField ? { ...config.option, xField: _xField, yField: _yField, seriesField: _seriesField } : { ...config.option, xField: _xField, yField: _yField }
       }
       return config
     },

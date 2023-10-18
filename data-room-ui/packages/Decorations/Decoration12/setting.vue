@@ -53,12 +53,12 @@
             />
           </el-form-item>
         </div>
-        <!-- <SettingTitle>旋转</SettingTitle>
+         <SettingTitle>旋转</SettingTitle>
         <div class="lc-field-body">
           <RotateSetting
             :config="config"
           />
-        </div> -->
+        </div>
       </el-form>
     </el-form>
   </div>

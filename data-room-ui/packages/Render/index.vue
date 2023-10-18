@@ -38,7 +38,8 @@
       :style="{
         zIndex: chart.z || 0,
       }"
-      :transform="`skew(${chart.skewX == undefined ? 0 : chart.skewX}deg, ${chart.skewY == undefined? 0 : chart.skewY}deg) perspective(${chart.perspective > 0? (chart.perspective + 'px') : 'none' }) rotateX(${chart.rotateX == undefined ? 0 : chart.rotateX}deg) rotateY(${chart.rotateY == undefined ? 0 : chart.rotateY}deg)  rotateZ(${chart.rotateZ == undefined ? 0 : chart.rotateZ}deg)`"
+      :perspective="parseInt(`${chart.perspective == undefined ? 0 : chart.perspective}`)"
+      :transform="`skew(${chart.skewX == undefined ? 0 : chart.skewX}deg, ${chart.skewY == undefined? 0 : chart.skewY}deg) rotateX(${chart.rotateX == undefined ? 0 : chart.rotateX}deg) rotateY(${chart.rotateY == undefined ? 0 : chart.rotateY}deg)  rotateZ(${chart.rotateZ == undefined ? 0 : chart.rotateZ}deg)`"
       :grid="[1,1]"
       :handles="handlesList"
       class-name-handle="bs-handle-class"
@@ -85,7 +86,6 @@ import RenderCard from './RenderCard.vue'
 import Configuration from './Configuration.vue'
 // import _ from 'lodash'
 import cloneDeep from 'lodash/cloneDeep'
-// import vdr from 'gc-vue-draggable-resizable'
 import vdr from '@gcpaas/vue-draggable-resizable-gorkys'
 import 'gc-vue-draggable-resizable/dist/VueDraggableResizable.css'
 import { randomString } from '../js/utils'
