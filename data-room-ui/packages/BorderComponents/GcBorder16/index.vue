@@ -12,6 +12,7 @@
 </template>
 <script>
 import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
+import { getFileUrl } from 'data-room-ui/js/utils/file'
 export default {
   name: 'Border14',
   components: {
@@ -45,8 +46,12 @@ export default {
     'config.border.imgUrl': {
       handler (val) {
         if(val){
+          let ur=val
+          if(!val.startsWith('http')){
+            ur = getFileUrl(val)
+          }
           const a =document.getElementById('border'+ this.config.code)
-          a.style['border-image-source']=`url(${val})`
+          a.style['border-image-source']=`url(${ur})`
         }else{
           const a =document.getElementById('border'+ this.config.code)
           a.style['border-image-source']=`url(${this.url})`
@@ -56,8 +61,12 @@ export default {
   },
   mounted () {
     if(this.config.border.imgUrl){
+      let ur=this.config.border.imgUrl
+      if(!this.config.border.imgUrl.startsWith('http')){
+            ur = getFileUrl(this.config.border.imgUrl)
+          }
       const a =document.getElementById('border'+ this.config.code)
-          a.style['border-image-source']=`url(${this.config.border.imgUrl})`
+          a.style['border-image-source']=`url(${ur})`
     }else{
       const a =document.getElementById('border'+ this.config.code)
           a.style['border-image-source']=`url(${this.url})`

@@ -96,7 +96,7 @@
   </el-dialog>
 </template>
 <script>
-import { right } from '@antv/g2plot/lib/plots/sankey/sankey'
+import { getFileUrl } from 'data-room-ui/js/utils/file'
 
 export default {
   name: 'SourceDialog',
@@ -182,7 +182,11 @@ export default {
       a.style.left=val+"px"
     },
     init (val,array) {
-      this.imgUrl=val
+      if(!val.startsWith('http')){
+        this.imgUrl=getFileUrl(val)
+      }else{
+        this.imgUrl=val
+      }
       if(array){
         [this.top,this.right,this.bottom,this.left]=array
         this.$nextTick(()=>{
