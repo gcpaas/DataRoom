@@ -93,10 +93,7 @@
                 v-model="config.dataHandler"
                 type="textarea"
                 :rows="5"
-                placeholder="示例:
-data.forEach(item => {
-// 数据处理
-})"
+                placeholder="示例:data.forEach(item => { // 数据处理 })"
               />
             </el-form-item>
           </div>
@@ -546,7 +543,7 @@ data.forEach(item => {
             </el-table>
           </div>
         </div>
-        <div
+        <!-- <div
           v-if="config.option.displayOption.serverPagination.enable"
           class="data-setting-data-box"
           name="分页配置"
@@ -601,7 +598,7 @@ data.forEach(item => {
               </el-select>
             </el-form-item>
           </div>
-        </div>
+        </div> -->
         <ComponentBinding
           v-if="['button'].includes(config.type)"
           :config="config"
