@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="资源库"
+    title="点九图"
     :visible.sync="dialogVisible"
     :modal="true"
     :modal-append-to-body="false"
@@ -214,6 +214,7 @@ export default {
   padding: 16px 16px 16px 16px !important;
 }
 .content{
+  margin: 20px 0;
   display: flex;
   justify-content: center;
   align-items: center;
