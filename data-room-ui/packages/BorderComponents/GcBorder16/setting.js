@@ -44,7 +44,7 @@ const setting = [
     // 是否多选
     multiple: false,
     // 绑定的值
-    value: [100,100,100,100],
+    value: [50,50,50,50],
   },
 ]
 

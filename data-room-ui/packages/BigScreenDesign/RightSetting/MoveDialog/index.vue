@@ -56,6 +56,7 @@
             />
         </span>
           <el-image
+          style="max-width:550px"
           :src="this.imgUrl||url"
           fit="none"></el-image>
           <div

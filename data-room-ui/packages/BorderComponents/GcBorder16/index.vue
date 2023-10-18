@@ -38,7 +38,7 @@ export default {
     },
     borderArray(){
       return this.config.border.borderArray ? this.config.border.borderArray
-        : [100,100,100,100]
+        : [50,50,50,50]
     }
   },
   watch: {
