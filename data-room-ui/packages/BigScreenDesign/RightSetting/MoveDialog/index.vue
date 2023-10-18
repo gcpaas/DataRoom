@@ -324,7 +324,7 @@ export default {
   }
 }
 table{
-  margin-right: 120px;
+  margin-right: 200px;
   color: #fff;
   border: 1px solid #fff;
 }
