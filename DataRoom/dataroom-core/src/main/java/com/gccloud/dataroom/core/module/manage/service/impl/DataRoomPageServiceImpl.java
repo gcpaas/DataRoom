@@ -10,6 +10,9 @@ import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
 import com.gccloud.dataroom.core.module.chart.bean.Chart;
 import com.gccloud.dataroom.core.module.chart.bean.Linkage;
 import com.gccloud.dataroom.core.module.chart.components.datasource.DataSetDataSource;
+import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
+import com.gccloud.dataroom.core.module.file.service.IDataRoomFileService;
+import com.gccloud.dataroom.core.module.file.service.IDataRoomOssService;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomSearchDTO;
 import com.gccloud.dataroom.core.module.manage.extend.DataRoomExtendClient;
@@ -23,6 +26,7 @@ import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.AssertUtils;
 import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.common.vo.PageVO;
+import com.gccloud.dataroom.core.utils.PathUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -30,12 +34,13 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +71,9 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
 
     @Resource
     private IDataRoomPagePreviewService previewService;
+
+    @Resource
+    private IDataRoomOssService ossService;
 
     @Override
     public PageEntity getByCode(String code) {
@@ -124,24 +132,15 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
             base64String = base64String.substring(base64String.indexOf(",") + 1);
             // 解码base64字符串
             byte[] imageBytes = Base64.getDecoder().decode(base64String);
-            String basePath = bigScreenConfig.getFile().getBasePath();
-            // 不是/结尾，加上/
-            if (!basePath.endsWith("/") || !basePath.endsWith("\\")) {
-                basePath += File.separator;
-            }
-            // 检查目录是否存在，不存在则创建
-            File file = new File(basePath + "cover");
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            // 保存为图片文件
-            String filePath = basePath + "cover" + File.separator + fileName + ".png";
-            fileUrl = "cover" + File.separator + fileName + ".png";
-            FileOutputStream outputStream = new FileOutputStream(filePath);
-            outputStream.write(imageBytes);
-            outputStream.close();
+            InputStream inputStream = new ByteArrayInputStream(imageBytes);
+            DataRoomFileEntity fileEntity = new DataRoomFileEntity();
+            String filePath = "cover" + File.separator + fileName + ".png";
+            ossService.upload(inputStream, filePath, 0, fileEntity);
+            // 封面先不保存到资源库
+            // fileService.save(fileEntity);
             log.info("大屏封面保存至：{}", filePath);
-        } catch (IOException e) {
+            fileUrl = fileEntity.getUrl();
+        } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
         }
         return fileUrl;
@@ -154,26 +153,13 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
      * @param newFileName
      * @return
      */
-    private boolean copyCoverPicture(String oldFileName, String newFileName) {
+    private String copyCoverPicture(String oldFileName, String newFileName) {
         if (StringUtils.isBlank(oldFileName)) {
-            return false;
+            return "";
         }
-        String basePath = bigScreenConfig.getFile().getBasePath() + File.separator;
-        String oldFile = basePath + "cover" + File.separator + oldFileName + ".png";
-        // 检查文件是否存在
-        File file = new File(oldFile);
-        if (!file.exists() || !file.isFile()) {
-            return false;
-        }
-        // 复制一份
-        String newFilePath = basePath + "cover" + File.separator + newFileName + ".png";
-        try {
-            FileUtils.copyFile(file, new File(newFilePath));
-            return true;
-        } catch (IOException e) {
-            log.error(ExceptionUtils.getStackTrace(e));
-        }
-        return false;
+        String oldFile = "cover" + File.separator + oldFileName + ".png";
+        String newFilePath = "cover" + File.separator + newFileName + ".png";
+        return ossService.copy(oldFile, newFilePath);
     }
 
     @Override
@@ -265,10 +251,14 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
             urlPrefix += "/";
         }
         for (PageEntity pageEntity : list) {
-            if (StringUtils.isBlank(pageEntity.getCoverPicture())) {
+            String coverPicture = pageEntity.getCoverPicture();
+            if (StringUtils.isBlank(coverPicture)) {
                 continue;
             }
-            pageEntity.setCoverPicture(urlPrefix + pageEntity.getCoverPicture().replace("\\", "/"));
+            if (coverPicture.startsWith("/")) {
+                coverPicture = coverPicture.substring(1);
+            }
+            pageEntity.setCoverPicture(urlPrefix + PathUtils.normalizePath(coverPicture));
         }
         return page;
     }
@@ -352,11 +342,11 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
                 component.setComponentKey(newCode);
             }
         }
-        boolean copy = this.copyCoverPicture(oldCode, screenEntity.getCode());
-        if (!copy) {
+        String copyUrl = this.copyCoverPicture(oldCode, screenEntity.getCode());
+        if (StringUtils.isBlank(copyUrl)) {
             screenEntity.setCoverPicture(null);
         } else {
-            screenEntity.setCoverPicture("cover" + File.separator + screenEntity.getCode() + ".png");
+            screenEntity.setCoverPicture(copyUrl);
         }
         this.save(screenEntity);
         dataRoomExtendClient.afterAdd(screenEntity.getCode());

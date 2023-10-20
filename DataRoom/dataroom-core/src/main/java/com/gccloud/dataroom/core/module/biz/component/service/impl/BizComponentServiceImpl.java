@@ -7,9 +7,12 @@ import com.gccloud.dataroom.core.module.biz.component.dao.DataRoomBizComponentDa
 import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentSearchDTO;
 import com.gccloud.dataroom.core.module.biz.component.entity.BizComponentEntity;
 import com.gccloud.dataroom.core.module.biz.component.service.IBizComponentService;
+import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
+import com.gccloud.dataroom.core.module.file.service.IDataRoomOssService;
 import com.gccloud.dataroom.core.utils.CodeGenerateUtils;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.vo.PageVO;
+import com.gccloud.dataroom.core.utils.PathUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,9 +20,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Base64;
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
 
     @Resource
     private DataRoomConfig bigScreenConfig;
+
+    @Resource
+    private IDataRoomOssService ossService;
 
     @Override
     public PageVO<BizComponentEntity> getPage(BizComponentSearchDTO searchDTO) {
@@ -93,10 +97,14 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
             urlPrefix += "/";
         }
         for (BizComponentEntity entity : list) {
-            if (StringUtils.isBlank(entity.getCoverPicture())) {
+            String coverPicture = entity.getCoverPicture();
+            if (StringUtils.isBlank(coverPicture)) {
                 continue;
             }
-            entity.setCoverPicture(urlPrefix + entity.getCoverPicture().replace("\\", "/"));
+            if (coverPicture.startsWith("/")) {
+                coverPicture = coverPicture.substring(1);
+            }
+            entity.setCoverPicture(urlPrefix + PathUtils.normalizePath(coverPicture));
         }
         return bizComponentEntity;
     }
@@ -133,13 +141,6 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
     }
 
 
-    /**
-     * 将base64字符串转为图片文件存储
-     *
-     * @param base64String
-     * @param fileName
-     * @return
-     */
     private String saveCoverPicture(String base64String, String fileName) {
         String fileUrl = "";
         if (StringUtils.isBlank(base64String)) {
@@ -150,28 +151,20 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
             base64String = base64String.substring(base64String.indexOf(",") + 1);
             // 解码base64字符串
             byte[] imageBytes = Base64.getDecoder().decode(base64String);
-            String basePath = bigScreenConfig.getFile().getBasePath();
-            // 不是/结尾，加上/
-            if (!basePath.endsWith("/") || !basePath.endsWith("\\")) {
-                basePath += File.separator;
-            }
-            // 检查目录是否存在，不存在则创建
-            File file = new File(basePath + "cover");
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            // 保存为图片文件
-            String filePath = basePath + "cover" + File.separator + fileName + ".png";
-            fileUrl = "cover" + File.separator + fileName + ".png";
-            FileOutputStream outputStream = new FileOutputStream(filePath);
-            outputStream.write(imageBytes);
-            outputStream.close();
+            InputStream inputStream = new ByteArrayInputStream(imageBytes);
+            DataRoomFileEntity fileEntity = new DataRoomFileEntity();
+            String filePath = "cover" + File.separator + fileName + ".png";
+            ossService.upload(inputStream, filePath, 0, fileEntity);
+            // 封面先不保存到资源库
+            // fileService.save(fileEntity);
             log.info("组业务件封面保存至：{}", filePath);
-        } catch (IOException e) {
+            fileUrl = fileEntity.getUrl();
+        } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
         }
         return fileUrl;
     }
+
 
     public static final String COPY_SUFFIX = "-副本";
 
@@ -198,11 +191,11 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
             i++;
         }
         copyFrom.setCode(CodeGenerateUtils.generate("bizComponent"));
-        boolean copy = this.copyCoverPicture(oldCode, copyFrom.getCode());
-        if (!copy) {
+        String copyUrl = this.copyCoverPicture(oldCode, copyFrom.getCode());
+        if (StringUtils.isBlank(copyUrl)) {
             copyFrom.setCoverPicture(null);
         } else {
-            copyFrom.setCoverPicture("cover" + File.separator + copyFrom.getCode() + ".png");
+            copyFrom.setCoverPicture(copyUrl);
         }
         this.save(copyFrom);
         return copyFrom.getCode();
@@ -215,26 +208,13 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
      * @param newFileName
      * @return
      */
-    private boolean copyCoverPicture(String oldFileName, String newFileName) {
+    private String copyCoverPicture(String oldFileName, String newFileName) {
         if (StringUtils.isBlank(oldFileName)) {
-            return false;
+            return "";
         }
-        String basePath = bigScreenConfig.getFile().getBasePath() + File.separator;
-        String oldFile = basePath + "cover" + File.separator + oldFileName + ".png";
-        // 检查文件是否存在
-        File file = new File(oldFile);
-        if (!file.exists() || !file.isFile()) {
-            return false;
-        }
-        // 复制一份
-        String newFilePath = basePath + "cover" + File.separator + newFileName + ".png";
-        try {
-            FileUtils.copyFile(file, new File(newFilePath));
-            return true;
-        } catch (IOException e) {
-            log.error(ExceptionUtils.getStackTrace(e));
-        }
-        return false;
+        String oldFile = "cover" + File.separator + oldFileName + ".png";
+        String newFilePath =  "cover" + File.separator + newFileName + ".png";
+        return ossService.copy(oldFile, newFilePath);
     }
 
     @Override
