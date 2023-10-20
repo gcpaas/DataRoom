@@ -12,7 +12,7 @@
       <div class="bs-table-box">
         <el-table
           ref="singleTable"
-          :data="paramsList"
+          :data="innerParamsList"
           :border="true"
           align="center"
           class="bs-el-table"

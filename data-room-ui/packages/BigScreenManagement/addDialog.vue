@@ -222,10 +222,10 @@ export default {
       dataFormRules: {
         name: [
           { required: true, message: '页面名称不能为空', trigger: 'blur' }
-        ],
-        modelCode: [
-          { required: true, message: '数据模型不能为空', trigger: 'change' }
         ]
+        // modelCode: [
+        //   { required: true, message: '数据模型不能为空', trigger: 'change' }
+        // ]
       },
       currentPageType: '基础表格',
       sureLoading: false,
