@@ -47,6 +47,9 @@
         <minio.version>8.2.2</minio.version>
         <dataset.core.version>2.0.0.RELEASE</dataset.core.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <commons-net.version>3.6</commons-net.version>
+        <commons-dbcp2.version>2.10.0</commons-dbcp2.version>
+        <jsch.version>0.1.55</jsch.version>
     </properties>
 
     <dependencyManagement>

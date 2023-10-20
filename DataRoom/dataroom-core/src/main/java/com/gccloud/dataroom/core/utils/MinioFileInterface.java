@@ -1,6 +1,6 @@
 package com.gccloud.dataroom.core.utils;
 
-import com.gccloud.dataroom.core.config.MinioConfig;
+import com.gccloud.dataroom.core.config.bean.MinioConfig;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.GetPresignedObjectUrlArgs;

@@ -30,4 +30,19 @@ public class FileConfig {
             "mp4", "mov", "mp3",
             "rar", "zip"
     );
+
+    /**
+     * ftp配置
+     */
+    private FtpConfig ftp;
+
+    /**
+     * sftp配置
+     */
+    private SftpConfig sftp;
+
+    /**
+     * minio配置
+     */
+    private MinioConfig minio;
 }

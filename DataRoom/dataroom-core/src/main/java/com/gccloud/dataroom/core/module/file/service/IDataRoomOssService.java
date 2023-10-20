@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 
 /**
  * 文件管理
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface IDataRoomOssService {
     /**
-     * 上传文件
+     * 上传文件，文件名重新生成
      *
      * @param file
      * @param entity
@@ -23,6 +24,18 @@ public interface IDataRoomOssService {
      * @return
      */
     DataRoomFileEntity upload(MultipartFile file, DataRoomFileEntity entity, HttpServletResponse response, HttpServletRequest request);
+
+
+    /**
+     * 上传文件, 保留传入的文件名
+     * @param inputStream
+     * @param fileName
+     * @param size
+     * @param entity
+     * @return
+     */
+    DataRoomFileEntity upload(InputStream inputStream, String fileName, long size, DataRoomFileEntity entity);
+
 
     /**
      * 下载文件
@@ -39,4 +52,12 @@ public interface IDataRoomOssService {
      * @param fileId
      */
     void delete(String fileId);
+
+    /**
+     * 复制文件，目前用于封面复制
+     * @param sourcePath
+     * @param targetPath
+     * @return 返回复制后的文件路径
+     */
+    default String copy(String sourcePath, String targetPath) {return "";}
 }
