@@ -13,14 +13,7 @@
         <div
           v-for="chart in chartList"
           :key="chart.code"
-          :style="{
-            position: 'absolute',
-            width: chart.w + 'px',
-            height: chart.h + 'px',
-            left: chart.x + 'px',
-            top: chart.y + 'px',
-            zIndex: chart.z || 0
-          }"
+          :style="getStyle(chart)"
         >
           <Configuration
             :config="chart"
@@ -94,7 +87,7 @@ export default {
       return this.config.fitMode || this.stateFitMode
     },
     fitSelector () {
-            return this.config.fitSelector
+      return this.config.fitSelector
     },
     pageLoading () {
       return this.$store.state.bigScreen.pageLoading
@@ -181,6 +174,28 @@ export default {
       'changePageConfig',
       'changeChartConfig'
     ]),
+    getStyle (chart) {
+      if (chart.perspective > 0) {
+        return {
+          position: 'absolute',
+          width: chart.w + 'px',
+          height: chart.h + 'px',
+          left: chart.x + 'px',
+          top: chart.y + 'px',
+          transform: `perspective(${chart.perspective}px) skew(${chart.skewX}deg, ${chart.skewY}deg) rotateX(${chart.rotateX}deg) rotateY(${chart.rotateY}deg)  rotateZ(${chart.rotateZ}deg)`,
+          zIndex: chart.z || 0
+        }
+      }
+      return {
+        position: 'absolute',
+        width: chart.w + 'px',
+        height: chart.h + 'px',
+        left: chart.x + 'px',
+        top: chart.y + 'px',
+        transform: `skew(${chart.skewX}deg, ${chart.skewY}deg) rotateX(${chart.rotateX}deg) rotateY(${chart.rotateY}deg)  rotateZ(${chart.rotateZ}deg)`,
+        zIndex: chart.z || 0
+      }
+    },
     // 右键点击查看数据
     openDataViewDialog (config) {
       this.$refs.dataViewDialog.init(config)
@@ -320,7 +335,7 @@ export default {
       // 宽度铺满 预览时画布横向铺满，纵向超出时出现滚动条
       if (pageConfig.fitMode === 'fitWidth') {
         scaleX = this.innerWidth / w
-                // 如果实际高度小于屏幕，纵向居中
+        // 如果实际高度小于屏幕，纵向居中
         if (this.innerHeight > h) {
           translate = `${((this.innerWidth - w) / 2) / scaleX}px, ${((this.innerHeight - h) / 2) / scaleY}px`
         } else {
