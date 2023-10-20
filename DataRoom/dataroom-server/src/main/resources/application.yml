@@ -24,9 +24,6 @@ spring:
     throw-exception-if-no-handler-found: true
     # 静态资源访问接口前缀
     static-path-pattern: /static/**
-    view:
-      prefix: classpath:/static/
-      suffix: .html
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
   web:
@@ -36,7 +33,7 @@ spring:
 mybatis-plus:
   # mybatis plus xml配置文件扫描，多个通过分号隔开
   mapper-locations: classpath*:mapper/**/*.xml
-  # xml中别名文件扫描，多个通过分号隔开
+  # typeHandler扫描路径，多个通过分号隔开
   type-handlers-package: com.gccloud
   global-config:
     db-config:
