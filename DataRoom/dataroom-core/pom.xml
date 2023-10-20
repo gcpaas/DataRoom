@@ -65,5 +65,12 @@
             <artifactId>jackson-datatype-json-org</artifactId>
             <version>${jackson.version.core}</version>
         </dependency>
+
+        <!-- Minio -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
+        </dependency>
     </dependencies>
 </project>
