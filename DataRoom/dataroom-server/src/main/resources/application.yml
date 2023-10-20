@@ -30,6 +30,19 @@ spring:
     resources:
       static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/META-INF/resources/webjars/,file:${gc.starter.file.basePath}
 
+gc:
+  starter:
+    file:
+      # minio | local
+      uploadType: local
+
+# Minio配置
+#minio:
+#  url: http://192.168.20.98:9000
+#  accessKey: admin
+#  secretKey: 123456
+#  bucketName: test
+
 mybatis-plus:
   # mybatis plus xml配置文件扫描，多个通过分号隔开
   mapper-locations: classpath*:mapper/**/*.xml
