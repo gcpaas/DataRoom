@@ -754,7 +754,6 @@ export default {
       }
     },
     addParams (paramList) {
-      this.$refs.paramsSettingDialog.open()
       paramList.forEach(name => {
         this.dataForm.config.paramsList.push({
           name,
@@ -764,6 +763,9 @@ export default {
           require: 0,
           remark: ''
         })
+      })
+      this.$nextTick(() => {
+        this.$refs.paramsSettingDialog.open()
       })
     },
     // 执行事件
