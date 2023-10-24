@@ -51,7 +51,7 @@ function registerRouters (config, router) {
         },
         {
           path: config?.routers?.templateListUrl || '/big-screen-template',
-          name: 'Template',
+          name: 'BigScreenTemplate',
           component: () =>
             require.ensure([], () => require('data-room-ui/BigScreenTempMag')),
           meta: {
@@ -97,13 +97,13 @@ function registerRouters (config, router) {
     },
     {
       path: config?.routers?.designUrl || '/big-screen/design',
-      name: 'Design',
+      name: 'BigScreenDesign',
       component: () =>
         require.ensure([], () => require('data-room-ui/BigScreenDesign'))
     },
     {
       path: config?.routers?.previewUrl || '/big-screen/preview',
-      name: 'Preview',
+      name: 'BigScreenPreview',
       component: () =>
         require.ensure([], () => require('data-room-ui/BigScreenRun'))
     },

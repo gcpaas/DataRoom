@@ -7,10 +7,9 @@ import com.gccloud.dataroom.core.config.bean.FileConfig;
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomFileService;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomOssService;
+import com.gccloud.dataroom.core.utils.SftpClientUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
@@ -24,17 +23,25 @@ import java.io.*;
 import java.net.URLEncoder;
 
 /**
- * 文件管理
+ * sftp文件管理实现类
+ * 将文件上传至sftp服务器，需要配置sftp服务器相关信息
+ * 由于该方案无法直接通过url访问文件，所以需要手动在对应的服务器上部署nginx等服务，将sftp服务器上的文件开放访问，然后将该服务地址配置到gc.starter.file.urlPrefix中
+ * @author hongyang
+ * @version 1.0
+ * @date 2023/10/17 15:12
  */
 @Slf4j
 @Service
-@ConditionalOnProperty(prefix = "gc.starter.file", name = "type", havingValue = "local", matchIfMissing = true)
-public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
+@ConditionalOnProperty(prefix = "gc.starter.file", name = "type", havingValue = "sftp")
+public class DataRoomSftpFileServiceImpl implements IDataRoomOssService {
 
+    @Resource
+    private SftpClientUtils sftpUtil;
     @Resource
     private DataRoomConfig bigScreenConfig;
     @Resource
     private IDataRoomFileService sysFileService;
+
 
     @Override
     public DataRoomFileEntity upload(MultipartFile file, DataRoomFileEntity fileEntity, HttpServletResponse response, HttpServletRequest request) {
@@ -46,58 +53,34 @@ public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
             log.error("不支持 {} 文件类型",extension);
             throw new GlobalException("不支持的文件类型");
         }
+        long size = file.getSize();
         // 重命名
         String id = IdWorker.getIdStr();
         String newFileName = id + "." + extension;
-        // 上传文件保存到的路径，根据实际情况修改，也可能是从配置文件获取到的文件存储路径
-        String basePath = bigScreenConfig.getFile().getBasePath();
-        String destPath = basePath + File.separator + newFileName;
-        long size = file.getSize();
+        InputStream inputStream;
         try {
-            File dest = new File(destPath);
-            file.transferTo(dest);
-        } catch (Exception e) {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            log.error("上传文件到SFTP服务失败：获取文件流失败");
             log.error(ExceptionUtils.getStackTrace(e));
-            log.error(String.format("文件 %s 存储到 %s 失败", originalFilename, destPath));
-            throw new GlobalException("文件上传失败");
+            throw new GlobalException("获取文件流失败");
         }
-        fileEntity.setOriginalName(originalFilename);
-        fileEntity.setNewName(newFileName);
-        fileEntity.setPath(basePath);
-        fileEntity.setSize(size);
-        fileEntity.setExtension(extension);
-        fileEntity.setUrl("/" + newFileName);
+        this.upload(inputStream, newFileName, size, fileEntity);
         return fileEntity;
     }
 
 
     @Override
     public DataRoomFileEntity upload(InputStream inputStream, String fileName, long size, DataRoomFileEntity fileEntity) {
-        // 上传文件保存到的路径, 从配置文件获取
-        String basePath = bigScreenConfig.getFile().getBasePath();
         // 提取文件后缀名
         String extension = FilenameUtils.getExtension(fileName);
-        String destPath = basePath + File.separator + fileName;
-        try {
-            File dest = new File(destPath);
-            // 检查文件所在的目录是否存在，不存在则创建
-            String parent = dest.getParent();
-            File parentFile = new File(parent);
-            if (!parentFile.exists()) {
-                FileUtils.forceMkdir(parentFile);
-            }
-            FileOutputStream outputStream = new FileOutputStream(dest);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
-            }
-            outputStream.close();
-            inputStream.close();
-        } catch (Exception e) {
-            log.error(ExceptionUtils.getStackTrace(e));
-            log.error(String.format("文件 %s 存储到 %s 失败", fileName, destPath));
-            throw new GlobalException("文件上传失败");
+        // 上传的目标路径
+        String basePath = bigScreenConfig.getFile().getBasePath();
+        // 上传文件到sftp
+        boolean upload = sftpUtil.upload(basePath, fileName, inputStream);
+        if (!upload) {
+            log.error("上传文件到sftp失败");
+            throw new GlobalException("上传文件到sftp失败");
         }
         fileEntity.setOriginalName(fileName);
         fileEntity.setNewName(fileName);
@@ -127,64 +110,46 @@ public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
         } catch (UnsupportedEncodingException e) {
             log.error(ExceptionUtils.getStackTrace(e));
         }
-        String filePath = fileEntity.getPath() + File.separator + fileEntity.getNewName();
-        File file = new File(filePath);
-        if (!file.exists()) {
-            response.setStatus(HttpStatus.NOT_FOUND.value());
-            log.error("下载的文件不存在");
+        OutputStream outputStream;
+        try {
+            outputStream = response.getOutputStream();
+        } catch (IOException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             return;
         }
-        try {
-            InputStream is = new FileInputStream(file);
-            IOUtils.copy(is, response.getOutputStream());
-            is.close();
-            response.getOutputStream().close();
-        } catch (Exception e) {
+        boolean download = sftpUtil.download(fileEntity.getPath(), fileEntity.getNewName(), outputStream);
+        if (!download) {
+            log.error("下载文件失败");
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            log.error(String.format("下载文件%s失败", fileEntity.getOriginalName()));
-        } finally {
-            sysFileService.updateDownloadCount(1, fileId);
         }
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+        }
+        sysFileService.updateDownloadCount(1, fileId);
     }
-
 
     @Override
     public void delete(String fileId) {
         DataRoomFileEntity fileEntity = sysFileService.getById(fileId);
-        sysFileService.removeById(fileId);
         if (fileEntity == null) {
             log.error("删除的文件不存在");
             return;
         }
-        String filePath = fileEntity.getPath() + File.separator + fileEntity.getNewName();
-        File file = new File(filePath);
-        if (!file.exists()) {
-            log.error("删除的文件不存在");
-            return;
-        }
-        file.delete();
+        sysFileService.removeById(fileId);
+        // 删除sftp上的文件
+        sftpUtil.delete(fileEntity.getPath(), fileEntity.getNewName());
     }
+
 
     @Override
     public String copy(String sourcePath, String targetPath) {
         String basePath = bigScreenConfig.getFile().getBasePath() + File.separator;
-        File sourceFile = new File(basePath + sourcePath);
-        File targetFile = new File(basePath + targetPath);
-        // 检查源文件是否存在
-        if (!sourceFile.exists()) {
-            log.error("复制源文件不存在:{}", sourcePath);
-            return "";
-        }
-        // 检查源文件是否是文件夹
-        if (sourceFile.isDirectory()) {
-            log.error("源文件为文件夹:{}，无法复制", sourcePath);
-            return "";
-        }
-        try {
-            FileUtils.copyFile(sourceFile, targetFile);
-        } catch (IOException e) {
-            log.error(String.format("文件 %s 复制到 %s 失败", sourcePath, targetPath));
-            log.error(ExceptionUtils.getStackTrace(e));
+
+        boolean copySuccess = sftpUtil.copy(basePath + sourcePath, basePath + targetPath);
+        if (!copySuccess) {
             return "";
         }
         return targetPath;
