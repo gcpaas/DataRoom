@@ -219,6 +219,9 @@ export default {
             }
             if (res.data.datasetType === 'js') {
               try {
+                params.filterList.forEach(item => {
+                  this.config.dataSource.params[item.column] = item.value
+                })
                 const scriptAfterReplacement = res.data.script.replace(/\${(.*?)}/g, (match, p) => {
                   const value = this.config.dataSource?.params[p]
                   if (value === null || value === undefined || value === '') {
