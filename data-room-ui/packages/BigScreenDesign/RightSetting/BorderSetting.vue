@@ -404,7 +404,6 @@ export default {
       this.$refs.SourceDialog.init()
     },
     initMove(val){
-      console.log(val)
       this.$refs.MoveDialog.init(val,this.config.borderArray)
     }
 
