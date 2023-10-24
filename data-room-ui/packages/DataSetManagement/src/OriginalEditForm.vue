@@ -929,10 +929,15 @@ export default {
       this.structurePreviewList = []
       this.structurePreviewListCopy = []
       if (!this.dataForm.sourceId || !this.dataForm.tableName) return
+      let allField = []
+      if (this.dataForm.fieldInfo.length === 0) {
+        // 从字段列表中取出所有字段
+        allField = this.fieldList.map(field => field.columnName)
+      }
       const executeParams = {
         dataSourceId: this.dataForm.sourceId,
         script: JSON.stringify({
-          fieldInfo: this.dataForm.fieldInfo, // 未选中字段就传空数组
+          fieldInfo: this.dataForm.fieldInfo.length ? this.dataForm.fieldInfo : allField,
           tableName: this.dataForm.tableName,
           repeatStatus: this.dataForm.repeatStatus
         }),
