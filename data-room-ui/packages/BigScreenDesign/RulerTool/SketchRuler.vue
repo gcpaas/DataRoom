@@ -55,7 +55,7 @@
           <slot />
         </div>
       </div>
-      <div
+      <!-- <div
         id="minimap"
         class="minimap"
       >
@@ -79,7 +79,7 @@
           />
         </div>
         <div class="miniView" />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -214,7 +214,7 @@ export default {
     this.listenSize()
     this.initRuleHeight()
     this.throttleScroll()
-    this.throttleDrag()
+    // this.throttleDrag()
   },
   methods: {
     ...mapMutations('bigScreen', [
