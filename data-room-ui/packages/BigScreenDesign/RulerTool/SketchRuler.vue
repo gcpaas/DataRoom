@@ -55,7 +55,7 @@
           <slot />
         </div>
       </div>
-      <!-- <div
+      <div
         id="minimap"
         class="minimap"
       >
@@ -79,7 +79,7 @@
           />
         </div>
         <div class="miniView" />
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -163,8 +163,7 @@ export default {
     },
     mapShow (value) {
       const mapElement = document.getElementById('minimap')
-      const selectElement = document.getElementById('selectWin')
-      console.log(value, selectElement.getBoundingClientRect().height)
+      // const selectElement = document.getElementById('selectWin')
       if (!value) {
         mapElement.style.bottom = parseFloat(window.getComputedStyle(mapElement).bottom) + 150 + 'px'
       } else {
@@ -214,7 +213,7 @@ export default {
     this.listenSize()
     this.initRuleHeight()
     this.throttleScroll()
-    // this.throttleDrag()
+    this.throttleDrag()
   },
   methods: {
     ...mapMutations('bigScreen', [
