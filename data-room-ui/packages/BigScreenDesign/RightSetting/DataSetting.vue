@@ -762,7 +762,9 @@ export default {
   methods: {
     changeDsid (dsId) {
       this.clearVerify()
-      this.config.customize.columnConfig = []
+      if (this.config.customize && this.config.customize.columnConfig) {
+        this.config.customize.columnConfig = []
+      }
       this.getDataSetDetailsById(dsId, 'treeTable')
     },
     // 打开表达式弹窗
