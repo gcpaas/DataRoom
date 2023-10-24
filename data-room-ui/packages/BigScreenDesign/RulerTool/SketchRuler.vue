@@ -43,6 +43,7 @@
       @scroll="throttleScroll"
     >
       <div
+        id="screen-container"
         ref="containerRef"
         class="screen-container grid-bg"
         :style="containerRefStyle"
@@ -53,6 +54,31 @@
         >
           <slot />
         </div>
+      </div>
+      <div
+        id="minimap"
+        class="minimap"
+      >
+        <div class="mapHeader" id="mapHeader">
+          <div>
+            <span>小地图</span>
+          </div>
+          <div class="showMap" @click="showMinimap">
+            <i class="el-icon-arrow-down" style="width:20px;height:20px;color:#fff;" v-if="!mapShow"/>
+            <i class="el-icon-arrow-up" style="width:20px;height:20px;color:#fff;" v-if="mapShow"/>
+          </div>
+        </div>
+        <div
+          id="selectWin"
+          class="selectWin"
+          v-show="mapShow"
+        >
+          <div
+            id="selectionWin"
+            class="selectionWin"
+          />
+        </div>
+        <div class="miniView" />
       </div>
     </div>
   </div>
@@ -85,6 +111,10 @@ export default {
   },
   data () {
     return {
+      mapShow: true, // 小地图显示与否
+      canvasLeft: 0, // 存储画布到视口的left距离
+      canvasTop: 0, // 存储画布到视口的top距离
+      isDrag: false, // 小地图白块是否拖拽
       startX: 0,
       startY: 0,
       lines: {
@@ -130,6 +160,16 @@ export default {
       if (this.fitZoom === this.zoom) {
         this.initZoom()
       }
+    },
+    mapShow (value) {
+      const mapElement = document.getElementById('minimap')
+      const selectElement = document.getElementById('selectWin')
+      console.log(value, selectElement.getBoundingClientRect().height)
+      if (!value) {
+        mapElement.style.bottom = parseFloat(window.getComputedStyle(mapElement).bottom) + 150 + 'px'
+      } else {
+        mapElement.style.bottom = parseFloat(window.getComputedStyle(mapElement).bottom) - 150 + 'px'
+      }
     }
   },
   computed: {
@@ -166,16 +206,135 @@ export default {
     }
   },
   mounted () {
+    // 初始化canvasLeft canvasTop
+    const canvasRect = document.querySelector('#canvas').getBoundingClientRect()
+    this.canvasLeft = canvasRect.left
+    this.canvasTop = canvasRect.top
     // 监听屏幕改变
     this.listenSize()
     this.initRuleHeight()
     this.throttleScroll()
+    this.throttleDrag()
   },
   methods: {
     ...mapMutations('bigScreen', [
       'changeZoom',
       'changeFitZoom'
     ]),
+    throttleDrag () {
+      throttle(() => {
+        this.dragSelection()
+        this.viewMapDrag()
+      }, 100)()
+    },
+    // 绑定滑块拖拽效果
+    dragSelection () {
+      const that = this
+      const draggableElement = document.getElementById('selectionWin')
+      const dragContainer = document.getElementById('selectWin')
+      const screenElement = document.getElementById('screens')
+      const screenContainer = document.getElementById('screen-container')
+      const maxContainer = document.querySelector('.bs-page-design-wrap')
+      // 鼠标按下的位置
+      let posX, posY
+      // 白色拖拽块相对于父盒子初始位置
+      let initialX, initialY
+      // 滚动条初始位置
+      let scrollTop, scrollLeft
+      draggableElement.addEventListener('mousedown', function (event) {
+        that.isDrag = true
+        posX = event.clientX
+        posY = event.clientY
+        initialX = draggableElement.getBoundingClientRect().left - dragContainer.getBoundingClientRect().left
+        initialY = draggableElement.getBoundingClientRect().top - dragContainer.getBoundingClientRect().top
+        scrollLeft = screenElement.scrollLeft
+        scrollTop = screenElement.scrollTop
+        maxContainer.addEventListener('mousemove', function (event) {
+          if (that.isDrag) {
+            // 鼠标移动距离
+            let moveX = event.clientX - posX
+            let moveY = event.clientY - posY
+            // 避免白色拖拽移出边框
+            if (moveX < -initialX) {
+              moveX = -initialX
+            } else if (moveX > dragContainer.getBoundingClientRect().width - draggableElement.getBoundingClientRect().width - initialX) {
+              moveX = dragContainer.getBoundingClientRect().width - draggableElement.getBoundingClientRect().width - initialX
+            }
+            if (moveY < -initialY) {
+              moveY = -initialY
+            } else if (moveY > dragContainer.getBoundingClientRect().height - draggableElement.getBoundingClientRect().height - initialY) {
+              moveY = dragContainer.getBoundingClientRect().height - draggableElement.getBoundingClientRect().height - initialY
+            }
+            const newX = moveX + initialX
+            const newY = moveY + initialY
+            // 移动拖拽白块
+            draggableElement.style.left = newX + 'px'
+            draggableElement.style.top = newY + 'px'
+            // 移动比例
+            const percentageX = moveX / (dragContainer.getBoundingClientRect().width - draggableElement.getBoundingClientRect().width)
+            const percentageY = moveY / (dragContainer.getBoundingClientRect().height - draggableElement.getBoundingClientRect().height)
+            // 进度条需要滚动的距离
+            const scrollTopLength = percentageY * (screenContainer.getBoundingClientRect().height - screenElement.getBoundingClientRect().height)
+            const scrollLeftLength = percentageX * (screenContainer.getBoundingClientRect().width - screenElement.getBoundingClientRect().width)
+            screenElement.scrollLeft = scrollLeft + scrollLeftLength
+            screenElement.scrollTop = scrollTop + scrollTopLength
+          }
+        })
+      })
+      maxContainer.addEventListener('mouseup', function (event) {
+        that.isDrag = false
+      })
+      draggableElement.addEventListener('mouseup', function () {
+        that.isDrag = false
+      })
+      // 禁止H5自带的拖拽事件
+      draggableElement.ondragstart = function (ev) {
+        ev.preventDefault()
+      }
+      draggableElement.ondragend = function (ev) {
+        ev.preventDefault()
+      }
+      screenElement.ondragstart = function (ev) {
+        ev.preventDefault()
+      }
+      screenElement.ondragend = function (ev) {
+        ev.preventDefault()
+      }
+    },
+    // 控制小地图显示与隐藏
+    showMinimap () {
+      this.mapShow = !this.mapShow
+    },
+    // 小地图拖拽
+    viewMapDrag () {
+      const mapElement = document.getElementById('minimap')
+      const mapDragElement = document.getElementById('mapHeader')
+      const pageElement = document.querySelector('.bs-page-design-wrap')
+      let mapDrag = false
+      let curX, curY
+      let curBottom, curRight
+      mapDragElement.addEventListener('mousedown', function (event) {
+        mapDrag = true
+        curX = event.clientX
+        curY = event.clientY
+        curBottom = window.getComputedStyle(mapElement).bottom
+        curRight = window.getComputedStyle(mapElement).right
+        pageElement.addEventListener('mousemove', function (event) {
+          if (mapDrag) {
+            const dragX = event.clientX - curX
+            const dragY = event.clientY - curY
+            mapElement.style.bottom = parseInt(curBottom) - dragY + 'px'
+            mapElement.style.right = parseInt(curRight) - dragX + 'px'
+          }
+        })
+      })
+      pageElement.addEventListener('mouseup', function () {
+        mapDrag = false
+      })
+      mapDragElement.addEventListener('mouseup', function () {
+        mapDrag = false
+      })
+    },
     listenSize () {
       window.onresize = throttle(() => {
         this.initRuleHeight()
@@ -224,7 +383,9 @@ export default {
       const canvasRect = document
         .querySelector('#canvas')
         .getBoundingClientRect()
-
+      const container = document.querySelector('#selectWin').getBoundingClientRect()
+      const screenContainer = document.querySelector('#screen-container').getBoundingClientRect()
+      const draggableElement = document.getElementById('selectionWin')
       // 标尺开始的刻度
       const startX = (screensRect.left + this.thick - canvasRect.left) / this.scale
       const startY = (screensRect.top + this.thick - canvasRect.top) / this.scale
@@ -236,6 +397,16 @@ export default {
         x: this.startX * this.scale + 50 - this.thick,
         y: this.startY * this.scale + 50 - this.thick
       })
+      // 拖动进度条移动小地图
+      if (!this.isDrag) {
+        const leftDrag = canvasRect.left - this.canvasLeft
+        const topDrag = canvasRect.top - this.canvasTop
+        // 小方块需要移动的距离
+        const leftLength = leftDrag / (screenContainer.width - screensRect.width - 9) * (container.width - draggableElement.getBoundingClientRect().width)
+        const topLength = topDrag / (screenContainer.height - screensRect.height - 9) * (container.height - draggableElement.getBoundingClientRect().height)
+        draggableElement.style.left = -leftLength + 'px'
+        draggableElement.style.top = -topLength + 'px'
+      }
     },
     // 保证画布能完整展示大屏
     initZoom () {
@@ -296,6 +467,48 @@ export default {
   position: absolute;
   width: 6000px;
   height: 6000px;
+}
+
+.minimap{
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  border: 1px solid #f6f7fb;
+  z-index:10000;
+  /*cursor: move;*/
+}
+.minimap .mapHeader{
+  background-color:#303640;
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  height: 20px;
+  width: 150px;
+  font-size: 12px;
+  border-bottom: 1px solid #fff;
+  color: #ffffff;
+  cursor: pointer;
+  span {
+    user-select: none;
+  }
+}
+
+.minimap .selectWin{
+  background-color: #232832;
+  height: 150px;
+  width: 150px;
+  position: relative;
+}
+
+.minimap .selectionWin{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  opacity: 0.5;
+  cursor: move;
 }
 
 .scale-value {
