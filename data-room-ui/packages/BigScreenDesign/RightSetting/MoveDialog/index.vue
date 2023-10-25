@@ -8,11 +8,14 @@
     :appen-to-body="false"
     class="bs-dialog-wrap bs-el-dialog"
     @closed="close"
-    @opened='getDom'
+    @opened="getDom"
   >
-    <div class="content">
+      <div class="content">
       <div>
-        <table border="1" cellspacing="0">
+        <table
+          border="1"
+          cellspacing="0"
+        >
           <tr>
             <th>方向</th>
             <th>描述</th>
@@ -21,27 +24,27 @@
             <td>左上角</td>
             <td>不能拉伸</td>
           </tr>
-           <tr>
+          <tr>
             <td>右上角</td>
             <td>不能拉伸</td>
           </tr>
-           <tr>
+          <tr>
             <td>左下角</td>
             <td>不能拉伸</td>
           </tr>
-           <tr>
+          <tr>
             <td>右下角</td>
             <td>不能拉伸</td>
           </tr>
-           <tr>
+          <tr>
             <td>左侧</td>
             <td>宽度不变，高度自动拉伸</td>
           </tr>
-           <tr>
+          <tr>
             <td>右侧</td>
             <td>宽度不变，高度自动拉伸</td>
           </tr>
-           <tr>
+          <tr>
             <td>顶部</td>
             <td>高度不变，宽度自动拉伸</td>
           </tr>
@@ -58,64 +61,73 @@
       <div class="img">
         <span class="toptitle">
           <!-- <InputCom @changeStyle='changeTop' :Fx="['上','下']" :number="top" /> -->
-            <el-input-number
-            @change='changeTop'
+          <el-input-number
             v-model="top"
             class="bs-el-input-number"
             :step=" 1"
             :min="0"
             :max="100000"
-            />
+            @change="changeTop"
+          />
         </span>
         <span class="righttitle">
-            <el-input-number
-            @change='changeRight'
+          <el-input-number
             v-model="right"
             class="bs-el-input-number"
             :step=" 1"
             :min="0"
             :max="100000"
-            />
+            @change="changeRight"
+          />
         </span>
         <span class="bottomtitle">
-            <el-input-number
-            @change='changeBottom'
+          <el-input-number
             v-model="bottom"
             class="bs-el-input-number"
             :step=" 1"
             :min="0"
             :max="100000"
-            />
+            @change="changeBottom"
+          />
         </span>
         <span class="lefttitle">
-            <el-input-number
-            @change='changeLeft'
+          <el-input-number
             v-model="left"
             class="bs-el-input-number"
             :step=" 1"
             :min="0"
             :max="100000"
-            />
+            @change="changeLeft"
+          />
         </span>
-          <el-image
+        <el-image
           style="max-width:550px"
-          :src="this.imgUrl||url"
-          fit="fill"></el-image>
-          <div
-           @mousedown="onMouseDown"
-           @mouseup="onMouseUp"
-           @mousemove="onMousemove"
-           @click="changeSymbol('top')"
-           id="top"
-           class="top">
-
-          </div>
-          <div @click="changeSymbol('right')" id="right" class="right">
-          </div>
-          <div @click="changeSymbol('bottom')" id="bottom" class="bottom">
-          </div>
-          <div @click="changeSymbol('left')" id="left" class="left">
-          </div>
+          :src="imgUrl||url"
+          fit="fill"
+        />
+        <div
+          id="top"
+          class="top"
+          @mousedown="onMouseDown"
+          @mouseup="onMouseUp"
+          @mousemove="onMousemove"
+          @click="changeSymbol('top')"
+        />
+        <div
+          id="right"
+          class="right"
+          @click="changeSymbol('right')"
+        />
+        <div
+          id="bottom"
+          class="bottom"
+          @click="changeSymbol('bottom')"
+        />
+        <div
+          id="left"
+          class="left"
+          @click="changeSymbol('left')"
+        />
       </div>
     </div>
     <div
@@ -145,32 +157,32 @@ export default {
   data () {
     return {
       dialogVisible: false,
-      imgUrl:'',
-      top:0,
-      right:0,
-      bottom:0,
-      left:0,
-      symbol:'',
-      isDown:false,
-      x:0,
-      y:0,
-      l:0,
-      t:0
+      imgUrl: '',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      symbol: '',
+      isDown: false,
+      x: 0,
+      y: 0,
+      l: 0,
+      t: 0
     }
   },
   computed: {
-    url(){
+    url () {
       return require('data-room-ui/BorderComponents/GcBorder16/component.png')
     }
   },
   mounted () {
-   },
+  },
   methods: {
-    confirm(){
-      this.$emit('getArray',[this.top,this.right,this.bottom,this.left])
+    confirm () {
+      this.$emit('getArray', [this.top, this.right, this.bottom, this.left])
       this.dialogVisible = false
     },
-    getDom(){
+    getDom () {
       //  const a=document.getElementById('top')
       //  const b=document.getElementById('right')
       //  const c=document.getElementById('bottom')
@@ -180,10 +192,10 @@ export default {
       //  this.bottom=getComputedStyle(c).bottom.slice(0,-2)
       //  this.left=getComputedStyle(d).left.slice(0,-2)
     },
-    onMouseUp(){
+    onMouseUp () {
       // this.isDown=false;
     },
-    onMousemove(e){
+    onMousemove (e) {
       // const a=document.getElementById('top')
       // if(this.isDown==false){
       //   return
@@ -194,44 +206,44 @@ export default {
       // a.style.top=nt+"px"
       // this.top=a.style.top
     },
-    onMouseDown(e){
+    onMouseDown (e) {
       // this.y=e.layerY
 	    // this.t=this.top;
       // this.isDown=true
       // console.log(this.x,this.l)
     },
-    changeSymbol(val){
-      this.symbol=val
+    changeSymbol (val) {
+      this.symbol = val
     },
 
-    close(){
+    close () {
 
     },
-    changeTop(val){
-      const a=document.getElementById('top')
-      a.style.top=val+"px"
+    changeTop (val) {
+      const a = document.getElementById('top')
+      a.style.top = val + 'px'
     },
-    changeRight(val){
-      const a=document.getElementById('right')
-      a.style.right=val+"px"
+    changeRight (val) {
+      const a = document.getElementById('right')
+      a.style.right = val + 'px'
     },
-     changeBottom(val){
-      const a=document.getElementById('bottom')
-      a.style.bottom=val+"px"
+    changeBottom (val) {
+      const a = document.getElementById('bottom')
+      a.style.bottom = val + 'px'
     },
-     changeLeft(val){
-      const a=document.getElementById('left')
-      a.style.left=val+"px"
+    changeLeft (val) {
+      const a = document.getElementById('left')
+      a.style.left = val + 'px'
     },
-    init (val,array) {
-      if(!val.startsWith('http')){
-        this.imgUrl=getFileUrl(val)
-      }else{
-        this.imgUrl=val
+    init (val, array) {
+      if (!val.startsWith('http')) {
+        this.imgUrl = getFileUrl(val)
+      } else {
+        this.imgUrl = val
       }
-      if(array){
-        [this.top,this.right,this.bottom,this.left]=array
-        this.$nextTick(()=>{
+      if (array) {
+        [this.top, this.right, this.bottom, this.left] = array
+        this.$nextTick(() => {
           this.changeTop(this.top)
           this.changeRight(this.right)
           this.changeBottom(this.bottom)
@@ -239,7 +251,7 @@ export default {
         })
       }
       this.dialogVisible = true
-    },
+    }
   }
 }
 </script>
@@ -261,27 +273,36 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  td,th{
+    padding: 8px 20px;
+    text-align: center;
+    vertical-align: middle;
+  }
   .img{
     position: relative;
     .toptitle{
         position: absolute;
-        top: -30px;
-        left: 34%;
+        top: -43px;
+        left: 50%;
+        transform: translateX(-50%);
       }
     .righttitle{
       position: absolute;
       top: 50%;
-      right: -110px;
+      transform: translateY(-50%);
+      right: -123px;
     }
     .bottomtitle{
       position: absolute;
-      bottom: -30px;
-      left: 34%;
+      bottom: -43px;
+      left: 50%;
+      transform: translateX(-50%);
     }
     .lefttitle{
       position: absolute;
       top: 50%;
-      left: -110px;
+      transform: translateY(-50%);
+      left: -123px;
     }
     // height: 100%;
     .top{
