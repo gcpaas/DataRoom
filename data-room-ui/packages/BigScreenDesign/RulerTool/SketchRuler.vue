@@ -250,6 +250,7 @@ export default {
         scrollTop = screenElement.scrollTop
         maxContainer.addEventListener('mousemove', function (event) {
           if (that.isDrag) {
+            event.preventDefault()
             // 鼠标移动距离
             let moveX = event.clientX - posX
             let moveY = event.clientY - posY
@@ -320,6 +321,7 @@ export default {
         curRight = window.getComputedStyle(mapElement).right
         pageElement.addEventListener('mousemove', function (event) {
           if (mapDrag) {
+            event.preventDefault()
             const dragX = event.clientX - curX
             const dragY = event.clientY - curY
             mapElement.style.bottom = parseInt(curBottom) - dragY + 'px'
