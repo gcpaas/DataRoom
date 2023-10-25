@@ -609,7 +609,6 @@ export default {
   position: absolute ;
   bottom: 20px;
   right: 20px;
-  border: 1px solid #f6f7fb;
   z-index:1000;
 }
 .minimap .mapHeader{
@@ -618,11 +617,11 @@ export default {
   padding: 0 10px;
   display: flex;
   justify-content: space-between;
-  height: 20px;
+  align-items: center;
+  height: 30px;
   width: 150px;
   font-size: 12px;
-  border-bottom: 1px solid #fff;
-  color: #ffffff;
+  color: var(--bs-el-title);
   cursor: pointer;
   span {
     user-select: none;
