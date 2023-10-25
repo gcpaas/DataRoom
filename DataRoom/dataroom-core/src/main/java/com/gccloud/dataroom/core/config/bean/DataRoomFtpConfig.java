@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "gc.starter.file.ftp")
-public class FtpConfig extends GenericObjectPoolConfig {
+public class DataRoomFtpConfig extends GenericObjectPoolConfig {
 
     /**
      * ftp服务器地址

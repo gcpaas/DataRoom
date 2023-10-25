@@ -1,7 +1,7 @@
 package com.gccloud.dataroom.core.utils;
 
 
-import com.gccloud.dataroom.core.config.bean.FtpConfig;
+import com.gccloud.dataroom.core.config.bean.DataRoomFtpConfig;
 import com.gccloud.dataroom.core.module.file.service.pool.ftp.FtpPoolServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,7 @@ import java.io.OutputStream;
 public class FtpClientUtil {
 
     @Resource
-    private FtpConfig config;
+    private DataRoomFtpConfig config;
 
     /**
      * ftp 连接池

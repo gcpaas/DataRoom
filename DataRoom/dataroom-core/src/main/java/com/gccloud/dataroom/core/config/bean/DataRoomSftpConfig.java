@@ -13,25 +13,25 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "gc.starter.file.sftp")
 @Data
-public class SftpConfig extends GenericObjectPoolConfig {
+public class DataRoomSftpConfig extends GenericObjectPoolConfig {
 
     /**
-     * ftp服务器地址
+     * sftp服务器地址
      */
     private String host;
 
     /**
-     * ftp服务器端口
+     * sftp服务器端口
      */
     private Integer port;
 
     /**
-     * ftp服务器用户名
+     * sftp服务器用户名
      */
     private String username;
 
     /**
-     * ftp服务器密码
+     * sftp服务器密码
      */
     private String password;
 
@@ -39,28 +39,6 @@ public class SftpConfig extends GenericObjectPoolConfig {
      * 私钥
      */
     private String privateKey;
-
-    /**
-     * 传输编码
-     */
-    String encoding = "utf-8";
-    /**
-     * 被动模式：在这种模式下，数据连接是由客户程序发起的
-     */
-    boolean passiveMode = true;
-    /**
-     * 连接超时时间
-     */
-    int clientTimeout = 30000;
-
-    /**
-     * 0=ASCII_FILE_TYPE(ASCII格式)，1=EBCDIC_FILE_TYPE，2=LOCAL_FILE_TYPE(二进制文件)
-     */
-    int transferFileType = 2;
-    /**
-     * 重新连接时间
-     */
-    int retryTimes;
 
     /**
      * 缓存大小

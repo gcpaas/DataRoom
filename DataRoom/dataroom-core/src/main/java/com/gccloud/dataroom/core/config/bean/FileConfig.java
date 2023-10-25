@@ -34,15 +34,15 @@ public class FileConfig {
     /**
      * ftp配置
      */
-    private FtpConfig ftp;
+    private DataRoomFtpConfig ftp;
 
     /**
      * sftp配置
      */
-    private SftpConfig sftp;
+    private DataRoomSftpConfig sftp;
 
     /**
      * minio配置
      */
-    private MinioConfig minio;
+    private DataRoomMinioConfig minio;
 }

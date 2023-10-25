@@ -1,6 +1,6 @@
 package com.gccloud.dataroom.core.utils;
 
-import com.gccloud.dataroom.core.config.bean.SftpConfig;
+import com.gccloud.dataroom.core.config.bean.DataRoomSftpConfig;
 import com.gccloud.dataroom.core.module.file.service.pool.sftp.SftpPoolService;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpException;
@@ -26,7 +26,7 @@ import java.io.OutputStream;
 public class SftpClientUtils {
 
     @Resource
-    private SftpConfig config;
+    private DataRoomSftpConfig config;
 
     @Resource
     private SftpPoolService sFtpPoolService;

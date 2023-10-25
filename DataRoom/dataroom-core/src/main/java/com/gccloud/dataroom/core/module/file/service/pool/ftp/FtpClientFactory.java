@@ -1,7 +1,7 @@
 package com.gccloud.dataroom.core.module.file.service.pool.ftp;
 
 import com.gccloud.dataroom.core.config.DataRoomConfig;
-import com.gccloud.dataroom.core.config.bean.FtpConfig;
+import com.gccloud.dataroom.core.config.bean.DataRoomFtpConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -41,7 +41,7 @@ public class FtpClientFactory implements PooledObjectFactory<FTPClient> {
     @Override
     public PooledObject<FTPClient> makeObject() throws Exception {
         log.info("创建ftp连接");
-        FtpConfig ftp = config.getFile().getFtp();
+        DataRoomFtpConfig ftp = config.getFile().getFtp();
         FTPClient ftpClient = new FTPClient();
         ftpClient.setConnectTimeout(ftp.getClientTimeout());
         ftpClient.connect(ftp.getHost(), ftp.getPort());
@@ -137,7 +137,7 @@ public class FtpClientFactory implements PooledObjectFactory<FTPClient> {
      */
     @Override
     public void activateObject(PooledObject<FTPClient> pool) throws Exception {
-        FtpConfig ftp = config.getFile().getFtp();
+        DataRoomFtpConfig ftp = config.getFile().getFtp();
         FTPClient ftpClient = pool.getObject();
         if (!ftpClient.isConnected()) {
             log.info("ftp连接已关闭，重新连接");

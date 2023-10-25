@@ -1,6 +1,6 @@
 package com.gccloud.dataroom.core.module.file.service.pool.ftp;
 
-import com.gccloud.dataroom.core.config.bean.FtpConfig;
+import com.gccloud.dataroom.core.config.bean.DataRoomFtpConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.pool2.impl.GenericObjectPool;
@@ -29,7 +29,7 @@ public class FtpPoolServiceImpl {
      * ftp 客户端配置文件
      */
     @Resource
-    private FtpConfig config;
+    private DataRoomFtpConfig config;
 
     /**
      * ftp 客户端工厂

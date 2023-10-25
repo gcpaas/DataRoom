@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "gc.starter.file.minio")
-public class MinioConfig
+public class DataRoomMinioConfig
 {
     /**
      * 服务地址

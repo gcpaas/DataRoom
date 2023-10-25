@@ -1,6 +1,6 @@
 package com.gccloud.dataroom.core.module.file.service.pool.sftp;
 
-import com.gccloud.dataroom.core.config.bean.SftpConfig;
+import com.gccloud.dataroom.core.config.bean.DataRoomSftpConfig;
 import com.jcraft.jsch.ChannelSftp;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPool;
@@ -30,7 +30,7 @@ public class SftpPoolService {
      * ftp 客户端配置文件
      */
     @Resource
-    private SftpConfig config;
+    private DataRoomSftpConfig config;
 
     /**
      * ftp 客户端工厂

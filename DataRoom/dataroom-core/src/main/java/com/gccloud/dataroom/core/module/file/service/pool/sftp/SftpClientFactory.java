@@ -1,6 +1,6 @@
 package com.gccloud.dataroom.core.module.file.service.pool.sftp;
 
-import com.gccloud.dataroom.core.config.bean.SftpConfig;
+import com.gccloud.dataroom.core.config.bean.DataRoomSftpConfig;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
@@ -28,7 +28,7 @@ import java.util.Properties;
 public class SftpClientFactory extends BasePooledObjectFactory<ChannelSftp>{
 
     @Resource
-    private SftpConfig config;
+    private DataRoomSftpConfig config;
 
     /**
      * 新建对象

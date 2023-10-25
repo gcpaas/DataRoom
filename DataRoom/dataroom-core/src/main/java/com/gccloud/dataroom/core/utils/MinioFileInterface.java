@@ -1,6 +1,6 @@
 package com.gccloud.dataroom.core.utils;
 
-import com.gccloud.dataroom.core.config.bean.MinioConfig;
+import com.gccloud.dataroom.core.config.bean.DataRoomMinioConfig;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.GetPresignedObjectUrlArgs;
@@ -30,7 +30,7 @@ import java.security.NoSuchAlgorithmException;
 @Component
 public class MinioFileInterface {
     @Autowired
-    private MinioConfig minioConfig;
+    private DataRoomMinioConfig minioConfig;
 
     private MinioClient init() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         MinioClient build = MinioClient.builder().endpoint(minioConfig.getUrl()).credentials(minioConfig.getAccessKey(), minioConfig.getSecretKey()).build();

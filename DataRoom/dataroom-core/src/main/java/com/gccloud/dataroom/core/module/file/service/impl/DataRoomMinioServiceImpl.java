@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.dataroom.core.config.DataRoomConfig;
 import com.gccloud.dataroom.core.config.bean.FileConfig;
-import com.gccloud.dataroom.core.config.bean.MinioConfig;
+import com.gccloud.dataroom.core.config.bean.DataRoomMinioConfig;
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomFileService;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomOssService;
@@ -75,7 +75,7 @@ public class DataRoomMinioServiceImpl implements IDataRoomOssService {
         // 组装路径:获取当前日期并格式化为"yyyy/mm/dd"格式的字符串
         String basePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         String filePath = basePath + "/" + newFileName;
-        MinioConfig minioConfig = bigScreenConfig.getFile().getMinio();
+        DataRoomMinioConfig minioConfig = bigScreenConfig.getFile().getMinio();
         try (InputStream inputStream = file.getInputStream()) {
             PutObjectArgs args = PutObjectArgs.builder()
                     .bucket(minioConfig.getBucketName())
@@ -106,7 +106,7 @@ public class DataRoomMinioServiceImpl implements IDataRoomOssService {
     public DataRoomFileEntity upload(InputStream inputStream, String fileName, long size, DataRoomFileEntity entity) {
         fileName = PathUtils.normalizePath(fileName);
         String extension = FilenameUtils.getExtension(fileName);
-        MinioConfig minioConfig = bigScreenConfig.getFile().getMinio();
+        DataRoomMinioConfig minioConfig = bigScreenConfig.getFile().getMinio();
         long fileSize = size == 0 ? -1 : size;
         // 使用minio的最小分片大小
         long partSize = fileSize == -1 ? ObjectWriteArgs.MIN_MULTIPART_SIZE : -1;
@@ -197,7 +197,7 @@ public class DataRoomMinioServiceImpl implements IDataRoomOssService {
 
     @Override
     public String copy(String sourcePath, String targetPath) {
-        MinioConfig minioConfig = bigScreenConfig.getFile().getMinio();
+        DataRoomMinioConfig minioConfig = bigScreenConfig.getFile().getMinio();
         CopySource source = CopySource.builder().bucket(minioConfig.getBucketName()).object(sourcePath).build();
         CopyObjectArgs args = CopyObjectArgs.builder()
                 .bucket(minioConfig.getBucketName())
