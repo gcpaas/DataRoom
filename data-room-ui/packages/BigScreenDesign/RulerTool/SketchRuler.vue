@@ -55,31 +55,6 @@
           <slot />
         </div>
       </div>
-      <div
-        id="minimap"
-        class="minimap"
-      >
-        <div class="mapHeader" id="mapHeader">
-          <div>
-            <span>小地图</span>
-          </div>
-          <div class="showMap" @click="showMinimap">
-            <i class="el-icon-arrow-down" style="width:20px;height:20px;color:#fff;" v-if="!mapShow"/>
-            <i class="el-icon-arrow-up" style="width:20px;height:20px;color:#fff;" v-if="mapShow"/>
-          </div>
-        </div>
-        <div
-          id="selectWin"
-          class="selectWin"
-          v-show="mapShow"
-        >
-          <div
-            id="selectionWin"
-            class="selectionWin"
-          />
-        </div>
-        <div class="miniView" />
-      </div>
     </div>
   </div>
 </template>
@@ -111,7 +86,6 @@ export default {
   },
   data () {
     return {
-      mapShow: true, // 小地图显示与否
       canvasLeft: 0, // 存储画布到视口的left距离
       canvasTop: 0, // 存储画布到视口的top距离
       isDrag: false, // 小地图白块是否拖拽
@@ -159,15 +133,6 @@ export default {
     pageHeight (pageHeight) {
       if (this.fitZoom === this.zoom) {
         this.initZoom()
-      }
-    },
-    mapShow (value) {
-      const mapElement = document.getElementById('minimap')
-      // const selectElement = document.getElementById('selectWin')
-      if (!value) {
-        mapElement.style.bottom = parseFloat(window.getComputedStyle(mapElement).bottom) + 150 + 'px'
-      } else {
-        mapElement.style.bottom = parseFloat(window.getComputedStyle(mapElement).bottom) - 150 + 'px'
       }
     }
   },
@@ -300,10 +265,6 @@ export default {
       screenElement.ondragend = function (ev) {
         ev.preventDefault()
       }
-    },
-    // 控制小地图显示与隐藏
-    showMinimap () {
-      this.mapShow = !this.mapShow
     },
     // 小地图拖拽
     viewMapDrag () {

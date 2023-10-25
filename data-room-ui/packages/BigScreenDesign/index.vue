@@ -32,6 +32,31 @@
         tabindex="1000"
         @keydown="designKeydown"
       >
+        <div
+          id="minimap"
+          class="minimap"
+        >
+          <div class="mapHeader" id="mapHeader">
+            <div>
+              <span>小地图</span>
+            </div>
+            <div class="showMap" @click="showMinimap">
+              <i class="el-icon-arrow-down" style="width:20px;height:20px;color:#fff;" v-if="!mapShow"/>
+              <i class="el-icon-arrow-up" style="width:20px;height:20px;color:#fff;" v-if="mapShow"/>
+            </div>
+          </div>
+          <div
+            id="selectWin"
+            class="selectWin"
+            v-show="mapShow"
+          >
+            <div
+              id="selectionWin"
+              class="selectionWin"
+            />
+          </div>
+          <div class="miniView" />
+        </div>
         <SketchDesignRuler
           ref="Rules"
           :width="3000"
@@ -175,6 +200,7 @@ export default {
   },
   data () {
     return {
+      mapShow: true, // 小地图显示与否
       hasPermission: true,
       rightVisiable: false,
       pageInfoVisiable: false,
@@ -212,6 +238,15 @@ export default {
       // if(val.length==0){
       //   this.updateRightVisiable(false)
       // }
+    },
+    mapShow (value) {
+      const mapElement = document.getElementById('minimap')
+      // const selectElement = document.getElementById('selectWin')
+      if (!value) {
+        mapElement.style.bottom = parseFloat(window.getComputedStyle(mapElement).bottom) + 150 + 'px'
+      } else {
+        mapElement.style.bottom = parseFloat(window.getComputedStyle(mapElement).bottom) - 150 + 'px'
+      }
     },
     fitZoom (zoom) {
       this.zoomList[0] = {
@@ -288,6 +323,10 @@ export default {
       'emptyDataset',
       'emptyComputedDatas'
     ]),
+    // 控制小地图显示与隐藏
+    showMinimap () {
+      this.mapShow = !this.mapShow
+    },
     // 判断页面权限
     permission () {
       this.$dataRoomAxios.get(`/bigScreen/permission/check/${this.pageCode}`).then(res => {
@@ -527,11 +566,11 @@ export default {
       display: flex;
       background-color: #1d1e20;
       height: calc(100vh - 40px);
-      overflow: hidden;
+      // overflow: hidden;
 
       .grid-wrap-box {
         flex: 1;
-        overflow: hidden;
+        // overflow: hidden;
         position: relative;
         margin: 8px 0 0 8px;
 
@@ -566,4 +605,45 @@ export default {
       }
     }
   }
+.minimap{
+  position: absolute ;
+  bottom: 20px;
+  right: 20px;
+  border: 1px solid #f6f7fb;
+  z-index:1000;
+}
+.minimap .mapHeader{
+  background-color:#303640;
+  box-sizing:border-box;
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  height: 20px;
+  width: 150px;
+  font-size: 12px;
+  border-bottom: 1px solid #fff;
+  color: #ffffff;
+  cursor: pointer;
+  span {
+    user-select: none;
+  }
+}
+
+.minimap .selectWin{
+  background-color: #232832;
+  height: 150px;
+  width: 150px;
+  position: relative;
+}
+
+.minimap .selectionWin{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  opacity: 0.5;
+  cursor: move;
+}
 </style>
