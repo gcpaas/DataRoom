@@ -299,58 +299,58 @@ export default function getComponentConfig (type) {
         y: 0,
         type
       }
-    case 'indicatorCard':
-      return {
-        name: '指标卡一',
-        title: '指标卡一',
-        icon: null,
-        img: require('data-room-ui/assets/images/cardImg/card.png'),
-        className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndicatorCardChart',
-        w: 400,
-        h: 170,
-        x: 0,
-        y: 0,
-        type
+      case 'indicatorCard':
+        return {
+          name: '指标卡一',
+          title: '指标卡一',
+          icon: null,
+          img: require('data-room-ui/assets/images/cardImg/card.png'),
+          className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndicatorCardChart',
+          w: 400,
+          h: 170,
+          x: 0,
+          y: 0,
+          type
       }
-    case 'indicatorCard2':
-      return {
-        name: '指标卡二',
-        title: '指标卡二',
-        icon: null,
-        img: require('data-room-ui/assets/images/cardImg/card2.png'),
-        className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndicatorCardChart',
-        w: 400,
-        h: 170,
-        x: 0,
-        y: 0,
-        type
+      case 'indicatorCard2':
+        return {
+          name: '指标卡二',
+          title: '指标卡二',
+          icon: null,
+          img: require('data-room-ui/assets/images/cardImg/card2.png'),
+          className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndicatorCardChart',
+          w: 400,
+          h: 170,
+          x: 0,
+          y: 0,
+          type
       }
-    case 'indexCard':
-      return {
-        name: '指标卡三',
-        title: '指标卡三',
-        icon: null,
-        img: require('data-room-ui/assets/images/cardImg/indicard.png'),
-        className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndexCardChart',
-        w: 400,
-        h: 170,
-        x: 0,
-        y: 0,
-        type
+      case 'indexCard':
+        return {
+          name: '指标卡三',
+          title: '指标卡三',
+          icon: null,
+          img: require('data-room-ui/assets/images/cardImg/indicard.png'),
+          className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndexCardChart',
+          w: 400,
+          h: 170,
+          x: 0,
+          y: 0,
+          type
       }
-    case 'indexCard2':
-      return {
-        name: '指标卡四',
-        title: '指标卡四',
-        icon: null,
-        img: require('data-room-ui/assets/images/cardImg/indcard2.png'),
-        className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndexCardChart',
-        w: 400,
-        h: 170,
-        x: 0,
-        y: 0,
-        type
-      }
+        case 'indexCard2':
+          return {
+            name: '指标卡四',
+            title: '指标卡四',
+            icon: null,
+            img: require('data-room-ui/assets/images/cardImg/indcard2.png'),
+            className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndexCardChart',
+            w: 400,
+            h: 170,
+            x: 0,
+            y: 0,
+            type
+        }
     default:
       return {}
   }
