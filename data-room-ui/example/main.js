@@ -60,6 +60,11 @@ registerConfig(
     sourceExtends: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'xls', 'xlsx', 'csv'],
     // datasetAuth: ['unAdd', 'unEdit', 'unDelete'], // 数据集按钮权限 新增 编辑 删除
     // datasetTypeList: ['original', 'custom', 'http'],
+    // sourceTypeList: [
+    //   { label: 'Mysql', code: 'mysql', name: 'com.mysql.jdbc.Driver', url: 'jdbc:mysql://localhost:3306/db_name?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false&useOldAliasMetadataBehavior=true' },
+    //   { label: 'ClickHouse', code: 'clickhouse', name: 'ru.yandex.clickhouse.ClickHouseDriver', url: 'jdbc:clickhouse://localhost:8123/db_name' },
+    //   { label: 'test', code: 'test', name: 'test', url: 'test' }
+    // ],
     // customPlots: [],
     // 远程组件列表
     remoteComponents,

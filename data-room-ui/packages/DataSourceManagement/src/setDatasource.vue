@@ -37,8 +37,8 @@
           >
             <el-option
               v-for="sourceType in sourceTypeList"
-              :key="sourceType.id"
-              :label="sourceType.name"
+              :key="sourceType.code"
+              :label="sourceType.label"
               :value="sourceType.code"
             />
           </el-select>
@@ -223,27 +223,10 @@ export default {
       setDatasourceVisible: false,
       title: '',
       linkLoading: false,
-      sourceTypeList: [
-        { name: 'Mysql', code: 'mysql' },
-        { name: 'ClickHouse', code: 'clickhouse' },
-        { name: 'PostgreSQL', code: 'postgresql' },
-        { name: 'Oracle', code: 'oracle' },
-        { name: 'Sqlserver', code: 'sqlserver' }
-      ],
-      driverCLassList: [
-        { code: 'mysqlDriver', name: 'com.mysql.jdbc.Driver' },
-        { code: 'clickhouseDriver', name: 'ru.yandex.clickhouse.ClickHouseDriver' },
-        { code: 'oracleDriver', name: 'oracle.jdbc.driver.OracleDriver' },
-        { code: 'hsqlDriver', name: 'org.hsqldb.jdbc.JDBCDriver' },
-        { code: 'ibmdb2Driver', name: 'com.ibm.db2.jcc.DB2Driver' },
-        { code: 'sqlserverDriver', name: 'com.microsoft.sqlserver.jdbc.SQLServerDriver' },
-        { code: 'postgresqlDriver', name: 'org.postgresql.Driver' },
-        { code: 'hiveDriver', name: 'org.apache.hive.jdbc.HiveDriver' }
-      ],
       dataForm: {
         id: '',
         sourceName: '',
-        sourceType: 'Mysql',
+        sourceType: 'mysql',
         driverClassName: 'com.mysql.jdbc.Driver',
         username: '',
         password: '',
@@ -315,6 +298,17 @@ export default {
       }
     }
   },
+  computed: {
+    sourceTypeList () {
+      return window.BS_CONFIG?.sourceTypeList || [
+        { label: 'Mysql', code: 'mysql', name: 'com.mysql.jdbc.Driver', url: 'jdbc:mysql://localhost:3306/db_name?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false&useOldAliasMetadataBehavior=true' },
+        { label: 'ClickHouse', code: 'clickhouse', name: 'ru.yandex.clickhouse.ClickHouseDriver', url: 'jdbc:clickhouse://localhost:8123/db_name' },
+        { label: 'PostgreSQL', code: 'postgresql', name: 'org.postgresql.Driver', url: 'jdbc:postgresql://localhost:13308/db_name' },
+        { label: 'Oracle', code: 'oracle', name: 'oracle.jdbc.driver.OracleDriver', url: 'jdbc:oracle:thin:@localhost:1521:orcl' },
+        { label: 'Sqlserver', code: 'sqlserver', name: 'com.microsoft.sqlserver.jdbc.SQLServerDriver', url: 'jdbc:sqlserver://localhost:1433;databaseName=db_name' }
+      ]
+    }
+  },
   methods: {
     // 初始化
     init (row) {
@@ -324,26 +318,6 @@ export default {
       }
       if (row && row.id) {
         this.dataForm = row
-      }
-    },
-    getUrl (driverClassName) {
-      switch (driverClassName) {
-        case 'com.mysql.jdbc.Driver':
-          return 'jdbc:mysql://localhost:3306/db_name?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false&useOldAliasMetadataBehavior=true'
-        case 'ru.yandex.clickhouse.ClickHouseDriver':
-          return 'jdbc:clickhouse://localhost:8123/db_name'
-        case 'oracle.jdbc.driver.OracleDriver':
-          return 'jdbc:oracle:thin:@localhost:1521:orcl'
-        case 'org.hsqldb.jdbc.JDBCDriver':
-          return 'jdbc:hsqldb:http://localhost:1527/db_name'
-        case 'com.ibm.db2.jcc.DB2Driver':
-          return 'jdbc:db2://localhost:5000/db_name'
-        case 'com.microsoft.sqlserver.jdbc.SQLServerDriver':
-          return 'jdbc:sqlserver://localhost:1433;databaseName=db_name;encrypt=false'
-        case 'org.postgresql.Driver':
-          return 'jdbc:postgresql://localhost:13308/db_name'
-        case 'org.apache.hive.jdbc.HiveDriver':
-          return 'jdbc:hive2://localhost:10000/db_name'
       }
     },
     // 名称校验
@@ -363,19 +337,9 @@ export default {
     // 数据源类型选择
     sourceTypeChange (code) {
       if (!this.dataForm.id && code) {
-        let driverName = ''
-        driverName = code + 'Driver'
-        // 从驱动列表中获取驱动的对应的jdbcUrl
-        this.driverCLassList.forEach(driver => {
-          if (driverName === driver.code) {
-            this.dataForm.driverClassName = driver.name
-            this.queryDriverTemp(driver.name)
-          }
-        })
+        this.dataForm.driverClassName = this.sourceTypeList.find(item => item.code === code)?.name
+        this.$set(this.dataForm, 'url', this.sourceTypeList.find(item => item.code === code)?.url)
       }
-    },
-    queryDriverTemp (val) {
-      this.$set(this.dataForm, 'url', this.getUrl(val))
     },
     // 阻止文本域回车换行
     textareaKeydown () {
@@ -414,7 +378,7 @@ export default {
       this.dataForm = {
         id: '',
         sourceName: '',
-        sourceType: 'Mysql',
+        sourceType: 'mysql',
         driverClassName: 'com.mysql.jdbc.Driver',
         username: '',
         password: '',
