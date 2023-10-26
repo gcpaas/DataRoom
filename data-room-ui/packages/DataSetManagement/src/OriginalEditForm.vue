@@ -717,10 +717,15 @@ export default {
      * 获取预览数据
      */
     getData () {
+      let allField = []
+      if (this.dataForm.fieldInfo.length === 0) {
+        // 从字段列表中取出所有字段
+        allField = this.fieldList.map(field => field.columnName)
+      }
       const executeParams = {
         dataSourceId: this.dataForm.sourceId,
         script: JSON.stringify({
-          fieldInfo: this.dataForm.fieldInfo, // 未选中字段就传空数组
+          fieldInfo: this.dataForm.fieldInfo.length === 0 ? allField : this.dataForm.fieldInfo,
           tableName: this.dataForm.tableName,
           repeatStatus: this.dataForm.repeatStatus
         }),
@@ -862,11 +867,15 @@ export default {
      * 选中原始表
      * @param value
      */
-    setTable (value) {
+    async setTable(value) {
       this.fieldList = []
+      if (!this.dataForm.tableName) {
+        this.dataForm.fieldInfo = []
+        return
+      }
+      await this.queryAllField()
+      // dataForm.fieldInfo的清空会触发监听事件，如果在queryAllField之前清空，会导致监听事件中的getPreViewData方法获取不到fieldList
       this.dataForm.fieldInfo = []
-      if (!this.dataForm.tableName) return
-      this.queryAllField()
     },
     repeatStatusChange () {
       this.getPreViewData()
@@ -874,20 +883,25 @@ export default {
     /**
      * 获取原始表字段列表
      */
-    queryAllField () {
-      getTableFieldList(this.dataForm.sourceId, this.dataForm.tableName).then((data) => {
-        const fieldDescMap = {}
-        this.fieldList = data.map(field => {
-          fieldDescMap[field.columnName] = field.columnComment
-          field.isCheck = false
-          if (this.dataForm.fieldInfo.includes(field.columnName)) {
-            field.isCheck = true
-          }
-          return field
-        })
-        // this.getPreViewData(fieldDescMap)
-      }).catch(() => {
-        this.fieldList = []
+    queryAllField() {
+      return new Promise((resolve, reject) => {
+        getTableFieldList(this.dataForm.sourceId, this.dataForm.tableName)
+          .then((data) => {
+            const fieldDescMap = {}
+            this.fieldList = data.map(field => {
+              fieldDescMap[field.columnName] = field.columnComment
+              field.isCheck = false
+              if (this.dataForm.fieldInfo.includes(field.columnName)) {
+                field.isCheck = true
+              }
+              return field
+            })
+            resolve()
+          })
+          .catch(() => {
+            this.fieldList = []
+            reject()
+          })
       })
     },
     /**
