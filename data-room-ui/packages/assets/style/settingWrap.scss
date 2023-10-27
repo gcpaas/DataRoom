@@ -29,6 +29,7 @@
 .bs-setting-wrap {
   position: relative;
   height: 100%;
+  background-color: var(--bs-background-2);
 
   ::v-deep .el-collapse {
     border: none !important;

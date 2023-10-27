@@ -91,6 +91,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/style/borderAndDecoraSetting.scss";
 .lc-field-body {
   padding: 12px 16px;
 }
