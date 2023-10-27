@@ -203,7 +203,7 @@ export default {
       upLoadUrl: window.BS_CONFIG?.httpConfigs?.baseURL + '/bigScreen/file/upload',
       searchKey: '',
       extend: '',
-      sourceExtends: window.BS_CONFIG?.sourceExtends || [],
+      sourceExtends: window.BS_CONFIG?.sourceExtends || ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'xls', 'xlsx', 'csv'],
       options: [],
       list: [],
       fileUploadParam: {},
