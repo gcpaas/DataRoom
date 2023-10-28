@@ -3,23 +3,28 @@ package com.gccloud.dataroom.core.module.map.controller;
 import com.gccloud.common.permission.ApiPermission;
 import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.common.vo.R;
-import com.gccloud.dataroom.core.module.map.dto.DataRoomMapRepeatDTO;
-import com.gccloud.dataroom.core.module.map.vo.DataRoomMapDataVO;
-import com.gccloud.dataroom.core.module.map.vo.DataRoomMapVO;
-import com.gccloud.dataroom.core.module.map.vo.MapChildVO;
 import com.gccloud.dataroom.core.module.map.dto.DataRoomMapDTO;
+import com.gccloud.dataroom.core.module.map.dto.DataRoomMapRepeatDTO;
 import com.gccloud.dataroom.core.module.map.dto.MapSearchDTO;
 import com.gccloud.dataroom.core.module.map.entity.DataRoomMapEntity;
 import com.gccloud.dataroom.core.module.map.service.IDataRoomMapService;
+import com.gccloud.dataroom.core.module.map.vo.DataRoomMapDataVO;
+import com.gccloud.dataroom.core.module.map.vo.DataRoomMapVO;
+import com.gccloud.dataroom.core.module.map.vo.MapChildVO;
 import com.gccloud.dataroom.core.permission.Permission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiSort;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -156,5 +161,36 @@ public class DataRoomMapController {
     }
 
 
+    @ApiPermission(permissions = {Permission.Map.VIEW})
+    @GetMapping("/default/{path}/{name}")
+    @ApiOperation(value = "默认地图", position = 130, notes = "从静态资源读取默认地图数据", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String defaultMap(@PathVariable String path, @PathVariable String name) {
+        if (path.contains(".")) {
+            path = path.replaceAll("\\.", "/");
+        }
+        String filePath = "static/" + path + "/" + name + ".json";
+        // 从静态资源中获取默认地图
+        String json;
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        try {
+            org.springframework.core.io.Resource[] resources = resolver.getResources(filePath);
+            org.springframework.core.io.Resource resource = resources[0];
+            if (!resource.exists()) {
+                return "";
+            }
+            // 获得文件流，因为在jar文件中，不能直接通过文件资源路径拿到文件，但是可以在jar包中拿到文件流
+            InputStream stream = resource.getInputStream();
+            StringBuilder buffer = new StringBuilder();
+            byte[] bytes = new byte[1024];
+            for (int n; (n = stream.read(bytes)) != -1; ) {
+                buffer.append(new String(bytes, 0, n));
+            }
+            json = buffer.toString();
+        } catch (IOException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            return "";
+        }
+        return json;
+    }
 
 }

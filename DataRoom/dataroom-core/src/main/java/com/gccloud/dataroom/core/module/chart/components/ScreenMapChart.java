@@ -104,6 +104,24 @@ public class ScreenMapChart extends Chart {
         @ApiModelProperty(notes = "中心点y轴位置")
         private Integer center2;
 
+        @ApiModelProperty(notes = "悬浮框数值标题")
+        private String tooltipTitle;
+
+        @ApiModelProperty(notes = "是否显示打点数值")
+        private Boolean showScatterValue;
+
+        @ApiModelProperty(notes = "打点图形")
+        private String scatterSymbol;
+
+        @ApiModelProperty(notes = "打点大小")
+        private Integer scatterSize;
+
+        @ApiModelProperty(notes = "高亮颜色")
+        private String emphasisColor;
+
+
+
+
     }
 
 
