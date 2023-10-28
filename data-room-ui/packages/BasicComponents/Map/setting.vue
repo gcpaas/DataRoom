@@ -191,6 +191,35 @@
           />
         </el-form-item>
         <el-form-item
+          label="地图高亮颜色"
+          label-width="100px"
+        >
+          <ColorPicker
+            v-model="config.customize.emphasisColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          label="值渲染模式"
+          label-width="100px"
+        >
+          <el-radio-group
+            v-model="config.customize.scatter"
+            class="bs-el-radio-group"
+          >
+            <el-radio :label="true">
+              打点
+            </el-radio>
+            <el-radio :label="false">
+              色块
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </div>
+      <SettingTitle v-if="config.customize.scatter" >打点模式</SettingTitle>
+      <div class="lc-field-body">
+        <el-form-item
+          v-if="config.customize.scatter"
           label="地图分割块颜色"
           label-width="100px"
         >
@@ -200,18 +229,8 @@
           />
         </el-form-item>
         <el-form-item
-          label="是否打点"
-          label-width="100px"
-        >
-          <el-switch
-            v-model="config.customize.scatter"
-            class="bs-el-switch"
-            active-color="#007aff"
-          />
-        </el-form-item>
-        <el-form-item
           v-if="config.customize.scatter"
-          label="打点图背景色"
+          label="点颜色"
           label-width="100px"
         >
           <ColorPicker
@@ -221,7 +240,37 @@
         </el-form-item>
         <el-form-item
           v-if="config.customize.scatter"
-          label="打点图文字颜色"
+          label="点形状"
+          label-width="100px"
+        >
+          <el-select
+            v-model="config.customize.scatterSymbol"
+            popper-class="bs-el-select"
+            class="bs-el-select"
+            @change="changeLevel()"
+          >
+            <el-option
+              v-for="symbol in symbolList"
+              :key="symbol.value"
+              :label="symbol.label"
+              :value="symbol.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.scatter"
+          label="显示点文字"
+          label-width="100px"
+        >
+          <el-switch
+            v-model="config.customize.showScatterValue"
+            class="bs-el-switch"
+            active-color="#007aff"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.scatter"
+          label="点文字颜色"
           label-width="100px"
         >
           <ColorPicker
@@ -229,6 +278,22 @@
             :predefine-colors="predefineThemeColors"
           />
         </el-form-item>
+        <el-form-item
+          v-if="config.customize.scatter"
+          label="点尺寸"
+          label-width="100px"
+        >
+          <el-slider
+            v-model="config.customize.scatterSize"
+            class="bs-el-slider-dark"
+            :step="1"
+            :min="1"
+            :max="100"
+          ></el-slider>
+        </el-form-item>
+      </div>
+      <SettingTitle v-if="!config.customize.scatter">色块模式</SettingTitle>
+      <div class="lc-field-body">
         <el-form-item
           v-if="!config.customize.scatter"
           label="悬浮框背景色"
@@ -250,7 +315,19 @@
           />
         </el-form-item>
         <el-form-item
-          label="是否开启筛选"
+          v-if="!config.customize.scatter"
+          label="悬浮框数值标题"
+          label-width="100px"
+        >
+          <el-input
+            v-model="config.customize.tooltipTitle"
+            placeholder="请输入数值标题"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="!config.customize.scatter"
+          label="启用手动筛选"
           label-width="100px"
         >
           <el-switch
@@ -260,8 +337,8 @@
           />
         </el-form-item>
         <el-form-item
-          v-if="config.customize.visual"
-          label="数值范围"
+          v-if="!config.customize.scatter"
+          label="色块数值范围"
           label-width="100px"
         >
           <el-input-number
@@ -279,8 +356,8 @@
           />
         </el-form-item>
         <el-form-item
-          v-if="config.customize.visual"
-          label="配色方案"
+          v-if="!config.customize.scatter"
+          label="色块配色方案"
           label-width="100px"
         >
           <color-select
@@ -353,6 +430,15 @@ export default {
         {value: '2', label: '省份'},
         {value: '3', label: '城市'},
         {value: '4', label: '区县'}
+      ],
+      symbolList: [
+        {value: 'circle', label: '圆形'},
+        {value: 'rect', label: '矩形'},
+        {value: 'roundRect', label: '圆角矩形'},
+        {value: 'triangle', label: '三角形'},
+        {value: 'diamond', label: '菱形'},
+        {value: 'pin', label: '水滴'},
+        {value: 'arrow', label: '箭头'}
       ],
       // 旧版本地图等级，该数据用于兼容旧版本
       oldLevelMap: {

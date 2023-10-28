@@ -155,7 +155,7 @@ export default {
             },
             // 鼠标放上去高亮的样式
             emphasis: {
-              areaColor: '#389BB7',
+              areaColor: config.customize.emphasisColor ? config.customize.emphasisColor :'#389BB7',
               borderWidth: 0
             }
           }
@@ -179,51 +179,30 @@ export default {
           },
           showDelay: 100
         },
+        // 视觉映射
+        visualMap: {
+          show: !config.customize.scatter,
+          calculable: config.customize.visual,
+          min: config.customize.range[0],
+          max: config.customize.range[1],
+          seriesIndex: [0],
+          inRange: {
+            color: config.customize.rangeColor
+          }
+        },
         series: config.customize.scatter
           ? [
-            // {
-            //   type: 'effectScatter',
-            //   coordinateSystem: 'geo',
-            //   effectType: 'ripple',
-            //   showEffectOn: 'render',
-            //   rippleEffect: {
-            //     period: 10,
-            //     scale: 10,
-            //     brushType: 'fill'
-            //   },
-
-            //   hoverAnimation: true,
-            //   itemStyle: {
-            //     normal: {
-            //       color: 'rgba(255, 235, 59, .7)',
-            //       shadowBlur: 10,
-            //       shadowColor: '#333'
-            //     }
-            //   },
-            //   tooltip: {
-            //     formatter(params) {
-            //       return `<p style="text-align:center;line-height: 30px;height:30px;font-size: 14px;border-bottom: 1px solid #7A8698;">${
-            //         params.name
-            //       }</p>
-            //   <div style="line-height:22px;margin-top:5px">GDP<span style="margin-left:12px;color:#fff;float:right">${
-            //     params.data?.value[2] || '--'
-            //   }</span></div>`
-            //     },
-            //     show: true
-            //   },
-            //   zlevel: 1,
-            //   data: [
-            //     { name: '西藏自治区', value: [91.23, 29.5, 1] },
-            //     { name: '黑龙江省', value: [128.03, 47.01, 1007] },
-            //     { name: '北京市', value: [116.4551, 40.2539, 5007] }
-            //   ]
-            // }
             {
               type: 'scatter',
+              // 坐标系类型
               coordinateSystem: 'geo',
-              symbol: 'pin',
+              // 标记符号形状 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
+              symbol: config.customize.scatterSymbol ? config.customize.scatterSymbol : 'pin',
+              // 是否允许图例和散点图之间的联动效果
               legendHoverLink: true,
-              symbolSize: [60, 60],
+              // 散点图标记符号的大小，[宽度,高度]
+              symbolSize: config.customize.scatterSize ? [config.customize.scatterSize, config.customize.scatterSize] : [40, 40],
+              // 触发特效的方式
               showEffectOn: 'render',
               rippleEffect: {
                 brushType: 'stroke'
@@ -232,7 +211,7 @@ export default {
               zlevel: 11,
               // 这里渲染标志里的内容以及样式
               label: {
-                show: true,
+                show: config.customize.hasOwnProperty('showScatterValue') ? config.customize.showScatterValue : true,
                 formatter(value) {
                   return value.data.value[2]
                 },
@@ -264,7 +243,7 @@ export default {
                   return `<p style="text-align:center;line-height: 30px;height:30px;font-size: 14px;border-bottom: 1px solid #7A8698;">${
                     params.name
                   }</p>
-                <div style="line-height:22px;margin-top:5px">GDP<span style="margin-left:12px;color:#fff;float:right">${
+                <div style="line-height:22px;margin-top:5px">${config.customize.tooltipTitle ? config.customize.tooltipTitle : 'GDP'}<span style="margin-left:12px;color:#fff;float:right">${
                     params.data?.value[2] || '--'
                   }</span></div>`
                 },
@@ -273,23 +252,12 @@ export default {
             }
           ]
       }
-      if (config.customize.visual) {
-        this.option.visualMap = {
-          show: true,
-          min: config.customize.range[0],
-          max: config.customize.range[1],
-          seriesIndex: [0],
-          inRange: {
-            color: config.customize.rangeColor
-          }
-        }
-      }
       let hasMapId = !!config.customize.mapId
       // 根据mapId获取地图数据
       let mapInfoUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/map/info/${config.customize.mapId}`
       // 如果设置了地图id，就用地图id获取地图数据，否则用默认的世界地图
       if (!hasMapId) {
-        mapInfoUrl = `${window.BS_CONFIG?.httpConfigs?.fileUrlPrefix}/chinaMap/country/中华人民共和国.json`
+        mapInfoUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/map/default/chinaMap.country/中华人民共和国`
       }
       const mapResp = await this.$dataRoomAxios.get(decodeURI(mapInfoUrl), {}, true)
       const map = hasMapId ? JSON.parse(mapResp.data.geoJson) : mapResp

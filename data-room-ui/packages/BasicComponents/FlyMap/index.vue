@@ -117,7 +117,7 @@ export default {
       let mapInfoUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/map/info/${config.customize.mapId}`
       // 如果设置了地图id，就用地图id获取地图数据，否则用默认的世界地图
       if (!hasMapId) {
-        mapInfoUrl = `${window.BS_CONFIG?.httpConfigs?.fileUrlPrefix}/worldMap/world.json`
+        mapInfoUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/map/default/worldMap/world`
       }
       this.$dataRoomAxios.get(mapInfoUrl, {}, true).then(res => {
         if (this.config.option.data) {

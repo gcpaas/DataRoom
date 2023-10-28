@@ -353,7 +353,7 @@
           </template>
           <div class="lc-field-body">
             <el-form-item
-              label="展示字段"
+              label="值"
               class="data-form-item"
             >
               <el-select
@@ -384,6 +384,19 @@
               label="地名字段"
               class="data-form-item"
             >
+              <template slot="label">
+                <span>
+                  地名字段
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    content="色块模式下可用，地图将根据该属性值寻找对应的区域，并按照值字段进行色块渲染"
+                    placement="top"
+                  >
+                    <i class="el-icon-question"></i>
+                  </el-tooltip>
+                </span>
+              </template>
               <el-select
                 v-model="config.customize.name"
                 class="bs-el-select"
@@ -409,9 +422,22 @@
               </el-select>
             </el-form-item>
             <el-form-item
-              label="x坐标"
+              label="经度字段"
               class="data-form-item"
             >
+              <template slot="label">
+                <span>
+                  经度字段
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    content="打点模式下可用，地图将经纬度寻找指定坐标，并进行打点显示"
+                    placement="top"
+                  >
+                    <i class="el-icon-question"></i>
+                  </el-tooltip>
+                </span>
+              </template>
               <el-select
                 v-model="config.customize.xaxis"
                 class="bs-el-select"
@@ -437,9 +463,22 @@
               </el-select>
             </el-form-item>
             <el-form-item
-              label="y坐标"
+              label="纬度字段"
               class="data-form-item"
             >
+              <template slot="label">
+                <span>
+                  纬度字段
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    content="打点模式下可用，地图将经纬度寻找指定坐标，并进行打点显示"
+                    placement="top"
+                  >
+                    <i class="el-icon-question"></i>
+                  </el-tooltip>
+                </span>
+              </template>
               <el-select
                 v-model="config.customize.yaxis"
                 class="bs-el-select"

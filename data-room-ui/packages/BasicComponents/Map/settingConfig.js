@@ -66,10 +66,18 @@ const customConfig = {
     tooltipBackgroundColor: '#0C121C',
     // 悬浮框边框色
     borderColor: 'rgba(0, 0, 0, 0.16)',
-    // 打点图背景颜色
+    // 悬浮框数值标题
+    tooltipTitle: 'GDP',
+    // 点颜色
     scatterBackgroundColor: 'rgba(255,0,0,.7)',
-    // 打点图文字颜色
+    // 显示点文字
+    showScatterValue: true,
+    // 点文字颜色
     scatterColor: '#fff',
+    // 点形状
+    scatterSymbol: 'circle',
+    // 点大小
+    scatterSize: 40,
     // 分割线颜色
     mapLineColor: 'rgba(53, 86, 165, 1)',
     fontGraphicColor: '#fff',
@@ -79,11 +87,13 @@ const customConfig = {
     // 允许下钻的层级
     downLevel: 1,
     // 地图级别
-    level: 1,
+    level: 2,
     // 范围
     scope: '中国',
     // 地图区域颜色
     areaColor: 'rgba(31, 50, 121, 1)',
+    // 地图区域悬浮颜色
+    emphasisColor: '#389BB7',
     // 是否开启筛选
     visual: false,
     // 筛选范围
