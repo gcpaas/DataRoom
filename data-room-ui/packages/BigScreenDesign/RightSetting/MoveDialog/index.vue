@@ -270,7 +270,7 @@ export default {
   left: 0;
   width: 400px;
   margin-top: 50px;
-  margin-left: 20px;
+  margin-left: 80px;
   margin-right: 200px;
   table{
     color: #fff;
@@ -283,9 +283,9 @@ export default {
   }
 }
   .imgContent{
-    width: 300px;
+    width: 400px;
     position: absolute;
-    left: 500px;
+    left: 600px;
     top: 50%;
     transform: translateY(-50%);
     margin-top: 0px;

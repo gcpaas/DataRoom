@@ -32,6 +32,8 @@ export default {
   },
   data () {
     return {
+      borderWidth: 0,
+      borderHeight: 0
     }
   },
   computed: {
@@ -45,10 +47,10 @@ export default {
       const borderArr = this.config.border.borderArray ? this.config.border.borderArray
         : [10, 10, 10, 10]
       const arr = []
-      arr[0] = borderArr[0] * 3.2
-      arr[1] = borderArr[1] * 4.5
-      arr[2] = borderArr[2] * 3.2
-      arr[3] = borderArr[3] * 4.5
+      arr[0] = borderArr[0] * this.borderHeight / 100
+      arr[1] = borderArr[1] * this.borderWidth / 100
+      arr[2] = borderArr[2] * this.borderHeight / 100
+      arr[3] = borderArr[3] * this.borderWidth / 100
       return arr
     }
   },
@@ -70,6 +72,10 @@ export default {
     }
   },
   mounted () {
+    // 获取边框大小
+    const element = document.querySelector('.bs-design-wrap')
+    this.borderWidth = element.offsetWidth
+    this.borderHeight = element.offsetHeight
     if(this.config.border.imgUrl){
       let ur=this.config.border.imgUrl
       if(!this.config.border.imgUrl.startsWith('http')){
