@@ -87,10 +87,10 @@ export default {
         }
         this.isSelectDown = true
 
-        this.startX = (event.x - this.offsetX) / this.scale
-        this.startY = (event.y - this.offsetY) / this.scale
-        this.endX = (event.x - this.offsetX) / this.scale
-        this.endY = (event.y - this.offsetY) / this.scale
+        this.startX = (event.x - this.offsetX) / this.scale + 50
+        this.startY = (event.y - this.offsetY) / this.scale + 50
+        this.endX = (event.x - this.offsetX) / this.scale + 50
+        this.endY = (event.y - this.offsetY) / this.scale + 50
       }
     },
     handleMouseMove (event) {
@@ -102,8 +102,8 @@ export default {
         this.isSelecting = true
       }
       if (this.isSelecting) {
-        this.endX = (event.x - this.offsetX) / this.scale
-        this.endY = (event.y - this.offsetY) / this.scale
+        this.endX = (event.x - this.offsetX) / this.scale + 50
+        this.endY = (event.y - this.offsetY) / this.scale + 50
       }
     },
     handleMouseUp (event) {
