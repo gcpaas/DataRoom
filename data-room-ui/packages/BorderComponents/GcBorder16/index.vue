@@ -1,12 +1,12 @@
 <template>
   <div
-    style="width: 100%;height: 100%"
+    style="width: 100%;height: 100%;object-fit: cover"
     class="bs-design-wrap"
     :id="'border'+ config.code"
     :style="{
       opacity: opacity,
-      borderImageSlice:`${borderArray[0]} ${borderArray[1]} ${borderArray[2]} ${borderArray[3]} fill`,
-      borderImageWidth:`${borderArray[0]}px ${borderArray[1]}px ${borderArray[2]}px ${borderArray[3]}px`,
+      borderImageSlice:`${borderImageArray[0]} ${borderImageArray[1]} ${borderImageArray[2]} ${borderImageArray[3]} fill`,
+      borderImageWidth:`${borderImageArray[0]}px ${borderImageArray[1]}px ${borderImageArray[2]}px ${borderImageArray[3]}px`,
     }"
   >
   </div>
@@ -35,15 +35,21 @@ export default {
     }
   },
   computed: {
-    url(){
+    url () {
       return require('data-room-ui/BorderComponents/GcBorder16/component.png')
     },
     opacity () {
       return this.config.border.opacity || 100
     },
-    borderArray(){
-      return this.config.border.borderArray ? this.config.border.borderArray
-        : [50,50,50,50]
+    borderImageArray () {
+      const borderArr = this.config.border.borderArray ? this.config.border.borderArray
+        : [10, 10, 10, 10]
+      const arr = []
+      arr[0] = borderArr[0] * 3.2
+      arr[1] = borderArr[1] * 4.5
+      arr[2] = borderArr[2] * 3.2
+      arr[3] = borderArr[3] * 4.5
+      return arr
     }
   },
   watch: {
