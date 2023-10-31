@@ -42,6 +42,24 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
+    label: '标签文本来源',
+    // 设置组件类型
+    type: 'select',
+    // 字段
+    field: 'label_content',
+    // 对应options中的字段
+    optionField: 'label.content',
+    value: '{value}',
+    tabName: 'custom',
+    options: [
+      { label: '维度', value: '{name}' },
+      { label: '指标', value: '{value}' }
+    ],
+    step: 0.1,
+    max: 1,
+    groupName: 'graph'
+  },
+  {
     label: '标签位置',
     // 设置组件类型
     type: 'select',

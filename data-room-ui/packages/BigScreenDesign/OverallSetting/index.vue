@@ -59,6 +59,16 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item label="开启磁吸">
+            <el-switch
+              v-model="currentSnap"
+              class="bs-el-switch"
+              active-color="#007aff"
+              :active-value="30"
+              :inactive-value="3"
+              @change="snapHandler"
+            />
+          </el-form-item>
           <el-form-item label="主题">
             <el-select
               v-model="form.customTheme"
@@ -304,6 +314,14 @@ export default {
       pageInfo: state => state.bigScreen.pageInfo,
       config: state => state.bigScreen.activeItemConfig
     }),
+    currentSnap: {
+      get () {
+        // return this.snap
+        return this.$store.state.bigScreen.snapTolerance
+      },
+      set (val) {
+      }
+    },
     isPreview () {
       return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
     },
@@ -361,7 +379,8 @@ export default {
       'changeLayout',
       'changeChartKey',
       'changeRefreshConfig',
-      'changePageInfo'
+      'changePageInfo',
+      'snapChange'
     ]),
     // 切换主题时更新主题配置
     changeTheme (theme) {
@@ -465,6 +484,10 @@ export default {
     },
     timerEmptyState () {
       return this.pageInfo.chartList.every(chart => chart.dataSource?.businessKey === '' && chart.type !== 'marquee')
+    },
+    snapHandler (val) {
+      // this.$emit('changeSnap', val)
+      this.snapChange(val)
     }
   }
 }

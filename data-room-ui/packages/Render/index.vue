@@ -34,7 +34,7 @@
       :debug="false"
       :is-conflict-check="false"
       :snap="true"
-      :snap-tolerance="2"
+      :snap-tolerance="snapTolerance"
       :style="{
         zIndex: chart.z || 0,
       }"
@@ -128,7 +128,8 @@ export default {
       hoverCode: (state) => state.bigScreen.hoverCode,
       themeJson: (state) => state.bigScreen.pageInfo.pageConfig.themeJson,
       isInit: (state) => !state.bigScreen.pageLoading,
-      scale: (state) => state.bigScreen.zoom / 100
+      scale: (state) => state.bigScreen.zoom / 100,
+      snapTolerance: (state) => state.bigScreen.snapTolerance
     })
   },
   watch: {

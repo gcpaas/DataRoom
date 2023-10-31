@@ -385,6 +385,10 @@ export default {
   // 清空数据集库
   emptyComputedDatas (state) {
     state.computedDatas = {}
+  },
+  // 修改磁吸状态
+  snapChange (state, snap) {
+    state.snapTolerance = snap
   }
 }
 function deldataset (state, type, codes) {
