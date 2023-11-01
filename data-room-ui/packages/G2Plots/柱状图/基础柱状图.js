@@ -446,7 +446,6 @@ const option = {
     fill: 'l(90) 0:#5AA6AB 1:#217AB1'
   },
   label: {
-    offsetY: 13,
     // 可手动配置 label 数据标签位置
     position: 'middle', // 'top', 'bottom', 'middle',
     // 配置样式
