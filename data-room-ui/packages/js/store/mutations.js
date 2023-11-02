@@ -14,6 +14,7 @@ import { defaultData } from './state'
 import moment from 'moment'
 import { randomString } from 'data-room-ui/js/utils'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
+import CloneDeep from 'lodash-es/cloneDeep'
 export default {
   // 改变页面基本信息，后端请求的页面信息存储到此处
   changePageInfo (state, pageInfo) {
@@ -372,11 +373,27 @@ export default {
   },
   // 更新数据集库中的内容
   updateDataset (state, res) {
-    Vue.set(state.dataset, res.name + res.code, res.data)
+    // 如果只是更新了组件的标题
+    if (res.oldTitle && state.dataset.hasOwnProperty(res.oldTitle + '_' + res.code)) {
+      const _dataset = CloneDeep(state.dataset)
+      _dataset[res.title + '_' + res.code] = _dataset[res.oldTitle + '_' + res.code]
+      delete _dataset[res.oldTitle + '_' + res.code]
+      state.dataset = CloneDeep(_dataset)
+    } else {
+      Vue.set(state.dataset, res.title + '_' + res.code, res.data)
+    }
   },
   // 更新数据集库中的内容
   updateComputedDatas (state, res) {
-    Vue.set(state.computedDatas, res.name + res.code, res.data)
+    // 如果只是更新了组件的标题
+    if (res.oldTitle && state.computedDatas.hasOwnProperty(res.oldTitle + '_' + res.code)) {
+      const _computedDatas = CloneDeep(state.computedDatas)
+      _computedDatas[res.title + '_' + res.code] = _computedDatas[res.oldTitle + '_' + res.code]
+      delete _computedDatas[res.oldTitle + '_' + res.code]
+      state.computedDatas = CloneDeep(_computedDatas)
+    } else if (res.isExpression) {
+      Vue.set(state.computedDatas, res.title + '_' + res.code, res.data)
+    }
   },
   // 清空数据集库
   emptyDataset (state) {

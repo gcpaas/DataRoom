@@ -43,11 +43,11 @@
         />
       </div>
       <SettingTitle>旋转</SettingTitle>
-          <div class="lc-field-body">
-            <RotateSetting
-              :config="config"
-            />
-          </div>
+      <div class="lc-field-body">
+        <RotateSetting
+          :config="config"
+        />
+      </div>
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
@@ -103,6 +103,7 @@ import TextGradient from 'data-room-ui/BigScreenDesign/RightSetting/TextGradient
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 import fontList from 'data-room-ui/js/utils/fontList'
+import { mapMutations } from 'vuex'
 export default {
   name: 'TextSetting',
   components: {
@@ -133,9 +134,22 @@ export default {
     }
   },
   watch: {
+    // 标题发生变化时需要及时更新表达式中的数据集库的字段名
+    'config.title': {
+      handler (val, oldVal) {
+        if (val) {
+          this.updateDataset({ code: this.config.code, title: val, data: [], oldTitle: oldVal })
+          this.updateComputedDatas({ code: this.config.code, title: val, data: [], oldTitle: oldVal })
+        }
+      }
+    }
   },
   mounted () {},
   methods: {
+    ...mapMutations({
+      updateDataset: 'bigScreen/updateDataset',
+      updateComputedDatas: 'bigScreen/updateComputedDatas'
+    })
   }
 }
 </script>

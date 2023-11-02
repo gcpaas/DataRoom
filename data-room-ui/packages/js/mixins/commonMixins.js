@@ -26,8 +26,8 @@ export default {
       }
     },
     currentDataset: { // 关联的数据发生变化
-      handler (val) {
-        if (val && Object.keys(val).length) {
+      handler (val, old) {
+        if (val && Object.keys(val).length && JSON.stringify(val) !== JSON.stringify(old)) {
           this.getDataByExpression(this.config)
         }
       },
@@ -35,8 +35,8 @@ export default {
       immediate: true
     },
     currentComputedDatas: { // 关联的数据发生变化
-      handler (val) {
-        if (val && Object.keys(val).length) {
+      handler (val, old) {
+        if (val && Object.keys(val).length && JSON.stringify(val) !== JSON.stringify(old)) {
           this.getDataByExpression(this.config)
         }
       },
@@ -62,9 +62,13 @@ export default {
     // 跟当前组件计算表达式关联的组件的数据集合
     currentDataset () {
       const newDataset = {}
-      this.config.expressionCodes?.forEach(code => {
-        if (this.dataset[code]) {
-          newDataset[code] = this.dataset[code]
+      this.config.expressionCodes?.forEach(item => {
+        const code = item.split('_')[1]
+        for (const key in this.dataset) {
+          const objCode = key.split('_')[1]
+          if (objCode === code) {
+            newDataset[code] = this.dataset[key]
+          }
         }
       })
       return newDataset
@@ -72,9 +76,13 @@ export default {
     // 跟当前组件计算表达式关联的组件的数据集合
     currentComputedDatas () {
       const newDataset = {}
-      this.config.expressionCodes?.forEach(code => {
-        if (this.computedDatas[code]) {
-          newDataset[code] = this.computedDatas[code]
+      this.config.expressionCodes?.forEach(item => {
+        const code = item.split('_')[1]
+        for (const key in this.computedDatas) {
+          const objCode = key.split('_')[1]
+          if (objCode === code) {
+            newDataset[code] = this.computedDatas[key]
+          }
         }
       })
       return newDataset
@@ -170,7 +178,7 @@ export default {
           }
           // 将后端返回的数据保存
           if (_res.success) {
-            this.updateDataset({ code: config.code, name: config.name, data: _res?.data })
+            this.updateDataset({ code: config.code, title: config.title, data: _res?.data })
           }
           config = this.dataFormatting(config, _res)
           this.changeChartConfig(config)
@@ -242,7 +250,7 @@ export default {
           }
           // 将后端返回的数据保存
           if (_res.success) {
-            this.updateDataset({ code: config.code, name: config.name, data: _res?.data })
+            this.updateDataset({ code: config.code, title: config.title, data: _res?.data })
           }
           config = this.dataFormatting(config, _res)
           if (this.chart) {

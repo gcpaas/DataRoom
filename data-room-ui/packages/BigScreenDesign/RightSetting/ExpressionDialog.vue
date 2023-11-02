@@ -129,17 +129,21 @@ export default {
     treeData () {
       const list = []
       for (const item in this.dataset) {
-        const fields = Object.keys(this.dataset[item][0])
-        const children = fields.map((field) => {
-          return {
-            label: field,
-            code: item,
-            value: `dataset.${item}[0].${field}`,
-            disabled: item.includes(this.config.code)
-          }
-        })
+        let children = []
+        if (this.dataset[item][0]) {
+          const fields = Object.keys(this.dataset[item][0])
+          children = fields.map((field) => {
+            return {
+              label: field,
+              code: item,
+              value: `dataset.${item}[0].${field}`,
+              disabled: item.includes(this.config.code)
+            }
+          })
+        }
+
         list.push({
-          label: item,
+          label: item.split('_')[0],
           code: item,
           value: `dataset.${item}`,
           disabled: item.includes(this.config.code),
@@ -148,7 +152,7 @@ export default {
       }
       for (const item in this.computedDatas) {
         list.push({
-          label: item,
+          label: item.split('_')[0],
           code: item,
           value: `computedDatas.${item}`,
           disabled: item.includes(this.config.code)
