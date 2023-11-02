@@ -17,32 +17,41 @@ export default {
         // 配置兼容
         const pageInfo = handleResData(data)
         // 兼容边框配置
-        pageInfo.chartList.forEach((item) => {
-          if (item.dataSource) {
-            item.dataSource.source = item.dataSource?.source || 'dataset'
+        pageInfo.chartList.forEach((chart) => {
+          if (chart.dataSource) {
+            chart.dataSource.source = chart.dataSource?.source || 'dataset'
           }
 
-          if (!item.border) {
-            item.border = { type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [0, 0, 0, 0] }
+          if (!chart.border) {
+            chart.border = { type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [0, 0, 0, 0] }
           }
-          if (!item.border.padding) {
-            item.border.padding = [0, 0, 0, 0]
+          if (!chart.border.padding) {
+            chart.border.padding = [0, 0, 0, 0]
           }
-          if (item.type == 'customComponent') {
-            plotSettings[Symbol.iterator] = function * () {
-              const keys = Object.keys(plotSettings)
-              for (const k of keys) {
-                yield [k, plotSettings[k]]
+          let plotSettingsIterator = false
+          if (chart.type == 'customComponent') {
+            // 为本地G2组件配置添加迭代器
+            if (!plotSettingsIterator) {
+              plotSettings[Symbol.iterator] = function * () {
+                const keys = Object.keys(plotSettings)
+                for (const k of keys) {
+                  yield [k, plotSettings[k]]
+                }
               }
             }
-            for (const [key, value] of plotSettings) {
-              if (item.name == value.name) {
-                const settings = JSON.parse(JSON.stringify(value.setting))
-                item.setting = settings.map((x) => {
-                  const index = item.setting.findIndex(y => y.field == x.field)
-                  x.field = item.setting[index].field
-                  x.value = item.setting[index].value
-                  return x
+            for (const [key, localPlotSetting] of plotSettings) {
+              if (chart.name == localPlotSetting.name) {
+                // 本地配置项
+                const localSettings = JSON.parse(JSON.stringify(localPlotSetting.setting))
+                chart.setting = localSettings.map((localSet) => {
+                  // 在远程组件配置中找到 与 本地组件的配置项 相同的项索引
+                  const index = chart.setting.findIndex(remoteSet => remoteSet.field == localSet.field)
+                  if (index !== -1) {
+                    // 使用远程的值替换本地值
+                    localSet.field = chart.setting[index].field
+                    localSet.value = chart.setting[index].value
+                  }
+                  return localSet
                 })
               }
             }

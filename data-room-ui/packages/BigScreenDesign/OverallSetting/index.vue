@@ -97,7 +97,7 @@
             <el-image
               v-if="form[currentBg]"
               class="bg-img bs-el-img"
-              :src="form[currentBg]"
+              :src="getCoverPicture(form[currentBg])"
               fit="cover"
               @click="$refs.bgImg.init()"
             />
@@ -200,6 +200,7 @@ import BgImg from './BgImgDialog.vue'
 import { mapState, mapMutations } from 'vuex'
 import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
 import {predefineColors} from 'data-room-ui/js/utils/colorList'
+import { getFileUrl } from 'data-room-ui/js/utils/file'
 export default {
   name: 'OverallSetting',
   components: {
@@ -488,6 +489,14 @@ export default {
     snapHandler (val) {
       // this.$emit('changeSnap', val)
       this.snapChange(val)
+    },
+    /**
+     * 获取图片访问地址,如果是相对路径则拼接上文件访问前缀地址
+     * @param url
+     * @returns {*}
+     */
+    getCoverPicture (url) {
+      return getFileUrl(url)
     }
   }
 }

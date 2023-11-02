@@ -7,7 +7,7 @@
       width: pageInfo.pageConfig.w + 'px',
       height: pageInfo.pageConfig.h + 'px',
       backgroundColor:pageInfo.pageConfig.customTheme ==='light' ? pageInfo.pageConfig.lightBgColor:pageInfo.pageConfig.bgColor ,
-      backgroundImage:pageInfo.pageConfig.customTheme ==='light' ? `url(${pageInfo.pageConfig.lightBg})`:`url(${pageInfo.pageConfig.bg})`
+      backgroundImage:pageInfo.pageConfig.customTheme ==='light' ? `url(${this.getCoverPicture(pageInfo.pageConfig.lightBg)})`:`url(${this.getCoverPicture(pageInfo.pageConfig.bg)})`
     }"
     @drop="drop($event)"
     @dragover.prevent
@@ -92,6 +92,7 @@ import { randomString } from '../js/utils'
 import { compile } from 'tiny-sass-compiler/dist/tiny-sass-compiler.esm-browser.prod.js'
 import plotList, { getCustomPlots } from '../G2Plots/plotList'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
+import { getFileUrl } from 'data-room-ui/js/utils/file'
 
 export default {
   name: 'BigScreenRender',
@@ -455,6 +456,14 @@ export default {
           })
         })
       }
+    },
+    /**
+     * 获取图片访问地址,如果是相对路径则拼接上文件访问前缀地址
+     * @param url
+     * @returns {*}
+     */
+    getCoverPicture (url) {
+      return getFileUrl(url)
     }
   }
 }

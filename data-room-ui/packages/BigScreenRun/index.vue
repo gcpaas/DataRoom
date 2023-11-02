@@ -42,6 +42,7 @@ import { compile } from 'tiny-sass-compiler/dist/tiny-sass-compiler.esm-browser.
 import NotPermission from 'data-room-ui/NotPermission'
 import Configuration from 'data-room-ui/Render/Configuration.vue'
 import DataViewDialog from 'data-room-ui/BigScreenDesign/DataViewDialog/index.vue'
+import { getFileUrl } from 'data-room-ui/js/utils/file'
 export default {
   name: 'BigScreenRun',
   components: {
@@ -99,7 +100,7 @@ export default {
       const bg = this.fitMode !== 'none'
         ? {
             backgroundColor: this.fitPageConfig.customTheme === 'light' ? this.fitPageConfig.lightBgColor : this.fitPageConfig.bgColor,
-            backgroundImage: this.fitPageConfig.customTheme === 'light' ? `url(${this.fitPageConfig.lightBg})` : `url(${this.fitPageConfig.bg})`,
+            backgroundImage: this.fitPageConfig.customTheme === 'light' ? `url(${this.getCoverPicture(this.fitPageConfig.lightBg)})` : `url(${this.getCoverPicture(this.fitPageConfig.bg)})`,
             backgroundSize: 'cover'
           }
         : {}
@@ -121,7 +122,7 @@ export default {
       const bg = this.fitMode === 'none'
         ? {
             backgroundColor: this.fitPageConfig.customTheme === 'light' ? this.fitPageConfig.lightBgColor : this.fitPageConfig.bgColor,
-            backgroundImage: this.fitPageConfig.customTheme === 'light' ? `url(${this.fitPageConfig.lightBg})` : `url(${this.fitPageConfig.bg})`,
+            backgroundImage: this.fitPageConfig.customTheme === 'light' ? `url(${this.getCoverPicture(this.fitPageConfig.lightBg)})` : `url(${this.getCoverPicture(this.fitPageConfig.bg)})`,
             backgroundSize: 'cover'
           }
         : {}
@@ -378,6 +379,14 @@ export default {
       }
 
       return newPageConfig
+    },
+    /**
+     * 获取图片访问地址,如果是相对路径则拼接上文件访问前缀地址
+     * @param url
+     * @returns {*}
+     */
+    getCoverPicture (url) {
+      return getFileUrl(url)
     }
   }
 }
