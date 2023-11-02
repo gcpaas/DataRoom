@@ -77,6 +77,17 @@ const setting = [
     groupName: 'graph'
   },
   {
+    label: '旋转内部标签',
+    type: 'switch', // 设置组件类型
+    field: 'labelAutoRotate', // 字段
+    optionField: 'label.autoRotate', // 对应options中的字段
+    value: true,
+    active: true,
+    inactive: false,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
     label: '标签颜色',
     // 设置组件类型
     type: 'colorPicker',
@@ -257,6 +268,7 @@ const option = {
   },
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
   label: {
+    autoRotate: true,
     type: 'inner',
     labelHeight: 50,
     labelLine: {
