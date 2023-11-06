@@ -186,7 +186,7 @@ export default {
             console.error(e)
           }
         }
-        if(config.chartType=='Treemap'){
+        if (config.chartType == 'Treemap') {
           const xAxis = config.setting.find(item => item.field === 'xField')?.value
           const listData = data.children.map(item => {
             if (xAxis && typeof item[xAxis] === 'number') {
@@ -194,14 +194,26 @@ export default {
             }
             return item
           })
-          config.option.data={name:'root',children:[...listData]}
+          config.option.data = { name: 'root', children: [...listData] }
           // console.log(config.option.data)
-        }else{
-           // 如果维度为数字类型则转化为字符串，否则在不增加其他配置的情况下会导致图标最后一项不显示（g2plot官网已说明）
+        } else {
+          // 如果维度为数字类型则转化为字符串，否则在不增加其他配置的情况下会导致图标最后一项不显示（g2plot官网已说明）
           const xAxis = config.setting.find(item => item.field === 'xField')?.value
+          const yAxis = config.setting.find(item => item.field === 'yField')?.value
           config.option.data = data?.map(item => {
-            if (xAxis && typeof item[xAxis] === 'number') {
+            // 此处函数处理data
+            if (config.dataHandler) {
+              try {
+                // 此处函数处理data
+                eval(config.dataHandler)
+              } catch (e) {
+                console.error(e)
+              }
+            }
+            if (config.chartType !== 'Bar' && xAxis && typeof item[xAxis] === 'number') {
               item[xAxis] = (item[xAxis]).toString()
+            } else if (config.chartType === 'Bar' && yAxis && typeof item[yAxis] === 'number') {
+              item[yAxis] = (item[yAxis]).toString()
             }
             return item
           })

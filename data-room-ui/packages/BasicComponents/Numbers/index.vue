@@ -39,7 +39,6 @@ export default {
   methods: {
     // 通过表达式计算得来的值
     getDataByExpression (config) {
-      console.log('getDataByExpression', this.dataset)
       const result = new Function('dataset', 'computedDatas', this.config.expression)
       config.customize.title = result(this.dataset, this.computedDatas)
       // 同时将计算得来的值保存到公共的数据存储的地方
