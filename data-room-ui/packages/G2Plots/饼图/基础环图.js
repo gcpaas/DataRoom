@@ -46,17 +46,30 @@ const setting = [
     // 设置组件类型
     type: 'select',
     // 字段
-    field: 'label_content',
+    field: 'label_contentList',
     // 对应options中的字段
-    optionField: 'label.content',
-    value: '{value}',
+    optionField: 'label.contentList',
+    value: ['{value}'],
     tabName: 'custom',
+    multiple: true,
     options: [
       { label: '维度', value: '{name}' },
-      { label: '指标', value: '{value}' }
+      { label: '指标', value: '{value}' },
+      { label: '百分比', value: '{percentage}' },
     ],
     step: 0.1,
     max: 1,
+    groupName: 'graph'
+  },
+  {
+    label: '旋转内部标签',
+    type: 'switch', // 设置组件类型
+    field: 'labelAutoRotate', // 字段
+    optionField: 'label.autoRotate', // 对应options中的字段
+    value: false,
+    active: true,
+    inactive: false,
+    tabName: 'custom',
     groupName: 'graph'
   },
   {
@@ -365,7 +378,25 @@ const data = [
 const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
   '\n  if (option.legendEnable) {\n' +
   '    option.legend.itemName = option.legendItemName\n' +
-  '  }'
+  '  }' +
+  `if (option.label.contentList && option.label.contentList.length > 0) {
+  let content = ''
+  if (option.label.contentList.length === 1) {
+    content = option.label.contentList[0]
+  } else {
+    // 多行文本，加换行符，但是最后一行不加
+    option.label.contentList.forEach((item, index) => {
+      if (index === option.label.contentList.length - 1) {
+        content += item
+      } else {
+        content += item + '\\n'
+      }
+    })
+  }
+  option.label.content = content
+}`
+
+
 
 // 数据处理脚本
 const dataHandler = ''
@@ -394,6 +425,7 @@ const option = {
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
   label: {
     type: 'inner',
+    autoRotate: false,
     labelLine: {
       style: {
         stroke: '#5B8FF9',
@@ -401,6 +433,7 @@ const option = {
         lineWidth: 1
       }
     },
+    contentList: [],
     content: '{value}',
     style: {
       fill: '#ffffff',
