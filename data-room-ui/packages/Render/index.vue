@@ -372,7 +372,7 @@ export default {
         code: !chart.code ? randomString(8) : chart.code,
         option
       }
-      config.key = config.code
+      config.key = isComponent ? randomString(8) : config.code
       // isComponent = false 从左侧新增时需要初始化theme的内容
       // isComponent = true从组件库添加自定义组件时不用初始化
       if (!isComponent) {
