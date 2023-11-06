@@ -51,8 +51,10 @@ export default {
     }),
     getSelectionBoxStyle () {
       // 计算虚线框的样式
-      const left = Math.min(this.startX, this.endX) + 'px'
-      const top = Math.min(this.startY, this.endY) + 'px'
+      let left = Math.min(this.startX, this.endX) + 'px'
+      let top = Math.min(this.startY, this.endY) + 'px'
+      const left1 = Math.min(this.startX, this.endX) + 50 * this.scale + 'px'
+      const top1 = Math.min(this.startY, this.endY) + 50 * this.scale + 'px'
       const width = Math.abs(this.endX - this.startX) + 'px'
       const height = Math.abs(this.endY - this.startY) + 'px'
       if (!this.isSelecting) {
@@ -79,6 +81,7 @@ export default {
       ]
     ),
     handleMouseDown (event) {
+      // 点击在底部背景上
       if (event.button === 0) {
         time = new Date()
         // 避免和shift + 点击多选组件冲突
@@ -86,11 +89,22 @@ export default {
           return
         }
         this.isSelectDown = true
-
-        this.startX = (event.x - this.offsetX) / this.scale + 50
-        this.startY = (event.y - this.offsetY) / this.scale + 50
-        this.endX = (event.x - this.offsetX) / this.scale + 50
-        this.endY = (event.y - this.offsetY) / this.scale + 50
+        // 点击在底部背景上
+        if (event.target.className.indexOf('mouse-select-wrap') !== -1) {
+          this.startX = event.offsetX
+          this.endX = event.offsetX
+          this.startY = event.offsetY
+          this.endY = event.offsetY
+        } else if (event.target.className.indexOf('design-drag-wrap') !== -1) {
+          this.startX = event.offsetX + 50
+          this.endX = event.offsetX + 50
+          this.startY = event.offsetY + 50
+          this.endY = event.offsetY + 50
+        }
+        // this.startX = (event.x - this.offsetX + 50) / this.scale
+        // this.startY = (event.y - this.offsetY + 50) / this.scale
+        // this.endX = (event.x - this.offsetX + 50) / this.scale
+        // this.endY = (event.y - this.offsetY + 50) / this.scale
       }
     },
     handleMouseMove (event) {
@@ -102,8 +116,13 @@ export default {
         this.isSelecting = true
       }
       if (this.isSelecting) {
-        this.endX = (event.x - this.offsetX) / this.scale + 50
-        this.endY = (event.y - this.offsetY) / this.scale + 50
+        if (event.target.className.indexOf('mouse-select-wrap') !== -1) {
+          this.endX = event.offsetX
+          this.endY = event.offsetY
+        } else if (event.target.className.indexOf('design-drag-wrap') !== -1) {
+          this.startX = event.offsetX + 50
+          this.endY = event.offsetY + 50
+        }
       }
     },
     handleMouseUp (event) {

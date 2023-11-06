@@ -55,7 +55,6 @@
               class="selectionWin"
             />
           </div>
-          <div class="miniView" />
         </div>
         <SketchDesignRuler
           ref="Rules"
