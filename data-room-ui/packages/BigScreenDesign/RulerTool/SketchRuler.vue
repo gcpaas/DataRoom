@@ -214,6 +214,10 @@ export default {
         scrollLeft = screenElement.scrollLeft
         scrollTop = screenElement.scrollTop
         maxContainer.addEventListener('mousemove', function (event) {
+          // 在鼠标移动过程中判断出鼠标左键未点击，则停止拖拽
+          if (event.buttons !== 1) {
+            that.isDrag = false
+          }
           if (that.isDrag) {
             event.preventDefault()
             // 鼠标移动距离
@@ -427,50 +431,9 @@ export default {
 
 .screen-container {
   position: absolute;
+  overflow:hidden;
   width: 6000px;
   height: 6000px;
-}
-
-.minimap{
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-  border: 1px solid #f6f7fb;
-  z-index:10000;
-  /*cursor: move;*/
-}
-.minimap .mapHeader{
-  background-color:#303640;
-  padding: 0 10px;
-  display: flex;
-  justify-content: space-between;
-  height: 20px;
-  width: 150px;
-  font-size: 12px;
-  border-bottom: 1px solid #fff;
-  color: #ffffff;
-  cursor: pointer;
-  span {
-    user-select: none;
-  }
-}
-
-.minimap .selectWin{
-  background-color: #232832;
-  height: 150px;
-  width: 150px;
-  position: relative;
-}
-
-.minimap .selectionWin{
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 30px;
-  height: 30px;
-  background-color: white;
-  opacity: 0.5;
-  cursor: move;
 }
 
 .scale-value {
