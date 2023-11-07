@@ -392,13 +392,19 @@ export default {
     // 跳转设计态
     toDesign (form) {
       // eslint-disable-next-line no-case-declarations
-      const { href: bigScreenHref } = this.$router.resolve({
+      // const { href: bigScreenHref } = this.$router.resolve({
+      //   path: window.BS_CONFIG?.routers?.designUrl || '/big-screen/design',
+      //   query: {
+      //     code: form.code
+      //   }
+      // })
+      // window.open(bigScreenHref, '_self')
+      this.$router.push({
         path: window.BS_CONFIG?.routers?.designUrl || '/big-screen/design',
         query: {
           code: form.code
         }
       })
-      window.open(bigScreenHref, '_self')
     },
     // 得到模板列表
     getTemplateList (type) {
