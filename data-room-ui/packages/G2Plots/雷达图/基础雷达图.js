@@ -42,15 +42,6 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
-    label: '底色',
-    type: 'colorPicker', // 设置组件类型
-    field: 'yAxis_grid_alternateColor', // 字段
-    optionField: 'yAxis.grid.alternateColor', // 对应options中的字段
-    value: 'rgba(0, 0, 0, 0.04)',
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
     label: '面积填充',
     type: 'switch', // 设置组件类型
     field: 'area', // 字段
@@ -159,8 +150,70 @@ const setting = [
     value: 2,
     tabName: 'custom',
     groupName: 'graph'
-  }
-  // 边距 padding
+  },
+  {
+    label: '数据标签',
+    type: 'switch', // 设置组件类型
+    field: 'label_style_opacity', // 字段
+    optionField: 'label.style.opacity', // 对应options中的字段
+    value: 0,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'label_style_fill', // 字段
+    optionField: 'label.style.fill', // 对应options中的字段
+    value: '#ffffff',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签大小',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'label_style_fontSize',
+    // 对应options中的字段
+    optionField: 'label.style.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+
+  // x轴 xAxis
+  {
+    label: '显示外层圆圈',
+    type: 'switch',
+    field: 'xAxis_lineEnabled',
+    optionField: 'xAxis.lineEnabled',
+    value: false,
+    active: true,
+    inactive: false,
+    tabName: 'custom',
+    groupName: 'grid'
+  },
+  {
+    label: '奇数圈底色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'yAxis_grid_alternateColor1', // 字段
+    optionField: 'yAxis.grid.alternateColor1', // 对应options中的字段
+    value: 'rgba(0, 0, 0, 0.04)',
+    tabName: 'custom',
+    groupName: 'grid'
+  },
+  {
+    label: '偶数圈底色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'yAxis_grid_alternateColor2', // 字段
+    optionField: 'yAxis.grid.alternateColor2', // 对应options中的字段
+    value: 'rgba(0, 0, 0, 0.04)',
+    tabName: 'custom',
+    groupName: 'grid'
+  },
 ]
 
 // 模拟数据
@@ -173,6 +226,17 @@ const data = [
   { name: 'AVA', star: 885 },
   { name: 'G2Plot', star: 1626 }
 ]
+
+// 配置处理脚本
+const optionHandler = `
+if (option.xAxis.lineEnabled) {
+  option.xAxis.line = {}
+} else {
+  option.xAxis.line = null
+}
+option.yAxis.grid.alternateColor = [option.yAxis.grid.alternateColor1, option.yAxis.grid.alternateColor2]
+`
+
 
 // 数据处理脚本
 const dataHandler = ''
@@ -192,17 +256,28 @@ const option = {
     }
   },
   meta: {
-    star: {
-      alias: 'star 数量',
+    value: {
+      alias: '数据',
       min: 0,
       nice: true,
       formatter: (v) => Number(v).toFixed(2)
     }
   },
   xAxis: {
-    tickLine: null
+    lineEnabled: false,
+    line: {},
+    tickLine: null,
+    grid: {
+      line: {
+        style: {
+          lineDash: null,
+        },
+      },
+    },
   },
   yAxis: {
+    // line: null,
+    tickLine: null,
     label: false,
     grid: {
       line: {
@@ -211,8 +286,10 @@ const option = {
           lineDash: null,
         },
       },
-      alternateColor: 'rgba(0, 0, 0, 0.04)'
-    }
+      alternateColor1: 'rgba(0, 0, 0, 0.04)',
+      alternateColor2: 'rgba(0, 0, 0, 0.04)',
+      alternateColor: ['rgba(0, 0, 0, 0.04)','rgba(0, 0, 0, 0.04)'],
+    },
   },
   // 开启辅助点
   point: {
@@ -222,7 +299,15 @@ const option = {
     shape: '',
     size: 2
   },
-  area: 1
+  area: 1,
+  label: {
+    autoRotate: false,
+    style: {
+      fill: '#ffffff',
+      opacity: 1,
+      fontSize: 12
+    }
+  }
 }
 
 export default {
@@ -233,5 +318,6 @@ export default {
   name,
   option,
   setting,
-  dataHandler
+  dataHandler,
+  optionHandler
 }
