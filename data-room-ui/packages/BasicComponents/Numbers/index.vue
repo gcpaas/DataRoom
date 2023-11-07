@@ -39,18 +39,10 @@ export default {
   methods: {
     // 通过表达式计算得来的值
     getDataByExpression (config) {
-      // 如果表达式是由其他组件的值构成的
-      // const len = this.config.expressionCodes ? this.config.expressionCodes.length : 0
-      // const len1 = this.currentComputedDatas ? Object.keys(this.currentComputedDatas).length : 0
-      // const len2 = this.currentDataset ? Object.keys(this.currentDataset).length : 0
-      // if (len && len === len1 + len2) {
-      // eslint-disable-next-line no-new-func
       const result = new Function('dataset', 'computedDatas', this.config.expression)
       config.customize.title = result(this.dataset, this.computedDatas)
       // 同时将计算得来的值保存到公共的数据存储的地方
-      this.updateComputedDatas({ code: config.code, name: config.name, data: config.customize.title })
-      // this.changeChartConfig(config)
-      // }
+      this.updateComputedDatas({ code: config.code, title: config.title, data: config.customize.title, isExpression: true })
     },
     dataFormatting (config, data) {
       // 文本数据配置原则：选择数据集则以后端返回的数据为主，否则以设置面板中标题设置为准

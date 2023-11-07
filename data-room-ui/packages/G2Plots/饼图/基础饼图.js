@@ -42,6 +42,25 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
+    label: '标签文本来源',
+    // 设置组件类型
+    type: 'select',
+    // 字段
+    field: 'label_content',
+    // 对应options中的字段
+    optionField: 'label.content',
+    value: '{value}',
+    tabName: 'custom',
+    options: [
+      { label: '维度', value: '{name}' },
+      { label: '指标', value: '{value}' },
+      { label: '百分比', value: '{percentage}' }
+    ],
+    step: 0.1,
+    max: 1,
+    groupName: 'graph'
+  },
+  {
     label: '标签位置',
     // 设置组件类型
     type: 'select',
@@ -56,6 +75,17 @@ const setting = [
       { label: '内部', value: 'inner' },
       { label: '蜘蛛布局', value: 'spider' }
     ],
+    groupName: 'graph'
+  },
+  {
+    label: '旋转内部标签',
+    type: 'switch', // 设置组件类型
+    field: 'labelAutoRotate', // 字段
+    optionField: 'label.autoRotate', // 对应options中的字段
+    value: true,
+    active: true,
+    inactive: false,
+    tabName: 'custom',
     groupName: 'graph'
   },
   {
@@ -239,6 +269,7 @@ const option = {
   },
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
   label: {
+    autoRotate: true,
     type: 'inner',
     labelHeight: 50,
     labelLine: {

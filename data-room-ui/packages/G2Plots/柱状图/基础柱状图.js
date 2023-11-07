@@ -389,7 +389,7 @@ const setting = [
     value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'yAxis'
-  },
+  }
   // 边距 padding
 ]
 

@@ -76,6 +76,18 @@ const setting = [
     groupName: 'graph'
   },
   {
+    label: '指标小数位',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'statistic_fixed',
+    // 对应options中的字段
+    optionField: 'statisticFixed',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
     label: '指标字体类型',
     // 设置组件类型
     type: 'select',
@@ -160,7 +172,9 @@ const data = [
   }
 ]
 // 配置处理脚本
-const optionHandler ='option.range.color = [option.color1, option.color2]'
+const optionHandler ='option.range.color = [option.color1, option.color2]\n' +
+  '  let fix = option.statisticFixed\n' +
+  '  option.statistic.title.formatter = ({ percent }) => `${(percent * 100).toFixed(fix)}%`'
 // 数据处理脚本
 const dataHandler = '// 取返回数据列表的第一项指标值\noption.percent = data[0][setting.filter(settingItem=>settingItem.field === \'percent\')[0].value]'
 
@@ -175,6 +189,7 @@ const option = {
   range: {
     color: ['l(0) 0:#6b74e4 1:#4391f4','#d0d0d0']
   },
+  statisticFixed: 0,
   startAngle: Math.PI,
   endAngle: 2 * Math.PI,
   indicator: null,

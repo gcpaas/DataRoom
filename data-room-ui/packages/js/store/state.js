@@ -68,7 +68,9 @@ export const defaultData = {
   // 页面上所有组件的数据集的数据信息
   dataset: {},
   // 页面上所有组件的数据集的数据信息
-  computedDatas: {}
+  computedDatas: {},
+  // 是否开启磁吸
+  snapTolerance: 3
 }
 
 export default () => ({

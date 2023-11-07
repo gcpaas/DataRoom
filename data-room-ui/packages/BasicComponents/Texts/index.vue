@@ -40,17 +40,15 @@ export default {
     // 通过表达式计算得来的值
     getDataByExpression (config) {
       // 如果表达式是由其他组件的值构成的
-      // const len = this.config.expressionCodes ? this.config.expressionCodes.length : 0
-      // const len1 = this.currentComputedDatas ? Object.keys(this.currentComputedDatas).length : 0
-      // const len2 = this.currentDataset ? Object.keys(this.currentDataset).length : 0
-      // console.log('len', len, len1, len2)
-      // if (len && len === len1 + len2) {
       // eslint-disable-next-line no-new-func
-      const result = new Function('dataset', 'computedDatas', this.config.expression)
-      config.customize.title = result(this.dataset, this.computedDatas)
-      console.log(result(this.dataset, this.computedDatas))
+      try {
+        const result = new Function('dataset', 'computedDatas', this.config.expression)
+        config.customize.title = result(this.dataset, this.computedDatas)
+      } catch (e) {
+
+      }
       // 同时将计算得来的值保存到公共的数据存储的地方
-      this.updateComputedDatas({ code: config.code, name: config.name, data: config.customize.title })
+      this.updateComputedDatas({ code: config.code, title: config.title, data: config.customize.title })
       // this.changeChartConfig(config)
       // }
     },
