@@ -61,6 +61,14 @@ public class ScreenDigitalFlopChart extends Chart {
         @ApiModelProperty(notes = "高度")
         private Integer height;
 
+        @ApiModelProperty(notes = "边框颜色")
+        private String borderColor;
+
+        @ApiModelProperty(notes = "边框宽度")
+        private Integer borderWidth;
+
+
+
 
     }
 
