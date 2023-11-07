@@ -185,7 +185,10 @@ export default {
       const str = node.value
       const code = node.code
       if (node.disabled) return
-      this.$refs.codemirrorRef.codemirror.setValue(this.currentConfig.expression + ' +  ' + str)
+      // 判断编辑器里面是return + 0或者多个空格 还是包含其他表达式，每次添加第一个表达式时不要加‘+’,防止计算错误
+      const isInit = /^[\w\s]+$/.test(this.currentConfig.expression)
+      const newStr = isInit ? this.currentConfig.expression + str : this.currentConfig.expression + ' +  ' + str
+      this.$refs.codemirrorRef.codemirror.setValue(newStr)
       // 同时将点击的数据存在expressionCodes中
       if (this.currentConfig.expressionCodes && Array.isArray(this.currentConfig.expressionCodes)) {
         this.currentConfig.expressionCodes.push(code)
