@@ -53,7 +53,8 @@ const setting = [
     tabName: 'custom',
     options: [
       { label: '维度', value: '{name}' },
-      { label: '指标', value: '{value}' }
+      { label: '指标', value: '{value}' },
+      { label: '百分比', value: '{percentage}' }
     ],
     step: 0.1,
     max: 1,
