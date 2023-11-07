@@ -346,14 +346,20 @@ export default {
     },
     design (screen) {
       const path = this.catalogInfo === 'component' ? (window.BS_CONFIG?.routers?.designUrl || '/big-screen/design') : (window.BS_CONFIG?.routers?.bizComponentDesignUrl || 'big-screen-biz-component-design')
-      const { href } = this.$router.resolve({
+      // const { href } = this.$router.resolve({
+      //   path,
+      //   query: {
+      //     code: screen.code
+      //   }
+      // })
+      // 新窗口打开
+      // window.open(href, '_self')
+      this.$router.push({
         path,
         query: {
           code: screen.code
         }
       })
-      // 新窗口打开
-      window.open(href, '_self')
     },
     add () {
       const page = {
@@ -426,7 +432,7 @@ export default {
      */
     getCoverPicture (url) {
       return getFileUrl(url)
-    },
+    }
   }
 }
 </script>

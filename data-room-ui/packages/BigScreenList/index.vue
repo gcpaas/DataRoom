@@ -232,13 +232,19 @@ export default {
     },
     design (screen) {
       const path = window.BS_CONFIG?.routers?.designUrl || '/big-screen/design'
-      const { href } = this.$router.resolve({
+      // const { href } = this.$router.resolve({
+      //   path,
+      //   query: {
+      //     code: screen.code
+      //   }
+      // })
+      // window.open(href, '_self')
+      this.$router.push({
         path,
         query: {
           code: screen.code
         }
       })
-      window.open(href, '_self')
     },
     add () {
       const page = {
@@ -309,7 +315,7 @@ export default {
      */
     getCoverPicture (url) {
       return getFileUrl(url)
-    },
+    }
   }
 }
 </script>

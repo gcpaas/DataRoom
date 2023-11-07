@@ -526,20 +526,35 @@ export default {
     // 跳转设计态
     toDesign (form) {
       const path = this.type === 'component' ? (window.BS_CONFIG?.routers?.designUrl || '/big-screen/design') : 'big-screen-biz-component-design'
-      const { href: bigScreenHref } = this.type === 'bizComponent' ? this.$router.resolve({
-        path,
-        query: {
-          code: form.code,
-          type: this.bizType
-        }
-      }) : this.$router.resolve({
-        path,
-        query: {
-          code: form.code
-        }
-      })
-      // 新窗口打开
-      window.open(bigScreenHref, '_self')
+      // const { href: bigScreenHref } = this.type === 'bizComponent' ? this.$router.resolve({
+      //   path,
+      //   query: {
+      //     code: form.code,
+      //     type: this.bizType
+      //   }
+      // }) : this.$router.resolve({
+      //   path,
+      //   query: {
+      //     code: form.code
+      //   }
+      // })
+      // window.open(bigScreenHref, '_self')
+      if (this.type === 'bizComponent') {
+        this.$router.push({
+          path,
+          query: {
+            code: form.code,
+            type: this.bizType
+          }
+        })
+      } else {
+        this.$router.push({
+          path,
+          query: {
+            code: form.code
+          }
+        })
+      }
     }
   }
 }

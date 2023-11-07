@@ -51,7 +51,7 @@
                 <span class="el-dropdown-link menu-dropdown-link">
                   <i class="el-icon-more" />
                 </span>
-                <el-dropdown-menu  slot="dropdown">
+                <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item @click.native="handleDropdownClick('edit',data,node)">编辑 </el-dropdown-item>
                   <el-dropdown-item
                     v-if="data.type!=='catalog'"
@@ -593,13 +593,19 @@ export default {
         className
       }).then((code) => {
         const path = window.BS_CONFIG?.routers?.designUrl || '/big-screen/design'
-        const { href } = this.$router.resolve({
+        // const { href } = this.$router.resolve({
+        //   path,
+        //   query: {
+        //     code: code
+        //   }
+        // })
+        // window.open(href, '_self')
+        this.$router.push({
           path,
           query: {
             code: code
           }
         })
-        window.open(href, '_self')
       }).finally(() => {
         this.templateLoading = true
       })
