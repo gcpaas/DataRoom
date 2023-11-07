@@ -433,7 +433,7 @@
 }
 
 .bs-el-message-box {
-  background: var(--bs-background-1) !important;
+  background: var(--bs-background-2) !important;
   border-color: var(--bs-el-border) !important;
 
   .el-message-box__title {
@@ -466,6 +466,11 @@
       background-color: #66b1ff !important;
       border-color: #66b1ff !important;
     }
+  }
+  .el-input__inner{
+    border-color: var(--bs-el-border) !important;
+    color: var(--bs-el-text) !important;
+    background-color: var(--bs-background-1) !important;
   }
 }
 
