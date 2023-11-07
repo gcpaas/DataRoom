@@ -83,6 +83,94 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
+  {
+    label: '折线点样式',
+    type: 'select',
+    field: 'point_shape',
+    optionField: 'point.shape',
+    // 是否多选
+    multiple: false,
+    value: 'circle',
+    tabName: 'custom',
+    options: [
+      {
+        label: '无',
+        value: false
+      },
+      {
+        label: '空心圆',
+        value: 'hollow-circle'
+      },
+      {
+        label: '圆形',
+        value: 'circle'
+      },
+      {
+        label: '正方形',
+        value: 'square'
+      },
+      {
+        label: '菱形',
+        value: 'diamond'
+      },
+      {
+        label: '三角形',
+        value: 'triangle'
+      },
+      {
+        label: '六边形',
+        value: 'hexagon'
+      },
+      {
+        label: '菱形交叉',
+        value: 'bowtie'
+      },
+      {
+        label: '十字形',
+        value: 'cross'
+      },
+      {
+        label: 'I形',
+        value: 'tick'
+      },
+      {
+        label: '加号',
+        value: 'plus'
+      },
+      {
+        label: '连字号',
+        value: 'hyphen'
+      }
+    ],
+    groupName: 'graph'
+  },
+  {
+    label: '折线点大小',
+    type: 'inputNumber',
+    field: 'point_size',
+    optionField: 'point.size',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签字体大小',
+    type: 'inputNumber',
+    field: 'label_style_fontSize',
+    optionField: 'label.style.fontSize',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签颜色',
+    type: 'colorPicker',
+    field: 'label_style_fill',
+    optionField: 'label.style.fill',
+    value: 'rgba(255,255,255,1)',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
   // 网格线 grid
   {
     label: '虚线',
@@ -622,6 +710,16 @@ const option = {
     }
   },
   startOnZero: true,
+  point: {
+    size: 5,
+    shape: 'circle',
+  },
+  label: {
+    style: {
+      fill: '#8C8C8C',
+      fontSize: 12,
+    }
+  },
   xAxis: {
     title: {
       text: '',

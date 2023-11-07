@@ -93,7 +93,102 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
-
+  {
+    label: '折线点大小',
+    type: 'inputNumber',
+    field: 'point_size',
+    optionField: 'point.size',
+    value: 0,
+    min: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '折线点颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'point_color', // 字段
+    optionField: 'point.color', // 对应options中的字段
+    value: '',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '折线点样式',
+    type: 'select', // 设置组件类型
+    field: 'point_shape', // 字段
+    optionField: 'point.shape', // 对应options中的字段
+    value: 'hollow-circle',
+    tabName: 'custom',
+    options: [
+      {
+        label: '无',
+        value: false
+      },
+      {
+        label: '空心圆',
+        value: 'hollow-circle'
+      },
+      {
+        label: '圆形',
+        value: 'circle'
+      },
+      {
+        label: '正方形',
+        value: 'square'
+      },
+      {
+        label: '菱形',
+        value: 'diamond'
+      },
+      {
+        label: '三角形',
+        value: 'triangle'
+      },
+      {
+        label: '六边形',
+        value: 'hexagon'
+      },
+      {
+        label: '菱形交叉',
+        value: 'bowtie'
+      },
+      {
+        label: '十字形',
+        value: 'cross'
+      },
+      {
+        label: 'I形',
+        value: 'tick'
+      },
+      {
+        label: '加号',
+        value: 'plus'
+      },
+      {
+        label: '连字号',
+        value: 'hyphen'
+      }
+    ],
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签字体大小',
+    type: 'inputNumber',
+    field: 'label_style_fontSize',
+    optionField: 'label.style.fontSize',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签颜色',
+    type: 'colorPicker',
+    field: 'label_style_fill',
+    optionField: 'label.style.fill',
+    value: 'rgba(255,255,255,1)',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
   // 网格线 grid
   {
     label: '虚线',
@@ -492,6 +587,17 @@ const option = {
     color: '#1890ff',
     size: 1
   },
+  point: {
+    color: '',
+    shape: 'hollow-circle',
+    size: 0
+  },
+  label: {
+    style: {
+      fill: 'rgba(255,255,255,1)',
+      fontSize: 0
+    }
+  },
   xAxis: {
     title: {
       text: '',
@@ -558,9 +664,6 @@ const option = {
       }
     }
   }
-  // point: {
-  //   color: ''
-  // }
 }
 
 export default {
