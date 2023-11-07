@@ -345,6 +345,7 @@
   </el-dialog>
 </template>
 <script>
+import * as echarts from 'echarts'
 import { displayOption } from 'data-room-ui/js/config'
 import { pageMixins } from 'data-room-ui/js/mixins/page'
 // import _ from 'lodash'
