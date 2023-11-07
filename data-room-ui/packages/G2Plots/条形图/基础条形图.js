@@ -120,6 +120,39 @@ const setting = [
     groupName: 'graph'
   },
   {
+    label: '数据标签位置',
+    type: 'select', // 设置组件类型
+    field: 'label_position', // 字段
+    optionField: 'label.position', // 对应options中的字段
+    // 是否多选
+    multiple: false,
+    value: 'middle',
+    tabName: 'custom',
+    options: [
+      {
+        label: '顶部',
+        value: 'top'
+      },
+      {
+        label: '居中',
+        value: 'middle'
+      },
+      {
+        label: '底部',
+        value: 'bottom'
+      },
+      {
+        label: '左侧',
+        value: 'left'
+      },
+      {
+        label: '右侧',
+        value: 'right'
+      }
+    ],
+    groupName: 'graph'
+  },
+  {
     label: '条形颜色',
     // 设置组件类型
     type: 'colorSelect',
@@ -128,6 +161,41 @@ const setting = [
     // 对应options中的字段
     optionField: 'color',
     value: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '条形背景颜色',
+    type: 'colorPicker',
+    field: 'barBackground_style_fill',
+    optionField: 'barBackground.style.fill',
+    // 是否多选
+    multiple: false,
+    value: 'rgba(0,0,0,0)',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '条形最小宽度',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'minBarWidth',
+    // 对应options中的字段
+    optionField: 'minBarWidth',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '条形最大宽度',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'maxBarWidth',
+    // 对应options中的字段
+    optionField: 'maxBarWidth',
+    value: 100,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -492,15 +560,19 @@ const data = [
 ]
 
 // 配置处理脚本
-const optionHandler = 'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]' +
-  '\noption.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
-  '\nconst radiusNum = setting.find(settingItem=>settingItem.field === \'radiusNum\').value; option.barStyle.radius = [radiusNum,radiusNum,0,0]'
+const optionHandler = `
+option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === 'yAxis_grid_line_style_lineDash').value]
+option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === 'legendPosition').value} : false;
+const radiusNum = setting.find(settingItem=>settingItem.field === 'radiusNum').value;
+option.barStyle.radius = [radiusNum,radiusNum,0,0]
+const yFieldValue = setting.find(settingItem=>settingItem.field === 'yField').value
+if (yFieldValue) {
+  option.seriesField = yFieldValue
+}
+`
 
 // 数据处理脚本
-const dataHandler = 'const yFieldValue = setting.find(settingItem=>settingItem.field === \'yField\').value\n' +
-  'if (yFieldValue) {\n' +
-  '  option.seriesField = yFieldValue\n' +
-  '}'
+const dataHandler = ``
 
 // 图表配置 new Line('domName', option)
 const option = {
@@ -510,6 +582,8 @@ const option = {
   data,
   xField: 'value',
   yField: 'year',
+  minBarWidth: 0,
+  maxBarWidth: 100,
   // shape: 'default', // 条形图形状
   seriesField: 'year',
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
@@ -526,6 +600,11 @@ const option = {
   },
   barStyle: {
     radius: [10, 10, 0, 0]// 设置条形图的圆角
+  },
+  barBackground: {
+    style: {
+      fill: 'rgba(0,0,0,0)',
+    },
   },
   label: {
     position: 'middle',
