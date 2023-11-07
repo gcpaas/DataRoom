@@ -41,6 +41,8 @@ export default {
         let title = ''
         // eslint-disable-next-line prefer-const, no-unused-vars
         let data = []
+        // eslint-disable-next-line prefer-const, no-unused-vars
+        let optionHandler = ''
         const g2Plots = g2Plot
         const echarts = _echarts
         // eslint-disable-next-line prefer-const
@@ -53,7 +55,8 @@ export default {
           option,
           setting,
           echarts,
-          g2Plots
+          g2Plots,
+          optionHandler
         }
       },
       set (val) {}
