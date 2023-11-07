@@ -105,6 +105,39 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
+  {
+    label: '柱最小宽度',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'minColumnWidth',
+    // 对应options中的字段
+    optionField: 'minColumnWidth',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '柱最大宽度',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'maxColumnWidth',
+    // 对应options中的字段
+    optionField: 'maxColumnWidth',
+    value: 100,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '柱背景颜色',
+    type: 'colorPicker',
+    field: 'columnBackground_style_fill',
+    optionField: 'columnBackground.style.fill',
+    value: 'rgba(255,255,255,0)',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
   // 网格线 grid
   {
     label: '虚线',
@@ -531,12 +564,11 @@ const option = {
     }
   },
   // 背景图设置
-  // columnBackground: {
-  //   style: {
-  //     fill: '#569EA4',
-  //     fillOpacity: 0.1
-  //   }
-  // },
+  columnBackground: {
+    style: {
+      fill: 'rgba(255,255,255,0)',
+    }
+  },
   meta: {
     type: {
       alias: '类别'
