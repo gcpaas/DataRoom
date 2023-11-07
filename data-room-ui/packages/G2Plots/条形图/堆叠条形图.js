@@ -5,23 +5,26 @@
  */
 
 // 配置版本号
-const version = '2023092201'
+const version = '20231107'
 // 分类
-const category = 'Column'
+const category = 'Bar'
 // 标题
-const title = '基础柱状图'
+const title = '堆叠条形图'
 // 类别， new Line()
-const chartType = 'Column'
+const chartType = 'Bar'
 // 用于标识，唯一，和文件夹名称一致
-const name = 'JiChuZhuZhuangTu'
+const name = 'DuiDieTiaoXingTu'
 
 // 右侧配置项
 const setting = [
   {
     label: '维度',
-    type: 'select', // 设置组件类型
-    field: 'xField', // 字段
-    optionField: 'xField', // 对应options中的字段
+    // 设置组件类型
+    type: 'select',
+    // 字段
+    field: 'yField',
+    // 对应options中的字段
+    optionField: 'yField',
     // 是否多选
     multiple: false,
     value: '',
@@ -29,9 +32,26 @@ const setting = [
   },
   {
     label: '指标',
-    type: 'select', // 设置组件类型
-    field: 'yField', // 字段
-    optionField: 'yField', // 对应options中的字段
+    // 设置组件类型， select / input / colorPicker
+    type: 'select',
+    // 字段
+    field: 'xField',
+    optionField: 'xField', // 对应options中的字段
+    // 是否多选
+    multiple: false,
+    // 绑定的值
+    value: '',
+    // tab页。 data: 数据， custom: 自定义
+    tabName: 'data'
+  },
+  {
+    label: '分组',
+    // 设置组件类型
+    type: 'select',
+    // 字段
+    field: 'seriesField',
+    // 对应options中的字段
+    optionField: 'seriesField',
     // 是否多选
     multiple: false,
     value: '',
@@ -39,15 +59,35 @@ const setting = [
   },
   /** 样式配置 **/
   // 图表 graph
-  {
-    label: '柱子颜色',
-    type: 'gradual', // 设置组件类型
-    field: 'columnStyle_fill', // 字段
-    optionField: 'columnStyle.fill', // 对应options中的字段
-    value: 'l(90) 0:#5AA6AB 1:#217AB1',
-    tabName: 'custom',
-    groupName: 'graph'
-  },
+  // {
+  //   label: '条形样式',
+  //   type: 'select', // 设置组件类型
+  //   field: 'shape', // 字段
+  //   optionField: 'shape', // 对应options中的字段
+  //   // 是否多选
+  //   multiple: false,
+  //   value: 'default',
+  //   tabName: 'custom',
+  //   options: [
+  //     {
+  //       label: '实心条形',
+  //       value: 'default'
+  //     },
+  //     // {
+  //     //   label: '线性',
+  //     //   value: 'line'
+  //     // },
+  //     {
+  //       label: '空心条形',
+  //       value: 'hollow-rect'
+  //     },
+  //     {
+  //       label: '钉形',
+  //       value: 'tick'
+  //     }
+  //   ],
+  //   groupName: 'graph'
+  // },
   {
     label: '数据标签',
     type: 'switch', // 设置组件类型
@@ -56,40 +96,6 @@ const setting = [
     value: 0,
     active: 1,
     inactive: 0,
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
-    label: '数据标签位置',
-    type: 'select', // 设置组件类型
-    field: 'label_position', // 字段
-    optionField: 'label.position', // 对应options中的字段
-    // 是否多选
-    multiple: false,
-    value: 'middle',
-    tabName: 'custom',
-    options: [
-      {
-        label: '顶部',
-        value: 'top'
-      },
-      {
-        label: '居中',
-        value: 'middle'
-      },
-      {
-        label: '底部',
-        value: 'bottom'
-      }
-    ],
-    groupName: 'graph'
-  },
-  {
-    label: '数据标签颜色',
-    type: 'colorPicker', // 设置组件类型
-    field: 'label_style_fill', // 字段
-    optionField: 'label.style.fill', // 对应options中的字段
-    value: '#ffffff',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -106,35 +112,38 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '柱最小宽度',
+    label: '条形颜色',
+    // 设置组件类型
+    type: 'colorSelect',
+    // 字段
+    field: 'color',
+    // 对应options中的字段
+    optionField: 'color',
+    value: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '条形最小宽度',
     // 设置组件类型
     type: 'inputNumber',
     // 字段
-    field: 'minColumnWidth',
+    field: 'minBarWidth',
     // 对应options中的字段
-    optionField: 'minColumnWidth',
+    optionField: 'minBarWidth',
     value: 0,
     tabName: 'custom',
     groupName: 'graph'
   },
   {
-    label: '柱最大宽度',
+    label: '条形最大宽度',
     // 设置组件类型
     type: 'inputNumber',
     // 字段
-    field: 'maxColumnWidth',
+    field: 'maxBarWidth',
     // 对应options中的字段
-    optionField: 'maxColumnWidth',
+    optionField: 'maxBarWidth',
     value: 100,
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
-    label: '柱背景颜色',
-    type: 'colorPicker',
-    field: 'columnBackground_style_fill',
-    optionField: 'columnBackground.style.fill',
-    value: 'rgba(255,255,255,0)',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -153,20 +162,86 @@ const setting = [
   {
     label: '宽度',
     type: 'inputNumber',
-    field: 'yAxis_grid_line_style_lineWidth',
-    optionField: 'yAxis.grid.line.style.lineWidth',
-    value: 1,
+    field: 'xAxis_grid_line_style_lineWidth',
+    optionField: 'xAxis.grid.line.style.lineWidth',
+    value: 0,
     tabName: 'custom',
     groupName: 'grid'
   },
   {
     label: '颜色',
     type: 'colorPicker',
-    field: 'yAxis_grid_line_style_stroke',
-    optionField: 'yAxis.grid.line.style.stroke',
+    field: 'xAxis_grid_line_style_stroke',
+    optionField: 'xAxis.grid.line.style.stroke',
     value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'grid'
+  },
+  // 图例 legend
+  {
+    label: '显示',
+    type: 'switch', // 设置组件类型
+    field: 'legendEnable', // 字段
+    optionField: 'legendEnable', // 对应options中的字段
+    value: false,
+    active: true,
+    inactive: false,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '位置',
+    type: 'select', // 设置组件类型
+    field: 'legendPosition', // 字段
+    optionField: 'legendPosition', // 对应options中的字段
+    // 是否多选
+    multiple: false,
+    value: 'top',
+    tabName: 'custom',
+    options: [
+      { label: '顶部', value: 'top' },
+      { label: '左上角', value: 'top-left' },
+      { label: '右上角', value: 'top-right' },
+      { label: '左侧', value: 'left' },
+      // { label: '左上方', value: 'left-top' },
+      // { label: '左下方', value: 'left-bottom' },
+      { label: '右侧', value: 'right' },
+      // { label: '右上方', value: 'right-top' },
+      // { label: '右下方', value: 'right-bottom' },
+      { label: '底部', value: 'bottom' },
+      { label: '左下角', value: 'bottom-left' },
+      { label: '右下角', value: 'bottom-right' }
+    ],
+    groupName: 'legend'
+  },
+  {
+    label: '字体大小',
+    type: 'inputNumber',
+    field: 'legendItemName_style_fontSize',
+    optionField: 'legendItemName.style.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体权重',
+    type: 'inputNumber',
+    step: 100,
+    max: 900,
+    field: 'legendItemName_style_fontWeight',
+    optionField: 'legendItemName.style.fontWeight',
+    value: 400,
+    tabName: 'custom',
+    groupName: 'legend'
+  },
+  {
+    label: '字体颜色',
+    type: 'colorPicker',
+    field: 'legendItemName_style_fill',
+    optionField: 'legendItemName.style.fill',
+    value: '#595959',
+    tabName: 'custom',
+    groupName: 'legend'
   },
   // X轴 xAxis
   {
@@ -245,7 +320,7 @@ const setting = [
     type: 'inputNumber',
     field: 'xAxis_line_style_lineWidth',
     optionField: 'xAxis.line.style.lineWidth',
-    value: 1,
+    value: 0,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -257,55 +332,6 @@ const setting = [
     // 是否多选
     multiple: false,
     value: '#d0d0d0',
-    tabName: 'custom',
-    groupName: 'xAxis'
-  },
-  {
-    label: '刻度线宽度',
-    type: 'inputNumber',
-    field: 'xAxis_tickLine_style_lineWidth',
-    optionField: 'xAxis.tickLine.style.lineWidth',
-    value: 1,
-    tabName: 'custom',
-    groupName: 'xAxis'
-  },
-  {
-    label: '刻度线颜色',
-    type: 'colorPicker',
-    field: 'xAxis_tickLine_style_stroke',
-    optionField: 'xAxis.tickLine.style.stroke',
-    // 是否多选
-    multiple: false,
-    value: '#d0d0d0',
-    tabName: 'custom',
-    groupName: 'xAxis'
-  },
-  {
-    label: '标签过多时旋转',
-    type: 'switch',
-    field: 'xAxis_label_autoRotate',
-    optionField: 'xAxis.label.autoRotate',
-    value: true,
-    active: true,
-    inactive: false,
-    tabName: 'custom',
-    groupName: 'xAxis'
-  },
-  {
-    label: '标签过多时隐藏',
-    type: 'switch',
-    field: 'xAxis_label_autoHide',
-    optionField: 'xAxis.label.autoHide',
-    value: true,
-    tabName: 'custom',
-    groupName: 'xAxis'
-  },
-  {
-    label: '标签过长时省略',
-    type: 'switch',
-    field: 'xAxis_label_autoEllipsis',
-    optionField: 'xAxis.label.autoEllipsis',
-    value: true,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -340,7 +366,7 @@ const setting = [
     options: [
       {
         label: '上',
-        value: 'end'
+        value: 'start'
       },
       {
         label: '中',
@@ -348,7 +374,7 @@ const setting = [
       },
       {
         label: '下',
-        value: 'start'
+        value: 'end'
       }],
     groupName: 'yAxis'
   },
@@ -419,50 +445,120 @@ const setting = [
     optionField: 'yAxis.line.style.stroke',
     // 是否多选
     multiple: false,
+    value: 'rgba(255,255,255,1)',
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: 'y刻度线宽度',
+    type: 'inputNumber',
+    field: 'yAxis_tickLine_style_lineWidth',
+    optionField: 'yAxis.tickLine.style.lineWidth',
+    value: 1,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: 'y刻度线颜色',
+    type: 'colorPicker',
+    field: 'yAxis_tickLine_style_stroke',
+    optionField: 'yAxis.tickLine.style.stroke',
+    // 是否多选
+    multiple: false,
     value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'yAxis'
-  }
+  },
+  {
+    label: '标签过多时旋转',
+    type: 'switch',
+    field: 'yAxis_label_autoRotate',
+    optionField: 'yAxis.label.autoRotate',
+    value: true,
+    active: true,
+    inactive: false,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '标签过多时隐藏',
+    type: 'switch',
+    field: 'yAxis_label_autoHide',
+    optionField: 'yAxis.label.autoHide',
+    value: true,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
+  {
+    label: '标签过长时省略',
+    type: 'switch',
+    field: 'yAxis_label_autoEllipsis',
+    optionField: 'yAxis.label.autoEllipsis',
+    value: true,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
   // 边距 padding
 ]
 
 // 模拟数据
 const data = [
   {
-    type: '家具家电',
-    sales: 38
+    label: 'Mon.',
+    type: 'series1',
+    value: 2800
   },
   {
-    type: '粮油副食',
-    sales: 52
+    label: 'Mon.',
+    type: 'series2',
+    value: 2260
   },
   {
-    type: '生鲜水果',
-    sales: 61
+    label: 'Tues.',
+    type: 'series1',
+    value: 1800
   },
   {
-    type: '美容洗护',
-    sales: 145
+    label: 'Tues.',
+    type: 'series2',
+    value: 1300
   },
   {
-    type: '母婴用品',
-    sales: 48
+    label: 'Wed.',
+    type: 'series1',
+    value: 950
   },
   {
-    type: '进口食品',
-    sales: 38
+    label: 'Wed.',
+    type: 'series2',
+    value: 900
   },
   {
-    type: '食品饮料',
-    sales: 38
+    label: 'Thur.',
+    type: 'series1',
+    value: 500
   },
   {
-    type: '家庭清洁',
-    sales: 38
+    label: 'Thur.',
+    type: 'series2',
+    value: 390
+  },
+  {
+    label: 'Fri.',
+    type: 'series1',
+    value: 170
+  },
+  {
+    label: 'Fri.',
+    type: 'series2',
+    value: 100
   }
 ]
+
 // 配置处理脚本
-const optionHandler = 'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
+const optionHandler = '\noption.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
+  '\nconst radiusNum = setting.find(settingItem=>settingItem.field === \'radiusNum\').value; option.barStyle.radius = [radiusNum,radiusNum,0,0];' +
+  'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
 
 // 数据处理脚本
 const dataHandler = ''
@@ -471,25 +567,52 @@ const dataHandler = ''
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  renderer: 'canvas',
   data,
-  xField: 'type',
-  yField: 'sales',
-  color: '',
-  columnStyle: { // 设置柱子渐变色
-    fill: 'l(90) 0:#5AA6AB 1:#217AB1'
-  },
-  label: {
-    offsetY: 13,
-    // 可手动配置 label 数据标签位置
-    position: 'middle', // 'top', 'bottom', 'middle',
-    // 配置样式
+  isStack: true,
+  // shape: ' ',
+  xField: 'value',
+  yField: 'label',
+  seriesField: 'type',
+  legendEnable: false,
+  legendLayout: 'vertical',
+  legendPosition: 'top',
+  legendItemName: {
     style: {
-      fill: '#8C8C8C',
-      opacity: 0,
-      fontSize: 12
+      fill: '#595959',
+      fontSize: 12,
+      fontWeight: 400
     }
   },
+  /** 自定义颜色 */
+  color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
+  legend: false,
+  label: {
+    position: 'middle',
+    style: {
+      fill: '#59F25F',
+      opacity: 0,
+      fontSize: 12
+    },
+    layout: [
+      // 柱形图数据标签位置自动调整
+      { type: 'interval-adjust-position' },
+      // 数据标签防遮挡
+      { type: 'interval-hide-overlap' },
+      // 数据标签文颜色自动调整
+      { type: 'adjust-color' },
+    ],
+  },
+  radiusNum: 0, // 设置条形图的圆角的中间值
   xAxis: {
+    grid: {
+      line: {
+        style: {
+          stroke: '#d0d0d0',
+          lineWidth: 0
+        }
+      }
+    },
     title: {
       text: '',
       position: 'end',
@@ -499,9 +622,6 @@ const option = {
       }
     },
     label: {
-      autoRotate: false,
-      autoHide: true,
-      autoEllipsis: true,
       style: {
         fill: '#8C8C8C',
         fontSize: 12
@@ -510,13 +630,13 @@ const option = {
     line: {
       style: {
         stroke: '#d0d0d0',
-        lineWidth: 1
+        lineWidth: 0
       }
     },
     tickLine: {
       style: {
         stroke: '#d0d0d0',
-        lineWidth: 1
+        lineWidth: 0
       }
     }
   },
@@ -535,21 +655,15 @@ const option = {
       line: {
         style: {
           stroke: '#d0d0d0',
-          lineWidth: 1,
-          lineDash: [4, 5],
+          lineWidth: 0,
           strokeOpacity: 0.7
         }
       }
     },
     label: {
-      formatter: (v) => {
-        if (v < 1e3) return v
-        // 数值格式化为千分位
-        if (v >= 1e3 && v < 1e6) return `${v}`.replace(/\d{1,3}(?=(\d{3})+$)/g, (s) => `${s},`)
-        if (v >= 1e6 && v < 1e9) return `${(v / 1e6).toFixed(1)} M`
-        if (v >= 1e9 && v < 1e12) return `${(v / 1e9).toFixed(1)} B`
-        return `${(v / 10e8).toFixed(1)} B`
-      },
+      autoRotate: false,
+      autoHide: true,
+      autoEllipsis: true,
       style: {
         fill: '#8C8C8C',
         fontSize: 12,
@@ -561,23 +675,16 @@ const option = {
         stroke: '#d0d0d0',
         lineWidth: 0
       }
-    }
-  },
-  // 背景图设置
-  columnBackground: {
-    style: {
-      fill: 'rgba(255,255,255,0)',
-    }
-  },
-  meta: {
-    type: {
-      alias: '类别'
     },
-    sales: {
-      alias: '销售额'
+    tickLine: {
+      style: {
+        stroke: '#d0d0d0',
+        lineWidth: 1
+      }
     }
   }
 }
+
 export default {
   category,
   version,
@@ -586,6 +693,6 @@ export default {
   name,
   option,
   setting,
-  dataHandler,
-  optionHandler
+  optionHandler,
+  dataHandler
 }
