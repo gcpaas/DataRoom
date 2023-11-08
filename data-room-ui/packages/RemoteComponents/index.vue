@@ -126,6 +126,8 @@ export default {
       let title = []
       // eslint-disable-next-line prefer-const, no-unused-vars
       let data = []
+      // eslint-disable-next-line prefer-const, no-unused-vars
+      let optionHandler = ''
       // eslint-disable-next-line prefer-const
       settingContent = settingContent.replaceAll('const ', '')
       // 去掉 export default及后面代码
@@ -147,7 +149,8 @@ export default {
 
       return {
         option,
-        setting
+        setting,
+        optionHandler
       }
     },
     /**

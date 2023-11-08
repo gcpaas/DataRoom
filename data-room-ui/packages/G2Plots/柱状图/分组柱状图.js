@@ -668,6 +668,7 @@ const option = {
     }
   },
   label: {
+    offsetY: 20,
     // 可手动配置 label 数据标签位置
     position: 'middle', // 'top', 'middle', 'bottom'
     // 配置样式

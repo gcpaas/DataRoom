@@ -19,7 +19,7 @@ public class ScreenPictureChart extends Chart {
     @Data
     public static class Customize {
         @ApiModelProperty(notes = "透明度")
-        private Integer opacity;
+        private Float opacity;
 
         @ApiModelProperty(notes = "圆角")
         private Integer radius;

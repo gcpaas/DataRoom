@@ -80,6 +80,105 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
+  {
+    label: '折线点样式',
+    type: 'select',
+    field: 'point_shape',
+    optionField: 'point.shape',
+    // 是否多选
+    multiple: false,
+    value: 'circle',
+    tabName: 'custom',
+    options: [
+      {
+        label: '无',
+        value: false
+      },
+      {
+        label: '空心圆',
+        value: 'hollow-circle'
+      },
+      {
+        label: '圆形',
+        value: 'circle'
+      },
+      {
+        label: '正方形',
+        value: 'square'
+      },
+      {
+        label: '菱形',
+        value: 'diamond'
+      },
+      {
+        label: '三角形',
+        value: 'triangle'
+      },
+      {
+        label: '六边形',
+        value: 'hexagon'
+      },
+      {
+        label: '菱形交叉',
+        value: 'bowtie'
+      },
+      {
+        label: '十字形',
+        value: 'cross'
+      },
+      {
+        label: 'I形',
+        value: 'tick'
+      },
+      {
+        label: '加号',
+        value: 'plus'
+      },
+      {
+        label: '连字号',
+        value: 'hyphen'
+      }
+    ],
+    groupName: 'graph'
+  },
+  {
+    label: '折线点大小',
+    type: 'inputNumber',
+    field: 'point_size',
+    optionField: 'point.size',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '折线点颜色',
+    type: 'colorPicker',
+    field: 'point_style_fill',
+    optionField: 'point.style.fill',
+    // 是否多选
+    multiple: false,
+    value: '#ffffff',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签字体大小',
+    type: 'inputNumber',
+    field: 'label_style_fontSize',
+    optionField: 'label.style.fontSize',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签颜色',
+    type: 'colorPicker',
+    field: 'label_style_fill',
+    optionField: 'label.style.fill',
+    value: 'rgba(255,255,255,1)',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
   // 网格线 grid
   {
     label: '虚线',
@@ -518,11 +617,13 @@ const data = [
 ]
 
 // 配置处理脚本
-const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
-  '\n  if (option.legendEnable) {\n' +
-  '    option.legend.itemName = option.legendItemName\n' +
-  '  };' +
-  'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
+const optionHandler = `
+option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === 'legendPosition').value} : false;
+if (option.legendEnable) {
+  option.legend.itemName = option.legendItemName
+}
+option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === 'yAxis_grid_line_style_lineDash').value]
+`
 
 // 数据处理脚本
 const dataHandler = ''
@@ -549,6 +650,21 @@ const option = {
     }
   },
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
+  point: {
+    size: 5,
+    shape: 'circle',
+    style: {
+      fill: 'white',
+      stroke: '#5B8FF9',
+      lineWidth: 0
+    }
+  },
+  label: {
+    style: {
+      fill: '#8C8C8C',
+      fontSize: 12,
+    }
+  },
   xAxis: {
     title: {
       text: '',

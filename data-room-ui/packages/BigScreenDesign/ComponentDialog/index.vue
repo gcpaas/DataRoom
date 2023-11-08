@@ -440,6 +440,7 @@ export default {
         const settingContent = cloneDeep(this.resolveStrSetting(this.focus.settingContent))
         config.setting = settingContent.setting
         config.option = settingContent.option
+        config.optionHandler = settingContent.optionHandler
         this.$emit('setRemoteComponent', config)
         // config = getRemoteComponentConfig(this.focus.code, this.focus.name)
         // this.$emit('setRemoteComponent', config)
@@ -494,6 +495,8 @@ export default {
       let title = []
       // eslint-disable-next-line prefer-const, no-unused-vars
       let data = []
+      // eslint-disable-next-line prefer-const, no-unused-vars
+      let optionHandler = ''
       // eslint-disable-next-line prefer-const
       settingContent = settingContent.replaceAll('const ', '')
       // 去掉 export default及后面代码
@@ -506,7 +509,8 @@ export default {
       }
       return {
         option,
-        setting
+        setting,
+        optionHandler
       }
     },
     // 获取目录的列表

@@ -205,11 +205,23 @@ export default {
   },
   // 改变锁定状态
   changeLocked (state, config) {
-    const index = state.pageInfo.chartList.findIndex(
-      item => item.code === config.code
-    )
-    Vue.set(state.pageInfo.chartList[index], 'locked', !config.locked)
-    saveTimeLineFunc(state, !config.locked ? `解锁${config?.title}` : `锁定${config?.title}`)
+    // 如果是多选，则改变框选中的所有组件的锁定状态
+    if (state.activeCodes && state.activeCodes.length) {
+      state.pageInfo.chartList = state.pageInfo.chartList?.map(chart => {
+        return {
+          ...chart,
+          locked: state.activeCodes.includes(chart.code) ? !config.locked : config.locked
+        }
+      })
+      saveTimeLineFunc(state, config.locked ? '解锁选中组件' : '锁定选中组件')
+    } else {
+      // 如果不是多选，则只改变当前一个
+      const index = state.pageInfo.chartList.findIndex(
+        item => item.code === config.code
+      )
+      Vue.set(state.pageInfo.chartList[index], 'locked', !config.locked)
+      saveTimeLineFunc(state, !config.locked ? `解锁${config?.title}` : `锁定${config?.title}`)
+    }
   },
   // 改变网格显示状态
   changeGridShow (state, isShow) {

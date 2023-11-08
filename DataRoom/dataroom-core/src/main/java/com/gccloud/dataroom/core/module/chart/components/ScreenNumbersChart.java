@@ -38,5 +38,11 @@ public class ScreenNumbersChart extends Chart {
         @ApiModelProperty(notes = "标题")
         private String title;
 
+        @ApiModelProperty(notes = "文字对齐方式")
+        private String align;
+
+        @ApiModelProperty(notes = "文字间距")
+        private Integer letterSpacing;
+
     }
 }
