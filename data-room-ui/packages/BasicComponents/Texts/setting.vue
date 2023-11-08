@@ -75,6 +75,16 @@
           />
         </el-form-item>
         <el-form-item
+          label="文字间距"
+          label-width="100px"
+        >
+          <el-input-number
+            v-model="config.customize.letterSpacing"
+            class="bs-el-input-number"
+            placeholder="请输入文字间距"
+          />
+        </el-form-item>
+        <el-form-item
           label="文字类型"
           label-width="100px"
         >
@@ -85,6 +95,23 @@
           >
             <el-option
               v-for="item in fontFamilyList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="文字对齐方式"
+          label-width="100px"
+        >
+          <el-select
+            v-model="config.customize.align"
+            popper-class="bs-el-select"
+            class="bs-el-select"
+          >
+            <el-option
+              v-for="item in alignList"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -116,6 +143,18 @@ export default {
   data () {
     return {
       fontFamilyList: fontList,
+      alignList: [{
+        label: '靠左',
+        value: 'left'
+      },
+      {
+        label: '居中',
+        value: 'center'
+      },
+      {
+        label: '靠右',
+        value: 'right'
+      }],
       rules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }

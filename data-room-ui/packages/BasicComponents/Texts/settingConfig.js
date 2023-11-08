@@ -8,7 +8,7 @@ import { commonConfig, displayOption } from 'data-room-ui/js/config'
 
 export const settingConfig = {
   theme: 'dark',
-  data:[],
+  data: [],
   text: '文本标签占位符', // text内容
   // 设置面板属性的显隐
   displayOption: {
@@ -58,7 +58,9 @@ const customConfig = {
     fontSize: 20,
     fontWeight: 700,
     fontFamily: '', // 字体类型
-    color: 'left,#ffffff,#ffffff'
+    color: 'left,#ffffff,#ffffff',
+    align: 'center', // 文字对齐方式
+    letterSpacing: 1// 文字间距
   }
 
 }

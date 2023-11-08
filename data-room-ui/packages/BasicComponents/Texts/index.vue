@@ -5,7 +5,7 @@
   >
     <div
       class="content-box"
-      :style="{'font-family': config.customize.fontFamily,'font-size': config.customize.fontSize +'px','font-weight': +config.customize.fontWeight,'background-image': `-webkit-linear-gradient(${config.customize.color})`}"
+      :style="{'text-align': config.customize.align,'letter-spacing': config.customize.letterSpacing +'px','font-family': config.customize.fontFamily,'font-size': config.customize.fontSize +'px','font-weight': +config.customize.fontWeight,'background-image': `-webkit-linear-gradient(${config.customize.color})`}"
     >
       {{ config.customize.title }}
     </div>
@@ -73,7 +73,8 @@ export default {
     justify-content: center;
   }
   .content-box{
-    //text-align: center;
+    width: 100%;
+    text-align: center;
     /* 将背景设为渐变 */
     /*background-image: -webkit-linear-gradient(left, #6294F7, #C85D14);*/
     /* 规定背景绘制区域 */
