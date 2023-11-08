@@ -90,12 +90,12 @@ export default {
         }
         this.isSelectDown = true
         // 点击在底部背景上
-        if (event.target.className.indexOf('mouse-select-wrap') !== -1) {
+        if (typeof event.target.className === 'string' && event.target.className.indexOf('mouse-select-wrap') !== -1) {
           this.startX = event.offsetX
           this.endX = event.offsetX
           this.startY = event.offsetY
           this.endY = event.offsetY
-        } else if (event.target.className.indexOf('design-drag-wrap') !== -1) {
+        } else if (typeof event.target.className === 'string' && event.target.className.indexOf('design-drag-wrap') !== -1) {
           this.startX = event.offsetX + 50
           this.endX = event.offsetX + 50
           this.startY = event.offsetY + 50
@@ -116,10 +116,10 @@ export default {
         this.isSelecting = true
       }
       if (this.isSelecting) {
-        if (event.target.className.indexOf('mouse-select-wrap') !== -1) {
+        if (typeof event.target.className === 'string' && event.target.className.indexOf('mouse-select-wrap') !== -1) {
           this.endX = event.offsetX
           this.endY = event.offsetY
-        } else if (event.target.className.indexOf('design-drag-wrap') !== -1) {
+        } else if (typeof event.target.className === 'string' && event.target.className.indexOf('design-drag-wrap') !== -1) {
           this.startX = event.offsetX + 50
           this.endY = event.offsetY + 50
         }
