@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 飞线地图
@@ -26,11 +27,23 @@ public class ScreenFlyMapChart extends Chart{
     @Data
     public static class Customize {
 
+        @ApiModelProperty(notes = "数据配置")
+        private Map<String, Object> dataField;
+
         @ApiModelProperty(notes = "地图id")
         private String mapId;
 
         @ApiModelProperty(notes = "是否显示文字")
         private Boolean mapName;
+
+        @ApiModelProperty(notes = "文字颜色")
+        private String mapNameColor;
+
+        @ApiModelProperty(notes = "文字大小")
+        private Integer mapNameSize;
+
+        @ApiModelProperty(notes = "文字权重")
+        private Integer mapNameWeight;
 
         @ApiModelProperty(notes = "悬浮框背景色")
         private String tooltipBackgroundColor;
@@ -115,6 +128,7 @@ public class ScreenFlyMapChart extends Chart{
 
         @ApiModelProperty(notes = "图形字体大小")
         private String fontSize;
+
     }
 
 }
