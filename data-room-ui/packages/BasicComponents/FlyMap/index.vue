@@ -121,15 +121,28 @@ export default {
       }
       this.$dataRoomAxios.get(mapInfoUrl, {}, true).then(res => {
         if (this.config.option.data) {
+          // 起点名称
+          const fromName = config.customize.dataField?.fromName || 'from'
+          // 起点经度
+          const fromLng = config.customize.dataField?.fromLng || 'lng1'
+          // 起点纬度
+          const fromLat = config.customize.dataField?.fromLat || 'lat1'
+          // 终点名称
+          const toName = config.customize.dataField?.toName || 'to'
+          // 终点经度
+          const toLng = config.customize.dataField?.toLng || 'lng2'
+          // 终点纬度
+          const toLat = config.customize.dataField?.toLat || 'lat2'
+          // 值
+          const value = config.customize.dataField?.value || 'value'
+
           this.config.option.data.forEach(val => {
-            lines_coord.push({value: val.value, msg: {...val}, coords: [[val.lat1, val.lng1], [val.lat2, val.lng2]]})
-            if (val.type === 'move_in') {
-              coord.push({name: val.from, value: [val.lat1, val.lng1, val.value], msg: {...val}})
-              fromCoord.push({name: val.to, value: [val.lat2, val.lng2, val.value], msg: {...val}})
-            } else {
-              coord.push({name: val.to, value: [val.lat2, val.lng2, val.value], msg: {...val}})
-              fromCoord.push({name: val.from, value: [val.lat1, val.lng1, val.value], msg: {...val}})
-            }
+            // 飞线
+            lines_coord.push({value: val[value], msg: {...val}, coords: [[val[fromLat], val[fromLng]], [val[toLat], val[toLng]]]})
+            // 起点散点
+            fromCoord.push({name: val[fromName], value: [val[fromLat], val[fromLng], val[value]], msg: {...val}})
+            // 终点散点
+            coord.push({name: val[toName], value: [val[toLat], val[toLng], val[value]], msg: {...val}})
           })
         }
         let mapData = hasMapId ? JSON.parse(res.data.geoJson) : res
@@ -161,13 +174,17 @@ export default {
               normal: {
                 show: config.customize.mapName,
                 textStyle: {
-                  color: '#fff'
+                  color: config.customize.mapNameColor || '#fff',
+                  fontSize: config.customize.mapNameSize || 12,
+                  fontWeight: config.customize.mapNameWeight || 500
                 }
               },
               // 鼠标放上去的样式
               emphasis: {
                 textStyle: {
-                  color: '#fff'
+                  color: config.customize.mapNameColor || '#fff',
+                  fontSize: config.customize.mapNameSize || 12,
+                  fontWeight: config.customize.mapNameWeight || 500
                 }
               }
             },
@@ -288,10 +305,6 @@ export default {
         this.charts.on('click', async (params) => {
           if (params.name == '') return
           if (!config.customize.down) {
-            this.$message({
-              message: '该地图未开启下钻',
-              type: 'warning'
-            })
             return
           }
           // 到达允许下钻的层数，则不再下钻

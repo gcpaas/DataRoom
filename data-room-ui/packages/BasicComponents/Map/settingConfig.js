@@ -58,6 +58,12 @@ const customConfig = {
     center2: 50,
     // 是否显示文字
     mapName: true,
+    // 文字颜色
+    mapNameColor: '#fff',
+    // 文字大小
+    mapNameSize: 12,
+    // 文字权重
+    mapNameWeight: 500,
     // 地图背景色
     backgroundColor: 'rgb(21, 26, 38)',
     // 是否打点

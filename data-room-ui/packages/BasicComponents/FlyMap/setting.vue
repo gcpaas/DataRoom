@@ -52,6 +52,41 @@
           />
         </el-form-item>
         <el-form-item
+          v-if="config.customize.mapName"
+          label="地名字体颜色"
+          label-width="100px"
+        >
+          <ColorPicker
+            v-model="config.customize.mapNameColor"
+            :predefine-colors="predefineThemeColors"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.mapName"
+          label="地名字体大小"
+          label-width="100px"
+        >
+          <el-input-number
+            v-model="config.customize.mapNameSize"
+            class="bs-el-input-number"
+            placeholder="请输入字体大小"
+            :min="0"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.mapName"
+          label="地名字体权重"
+          label-width="100px"
+        >
+          <el-input-number
+            v-model="config.customize.mapNameWeight"
+            class="bs-el-input-number"
+            placeholder="请输入字体权重"
+            :min="100"
+            :step="100"
+          />
+        </el-form-item>
+        <el-form-item
           label="地图级别"
           label-width="100px"
         >

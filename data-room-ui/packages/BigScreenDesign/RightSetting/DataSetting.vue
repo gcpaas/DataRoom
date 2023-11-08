@@ -104,7 +104,6 @@
         >
           <div class="lc-field-head">
             <div
-              v-if="config.type!=='flyMap'"
               class="lc-field-title"
             >
               数据配置
@@ -481,6 +480,209 @@
               </template>
               <el-select
                 v-model="config.customize.yaxis"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                filterable
+                clearable
+              >
+                <el-option
+                  v-for="(field, index) in dataSourceDataList"
+                  :key="index"
+                  :label="field.comment"
+                  :value="field.name"
+                >
+                  <div class="source-key-option">
+                    <div>
+                      {{ field.comment !== "" ? field.comment : field.name }}
+                    </div>
+                    <div class="option-txt">
+                      {{ field.name }}
+                    </div>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+        </div>
+        <div
+          v-if="config.option.displayOption.flyMapField && config.option.displayOption.flyMapField.enable"
+          name="飞线地图数据配置"
+        >
+          <div class="lc-field-body">
+            <el-form-item
+              label="起点经度"
+              class="data-form-item"
+            >
+              <el-select
+                v-model="config.customize.dataField.fromLng"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                filterable
+                clearable
+              >
+                <el-option
+                  v-for="(field, index) in dataSourceDataList"
+                  :key="index"
+                  :label="field.comment"
+                  :value="field.name"
+                >
+                  <div class="source-key-option">
+                    <div>
+                      {{ field.comment !== "" ? field.comment : field.name }}
+                    </div>
+                    <div class="option-txt">
+                      {{ field.name }}
+                    </div>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="起点纬度"
+              class="data-form-item"
+            >
+              <el-select
+                v-model="config.customize.dataField.fromLat"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                filterable
+                clearable
+              >
+                <el-option
+                  v-for="(field, index) in dataSourceDataList"
+                  :key="index"
+                  :label="field.comment"
+                  :value="field.name"
+                >
+                  <div class="source-key-option">
+                    <div>
+                      {{ field.comment !== "" ? field.comment : field.name }}
+                    </div>
+                    <div class="option-txt">
+                      {{ field.name }}
+                    </div>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="终点经度"
+              class="data-form-item"
+            >
+              <el-select
+                v-model="config.customize.dataField.toLng"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                filterable
+                clearable
+              >
+                <el-option
+                  v-for="(field, index) in dataSourceDataList"
+                  :key="index"
+                  :label="field.comment"
+                  :value="field.name"
+                >
+                  <div class="source-key-option">
+                    <div>
+                      {{ field.comment !== "" ? field.comment : field.name }}
+                    </div>
+                    <div class="option-txt">
+                      {{ field.name }}
+                    </div>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="终点纬度"
+              class="data-form-item"
+            >
+              <el-select
+                v-model="config.customize.dataField.toLat"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                filterable
+                clearable
+              >
+                <el-option
+                  v-for="(field, index) in dataSourceDataList"
+                  :key="index"
+                  :label="field.comment"
+                  :value="field.name"
+                >
+                  <div class="source-key-option">
+                    <div>
+                      {{ field.comment !== "" ? field.comment : field.name }}
+                    </div>
+                    <div class="option-txt">
+                      {{ field.name }}
+                    </div>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="起点名称"
+              class="data-form-item"
+            >
+              <el-select
+                v-model="config.customize.dataField.fromName"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                filterable
+                clearable
+              >
+                <el-option
+                  v-for="(field, index) in dataSourceDataList"
+                  :key="index"
+                  :label="field.comment"
+                  :value="field.name"
+                >
+                  <div class="source-key-option">
+                    <div>
+                      {{ field.comment !== "" ? field.comment : field.name }}
+                    </div>
+                    <div class="option-txt">
+                      {{ field.name }}
+                    </div>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="终点名称"
+              class="data-form-item"
+            >
+              <el-select
+                v-model="config.customize.dataField.toName"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                filterable
+                clearable
+              >
+                <el-option
+                  v-for="(field, index) in dataSourceDataList"
+                  :key="index"
+                  :label="field.comment"
+                  :value="field.name"
+                >
+                  <div class="source-key-option">
+                    <div>
+                      {{ field.comment !== "" ? field.comment : field.name }}
+                    </div>
+                    <div class="option-txt">
+                      {{ field.name }}
+                    </div>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="值"
+              class="data-form-item"
+            >
+              <el-select
+                v-model="config.customize.dataField.value"
                 class="bs-el-select"
                 popper-class="bs-el-select"
                 filterable

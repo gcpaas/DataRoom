@@ -132,13 +132,17 @@ export default {
             normal: {
               show: config.customize.mapName,
               textStyle: {
-                color: '#fff'
+                color: config.customize.mapNameColor || '#fff',
+                fontSize: config.customize.mapNameSize || 12,
+                fontWeight: config.customize.mapNameWeight || 500
               }
             },
             // 鼠标放上去的样式
             emphasis: {
               textStyle: {
-                color: '#fff'
+                color: config.customize.mapNameColor || '#fff',
+                fontSize: config.customize.mapNameSize || 12,
+                fontWeight: config.customize.mapNameWeight || 500
               }
             }
           },
@@ -276,10 +280,6 @@ export default {
       this.charts.on('click', async (params) => {
         if (params.name == '') return
         if (!config.customize.down) {
-          this.$message({
-            message: '该地图未开启下钻',
-            type: 'warning'
-          })
           return
         }
         // 到达允许下钻的层数，则不再下钻

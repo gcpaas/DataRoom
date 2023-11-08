@@ -20,6 +20,9 @@ export const settingConfig = {
     mapField: {
       enable: false
     },
+    flyMapField: {
+      enable: true
+    },
     metricField: {
       // 指标
       label: '维度',
@@ -49,11 +52,18 @@ const customConfig = {
     skewX: 0,
     skewY: 0
   },
+
   customize: {
     // 地图id
     mapId: '',
     // 是否显示文字
     mapName: false,
+    // 文字颜色
+    mapNameColor: '#fff',
+    // 文字大小
+    mapNameSize: 12,
+    // 文字权重
+    mapNameWeight: 500,
     // 悬浮框背景色
     tooltipBackgroundColor: '#0C121C',
     // 悬浮框边框色
@@ -106,8 +116,24 @@ const customConfig = {
     // 纵坐标
     yaxis: '',
     // 名称
-    name: ''
-
+    name: '',
+    // 数据字段配置
+    dataField: {
+      // 起点名称
+      fromName: '',
+      // 起点经度
+      fromLng: '',
+      // 起点纬度
+      fromLat: '',
+      // 终点名称
+      toName: '',
+      // 终点经度
+      toLng: '',
+      // 终点纬度
+      toLat: '',
+      // 轨迹数据
+      value: '',
+    }
   }
 }
 
