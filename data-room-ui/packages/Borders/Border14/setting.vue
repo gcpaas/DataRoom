@@ -7,27 +7,35 @@
       label-position="left"
       class="setting-body bs-el-form"
     >
-      <div class="lc-field-body">
-        <slot name="top" />
-        <el-form
-          :model="config.customize"
-          label-position="left"
-          class="setting-body bs-el-form"
-          label-width="90px"
+      <slot name="top" />
+      <el-form
+        :model="config.customize"
+        label-position="left"
+        class="setting-body bs-el-form"
+        label-width="90px"
+      >
+        <SettingTitle>标题</SettingTitle>
+        <el-form-item
+          label="边框名称"
+          class="lc-field-body"
         >
-          <el-form-item label="边框名称">
-            <el-input
-              v-model="config.title"
-              clearable
-            />
-          </el-form-item>
+          <el-input
+            v-model="config.title"
+            clearable
+          />
+        </el-form-item>
+        <SettingTitle>位置</SettingTitle>
+        <div class="lc-field-body">
           <PosWhSetting :config="config" />
-          <SettingTitle>旋转</SettingTitle>
-          <div class="lc-field-body">
-            <RotateSetting
-              :config="config"
-            />
-          </div>
+        </div>
+        <SettingTitle>旋转</SettingTitle>
+        <div class="lc-field-body">
+          <RotateSetting
+            :config="config"
+          />
+        </div>
+        <SettingTitle>基础</SettingTitle>
+        <div class="lc-field-body">
           <el-form-item label="边框线颜色">
             <ColorPicker
               v-model="config.customize.borderColor"
@@ -105,8 +113,8 @@
             />
           </el-form-item>
           <slot name="bottom" />
-        </el-form>
-      </div>
+        </div>
+      </el-form>
     </el-form>
   </div>
 </template>
@@ -114,13 +122,15 @@
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
-import {predefineColors} from 'data-room-ui/js/utils/colorList'
+import { predefineColors } from 'data-room-ui/js/utils/colorList'
+import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 export default {
   name: 'Border14Setting',
   components: {
     ColorPicker,
     PosWhSetting,
-    RotateSetting
+    RotateSetting,
+    SettingTitle
   },
   props: {
     config: {
