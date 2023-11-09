@@ -107,7 +107,7 @@ export default {
       return this.config.border.fontBottomColor || ''
     },
     fontLeftWidth(){
-      return this.config.border.fontLeftWidth || 6
+      return (this.config.border.fontLeftWidth || String(this.config.border.fontLeftWidth) === '0') ? this.config.border.fontLeftWidth : 6
     },
     radiusLeftTop () {
       return this.config.border.radiusLeftTop || 2
