@@ -569,6 +569,7 @@ const dataHandler = ''
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  renderer: 'canvas',
   data,
   xField: 'year',
   yField: 'value',

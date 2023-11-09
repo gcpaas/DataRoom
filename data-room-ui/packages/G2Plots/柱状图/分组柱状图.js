@@ -468,90 +468,90 @@ const setting = [
     value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'yAxis'
-  },
+  }
 ]
 
 // 模拟数据
 const data = [
   {
-    year:'1',
-    value:100,
-    type:'今年'
+    year: '1',
+    value: 100,
+    type: '今年'
   },
   {
-    year:'2',
-    value:200,
-    type:'今年'
+    year: '2',
+    value: 200,
+    type: '今年'
   },
   {
-    year:'3',
-    value:300,
-    type:'今年'
+    year: '3',
+    value: 300,
+    type: '今年'
   },
   {
-    year:'4',
-    value:200,
-    type:'今年'
+    year: '4',
+    value: 200,
+    type: '今年'
   },
   {
-    year:'5',
-    value:100,
-    type:'今年'
+    year: '5',
+    value: 100,
+    type: '今年'
   },
   {
-    year:'6',
-    value:200,
-    type:'今年'
+    year: '6',
+    value: 200,
+    type: '今年'
   },
   {
-    year:'7',
-    value:300,
-    type:'今年'
+    year: '7',
+    value: 300,
+    type: '今年'
   },
   {
-    year:'8',
-    value:400,
-    type:'今年'
+    year: '8',
+    value: 400,
+    type: '今年'
   },
   {
-    year:'1',
-    value:400,
-    type:'去年'
+    year: '1',
+    value: 400,
+    type: '去年'
   },
   {
-    year:'2',
-    value:100,
-    type:'去年'
+    year: '2',
+    value: 100,
+    type: '去年'
   },
   {
-    year:'3',
-    value:200,
-    type:'去年'
+    year: '3',
+    value: 200,
+    type: '去年'
   },
   {
-    year:'4',
-    value:300,
-    type:'去年'
+    year: '4',
+    value: 300,
+    type: '去年'
   },
   {
-    year:'5',
-    value:200,
-    type:'去年'
+    year: '5',
+    value: 200,
+    type: '去年'
   },
   {
-    year:'6',
-    value:100,
-    type:'去年'
+    year: '6',
+    value: 100,
+    type: '去年'
   },
   {
-    year:'7',
-    value:200,
-    type:'去年'
+    year: '7',
+    value: 200,
+    type: '去年'
   },
   {
-    year:'8',
-    value:300,
-    type:'去年'
+    year: '8',
+    value: 300,
+    type: '去年'
   }
 ]
 
@@ -569,6 +569,7 @@ const dataHandler = ''
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  renderer: 'canvas',
   data,
   legendEnable: false,
   legendLayout: 'vertical',
