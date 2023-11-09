@@ -26,17 +26,27 @@
               v-if="config.option.displayOption.expression && config.option.displayOption.expression.enable"
               label="数据来源"
             >
-              <el-radio-group
-                v-model="config.dataSource.source "
-                class="bs-el-radio-group"
+              <el-select
+                v-model="config.dataSource.source"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                placeholder="自适应模式"
+                clearable
+                @change="sourceChange"
               >
-                <el-radio label="dataset">
-                  数据集
-                </el-radio>
-                <el-radio label="expression">
-                  表达式
-                </el-radio>
-              </el-radio-group>
+                <el-option
+                  value="dataset"
+                  label="数据集"
+                />
+                <el-option
+                  value="expression"
+                  label="表达式"
+                />
+                <el-option
+                  value="static"
+                  label="静态值"
+                />
+              </el-select>
             </el-form-item>
             <el-form-item
               v-if="config.dataSource.source === 'dataset'"
@@ -65,7 +75,7 @@
               />
             </el-form-item>
             <el-form-item
-              v-if="config.option.displayOption.text && config.option.displayOption.text.enable"
+              v-if="config.dataSource.source === 'static'"
               label="文本内容"
             >
               <el-input
@@ -1001,6 +1011,11 @@ export default {
     }
   },
   methods: {
+    // 切换数据源的时候将文字和数字组件的相关配置清空
+    sourceChange (val) {
+      this.config.expression = 'return '
+      this.config.expressionCodes = []
+    },
     changeDsid (dsId) {
       this.clearVerify()
       if (this.config.customize && this.config.customize.columnConfig) {
