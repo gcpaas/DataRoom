@@ -143,9 +143,9 @@ export default {
       if (event.button === 0 && this.isSelecting) {
         this.isSelecting = false
         if (newTime - time < 300) {
-          newTime = 0
-          time = 0
-          return
+          // newTime = 0
+          // time = 0
+          // return
         }
         newTime = 0
         time = 0

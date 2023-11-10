@@ -513,7 +513,7 @@ export default {
       const activeCodes = this.chartList
         ?.filter((chart) => {
           const { x, y, w, h } = chart
-          return startX <= x && x + w <= endX && startY <= y && y + h <= endY
+          return startX - 50 <= x && x + w <= endX && startY - 50 <= y && y + h <= endY
         })
         ?.map((chart) => chart.code)
       this.changeActiveCodes(activeCodes)
