@@ -51,10 +51,8 @@ export default {
     }),
     getSelectionBoxStyle () {
       // 计算虚线框的样式
-      let left = Math.min(this.startX, this.endX) + 'px'
-      let top = Math.min(this.startY, this.endY) + 'px'
-      const left1 = Math.min(this.startX, this.endX) + 50 * this.scale + 'px'
-      const top1 = Math.min(this.startY, this.endY) + 50 * this.scale + 'px'
+      const left = Math.min(this.startX, this.endX) + 'px'
+      const top = Math.min(this.startY, this.endY) + 'px'
       const width = Math.abs(this.endX - this.startX) + 'px'
       const height = Math.abs(this.endY - this.startY) + 'px'
       if (!this.isSelecting) {
@@ -100,11 +98,12 @@ export default {
           this.endX = event.offsetX + 50
           this.startY = event.offsetY + 50
           this.endY = event.offsetY + 50
+        } else if (event.target.className === '') {
+          this.startX = event.offsetX + 50
+          this.endX = event.offsetX + 50
+          this.startY = event.offsetY + 50
+          this.endY = event.offsetY + 50
         }
-        // this.startX = (event.x - this.offsetX + 50) / this.scale
-        // this.startY = (event.y - this.offsetY + 50) / this.scale
-        // this.endX = (event.x - this.offsetX + 50) / this.scale
-        // this.endY = (event.y - this.offsetY + 50) / this.scale
       }
     },
     handleMouseMove (event) {
@@ -119,8 +118,8 @@ export default {
         if (typeof event.target.className === 'string' && event.target.className.indexOf('mouse-select-wrap') !== -1) {
           this.endX = event.offsetX
           this.endY = event.offsetY
-        } else if (typeof event.target.className === 'string' && event.target.className.indexOf('design-drag-wrap') !== -1) {
-          this.startX = event.offsetX + 50
+        } else if (typeof event.target.className === 'string' && (event.target.className.indexOf('design-drag-wrap') !== -1)) {
+          this.endX = event.offsetX + 50
           this.endY = event.offsetY + 50
         }
       }
