@@ -29,6 +29,15 @@ public class ScreenMapChart extends Chart {
         @ApiModelProperty(notes = "是否显示文字")
         private Boolean mapName;
 
+        @ApiModelProperty(notes = "文字颜色")
+        private String mapNameColor;
+
+        @ApiModelProperty(notes = "文字大小")
+        private Integer mapNameSize;
+
+        @ApiModelProperty(notes = "文字权重")
+        private Integer mapNameWeight;
+
         @ApiModelProperty(notes = "地图背景色")
         private String backgroundColor;
 
