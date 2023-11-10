@@ -112,9 +112,9 @@ export default {
         return
       }
       newTime = new Date()
-      if (newTime - time > 300) {
-        this.isSelecting = true
-      }
+      // if (newTime - time > 300) {
+      this.isSelecting = true
+      // }
       if (this.isSelecting) {
         if (typeof event.target.className === 'string' && event.target.className.indexOf('mouse-select-wrap') !== -1) {
           this.endX = event.offsetX
