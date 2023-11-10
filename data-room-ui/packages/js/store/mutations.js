@@ -386,11 +386,13 @@ export default {
   // 更新数据集库中的内容
   updateDataset (state, res) {
     // 如果只是更新了组件的标题
-    if (res.oldTitle && state.dataset.hasOwnProperty(res.oldTitle + '_' + res.code)) {
-      const _dataset = CloneDeep(state.dataset)
-      _dataset[res.title + '_' + res.code] = _dataset[res.oldTitle + '_' + res.code]
-      delete _dataset[res.oldTitle + '_' + res.code]
-      state.dataset = CloneDeep(_dataset)
+    if (res.isChangeTitle) {
+      if (state.dataset.hasOwnProperty(res.oldTitle + '_' + res.code)) {
+        const _dataset = CloneDeep(state.dataset)
+        _dataset[res.title + '_' + res.code] = _dataset[res.oldTitle + '_' + res.code]
+        delete _dataset[res.oldTitle + '_' + res.code]
+        state.dataset = CloneDeep(_dataset)
+      }
     } else {
       Vue.set(state.dataset, res.title + '_' + res.code, res.data)
     }
@@ -398,12 +400,14 @@ export default {
   // 更新数据集库中的内容
   updateComputedDatas (state, res) {
     // 如果只是更新了组件的标题
-    if (res.oldTitle && state.computedDatas.hasOwnProperty(res.oldTitle + '_' + res.code)) {
-      const _computedDatas = CloneDeep(state.computedDatas)
-      _computedDatas[res.title + '_' + res.code] = _computedDatas[res.oldTitle + '_' + res.code]
-      delete _computedDatas[res.oldTitle + '_' + res.code]
-      state.computedDatas = CloneDeep(_computedDatas)
-    } else if (res.isExpression) {
+    if (res.isChangeTitle) {
+      if ((!res.isExpression) && state.computedDatas.hasOwnProperty(res.oldTitle + '_' + res.code)) {
+        const _computedDatas = CloneDeep(state.computedDatas)
+        _computedDatas[res.title + '_' + res.code] = _computedDatas[res.oldTitle + '_' + res.code]
+        delete _computedDatas[res.oldTitle + '_' + res.code]
+        state.computedDatas = CloneDeep(_computedDatas)
+      }
+    } else {
       Vue.set(state.computedDatas, res.title + '_' + res.code, res.data)
     }
   },
@@ -421,6 +425,7 @@ export default {
   }
 }
 function deldataset (state, type, codes) {
+  console.log('del', codes)
   const datasets = state[type]
   for (const code of codes) {
     for (const key in datasets) {
