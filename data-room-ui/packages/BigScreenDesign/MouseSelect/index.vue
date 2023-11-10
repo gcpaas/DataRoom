@@ -99,10 +99,10 @@ export default {
           this.startY = event.offsetY + 50
           this.endY = event.offsetY + 50
         } else if (event.target.className === '') {
-          this.startX = event.offsetX
-          this.endX = event.offsetX
-          this.startY = event.offsetY
-          this.endY = event.offsetY
+          this.startX = event.offsetX + 50
+          this.endX = event.offsetX + 50
+          this.startY = event.offsetY + 50
+          this.endY = event.offsetY + 50
         }
       }
     },
