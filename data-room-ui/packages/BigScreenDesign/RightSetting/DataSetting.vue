@@ -1009,6 +1009,27 @@ export default {
     if (this.config.dataSource && this.config.dataSource.businessKey) {
       this.getDataSetDetailsById(this.config.dataSource.businessKey, 'initial')
     }
+    // TODO 临时解决方案，解决旧版飞线地图配置缺少字段问题
+    if (this.config.option.displayOption.flyMapField && this.config.option.displayOption.flyMapField.enable) {
+      if (!this.config.customize.dataField) {
+        this.config.customize.dataField = {
+          // 起点名称
+          fromName: '',
+          // 起点经度
+          fromLng: '',
+          // 起点纬度
+          fromLat: '',
+          // 终点名称
+          toName: '',
+          // 终点经度
+          toLng: '',
+          // 终点纬度
+          toLat: '',
+          // 轨迹数据
+          value: '',
+        }
+      }
+}
   },
   methods: {
     // 切换数据源的时候将文字和数字组件的相关配置清空
