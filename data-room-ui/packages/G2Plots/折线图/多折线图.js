@@ -60,6 +60,15 @@ const setting = [
   /** 样式配置 **/
   // 图表 graph
   {
+    label: '是否平滑',
+    type: 'switch',
+    field: 'smooth',
+    optionField: 'smooth',
+    value: true,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
     label: '折线宽度',
     type: 'inputNumber',
     field: 'lineStyle_lineWidth',
