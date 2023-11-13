@@ -162,6 +162,7 @@ export function handleResData (data) {
 function compatibility (config, originalConfig) {
   const newConfig = config
   newConfig.version = originalConfig?.version || '2023071001'
+  newConfig.optionHandler = originalConfig.optionHandler || ''
   newConfig.dataSource = objCompare(newConfig?.dataSource, originalConfig?.dataSource)
   newConfig.customize = objCompare(newConfig?.customize, originalConfig?.customize)
   newConfig.option = { ...objCompare(newConfig.option, originalConfig?.option), displayOption: originalConfig?.option?.displayOption }
