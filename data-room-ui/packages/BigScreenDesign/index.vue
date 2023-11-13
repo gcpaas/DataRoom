@@ -244,6 +244,7 @@ export default {
       if (!value) {
         mapElement.style.bottom = parseFloat(window.getComputedStyle(mapElement).bottom) + 150 + 'px'
       } else {
+        this.$refs.Rules.handleScroll()
         mapElement.style.bottom = parseFloat(window.getComputedStyle(mapElement).bottom) - 150 + 'px'
       }
     },

@@ -65,6 +65,19 @@ export default {
     return {
     }
   },
+  watch: {
+    rightVisiable (value) {
+      if (value) {
+        const leftElement = document.querySelector('.bs-left-panel')
+        const contentElement = document.querySelector('.grid-wrap-box')
+        // const rightElement = document.querySelector('.bs-right-panel-wrap')
+        const mapElement = document.querySelector('.minimap')
+        if (parseInt(window.getComputedStyle(mapElement).right) > parseInt(window.getComputedStyle(leftElement).width) + parseInt(window.getComputedStyle(contentElement).width) - 320 - parseInt(window.getComputedStyle(mapElement).width)) {
+          mapElement.style.right = parseInt(window.getComputedStyle(leftElement).width) + parseInt(window.getComputedStyle(contentElement).width) - 320 - parseInt(window.getComputedStyle(mapElement).width) + 'px'
+        }
+      }
+    }
+  },
   computed: {
     ...mapState('bigScreen', {
       activeItem: state => state.activeItemConfig,

@@ -349,7 +349,7 @@ export default {
       const canvasRect = document
         .querySelector('#canvas')
         .getBoundingClientRect()
-      const container = document.querySelector('#selectWin').getBoundingClientRect()
+      // const container = document.querySelector('#selectWin').getBoundingClientRect()
       const screenContainer = document.querySelector('#screen-container').getBoundingClientRect()
       const draggableElement = document.getElementById('selectionWin')
       // 标尺开始的刻度
@@ -368,8 +368,8 @@ export default {
         const leftDrag = canvasRect.left - this.canvasLeft
         const topDrag = canvasRect.top - this.canvasTop
         // 小方块需要移动的距离
-        const leftLength = leftDrag / (screenContainer.width - screensRect.width - 9) * (container.width - draggableElement.getBoundingClientRect().width)
-        const topLength = topDrag / (screenContainer.height - screensRect.height - 9) * (container.height - draggableElement.getBoundingClientRect().height)
+        const leftLength = leftDrag / (screenContainer.width - screensRect.width - 9) * (150 - 30)
+        const topLength = topDrag / (screenContainer.height - screensRect.height - 9) * (150 - 30)
         draggableElement.style.left = -leftLength + 'px'
         draggableElement.style.top = -topLength + 'px'
       }
