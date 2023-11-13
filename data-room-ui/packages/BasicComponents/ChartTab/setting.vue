@@ -80,6 +80,8 @@
           <el-input-number
             v-model="config.customize.fontWeight"
             class="bs-el-input-number"
+            :min="0"
+            :step="100"
             placeholder="请输入字体权重"
           />
         </el-form-item>
