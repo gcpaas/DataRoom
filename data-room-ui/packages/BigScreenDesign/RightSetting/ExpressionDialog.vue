@@ -136,7 +136,7 @@ export default {
             return {
               label: field,
               code: item,
-              value: `dataset.${item}[0].${field}`,
+              value: `dataset['${item}'][0].${field}`,
               disabled: item.includes(this.config.code)
             }
           })
@@ -145,7 +145,7 @@ export default {
         list.push({
           label: item.split('_')[0],
           code: item,
-          value: `dataset.${item}`,
+          value: `dataset['${item}']`,
           disabled: item.includes(this.config.code),
           children
         })
@@ -154,7 +154,7 @@ export default {
         list.push({
           label: item.split('_')[0],
           code: item,
-          value: `computedDatas.${item}`,
+          value: `computedDatas['${item}']`,
           disabled: item.includes(this.config.code)
         })
       }

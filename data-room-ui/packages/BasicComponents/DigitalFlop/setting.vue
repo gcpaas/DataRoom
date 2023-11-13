@@ -57,7 +57,7 @@
                 v-model="config.customize.fontWeight"
                 class="bs-el-input-number"
                 :min="0"
-                :step="1"
+                :step="100"
               />
             </el-form-item>
             <el-form-item label="字体颜色">

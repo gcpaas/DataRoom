@@ -66,6 +66,8 @@
             v-model="config.customize.fontWeight"
             class="bs-el-input-number"
             placeholder="请输入标题字体权重"
+            :min="0"
+            :step="100"
           />
         </el-form-item>
         <TextGradient v-model="config.customize.color" />

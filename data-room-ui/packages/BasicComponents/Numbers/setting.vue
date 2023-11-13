@@ -72,6 +72,8 @@
             v-model="config.customize.fontWeight"
             class="bs-el-input-number"
             placeholder="请输入数字权重"
+            :min="0"
+            :step="100"
           />
         </el-form-item>
         <el-form-item
@@ -176,13 +178,6 @@ export default {
     }
   },
   watch: {
-    // 标题发生变化时需要及时更新表达式中的数据集库的字段名
-    'config.title': {
-      handler (val, oldVal) {
-        this.updateDataset({ code: this.config.code, title: val, data: [], oldTitle: oldVal, isChangeTitle: true })
-        this.updateComputedDatas({ code: this.config.code, title: val, data: [], oldTitle: oldVal, isChangeTitle: true })
-      }
-    }
   },
   mounted () {},
   methods: {
