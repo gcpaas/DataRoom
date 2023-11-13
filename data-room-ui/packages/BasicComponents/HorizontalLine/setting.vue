@@ -17,7 +17,7 @@
         >
           <SettingTitle>标题</SettingTitle>
           <div class="lc-field-body">
-            <el-form-item label="边框名称">
+            <el-form-item label="标题">
               <el-input
                 v-model="config.title"
                 clearable

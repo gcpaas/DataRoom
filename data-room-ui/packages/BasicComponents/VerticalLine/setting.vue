@@ -16,7 +16,7 @@
       >
         <SettingTitle>标题</SettingTitle>
         <el-form-item
-          label="边框名称"
+          label="标题"
           class="lc-field-body"
         >
           <el-input
