@@ -59,7 +59,7 @@ const customConfig = {
     fontWeight: 700,
     fontFamily: '', // 字体类型
     color: 'left,#ffffff,#ffffff',
-    // thousands: false, // 千分位分隔
+    thousands: false, // 千分位分隔
     align: 'center', // 文字对齐方式
     letterSpacing: 1// 文字间距
   }
