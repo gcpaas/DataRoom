@@ -176,13 +176,6 @@ export default {
     }
   },
   watch: {
-    // 标题发生变化时需要及时更新表达式中的数据集库的字段名
-    'config.title': {
-      handler (val, oldVal) {
-        this.updateDataset({ code: this.config.code, title: val, data: [], oldTitle: oldVal, isChangeTitle: true })
-        this.updateComputedDatas({ code: this.config.code, title: val, data: [], oldTitle: oldVal, isChangeTitle: true })
-      }
-    }
   },
   mounted () {},
   methods: {
