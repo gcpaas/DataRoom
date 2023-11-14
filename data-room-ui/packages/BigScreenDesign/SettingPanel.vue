@@ -121,6 +121,7 @@ export default {
 
 <style lang="scss" scoped>
 .bs-right-panel-wrap {
+  z-index: 1010;
   display: flex;
   flex-direction: column;
   background-color: var(--bs-background-1);
