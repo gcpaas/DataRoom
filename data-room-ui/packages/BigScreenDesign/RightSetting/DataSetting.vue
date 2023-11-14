@@ -30,7 +30,7 @@
                 v-model="config.dataSource.source"
                 class="bs-el-select"
                 popper-class="bs-el-select"
-                placeholder="自适应模式"
+                placeholder="请选择数据来源"
                 clearable
                 @change="sourceChange"
               >
@@ -109,7 +109,7 @@
           </div>
         </div>
         <div
-          v-if="!['tree','multipleNumberChart','carousel'].includes(config.type) && config.option.displayOption.dataSourceType.enable && config.dataSource.source !== 'expression'"
+          v-if="!['tree','multipleNumberChart','carousel'].includes(config.type) && config.option.displayOption.dataSourceType.enable && (!['expression','static'].includes(config.dataSource.source))"
           class="data-setting-data-box"
         >
           <div class="lc-field-head">
@@ -402,7 +402,7 @@
                     content="色块模式下可用，地图将根据该属性值寻找对应的区域，并按照值字段进行色块渲染"
                     placement="top"
                   >
-                    <i class="el-icon-question"></i>
+                    <i class="el-icon-question" />
                   </el-tooltip>
                 </span>
               </template>
@@ -443,7 +443,7 @@
                     content="打点模式下可用，地图将经纬度寻找指定坐标，并进行打点显示"
                     placement="top"
                   >
-                    <i class="el-icon-question"></i>
+                    <i class="el-icon-question" />
                   </el-tooltip>
                 </span>
               </template>
@@ -484,7 +484,7 @@
                     content="打点模式下可用，地图将经纬度寻找指定坐标，并进行打点显示"
                     placement="top"
                   >
-                    <i class="el-icon-question"></i>
+                    <i class="el-icon-question" />
                   </el-tooltip>
                 </span>
               </template>
@@ -718,7 +718,7 @@
           </div>
         </div>
         <div
-          v-if="config.option.displayOption.params.enable && config.dataSource.source !== 'expression'"
+          v-if="config.option.displayOption.params.enable &&(!['expression','static'].includes(config.dataSource.source))"
           class="data-setting-data-box"
         >
           <div class="lc-field-head">
@@ -1026,10 +1026,10 @@ export default {
           // 终点纬度
           toLat: '',
           // 轨迹数据
-          value: '',
+          value: ''
         }
       }
-}
+    }
   },
   methods: {
     // 切换数据源的时候将文字和数字组件的相关配置清空
