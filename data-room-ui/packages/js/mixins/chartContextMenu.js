@@ -36,7 +36,8 @@ export default {
       'changeLocked',
       'saveTimeLine',
       'copyCharts',
-      'pasteCharts'
+      'pasteCharts',
+      'clearActiveCodes'
     ]),
     // 改变hover的组件
     changeHover (code) {
@@ -117,6 +118,7 @@ export default {
         this.saveTimeLine('组合图表')
       } else {
         // 取消组合
+        this.clearActiveCodes()
         // 找到和本组件group相同的组件 取消group
         this.chartList.forEach(_chart => {
           if (_chart.group === chart.group) {

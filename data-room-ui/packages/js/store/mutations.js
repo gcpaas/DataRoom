@@ -77,6 +77,10 @@ export default {
       })
     }
   },
+  // 情况页面选中的组件
+  clearActiveCodes (state) {
+    state.activeCodes = []
+  },
   // 改变当前hover组件id
   changeHoverCode (state, code) {
     state.hoverCode = code
@@ -206,7 +210,7 @@ export default {
   // 改变锁定状态
   changeLocked (state, config) {
     // 如果是多选，则改变框选中的所有组件的锁定状态
-    if (state.activeCodes && state.activeCodes.length) {
+    if (state.activeCodes && state.activeCodes.length > 1) {
       state.pageInfo.chartList = state.pageInfo.chartList?.map(chart => {
         return {
           ...chart,
