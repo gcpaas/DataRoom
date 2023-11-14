@@ -1,8 +1,5 @@
 <template>
   <div
-    v-loading="config.loading"
-    element-loading-text="图表加载中"
-    :element-loading-background="loadingBackground"
     style="width: 100%;height: 100%"
     class="bs-design-wrap bs-custom-component"
     :class="{'light-theme':customTheme === 'light','auto-theme':customTheme !=='light'}"
