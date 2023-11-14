@@ -67,6 +67,8 @@ public class ScreenDigitalFlopChart extends Chart {
         @ApiModelProperty(notes = "边框宽度")
         private Integer borderWidth;
 
+        @ApiModelProperty("字体")
+        private String fontFamily;
 
 
 
