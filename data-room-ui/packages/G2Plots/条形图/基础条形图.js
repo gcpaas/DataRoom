@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023092501'
+const version = '2023111401'
 // 分类
 const category = 'Bar'
 // 标题
@@ -547,6 +547,16 @@ const setting = [
     value: true,
     tabName: 'custom',
     groupName: 'yAxis'
+  },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
   }
 ]
 
@@ -578,6 +588,8 @@ const dataHandler = ``
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   renderer: 'canvas',
   data,
   xField: 'value',

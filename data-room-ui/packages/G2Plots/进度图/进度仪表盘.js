@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023101403'
+const version = '2023111401'
 // 分类
 const category = 'Gauge'
 // 标题
@@ -163,8 +163,17 @@ const setting = [
     min:-100,
     tabName: 'custom',
     groupName: 'graph'
+  },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
   }
-  // 边距 padding
 ]
 const data = [
   {
@@ -182,6 +191,8 @@ const dataHandler = '// 取返回数据列表的第一项指标值\noption.perce
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'percent',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
   percent: 0.75,
   color1: 'l(0) 0:#6b74e4 1:#4391f4',

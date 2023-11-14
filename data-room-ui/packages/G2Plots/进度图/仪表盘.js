@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023101403'
+const version = '2023111401'
 // 分类
 const category = 'Gauge'
 // 标题
@@ -171,7 +171,7 @@ const setting = [
     // 对应options中的字段
     optionField: 'statistic.content.offsetY',
     value: -30,
-    min:-100,
+    min: -100,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -184,12 +184,21 @@ const setting = [
     // 对应options中的字段
     optionField: 'statistic.title.offsetY',
     value: 0,
-    min:-100,
+    min: -100,
     tabName: 'custom',
     groupName: 'graph'
+  },
+  // 图例 legend,
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
   }
-  // 图例 legend
-  // 边距 padding
 ]
 const data = [
   {
@@ -197,11 +206,9 @@ const data = [
   }
 ]
 // 配置处理脚本
-const optionHandler ='option.range.color = [option.color1, option.color2]\n' +
+const optionHandler = 'option.range.color = [option.color1, option.color2]\n' +
   '  let fix = option.statisticFixed\n' +
   '  option.statistic.title.formatter = ({ percent }) => `${(percent * 100).toFixed(fix)}%`'
-
-
 
 // 数据处理脚本
 const dataHandler = '// 取返回数据列表的第一项指标值\noption.percent = data[0][setting.filter(settingItem=>settingItem.field === \'percent\')[0].value]'
@@ -210,12 +217,14 @@ const dataHandler = '// 取返回数据列表的第一项指标值\noption.perce
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'percent',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
   percent: 0.75,
   color1: 'l(0) 0:#6b74e4 1:#4391f4',
   color2: '#d0d0d0',
   range: {
-    color: ['l(0) 0:#6b74e4 1:#4391f4','#d0d0d0']
+    color: ['l(0) 0:#6b74e4 1:#4391f4', '#d0d0d0']
   },
   indicator: {
     pointer: {

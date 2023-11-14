@@ -1,5 +1,5 @@
 
-const version = '20231107'
+const version = '2023111401'
 // 分类
 const category = 'RadialBar'
 // 标题
@@ -148,6 +148,16 @@ const setting = [
     tabName: 'custom',
     groupName: 'xAxis'
 
+  },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
   }
 ]
 
@@ -177,6 +187,8 @@ const dataHandler = ``
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
   xField: 'name',
   yField: 'star',

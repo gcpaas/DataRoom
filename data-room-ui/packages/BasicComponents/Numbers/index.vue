@@ -37,6 +37,10 @@ export default {
     this.chartInit()
   },
   methods: {
+    changeStyle (config) {
+      config.customize.title = config.customize.thousands ? config.customize?.title?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : config.customize.title
+      this.changeChartConfig(config)
+    },
     // 通过表达式计算得来的值
     getDataByExpression (config) {
       const result = new Function('dataset', 'computedDatas', this.config.expression)

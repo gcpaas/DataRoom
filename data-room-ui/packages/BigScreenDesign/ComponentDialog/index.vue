@@ -670,7 +670,7 @@ export default {
           .left-bigscreen-title {
             font-size: 14px;
             overflow: hidden;
-            width: 120px;
+            width: 100%;
             white-space: nowrap;
             text-overflow: ellipsis;
           }

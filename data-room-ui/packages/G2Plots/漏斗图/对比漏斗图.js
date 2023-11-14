@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023092501'
+const version = '2023111401'
 // 分类
 const category = 'Funnel'
 // 标题
@@ -208,7 +208,16 @@ const setting = [
     tabName: 'custom',
     groupName: 'legend'
   },
-  // 边距 padding
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
 ]
 
 // 模拟数据
@@ -244,6 +253,8 @@ const dataHandler = 'data = data.sort((a, b) => b[option.yField] - a[option.yFie
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   renderer: 'canvas',
   data,
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
