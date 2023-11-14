@@ -214,7 +214,7 @@ export default {
       state.pageInfo.chartList = state.pageInfo.chartList?.map(chart => {
         return {
           ...chart,
-          locked: state.activeCodes.includes(chart.code) ? !config.locked : config.locked
+          locked: state.activeCodes.includes(chart.code) ? !config.locked : chart.locked
         }
       })
       saveTimeLineFunc(state, config.locked ? '解锁选中组件' : '锁定选中组件')
