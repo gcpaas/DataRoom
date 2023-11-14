@@ -53,7 +53,7 @@ public class ScreenBorderChart extends Chart {
         private String gradientDirection;
 
         @ApiModelProperty(notes = "透明度")
-        private Integer opacity;
+        private Float opacity;
 
         @ApiModelProperty(notes = "字体大小")
         private Integer fontSize;
