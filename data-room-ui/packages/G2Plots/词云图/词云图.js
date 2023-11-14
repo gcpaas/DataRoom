@@ -82,7 +82,7 @@ const setting = [
     value: 80,
     tabName: 'custom',
     groupName: 'graph'
-  }
+  },
   // 图例 legend,
   // 内边距 appendPadding
   {
