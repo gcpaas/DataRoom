@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023092202'
+const version = '2023111401'
 // 分类
 const category = 'Radar'
 // 标题

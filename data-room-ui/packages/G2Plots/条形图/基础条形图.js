@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023092501'
+const version = '2023111401'
 // 分类
 const category = 'Bar'
 // 标题

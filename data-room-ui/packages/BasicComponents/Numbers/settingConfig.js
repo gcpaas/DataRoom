@@ -38,7 +38,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'numbers',
   root: {
-    version: '2023101401',
+    version: '2023111401',
     url: 'https://www.runoob.com/',
     expression: 'return ',
     expressionCodes: [],

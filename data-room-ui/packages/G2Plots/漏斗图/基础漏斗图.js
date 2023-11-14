@@ -1,7 +1,7 @@
 import { Funnel } from '@antv/g2plot'
 
 // 配置版本号
-const version = '2023071002'
+const version = '2023111401'
 // 分类
 const category = 'Funnel'
 // 标题

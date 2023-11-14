@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023101402'
+const version = '2023111401'
 // 分类
 const category = 'RingProgress'
 // 标题

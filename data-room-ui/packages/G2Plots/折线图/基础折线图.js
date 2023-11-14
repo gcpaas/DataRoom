@@ -4,7 +4,7 @@
  * @Author: xing.heng
  */
 // 配置版本号
-const version = '2023092201'
+const version = '2023111401'
 // 分类
 const category = 'Line'
 // 标题

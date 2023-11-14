@@ -1,5 +1,5 @@
 
-const version = '20231107'
+const version = '2023111401'
 // 分类
 const category = 'RadialBar'
 // 标题
