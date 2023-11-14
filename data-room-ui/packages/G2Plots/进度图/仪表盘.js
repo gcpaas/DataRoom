@@ -188,8 +188,17 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   }
-  // 图例 legend
-  // 边距 padding
+  // 图例 legend,
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
 ]
 const data = [
   {

@@ -151,6 +151,16 @@ const setting = [
     value: '#598BF2',
     tabName: 'custom',
     groupName: 'graph'
+  },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
   }
 ]
 

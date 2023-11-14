@@ -212,8 +212,17 @@ const setting = [
     value: '#595959',
     tabName: 'custom',
     groupName: 'legend'
+  },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
   }
-  // 边距 padding
 ]
 
 // 模拟数据

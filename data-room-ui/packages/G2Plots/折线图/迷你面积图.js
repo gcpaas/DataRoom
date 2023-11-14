@@ -93,8 +93,17 @@ const setting = [
     step: 0.01,
     max: 1,
     min: 0
+  },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
   }
-  // 边距 padding
 ]
 
 // 配置处理脚本

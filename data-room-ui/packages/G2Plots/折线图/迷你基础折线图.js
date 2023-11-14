@@ -74,7 +74,16 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
-  // 边距 padding
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
 ]
 
 // 数据处理脚本,取出所有指标的值
