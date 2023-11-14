@@ -90,10 +90,10 @@ const setting = [
     value: 0.3,
     tabName: 'custom',
     groupName: 'graph',
-    step:0.01,
-    max:1,
-    min:0
-  },
+    step: 0.01,
+    max: 1,
+    min: 0
+  }
   // 边距 padding
 ]
 
@@ -106,8 +106,8 @@ const dataHandler = '// 取出所有指标的值 \ndata = data.map(item => item[
 // 图表配置 new Line('domName', option)
 const option = {
   data: [16, 95, 35, 27, 50, 36, 78, 99, 60, 62, 37],
-  xField:'',
-  yField:'',
+  xField: '',
+  yField: '',
   height: 60,
   autoFit: true,
   smooth: true,
