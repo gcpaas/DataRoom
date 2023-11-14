@@ -91,6 +91,8 @@ const dataHandler = '// 取出所有指标的值 \ndata = data.map(item => item[
 
 // 图表配置 new Line('domName', option)
 const option = {
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   xField:'',
   yField:'',
   data: [16, 95, 35, 27, 50, 36, 78, 99, 60, 62, 37],

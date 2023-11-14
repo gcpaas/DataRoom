@@ -89,6 +89,8 @@ const dataHandler = '// 取返回数据列表的第一项指标值\noption.perce
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'percent',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
   height: 50,
   width: 400,

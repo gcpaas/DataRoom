@@ -179,6 +179,8 @@ const dataHandler =
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'percent',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
   color1: 'l(0) 0:#6B74E3 1:#38BBE5',
   color2: '#d0d0d0',

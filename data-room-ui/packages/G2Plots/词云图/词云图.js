@@ -608,6 +608,8 @@ const dataHandler = 'let wordFieldValue = setting.find(settingItem=>settingItem.
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
   wordField: 'x',
   weightField: 'value',

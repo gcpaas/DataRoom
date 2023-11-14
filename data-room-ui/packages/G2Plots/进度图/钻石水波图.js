@@ -174,6 +174,8 @@ const dataHandler = '// 取返回数据列表的第一项指标值\noption.perce
 // 图表配置 new Liquid('domName', option)
 const option = {
   renderer: 'canvas',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   color: '#598BF2',
   percent: 0.25,
   data,
