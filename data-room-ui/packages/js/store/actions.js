@@ -18,8 +18,13 @@ export default {
         const pageInfo = handleResData(data)
         // 兼容边框配置
         pageInfo.chartList.forEach((chart) => {
-          if (chart.dataSource) {
-            chart.dataSource.source = chart.dataSource?.source || 'dataset'
+          // 对数据源的方式进行兼容
+          if (chart.dataSource && ['texts', 'numbers'].includes(chart.type)) {
+            if (chart.dataSource.source === 'dataset' && (!chart.dataSource.businessKey)) {
+              chart.dataSource.source = 'static'
+            }
+          } else if (!chart.dataSource.source) {
+            chart.dataSource.source = 'dataset'
           }
 
           if (!chart.border) {
@@ -28,7 +33,7 @@ export default {
           if (!chart.border.padding) {
             chart.border.padding = [0, 0, 0, 0]
           }
-          let plotSettingsIterator = false
+          const plotSettingsIterator = false
           if (chart.type == 'customComponent') {
             // 为本地G2组件配置添加迭代器
             if (!plotSettingsIterator) {
