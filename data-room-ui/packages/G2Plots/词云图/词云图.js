@@ -153,7 +153,7 @@ const option = {
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
   wordStyle: {
     fontFamily: 'Verdana',
-    fontSize: [12, 60]
+    fontSize: [10, 60]
   },
   fontSizeMin: 24,
   fontSizeMax: 80,

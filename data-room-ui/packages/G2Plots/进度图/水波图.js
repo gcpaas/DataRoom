@@ -76,7 +76,7 @@ const setting = [
     field: 'statistic_content_style_fill',
     // 对应options中的字段
     optionField: 'statistic.content.style.fill',
-    value: '#d0d0d0',
+    value: '#FFFFFF',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -88,7 +88,7 @@ const setting = [
     field: 'statistic_content_style_fontSize',
     // 对应options中的字段
     optionField: 'statistic.content.style.fontSize',
-    value: 20,
+    value: 30,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -102,7 +102,7 @@ const setting = [
     optionField: 'statistic.content.style.fontFamily',
     // 是否多选
     multiple: false,
-    value: '',
+    value: 'ds-digitalbold',
     tabName: 'custom',
     options: fontList,
     groupName: 'graph'
@@ -115,7 +115,7 @@ const setting = [
     field: 'outline_border',
     // 对应options中的字段
     optionField: 'outline.border',
-    value: 1,
+    value: 2,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -139,7 +139,7 @@ const setting = [
     field: 'outline_style_stroke',
     // 对应options中的字段
     optionField: 'outline.style.stroke',
-    value: '#6291ef',
+    value: '#FFFFFF',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -148,7 +148,7 @@ const setting = [
     type: 'colorPicker', // 设置组件类型
     field: 'color', // 字段
     optionField: 'color', // 对应options中的字段
-    value: '#598BF2',
+    value: '#1DAEFF',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -180,14 +180,14 @@ const option = {
   // 图表内边距
   appendPadding: [0, 0, 0, 0],
   data,
-  color: '#598BF2',
+  color: '#1DAEFF',
   renderer: 'canvas',
   percent: 0.25,
   outline: {
-    border: 1, // 边框宽度
+    border: 2, // 边框宽度
     distance: 1, // 边框距离
     style: {
-      stroke: '#6291ef' // 边框颜色
+      stroke: '#FFFFFF' // 边框颜色
     }
   },
   liquidStyle: {
@@ -212,10 +212,10 @@ const option = {
   statistic: {
     content: {
       style: {
-        fontSize: 20,
+        fontSize: 30,
         lineHeight: 1,
         fill: '#d0d0d0',
-        fontFamily: ''
+        fontFamily: 'ds-digitalbold'
       }
     }
   }

@@ -44,12 +44,15 @@ const setting = [
   {
     label: '玫瑰半径',
     // 设置组件类型
-    type: 'slider',
+    type: 'inputNumber',
     // 字段
     field: 'radius',
     // 对应options中的字段
     optionField: 'radius',
-    value: 1,
+    value: 0.9,
+    min: 0,
+    max: 1,
+    step: 0.01,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -61,7 +64,7 @@ const setting = [
     field: 'label_style_fill',
     // 对应options中的字段
     optionField: 'label.style.fill',
-    value: '#ffffff',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -95,7 +98,7 @@ const setting = [
     type: 'switch', // 设置组件类型
     field: 'legendEnable', // 字段
     optionField: 'legendEnable', // 对应options中的字段
-    value: false,
+    value: true,
     active: true,
     inactive: false,
     tabName: 'custom',
@@ -108,7 +111,7 @@ const setting = [
     optionField: 'legendPosition', // 对应options中的字段
     // 是否多选
     multiple: false,
-    value: 'top',
+    value: 'right',
     tabName: 'custom',
     options: [
       { label: '顶部', value: 'top' },
@@ -151,7 +154,7 @@ const setting = [
     type: 'colorPicker',
     field: 'legendItemName_style_fill',
     optionField: 'legendItemName.style.fill',
-    value: '#595959',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'legend'
   },
@@ -203,18 +206,18 @@ const option = {
   label: {
     offset: -15,
     style: {
-      fill: '#ffffff',
+      fill: '#e9e9e9',
       fontSize: 14,
       textAlign: 'center'
     }
   },
   legendEnable: true,
   legendLayout: 'vertical',
-  legendPosition: 'top',
+  legendPosition: 'right',
   legend: false,
   legendItemName: {
     style: {
-      fill: '#595959',
+      fill: '#e9e9e9',
       fontSize: 12,
       fontWeight: 400
     }

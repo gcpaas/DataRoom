@@ -44,7 +44,7 @@ const setting = [
     type: 'gradual', // 设置组件类型
     field: 'columnStyle_fill', // 字段
     optionField: 'columnStyle.fill', // 对应options中的字段
-    value: 'l(90) 0:#5AA6AB 1:#217AB1',
+    value: 'l(90) 0:#6B74E4 1:#4391F4',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -485,7 +485,7 @@ const option = {
   yField: 'value',
   color: '',
   columnStyle: { // 设置柱子渐变色
-    fill: 'l(90) 0:#5AA6AB 1:#217AB1'
+    fill: 'l(90) 0:#6B74E4 1:#4391F4'
   },
   label: {
     offsetY: 13,

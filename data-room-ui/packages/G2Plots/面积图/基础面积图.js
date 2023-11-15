@@ -62,7 +62,7 @@ const setting = [
     type: 'switch', // 设置组件类型
     field: 'smooth', // 字段
     optionField: 'smooth', // 对应options中的字段
-    value: false,
+    value: true,
     active: true,
     inactive: false,
     tabName: 'custom',
@@ -82,7 +82,7 @@ const setting = [
     type: 'gradual', // 设置组件类型
     field: 'line_color', // 字段
     optionField: 'line.color', // 对应options中的字段
-    value: 'l(0) 0:#3e5bdb 1:#3e5bdb',
+    value: 'l(0) 0:#6B74E4 1:#6B74E4',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -91,7 +91,7 @@ const setting = [
     type: 'inputNumber', // 设置组件类型
     field: 'line_size', // 字段
     optionField: 'line.size', // 对应options中的字段
-    value: 1,
+    value: 2,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -100,7 +100,7 @@ const setting = [
     type: 'gradual', // 设置组件类型
     field: 'areaStyle_fill', // 字段
     optionField: 'areaStyle.fill', // 对应options中的字段
-    value: 'l(0) 0:#3e5bdb 1:#3e5bdb',
+    value: 'l(0) 0:#6B74E4 1:#6B74E4',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -563,12 +563,12 @@ const option = {
   data,
   xField: 'date',
   yField: 'value',
-  smooth: false,
+  smooth: true,
   startOnZero: true,
   isStack: false,
   areaStyle: {
     fillOpacity: 0.15,
-    fill: 'l(0) 0:#3e5bdb 1:#3e5bdb'
+    fill: 'l(0) 0:#6B74E4 1:#6B74E4'
   },
   label: {
     style: {
@@ -577,8 +577,8 @@ const option = {
     }
   },
   line: {
-    color: '',
-    size: 1
+    color: 'l(0) 0:#6B74E4 1:#6B74E4',
+    size: 2
   },
   point: {
     color: '',

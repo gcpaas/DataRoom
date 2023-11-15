@@ -47,7 +47,7 @@ const setting = [
     field: 'color2',
     // 对应options中的字段
     optionField: 'color2',
-    value: '#d0d0d0',
+    value: '#FFFFFF',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -59,7 +59,7 @@ const setting = [
     field: 'statistic_title_style_color',
     // 对应options中的字段
     optionField: 'statistic.title.style.color',
-    value: '#d0d0d0',
+    value: '#FFFFFF',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -71,7 +71,7 @@ const setting = [
     field: 'statistic_title_style_fontSize',
     // 对应options中的字段
     optionField: 'statistic.title.style.fontSize',
-    value: 20,
+    value: 40,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -97,7 +97,7 @@ const setting = [
     optionField: 'statistic.title.style.fontFamily',
     // 是否多选
     multiple: false,
-    value: '',
+    value: 'ds-digitalbold',
     tabName: 'custom',
     options: fontList,
     groupName: 'graph'
@@ -122,7 +122,7 @@ const setting = [
     field: 'statistic_content_style_color',
     // 对应options中的字段
     optionField: 'statistic.content.style.color',
-    value: '#d0d0d0',
+    value: '#FFFFFF',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -146,7 +146,7 @@ const setting = [
     field: 'statistic_content_offsetY',
     // 对应options中的字段
     optionField: 'statistic.content.offsetY',
-    value: -30,
+    value: -60,
     min:-100,
     tabName: 'custom',
     groupName: 'graph'
@@ -159,7 +159,7 @@ const setting = [
     field: 'statistic_title_offsetY',
     // 对应options中的字段
     optionField: 'statistic.title.offsetY',
-    value: 0,
+    value: -10,
     min:-100,
     tabName: 'custom',
     groupName: 'graph'
@@ -196,7 +196,7 @@ const option = {
   data,
   percent: 0.75,
   color1: 'l(0) 0:#6b74e4 1:#4391f4',
-  color2: '#d0d0d0',
+  color2: '#FFFFFF',
   range: {
     color: ['l(0) 0:#6b74e4 1:#4391f4','#d0d0d0']
   },
@@ -206,22 +206,22 @@ const option = {
   indicator: null,
   statistic: {
     title: {
-      offsetY: 0,
+      offsetY: -60,
       style: {
-        fontSize: 20,
+        fontSize: 40,
         lineHeight: 2,
-        fontFamily: '',
-        color: '#d0d0d0'
+        fontFamily: 'ds-digitalbold',
+        color: '#FFFFFF'
       },
       formatter: ({ percent }) => `${(percent * 100).toFixed(0)}%`
     },
     content: {
-      offsetY: -30,
+      offsetY: -10,
       content: '占比',
       style: {
         fontSize: 20,
         lineHeight: 2,
-        color: '#d0d0d0'
+        color: '#FFFFFF'
       }
     }
   }

@@ -71,7 +71,7 @@ const setting = [
     type: 'colorPicker', // 设置组件类型
     field: 'line_color', // 字段
     optionField: 'line.color', // 对应options中的字段
-    value: '#1890ff',
+    value: '#6B74E4',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -80,7 +80,7 @@ const setting = [
     type: 'inputNumber', // 设置组件类型
     field: 'line_size', // 字段
     optionField: 'line.size', // 对应options中的字段
-    value: 1,
+    value: 2,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -89,7 +89,7 @@ const setting = [
     type: 'gradual', // 设置组件类型
     field: 'areaStyle_fill', // 字段
     optionField: 'areaStyle.fill', // 对应options中的字段
-    value: 'l(270) 0:#ffffff 1:#1890ff',
+    value: 'l(270) 0:#6B74E4 1:#000000',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -555,11 +555,11 @@ const option = {
   isStack: false,
   areaStyle: {
     fillOpacity: 0.15,
-    fill: 'l(270) 0:#ffffff 1:#1890ff'
+    fill: 'l(270) 0:#6B74E4 1:#000000'
   },
   line: {
-    color: '#1890ff',
-    size: 1
+    color: '#6B74E4',
+    size: 2
   },
   point: {
     color: '',

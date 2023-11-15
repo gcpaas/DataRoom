@@ -60,7 +60,7 @@ const setting = [
     type: 'gradual',
     field: 'lineStyle_stroke',
     optionField: 'lineStyle.stroke',
-    value: 'l(0) 0:#5F92F9 1:#62FF00',
+    value: 'l(0) 0:#6B74E4 1:#4391F4',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -419,7 +419,7 @@ const option = {
   smooth: true,
   lineStyle: {
     lineWidth: 2,
-    stroke: 'l(0) 0:#6b74e4 1:#4391f4'
+    stroke: 'l(0) 0:#6B74E4 1:#4391F4'
   },
   xAxis: {
     title: {

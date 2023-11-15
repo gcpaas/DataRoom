@@ -110,7 +110,7 @@ const setting = [
     // 对应options中的字段
     optionField: 'conversionTag.style.fill',
     // 绑定的值
-    value: '#8c8c8c',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -143,7 +143,7 @@ const setting = [
     field: 'label_style_fontSize',
     // 对应options中的字段
     optionField: 'label.style.fontSize',
-    value: 12,
+    value: 10,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -209,7 +209,7 @@ const setting = [
     type: 'colorPicker',
     field: 'legendItemName_style_fill',
     optionField: 'legendItemName.style.fill',
-    value: '#595959',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'legend'
   },
@@ -266,7 +266,7 @@ const option = {
   legend: false,
   legendItemName: {
     style: {
-      fill: '#595959',
+      fill: '#e9e9e9',
       fontSize: 12,
       fontWeight: 400
     }
@@ -276,16 +276,16 @@ const option = {
   label: { // 图表内的数据标签
     // 配置样式
     style: {
-      fill: '#ffffff',
+      fill: '#FFFFFF',
       opacity: 1,
-      fontSize: 12
+      fontSize: 10
     }
   },
   conversionTag: {
     offsetX: 10,
     offsetY: 0,
     style: {
-      fill: '#8c8c8c',
+      fill: '#e9e9e9',
       fontSize: 12
     },
     formatter: (datum) => {

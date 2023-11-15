@@ -60,7 +60,7 @@ const setting = [
     optionField: 'color',
     // 是否多选
     multiple: false,
-    value: ["#5B8FF9", "#5AD8A6", "#5D7092", "#F6BD16", "#E8684A", "#6DC8EC", "#9270CA", "#FF9D4D", "#269A99", "#FF99C3"],
+    value: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -123,7 +123,7 @@ const setting = [
     type: 'colorPicker',
     field: 'xAxis_labelStyle_fill',
     optionField: 'xAxis.label.style.fill',
-    value: '#595959',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -209,7 +209,7 @@ const option = {
   xAxis: {
     label: {
       style: {
-        fill: '#ffffff',
+        fill: '#e9e9e9',
         fontSize: 12,
         fontWeight: 600,
       }

@@ -96,7 +96,7 @@ const option = {
   xField:'',
   yField:'',
   data: [100, 200, 300, 200, 100, 200, 300, 400],
-  height: 60,
+  height: 150,
   autoFit: true,
   smooth: true,
   lineStyle: {

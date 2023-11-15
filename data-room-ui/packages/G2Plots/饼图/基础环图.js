@@ -55,7 +55,7 @@ const setting = [
     options: [
       { label: '维度', value: '{name}' },
       { label: '指标', value: '{value}' },
-      { label: '百分比', value: '{percentage}' },
+      { label: '百分比', value: '{percentage}' }
     ],
     step: 0.1,
     max: 1,
@@ -97,19 +97,19 @@ const setting = [
     field: 'label_style_fill',
     // 对应options中的字段
     optionField: 'label.style.fill',
-    value: '#ffffff',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'graph'
   },
   {
-    label: '标签大小',
+    label: '标签字体大小',
     // 设置组件类型
     type: 'inputNumber',
     // 字段
     field: 'label_style_fontSize',
     // 对应options中的字段
     optionField: 'label.style.fontSize',
-    value: 12,
+    value: 14,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -121,7 +121,7 @@ const setting = [
     field: 'label_labelLine_style_stroke',
     // 对应options中的字段
     optionField: 'label.labelLine.style.stroke',
-    value: '#5B8FF9',
+    value: '#C9CDD4',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -191,7 +191,7 @@ const setting = [
     field: 'statistic_title_style_color',
     // 对应options中的字段
     optionField: 'statistic.title.style.color',
-    value: '#d0d0d0',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -215,7 +215,7 @@ const setting = [
     field: 'statistic_content_style_color',
     // 对应options中的字段
     optionField: 'statistic.content.style.color',
-    value: '#d0d0d0',
+    value: '#ffffff',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -255,7 +255,7 @@ const setting = [
     // 对应options中的字段
     optionField: 'statistic.title.offsetY',
     value: 0,
-    min:-100,
+    min: -100,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -268,31 +268,37 @@ const setting = [
     // 对应options中的字段
     optionField: 'statistic.content.offsetY',
     value: 0,
-    min:-100,
+    min: -100,
     tabName: 'custom',
     groupName: 'graph'
   },
   {
     label: '外环半径',
     // 设置组件类型
-    type: 'slider',
+    type: 'inputNumber',
     // 字段
     field: 'radius',
     // 对应options中的字段
     optionField: 'radius',
-    value: 1,
+    value: 0.9,
+    min: 0,
+    max: 1,
+    step: 0.01,
     tabName: 'custom',
     groupName: 'graph'
   },
   {
     label: '内环半径',
     // 设置组件类型
-    type: 'slider',
+    type: 'inputNumber',
     // 字段
     field: 'innerRadius',
     // 对应options中的字段
     optionField: 'innerRadius',
-    value: 0.6,
+    value: 0.65,
+    min: 0,
+    max: 1,
+    step: 0.01,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -302,7 +308,7 @@ const setting = [
     type: 'switch', // 设置组件类型
     field: 'legendEnable', // 字段
     optionField: 'legendEnable', // 对应options中的字段
-    value: false,
+    value: true,
     active: true,
     inactive: false,
     tabName: 'custom',
@@ -315,7 +321,7 @@ const setting = [
     optionField: 'legendPosition', // 对应options中的字段
     // 是否多选
     multiple: false,
-    value: 'top',
+    value: 'right',
     tabName: 'custom',
     options: [
       { label: '顶部', value: 'top' },
@@ -358,10 +364,10 @@ const setting = [
     type: 'colorPicker',
     field: 'legendItemName_style_fill',
     optionField: 'legendItemName.style.fill',
-    value: '#595959',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'legend'
-  },
+  }
 ]
 
 // 模拟数据
@@ -396,8 +402,6 @@ const optionHandler = 'option.legend = option.legendEnable ? {position: setting.
   option.label.content = content
 }`
 
-
-
 // 数据处理脚本
 const dataHandler = ''
 
@@ -413,13 +417,13 @@ const option = {
   colorField: 'type',
   radius: 1,
   innerRadius: 0.6,
-  legendEnable: false,
+  legendEnable: true,
   legendLayout: 'vertical',
-  legendPosition: 'top',
+  legendPosition: 'right',
   legend: false,
   legendItemName: {
     style: {
-      fill: '#595959',
+      fill: '#e9e9e9',
       fontSize: 12,
       fontWeight: 400
     }
@@ -438,33 +442,33 @@ const option = {
     contentList: [],
     content: '{value}',
     style: {
-      fill: '#ffffff',
+      fill: '#e9e9e9',
       fontSize: 14,
       textAlign: 'center'
     }
   },
   statistic: {
     title: {
-      offsetY:0,//垂直方向的偏移量
+      offsetY: 0, // 垂直方向的偏移量
       style: {
         whiteSpace: 'pre-wrap',
         lineHeight: 2,
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        color: '#d0d0d0',
+        color: '#e9e9e9',
         fontSize: 20
       },
       content: '总计'
     },
     content: {
-      offsetY:0,//垂直方向的偏移量
+      offsetY: 0, // 垂直方向的偏移量
       style: {
         whiteSpace: 'pre-wrap',
         lineHeight: 2,
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         fontFamily: '',
-        color: '#d0d0d0',
+        color: '#ffffff',
         fontSize: 30
       }
       // content: '100'

@@ -49,7 +49,7 @@ const setting = [
     field: 'lable_style_fontSize',
     // 对应options中的字段
     optionField: 'label.style.fontSize',
-    value: '14',
+    value: '10',
     tabName: 'custom',
     groupName: 'graph'
   },

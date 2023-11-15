@@ -119,12 +119,12 @@ const option = {
   appendPadding: [0, 0, 0, 0],
   xField: '',
   yField: '',
-  height: 60,
+  height: 150,
   autoFit: true,
   smooth: true,
   areaStyle: {
     fill: 'l(0) 0:#648ff7 1:#62FF00',
-    fillOpacity: 0.3
+    fillOpacity: 0.15
   },
   line: {
     color: 'l(0) 0:#648ff7 1:#62FF00',
