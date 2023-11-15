@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023111401'
+const version = '2023111501'
 // 分类
 const category = 'Radar'
 // 标题
@@ -231,6 +231,15 @@ const setting = [
     tabName: 'custom',
     groupName: 'legend'
   },
+  {
+    label: 'y轴最小值',
+    type: 'inputNumber',
+    field: 'yAxis_min',
+    optionField: 'yAxis.min',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
   // 内边距 appendPadding
   {
     label: '',
@@ -245,28 +254,17 @@ const setting = [
 
 // 模拟数据
 const data = [
-  { item: 'Design', user: 'a', score: 70 },
-  { item: 'Design', user: 'b', score: 30 },
-  { item: 'Development', user: 'a', score: 60 },
-  { item: 'Development', user: 'b', score: 70 },
-  { item: 'Marketing', user: 'a', score: 50 },
-  { item: 'Marketing', user: 'b', score: 60 },
-  { item: 'Users', user: 'a', score: 40 },
-  { item: 'Users', user: 'b', score: 50 },
-  { item: 'Test', user: 'a', score: 60 },
-  { item: 'Test', user: 'b', score: 70 },
-  { item: 'Language', user: 'a', score: 70 },
-  { item: 'Language', user: 'b', score: 50 },
-  { item: 'Technology', user: 'a', score: 50 },
-  { item: 'Technology', user: 'b', score: 40 },
-  { item: 'Support', user: 'a', score: 30 },
-  { item: 'Support', user: 'b', score: 40 },
-  { item: 'Sales', user: 'a', score: 60 },
-  { item: 'Sales', user: 'b', score: 40 },
-  { item: 'UX', user: 'a', score: 50 },
-  { item: 'UX', user: 'b', score: 60 }
+  { name: '支撑及时性', star: 300, type: '当前得分' },
+  { name: '基本能力', star: 450, type: '当前得分' },
+  { name: '支撑规范性', star: 200, type: '当前得分' },
+  { name: '满意度', star: 420, type: '当前得分' },
+  { name: '工作质量', star: 380, type: '当前得分' },
+  { name: '支撑及时性', star: 380, type: '平均得分' },
+  { name: '基本能力', star: 420, type: '平均得分' },
+  { name: '支撑规范性', star: 300, type: '平均得分' },
+  { name: '满意度', star: 350, type: '平均得分' },
+  { name: '工作质量', star: 400, type: '平均得分' }
 ]
-
 // 配置处理脚本
 const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
   '\n  if (option.legendEnable) {\n' +
@@ -284,9 +282,9 @@ const option = {
   appendPadding: [0, 0, 0, 0],
   renderer: 'canvas',
   data,
-  xField: 'item',
-  yField: 'score',
-  seriesField: 'user',
+  xField: 'name',
+  yField: 'star',
+  seriesField: 'type',
   legendEnable: false,
   legendLayout: 'vertical',
   legendPosition: 'top',
@@ -325,6 +323,7 @@ const option = {
     size: 2
   },
   yAxis: {
+    min: 0,
     label: false,
     grid: {
       alternateColor: 'rgba(0, 0, 0, 0.04)'

@@ -422,7 +422,7 @@
               @click="addColor"
             />
             <span
-              v-if="colors.length"
+              v-if="colors.length > 2"
               class="el-icon-remove-outline"
               style="color: #ea0b30; font-size: 20px"
               @click="delColor"
@@ -456,6 +456,7 @@ export default {
   props: {},
   data () {
     return {
+      colors: [],
       mapList: [],
       predefineThemeColors: predefineColors,
       mapTree: [],
@@ -504,6 +505,7 @@ export default {
   watch: {},
   mounted () {
     this.getMapTree()
+    this.colors = this.config.customize.rangeColor
   },
   methods: {
     getMapTree() {
@@ -526,11 +528,12 @@ export default {
       this.getMapTree()
     },
     delColor () {
-      this.colors = []
-      this.config.customize.rangeColor = []
+      if (this.colors.length <= 2) return
+      this.colors.pop()
+      this.config.customize.rangeColor.pop()
     },
     addColor () {
-      this.colors.push('')
+      this.colors.push('#fff')
     },
     updateColorScheme (colors) {
       this.colors = [...colors]

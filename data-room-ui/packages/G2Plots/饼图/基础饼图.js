@@ -270,6 +270,10 @@ const option = {
     }
   },
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
+  pieStyle: {
+    stroke: '#000000',
+    lineWidth: 0
+  },
   label: {
     autoRotate: true,
     type: 'inner',

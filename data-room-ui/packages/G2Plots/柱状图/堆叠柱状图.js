@@ -483,24 +483,18 @@ const setting = [
 
 // 模拟数据
 const data = [
-  { year: '1991', value: 3, type: 'Lon' },
-  { year: '1992', value: 4, type: 'Lon' },
-  { year: '1993', value: 3.5, type: 'Lon' },
-  { year: '1994', value: 5, type: 'Lon' },
-  { year: '1995', value: 4.9, type: 'Lon' },
-  { year: '1996', value: 6, type: 'Lon' },
-  { year: '1997', value: 7, type: 'Lon' },
-  { year: '1998', value: 9, type: 'Lon' },
-  { year: '1999', value: 13, type: 'Lon' },
-  { year: '1991', value: 3, type: 'Bor' },
-  { year: '1992', value: 4, type: 'Bor' },
-  { year: '1993', value: 3.5, type: 'Bor' },
-  { year: '1994', value: 5, type: 'Bor' },
-  { year: '1995', value: 4.9, type: 'Bor' },
-  { year: '1996', value: 6, type: 'Bor' },
-  { year: '1997', value: 7, type: 'Bor' },
-  { year: '1998', value: 9, type: 'Bor' },
-  { year: '1999', value: 13, type: 'Bor' }
+  { date: '2018年', value: 300, type: '已处理' },
+  { date: '2019年', value: 200, type: '已处理' },
+  { date: '2020年', value: 100, type: '已处理' },
+  { date: '2021年', value: 200, type: '已处理' },
+  { date: '2022年', value: 300, type: '已处理' },
+  { date: '2023年', value: 400, type: '已处理' },
+  { date: '2018年', value: 200, type: '未处理' },
+  { date: '2019年', value: 300, type: '未处理' },
+  { date: '2020年', value: 200, type: '未处理' },
+  { date: '2021年', value: 100, type: '未处理' },
+  { date: '2022年', value: 200, type: '未处理' },
+  { date: '2023年', value: 300, type: '未处理' }
 ]
 
 // 配置处理脚本
@@ -522,7 +516,7 @@ const option = {
   renderer: 'canvas',
   data,
   isStack: true,
-  xField: 'year',
+  xField: 'date',
   yField: 'value',
   seriesField: 'type',
   legendEnable: false,

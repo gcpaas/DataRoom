@@ -483,86 +483,18 @@ const setting = [
 
 // 模拟数据
 const data = [
-  {
-    year: '1',
-    value: 100,
-    type: '今年'
-  },
-  {
-    year: '2',
-    value: 200,
-    type: '今年'
-  },
-  {
-    year: '3',
-    value: 300,
-    type: '今年'
-  },
-  {
-    year: '4',
-    value: 200,
-    type: '今年'
-  },
-  {
-    year: '5',
-    value: 100,
-    type: '今年'
-  },
-  {
-    year: '6',
-    value: 200,
-    type: '今年'
-  },
-  {
-    year: '7',
-    value: 300,
-    type: '今年'
-  },
-  {
-    year: '8',
-    value: 400,
-    type: '今年'
-  },
-  {
-    year: '1',
-    value: 400,
-    type: '去年'
-  },
-  {
-    year: '2',
-    value: 100,
-    type: '去年'
-  },
-  {
-    year: '3',
-    value: 200,
-    type: '去年'
-  },
-  {
-    year: '4',
-    value: 300,
-    type: '去年'
-  },
-  {
-    year: '5',
-    value: 200,
-    type: '去年'
-  },
-  {
-    year: '6',
-    value: 100,
-    type: '去年'
-  },
-  {
-    year: '7',
-    value: 200,
-    type: '去年'
-  },
-  {
-    year: '8',
-    value: 300,
-    type: '去年'
-  }
+  { date: '2018年', value: 300, type: '已处理' },
+  { date: '2019年', value: 200, type: '已处理' },
+  { date: '2020年', value: 100, type: '已处理' },
+  { date: '2021年', value: 200, type: '已处理' },
+  { date: '2022年', value: 300, type: '已处理' },
+  { date: '2023年', value: 400, type: '已处理' },
+  { date: '2018年', value: 200, type: '未处理' },
+  { date: '2019年', value: 300, type: '未处理' },
+  { date: '2020年', value: 200, type: '未处理' },
+  { date: '2021年', value: 100, type: '未处理' },
+  { date: '2022年', value: 200, type: '未处理' },
+  { date: '2023年', value: 300, type: '未处理' }
 ]
 
 // 配置处理脚本
@@ -596,7 +528,7 @@ const option = {
   legend: false,
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
   isGroup: true,
-  xField: 'year',
+  xField: 'date',
   yField: 'value',
   seriesField: 'type',
   /** 设置颜色 */
