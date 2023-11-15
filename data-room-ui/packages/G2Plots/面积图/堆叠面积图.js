@@ -350,7 +350,7 @@ const setting = [
     optionField: 'xAxis.label.style.fill',
     // 是否多选
     multiple: false,
-    value: '#8C8C8C',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -370,7 +370,7 @@ const setting = [
     optionField: 'xAxis.line.style.stroke',
     // 是否多选
     multiple: false,
-    value: '#d0d0d0',
+    value: '#C9CDD4',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -518,13 +518,13 @@ const setting = [
     groupName: 'yAxis'
   },
   {
-    label: '标签字体颜色',
+    label: '标签颜色',
     type: 'colorPicker',
     field: 'yAxis_label_style_fill',
     optionField: 'yAxis.label.style.fill',
     // 是否多选
     multiple: false,
-    value: '#8C8C8C',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -544,7 +544,7 @@ const setting = [
     optionField: 'yAxis.line.style.stroke',
     // 是否多选
     multiple: false,
-    value: '#d0d0d0',
+    value: '#C9CDD4',
     tabName: 'custom',
     groupName: 'yAxis'
   },
