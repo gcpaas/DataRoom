@@ -51,7 +51,7 @@ const customConfig = {
     skewY: 0
   },
   customize: {
-    mapId: '',
+    mapId: '667',
     // 缩放尺寸
     zoom: 1,
     center1: 50,
@@ -61,11 +61,11 @@ const customConfig = {
     // 文字颜色
     mapNameColor: '#fff',
     // 文字大小
-    mapNameSize: 12,
+    mapNameSize: 8,
     // 文字权重
     mapNameWeight: 500,
     // 地图背景色
-    backgroundColor: 'rgb(21, 26, 38)',
+    backgroundColor: 'rgb(0,0,0,0)',
     // 是否打点
     scatter: true,
     // 悬浮框背景色
@@ -89,11 +89,11 @@ const customConfig = {
     fontGraphicColor: '#fff',
     fontSize: '30',
     // 是否开启下钻
-    down: false,
+    down: true,
     // 允许下钻的层级
     downLevel: 1,
     // 地图级别
-    level: 2,
+    level: '2',
     // 范围
     scope: '中国',
     // 地图区域颜色
@@ -128,7 +128,7 @@ export const mapData = {
   name: '地图',
   title: '地图',
   icon: Icon.getNameList()[5],
-  border:{type:'',titleHeight:60,fontSize:16,isTitle:true,padding:[0,0,0,0]},
+  border: { type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [0, 0, 0, 0] },
   className:
     'com.gccloud.dataroom.core.module.chart.components.ScreenMapChart',
   w: 800,
