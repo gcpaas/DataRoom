@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023092201'
+const version = '2023111501'
 // 分类
 const category = 'Column'
 // 标题
@@ -281,10 +281,10 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时旋转',
+    label: '标签过多时隐藏',
     type: 'switch',
-    field: 'xAxis_label_autoRotate',
-    optionField: 'xAxis.label.autoRotate',
+    field: 'xAxis_label_autoHide',
+    optionField: 'xAxis.label.autoHideEnable',
     value: true,
     active: true,
     inactive: false,
@@ -292,11 +292,22 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时隐藏',
+    label: '标签隐藏判定间隔',
+    type: 'inputNumber',
+    field: 'xAxis_label_autoHide_minGap',
+    optionField: 'xAxis.label.autoHideMinGap',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签过多时旋转',
     type: 'switch',
-    field: 'xAxis_label_autoHide',
-    optionField: 'xAxis.label.autoHide',
+    field: 'xAxis_label_autoRotate',
+    optionField: 'xAxis.label.autoRotate',
     value: true,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -422,47 +433,43 @@ const setting = [
     value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'yAxis'
+  },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
   }
-  // 边距 padding
 ]
 
 // 模拟数据
 const data = [
-  {
-    type: '家具家电',
-    sales: 38
-  },
-  {
-    type: '粮油副食',
-    sales: 52
-  },
-  {
-    type: '生鲜水果',
-    sales: 61
-  },
-  {
-    type: '美容洗护',
-    sales: 145
-  },
-  {
-    type: '母婴用品',
-    sales: 48
-  },
-  {
-    type: '进口食品',
-    sales: 38
-  },
-  {
-    type: '食品饮料',
-    sales: 38
-  },
-  {
-    type: '家庭清洁',
-    sales: 38
-  }
+  { date: '2018年', value: 300 },
+  { date: '2019年', value: 200 },
+  { date: '2020年', value: 100 },
+  { date: '2021年', value: 200 },
+  { date: '2022年', value: 300 },
+  { date: '2023年', value: 400 }
 ]
 // 配置处理脚本
-const optionHandler = 'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
+const optionHandler =
+  `
+option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === 'yAxis_grid_line_style_lineDash').value]
+let autoHide = setting.find(settingItem=>settingItem.field === 'xAxis_label_autoHide').value
+if(autoHide){
+  let minGap = option.xAxis.label.autoHideMinGap
+  option.xAxis.label.autoHide = {
+    type: 'equidistance',
+    cfg: { minGap: minGap }
+  }
+} else {
+  option.xAxis.label.autoHide = false
+}
+  `
 
 // 数据处理脚本
 const dataHandler = ''
@@ -471,9 +478,11 @@ const dataHandler = ''
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
-  xField: 'type',
-  yField: 'sales',
+  xField: 'date',
+  yField: 'value',
   color: '',
   columnStyle: { // 设置柱子渐变色
     fill: 'l(90) 0:#5AA6AB 1:#217AB1'
@@ -502,6 +511,8 @@ const option = {
       autoRotate: false,
       autoHide: true,
       autoEllipsis: true,
+      autoHideEnable: true,
+      autoHideMinGap: 2,
       style: {
         fill: '#8C8C8C',
         fontSize: 12

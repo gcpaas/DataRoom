@@ -395,7 +395,16 @@ const setting = [
     tabName: 'custom',
     groupName: 'yAxis'
   },
-  // 边距 padding
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
     {
     label: '图表边距',
     type: 'padding',
@@ -424,6 +433,8 @@ const data = [
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
   color: '',
   appendPadding: [16, 16, 16, 16], // 设置图标的边距

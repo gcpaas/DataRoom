@@ -120,6 +120,18 @@
             />
           </el-select>
         </el-form-item>
+        <!-- 是否开启语音播报 -->
+        <el-form-item
+          label="千分位分隔"
+          label-width="100px"
+        >
+          <el-switch
+            v-model="config.customize.thousands"
+            :active-value="true"
+            :inactive-value="false"
+            class="bs-el-switch"
+          />
+        </el-form-item>
         <TextGradient
           v-model="config.customize.color"
           label="数字"

@@ -9,6 +9,7 @@
         :key="index"
         class="content_item"
         :style="{
+          'font-family': option.fontFamily,
           'border-color': option.borderColor,
           'border-width': option.borderWidth + 'px',
           'background-color': option.bgColor,

@@ -4,7 +4,7 @@
     class="wrapper vue-ruler-wrapper"
     :style="{
       width: width + thick + 'px',
-      height: height + thick + 'px',
+      height: height + thick + 'px'
     }"
   >
     <i
@@ -54,45 +54,6 @@
         >
           <slot />
         </div>
-      </div>
-      <div
-        id="minimap"
-        class="minimap"
-      >
-        <div
-          id="mapHeader"
-          class="mapHeader"
-        >
-          <div>
-            <span>小地图</span>
-          </div>
-          <div
-            class="showMap"
-            @click="showMinimap"
-          >
-            <i
-              v-if="!mapShow"
-              class="el-icon-arrow-down"
-              style="width:20px;height:20px;color:#fff;"
-            />
-            <i
-              v-if="mapShow"
-              class="el-icon-arrow-up"
-              style="width:20px;height:20px;color:#fff;"
-            />
-          </div>
-        </div>
-        <div
-          v-show="mapShow"
-          id="selectWin"
-          class="selectWin"
-        >
-          <div
-            id="selectionWin"
-            class="selectionWin"
-          />
-        </div>
-        <div class="miniView" />
       </div>
     </div>
   </div>

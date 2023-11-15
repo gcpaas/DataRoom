@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023092201'
+const version = '2023111501'
 // 分类
 const category = 'Area'
 // 标题
@@ -103,6 +103,21 @@ const setting = [
     value: 'l(0) 0:#3e5bdb 1:#3e5bdb',
     tabName: 'custom',
     groupName: 'graph'
+  },
+  {
+    label: '面积透明度',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'areaStyle_fillOpacity',
+    // 对应options中的字段
+    optionField: 'areaStyle.fillOpacity',
+    value: 0.15,
+    tabName: 'custom',
+    groupName: 'graph',
+    step: 0.01,
+    max: 1,
+    min: 0
   },
   {
     label: '折线点颜色',
@@ -334,10 +349,10 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时旋转',
+    label: '标签过多时隐藏',
     type: 'switch',
-    field: 'xAxis_label_autoRotate',
-    optionField: 'xAxis.label.autoRotate',
+    field: 'xAxis_label_autoHide',
+    optionField: 'xAxis.label.autoHideEnable',
     value: true,
     active: true,
     inactive: false,
@@ -345,11 +360,22 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时隐藏',
+    label: '标签隐藏判定间隔',
+    type: 'inputNumber',
+    field: 'xAxis_label_autoHide_minGap',
+    optionField: 'xAxis.label.autoHideMinGap',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签过多时旋转',
     type: 'switch',
-    field: 'xAxis_label_autoHide',
-    optionField: 'xAxis.label.autoHide',
+    field: 'xAxis_label_autoRotate',
+    optionField: 'xAxis.label.autoRotate',
     value: true,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -475,35 +501,55 @@ const setting = [
     value: '#d0d0d0',
     tabName: 'custom',
     groupName: 'yAxis'
+  },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
   }
-  // 边距 padding
 ]
 
 // 模拟数据
 const data = [
-  { Date: '2010-01', scales: 1998 },
-  { Date: '2010-02', scales: 1850 },
-  { Date: '2010-03', scales: 1720 },
-  { Date: '2010-04', scales: 1818 },
-  { Date: '2010-05', scales: 1920 },
-  { Date: '2010-06', scales: 1802 },
-  { Date: '2010-07', scales: 1945 },
-  { Date: '2010-08', scales: 1856 },
-  { Date: '2010-09', scales: 2107 },
-  { Date: '2010-10', scales: 2140 }
+  { date: '2016年', value: 100 },
+  { date: '2017年', value: 200 },
+  { date: '2018年', value: 300 },
+  { date: '2019年', value: 200 },
+  { date: '2020年', value: 100 },
+  { date: '2021年', value: 200 },
+  { date: '2022年', value: 300 },
+  { date: '2023年', value: 400 }
 ]
 
 // 配置处理脚本
-const optionHandler = '  let pointEnable = setting.find(settingItem=>settingItem.field === \'point_shape\').value\n' +
-  '  if (pointEnable === false) {\n' +
-  '    option.point = false\n' +
-  '  } else {\n' +
-  '    option.point = {shape: pointEnable}\n' +
-  '    let pointColor = setting.find(settingItem=>settingItem.field === \'point_color\').value\n' +
-  '    option.point.color = pointColor\n' +
-  '  option.point.size =  setting.find(settingItem=>settingItem.field === \'point_size\').value\n' +
-  '};' +
-  'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
+const optionHandler =
+  `
+let pointEnable = setting.find(settingItem=>settingItem.field === \'point_shape\').value
+if (pointEnable === false) {
+  option.point = false
+} else {
+  option.point = {shape: pointEnable}
+  let pointColor = setting.find(settingItem=>settingItem.field === 'point_color').value
+  option.point.color = pointColor
+  option.point.size =  setting.find(settingItem=>settingItem.field === 'point_size').value
+};
+option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === 'yAxis_grid_line_style_lineDash').value]
+let autoHide = setting.find(settingItem=>settingItem.field === 'xAxis_label_autoHide').value
+if(autoHide){
+  let minGap = option.xAxis.label.autoHideMinGap
+  option.xAxis.label.autoHide = {
+    type: 'equidistance',
+    cfg: { minGap: minGap }
+  }
+} else {
+  option.xAxis.label.autoHide = false
+}
+  `
 
 // 数据处理脚本
 const dataHandler = ''
@@ -512,13 +558,16 @@ const dataHandler = ''
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
-  xField: 'Date',
-  yField: 'scales',
+  xField: 'date',
+  yField: 'value',
   smooth: false,
   startOnZero: true,
   isStack: false,
   areaStyle: {
+    fillOpacity: 0.15,
     fill: 'l(0) 0:#3e5bdb 1:#3e5bdb'
   },
   label: {
@@ -549,6 +598,8 @@ const option = {
       autoRotate: false,
       autoHide: true,
       autoEllipsis: true,
+      autoHideEnable: true,
+      autoHideMinGap: 2,
       style: {
         fill: '#8C8C8C',
         fontSize: 12

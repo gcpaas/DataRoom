@@ -38,7 +38,7 @@ export const settingConfig = {
 const customConfig = {
   type: 'numbers',
   root: {
-    version: '2023101401',
+    version: '2023111401',
     url: 'https://www.runoob.com/',
     expression: 'return ',
     expressionCodes: [],
@@ -59,7 +59,7 @@ const customConfig = {
     fontWeight: 700,
     fontFamily: 'ds-digitalbold', // 字体类型
     color: 'left,#ffffff,#ffffff',
-    // thousands: false, // 千分位分隔
+    thousands: false, // 千分位分隔
     align: 'center', // 文字对齐方式
     letterSpacing: 1// 文字间距
   }

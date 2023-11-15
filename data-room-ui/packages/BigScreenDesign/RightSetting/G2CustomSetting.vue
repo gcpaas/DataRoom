@@ -52,8 +52,8 @@
               :key="settingIndex+1"
             >
               <el-form-item
-                :label="setting.type=== 'padding' ? '' : setting.label"
-                :label-width="setting.type=== 'padding' ? '0px' :'120px'"
+                :label="['padding','appendPadding'].includes(setting.type)? '' : setting.label"
+                :label-width="['padding','appendPadding'].includes(setting.type)? '0px' :'120px'"
               >
                 <el-input
                   v-if="setting.type === 'input'"
@@ -160,7 +160,7 @@
                   :step="0.01"
                 />
                 <PaddingSetting
-                  v-else-if="setting.type === 'padding'"
+                  v-else-if="setting.type === 'appendPadding'"
                   v-model="setting.value"
                 />
               </el-form-item>
@@ -211,6 +211,7 @@ export default {
         xAxis: 'X轴',
         yAxis: 'Y轴',
         padding: '边距',
+        appendPadding: '内边距',
         other: '其他'
 
       }

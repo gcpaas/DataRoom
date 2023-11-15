@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023092501'
+const version = '2023111501'
 // 分类
 const category = 'Area'
 // 标题
@@ -82,6 +82,21 @@ const setting = [
     value: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
     tabName: 'custom',
     groupName: 'graph'
+  },
+  {
+    label: '面积透明度',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'areaStyle_fillOpacity',
+    // 对应options中的字段
+    optionField: 'areaStyle.fillOpacity',
+    value: 0.15,
+    tabName: 'custom',
+    groupName: 'graph',
+    step: 0.01,
+    max: 1,
+    min: 0
   },
   {
     label: '折线点样式',
@@ -380,10 +395,10 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时旋转',
+    label: '标签过多时隐藏',
     type: 'switch',
-    field: 'xAxis_label_autoRotate',
-    optionField: 'xAxis.label.autoRotate',
+    field: 'xAxis_label_autoHide',
+    optionField: 'xAxis.label.autoHideEnable',
     value: true,
     active: true,
     inactive: false,
@@ -391,11 +406,22 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时隐藏',
+    label: '标签隐藏判定间隔',
+    type: 'inputNumber',
+    field: 'xAxis_label_autoHide_minGap',
+    optionField: 'xAxis.label.autoHideMinGap',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签过多时旋转',
     type: 'switch',
-    field: 'xAxis_label_autoHide',
-    optionField: 'xAxis.label.autoHide',
+    field: 'xAxis_label_autoRotate',
+    optionField: 'xAxis.label.autoRotate',
     value: true,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -522,167 +548,57 @@ const setting = [
     tabName: 'custom',
     groupName: 'yAxis'
   },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
 ]
 
 // 模拟数据
 const data = [
-  {
-    country: '北美',
-    date: 1965,
-    value: 1390.5
-  },
-  {
-    country: '北美',
-    date: 1966,
-    value: 1469.5
-  },
-  {
-    country: '北美',
-    date: 1967,
-    value: 1521.7
-  },
-  {
-    country: '北美',
-    date: 1968,
-    value: 1615.9
-  },
-  {
-    country: '北美',
-    date: 1969,
-    value: 1703.7
-  },
-  {
-    country: '中南美',
-    date: 1965,
-    value: 109.2
-  },
-  {
-    country: '中南美',
-    date: 1966,
-    value: 115.7
-  },
-  {
-    country: '中南美',
-    date: 1967,
-    value: 120.5
-  },
-  {
-    country: '中南美',
-    date: 1968,
-    value: 128
-  },
-  {
-    country: '中南美',
-    date: 1969,
-    value: 134.4
-  },
-  {
-    country: '欧洲',
-    date: 1965,
-    value: 1058.1
-  },
-  {
-    country: '欧洲',
-    date: 1966,
-    value: 1089.7
-  },
-  {
-    country: '欧洲',
-    date: 1967,
-    value: 1121.7
-  },
-  {
-    country: '欧洲',
-    date: 1968,
-    value: 1196.6
-  },
-  {
-    country: '欧洲',
-    date: 1969,
-    value: 1285.5
-  },
-  {
-    country: 'CIS 地区',
-    date: 1965,
-    value: 593.3
-  },
-  {
-    country: 'CIS 地区',
-    date: 1966,
-    value: 630.9
-  },
-  {
-    country: 'CIS 地区',
-    date: 1967,
-    value: 663.2
-  },
-  {
-    country: 'CIS 地区',
-    date: 1968,
-    value: 687.8
-  },
-  {
-    country: 'CIS 地区',
-    date: 1969,
-    value: 719
-  }, {
-    country: '中东',
-    date: 1965,
-    value: 48.3
-  },
-  {
-    country: '中东',
-    date: 1966,
-    value: 50.4
-  },
-  {
-    country: '中东',
-    date: 1967,
-    value: 52.7
-  },
-  {
-    country: '中东',
-    date: 1968,
-    value: 55.6
-  },
-  {
-    country: '中东',
-    date: 1969,
-    value: 58.5
-  },
-  {
-    country: '非洲',
-    date: 1965,
-    value: 60.6
-  },
-  {
-    country: '非洲',
-    date: 1966,
-    value: 63.3
-  },
-  {
-    country: '非洲',
-    date: 1967,
-    value: 64
-  },
-  {
-    country: '非洲',
-    date: 1968,
-    value: 67.4
-  },
-  {
-    country: '非洲',
-    date: 1969,
-    value: 68.9
-  }
+  { date: '2016年', value: 100, type: '已处理' },
+  { date: '2017年', value: 200, type: '已处理' },
+  { date: '2018年', value: 300, type: '已处理' },
+  { date: '2019年', value: 200, type: '已处理' },
+  { date: '2020年', value: 100, type: '已处理' },
+  { date: '2021年', value: 200, type: '已处理' },
+  { date: '2022年', value: 300, type: '已处理' },
+  { date: '2023年', value: 400, type: '已处理' },
+  { date: '2016年', value: 400, type: '未处理' },
+  { date: '2017年', value: 100, type: '未处理' },
+  { date: '2018年', value: 200, type: '未处理' },
+  { date: '2019年', value: 300, type: '未处理' },
+  { date: '2020年', value: 200, type: '未处理' },
+  { date: '2021年', value: 100, type: '未处理' },
+  { date: '2022年', value: 200, type: '未处理' },
+  { date: '2023年', value: 300, type: '未处理' }
 ]
 
 // 配置处理脚本
-const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
-  '\n  if (option.legendEnable) {\n' +
-  '    option.legend.itemName = option.legendItemName\n' +
-  '  };' +
-  'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
+const optionHandler =
+  `
+option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === 'legendPosition').value} : false;
+if (option.legendEnable) {
+  option.legend.itemName = option.legendItemName
+};
+option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === 'yAxis_grid_line_style_lineDash').value]
+let autoHide = setting.find(settingItem=>settingItem.field === 'xAxis_label_autoHide').value
+if(autoHide){
+  let minGap = option.xAxis.label.autoHideMinGap
+  option.xAxis.label.autoHide = {
+    type: 'equidistance',
+    cfg: { minGap: minGap }
+  }
+} else {
+  option.xAxis.label.autoHide = false
+}
+  `
 
 // 数据处理脚本
 const dataHandler = ''
@@ -691,12 +607,14 @@ const dataHandler = ''
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   renderer: 'canvas',
   data,
   xField: 'date',
   yField: 'value',
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
-  seriesField: 'country',
+  seriesField: 'type',
   smooth: false,
   legendEnable: false,
   legendLayout: 'vertical',
@@ -733,6 +651,8 @@ const option = {
       autoRotate: false,
       autoHide: true,
       autoEllipsis: true,
+      autoHideEnable: true,
+      autoHideMinGap: 2,
       style: {
         fill: '#8C8C8C',
         fontSize: 12
@@ -785,10 +705,10 @@ const option = {
         lineWidth: 0
       }
     }
+  },
+  areaStyle: {
+    fillOpacity: 0.15
   }
-  // areaStyle: {
-  //   fill: "#94c6ff"
-  // },
   // line: {
   //   color: ''
   // },

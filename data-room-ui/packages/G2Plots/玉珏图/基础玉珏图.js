@@ -1,5 +1,5 @@
 
-const version = '20231107'
+const version = '2023111401'
 // 分类
 const category = 'RadialBar'
 // 标题
@@ -148,19 +148,27 @@ const setting = [
     tabName: 'custom',
     groupName: 'xAxis'
 
+  },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
   }
 ]
 
 // 模拟数据
 const data = [
-  { name: 'X6', star: 297 },
-  { name: 'G', star: 506 },
-  { name: 'AVA', star: 805 },
-  { name: 'G2Plot', star: 1478 },
-  { name: 'L7', star: 2029 },
-  { name: 'G6', star: 7100 },
-  { name: 'F2', star: 7346 },
-  { name: 'G2', star: 10178 },
+  { type: '分类一', value: 27 },
+  { type: '分类二', value: 25 },
+  { type: '分类三', value: 18 },
+  { type: '分类四', value: 15 },
+  { type: '分类五', value: 10 },
+  { type: '其他', value: 5 }
 ]
 
 const optionHandler = `
@@ -177,14 +185,16 @@ const dataHandler = ``
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
-  xField: 'name',
-  yField: 'star',
+  xField: 'type',
+  yField: 'value',
   startAngle:  - Math.PI / 2, // 起始角度
   maxAngle: 270, //最大旋转角度,
   radius: 0.8,
   color: [],
-  colorField: 'name',
+  colorField: 'type',
   innerRadius: 0.2,
   barStyle: {
     lineCap: 'round', // 可选项：round 和 square

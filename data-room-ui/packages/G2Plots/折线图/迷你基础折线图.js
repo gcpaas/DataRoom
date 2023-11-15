@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023092201'
+const version = '2023111401'
 // 分类
 const category = 'TinyLine'
 // 标题
@@ -74,7 +74,16 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
-  // 边距 padding
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
 ]
 
 // 数据处理脚本,取出所有指标的值
@@ -82,9 +91,11 @@ const dataHandler = '// 取出所有指标的值 \ndata = data.map(item => item[
 
 // 图表配置 new Line('domName', option)
 const option = {
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   xField:'',
   yField:'',
-  data: [16, 95, 35, 27, 50, 36, 78, 99, 60, 62, 37],
+  data: [100, 200, 300, 200, 100, 200, 300, 400],
   height: 60,
   autoFit: true,
   smooth: true,

@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023101401'
+const version = '2023111401'
 // 分类
 const category = 'Progress'
 // 标题
@@ -63,7 +63,16 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
-  // 边距 padding
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
 ]
 
 const data = [
@@ -82,6 +91,8 @@ const dataHandler = '// 取返回数据列表的第一项指标值\noption.perce
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
   height: 50,
   width: 400,

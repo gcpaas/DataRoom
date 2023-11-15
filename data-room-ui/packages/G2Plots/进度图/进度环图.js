@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023101402'
+const version = '2023111401'
 // 分类
 const category = 'RingProgress'
 // 标题
@@ -165,8 +165,17 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   }
-
-  // 边距 padding
+,
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
 ]
 
 // 配置处理脚本
@@ -184,6 +193,8 @@ const dataHandler =
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'percent',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
   color1: 'l(0) 0:#6B74E3 1:#38BBE5',
   color2: '#d0d0d0',

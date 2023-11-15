@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023092201'
+const version = '2023111401'
 // 分类
 const category = 'TinyArea'
 // 标题
@@ -90,11 +90,20 @@ const setting = [
     value: 0.3,
     tabName: 'custom',
     groupName: 'graph',
-    step:0.01,
-    max:1,
-    min:0
+    step: 0.01,
+    max: 1,
+    min: 0
   },
-  // 边距 padding
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
 ]
 
 // 配置处理脚本
@@ -105,9 +114,11 @@ const dataHandler = '// 取出所有指标的值 \ndata = data.map(item => item[
 
 // 图表配置 new Line('domName', option)
 const option = {
-  data: [16, 95, 35, 27, 50, 36, 78, 99, 60, 62, 37],
-  xField:'',
-  yField:'',
+  data: [100, 200, 300, 200, 100, 200, 300, 400],
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
+  xField: '',
+  yField: '',
   height: 60,
   autoFit: true,
   smooth: true,
