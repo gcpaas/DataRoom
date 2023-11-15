@@ -230,7 +230,7 @@ const setting = [
     type: 'colorPicker',
     field: 'yAxis_grid_line_style_stroke',
     optionField: 'yAxis.grid.line.style.stroke',
-    value: '#d0d0d0',
+    value: '#E5E6EB10',
     tabName: 'custom',
     groupName: 'grid'
   },
@@ -619,7 +619,7 @@ const option = {
     grid: {
       line: {
         style: {
-          stroke: '#d0d0d0',
+          stroke: '#E5E6EB10',
           lineWidth: 1,
           lineDash: [4, 5],
           strokeOpacity: 0.7
