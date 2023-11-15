@@ -129,7 +129,7 @@ export default function getComponentConfig (type) {
         icon: Icon.getNameList()[6],
         className:
           'com.gccloud.dataroom.core.module.chart.components.ScreenCurrentTimeChart',
-        w: 380,
+        w: 300,
         h: 60,
         x: 0,
         y: 0,
@@ -142,7 +142,7 @@ export default function getComponentConfig (type) {
         icon: Icon.getNameList()[7],
         className:
           'com.gccloud.dataroom.core.module.chart.components.ScreenTimeCountDownChart',
-        w: 500,
+        w: 300,
         h: 60,
         x: 0,
         y: 0,

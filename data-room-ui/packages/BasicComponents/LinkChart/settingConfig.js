@@ -46,7 +46,7 @@ const customConfig = {
     title: '超链接占位符',
     fontSize: 20,
     fontWeight: 700,
-    color: 'left,#007aff,#ffffff',
+    color: 'left,#007aff,#007aff',
     url: 'http://gcpaas.gccloud.com', // 链接地址
     openType: '_blank', // 打开方式
     dialogW: 1000, // 弹窗宽度

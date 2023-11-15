@@ -75,7 +75,7 @@ const customConfig = {
     },
     backgroundStyle: {
       // 背景颜色
-      backgroundColor: ''
+      backgroundColor: '#00000000'
     }
   }
 }

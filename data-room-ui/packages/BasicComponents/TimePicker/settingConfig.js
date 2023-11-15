@@ -34,7 +34,7 @@ const customConfig = {
   customize: {
     value: '',
     // 选择框背景颜色
-    backgroundColor: '',
+    backgroundColor: '#00000000',
     // 选择框文字颜色
     fontColor: '#FFFFFF',
     // 选择框字体大小

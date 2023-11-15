@@ -35,7 +35,7 @@ const customConfig = {
     // 选择框背景颜色
     bgColor: '',
     // 选择框文字颜色
-    fontColor: '#FFFFFF',
+    fontColor: '#00000000',
     // 选择框字体大小
     fontSize: 14,
     // 显示类型 year/month/date/ datetime/datetimerange/daterange
