@@ -1,6 +1,6 @@
 
 // 配置版本号
-const version = '2023111401'
+const version = '2023111501'
 // 分类
 const category = 'Radar'
 // 标题
@@ -214,6 +214,15 @@ const setting = [
     tabName: 'custom',
     groupName: 'grid'
   },
+  {
+    label: 'y轴最小值',
+    type: 'inputNumber',
+    field: 'yAxis_min',
+    optionField: 'yAxis.min',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'yAxis'
+  },
   // 内边距 appendPadding
   {
     label: '',
@@ -228,13 +237,11 @@ const setting = [
 
 // 模拟数据
 const data = [
-  { name: 'G2', star: 10371 },
-  { name: 'G6', star: 7380 },
-  { name: 'F2', star: 7414 },
-  { name: 'L7', star: 2140 },
-  { name: 'X6', star: 660 },
-  { name: 'AVA', star: 885 },
-  { name: 'G2Plot', star: 1626 }
+  { name: '支撑及时性', star: 300 },
+  { name: '基本能力', star: 450 },
+  { name: '支撑规范性', star: 200 },
+  { name: '满意度', star: 420 },
+  { name: '工作质量', star: 380 },
 ]
 
 // 配置处理脚本
@@ -290,6 +297,7 @@ const option = {
   yAxis: {
     // line: null,
     tickLine: null,
+    min: 0,
     label: false,
     grid: {
       line: {
