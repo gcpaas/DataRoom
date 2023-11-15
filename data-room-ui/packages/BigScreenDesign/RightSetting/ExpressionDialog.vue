@@ -4,7 +4,7 @@
     title="表达式"
     width="60%"
     :visible.sync="formVisible"
-    :append-to-body="false"
+    append-to-body
     class="bs-dialog-wrap bs-el-dialog"
   >
     <div class="main-box">
