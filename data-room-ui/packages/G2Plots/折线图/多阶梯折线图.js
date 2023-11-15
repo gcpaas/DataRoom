@@ -452,22 +452,22 @@ const setting = [
 
 // 模拟数据
 const data = [
-  { date: '2016年', value: 100, type: '已处理' },
-  { date: '2017年', value: 200, type: '已处理' },
-  { date: '2018年', value: 300, type: '已处理' },
-  { date: '2019年', value: 200, type: '已处理' },
-  { date: '2020年', value: 100, type: '已处理' },
-  { date: '2021年', value: 200, type: '已处理' },
-  { date: '2022年', value: 300, type: '已处理' },
-  { date: '2023年', value: 400, type: '已处理' },
-  { date: '2016年', value: 400, type: '未处理' },
-  { date: '2017年', value: 100, type: '未处理' },
-  { date: '2018年', value: 200, type: '未处理' },
-  { date: '2019年', value: 300, type: '未处理' },
-  { date: '2020年', value: 200, type: '未处理' },
-  { date: '2021年', value: 100, type: '未处理' },
-  { date: '2022年', value: 200, type: '未处理' },
-  { date: '2023年', value: 300, type: '未处理' }
+  { date: '2016年', value: 140, type: '已处理' },
+  { date: '2017年', value: 240, type: '已处理' },
+  { date: '2018年', value: 340, type: '已处理' },
+  { date: '2019年', value: 240, type: '已处理' },
+  { date: '2020年', value: 140, type: '已处理' },
+  { date: '2021年', value: 240, type: '已处理' },
+  { date: '2022年', value: 340, type: '已处理' },
+  { date: '2023年', value: 440, type: '已处理' },
+  { date: '2016年', value: 400 + 340, type: '未处理' },
+  { date: '2017年', value: 100 + 340, type: '未处理' },
+  { date: '2018年', value: 200 + 340, type: '未处理' },
+  { date: '2019年', value: 300 + 340, type: '未处理' },
+  { date: '2020年', value: 200 + 340, type: '未处理' },
+  { date: '2021年', value: 100 + 340, type: '未处理' },
+  { date: '2022年', value: 200 + 340, type: '未处理' },
+  { date: '2023年', value: 300 + 340, type: '未处理' }
 ]
 
 // 配置处理脚本
