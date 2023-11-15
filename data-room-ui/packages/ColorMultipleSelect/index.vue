@@ -57,15 +57,11 @@ export default {
         },
         {
           label: '配色2',
-          value: JSON.stringify(['#FF6B3B', '#626681', '#FFC100', '#9FB40F', '#76523B'])
+          value: JSON.stringify(['#1DAEFF', '#25A979', '#D19C4C', '#654FEA', '#C957CB'])
         },
         {
           label: '配色3',
-          value: JSON.stringify(['#025DF4', '#DB6BCF', '#2498D1', '#BBBDE6', '#4045B2'])
-        },
-        {
-          label: '配色4',
-          value: JSON.stringify(['#FF4500', '#1AAF8B', '#406C85', '#F6BD16', '#B40F0F'])
+          value: JSON.stringify(['#1DAEFF', '#15BCE0', '#1FD7CC', '#43D4A0', '#25A979'])
         }
       ],
       colorValue: []
@@ -80,7 +76,7 @@ export default {
   computed: {
     myColor: {
       get () {
-        return JSON.stringify(this.color) || JSON.stringify(['#5B8FF9', '#61DDAA', '#5D7092', '#F6BD16', '#6F5EF9', '#6DC8EC', '#945FB9', '#FF9845', '#1E9493', '#FF99C3'])
+        return JSON.stringify(this.color) || JSON.stringify(['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'])
       },
       set (val) {
 
