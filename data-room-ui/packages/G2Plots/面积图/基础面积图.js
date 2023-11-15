@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023111401'
+const version = '2023111501'
 // 分类
 const category = 'Area'
 // 标题
@@ -103,6 +103,21 @@ const setting = [
     value: 'l(0) 0:#3e5bdb 1:#3e5bdb',
     tabName: 'custom',
     groupName: 'graph'
+  },
+  {
+    label: '面积透明度',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'areaStyle_fillOpacity',
+    // 对应options中的字段
+    optionField: 'areaStyle.fillOpacity',
+    value: 0.15,
+    tabName: 'custom',
+    groupName: 'graph',
+    step: 0.01,
+    max: 1,
+    min: 0
   },
   {
     label: '折线点颜色',
@@ -530,6 +545,7 @@ const option = {
   startOnZero: true,
   isStack: false,
   areaStyle: {
+    fillOpacity: 0.15,
     fill: 'l(0) 0:#3e5bdb 1:#3e5bdb'
   },
   label: {
