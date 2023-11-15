@@ -551,155 +551,22 @@ const setting = [
 
 // 模拟数据
 const data = [
-  {
-    country: '北美',
-    date: 1965,
-    value: 1390.5
-  },
-  {
-    country: '北美',
-    date: 1966,
-    value: 1469.5
-  },
-  {
-    country: '北美',
-    date: 1967,
-    value: 1521.7
-  },
-  {
-    country: '北美',
-    date: 1968,
-    value: 1615.9
-  },
-  {
-    country: '北美',
-    date: 1969,
-    value: 1703.7
-  },
-  {
-    country: '中南美',
-    date: 1965,
-    value: 109.2
-  },
-  {
-    country: '中南美',
-    date: 1966,
-    value: 115.7
-  },
-  {
-    country: '中南美',
-    date: 1967,
-    value: 120.5
-  },
-  {
-    country: '中南美',
-    date: 1968,
-    value: 128
-  },
-  {
-    country: '中南美',
-    date: 1969,
-    value: 134.4
-  },
-  {
-    country: '欧洲',
-    date: 1965,
-    value: 1058.1
-  },
-  {
-    country: '欧洲',
-    date: 1966,
-    value: 1089.7
-  },
-  {
-    country: '欧洲',
-    date: 1967,
-    value: 1121.7
-  },
-  {
-    country: '欧洲',
-    date: 1968,
-    value: 1196.6
-  },
-  {
-    country: '欧洲',
-    date: 1969,
-    value: 1285.5
-  },
-  {
-    country: 'CIS 地区',
-    date: 1965,
-    value: 593.3
-  },
-  {
-    country: 'CIS 地区',
-    date: 1966,
-    value: 630.9
-  },
-  {
-    country: 'CIS 地区',
-    date: 1967,
-    value: 663.2
-  },
-  {
-    country: 'CIS 地区',
-    date: 1968,
-    value: 687.8
-  },
-  {
-    country: 'CIS 地区',
-    date: 1969,
-    value: 719
-  }, {
-    country: '中东',
-    date: 1965,
-    value: 48.3
-  },
-  {
-    country: '中东',
-    date: 1966,
-    value: 50.4
-  },
-  {
-    country: '中东',
-    date: 1967,
-    value: 52.7
-  },
-  {
-    country: '中东',
-    date: 1968,
-    value: 55.6
-  },
-  {
-    country: '中东',
-    date: 1969,
-    value: 58.5
-  },
-  {
-    country: '非洲',
-    date: 1965,
-    value: 60.6
-  },
-  {
-    country: '非洲',
-    date: 1966,
-    value: 63.3
-  },
-  {
-    country: '非洲',
-    date: 1967,
-    value: 64
-  },
-  {
-    country: '非洲',
-    date: 1968,
-    value: 67.4
-  },
-  {
-    country: '非洲',
-    date: 1969,
-    value: 68.9
-  }
+  { date: '2016年', value: 100, type: '已处理' },
+  { date: '2017年', value: 200, type: '已处理' },
+  { date: '2018年', value: 300, type: '已处理' },
+  { date: '2019年', value: 200, type: '已处理' },
+  { date: '2020年', value: 100, type: '已处理' },
+  { date: '2021年', value: 200, type: '已处理' },
+  { date: '2022年', value: 300, type: '已处理' },
+  { date: '2023年', value: 400, type: '已处理' },
+  { date: '2016年', value: 400, type: '未处理' },
+  { date: '2017年', value: 100, type: '未处理' },
+  { date: '2018年', value: 200, type: '未处理' },
+  { date: '2019年', value: 300, type: '未处理' },
+  { date: '2020年', value: 200, type: '未处理' },
+  { date: '2021年', value: 100, type: '未处理' },
+  { date: '2022年', value: 200, type: '未处理' },
+  { date: '2023年', value: 300, type: '未处理' }
 ]
 
 // 配置处理脚本
@@ -723,7 +590,7 @@ const option = {
   xField: 'date',
   yField: 'value',
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
-  seriesField: 'country',
+  seriesField: 'type',
   smooth: false,
   legendEnable: false,
   legendLayout: 'vertical',
