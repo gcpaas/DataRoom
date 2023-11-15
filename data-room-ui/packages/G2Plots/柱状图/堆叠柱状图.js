@@ -590,7 +590,7 @@ const option = {
     },
     line: {
       style: {
-        stroke: '#d0d0d0',
+        stroke: '#C9CDD4',
         lineWidth: 1
       }
     },
