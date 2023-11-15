@@ -647,7 +647,7 @@ const option = {
     },
     label: {
       style: {
-        fill: '#8C8C8C',
+        fill: '#e9e9e9',
         fontSize: 12
       }
     },

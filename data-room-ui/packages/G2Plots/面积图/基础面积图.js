@@ -601,7 +601,7 @@ const option = {
       autoHideEnable: true,
       autoHideMinGap: 2,
       style: {
-        fill: '#8C8C8C',
+        fill: '#e9e9e9',
         fontSize: 12
       }
     },
