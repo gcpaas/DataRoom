@@ -41,9 +41,9 @@ const customConfig = {
   customize: {
     placeholder: '请选择',
     // 输入框背景颜色
-    backgroundColor: '#35393F',
+    backgroundColor: '#00000000',
     // 输入框字体大小
-    fontSize: 20,
+    fontSize: 14,
     // 输入框字体颜色
     fontColor: '#FFFFFF',
     // 下拉框背景颜色

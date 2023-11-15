@@ -28,10 +28,10 @@ const customConfig = {
     skewY: 0
   },
   customize: {
-    fontSize: 28,
-    fontWeight: 700,
-    fontFamily: '', // 字体类型
-    color: 'rgb(155 159 172)'
+    fontSize: 14,
+    fontWeight: 300,
+    fontFamily: 'ds-digitalbold', // 字体类型
+    color: '#ffffff'
   }
 
 }

@@ -12,7 +12,7 @@
           :model="config.customize"
           label-position="left"
           class="setting-body bs-el-form"
-          label-width="90px"
+          label-width="100px"
         >
           <SettingTitle>标题</SettingTitle>
           <div class="lc-field-body">

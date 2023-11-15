@@ -50,23 +50,23 @@ const customConfig = {
   },
   customize: {
     borderRadius: 0,
-    fontFamily:'',
+    fontFamily: 'ds-digitalbold',
     borderWidth: 0,
     lineDistance: 25,
     borderColor: '',
-    gradientDirection:'to right',
-    gradientColor0: 'rgba(0, 122, 255, 1)',
-    gradientColor1:'rgba(0, 122, 255, 1)',
-    firstSize: 32,
+    gradientDirection: 'to right',
+    gradientColor0: '#4391f4',
+    gradientColor1: '#38bbe5',
+    firstSize: 18,
     firstColor: '#ffffff',
     firstWeight: 500,
-    secondSize: 50,
+    secondSize: 36,
     secondColor: '#ffffff',
     secondWeight: 500,
-    secondLine: '装机处理及时率',
+    secondLine: '项目总数',
     unit: '',
     unitSize: 32,
-    unitColor:'#fff'
+    unitColor: '#fff'
   }
 }
 export const dataConfig = {

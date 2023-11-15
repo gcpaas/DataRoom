@@ -34,11 +34,11 @@ const customConfig = {
   customize: {
     value: '',
     // 选择框背景颜色
-    backgroundColor: '#35393F',
+    backgroundColor: '#00000000',
     // 选择框文字颜色
     fontColor: '#FFFFFF',
-    // 选择框文字大小
-    fontSize: 20,
+    // 选择框字体大小
+    fontSize: 14,
     // 下拉框背景颜色
     dropDownBackgroundColor: '#35393F',
     // 下拉框字体颜色

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import {predefineColors} from 'data-room-ui/js/utils/colorList'
+import { predefineColors } from 'data-room-ui/js/utils/colorList'
 export default {
   name: 'ColorPicker',
   props: {

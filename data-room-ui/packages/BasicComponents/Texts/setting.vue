@@ -51,12 +51,12 @@
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item
-          label="文字大小"
+          label="字体大小"
           label-width="100px"
         >
           <el-input
             v-model="config.customize.fontSize"
-            placeholder="请输入文字大小"
+            placeholder="请输入字体大小"
             clearable
           >
             <template slot="append">

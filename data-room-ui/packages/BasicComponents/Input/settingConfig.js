@@ -35,17 +35,17 @@ const customConfig = {
 
     titleStyle: {
       // 标题大小
-      fontSize: 18,
+      fontSize: 14,
       // 标题颜色
-      color: '#fff',
+      color: '#ffffff',
       // 标题间距
       marginRight: 10
     },
     inputStyle: {
       // 输入值字体大小
-      fontSize: 20,
+      fontSize: 14,
       // 输入值字体颜色
-      color: '#fff',
+      color: '#ffffff',
       // 输入值左间距
       paddingLeft: 10
     },
@@ -65,7 +65,7 @@ const customConfig = {
     // 边框样式
     borderStyle: {
       // 边框颜色
-      borderColor: '#dcdfe6',
+      borderColor: '#ffffff',
       // 边框宽度
       borderWidth: 1,
       // 边框样式
@@ -75,7 +75,7 @@ const customConfig = {
     },
     backgroundStyle: {
       // 背景颜色
-      backgroundColor: '#151a26'
+      backgroundColor: '#00000000'
     }
   }
 }

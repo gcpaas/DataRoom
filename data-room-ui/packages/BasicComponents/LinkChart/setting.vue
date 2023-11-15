@@ -31,21 +31,23 @@
       <div class="bs-setting-wrap">
         <PosWhSetting :config="config" />
       </div>
-       <SettingTitle v-if="config.border">边框</SettingTitle>
-          <div class="lc-field-body">
-            <BorderSetting
-              v-if="config.border"
-              label-width="100px"
-              :config="config.border"
-              :bigTitle='config.title'
-            />
-          </div>
-         <SettingTitle>旋转</SettingTitle>
-          <div class="lc-field-body">
-            <RotateSetting
-              :config="config"
-            />
-          </div>
+      <SettingTitle v-if="config.border">
+        边框
+      </SettingTitle>
+      <div class="lc-field-body">
+        <BorderSetting
+          v-if="config.border"
+          label-width="100px"
+          :config="config.border"
+          :big-title="config.title"
+        />
+      </div>
+      <SettingTitle>旋转</SettingTitle>
+      <div class="lc-field-body">
+        <RotateSetting
+          :config="config"
+        />
+      </div>
       <SettingTitle>基础</SettingTitle>
       <div class="bs-setting-wrap">
         <el-form-item
@@ -69,7 +71,7 @@
             class="bs-el-select"
           >
             <el-option
-              v-for="type in openTypeList"
+              v-for="(type) in openTypeList"
               :key="type.label"
               :label="type.label"
               :value="type.value"
