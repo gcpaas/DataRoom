@@ -555,7 +555,6 @@ if(autoHide){
 }
   `
 
-
 // 数据处理脚本
 const dataHandler = ''
 
@@ -635,7 +634,7 @@ const option = {
         return `${(v / 10e8).toFixed(1)} B`
       },
       style: {
-        fill: '#8C8C8C',
+        fill: '#e9e9e9',
         fontSize: 12,
         opacity: 1
       }
