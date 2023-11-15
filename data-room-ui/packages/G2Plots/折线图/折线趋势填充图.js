@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023111101'
+const version = '2023111501'
 // 分类
 const category = 'Line'
 // 标题
@@ -350,10 +350,10 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时旋转',
+    label: '标签过多时隐藏',
     type: 'switch',
-    field: 'xAxis_label_autoRotate',
-    optionField: 'xAxis.label.autoRotate',
+    field: 'xAxis_label_autoHide',
+    optionField: 'xAxis.label.autoHideEnable',
     value: true,
     active: true,
     inactive: false,
@@ -361,11 +361,22 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时隐藏',
+    label: '标签隐藏判定间隔',
+    type: 'inputNumber',
+    field: 'xAxis_label_autoHide_minGap',
+    optionField: 'xAxis.label.autoHideMinGap',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签过多时旋转',
     type: 'switch',
-    field: 'xAxis_label_autoHide',
-    optionField: 'xAxis.label.autoHide',
+    field: 'xAxis_label_autoRotate',
+    optionField: 'xAxis.label.autoRotate',
     value: true,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -492,98 +503,58 @@ const setting = [
     tabName: 'custom',
     groupName: 'yAxis'
   },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
 ]
 
 // 模拟数据
 const data = [
-  {
-    year:'1',
-    value:100,
-    type:'今年'
-  },
-  {
-    year:'2',
-    value:200,
-    type:'今年'
-  },
-  {
-    year:'3',
-    value:300,
-    type:'今年'
-  },
-  {
-    year:'4',
-    value:200,
-    type:'今年'
-  },
-  {
-    year:'5',
-    value:100,
-    type:'今年'
-  },
-  {
-    year:'6',
-    value:200,
-    type:'今年'
-  },
-  {
-    year:'7',
-    value:300,
-    type:'今年'
-  },
-  {
-    year:'8',
-    value:400,
-    type:'今年'
-  },
-  {
-    year:'1',
-    value:400,
-    type:'去年'
-  },
-  {
-    year:'2',
-    value:100,
-    type:'去年'
-  },
-  {
-    year:'3',
-    value:200,
-    type:'去年'
-  },
-  {
-    year:'4',
-    value:300,
-    type:'去年'
-  },
-  {
-    year:'5',
-    value:200,
-    type:'去年'
-  },
-  {
-    year:'6',
-    value:100,
-    type:'去年'
-  },
-  {
-    year:'7',
-    value:200,
-    type:'去年'
-  },
-  {
-    year:'8',
-    value:300,
-    type:'去年'
-  }
+  { date: '2016年', value: 100, type: '已处理' },
+  { date: '2017年', value: 200, type: '已处理' },
+  { date: '2018年', value: 300, type: '已处理' },
+  { date: '2019年', value: 200, type: '已处理' },
+  { date: '2020年', value: 100, type: '已处理' },
+  { date: '2021年', value: 200, type: '已处理' },
+  { date: '2022年', value: 300, type: '已处理' },
+  { date: '2023年', value: 400, type: '已处理' },
+  { date: '2016年', value: 400, type: '未处理' },
+  { date: '2017年', value: 100, type: '未处理' },
+  { date: '2018年', value: 200, type: '未处理' },
+  { date: '2019年', value: 300, type: '未处理' },
+  { date: '2020年', value: 200, type: '未处理' },
+  { date: '2021年', value: 100, type: '未处理' },
+  { date: '2022年', value: 200, type: '未处理' },
+  { date: '2023年', value: 300, type: '未处理' }
 ]
 
 // 配置处理脚本
-const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
-  '\n  if (option.legendEnable) {\n' +
-  '    option.legend.itemName = option.legendItemName\n' +
-  '  };' +
-  'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
+const optionHandler =
+  `
+option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === 'legendPosition').value} : false;
+if (option.legendEnable) {
+  option.legend.itemName = option.legendItemName
+};
+option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === 'yAxis_grid_line_style_lineDash').value]
+let autoHide = setting.find(settingItem=>settingItem.field === 'xAxis_label_autoHide').value
+if(autoHide){
+  let minGap = option.xAxis.label.autoHideMinGap
+  option.xAxis.label.autoHide = {
+    type: 'equidistance',
+    cfg: { minGap: minGap }
+  }
+} else {
+  option.xAxis.label.autoHide = false
+}
+  `
+
 
 // 数据处理脚本
 const dataHandler = ''
@@ -592,10 +563,12 @@ const dataHandler = ''
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   renderer: 'canvas',
   data,
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
-  xField: 'year',
+  xField: 'date',
   yField: 'value',
   seriesField: 'type',
   xAxis: {
@@ -611,6 +584,8 @@ const option = {
       autoRotate: false,
       autoHide: true,
       autoEllipsis: true,
+      autoHideEnable: true,
+      autoHideMinGap: 0,
       style: {
         fill: '#8C8C8C',
         fontSize: 12

@@ -68,6 +68,23 @@
                 :predefine="predefineThemeColors"
               />
             </el-form-item>
+            <el-form-item
+              label="字体类型"
+              label-width="100px"
+            >
+              <el-select
+                v-model="config.customize.fontFamily"
+                popper-class="bs-el-select"
+                class="bs-el-select"
+              >
+                <el-option
+                  v-for="item in fontFamilyList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
             <el-form-item label="卡片宽度">
               <el-input-number
                 v-model="config.customize.width"
@@ -106,7 +123,7 @@
                 :step="1"
               />
             </el-form-item>
-            <el-form-item label="卡片边框">
+            <el-form-item label="边框宽度">
               <el-input-number
                 v-model="config.customize.borderWidth"
                 class="bs-el-input-number"
@@ -168,6 +185,7 @@ import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetti
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 import { predefineColors } from 'data-room-ui/js/utils/colorList'
+import fontList from 'data-room-ui/js/utils/fontList'
 export default {
   name: 'BarSetting',
   components: {
@@ -179,6 +197,7 @@ export default {
   },
   data () {
     return {
+      fontFamilyList: fontList,
       // 预设主题色
       predefineThemeColors: predefineColors
     }

@@ -4,7 +4,7 @@
  * @Author: xing.heng
  */
 // 配置版本号
-const version = '2023092201'
+const version = '2023111501'
 // 分类
 const category = 'Line'
 // 标题
@@ -317,10 +317,10 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时旋转',
+    label: '标签过多时隐藏',
     type: 'switch',
-    field: 'xAxis_label_autoRotate',
-    optionField: 'xAxis.label.autoRotate',
+    field: 'xAxis_label_autoHide',
+    optionField: 'xAxis.label.autoHideEnable',
     value: true,
     active: true,
     inactive: false,
@@ -328,10 +328,19 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时隐藏',
+    label: '标签隐藏判定间隔',
+    type: 'inputNumber',
+    field: 'xAxis_label_autoHide_minGap',
+    optionField: 'xAxis.label.autoHideMinGap',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签过多时旋转',
     type: 'switch',
-    field: 'xAxis_label_autoHide',
-    optionField: 'xAxis.label.autoHide',
+    field: 'xAxis_label_autoRotate',
+    optionField: 'xAxis.label.autoRotate',
     value: true,
     active: true,
     inactive: false,
@@ -463,25 +472,45 @@ const setting = [
     tabName: 'custom',
     groupName: 'yAxis'
   },
-  // 边距 padding
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
 ]
 
 // 模拟数据
 const data = [
-  { Date: '2010-01', scales: 1998 },
-  { Date: '2010-02', scales: 1850 },
-  { Date: '2010-03', scales: 1720 },
-  { Date: '2010-04', scales: 1818 },
-  { Date: '2010-05', scales: 1920 },
-  { Date: '2010-06', scales: 1802 },
-  { Date: '2010-07', scales: 1945 },
-  { Date: '2010-08', scales: 1856 },
-  { Date: '2010-09', scales: 2107 },
-  { Date: '2010-10', scales: 2140 }
+  { date: '2016年', value: 100 },
+  { date: '2017年', value: 200 },
+  { date: '2018年', value: 300 },
+  { date: '2019年', value: 200 },
+  { date: '2020年', value: 100 },
+  { date: '2021年', value: 200 },
+  { date: '2022年', value: 300 },
+  { date: '2023年', value: 400 }
 ]
 
 // 配置处理脚本
-const optionHandler = 'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
+const optionHandler =
+  `
+option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === 'yAxis_grid_line_style_lineDash').value]
+let autoHide = setting.find(settingItem=>settingItem.field === 'xAxis_label_autoHide').value
+if(autoHide){
+  let minGap = option.xAxis.label.autoHideMinGap
+  option.xAxis.label.autoHide = {
+    type: 'equidistance',
+    cfg: { minGap: minGap }
+  }
+} else {
+  option.xAxis.label.autoHide = false
+}
+  `
 
 // 数据处理脚本
 const dataHandler = ''
@@ -490,10 +519,12 @@ const dataHandler = ''
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   data,
   color: '',
-  xField: 'Date',
-  yField: 'scales',
+  xField: 'date',
+  yField: 'value',
   smooth: false,
   lineStyle: {
     lineWidth: 2,
@@ -535,9 +566,13 @@ const option = {
       }
     },
     label: {
+      // 可使用函数 (isVertical: boolean, labelGroup: IGroup, limitLength?: number) => boolean;
       autoRotate: false,
       autoHide: false,
       autoEllipsis: true,
+      // autoHide的类型详见@antv/component/src/axis/overlap/auto-hide.ts
+      autoHideEnable: true,
+      autoHideMinGap: 2,
       style: {
         fill: '#8C8C8C',
         fontSize: 12

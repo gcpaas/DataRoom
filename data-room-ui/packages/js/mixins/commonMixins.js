@@ -94,10 +94,6 @@ export default {
       })
       return newDataset
     },
-    // 组件数据加载时的背景颜色
-    loadingBackground () {
-      return this.customTheme === 'light' ? '#ffffff' : '#151A26'
-    },
     isPreview () {
       return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
     }

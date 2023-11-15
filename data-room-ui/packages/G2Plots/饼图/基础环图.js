@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023101402'
+const version = '2023111401'
 // 分类
 const category = 'Pie'
 // 标题
@@ -405,6 +405,8 @@ const dataHandler = ''
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   renderer: 'canvas',
   data,
   angleField: 'value',

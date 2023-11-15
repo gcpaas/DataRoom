@@ -63,17 +63,27 @@ export default {
   },
   data () {
     return {
+      count: 0,
+      right: 0
     }
   },
   watch: {
     rightVisiable (value) {
+      const leftElement = document.querySelector('.bs-left-panel')
+      const contentElement = document.querySelector('.grid-wrap-box')
+      // const rightElement = document.querySelector('.bs-right-panel-wrap')
+      const mapElement = document.querySelector('.minimap')
       if (value) {
-        const leftElement = document.querySelector('.bs-left-panel')
-        const contentElement = document.querySelector('.grid-wrap-box')
-        // const rightElement = document.querySelector('.bs-right-panel-wrap')
-        const mapElement = document.querySelector('.minimap')
         if (parseInt(window.getComputedStyle(mapElement).right) > parseInt(window.getComputedStyle(leftElement).width) + parseInt(window.getComputedStyle(contentElement).width) - 320 - parseInt(window.getComputedStyle(mapElement).width)) {
+          // 此时距离超出可视范围
+          this.count = 1
+          this.right = window.getComputedStyle(mapElement).right
           mapElement.style.right = parseInt(window.getComputedStyle(leftElement).width) + parseInt(window.getComputedStyle(contentElement).width) - 320 - parseInt(window.getComputedStyle(mapElement).width) + 'px'
+        }
+      } else {
+        if (this.count === 1) {
+          mapElement.style.right = this.right
+          this.count--
         }
       }
     }
@@ -121,6 +131,7 @@ export default {
 
 <style lang="scss" scoped>
 .bs-right-panel-wrap {
+  //z-index: 1000;
   display: flex;
   flex-direction: column;
   background-color: var(--bs-background-1);

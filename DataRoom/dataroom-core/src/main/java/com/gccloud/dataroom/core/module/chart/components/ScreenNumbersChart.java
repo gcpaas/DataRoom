@@ -44,5 +44,8 @@ public class ScreenNumbersChart extends Chart {
         @ApiModelProperty(notes = "文字间距")
         private Integer letterSpacing;
 
+        @ApiModelProperty(notes = "千分位")
+        private Boolean thousands;
+
     }
 }

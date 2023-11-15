@@ -5,7 +5,7 @@
  */
 
 // 配置版本号
-const version = '2023092201'
+const version = '2023111501'
 // 分类
 const category = 'Column'
 // 标题
@@ -327,10 +327,10 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时旋转',
+    label: '标签过多时隐藏',
     type: 'switch',
-    field: 'xAxis_label_autoRotate',
-    optionField: 'xAxis.label.autoRotate',
+    field: 'xAxis_label_autoHide',
+    optionField: 'xAxis.label.autoHideEnable',
     value: true,
     active: true,
     inactive: false,
@@ -338,11 +338,22 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时隐藏',
+    label: '标签隐藏判定间隔',
+    type: 'inputNumber',
+    field: 'xAxis_label_autoHide_minGap',
+    optionField: 'xAxis.label.autoHideMinGap',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签过多时旋转',
     type: 'switch',
-    field: 'xAxis_label_autoHide',
-    optionField: 'xAxis.label.autoHide',
+    field: 'xAxis_label_autoRotate',
+    optionField: 'xAxis.label.autoRotate',
     value: true,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -469,36 +480,53 @@ const setting = [
     tabName: 'custom',
     groupName: 'yAxis'
   },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
+  }
 ]
 
 // 模拟数据
 const data = [
-  { year: '1991', value: 3, type: 'Lon' },
-  { year: '1992', value: 4, type: 'Lon' },
-  { year: '1993', value: 3.5, type: 'Lon' },
-  { year: '1994', value: 5, type: 'Lon' },
-  { year: '1995', value: 4.9, type: 'Lon' },
-  { year: '1996', value: 6, type: 'Lon' },
-  { year: '1997', value: 7, type: 'Lon' },
-  { year: '1998', value: 9, type: 'Lon' },
-  { year: '1999', value: 13, type: 'Lon' },
-  { year: '1991', value: 3, type: 'Bor' },
-  { year: '1992', value: 4, type: 'Bor' },
-  { year: '1993', value: 3.5, type: 'Bor' },
-  { year: '1994', value: 5, type: 'Bor' },
-  { year: '1995', value: 4.9, type: 'Bor' },
-  { year: '1996', value: 6, type: 'Bor' },
-  { year: '1997', value: 7, type: 'Bor' },
-  { year: '1998', value: 9, type: 'Bor' },
-  { year: '1999', value: 13, type: 'Bor' }
+  { date: '2018年', value: 300, type: '已处理' },
+  { date: '2019年', value: 200, type: '已处理' },
+  { date: '2020年', value: 100, type: '已处理' },
+  { date: '2021年', value: 200, type: '已处理' },
+  { date: '2022年', value: 300, type: '已处理' },
+  { date: '2023年', value: 400, type: '已处理' },
+  { date: '2018年', value: 200, type: '未处理' },
+  { date: '2019年', value: 300, type: '未处理' },
+  { date: '2020年', value: 200, type: '未处理' },
+  { date: '2021年', value: 100, type: '未处理' },
+  { date: '2022年', value: 200, type: '未处理' },
+  { date: '2023年', value: 300, type: '未处理' }
 ]
 
 // 配置处理脚本
-const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
-  '  if (option.legendEnable) {\n' +
-  '    option.legend.itemName = option.legendItemName\n' +
-  '  };' +
-  'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
+const optionHandler =
+  `
+option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === 'legendPosition').value} : false;
+if (option.legendEnable) {
+  option.legend.itemName = option.legendItemName
+};
+option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === 'yAxis_grid_line_style_lineDash').value]
+let autoHide = setting.find(settingItem=>settingItem.field === 'xAxis_label_autoHide').value
+if(autoHide){
+  let minGap = option.xAxis.label.autoHideMinGap
+  option.xAxis.label.autoHide = {
+    type: 'equidistance',
+    cfg: { minGap: minGap }
+  }
+} else {
+  option.xAxis.label.autoHide = false
+}
+  `
 
 // 数据处理脚本
 const dataHandler = ''
@@ -507,10 +535,12 @@ const dataHandler = ''
 const option = {
   // 数据将要放入到哪个字段中
   dataKey: 'data',
+  // 图表内边距
+  appendPadding: [0, 0, 0, 0],
   renderer: 'canvas',
   data,
   isStack: true,
-  xField: 'year',
+  xField: 'date',
   yField: 'value',
   seriesField: 'type',
   legendEnable: false,
@@ -551,6 +581,8 @@ const option = {
       autoRotate: false,
       autoHide: true,
       autoEllipsis: true,
+      autoHideEnable: true,
+      autoHideMinGap: 2,
       style: {
         fill: '#8C8C8C',
         fontSize: 12

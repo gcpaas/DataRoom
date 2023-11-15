@@ -58,7 +58,8 @@ const customConfig = {
     marginRight: 20,
     numberDigits: 5,
     placeHolder: '0',
-    height: 125
+    height: 125,
+    fontFamily: ''
   }
 }
 export const dataConfig = {
