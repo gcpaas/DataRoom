@@ -43,8 +43,8 @@ const customConfig = {
     skewY: 0
   },
   customize: {
-    title: '跑马灯占位符',
-    fontSize: 40,
+    title: 'DataRoom由GCPAAS开源社区开源',
+    fontSize: 14,
     fontWeight: 700,
     icon: {
       name: '',

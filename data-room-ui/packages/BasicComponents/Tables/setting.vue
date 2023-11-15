@@ -19,13 +19,15 @@
           />
         </el-form-item>
       </div>
-      <SettingTitle v-if="config.border">边框</SettingTitle>
+      <SettingTitle v-if="config.border">
+        边框
+      </SettingTitle>
       <div class="lc-field-body">
         <BorderSetting
           v-if="config.border"
           label-width="120px"
           :config="config.border"
-          :bigTitle='config.title'
+          :big-title="config.title"
         />
       </div>
       <SettingTitle>位置</SettingTitle>
@@ -36,11 +38,11 @@
         />
       </div>
       <SettingTitle>旋转</SettingTitle>
-          <div class="lc-field-body">
-            <RotateSetting
-              :config="config"
-            />
-          </div>
+      <div class="lc-field-body">
+        <RotateSetting
+          :config="config"
+        />
+      </div>
       <SettingTitle>基础</SettingTitle>
       <div class="lc-field-body">
         <el-form-item label="表头颜色">
@@ -115,7 +117,7 @@ import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import { chartSettingMixins } from 'data-room-ui/js/mixins/chartSettingMixins'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
-import {predefineColors} from "data-room-ui/js/utils/colorList";
+import { predefineColors } from 'data-room-ui/js/utils/colorList'
 export default {
   components: {
     ColorPicker,

@@ -33,11 +33,11 @@ const customConfig = {
   // 自定义属性
   customize: {
     // 选择框背景颜色
-    bgColor: '#35393F',
+    bgColor: '',
     // 选择框文字颜色
     fontColor: '#FFFFFF',
-    // 选择框文字大小
-    fontSize: 20,
+    // 选择框字体大小
+    fontSize: 14,
     // 显示类型 year/month/date/ datetime/datetimerange/daterange
     type: 'datetimerange',
     // 时间格式化类型:时间戳（timestamp），自定义（custom）

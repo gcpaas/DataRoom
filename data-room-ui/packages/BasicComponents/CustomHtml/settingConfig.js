@@ -28,7 +28,7 @@ const customConfig = {
     skewY: 0
   },
   customize: {
-    htmlStr: '<h1 style="color:#ffffff;font-size: 30px">我是自定义html内容</h1>' // html的内容
+    htmlStr: '<h1 style="color:#6b74e4;font-size: 20px;font-style: italic;">我是自定义html内容</h1>' // html的内容
   }
 
 }

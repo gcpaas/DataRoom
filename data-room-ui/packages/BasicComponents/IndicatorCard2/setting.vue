@@ -125,27 +125,27 @@
               label="请输入上下间距"
             />
           </el-form-item>
-          <el-form-item label-width="100px" label="首行文字大小">
+          <el-form-item label-width="100px" label="第一行字体大小">
             <el-input-number
               v-model="config.customize.firstSize"
               :precision="0"
               class="bs-el-input-number"
-              label="请输入首行文字大小"
+              label="请输入第一行字体大小"
             />
           </el-form-item>
-          <el-form-item label-width="100px" label="首行字体颜色">
+          <el-form-item label-width="100px" label="第一行字体颜色">
             <ColorPicker
               v-model="config.customize.firstColor"
               :predefine="predefineThemeColors"
             />
           </el-form-item>
-          <el-form-item label-width="100px" label="首行字体粗细">
+          <el-form-item label-width="100px" label="第一行字体粗细">
             <el-input-number
               v-model="config.customize.firstWeight"
               :precision="0"
               :step="100"
               class="bs-el-input-number"
-              label="请输入首行字体粗细"
+              label="请输入第一行字体粗细"
             />
           </el-form-item>
           <el-form-item
@@ -158,12 +158,12 @@
               placeholder="请输入第二行文字内容"
             />
           </el-form-item>
-           <el-form-item label-width="100px" label="第二行文字大小">
+           <el-form-item label-width="100px" label="第二行字体大小">
             <el-input-number
               v-model="config.customize.secondSize"
               :precision="0"
               class="bs-el-input-number"
-              label="请输入第二行文字大小"
+              label="请输入第二行字体大小"
             />
           </el-form-item>
           <el-form-item

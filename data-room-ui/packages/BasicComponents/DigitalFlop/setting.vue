@@ -12,7 +12,7 @@
           :model="config.customize"
           label-position="left"
           class="setting-body bs-el-form"
-          label-width="90px"
+          label-width="100px"
         >
           <SettingTitle>标题</SettingTitle>
           <div class="lc-field-body">
@@ -27,16 +27,18 @@
           <div class="lc-field-body">
             <PosWhSetting :config="config" />
           </div>
-           <SettingTitle v-if="config.border">边框</SettingTitle>
+          <SettingTitle v-if="config.border">
+            边框
+          </SettingTitle>
           <div class="lc-field-body">
             <BorderSetting
               v-if="config.border"
               label-width="100px"
               :config="config.border"
-              :bigTitle='config.title'
+              :big-title="config.title"
             />
           </div>
-         <SettingTitle>旋转</SettingTitle>
+          <SettingTitle>旋转</SettingTitle>
           <div class="lc-field-body">
             <RotateSetting
               :config="config"
@@ -165,7 +167,7 @@ import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
-import {predefineColors} from "data-room-ui/js/utils/colorList";
+import { predefineColors } from 'data-room-ui/js/utils/colorList'
 export default {
   name: 'BarSetting',
   components: {

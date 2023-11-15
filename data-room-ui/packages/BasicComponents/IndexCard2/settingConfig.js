@@ -54,22 +54,22 @@ const customConfig = {
     borderWidth: 0,
     lineDistance: 6,
     borderColor: '',
-    fontFamily:'',
-    gradientDirection:'to right',
-    gradientColor0: 'rgba(0, 122, 255, 0.07)',
-    gradientColor1:'rgba(0, 122, 255, 0.07)',
+    fontFamily: 'ds-digitalbold',
+    gradientDirection: 'to right',
+    gradientColor0: '#4391f4',
+    gradientColor1: '#36c49f',
     distance: 30,
-    imgSize: 80,
-    firstSize: 21,
+    imgSize: 60,
+    firstSize: 18,
     firstColor: '#ffffff',
     firstWeight: 500,
-    secondSize: 64,
-    secondColor: '#007aff',
+    secondSize: 36,
+    secondColor: '#ffffff',
     secondWeight: 500,
-    secondLine: '装机处理及时率',
+    secondLine: '历史工单量',
     unit: '',
     unitSize: 32,
-    unitColor:'#fff'
+    unitColor: '#fff'
   }
 }
 export const dataConfig = {

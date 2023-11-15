@@ -6,8 +6,8 @@
     <div
       :style="{
         'background-image': `linear-gradient(${customize.gradientDirection}, ${
-            gradientColor0 ? gradientColor0 : gradientColor1
-          } , ${gradientColor1 ? gradientColor1 : gradientColor0})`,
+          gradientColor0 ? gradientColor0 : gradientColor1
+        } , ${gradientColor1 ? gradientColor1 : gradientColor0})`,
         'border-radius':customize.borderRadius + 'px',
         border:`${customize.borderWidth}px solid ${customize.borderColor}`,
       }"
@@ -20,23 +20,24 @@
         }"
       >
         <span
-        :style="{
-          'font-family': config.customize.fontFamily,
-          'font-size': customize.firstSize + 'px',
-          color:customize.firstColor,
-          'font-weight':customize.firstWeight,
-          'margin-bottom':customize.lineDistance +'px'
-        }"
+          :style="{
+            'font-family': config.customize.fontFamily,
+            'font-size': customize.firstSize + 'px',
+            color:customize.firstColor,
+            'font-weight':customize.firstWeight,
+            'margin-bottom':customize.lineDistance +'px'
+          }"
         >{{ optionData }}</span>
         <span
-        :style="{
-             'margin-left':'10px',
+          :style="{
+            'margin-left':'10px',
             'font-size': customize.unitSize + 'px',
             'line-height':customize.unitSize + 'px',
             color:customize.unitColor,
             'margin-bottom':customize.lineDistance +'px'
-          }">
-          {{unit}}
+          }"
+        >
+          {{ unit }}
         </span>
       </div>
       <div
@@ -83,9 +84,9 @@ export default {
       return this.config.customize.gradientColor0 || this.config.customize.gradientColor1 || 'transparent'
     },
     gradientColor1 () {
-       return this.config.customize.gradientColor1 || this.config.customize.gradientColor0 || 'transparent'
+      return this.config.customize.gradientColor1 || this.config.customize.gradientColor0 || 'transparent'
     },
-    unit(){
+    unit () {
       return this.config?.customize.unit || ''
     },
     option () {
@@ -96,7 +97,7 @@ export default {
     },
     customize () {
       return this.config?.customize
-    },
+    }
     // tableData () {
     //   let dataList = ''
     //   if (this.optionData instanceof Array && this.optionData.length > 0) {
@@ -112,7 +113,7 @@ export default {
   methods: {
     dataFormatting (config, data) {
       let dataList = ''
-      if(data.success){
+      if (data.success) {
         if (data.data instanceof Array) {
           dataList = config.dataSource.dimensionField
             ? data.data[0][config.dataSource.dimensionField]
@@ -120,8 +121,8 @@ export default {
         } else {
           dataList = data.data[config.dataSource.dimensionField]
         }
-      }else{
-        dataList=80
+      } else {
+        dataList = 80
       }
       config.option = {
         ...config.option,
@@ -129,7 +130,7 @@ export default {
       }
       return config
     }
-   }
+  }
 }
 </script>
 

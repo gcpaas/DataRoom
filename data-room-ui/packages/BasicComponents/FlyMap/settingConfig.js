@@ -60,7 +60,7 @@ const customConfig = {
     mapName: false,
     // 文字颜色
     mapNameColor: '#fff',
-    // 文字大小
+    // 字体大小
     mapNameSize: 12,
     // 文字权重
     mapNameWeight: 500,
