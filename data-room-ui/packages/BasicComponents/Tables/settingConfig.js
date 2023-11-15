@@ -67,13 +67,7 @@ const customConfig = {
     // 表格奇数行背景颜色
     oddRowBackgroundColor: '',
     // 表格偶数行背景颜色‘
-    evenRowBackgroundColor: '',
-    condition: {
-      // 表头配置
-      headerConditionList: [],
-      // 表格列配置
-      columnConditionList: []
-    }
+    evenRowBackgroundColor: ''
     // 表格是否需要边框
     // border: false,
   }
