@@ -349,10 +349,10 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时旋转',
+    label: '标签过多时隐藏',
     type: 'switch',
-    field: 'xAxis_label_autoRotate',
-    optionField: 'xAxis.label.autoRotate',
+    field: 'xAxis_label_autoHide',
+    optionField: 'xAxis.label.autoHideEnable',
     value: true,
     active: true,
     inactive: false,
@@ -360,11 +360,22 @@ const setting = [
     groupName: 'xAxis'
   },
   {
-    label: '标签过多时隐藏',
+    label: '标签隐藏判定间隔',
+    type: 'inputNumber',
+    field: 'xAxis_label_autoHide_minGap',
+    optionField: 'xAxis.label.autoHideMinGap',
+    value: 0,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签过多时旋转',
     type: 'switch',
-    field: 'xAxis_label_autoHide',
-    optionField: 'xAxis.label.autoHide',
+    field: 'xAxis_label_autoRotate',
+    optionField: 'xAxis.label.autoRotate',
     value: true,
+    active: true,
+    inactive: false,
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -516,16 +527,29 @@ const data = [
 ]
 
 // 配置处理脚本
-const optionHandler = '  let pointEnable = setting.find(settingItem=>settingItem.field === \'point_shape\').value\n' +
-  '  if (pointEnable === false) {\n' +
-  '    option.point = false\n' +
-  '  } else {\n' +
-  '    option.point = {shape: pointEnable}\n' +
-  '    let pointColor = setting.find(settingItem=>settingItem.field === \'point_color\').value\n' +
-  '    option.point.color = pointColor\n' +
-  '  option.point.size =  setting.find(settingItem=>settingItem.field === \'point_size\').value\n' +
-  '};' +
-  'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
+const optionHandler =
+  `
+let pointEnable = setting.find(settingItem=>settingItem.field === \'point_shape\').value
+if (pointEnable === false) {
+  option.point = false
+} else {
+  option.point = {shape: pointEnable}
+  let pointColor = setting.find(settingItem=>settingItem.field === 'point_color').value
+  option.point.color = pointColor
+  option.point.size =  setting.find(settingItem=>settingItem.field === 'point_size').value
+};
+option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === 'yAxis_grid_line_style_lineDash').value]
+let autoHide = setting.find(settingItem=>settingItem.field === 'xAxis_label_autoHide').value
+if(autoHide){
+  let minGap = option.xAxis.label.autoHideMinGap
+  option.xAxis.label.autoHide = {
+    type: 'equidistance',
+    cfg: { minGap: minGap }
+  }
+} else {
+  option.xAxis.label.autoHide = false
+}
+  `
 
 // 数据处理脚本
 const dataHandler = ''
@@ -574,6 +598,8 @@ const option = {
       autoRotate: false,
       autoHide: true,
       autoEllipsis: true,
+      autoHideEnable: true,
+      autoHideMinGap: 2,
       style: {
         fill: '#8C8C8C',
         fontSize: 12
