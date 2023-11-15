@@ -505,16 +505,14 @@ const setting = [
 
 // 模拟数据
 const data = [
-  { Date: '2010-01', scales: 1998 },
-  { Date: '2010-02', scales: 1850 },
-  { Date: '2010-03', scales: 1720 },
-  { Date: '2010-04', scales: 1818 },
-  { Date: '2010-05', scales: 1920 },
-  { Date: '2010-06', scales: 1802 },
-  { Date: '2010-07', scales: 1945 },
-  { Date: '2010-08', scales: 1856 },
-  { Date: '2010-09', scales: 2107 },
-  { Date: '2010-10', scales: 2140 }
+  { date: '2016年', value: 100 },
+  { date: '2017年', value: 200 },
+  { date: '2018年', value: 300 },
+  { date: '2019年', value: 200 },
+  { date: '2020年', value: 100 },
+  { date: '2021年', value: 200 },
+  { date: '2022年', value: 300 },
+  { date: '2023年', value: 400 }
 ]
 
 // 配置处理脚本
@@ -539,8 +537,8 @@ const option = {
   // 图表内边距
   appendPadding: [0, 0, 0, 0],
   data,
-  xField: 'Date',
-  yField: 'scales',
+  xField: 'date',
+  yField: 'value',
   smooth: false,
   startOnZero: true,
   isStack: false,

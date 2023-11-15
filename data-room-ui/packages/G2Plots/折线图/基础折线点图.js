@@ -468,15 +468,14 @@ const setting = [
 
 // 模拟数据
 const data = [
-  { year: '1991', value: 3 },
-  { year: '1992', value: 4 },
-  { year: '1993', value: 3.5 },
-  { year: '1994', value: 5 },
-  { year: '1995', value: 4.9 },
-  { year: '1996', value: 6 },
-  { year: '1997', value: 7 },
-  { year: '1998', value: 9 },
-  { year: '1999', value: 13 }
+  { date: '2016年', value: 100 },
+  { date: '2017年', value: 200 },
+  { date: '2018年', value: 300 },
+  { date: '2019年', value: 200 },
+  { date: '2020年', value: 100 },
+  { date: '2021年', value: 200 },
+  { date: '2022年', value: 300 },
+  { date: '2023年', value: 400 }
 ]
 // 配置处理脚本
 const optionHandler = 'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
@@ -491,7 +490,7 @@ const option = {
   // 图表内边距
   appendPadding: [0, 0, 0, 0],
   data,
-  xField: 'year',
+  xField: 'date',
   yField: 'value',
   label: {
     style: {

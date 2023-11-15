@@ -437,38 +437,12 @@ const setting = [
 
 // 模拟数据
 const data = [
-  {
-    type: '家具家电',
-    sales: 38
-  },
-  {
-    type: '粮油副食',
-    sales: 52
-  },
-  {
-    type: '生鲜水果',
-    sales: 61
-  },
-  {
-    type: '美容洗护',
-    sales: 145
-  },
-  {
-    type: '母婴用品',
-    sales: 48
-  },
-  {
-    type: '进口食品',
-    sales: 38
-  },
-  {
-    type: '食品饮料',
-    sales: 38
-  },
-  {
-    type: '家庭清洁',
-    sales: 38
-  }
+  { date: '2018年', value: 300 },
+  { date: '2019年', value: 200 },
+  { date: '2020年', value: 100 },
+  { date: '2021年', value: 200 },
+  { date: '2022年', value: 300 },
+  { date: '2023年', value: 400 }
 ]
 // 配置处理脚本
 const optionHandler = 'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
@@ -483,8 +457,8 @@ const option = {
   // 图表内边距
   appendPadding: [0, 0, 0, 0],
   data,
-  xField: 'type',
-  yField: 'sales',
+  xField: 'date',
+  yField: 'value',
   color: '',
   columnStyle: { // 设置柱子渐变色
     fill: 'l(90) 0:#5AA6AB 1:#217AB1'

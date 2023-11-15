@@ -562,11 +562,11 @@ const setting = [
 
 // 模拟数据
 const data = [
-  { year: '1951 年', value: 38 },
-  { year: '1952 年', value: 52 },
-  { year: '1956 年', value: 61 },
-  { year: '1957 年', value: 145 },
-  { year: '1958 年', value: 48 }
+  { date: '2019年', value: 38 },
+  { date: '2020年', value: 52 },
+  { date: '2021年', value: 61 },
+  { date: '2022年', value: 145 },
+  { date: '2023年', value: 48 }
 ]
 
 // 配置处理脚本
@@ -593,11 +593,11 @@ const option = {
   renderer: 'canvas',
   data,
   xField: 'value',
-  yField: 'year',
+  yField: 'date',
   minBarWidth: 0,
   maxBarWidth: 100,
   // shape: 'default', // 条形图形状
-  seriesField: 'year',
+  seriesField: 'date',
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
   legendEnable: true,
   legendLayout: 'vertical',

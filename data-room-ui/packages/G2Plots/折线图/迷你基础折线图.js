@@ -95,7 +95,7 @@ const option = {
   appendPadding: [0, 0, 0, 0],
   xField:'',
   yField:'',
-  data: [16, 95, 35, 27, 50, 36, 78, 99, 60, 62, 37],
+  data: [100, 200, 300, 200, 100, 200, 300, 400],
   height: 60,
   autoFit: true,
   smooth: true,
