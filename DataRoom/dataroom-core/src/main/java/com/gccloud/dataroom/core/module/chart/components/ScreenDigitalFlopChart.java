@@ -5,6 +5,8 @@ import com.gccloud.dataroom.core.module.chart.bean.Chart;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * @author hongyang
  * @version 1.0
@@ -69,6 +71,9 @@ public class ScreenDigitalFlopChart extends Chart {
 
         @ApiModelProperty("字体")
         private String fontFamily;
+
+        @ApiModelProperty("线条样式")
+        private Map<String, Object> lineStyle;
 
 
 
