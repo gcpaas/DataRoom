@@ -115,6 +115,18 @@ const setting = [
     groupName: 'graph'
   },
   {
+    label: '数据标签大小',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'conversionTag_style_fontSize',
+    // 对应options中的字段
+    optionField: 'conversionTag.style.fontSize',
+    value: 10,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
     label: '颜色',
     // 设置组件类型
     type: 'colorSelect',

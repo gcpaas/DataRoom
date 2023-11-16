@@ -101,7 +101,7 @@ const setting = [
     field: 'label_style_fontSize',
     // 对应options中的字段
     optionField: 'label.style.fontSize',
-    value: 12,
+    value: 10,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -216,7 +216,7 @@ const setting = [
     optionField: 'xAxis.title.style.fill',
     // 是否多选
     multiple: false,
-    value: '#8C8C8C',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -276,7 +276,7 @@ const setting = [
     optionField: 'xAxis.tickLine.style.stroke',
     // 是否多选
     multiple: false,
-    value: '#d0d0d0',
+    value: '#C9CDD4',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -379,7 +379,7 @@ const setting = [
     optionField: 'yAxis.title.style.fill',
     // 是否多选
     multiple: false,
-    value: '#8C8C8C',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -503,7 +503,7 @@ const option = {
       text: '',
       position: 'end',
       style: {
-        fill: '#8C8C8C',
+        fill: '#e9e9e9',
         fontSize: 12
       }
     },
@@ -526,7 +526,7 @@ const option = {
     },
     tickLine: {
       style: {
-        stroke: '#d0d0d0',
+        stroke: '#C9CDD4',
         lineWidth: 1
       }
     }

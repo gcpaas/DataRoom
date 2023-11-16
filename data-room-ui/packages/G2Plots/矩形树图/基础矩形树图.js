@@ -139,7 +139,7 @@ const setting = [
     type: 'colorPicker',
     field: 'legendItemName_style_fill',
     optionField: 'legendItemName.style.fill',
-    value: '#595959',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'legend'
   },
@@ -216,7 +216,7 @@ const option = {
   legend: false,
   legendItemName: {
     style: {
-      fill: '#595959',
+      fill: '#e9e9e9',
       fontSize: 12,
       fontWeight: 400
     }

@@ -65,7 +65,7 @@ const setting = [
     type: 'switch', // 设置组件类型
     field: 'smooth', // 字段
     optionField: 'smooth', // 对应options中的字段
-    value: false,
+    value: true,
     active: true,
     inactive: false,
     tabName: 'custom',
@@ -108,10 +108,6 @@ const setting = [
     value: 'circle',
     tabName: 'custom',
     options: [
-      {
-        label: '无',
-        value: false
-      },
       {
         label: '空心圆',
         value: 'hollow-circle'
@@ -169,11 +165,11 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '数据标签字体大小',
+    label: '数据标签大小',
     type: 'inputNumber',
     field: 'label_style_fontSize',
     optionField: 'label.style.fontSize',
-    value: 0,
+    value: 10,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -278,7 +274,7 @@ const setting = [
     type: 'colorPicker',
     field: 'legendItemName_style_fill',
     optionField: 'legendItemName.style.fill',
-    value: '#595959',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'legend'
   },
@@ -330,7 +326,7 @@ const setting = [
     optionField: 'xAxis.title.style.fill',
     // 是否多选
     multiple: false,
-    value: '#8C8C8C',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -390,7 +386,7 @@ const setting = [
     optionField: 'xAxis.tickLine.style.stroke',
     // 是否多选
     multiple: false,
-    value: '#d0d0d0',
+    value: '#C9CDD4',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -493,7 +489,7 @@ const setting = [
     optionField: 'yAxis.title.style.fill',
     // 是否多选
     multiple: false,
-    value: '#8C8C8C',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -615,21 +611,21 @@ const option = {
   yField: 'value',
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
   seriesField: 'type',
-  smooth: false,
+  smooth: true,
   legendEnable: false,
   legendLayout: 'vertical',
   legendPosition: 'top',
   legend: false,
   legendItemName: {
     style: {
-      fill: '#595959',
+      fill: '#e9e9e9',
       fontSize: 12,
       fontWeight: 400
     }
   },
   startOnZero: true,
   point: {
-    size: 5,
+    size: 3,
     shape: 'circle',
   },
   label: {
@@ -643,7 +639,7 @@ const option = {
       text: '',
       position: 'end',
       style: {
-        fill: '#8C8C8C',
+        fill: '#e9e9e9',
         fontSize: 12
       }
     },
@@ -666,7 +662,7 @@ const option = {
     },
     tickLine: {
       style: {
-        stroke: '#d0d0d0',
+        stroke: '#C9CDD4',
         lineWidth: 1
       }
     }

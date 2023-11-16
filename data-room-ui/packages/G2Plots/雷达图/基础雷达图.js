@@ -179,12 +179,20 @@ const setting = [
     field: 'label_style_fontSize',
     // 对应options中的字段
     optionField: 'label.style.fontSize',
-    value: 12,
+    value: 10,
     tabName: 'custom',
     groupName: 'graph'
   },
-
-  // x轴 xAxis
+  // 网格线
+  {
+    label: '颜色',
+    type: 'colorPicker',
+    field: 'yAxis_grid_line_style_stroke',
+    optionField: 'yAxis.grid.line.style.stroke',
+    value: '#E5E6EB10',
+    tabName: 'custom',
+    groupName: 'grid'
+  },
   {
     label: '显示外层圆圈',
     type: 'switch',
@@ -213,6 +221,26 @@ const setting = [
     value: 'rgba(0, 0, 0, 0.04)',
     tabName: 'custom',
     groupName: 'grid'
+  },
+  {
+    label: '标签大小',
+    type: 'inputNumber',
+    field: 'xAxis_label_style_fontSize',
+    optionField: 'xAxis.label.style.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签颜色',
+    type: 'colorPicker',
+    field: 'xAxis_label_style_fill',
+    optionField: 'xAxis.label.style.fill',
+    // 是否多选
+    multiple: false,
+    value: '#e9e9e9',
+    tabName: 'custom',
+    groupName: 'xAxis'
   },
   {
     label: 'y轴最小值',
@@ -286,6 +314,12 @@ const option = {
     lineEnabled: false,
     line: {},
     tickLine: null,
+    label: {
+      style: {
+        fill: '#e9e9e9',
+        fontSize: 12
+      }
+    },
     grid: {
       line: {
         style: {
@@ -303,6 +337,7 @@ const option = {
       line: {
         type: 'line',
         style: {
+          stroke: '#E5E6EB10',
           lineDash: null,
         },
       },

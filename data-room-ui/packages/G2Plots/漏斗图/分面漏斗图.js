@@ -138,7 +138,7 @@ const setting = [
     field: 'label_style_fontSize',
     // 对应options中的字段
     optionField: 'label.style.fontSize',
-    value: 12,
+    value: 10,
     tabName: 'custom',
     groupName: 'graph'
   },

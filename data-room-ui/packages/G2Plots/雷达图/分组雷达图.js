@@ -165,6 +165,86 @@ const setting = [
     tabName: 'custom',
     groupName: 'graph'
   },
+  {
+    label: '数据标签',
+    type: 'switch', // 设置组件类型
+    field: 'label_style_opacity', // 字段
+    optionField: 'label.style.opacity', // 对应options中的字段
+    value: 0,
+    active: 1,
+    inactive: 0,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签颜色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'label_style_fill', // 字段
+    optionField: 'label.style.fill', // 对应options中的字段
+    value: '#ffffff',
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  {
+    label: '数据标签大小',
+    // 设置组件类型
+    type: 'inputNumber',
+    // 字段
+    field: 'label_style_fontSize',
+    // 对应options中的字段
+    optionField: 'label.style.fontSize',
+    value: 10,
+    tabName: 'custom',
+    groupName: 'graph'
+  },
+  // 网格线
+  {
+    label: '颜色',
+    type: 'colorPicker',
+    field: 'yAxis_grid_line_style_stroke',
+    optionField: 'yAxis.grid.line.style.stroke',
+    value: '#E5E6EB10',
+    tabName: 'custom',
+    groupName: 'grid'
+  },
+  {
+    label: '奇数圈底色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'yAxis_grid_alternateColor1', // 字段
+    optionField: 'yAxis.grid.alternateColor1', // 对应options中的字段
+    value: 'rgba(0, 0, 0, 0.04)',
+    tabName: 'custom',
+    groupName: 'grid'
+  },
+  {
+    label: '偶数圈底色',
+    type: 'colorPicker', // 设置组件类型
+    field: 'yAxis_grid_alternateColor2', // 字段
+    optionField: 'yAxis.grid.alternateColor2', // 对应options中的字段
+    value: 'rgba(0, 0, 0, 0.04)',
+    tabName: 'custom',
+    groupName: 'grid'
+  },
+  {
+    label: '标签大小',
+    type: 'inputNumber',
+    field: 'xAxis_label_style_fontSize',
+    optionField: 'xAxis.label.style.fontSize',
+    value: 12,
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
+  {
+    label: '标签颜色',
+    type: 'colorPicker',
+    field: 'xAxis_label_style_fill',
+    optionField: 'xAxis.label.style.fill',
+    // 是否多选
+    multiple: false,
+    value: '#e9e9e9',
+    tabName: 'custom',
+    groupName: 'xAxis'
+  },
   // 图例 legend
   {
     label: '显示',
@@ -227,7 +307,7 @@ const setting = [
     type: 'colorPicker',
     field: 'legendItemName_style_fill',
     optionField: 'legendItemName.style.fill',
-    value: '#595959',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'legend'
   },
@@ -269,7 +349,8 @@ const data = [
 const optionHandler = 'option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
   '\n  if (option.legendEnable) {\n' +
   '    option.legend.itemName = option.legendItemName\n' +
-  '  }'
+  '  }' +
+  'option.yAxis.grid.alternateColor = [option.yAxis.grid.alternateColor1, option.yAxis.grid.alternateColor2]'
 
 // 数据处理脚本
 const dataHandler = ''
@@ -292,7 +373,7 @@ const option = {
   legend: false,
   legendItemName: {
     style: {
-      fill: '#595959',
+      fill: '#e9e9e9',
       fontSize: 12,
       fontWeight: 400
     }
@@ -308,6 +389,12 @@ const option = {
   xAxis: {
     line: null,
     tickLine: null,
+    label: {
+      style: {
+        fill: '#e9e9e9',
+        fontSize: 12
+      }
+    },
     grid: {
       line: {
         style: {
@@ -326,10 +413,27 @@ const option = {
     min: 0,
     label: false,
     grid: {
-      alternateColor: 'rgba(0, 0, 0, 0.04)'
+      line: {
+        type: 'line',
+        style: {
+          stroke: '#E5E6EB10',
+          lineDash: null
+        },
+      },
+      alternateColor1: 'rgba(0, 0, 0, 0.04)',
+      alternateColor2: 'rgba(0, 0, 0, 0.04)',
+      alternateColor: ['rgba(0, 0, 0, 0.04)', 'rgba(0, 0, 0, 0.04)']
     }
   },
-  area: 1
+  area: 1,
+  label: {
+    autoRotate: false,
+    style: {
+      fill: '#ffffff',
+      opacity: 1,
+      fontSize: 12
+    }
+  }
 }
 
 export default {

@@ -58,10 +58,6 @@ const setting = [
     tabName: 'custom',
     options: [
       {
-        label: '无',
-        value: false
-      },
-      {
         label: '空心圆',
         value: 'hollow-circle'
       },
@@ -113,7 +109,7 @@ const setting = [
     type: 'inputNumber',
     field: 'point_size',
     optionField: 'point.size',
-    value: 2,
+    value: 3,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -124,16 +120,16 @@ const setting = [
     optionField: 'point.style.fill',
     // 是否多选
     multiple: false,
-    value: '#ffffff',
+    value: '#6B74E4',
     tabName: 'custom',
     groupName: 'graph'
   },
   {
-    label: '数据标签字体大小',
+    label: '数据标签大小',
     type: 'inputNumber',
     field: 'label_style_fontSize',
     optionField: 'label.style.fontSize',
-    value: 12,
+    value: 10,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -142,7 +138,7 @@ const setting = [
     type: 'colorPicker',
     field: 'label_style_fill',
     optionField: 'label.style.fill',
-    value: 'rgba(255,255,255,1)',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -160,7 +156,7 @@ const setting = [
     type: 'gradual',
     field: 'lineStyle_stroke',
     optionField: 'lineStyle.stroke',
-    value: 'l(0) 0:#6b74e4 1:#4391f4',
+    value: 'l(0) 0:#6b74e4 1:#6b74e4',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -243,7 +239,7 @@ const setting = [
     optionField: 'xAxis.title.style.fill',
     // 是否多选
     multiple: false,
-    value: '#8C8C8C',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -303,7 +299,7 @@ const setting = [
     optionField: 'xAxis.tickLine.style.stroke',
     // 是否多选
     multiple: false,
-    value: '#d0d0d0',
+    value: '#C9CDD4',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -408,7 +404,7 @@ const setting = [
     optionField: 'yAxis.title.style.fill',
     // 是否多选
     multiple: false,
-    value: '#8C8C8C',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -517,15 +513,15 @@ const option = {
   yField: 'value',
   label: {
     style: {
-      fill: '#fff',
-      fontSize: 12
+      fill: '#e9e9e9',
+      fontSize: 10
     }
   },
   point: {
-    size: 5,
+    size: 3,
     shape: 'circle',
     style: {
-      fill: 'white',
+      fill: '6B74E4',
       stroke: '#5B8FF9',
       lineWidth: 2
     }
@@ -542,14 +538,14 @@ const option = {
   },
   lineStyle: {
     lineWidth: 2,
-    stroke: 'l(0) 0:#6b74e4 1:#4391f4'
+    stroke: 'l(0) 0:#6b74e4 1:#6b74e4'
   },
   xAxis: {
     title: {
       text: '',
       position: 'end',
       style: {
-        fill: '#8C8C8C',
+        fill: '#e9e9e9',
         fontSize: 12
       }
     },
@@ -572,7 +568,7 @@ const option = {
     },
     tickLine: {
       style: {
-        stroke: '#d0d0d0',
+        stroke: '#C9CDD4',
         lineWidth: 1
       }
     }

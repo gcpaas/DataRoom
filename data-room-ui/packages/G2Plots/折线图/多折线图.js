@@ -100,10 +100,6 @@ const setting = [
     tabName: 'custom',
     options: [
       {
-        label: '无',
-        value: false
-      },
-      {
         label: '空心圆',
         value: 'hollow-circle'
       },
@@ -160,18 +156,7 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '折线点颜色',
-    type: 'colorPicker',
-    field: 'point_style_fill',
-    optionField: 'point.style.fill',
-    // 是否多选
-    multiple: false,
-    value: '#ffffff',
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
-    label: '数据标签字体大小',
+    label: '数据标签大小',
     type: 'inputNumber',
     field: 'label_style_fontSize',
     optionField: 'label.style.fontSize',
@@ -280,7 +265,7 @@ const setting = [
     type: 'colorPicker',
     field: 'legendItemName_style_fill',
     optionField: 'legendItemName.style.fill',
-    value: '#595959',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'legend'
   },
@@ -332,7 +317,7 @@ const setting = [
     optionField: 'xAxis.title.style.fill',
     // 是否多选
     multiple: false,
-    value: '#8C8C8C',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -392,7 +377,7 @@ const setting = [
     optionField: 'xAxis.tickLine.style.stroke',
     // 是否多选
     multiple: false,
-    value: '#d0d0d0',
+    value: '#C9CDD4',
     tabName: 'custom',
     groupName: 'xAxis'
   },
@@ -495,7 +480,7 @@ const setting = [
     optionField: 'yAxis.title.style.fill',
     // 是否多选
     multiple: false,
-    value: '#8C8C8C',
+    value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'yAxis'
   },
@@ -599,6 +584,7 @@ if(autoHide){
 } else {
   option.xAxis.label.autoHide = false
 }
+option.point.color = setting.find(settingItem=>settingItem.field === 'color')?.value
   `
 
 // 数据处理脚本
@@ -622,17 +608,18 @@ const option = {
   legend: false,
   legendItemName: {
     style: {
-      fill: '#595959',
+      fill: '#e9e9e9',
       fontSize: 12,
       fontWeight: 400
     }
   },
   color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
   point: {
-    size: 5,
+    size: 3,
     shape: 'circle',
+    color: ['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'],
     style: {
-      fill: 'white',
+      // fill: 'white',
       stroke: '#5B8FF9',
       lineWidth: 0
     }
@@ -648,7 +635,7 @@ const option = {
       text: '',
       position: 'end',
       style: {
-        fill: '#8C8C8C',
+        fill: '#e9e9e9',
         fontSize: 12
       }
     },
@@ -671,7 +658,7 @@ const option = {
     },
     tickLine: {
       style: {
-        stroke: '#d0d0d0',
+        stroke: '#C9CDD4',
         lineWidth: 1
       }
     }

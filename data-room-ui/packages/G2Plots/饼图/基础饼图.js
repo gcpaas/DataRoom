@@ -277,7 +277,7 @@ const option = {
   label: {
     autoRotate: true,
     type: 'inner',
-    labelHeight: 50,
+    // offset: '-50%',
     labelLine: {
       style: {
         stroke: '#5B8FF9',
