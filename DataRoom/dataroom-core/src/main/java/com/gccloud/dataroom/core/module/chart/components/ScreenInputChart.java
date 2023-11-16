@@ -111,5 +111,8 @@ public class ScreenInputChart extends Chart {
         @ApiModelProperty(notes = "占位符字体颜色")
         private String placeholderColor;
 
+        @ApiModelProperty(notes = "占位符字体大小")
+        private Integer placeholderFontSize;
+
     }
 }
