@@ -37,6 +37,30 @@ public class ScreenScrollRankingChart extends Chart {
         @ApiModelProperty(notes = "是否自动排序")
         private Boolean sort;
 
+        @ApiModelProperty("排名字体大小")
+        private Integer rankFontSize;
+
+        @ApiModelProperty("排名字体颜色")
+        private String rankColor;
+
+        @ApiModelProperty("名称字体大小")
+        private Integer infoNameFontSize;
+
+        @ApiModelProperty("名称字体颜色")
+        private String infoNameColor;
+
+        @ApiModelProperty("值字体大小")
+        private Integer rankingValueFontSize;
+
+        @ApiModelProperty("值字体颜色")
+        private String rankingValueColor;
+
+        @ApiModelProperty("内部柱子颜色")
+        private String insideColumnColor;
+
+        @ApiModelProperty("排名柱子底部颜色")
+        private String rankingColumnBorderBottomColor;
+
     }
 
 }

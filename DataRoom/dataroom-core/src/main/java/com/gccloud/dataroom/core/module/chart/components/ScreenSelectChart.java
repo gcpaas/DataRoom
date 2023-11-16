@@ -52,6 +52,15 @@ public class ScreenSelectChart extends Chart {
         @ApiModelProperty("占位提示")
         private String placeholder;
 
+        @ApiModelProperty("边框颜色")
+        private String borderColor;
+
+        @ApiModelProperty("占位符字体颜色")
+        private String placeholderColor;
+
+        @ApiModelProperty("占位符字体大小")
+        private Integer placeholderFontSize;
+
     }
 
 

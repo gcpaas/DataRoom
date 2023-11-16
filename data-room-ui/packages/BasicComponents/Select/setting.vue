@@ -19,7 +19,7 @@
           <div class="lc-field-body">
             <PosWhSetting :config="config" />
           </div>
-         <SettingTitle>旋转</SettingTitle>
+          <SettingTitle>旋转</SettingTitle>
           <div class="lc-field-body">
             <RotateSetting
               :config="config"
@@ -48,6 +48,29 @@
               <ColorPicker
                 v-model="config.customize.fontColor"
                 :predefine="predefineThemeColors"
+              />
+            </el-form-item>
+            <!-- 边框颜色 -->
+            <el-form-item label="边框颜色">
+              <ColorPicker
+                v-model="config.customize.borderColor"
+                :predefine="predefineThemeColors"
+              />
+            </el-form-item>
+            <!-- 占位符字体颜色 -->
+            <el-form-item label="占位符字体颜色">
+              <ColorPicker
+                v-model="config.customize.placeholderColor"
+                :predefine="predefineThemeColors"
+              />
+            </el-form-item>
+            <!-- 占位符字体大小 -->
+            <el-form-item label="占位符字体大小">
+              <el-input-number
+                v-model="config.customize.placeholderFontSize"
+                class="bs-el-input-number"
+                :min="12"
+                :max="100"
               />
             </el-form-item>
           </div>
@@ -93,7 +116,7 @@ import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetti
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
-import {predefineColors} from "data-room-ui/js/utils/colorList";
+import { predefineColors } from 'data-room-ui/js/utils/colorList'
 export default {
   name: 'Border14Setting',
   components: {
@@ -109,7 +132,7 @@ export default {
       type: Object,
       required: true
     },
-     predefineThemeColors: {
+    predefineThemeColors: {
       type: Array,
       default: () => predefineColors
     }

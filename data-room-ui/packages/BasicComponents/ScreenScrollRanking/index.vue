@@ -8,6 +8,16 @@
       class="ranking-box"
       :class="{'light-theme':customTheme === 'light','auto-theme':customTheme =='dark'}"
       :config="option"
+      :style="{
+        '--rank-font-size':customize.rankFontSize + 'px',
+        '--rank-color':customize.rankColor,
+        '--info-name-font-size':customize.infoNameFontSize + 'px',
+        '--info-name-color':customize.infoNameColor,
+        '--ranking-value-font-size':customize.rankingValueFontSize + 'px',
+        '--ranking-value-color':customize.rankingValueColor,
+        '--inside-column-color':customize.insideColumnColor,
+        '--ranking-column-border-bottom-color':customize.rankingColumnBorderBottomColor
+      }"
       @click="rowClick"
     />
   </div>
@@ -43,6 +53,9 @@ export default {
         return { ...this.config.customize, data: this.config.option.data }
       },
       set (value) {}
+    },
+    customize(){
+      return this.config.customize
     }
   },
   watch: {
@@ -72,7 +85,7 @@ export default {
 
 <style lang="scss" scoped>
 .light-theme{
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   color: #000000;
 }
 .auto-theme{
@@ -133,5 +146,26 @@ export default {
     background: #dddddd !important;
     border-radius: 10px;
   }
-
+::v-deep .dv-scroll-ranking-board{
+  .ranking-info{
+    .rank{
+      font-size: var(--rank-font-size);
+      color: var(--rank-color);
+    }
+    .info-name{
+      font-size: var(--info-name-font-size);
+      color: var(--info-name-color);
+    }
+    .ranking-value{
+      font-size: var(--ranking-value-font-size);
+      color: var(--ranking-value-color);
+    }
+  }
+  .ranking-column{
+    border-bottom: 2px solid var(--ranking-column-border-bottom-color);
+    .inside-column{
+      background-color: var(--inside-column-color);
+    }
+  }
+}
 </style>

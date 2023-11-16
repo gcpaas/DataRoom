@@ -164,7 +164,6 @@ export default {
           })
         }
       })
-      config.option = { ...config.option, ...option }
       return config
     },
     dataFormatting (config, data) {
@@ -260,7 +259,7 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/style/echartStyle';
 .light-theme{
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   color: #000000;
 }
 .auto-theme{

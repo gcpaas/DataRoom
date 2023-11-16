@@ -44,7 +44,15 @@ const customConfig = {
     carousel: 'single',
     unit: '',
     sort: true,
-    valueFormatter: undefined
+    valueFormatter: undefined,
+    rankFontSize: 13,
+    rankColor: '#1370fb',
+    infoNameFontSize: 13,
+    infoNameColor: '#ffffff',
+    rankingValueFontSize: 13,
+    rankingValueColor: '#fff',
+    insideColumnColor: '#1370fb',
+    rankingColumnBorderBottomColor: '#1370fb',
   }
 }
 export const dataConfig = {
