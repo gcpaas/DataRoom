@@ -48,8 +48,8 @@ const customConfig = {
     bgColor: '#007aff',
     fontSize: 100,
     width: 100,
-    borderRadius: 10,
-    borderColor: '#fff',
+    borderRadius: 0,
+    borderColor: '',
     borderWidth: 1,
     formatter: 3,
     fontWeight: 500,
@@ -59,7 +59,11 @@ const customConfig = {
     numberDigits: 5,
     placeHolder: '0',
     height: 125,
-    fontFamily: ''
+    fontFamily: 'ds-digitalbold',
+    lineStyle: {
+      height: 4,
+      color: '#000000'
+    }
   }
 }
 export const dataConfig = {

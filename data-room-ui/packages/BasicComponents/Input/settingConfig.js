@@ -60,7 +60,9 @@ const customConfig = {
     // 占位符
       placeholder: '请输入',
       // 占位符字体颜色
-      placeholderColor: 'red'
+      placeholderColor: '#999999',
+      // 占位符字体大小
+      placeholderFontSize: 14
     },
     // 边框样式
     borderStyle: {

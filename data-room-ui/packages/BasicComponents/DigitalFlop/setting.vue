@@ -172,6 +172,22 @@
                 clearable
               />
             </el-form-item>
+            <!-- 中线宽度 -->
+            <el-form-item label="中线宽度">
+              <el-input-number
+                v-model="config.customize.lineStyle.height"
+                class="bs-el-input-number"
+                :min="0"
+                :step="1"
+              />
+            </el-form-item>
+            <!-- 中线颜色 -->
+            <el-form-item label="中线颜色">
+              <ColorPicker
+                v-model="config.customize.lineStyle.color"
+                :predefine="predefineThemeColors"
+              />
+            </el-form-item>
           </div>
         </el-form>
       </div>

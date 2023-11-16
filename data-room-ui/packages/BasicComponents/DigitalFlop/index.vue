@@ -19,8 +19,9 @@
           color: option.color,
           'border-radius': option.borderRadius + 'px',
           'font-weight': option.fontWeight,
-          'margin-right':
-            index !== option.data.length - 1 ? option.marginRight + 'px' : ''
+          'margin-right': index !== option.data.length - 1 ? option.marginRight + 'px' : '',
+          '--line-height': option.lineStyle.height + 'px',
+          '--line-color': option.lineStyle.color
         }"
       >
         {{ item }}
@@ -120,6 +121,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.content_item{
+  position: relative;
+  &::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: var(--line-height);
+    transform: translateY( -cale(--line-height / 2) + 'px');
+    background-color: var(--line-color);
+  }
+}
 .light-theme {
   background-color: #ffffff;
   color: #000000;

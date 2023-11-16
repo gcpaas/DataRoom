@@ -72,7 +72,7 @@ export default {
 
 <style lang="scss" scoped>
 .light-theme{
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   color: #000000;
 }
 .auto-theme{

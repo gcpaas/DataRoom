@@ -7,6 +7,7 @@
     :placeholder="config.customize.placeholder"
     clearable
     :filterable="filterable"
+    :style="{'--input-placeholder-color':config.customize.placeholderColor,'--input-placeholder-font-size':config.customize.placeholderFontSize + 'px'}"
     @visible-change="visibleChange"
     @change="selectChange"
     @mouseenter.native="mouseenter"
@@ -50,7 +51,7 @@ export default {
       return (this.$route.path === window?.BS_CONFIG?.routers?.previewUrl) || (this.$route.path === '/big-screen/preview')
     }
   },
-  watch: { },
+  watch: {},
   created () {
   },
   mounted () {
@@ -100,6 +101,8 @@ export default {
       selectInputEl.style.fontSize = config.customize.fontSize + 'px'
       // 字体颜色
       selectInputEl.style.color = config.customize.fontColor
+      // 边框颜色
+      selectInputEl.style.borderColor = config.customize.borderColor
       // 下拉图标
       const selectDropdownIcon = document.querySelector(`.select-${config.code} .el-icon-arrow-up`)
       selectDropdownIcon.style.fontSize = config.customize.fontSize + 'px'
@@ -131,8 +134,8 @@ export default {
         }
         // 下拉项hover颜色
         const selectDropdownWrap = document.querySelector(`.select-popper-${this.innerConfig.code} .el-select-dropdown__wrap`)
-        selectDropdownWrap.style.setProperty('--dropDownHoverFontColor', this.innerConfig.customize.dropDownHoverFontColor)
-        selectDropdownWrap.style.setProperty('--dropDownHoverBackgroundColor', this.innerConfig.customize.dropDownHoverBackgroundColor)
+        selectDropdownWrap.style.setProperty('--drop-down-hover-font-color', this.innerConfig.customize.dropDownHoverFontColor)
+        selectDropdownWrap.style.setProperty('--drop-down-hover-background-color', this.innerConfig.customize.dropDownHoverBackgroundColor)
       }
       // 不是激活项的还是使用背景颜色
       const selectDropdownItemEl = document.querySelectorAll(`.select-popper-${this.innerConfig.code} .el-select-dropdown__item`)
@@ -148,7 +151,7 @@ export default {
     mouseenter () {
       if (this.value) {
         setTimeout(() => {
-        // 清空图标
+          // 清空图标
           const selectDropdownCloseIcon = document.querySelector(`.select-${this.innerConfig.code} .el-icon-circle-close`)
           if (selectDropdownCloseIcon) {
             selectDropdownCloseIcon.style.fontSize = this.innerConfig.customize.fontSize + 'px'
@@ -162,22 +165,24 @@ export default {
 </script>
 
 <style lang="scss">
-.basic-component-select{
-  color: '';
+.basic-component-select {
   .el-select-dropdown__wrap {
     margin-bottom: 0px !important;
   }
+
   .el-select-group__wrap:not(:last-of-type)::after {
     background-color: transparent !important;
   }
-  .popper__arrow{
+
+  .popper__arrow {
     bottom: -6px !important;
-    border-top-color:var(--color) !important;
-    border-bottom-color:var(--color) !important;
-    &::after{
+    border-top-color: var(--color) !important;
+    border-bottom-color: var(--color) !important;
+
+    &::after {
       bottom: 0px !important;
-      border-top-color:var(--color) !important;
-      border-bottom-color:var(--color) !important;
+      border-top-color: var(--color) !important;
+      border-bottom-color: var(--color) !important;
     }
   }
 }
@@ -190,23 +195,29 @@ export default {
 
   ::v-deep .el-input {
     height: 100% !important;
-    .el-select__caret{
+
+    .el-select__caret {
       width: 100%;
       height: 100%;
       display: flex;
       align-items: center;
     }
+
     //  选择器输入框样式
     .el-input__inner {
       height: 100% !important;
-      border-color: none !important;
     }
   }
+  ::v-deep .el-input__inner::placeholder {
+      color: var(--input-placeholder-color);
+      font-size: var(--input-placeholder-font-size);
+    }
   .el-select-dropdown__item.hover,
   .el-select-dropdown__item:hover {
-    color: var(--dropDownHoverFontColor) !important;
-    background-color: var(--dropDownHoverBackgroundColor) !important;
+    color: var(--drop-down-hover-font-color) !important;
+    background-color: var(--drop-down-hover-background-color) !important;
   }
+
   .el-tag.el-tag--info {
     color: var(--bs-el-text) !important;
   }

@@ -45,15 +45,21 @@ const customConfig = {
     // 输入框字体大小
     fontSize: 14,
     // 输入框字体颜色
-    fontColor: '#FFFFFF',
+    fontColor: '#ffffff',
+    // 边框颜色
+    borderColor: '#ffffff',
+    // 占位符字体颜色
+    placeholderColor: '#ffffff',
+    // 占位符字体大小
+    placeholderFontSize: 14,
     // 下拉框背景颜色
     dropDownBackgroundColor: '#35393F',
     // 下拉框字体颜色
-    dropDownFontColor: '#FFFFFF',
+    dropDownFontColor: '#ffffff',
     // 下拉项hover背景颜色
     dropDownHoverBackgroundColor: '#6A7E9D',
     // 下拉项hover字体颜色
-    dropDownHoverFontColor: '#FFFFFF'
+    dropDownHoverFontColor: '#ffffff'
   }
 }
 export const dataConfig = {

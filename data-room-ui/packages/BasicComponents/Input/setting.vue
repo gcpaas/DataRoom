@@ -41,7 +41,6 @@
               <el-input-number
                 v-model="config.customize.titleStyle.fontSize"
                 class="bs-el-input-number"
-                controls-position="right"
                 :min="12"
                 :max="100"
               />
@@ -62,7 +61,6 @@
               <el-input-number
                 v-model="config.customize.titleStyle.marginRight"
                 class="bs-el-input-number"
-                controls-position="right"
                 :min="0"
                 :max="100"
               />
@@ -72,7 +70,7 @@
           <div class="lc-field-body">
             <PosWhSetting :config="config" />
           </div>
-         <SettingTitle>旋转</SettingTitle>
+          <SettingTitle>旋转</SettingTitle>
           <div class="lc-field-body">
             <RotateSetting
               :config="config"
@@ -84,7 +82,6 @@
               <el-input-number
                 v-model="config.customize.inputStyle.fontSize"
                 class="bs-el-input-number"
-                controls-position="right"
                 :min="12"
                 :max="100"
               />
@@ -117,6 +114,20 @@
                 clearable
               />
             </el-form-item>
+            <el-form-item label="占位符字体颜色">
+              <ColorPicker
+                v-model="config.customize.placeholderStyle.placeholderColor"
+                :predefine="predefineThemeColors"
+              />
+            </el-form-item>
+            <el-form-item label="占位符字体大小">
+              <el-input-number
+                v-model="config.customize.placeholderStyle.placeholderFontSize"
+                class="bs-el-input-number"
+                :min="12"
+                :max="100"
+              />
+            </el-form-item>
             <el-form-item label="图标选择">
               <IconPicker v-model="config.customize.icon.name" />
             </el-form-item>
@@ -134,12 +145,6 @@
                 />
               </el-select>
             </el-form-item>
-            <!-- <el-form-item label="占位符字体颜色">
-              <ColorPicker
-                v-model="config.customize.placeholderStyle.placeholderColor"
-                :predefine="predefineThemeColors"
-              />
-            </el-form-item> -->
             <el-form-item label="边框颜色">
               <ColorPicker
                 v-model="config.customize.borderStyle.borderColor"
@@ -150,7 +155,6 @@
               <el-input-number
                 v-model="config.customize.borderStyle.borderWidth"
                 class="bs-el-input-number"
-                controls-position="right"
                 :min="0"
                 :max="10"
               />
@@ -174,7 +178,6 @@
               <el-input-number
                 v-model="config.customize.borderStyle.borderRadius"
                 class="bs-el-input-number"
-                controls-position="right"
                 :min="0"
                 :max="100"
               />
@@ -192,7 +195,7 @@ import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
-import {predefineColors} from "data-room-ui/js/utils/colorList";
+import { predefineColors } from 'data-room-ui/js/utils/colorList'
 export default {
   name: 'InputSetting',
   components: {
@@ -208,7 +211,7 @@ export default {
       type: Object,
       required: true
     },
-     predefineThemeColors: {
+    predefineThemeColors: {
       type: Array,
       default: () => predefineColors
     }

@@ -12,9 +12,9 @@
       v-model="value"
       type="text"
       resize="both"
-      class="input"
+      class="input-component"
       :placeholder="config.customize.placeholderStyle.placeholder"
-      :style="{ backgroundColor: config.customize.backgroundStyle.backgroundColor }"
+      :style="{ backgroundColor: config.customize.backgroundStyle.backgroundColor,'--input-placeholder-color': config.customize.placeholderStyle.placeholderColor, '--input-placeholder-font-size': config.customize.placeholderStyle.placeholderFontSize + 'px' }"
       @input="handleInput"
       @keyup.enter.native="keyupEnter"
     >
@@ -116,6 +116,14 @@ export default {
 }
 </script>
 
+<style>
+/* 修改输入框的 placeholder 文字颜色 */
+input::placeholder {
+  color: red; /* 设置占位文字颜色为灰色 */
+}
+
+</style>
+
 <style lang="scss" scoped>
 .basic-component-input {
   width: 100%;
@@ -125,12 +133,6 @@ export default {
     white-space: nowrap;
     align-self: center;
   }
-  // .title-top{
-  //   display: block;
-  //   text-align: center;
-  //   white-space: nowrap;
-  // }
-
   .el-input {
     height: 100%;
     width: 100%;
@@ -142,6 +144,10 @@ export default {
       border: 1px solid #DCDFE6;
     }
   }
-
+  ::v-deep .el-input__inner::placeholder {
+   color: var(--input-placeholder-color);
+   font-size: var(--input-placeholder-font-size);
+ }
 }
+
 </style>
