@@ -107,7 +107,7 @@ const setting = [
     type: 'inputNumber',
     field: 'point_size',
     optionField: 'point.size',
-    value: 3,
+    value: 0,
     tabName: 'custom',
     groupName: 'graph'
   },
