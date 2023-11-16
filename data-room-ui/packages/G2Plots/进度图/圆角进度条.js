@@ -90,7 +90,7 @@ const dataHandler = '// 取返回数据列表的第一项指标值\noption.perce
 // 图表配置 new Gauge('domName', option)
 const option = {
   // 数据将要放入到哪个字段中
-  dataKey: 'data',
+  dataKey: 'percent',
   // 图表内边距
   appendPadding: [0, 0, 0, 0],
   data,

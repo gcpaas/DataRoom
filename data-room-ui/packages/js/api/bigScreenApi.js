@@ -9,7 +9,9 @@ export function saveScreen(data) {
   data.chartList.forEach((item) => {
     if (item.type == 'customComponent') {
       const a = JSON.parse(item.option)
-      a[a.dataKey] = []
+      if (a.data) {
+        a.data = []
+      }
       item.option=JSON.stringify(a)
       item.setting=item.setting.map((x) => {
         const {field,value,...obj}=x
