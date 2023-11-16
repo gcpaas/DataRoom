@@ -1,6 +1,6 @@
 import fontList from 'data-room-ui/js/utils/fontList'
 // 配置版本号
-const version = '2023111401'
+const version = '2023111601'
 // 分类
 const category = 'Liquid'
 // 标题
@@ -212,9 +212,10 @@ const option = {
   statistic: {
     content: {
       style: {
+        opacity: 1,
         fontSize: 30,
         lineHeight: 1,
-        fill: '#d0d0d0',
+        fill: '#FFFFFF',
         fontFamily: 'ds-digitalbold'
       }
     }

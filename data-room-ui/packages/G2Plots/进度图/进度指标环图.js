@@ -35,7 +35,7 @@ const setting = [
     field: 'color2',
     // 对应options中的字段
     optionField: 'color2',
-    value: 'rgba(238, 238, 238, 1)',
+    value: '#FFFFFF',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -108,7 +108,7 @@ const setting = [
     field: 'statistic_content_style_fill',
     // 对应options中的字段
     optionField: 'statistic.content.style.fill',
-    value: 'rgba(133, 133, 133, 1)',
+    value: '#FFFFFF',
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -120,7 +120,7 @@ const setting = [
     field: 'statistic_content_style_fontSize',
     // 对应options中的字段
     optionField: 'statistic.content.style.fontSize',
-    value: 24,
+    value: 40,
     tabName: 'custom',
     groupName: 'graph'
   },
@@ -134,7 +134,7 @@ const setting = [
     optionField: 'statistic.content.style.fontFamily',
     // 是否多选
     multiple: false,
-    value: '',
+    value: 'ds-digitalbold',
     tabName: 'custom',
     options: fontList,
     groupName: 'graph'
@@ -183,20 +183,15 @@ const option = {
   appendPadding: [0, 0, 0, 0],
   data,
   color1: 'l(0) 0:#6B74E3 1:#38BBE5',
-  color2: '#d0d0d0',
+  color2: '#FFFFFF',
   autoFit: true,
   percent: 0.6,
   color: ['l(0) 0:#6B74E3 1:#38BBE5', '#d0d0d0'],
   innerRadius: 0.85,
   radius: 0.98,
   statistic: {
-    // title: {
-    //   style: { fill: '#fafafa', fontSize: 28, lineHeight: 2 },
-    //   content: '进度',
-    //   offsetY: 0
-    // },
     content: {
-      style: { fill: '#fafafa', fontSize: 28, fontFamily: '', lineHeight: 2 },
+      style: { fill: '#FFFFFF', fontSize: 40, fontFamily: 'ds-digitalbold', lineHeight: 2 },
       offsetY: 0
     }
   }
