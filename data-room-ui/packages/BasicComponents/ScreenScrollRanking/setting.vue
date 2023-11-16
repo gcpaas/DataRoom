@@ -11,7 +11,7 @@
         :model="config.customize"
         label-position="left"
         class="setting-body bs-el-form"
-        label-width="100px"
+        label-width="120px"
       >
         <SettingTitle>标题</SettingTitle>
         <div class="lc-field-body">
@@ -78,12 +78,67 @@
               :inactive-value="false"
             />
           </el-form-item>
+          <el-form-item label="序号字体颜色">
+            <ColorPicker
+              v-model="config.customize.rankColor"
+              :predefine="predefineThemeColors"
+            />
+          </el-form-item>
+          <el-form-item label="序号字体大小">
+            <el-input-number
+              v-model="config.customize.rankFontSize"
+              :min="12"
+              class="bs-el-input-number"
+              label="请输入字体大小"
+            />
+          </el-form-item>
+          <el-form-item label="左侧数据字体颜色">
+            <ColorPicker
+              v-model="config.customize.infoNameColor"
+              :predefine="predefineThemeColors"
+            />
+          </el-form-item>
+          <el-form-item label="左侧数据字体大小">
+            <el-input-number
+              v-model="config.customize.infoNameFontSize"
+              :min="12"
+              class="bs-el-input-number"
+              label="请输入字体大小"
+            />
+          </el-form-item>
+          <el-form-item label="右侧数据字体颜色">
+            <ColorPicker
+              v-model="config.customize.rankingValueColor"
+              :predefine="predefineThemeColors"
+            />
+          </el-form-item>
+          <el-form-item label="右侧数据字体大小">
+            <el-input-number
+              v-model="config.customize.rankingValueFontSize"
+              :min="12"
+              class="bs-el-input-number"
+              label="请输入字体大小"
+            />
+          </el-form-item>
+          <el-form-item label="内部列颜色">
+            <ColorPicker
+              v-model="config.customize.insideColumnColor"
+              :predefine="predefineThemeColors"
+            />
+          </el-form-item>
+          <el-form-item label="底部边框颜色">
+            <ColorPicker
+              v-model="config.customize.rankingColumnBorderBottomColor"
+              :predefine="predefineThemeColors"
+            />
+          </el-form-item>
         </div>
       </el-form>
     </el-form>
   </div>
 </template>
 <script>
+import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
@@ -93,6 +148,7 @@ export default {
   name: 'BarSetting',
   components: {
     PosWhSetting,
+    ColorPicker,
     SettingTitle,
     BorderSetting,
     RotateSetting
