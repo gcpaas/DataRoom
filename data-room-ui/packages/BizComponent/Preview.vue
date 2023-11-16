@@ -136,12 +136,15 @@ export default {
                 option[field] = set.value
               }
             } else {
+              // 如果没有这个属性，则创建该属性，并赋值为空对值
+              if (!option[field]) {
+                option[field] = {}
+              }
               option = option[field]
             }
           })
         }
       })
-      config.option = { ...config.option, ...option }
       return config
     },
     dataFormatting (config, data) {
