@@ -5,9 +5,9 @@
   >
     <div
       :style="{
-         'background-image': `linear-gradient(${customize.gradientDirection}, ${
-            gradientColor0 ? gradientColor0 : gradientColor1
-          } , ${gradientColor1 ? gradientColor1 : gradientColor0})`,
+        'background-image': `linear-gradient(${customize.gradientDirection}, ${
+          gradientColor0 ? gradientColor0 : gradientColor1
+        } , ${gradientColor1 ? gradientColor1 : gradientColor0})`,
         'border-radius':customize.borderRadius + 'px',
         border:`${customize.borderWidth}px solid ${customize.borderColor}`,
       }"
@@ -40,15 +40,16 @@
             'margin-bottom':customize.lineDistance +'px'
           }"
         >
-        {{ optionData}}
-        <span
-        :style="{
-            'margin-left':'10px',
-            'font-size': customize.unitSize + 'px',
-            color:customize.unitColor,
-          }">
-          {{unit}}
-        </span>
+          {{ optionData }}
+          <span
+            :style="{
+              'margin-left':'10px',
+              'font-size': customize.unitSize + 'px',
+              color:customize.unitColor,
+            }"
+          >
+            {{ unit }}
+          </span>
         </span>
         <span
           :style="{
@@ -82,7 +83,7 @@ export default {
   },
   data () {
     return {
-      imgUrl:require('data-room-ui/assets/images/cardImg/cardicon.png'),
+      imgUrl: require('data-room-ui/assets/images/cardImg/cardicon.png'),
       customClass: {}
     }
   },
@@ -94,9 +95,9 @@ export default {
       return this.config.customize.gradientColor0 || this.config.customize.gradientColor1 || 'transparent'
     },
     gradientColor1 () {
-       return this.config.customize.gradientColor1 || this.config.customize.gradientColor0 || 'transparent'
+      return this.config.customize.gradientColor1 || this.config.customize.gradientColor0 || 'transparent'
     },
-     unit(){
+    unit () {
       return this.config?.customize.unit || ''
     },
     option () {
@@ -107,12 +108,12 @@ export default {
     },
     customize () {
       return this.config?.customize
-    },
+    }
   },
   methods: {
     dataFormatting (config, data) {
       let dataList = ''
-      if(data.success){
+      if (data.success) {
         if (data.data instanceof Array) {
           dataList = config.dataSource.dimensionField
             ? data.data[0][config.dataSource.dimensionField]
@@ -120,8 +121,8 @@ export default {
         } else {
           dataList = data.data[config.dataSource.dimensionField]
         }
-      }else{
-        dataList=80
+      } else {
+        dataList = 80
       }
       config.option = {
         ...config.option,
@@ -129,7 +130,7 @@ export default {
       }
       return config
     }
-   }
+  }
 }
 </script>
 

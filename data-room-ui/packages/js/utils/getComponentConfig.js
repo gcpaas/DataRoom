@@ -303,8 +303,8 @@ export default function getComponentConfig (type) {
       return {
         name: '指标卡一',
         title: '指标卡一',
-        icon: null,
-        img: require('data-room-ui/assets/images/cardImg/card.png'),
+        icon: Icon.getNameList()[30],
+        // img: require('data-room-ui/assets/images/cardImg/card.png'),
         className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndicatorCardChart',
         w: 300,
         h: 114,
@@ -316,8 +316,8 @@ export default function getComponentConfig (type) {
       return {
         name: '指标卡二',
         title: '指标卡二',
-        icon: null,
-        img: require('data-room-ui/assets/images/cardImg/card2.png'),
+        icon: Icon.getNameList()[31],
+        // img: require('data-room-ui/assets/images/cardImg/card2.png'),
         className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndicatorCardChart',
         w: 300,
         h: 114,
@@ -329,8 +329,8 @@ export default function getComponentConfig (type) {
       return {
         name: '指标卡三',
         title: '指标卡三',
-        icon: null,
-        img: require('data-room-ui/assets/images/cardImg/indicard.png'),
+        icon: Icon.getNameList()[32],
+        // img: require('data-room-ui/assets/images/cardImg/indicard.png'),
         className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndexCardChart',
         w: 300,
         h: 114,
@@ -342,8 +342,8 @@ export default function getComponentConfig (type) {
       return {
         name: '指标卡四',
         title: '指标卡四',
-        icon: null,
-        img: require('data-room-ui/assets/images/cardImg/indcard2.png'),
+        icon: Icon.getNameList()[33],
+        // img: require('data-room-ui/assets/images/cardImg/indcard2.png'),
         className: 'com.gccloud.dataroom.core.module.chart.components.ScreenIndexCardChart',
         w: 300,
         h: 114,
