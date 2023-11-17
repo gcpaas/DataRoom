@@ -88,19 +88,6 @@ const setting = [
     groupName: 'graph'
   },
   {
-    label: '标签位置',
-    // 设置组件类型
-    type: 'inputNumber',
-    // 字段
-    field: 'statistic_title_style_offsetY',
-    // 对应options中的字段
-    optionField: 'statistic.title.offsetY',
-    value: 0,
-    min: -100,
-    tabName: 'custom',
-    groupName: 'graph'
-  },
-  {
     label: '指标字体颜色',
     // 设置组件类型
     type: 'colorPicker',
