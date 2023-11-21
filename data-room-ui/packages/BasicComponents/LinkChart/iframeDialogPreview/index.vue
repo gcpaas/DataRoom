@@ -6,7 +6,7 @@
       :width="dialogW"
       :modal="true"
       :modal-append-to-body="false"
-      :appen-to-body="true"
+      :append-to-body="true"
       class="bs-dialog-wrap bs-el-dialog"
       @close="close"
     >
