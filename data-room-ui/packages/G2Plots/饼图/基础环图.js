@@ -367,6 +367,16 @@ const setting = [
     value: '#e9e9e9',
     tabName: 'custom',
     groupName: 'legend'
+  },
+  // 内边距 appendPadding
+  {
+    label: '',
+    type: 'appendPadding',
+    field: 'appendPadding',
+    optionField: 'appendPadding',
+    value: [0, 0, 0, 0],
+    tabName: 'custom',
+    groupName: 'appendPadding'
   }
 ]
 
