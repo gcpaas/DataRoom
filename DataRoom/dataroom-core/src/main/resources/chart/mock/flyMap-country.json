@@ -3,50 +3,50 @@
     "data": [
         {
             "from": "青海",
-            "lat1": 95.2402,
-            "lat2": 115.4004,
-            "lng1": 35.4199,
-            "lng2": 39.4688,
+            "lng1": 95.2402,
+            "lng2": 115.4004,
+            "lat1": 35.4199,
+            "lat2": 39.4688,
             "to": "河北",
             "type": "move_in",
             "value": 90
         },
         {
             "from": "安徽省",
-            "lat1": 117.2461,
-            "lat2": 115.4004,
-            "lng1": 32.0361,
-            "lng2": 39.4688,
+            "lng1": 117.2461,
+            "lng2": 115.4004,
+            "lat1": 32.0361,
+            "lat2": 39.4688,
             "to": "河北省",
             "type": "move_in",
             "value": 10
         },
         {
             "from": "新疆",
-            "lat1": 87.9688,
-            "lat2": 115.4004,
-            "lng1": 39.7467,
-            "lng2": 39.4688,
+            "lng1": 87.9688,
+            "lng2": 115.4004,
+            "lat1": 39.7467,
+            "lat2": 39.4688,
             "to": "河北",
             "type": "move_in",
             "value": 10
         },
         {
             "from": "云南",
-            "lat1": 101.8652,
-            "lat2": 115.4004,
-            "lng1": 25.1807,
-            "lng2": 39.4688,
+            "lng1": 101.8652,
+            "lng2": 115.4004,
+            "lat1": 25.1807,
+            "lat2": 39.4688,
             "to": "河北",
             "type": "move_in",
             "value": 10
         },
         {
             "from": "黑龙江",
-            "lat1": 128.1445,
-            "lat2": 115.4004,
-            "lng1": 48.5156,
-            "lng2": 39.4688,
+            "lng1": 128.1445,
+            "lng2": 115.4004,
+            "lat1": 48.5156,
+            "lat2": 39.4688,
             "to": "河北",
             "type": "move_in",
             "value": 10
@@ -61,29 +61,13 @@
             "alias": "from",
             "remark": "起点"
         },
-        "lat1": {
-            "type": "double",
-            "tableName": "",
-            "originalColumn": "lat1",
-            "aggregate": "",
-            "alias": "lat1",
-            "remark": "起点纬度"
-        },
-        "lat2": {
-            "type": "double",
-            "tableName": "",
-            "originalColumn": "lat2",
-            "aggregate": "",
-            "alias": "lat2",
-            "remark": "终点纬度"
-        },
         "lng1": {
             "type": "double",
             "tableName": "",
             "originalColumn": "lng1",
             "aggregate": "",
             "alias": "lng1",
-            "remark": "起点经度"
+            "remark": "起点纬度"
         },
         "lng2": {
             "type": "double",
@@ -91,6 +75,22 @@
             "originalColumn": "lng2",
             "aggregate": "",
             "alias": "lng2",
+            "remark": "终点纬度"
+        },
+        "lat1": {
+            "type": "double",
+            "tableName": "",
+            "originalColumn": "lat1",
+            "aggregate": "",
+            "alias": "lat1",
+            "remark": "起点经度"
+        },
+        "lat2": {
+            "type": "double",
+            "tableName": "",
+            "originalColumn": "lat2",
+            "aggregate": "",
+            "alias": "lat2",
             "remark": "终点经度"
         },
         "to": {
