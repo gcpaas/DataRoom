@@ -14,10 +14,11 @@
 <script>
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
+import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 export default {
   name: 'Texts',
   components: {},
-  mixins: [paramsMixins, commonMixins],
+  mixins: [paramsMixins, commonMixins, linkageMixins],
   props: {
     // 卡片的属性
     config: {
