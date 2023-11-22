@@ -513,7 +513,7 @@ export default {
       if (!levelConst.includes(this.config.customize.level)) {
         this.config.customize.level = this.oldLevelMap[this.config.customize.level] || '0'
       }
-      this.$dataRoomAxios.get(`${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/map/tree/${this.config.customize.level}`).then((res) => {
+      this.$dataRoomAxios.get(`/bigScreen/map/tree/${this.config.customize.level}`).then((res) => {
         this.mapTree = res
       })
     },
