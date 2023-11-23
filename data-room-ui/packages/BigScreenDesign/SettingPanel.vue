@@ -144,6 +144,7 @@ export default {
     border-bottom: 2px solid var(--bs-background-1);
     display: flex;
     align-items: center;
+    z-index
 
     .bs-set-title-text {
       position: relative;
