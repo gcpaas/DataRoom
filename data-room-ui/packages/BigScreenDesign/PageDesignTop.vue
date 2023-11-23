@@ -373,7 +373,7 @@ export default {
     backManagement () {
       const data = { componentsManagementType: 'component' }
       this.$router.app.$options.globalData = data // 将数据存储在全局变量中
-      this.$router.push({ path: this.pageInfo.type === 'component' ? (window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components') : (window.BS_CONFIG?.routers?.pageManagementUrl || '/home') })
+      this.$router.push({ path: this.pageInfo.type === 'component' ? (window.BS_CONFIG?.routers?.componentUrl || '/big-screen-components') : (window.BS_CONFIG?.routers?.pageListUrl || '/big-screen-list') })
     },
     undo (isUndo) {
       this.undoTimeLine(isUndo)

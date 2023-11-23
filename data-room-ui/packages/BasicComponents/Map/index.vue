@@ -189,7 +189,7 @@ export default {
           calculable: config.customize.visual,
           min: config.customize.range[0],
           max: config.customize.range[1],
-          seriesIndex: [0],
+          seriesIndex: config.customize.scatter ? -1 : 0,
           inRange: {
             color: config.customize.rangeColor
           }

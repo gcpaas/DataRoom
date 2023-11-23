@@ -138,11 +138,11 @@ export default {
 
           this.config.option.data.forEach(val => {
             // 飞线
-            lines_coord.push({value: val[value], msg: {...val}, coords: [[val[fromLat], val[fromLng]], [val[toLat], val[toLng]]]})
+            lines_coord.push({value: val[value], msg: {...val}, coords: [[val[fromLng], val[fromLat]], [val[toLng], val[toLat]]]})
             // 起点散点
-            fromCoord.push({name: val[fromName], value: [val[fromLat], val[fromLng], val[value]], msg: {...val}})
+            fromCoord.push({name: val[fromName], value: [val[fromLng], val[fromLat], val[value]], msg: {...val}})
             // 终点散点
-            coord.push({name: val[toName], value: [val[toLat], val[toLng], val[value]], msg: {...val}})
+            coord.push({name: val[toName], value: [val[toLng], val[toLat], val[value]], msg: {...val}})
           })
         }
         let mapData = hasMapId ? JSON.parse(res.data.geoJson) : res
