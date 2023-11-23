@@ -97,12 +97,11 @@ export default {
       return this.rightVisiable && this.activeCode
     },
     title () {
-      if(this.activeItem.type=='customComponent'){
+      if (this.activeItem.type == 'customComponent') {
         return this.activeItem?.category
-      }else if(this.activeItem.type=='"remoteComponent"'){
+      } else if (this.activeItem.type == '"remoteComponent"') {
         return this.activeItem?.title
-      }
-      else{
+      } else {
         return this.activeItem?.name
       }
       // if(this.activeItem)
@@ -144,7 +143,7 @@ export default {
     border-bottom: 2px solid var(--bs-background-1);
     display: flex;
     align-items: center;
-    z-index
+    z-index: 1000;
 
     .bs-set-title-text {
       position: relative;
