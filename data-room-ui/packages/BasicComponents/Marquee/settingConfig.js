@@ -26,7 +26,7 @@ export const settingConfig = {
     }
   }
 }
-const dataHandler = ''
+const dataHandler = 'data = data[0]'
 const customConfig = {
   type: 'marquee',
   root: {
