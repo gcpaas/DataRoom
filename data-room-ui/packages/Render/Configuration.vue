@@ -79,7 +79,7 @@ export default {
   height: 100%;
   width: 100%;
   border: 1px solid transparent;
-  cursor: move;
+  //cursor: move;
 
   .opt-icon-wrap {
     z-index: 100;

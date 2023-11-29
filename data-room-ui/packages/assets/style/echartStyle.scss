@@ -32,11 +32,11 @@
 .el-icon-warning{
   color: #FFD600;
 }
-.title-hover{
-  &:hover{
-    cursor: move;
-  }
-}
+//.title-hover{
+//  &:hover{
+//    cursor: move;
+//  }
+//}
 /*滚动条样式*/
 ::v-deep ::-webkit-scrollbar {
   width: 4px;
