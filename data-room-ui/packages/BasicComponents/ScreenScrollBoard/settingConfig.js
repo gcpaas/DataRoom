@@ -8,6 +8,7 @@ export const settingConfig = {
   columnWidth: [],
   align: [],
   data: [],
+  origData:[],
   // 设置面板属性的显隐
   displayOption: {
     ...displayOption,

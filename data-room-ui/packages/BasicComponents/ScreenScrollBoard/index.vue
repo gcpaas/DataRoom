@@ -52,7 +52,10 @@ export default {
   methods: {
     // 表格点击事件
     rowClick (row) {
-      this.linkage(row)
+      const origData = this.config.option.origData
+      if (row && row.rowIndex && this.config && this.config.option && origData && origData.length){
+        this.linkage(origData [row.rowIndex])
+      }
     },
     dataFormatting (config, data) {
       this.config.loading = false
@@ -60,6 +63,7 @@ export default {
       const dataList = []
       const alignList = []
       const widthList = []
+      config.option.origData = data?.data
       if (config.customize.columnConfig.length === 0) {
         const key = []
         for (const i in data.columnData) {
