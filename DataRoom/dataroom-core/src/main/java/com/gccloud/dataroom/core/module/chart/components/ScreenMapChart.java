@@ -105,7 +105,7 @@ public class ScreenMapChart extends Chart {
         private Integer downLevel;
 
         @ApiModelProperty(notes = "地图比例")
-        private Integer zoom;
+        private Float zoom;
 
         @ApiModelProperty(notes = "中心点x轴位置")
         private Integer center1;
