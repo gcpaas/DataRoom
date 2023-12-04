@@ -195,6 +195,7 @@ export default {
     /**
      * @description: 更新chart
      * @param {Object} config
+     * @param {Array} filterList
      */
     changeData (config, filterList) {
       const list = config?.paramsList?.map((item) => {
@@ -263,6 +264,10 @@ export default {
             } else {
               this.chart.changeData(config.option.data)
             }
+          }
+          if (this.charts) {
+            // 地图组件的被联动更新
+            this.changeMapData(config.option.data)
           }
         }).catch(err => {
           console.info(err)

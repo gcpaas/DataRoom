@@ -968,6 +968,9 @@ export default {
       if (['input', 'timePicker', 'dateTimePicker'].includes(this.config.type)) {
         modifiedList.push({ label: '当前组件值', value: this.config.code })
       }
+      if (['map', 'flyMap'].includes(this.config.type)) {
+        modifiedList.push({ label: '点击区域名称', value: 'clickAreaName' })
+      }
       return modifiedList
     }
   },
