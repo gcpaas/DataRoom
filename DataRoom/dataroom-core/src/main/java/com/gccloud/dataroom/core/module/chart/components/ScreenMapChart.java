@@ -72,7 +72,7 @@ public class ScreenMapChart extends Chart {
         private Boolean visual;
 
         @ApiModelProperty(notes = "筛选范围")
-        private String[] range;
+        private Integer[] range;
 
         @ApiModelProperty(notes = "从上到下的颜色")
         private String[] rangeColor;
