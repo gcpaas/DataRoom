@@ -369,7 +369,6 @@ export default {
         }
         // 到达允许下钻的层数，则不再下钻
         if (this.currentDeep >= config.customize.downLevel) return
-        console.log('mapList',this.mapList)
         const mapUrl = `${window.BS_CONFIG?.httpConfigs?.baseURL}/bigScreen/map/data/${this.mapList[this.currentDeep].id}/${params.name}`
         const map = await this.$dataRoomAxios.get(decodeURI(mapUrl), {}, false)
         // 地图不可用
