@@ -334,7 +334,7 @@ import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetti
 import IconSvg from 'data-room-ui/SvgIcon'
 import {predefineColors} from "data-room-ui/js/utils/colorList";
 export default {
-  name: 'TextSetting',
+  name: 'MarqueeSetting',
   components: {
     PosWhSetting,
     ColorPicker,

@@ -82,7 +82,7 @@ import TextGradient from 'data-room-ui/BigScreenDesign/RightSetting/TextGradient
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
 export default {
-  name: 'TextSetting',
+  name: 'ThemeSelect',
   components: {
     TextGradient,
     PosWhSetting,

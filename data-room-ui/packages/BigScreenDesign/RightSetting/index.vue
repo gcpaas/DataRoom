@@ -62,6 +62,7 @@ import { mapState, mapMutations } from 'vuex'
 // import _ from 'lodash'
 import isEqual from 'lodash/isEqual'
 import cloneDeep from 'lodash/cloneDeep'
+import { EventBus } from 'data-room-ui/js/utils/eventBus'
 // 整体动态导入右侧设置组件，不用手动注册
 const components = {}
 for (const key in rightSetting) {
@@ -83,7 +84,8 @@ export default {
   },
   data () {
     return {
-      activeName: 'data'
+      activeName: 'data',
+      isOperationRollback: false
     }
   },
   computed: {
@@ -145,7 +147,14 @@ export default {
       deep: true
     }
   },
-  mounted () {},
+  mounted () {
+    EventBus.$on('operationRollback', val => {
+      this.isOperationRollback = val
+    })
+  },
+  beforeDestroy () {
+    EventBus.$off('operationRollback')
+  },
   methods: {
     ...mapMutations('bigScreen', [
       'saveTimeLine'
@@ -170,7 +179,10 @@ export default {
           } else {
             this.$emit('updateDataSetting', this.config)
           }
-          this.saveTimeLine(`更新${val?.title ?? this.config.title}组件属性`)
+          if (!this.isOperationRollback) {
+            this.saveTimeLine(`更新${val?.title ?? this.config.title}组件属性`)
+            this.isOperationRollback = false
+          }
         }
       }
     },

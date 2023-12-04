@@ -149,7 +149,7 @@ import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetti
 import fontList from 'data-room-ui/js/utils/fontList'
 import { mapMutations } from 'vuex'
 export default {
-  name: 'TextSetting',
+  name: 'NumberSetting',
   components: {
     TextGradient,
     PosWhSetting,

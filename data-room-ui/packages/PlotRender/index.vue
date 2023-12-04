@@ -191,7 +191,6 @@ export default {
             return item
           })
           config.option.data = { name: 'root', children: [...listData] }
-          // console.log(config.option.data)
         } else {
           // 如果维度为数字类型则转化为字符串，否则在不增加其他配置的情况下会导致图标最后一项不显示（g2plot官网已说明）
           const xAxis = config.setting.find(item => item.field === 'xField')?.value

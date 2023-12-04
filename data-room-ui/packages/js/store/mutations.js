@@ -327,6 +327,8 @@ export default {
         currentStore = state.timelineStore[state.currentTimeLine - 1]
         if (currentStore?.chartList) {
           state.pageInfo.chartList = cloneDeep(currentStore?.chartList)
+          state.activeItemConfig = cloneDeep(currentStore?.chartList?.find(item => item.code === state.activeCode) || {})
+          EventBus.$emit('operationRollback', true)
         }
       }
     }
@@ -429,7 +431,6 @@ export default {
   }
 }
 function deldataset (state, type, codes) {
-  console.log('del', codes)
   const datasets = state[type]
   for (const code of codes) {
     for (const key in datasets) {

@@ -1,6 +1,6 @@
 {
   "name": "@gcpaas/data-room-ui",
-  "version": "2.0.1-2023111301-Alpha",
+  "version": "2.0.1-2023112901-Alpha",
   "description": "自定义大屏",
   "author": "gcpaas",
   "license": "MIT",
@@ -85,7 +85,8 @@
     "vue-video-player": "^5.0.1",
     "vuedraggable": "^2.24.3",
     "vuex": "3.1.0",
-    "ztree": "3.5.24"
+    "node-sass": "4.14.1",
+    "sass-loader": "7.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -122,9 +123,7 @@
     "husky": "^4.2.5",
     "jest": "^27.1.0",
     "lint-staged": "^10.2.11",
-    "node-sass": "4.14.1",
     "runjs": "^4.3.2",
-    "sass-loader": "7.1.0",
     "script-ext-html-webpack-plugin": "2.1.3",
     "script-loader": "0.7.2",
     "serve-static": "^1.13.2",
@@ -136,7 +135,8 @@
     "vue": "2.6.10",
     "babel-polyfill": "6.26.0",
     "increase-memory-limit": "^1.0.7",
-    "tiny-sass-compiler": "^0.12.2"
+    "tiny-sass-compiler": "^0.12.2",
+    "ztree": "3.5.24"
   },
   "engines": {
     "node": ">=8.9",

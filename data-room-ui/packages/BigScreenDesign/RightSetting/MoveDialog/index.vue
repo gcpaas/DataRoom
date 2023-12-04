@@ -237,7 +237,6 @@ export default {
       // if(this.isDown==false){
       //   return
       // }
-      // console.log(e)
       // let ny=e.clientY-194;
       // let nt=ny-(this.y-this.t);
       // a.style.top=nt+"px"
@@ -247,7 +246,6 @@ export default {
       // this.y=e.layerY
       // this.t=this.top;
       // this.isDown=true
-      // console.log(this.x,this.l)
     },
     changeSymbol (val) {
       this.symbol = val

@@ -40,7 +40,6 @@
 
 <script>
 // import _ from 'lodash'
-import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'TextGradient',
   model: {
@@ -50,7 +49,8 @@ export default {
   props: {
     colors: {
       type: String,
-      default: ''
+      default: '',
+      required: true
     },
     label: {
       type: String,
@@ -67,14 +67,26 @@ export default {
     }
   },
   computed: {
-    newColors () {
-      return cloneDeep(this.colors)
-    },
+  //   newColors:
+  //     {
+  //       get () {
+  //         return this.colors
+  //       },
+  //       set (val) {
+  //         this.$emit('change', val)
+  //       }
+  //     },
     customLabel () {
       return this.label || '文字'
     }
   },
   watch: {
+    colors: {
+      handler (val) {
+        this.init()
+      },
+      immediate: true
+    },
     position () {
       this.colorChange()
     },
@@ -90,7 +102,7 @@ export default {
   },
   methods: {
     init () {
-      const arr = this.newColors.split(',').map(data => data.trim()) || []
+      const arr = this.colors.split(',').map(data => data.trim()) || []
       this.position = arr[0] || 'left'
       const s = arr[1] || '#ffffff'
       const e = arr[2] || '#ffffff'
