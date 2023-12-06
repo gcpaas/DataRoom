@@ -65,6 +65,7 @@ export default {
   beforeDestroy () { },
   methods: {
     dataFormatting (config, data) {
+      console.log('data', data)
       // 数据返回成功则赋值
       if (data.success) {
         data = data.data
@@ -78,7 +79,6 @@ export default {
           }
         }
         this.optionData = data
-        config.customize.title = config.option.data[config.dataSource.dimensionField] || config.customize.title
         // 语音播报
       } else {
         // 数据返回失败则赋前端的模拟数据

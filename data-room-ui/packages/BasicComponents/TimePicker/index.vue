@@ -100,7 +100,7 @@ export default {
           }
         }
         config.option.data = data
-        config.customize.title = config.option.data[config.dataSource.dimensionField] || config.customize.title
+        // config.customize.title = config.option.data[config.dataSource.dimensionField] || config.customize.title
         if (window.dataSetFields.length === 0) {
           getDataSetDetails(this.config.dataSource.businessKey).then(res => {
             window.dataSetFields = res.fields.map(field => {
