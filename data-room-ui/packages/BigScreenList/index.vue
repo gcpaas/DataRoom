@@ -62,7 +62,7 @@
                     class="screen-card__oper-label circle"
                     @click="preview(screen)"
                   >
-                    <span>预览</span>
+                    <span>访问</span>
                   </div>
                   <div
                     class="circle"
