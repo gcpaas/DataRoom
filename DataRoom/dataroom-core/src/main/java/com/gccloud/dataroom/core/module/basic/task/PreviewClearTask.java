@@ -24,7 +24,7 @@ public class PreviewClearTask {
 
 
     @Scheduled(cron = "0 0 1 * * ?")
-    private void clear() {
+    public void clear() {
         log.info("开始清理预览数据");
         previewService.clear();
     }
