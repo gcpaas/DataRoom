@@ -496,4 +496,18 @@ export default {
     background-repeat: repeat;
     word-spacing: 10px;
 }
+
+::v-deep .lines {
+  .line {
+    .action {
+      .del {
+        color: var(--bs-el-text);
+      }
+
+      .value {
+        color: var(--bs-el-text);
+      }
+    }
+  }
+}
 </style>
