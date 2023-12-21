@@ -115,13 +115,8 @@ export default {
   methods: {
     init () {
       this.dialogVisible = true
-      this.imgUrl = this.form.customTheme === 'light' ? this.form.bg : this.form.lightBg
-      this.fileList = this.getCoverPicture(this.imgUrl)
-        ? [{
-            name: '背景图',
-            url: this.getCoverPicture(this.imgUrl)
-          }]
-        : []
+      this.imgUrl = this.form.customTheme === 'light' ? this.form.lightBg : this.form.bg
+      this.fileList = this.getCoverPicture(this.imgUrl) ? [{ name: '背景图', url: this.getCoverPicture(this.imgUrl) }] : []
       this.hideUploadImgBtn = this.fileList.length !== 0
       this.$dataRoomAxios.get('/bigScreen/design/bg/list').then(list => {
         this.bgImgList = list

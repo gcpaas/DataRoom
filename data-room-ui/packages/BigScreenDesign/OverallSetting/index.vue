@@ -196,10 +196,10 @@
 <script>
 import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import ColorPicker from 'data-room-ui/ColorPicker/index.vue'
-import BgImg from './BgImgDialog.vue'
+import BgImg from 'data-room-ui/BigScreenDesign/OverallSetting/BgImgDialog.vue'
 import { mapState, mapMutations } from 'vuex'
 import { themeToSetting } from 'data-room-ui/js/utils/themeFormatting'
-import {predefineColors} from 'data-room-ui/js/utils/colorList'
+import { predefineColors } from 'data-room-ui/js/utils/colorList'
 import { getFileUrl } from 'data-room-ui/js/utils/file'
 export default {
   name: 'OverallSetting',
