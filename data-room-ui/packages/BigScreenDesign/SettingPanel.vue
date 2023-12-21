@@ -97,9 +97,9 @@ export default {
       return this.rightVisiable && this.activeCode
     },
     title () {
-      if (this.activeItem.type == 'customComponent') {
+      if (this.activeItem.type === 'customComponent') {
         return this.activeItem?.category
-      } else if (this.activeItem.type == '"remoteComponent"') {
+      } else if (this.activeItem.type === 'remoteComponent') {
         return this.activeItem?.title
       } else {
         return this.activeItem?.name
