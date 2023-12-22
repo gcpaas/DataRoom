@@ -452,6 +452,7 @@ export default {
                 // 确认框
                 this.$confirm('保存封面失败，我们将使用上次保存的封面，它不会影响其他数据的保存。由于图片资源跨域问题导致使用toDataURL API生成图片失败，我们需要将图片上传到资源库。然后在组件中使用资源库中的图片资源，以确保没有跨域问题。', '提示', {
                   confirmButtonText: '确定',
+                  showCancelButton: false,
                   type: 'warning',
                   customClass: 'bs-el-message-box'
                 }).then(async () => {
@@ -579,7 +580,7 @@ export default {
               // 确认框
               this.$confirm('图片资源跨域导致使用toDataURL API生成图片失败，请将图片上传到资源库，然后在组件中使用资源库中的图片资源，确保没有跨域问题。', '提示', {
                 confirmButtonText: '确定',
-                cancelButtonText: '取消',
+                showCancelButton: false,
                 type: 'warning',
                 customClass: 'bs-el-message-box'
               }).then(() => { }).catch(() => { })
@@ -589,6 +590,59 @@ export default {
           }
         })
     }
+    // createdImg () {
+    //   this.saveAndPreviewLoading = true
+    //   // 暂停跑马灯动画
+    //   EventBus.$emit('stopMarquee')
+    //   const node = document.querySelector('.render-theme-wrap')
+    //   // 获取node 下的所有img标签，拿到他们的src，重新请求资源，并加上请求头  'Access-Control-Allow-Origin': '*'
+    //   const imgTags = node.querySelectorAll('img')
+    //   const requests = Array.from(imgTags).map(img => {
+    //     const src = img.getAttribute('src')
+    //     return  (src, {
+    //       headers: { 'Access-Control-Allow-Origin': '*' }
+    //     }).then(response => {
+    //       if (response.ok) {
+    //         return response.blob()
+    //       } else {
+    //         throw new Error('Network response was not ok.')
+    //       }
+    //     }).then(blob => {
+    //       return new Promise((resolve, reject) => {
+    //         const reader = new FileReader()
+    //         reader.onload = () => resolve(reader.result)
+    //         reader.onerror = reject
+    //         reader.readAsDataURL(blob)
+    //       })
+    //     }).then(dataUrl => {
+    //       img.setAttribute('src', dataUrl)
+    //     }).catch(error => {
+    //       console.error('Fetch error:', error)
+    //     })
+    //   })
+
+    //   Promise.all(requests).then(() => {
+    //     toPng(node)
+    //       .then((dataUrl) => {
+    //         const link = document.createElement('a')
+    //         link.download = `${this.pageInfo.name}.png`
+    //         link.href = dataUrl
+    //         link.click()
+    //         link.addEventListener('click', () => {
+    //           link.remove()
+    //         })
+    //         this.saveAndPreviewLoading = false
+    //         // 恢复跑马灯动画
+    //         EventBus.$emit('startMarquee')
+    //       }).catch((error) => {
+    //         console.info(error)
+    //         this.$message.warning('出现未知错误，请重试')
+    //         this.saveAndPreviewLoading = false
+    //       })
+    //   }).catch(error => {
+    //     console.error('Fetch error:', error)
+    //   })
+    // }
   }
 }
 </script>

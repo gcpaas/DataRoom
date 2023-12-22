@@ -299,7 +299,7 @@ export default {
       this.$confirm('确定替换为选中模板吗？未保存的代码将被覆盖！', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        showCancelButton: false,
         cancelButtonClass: 'cancel-btn',
         type: 'warning',
         customClass: 'bs-el-message-box'
@@ -422,7 +422,7 @@ export default {
               // 确认框
               this.$confirm('图片资源跨域导致使用toDataURL API生成图片失败，请将图片上传到资源库，然后在组件中使用资源库中的图片资源，确保没有跨域问题。', '提示', {
                 confirmButtonText: '确定',
-                cancelButtonText: '取消',
+                showCancelButton: false,
                 type: 'warning',
                 customClass: 'bs-el-message-box'
               }).then(() => { }).catch(() => { })

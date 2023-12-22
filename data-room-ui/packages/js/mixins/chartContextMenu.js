@@ -114,6 +114,21 @@ export default {
           link.addEventListener('click', () => {
             link.remove()
           })
+        }).catch((error) => {
+          if (error.type === 'error') {
+            // 判断的error.currentTarget是img标签，如果是的，就弹出消息说是图片跨域
+            if (error.currentTarget.tagName.toLowerCase() === 'img') {
+              // 确认框
+              this.$confirm('图片资源跨域导致使用toDataURL API生成图片失败，请将图片上传到资源库，然后在组件中使用资源库中的图片资源，确保没有跨域问题。', '提示', {
+                confirmButtonText: '确定',
+                showCancelButton: false,
+                type: 'warning',
+                customClass: 'bs-el-message-box'
+              }).then(() => { }).catch(() => { })
+            }
+          } else {
+            this.$message.warning('出现未知错误，请重试')
+          }
         })
     }, // 右键菜单
     onContextmenu (event, chart) {
