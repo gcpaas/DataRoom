@@ -439,12 +439,32 @@ export default {
         } else {
           pageInfo.isPreview = false
           this.saveLoading = true
+          pageInfo.coverPicture = this.initialCoverPicture
           const node = document.querySelector('.render-theme-wrap')
           let dataUrl = ''
+          let res = null
           try {
             dataUrl = await toJpeg(node, { quality: 0.2 })
           } catch (error) {
-            console.info(error)
+            if (error.type === 'error') {
+              // 判断的error.currentTarget是img标签，如果是的，就弹出消息说是图片跨域
+              if (error.currentTarget.tagName.toLowerCase() === 'img') {
+                // 确认框
+                this.$confirm('保存封面失败，我们将使用上次保存的封面，它不会影响其他数据的保存。由于图片资源跨域问题导致使用toDataURL API生成图片失败，我们需要将图片上传到资源库。然后在组件中使用资源库中的图片资源，以确保没有跨域问题。', '提示', {
+                  confirmButtonText: '确定',
+                  type: 'warning',
+                  customClass: 'bs-el-message-box'
+                }).then(async () => {
+                  res = await saveScreen(pageInfo)
+                  this.$message.success('数据保存成功')
+                }).catch(async () => {
+                  res = await saveScreen(pageInfo)
+                  this.$message.success('数据保存成功')
+                })
+              }
+            } else {
+              this.$message.warning('出现未知错误，请重试')
+            }
           }
           if (dataUrl) {
             if (showSize(dataUrl) > 200) {
@@ -464,12 +484,9 @@ export default {
             } else {
               pageInfo.coverPicture = dataUrl
             }
-          } else {
-            this.$message.warning('保存封面失败，将使用上次保存的封面')
-            pageInfo.coverPicture = this.initialCoverPicture
+            res = await saveScreen(pageInfo)
+            this.$message.success('数据保存成功')
           }
-          const res = await saveScreen(pageInfo)
-          this.$message.success('保存成功')
           return res
         }
       } catch (error) {
@@ -554,10 +571,22 @@ export default {
           this.saveAndPreviewLoading = false
           // 恢复跑马灯动画
           EventBus.$emit('startMarquee')
-        })
-        .catch(() => {
-          this.$message.warning('出现未知错误，请重试')
+        }).catch((error) => {
           this.saveAndPreviewLoading = false
+          if (error.type === 'error') {
+            // 判断的error.currentTarget是img标签，如果是的，就弹出消息说是图片跨域
+            if (error.currentTarget.tagName.toLowerCase() === 'img') {
+              // 确认框
+              this.$confirm('图片资源跨域导致使用toDataURL API生成图片失败，请将图片上传到资源库，然后在组件中使用资源库中的图片资源，确保没有跨域问题。', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                customClass: 'bs-el-message-box'
+              }).then(() => { }).catch(() => { })
+            }
+          } else {
+            this.$message.warning('出现未知错误，请重试')
+          }
         })
     }
   }
