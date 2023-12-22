@@ -457,10 +457,10 @@ export default {
                   customClass: 'bs-el-message-box'
                 }).then(async () => {
                   res = await saveScreen(pageInfo)
-                  this.$message.success('数据保存成功')
+                  this.$message.success('保存成功')
                 }).catch(async () => {
                   res = await saveScreen(pageInfo)
-                  this.$message.success('数据保存成功')
+                  this.$message.success('保存成功')
                 })
               }
             } else {
@@ -486,7 +486,7 @@ export default {
               pageInfo.coverPicture = dataUrl
             }
             res = await saveScreen(pageInfo)
-            this.$message.success('数据保存成功')
+            this.$message.success('保存成功')
           }
           return res
         }

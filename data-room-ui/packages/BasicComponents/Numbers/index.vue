@@ -12,6 +12,8 @@
   </div>
 </template>
 <script>
+import cloneDeep from 'lodash/cloneDeep'
+import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
@@ -36,11 +38,20 @@ export default {
   },
   mounted () {
     this.chartInit()
+    console.log(this.config.customize.color)
   },
   methods: {
     changeStyle (config) {
       config.customize.title = config.customize.thousands ? config.customize?.title?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : config.customize.title
       this.changeChartConfig(config)
+      config = { ...this.config, ...config }
+      // 样式改变时更新主题配置
+      config.theme = settingToTheme(cloneDeep(config), this.customTheme)
+      this.changeChartConfig(config)
+      if (config.code === this.activeCode) {
+        this.changeActiveItemConfig(config)
+      }
+      return config
     },
     // 通过表达式计算得来的值
     getDataByExpression (config) {
