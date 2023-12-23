@@ -441,6 +441,7 @@ export default {
         config.setting = settingContent.setting
         config.option = settingContent.option
         config.optionHandler = settingContent.optionHandler
+        console.log(config)
         this.$emit('setRemoteComponent', config)
         // config = getRemoteComponentConfig(this.focus.code, this.focus.name)
         // this.$emit('setRemoteComponent', config)

@@ -7,7 +7,7 @@
       width: pageInfo.pageConfig.w + 'px',
       height: pageInfo.pageConfig.h + 'px',
       backgroundColor:pageInfo.pageConfig.customTheme ==='light' ? pageInfo.pageConfig.lightBgColor:pageInfo.pageConfig.bgColor ,
-      backgroundImage:pageInfo.pageConfig.customTheme ==='light' ? `url(${this.getCoverPicture(pageInfo.pageConfig.lightBg)})`:`url(${this.getCoverPicture(pageInfo.pageConfig.bg)})`
+      backgroundImage:pageInfo.pageConfig.customTheme ==='light' ? `url(${getCoverPicture(pageInfo.pageConfig.lightBg)})`:`url(${getCoverPicture(pageInfo.pageConfig.bg)})`
     }"
     @drop="drop($event)"
     @dragover.prevent
@@ -379,6 +379,7 @@ export default {
         config.theme = settingToTheme(config, 'dark')
         config.theme = settingToTheme(config, 'light')
       }
+      console.log('1', config)
       this.addItem(config)
     },
     addSourceChart (chart, position) {

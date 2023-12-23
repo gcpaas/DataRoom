@@ -65,7 +65,6 @@ export default {
   beforeDestroy () { },
   methods: {
     dataFormatting (config, data) {
-      console.log('data', data)
       // 数据返回成功则赋值
       if (data.success) {
         data = data.data

@@ -38,7 +38,6 @@ export default {
   },
   mounted () {
     this.chartInit()
-    console.log(this.config.customize.color)
   },
   methods: {
     changeStyle (config) {
