@@ -272,13 +272,13 @@ export default {
       }
     },
     changeTemp (val) {
-      if (val == 'g2plot') {
+      if (val === 'g2plot') {
         this.form.settingContent = defaultG2SettingContent
         this.form.vueContent = defaultG2VueContent
-      } else if (val == 'native') {
+      } else if (val === 'native') {
         this.form.settingContent = defaultSettingContent
         this.form.vueContent = defaultVueContent
-      } else if (val == 'echart') {
+      } else if (val === 'echart') {
         this.form.settingContent = defaultEchartsSettingContent
         this.form.vueContent = defaultEchartsVueContent
       }

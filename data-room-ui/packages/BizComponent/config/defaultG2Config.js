@@ -397,15 +397,6 @@ const setting = [
   },
   // 内边距 appendPadding
   {
-    label: '',
-    type: 'appendPadding',
-    field: 'appendPadding',
-    optionField: 'appendPadding',
-    value: [0, 0, 0, 0],
-    tabName: 'custom',
-    groupName: 'appendPadding'
-  }
-    {
     label: '图表边距',
     type: 'padding',
     field: 'appendPadding',
