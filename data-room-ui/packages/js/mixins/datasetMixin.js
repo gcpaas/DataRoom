@@ -129,6 +129,13 @@ const datasetMixins = {
     currentChangeHandle (value) {
       this.current = value
       this.datasetTest(false)
+      const tableBodyWrapperEl = document.querySelector('.el-table__body-wrapper') || {}
+      this.$nextTick(() => {
+        if (tableBodyWrapperEl) {
+          // 表格滚动到顶部
+          tableBodyWrapperEl.scrollTop = 0
+        }
+      })
     },
     // 表头添加提示
     renderHeader (h, { column, index }) {

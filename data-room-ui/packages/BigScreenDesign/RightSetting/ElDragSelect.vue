@@ -69,9 +69,7 @@ export default {
   },
   methods: {
     setSort () {
-      const el = this.$refs.dragSelect.$el.querySelectorAll(
-        '.el-select__tags > span'
-      )[0]
+      const el = this.$refs.dragSelect.$el.querySelectorAll('.el-select__tags > span')[0]
       if (el) {
         this.sortable = Sortable.create(el, {
           animation: 350,

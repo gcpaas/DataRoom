@@ -595,17 +595,17 @@ export default {
     //   // 暂停跑马灯动画
     //   EventBus.$emit('stopMarquee')
     //   const node = document.querySelector('.render-theme-wrap')
-    //   // 获取node 下的所有img标签，拿到他们的src，重新请求资源，并加上请求头  'Access-Control-Allow-Origin': '*'
+    //   // 获取node 下的所有img标签，拿到他们的src
     //   const imgTags = node.querySelectorAll('img')
     //   const requests = Array.from(imgTags).map(img => {
     //     const src = img.getAttribute('src')
-    //     return  (src, {
+    //     return fetch(src, {
     //       headers: { 'Access-Control-Allow-Origin': '*' }
     //     }).then(response => {
     //       if (response.ok) {
     //         return response.blob()
     //       } else {
-    //         throw new Error('Network response was not ok.')
+    //         throw new Error('网络请求失败')
     //       }
     //     }).then(blob => {
     //       return new Promise((resolve, reject) => {

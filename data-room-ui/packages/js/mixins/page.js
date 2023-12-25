@@ -111,6 +111,18 @@ const pageMixins = {
     currentChangeHandle (val) {
       this.current = val
       this.getDataList()
+      const bsScrollbarEl = document.querySelector('.bs-scrollbar') || {}
+      const tableBodyWrapperEl = document.querySelector('.el-table__body-wrapper') || {}
+      this.$nextTick(() => {
+        if (bsScrollbarEl) {
+          // 类名bs-scrollbar的元素滚动到顶部
+          bsScrollbarEl.scrollTop = 0
+        }
+        if (tableBodyWrapperEl) {
+          // 表格滚动到顶部
+          tableBodyWrapperEl.scrollTop = 0
+        }
+      })
     },
     getSortForm () {
       return {
