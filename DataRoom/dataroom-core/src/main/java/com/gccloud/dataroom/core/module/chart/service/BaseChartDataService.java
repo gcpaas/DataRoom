@@ -155,7 +155,8 @@ public class BaseChartDataService {
             });
         }
         if (dataSource.getParams() != null && dataSource.getParams().size() > 0) {
-            List<DatasetParamDTO> setParams = dataSetInfoVo.getParams();
+            String setString = JSON.toJSONString(dataSetInfoVo.getParams());
+            List<DatasetParamDTO> setParams = JSON.parseArray(setString, DatasetParamDTO.class);
             for (DatasetParamDTO param : setParams) {
                 if (!dataSource.getParams().containsKey(param.getName())) {
                     continue;
@@ -186,7 +187,8 @@ public class BaseChartDataService {
             if (setParams == null) {
                 setParams = Lists.newArrayList();
             }
-            params = setParams;
+            String setString = JSON.toJSONString(setParams);
+            params = JSON.parseArray(setString, DatasetParamDTO.class);
         }
         dataDTO.setColumnData(columnData);
         Object data;
