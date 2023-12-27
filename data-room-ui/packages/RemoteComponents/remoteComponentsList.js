@@ -8,8 +8,18 @@ const innerRemoteComponents = []
 
 files.keys().forEach(key => {
   const title = key.split('/')[1].replace('.vue', '')
-  const img = require(`./innerComponents/${title}/component.png`)
-  const config = require(`./innerComponents/${title}/config.js`).default
+  let img = null
+  let config = {}
+  try {
+    img = require(`./innerComponents/${title}/component.png`)
+  } catch (error) {
+    console.log(error)
+  }
+  try {
+    config = require(`./innerComponents/${title}/config.js`).default
+  } catch (error) {
+
+  }
   innerRemoteComponents.push({
     title: config.title || title,
     vueSysComponentDirName: 'inner_' + title,
