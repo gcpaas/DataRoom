@@ -526,6 +526,7 @@ const data = [
 
 // 配置处理脚本
 const optionHandler = '\noption.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === \'legendPosition\').value} : false;' +
+  'if (option.legendEnable) {\n  option.legend.itemName = option.legendItemName\n};' +
   '\nconst radiusNum = setting.find(settingItem=>settingItem.field === \'radiusNum\').value; option.barStyle.radius = [radiusNum,radiusNum,0,0];' +
   'option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === \'yAxis_grid_line_style_lineDash\').value]'
 
@@ -571,8 +572,8 @@ const option = {
       // 数据标签防遮挡
       { type: 'interval-hide-overlap' },
       // 数据标签文颜色自动调整
-      { type: 'adjust-color' },
-    ],
+      { type: 'adjust-color' }
+    ]
   },
   radiusNum: 0, // 设置条形图的圆角的中间值
   xAxis: {

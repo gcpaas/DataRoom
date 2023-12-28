@@ -573,6 +573,9 @@ const data = [
 const optionHandler = `
 option.yAxis.grid.line.style.lineDash = [4,setting.find(settingItem=>settingItem.field === 'yAxis_grid_line_style_lineDash').value]
 option.legend = option.legendEnable ? {position: setting.find(settingItem=>settingItem.field === 'legendPosition').value} : false;
+if (option.legendEnable) {
+  option.legend.itemName = option.legendItemName
+};
 const radiusNum = setting.find(settingItem=>settingItem.field === 'radiusNum').value;
 option.barStyle.radius = [radiusNum,radiusNum,0,0]
 const yFieldValue = setting.find(settingItem=>settingItem.field === 'yField').value
@@ -603,7 +606,7 @@ const option = {
   legendLayout: 'vertical',
   legendPosition: 'top',
   legend: false,
-  legendItemName: {
+  itemName: {
     style: {
       fill: '#e9e9e9',
       fontSize: 12,
