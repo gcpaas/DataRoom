@@ -57,6 +57,15 @@ export default {
     this.chartInit()
   },
   methods: {
+    changeData (config, filterList) {
+      // 当前组件的方法调用
+      let remote = this.$refs['remoteComponent'+config.code]
+      if (remote && remote.changeData){
+        remote.changeData(config, filterList)
+      }
+      // 调用混入中的方法
+      this.$options.mixins[1].methods.changeData.call(this, config, filterList)
+    },
     ...mapMutations('bigScreen', ['changeChartConfig']),
     // 尝试渲染远程文件或远程字符串
     getRemoteComponent () {
