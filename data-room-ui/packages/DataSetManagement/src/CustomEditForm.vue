@@ -240,7 +240,10 @@
                 :options="cOptions"
                 style="margin-top: 2px"
               />
-              <div class="bs-codemirror-bottom-text" v-if="dataForm.syntaxType === 'mybatis'">
+              <div
+                v-if="dataForm.syntaxType === 'mybatis'"
+                class="bs-codemirror-bottom-text"
+              >
                 示例：
                 <strong><br>
                   1、常规使用
@@ -265,7 +268,10 @@
                   >${参数名称}</span> <span style="color: #2F67A7;">&lt;/if&gt;</span>
                 </strong>
               </div>
-              <div class="bs-codemirror-bottom-text" v-else>
+              <div
+                v-else
+                class="bs-codemirror-bottom-text"
+              >
                 示例：
                 <strong><br>
                   1、常规使用 select * from table where table_field = <span style="color: #CC7832;">${参数名称}</span><br>
@@ -1220,7 +1226,7 @@ export default {
             paramsList: this.dataForm.paramsList,
             fieldList: this.dataForm.fieldList,
             fieldDesc: this.dataForm.fieldDesc,
-            syntaxType: this.dataForm.syntaxType,
+            syntaxType: this.dataForm.syntaxType
           }
         }
         datasetSave(datasetParams).then(res => {
@@ -1245,7 +1251,7 @@ export default {
       this.isTest = true
       // 匹配 ${}
       const reg = /\${(.*?)}/g
-      let paramNames = [...new Set([...this.dataForm.sqlProcess.matchAll(reg)].map(item => item[1]))]
+      const paramNames = [...new Set([...this.dataForm.sqlProcess.matchAll(reg)].map(item => item[1]))]
       // 匹配 #{}
       const reg2 = /#{(.*?)}/g
       const paramNames2 = [...new Set([...this.dataForm.sqlProcess.matchAll(reg2)].map(item => item[1]))]
@@ -1315,12 +1321,15 @@ export default {
         this.dataPreviewList = res.data.list
         this.structurePreviewList = res.structure
         // 输出字段描述合并
-        this.structurePreviewList.forEach(field => {
-          const fieldInfo = this.dataForm.fieldList.find(item => item.fieldName === field.fieldName)
+        this.structurePreviewList = this.dataForm.fieldList.map(field => {
+          const fieldInfo = this.structurePreviewList.find(item => item.fieldName === field.fieldName)
           if (fieldInfo) {
-            field.fieldDesc = fieldInfo.fieldDesc
-            field.orderNum = fieldInfo.orderNum
-            field.sourceTable = fieldInfo.sourceTable
+            return {
+              ...field,
+              fieldDesc: fieldInfo.fieldDesc,
+              orderNum: fieldInfo.orderNum,
+              sourceTable: fieldInfo.sourceTable
+            }
           }
         })
         this.structurePreviewList.forEach(item => {
