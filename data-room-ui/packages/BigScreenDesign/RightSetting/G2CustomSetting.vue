@@ -27,7 +27,7 @@
           v-if="config.border"
           label-width="120px"
           :config="config.border"
-          :bigTitle='config.title'
+          :big-title="config.title"
         />
       </div>
       <SettingTitle>位置</SettingTitle>
@@ -38,11 +38,11 @@
         />
       </div>
       <SettingTitle>旋转</SettingTitle>
-          <div class="lc-field-body">
-            <RotateSetting
-              :config="config"
-            />
-          </div>
+      <div class="lc-field-body">
+        <RotateSetting
+          :config="config"
+        />
+      </div>
       <template v-for="group in groupList">
         <div :key="group.groupName">
           <SettingTitle>   {{ group.groupName | filterGroupName }}</SettingTitle>
@@ -67,6 +67,7 @@
                   popper-class="bs-el-select"
                   class="bs-el-select"
                   :placeholder="`请选择${setting.label}`"
+                  :filterable="setting.filterable"
                   :multiple="setting.multiple"
                   clearable
                 >

@@ -14,7 +14,6 @@
 
 <script>
 import AMapLoader from '@amap/amap-jsapi-loader'
-import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'RemoteMap',
   props: {
