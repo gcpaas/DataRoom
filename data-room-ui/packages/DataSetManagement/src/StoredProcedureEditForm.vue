@@ -1013,12 +1013,23 @@ export default {
         this.dataPreviewList = res.data.list
         this.structurePreviewList = res.structure
         // 输出字段描述合并
-        this.structurePreviewList.forEach(field => {
-          const fieldInfo = this.dataForm.fieldList.find(item => item.fieldName === field.fieldName)
+        // this.structurePreviewList.forEach(field => {
+        //   const fieldInfo = this.dataForm.fieldList.find(item => item.fieldName === field.fieldName)
+        //   if (fieldInfo) {
+        //     field.fieldDesc = fieldInfo.fieldDesc
+        //     field.orderNum = fieldInfo.orderNum
+        //     field.sourceTable = fieldInfo.sourceTable
+        //   }
+        // })
+        this.structurePreviewList = this.dataForm.fieldList.map(field => {
+          const fieldInfo = this.structurePreviewList.find(item => item.fieldName === field.fieldName)
           if (fieldInfo) {
-            field.fieldDesc = fieldInfo.fieldDesc
-            field.orderNum = fieldInfo.orderNum
-            field.sourceTable = fieldInfo.sourceTable
+            return {
+              ...field,
+              fieldDesc: fieldInfo.fieldDesc,
+              orderNum: fieldInfo.orderNum,
+              sourceTable: fieldInfo.sourceTable
+            }
           }
         })
         this.structurePreviewList.forEach(item => {
