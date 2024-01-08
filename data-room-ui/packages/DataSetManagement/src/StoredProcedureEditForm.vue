@@ -1026,9 +1026,9 @@ export default {
           if (fieldInfo) {
             return {
               ...field,
-              fieldDesc: fieldInfo.fieldDesc,
-              orderNum: fieldInfo.orderNum,
-              sourceTable: fieldInfo.sourceTable
+              fieldDesc: field.fieldDesc,
+              orderNum: field.orderNum,
+              sourceTable: field.sourceTable
             }
           }
         })
