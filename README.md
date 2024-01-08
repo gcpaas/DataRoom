@@ -25,7 +25,7 @@
 
 ### 2. 设计器
 
-采用拖拉拽可视化设计，支持20+种图表组件、15种边框组件、10多种修饰组件
+采用拖拉拽可视化设计，支持30+基础组件、40+种图表组件、15种边框组件、10多种修饰组件
 
 <br>
 
@@ -42,7 +42,7 @@
 
 ### 4. 数据源
 
-支持MySQL、PostgreSQL、Oracle 、ClickHouse数据库接入
+支持MySQL、PostgreSQL、Oracle 、ClickHouse、SqlServer数据库接入
 
 <br>
 
