@@ -71,6 +71,16 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item label="自动播放">
+            <el-switch
+              v-model="config.customize.autoPlay"
+            />
+          </el-form-item>
+          <el-form-item label="播放控制">
+            <el-switch
+              v-model="config.customize.controls"
+            />
+          </el-form-item>
         </div>
       </el-form>
     </el-form>
@@ -81,7 +91,7 @@ import SettingTitle from 'data-room-ui/SettingTitle/index.vue'
 import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetting.vue'
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
-import {predefineColors} from "data-room-ui/js/utils/colorList";
+import { predefineColors } from 'data-room-ui/js/utils/colorList'
 export default {
   name: 'Border14Setting',
   components: {
@@ -95,7 +105,7 @@ export default {
       type: Object,
       required: true
     },
-     predefineThemeColors: {
+    predefineThemeColors: {
       type: Array,
       default: () => predefineColors
     }

@@ -16,6 +16,7 @@ import { videoPlayer } from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import 'videojs-contrib-hls'
 import { refreshComponentMixin } from 'data-room-ui/js/mixins/refreshComponent'
+
 export default {
   name: 'Video',
   components: { videoPlayer },
@@ -37,7 +38,9 @@ export default {
       videoOptions: {
         live: true,
         // 浏览器准备好时开始回放
-        autoplay: false,
+        autoplay: this.config.customize.autoPlay,
+        // 播放控制
+        controls: this.config.customize.controls,
         // true：默认视频播放无声音，需要手动开启声音
         muted: false,
         // 播放速度
@@ -76,13 +79,16 @@ export default {
   },
 
   watch: {},
-  mounted () {},
+  mounted () {
+  },
   methods: {
     // 由于静态组件没有混入公共函数，所以需要定义一个changeStyle方法，以免报错
     changeStyle (config) {
       this.videoOptions.sources.type = config.customize.videoType
       this.videoOptions.sources.type = config.customize.videoUrl
       this.videoOptions.poster = config.customize.posterUrl
+      this.videoOptions.autoplay = config.customize.autoPlay
+      this.videoOptions.controls = config.customize.controls
     }
   }
 }
@@ -95,7 +101,7 @@ export default {
   height: 100%;
   background-color: transparent;
   border-radius: 4px;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 
   .videoPlayer {
@@ -117,6 +123,7 @@ export default {
   background: #dddddd !important;
   border-radius: 10px;
 }
+
 ::v-deep .video-js .vjs-big-play-button {
   z-index: 100;
   left: 50%;

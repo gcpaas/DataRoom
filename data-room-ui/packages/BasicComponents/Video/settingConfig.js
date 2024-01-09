@@ -1,4 +1,4 @@
-import { commonConfig } from '../../js/config'
+import {commonConfig} from '../../js/config'
 
 export const settingConfig = {
   // 设置面板属性的显隐
@@ -27,7 +27,9 @@ const customConfig = {
   customize: {
     videoType: 'application/x-mpegURL',
     videoUrl: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
-    posterUrl: ''
+    posterUrl: '',
+    autoPlay: true,
+    controls: false
   }
 }
 export const dataConfig = {
