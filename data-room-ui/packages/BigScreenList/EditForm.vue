@@ -30,6 +30,25 @@
           />
         </el-form-item>
         <el-form-item
+          v-if="!!dataForm.id"
+          label="大屏编码"
+        >
+          <el-input
+            style="width: 200px"
+            v-model="dataForm.code"
+            readonly
+            class="bs-el-input"
+          />
+          <el-button
+            style="margin-left: 10px;"
+            type="text"
+            @click="copyCode"
+            class="bs-el-button"
+          >
+            <i class="el-icon-document-copy" />
+          </el-button>
+        </el-form-item>
+        <el-form-item
           label="推荐分辨率"
         >
           <el-select
@@ -390,6 +409,21 @@ export default {
           code: form.code
         }
       })
+    },
+    /**
+     * 复制大屏编码
+     */
+    copyCode () {
+      let code = this.dataForm.code
+      navigator.clipboard
+        .writeText(code)
+        .then(() => {
+          this.$message.success("复制成功");
+        })
+        .catch(err => {
+          this.$message.error("复制失败，请手动复制");
+          console.error(err);
+        })
     }
   }
 }

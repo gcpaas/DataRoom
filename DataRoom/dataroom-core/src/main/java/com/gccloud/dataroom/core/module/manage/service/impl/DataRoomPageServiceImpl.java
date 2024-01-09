@@ -127,6 +127,10 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
         if (StringUtils.isBlank(base64String)) {
             return fileUrl;
         }
+        // 如果不是base64字符串，直接返回 NOTE 因为如果前端截图失败，会将原封面地址传过来
+        if (!base64String.startsWith("data:image")) {
+            return base64String;
+        }
         try {
             // 去除base64字符串前缀，从初始位置，到逗号位置
             base64String = base64String.substring(base64String.indexOf(",") + 1);
