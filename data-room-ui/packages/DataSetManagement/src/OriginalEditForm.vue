@@ -984,13 +984,14 @@ export default {
               }
               this.$set(item, 'fieldDesc', fieldDesc)
               // this.structurePreviewList 和 this.oldStructurePreviewList 比较，如果旧的数据里fieldDesc有值则重新赋值给新的数据
-              this.structurePreviewList = this.oldStructurePreviewList.map(oldItem => {
-                const data = this.structurePreviewList.find(item => oldItem.fieldName === item.fieldName)
-                if (data) {
-                  return {
-                    ...oldItem,
-                    fieldDesc: oldItem.fieldDesc
-                  }
+              this.structurePreviewList.forEach(item => {
+                const oldItem = this.oldStructurePreviewList.find(oldItem => oldItem.fieldName === item.fieldName)
+                if (oldItem && oldItem.fieldDesc) {
+                  const { fieldDesc, ...rest } = oldItem
+                  item.fieldDesc = fieldDesc
+                  Object.keys(rest).forEach(key => {
+                    this.$set(item, key, rest[key])
+                  })
                 }
               })
             }
