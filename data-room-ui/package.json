@@ -3,7 +3,7 @@
   "version": "2.0.1-2024010901-Alpha",
   "description": "自定义大屏",
   "author": "gcpaas",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "main": "packages/index.js",
   "keywords": [
     "dataRoom",

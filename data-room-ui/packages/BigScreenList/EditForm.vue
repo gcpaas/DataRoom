@@ -414,16 +414,22 @@ export default {
      * 复制大屏编码
      */
     copyCode () {
-      let code = this.dataForm.code
-      navigator.clipboard
-        .writeText(code)
-        .then(() => {
-          this.$message.success("复制成功");
-        })
-        .catch(err => {
-          this.$message.error("复制失败，请手动复制");
-          console.error(err);
-        })
+      try {
+        let code = this.dataForm.code
+        const transfer = document.createElement('input')
+        document.body.appendChild(transfer)
+        transfer.value = code
+        transfer.focus()
+        transfer.select()
+        if (document.execCommand('copy')) {
+          document.execCommand('copy')
+        }
+        transfer.blur()
+        transfer.style.display = 'none'
+        this.$message.success('复制成功')
+      } catch (e) {
+        this.$message.error('复制失败, 请手动复制')
+      }
     }
   }
 }
