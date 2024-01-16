@@ -1,7 +1,7 @@
 <template>
   <div
-    style="width: 100%;height: 100%"
-    class="bs-design-wrap "
+    style="width: 100%; height: 100%"
+    class="bs-design-wrap"
   >
     <!-- <span style="color: aliceblue;font-size: 40px;">
       {{ columnData }}
@@ -21,7 +21,7 @@
       @row-click="rowClick"
     >
       <el-table-column
-        v-for="(col,index) in columnData"
+        v-for="(col, index) in config.option.columnData"
         :key="index"
         show-overflow-tooltip
         :prop="col.alias"
@@ -32,7 +32,6 @@
   </div>
 </template>
 <script>
-import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
@@ -76,7 +75,8 @@ export default {
           .getElementById(this.config.code)
           .querySelector('tr').style.backgroundColor =
           this.customTheme !== 'custom'
-            ? this.config.customize.headerBackgroundColor || headerBackgroundColor[this.customTheme]
+            ? this.config.customize.headerBackgroundColor ||
+              headerBackgroundColor[this.customTheme]
             : this.headerCellStyleObj.backgroundColor
       }
       const style = {
@@ -84,7 +84,8 @@ export default {
         borderBottom: 'solid 2px #007aff',
         backgroundColor:
           this.customTheme !== 'custom'
-            ? this.config.customize.headerBackgroundColor || headerBackgroundColor[this.customTheme]
+            ? this.config.customize.headerBackgroundColor ||
+              headerBackgroundColor[this.customTheme]
             : this.headerCellStyleObj.backgroundColor,
         color:
           this.customTheme === 'light'
@@ -100,25 +101,11 @@ export default {
       console.dir(val)
     }
   },
-  created () { },
+  created () {},
   mounted () {
     this.chartInit()
-    // this.config.option?.columnData 对象的key 根据 list 对应的key 来排序
-    EventBus.$on('dragSelectChange', (val) => {
-      if (val.length > 0) {
-        const sortedColumnData = {}
-        const columnData = cloneDeep(this.config.option?.columnData)
-        val.forEach((item, index) => {
-          sortedColumnData[item] = columnData[item]
-        })
-        this.columnData = sortedColumnData
-        this.updateKey = new Date().getTime()
-      }
-    })
   },
-  beforeDestroy () {
-    EventBus.$off('dragSelectChange')
-  },
+  beforeDestroy () { },
   methods: {
     cellStyle ({ row, column, rowIndex, columnIndex }) {
       const bodyBackgroundColor = {
@@ -134,10 +121,15 @@ export default {
       // 如果设置了奇偶行的背景颜色，则以奇偶行的背景颜色为主
       if (rowIndex % 2 && this.config.customize.evenRowBackgroundColor) {
         style.backgroundColor = this.config.customize.evenRowBackgroundColor
-      } else if (!(rowIndex % 2) && this.config.customize.oddRowBackgroundColor) {
+      } else if (
+        !(rowIndex % 2) &&
+        this.config.customize.oddRowBackgroundColor
+      ) {
         style.backgroundColor = this.config.customize.oddRowBackgroundColor
       } else {
-        style.backgroundColor = this.config.customize.bodyBackgroundColor || bodyBackgroundColor[this.customTheme]
+        style.backgroundColor =
+          this.config.customize.bodyBackgroundColor ||
+          bodyBackgroundColor[this.customTheme]
       }
       return style
     },
@@ -168,19 +160,25 @@ export default {
       return config
     },
     dataFormatting (config, data) {
-      config.option.tableData = data?.data && data.data.length > 0 ? data.data : []
+      config.option.tableData =
+        data?.data && data.data.length > 0 ? data.data : []
       const filteredData = {}
       const columnData = data?.columnData || {}
       const dimensionFieldList = config.dataSource.dimensionFieldList || []
-      if (config.dataSource.dimensionFieldList && config.dataSource.dimensionFieldList.length > 0) {
+      if (
+        config.dataSource.dimensionFieldList &&
+        config.dataSource.dimensionFieldList.length > 0
+      ) {
         // 根据config.dataSource.dimensionFieldList 数据的顺序将表格列顺序调整，使其初始化的时候，顺序和组件配置面板中的一致
         const sortedColumnData = {}
         dimensionFieldList.forEach((item, index) => {
           sortedColumnData[item] = columnData[item]
         })
-        Object?.keys(sortedColumnData).forEach(key => {
+        Object?.keys(sortedColumnData).forEach((key) => {
           if (
-            config.dataSource.dimensionFieldList.includes(sortedColumnData[key]?.alias)
+            config.dataSource.dimensionFieldList.includes(
+              sortedColumnData[key]?.alias
+            )
           ) {
             filteredData[key] = sortedColumnData[key]
           }
@@ -204,7 +202,7 @@ export default {
         // 将样式字符串转成对象
         const styleStr = match[1].trim().replace(/\s*;\s*$/, '') // 去掉末尾的空格和分号
         // const styleObj = {};
-        styleStr.split(';').forEach(s => {
+        styleStr.split(';').forEach((s) => {
           const [key, value] = s.split(':')
           if (key && value) {
             // 判断是否为空字符串
@@ -226,7 +224,7 @@ export default {
       if (match) {
         // 将样式字符串转成对象
         const styleStr = match[1].trim().replace(/\s*;\s*$/, '') // 去掉末尾的空格和分号
-        styleStr.split(';').forEach(s => {
+        styleStr.split(';').forEach((s) => {
           const [key, value] = s.split(':')
           if (key && value) {
             // 判断是否为空字符串
@@ -343,7 +341,7 @@ export default {
 
 // 滚动条的滑块
 ::v-deep .el-table__body-wrapper::-webkit-scrollbar-thumb {
-  background-color: #9093994D;
+  background-color: #9093994d;
   border-radius: 5px;
 
   &:hover {

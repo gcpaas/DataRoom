@@ -54,15 +54,12 @@ export default {
           if ((newVal.length === oldVal.length) && (JSON.stringify(oldVal) !== JSON.stringify(newVal))) {
             // 告诉右侧的数据配置面板，选择器内的选项顺序发生变化，修改config的数据顺序
             this.$emit('valuePositionChange', newVal)
-            // 告诉表格组件，表格列顺序发生变化
-            EventBus.$emit('dragSelectChange', newVal)
           }
         }
       }
     }
   },
   created () {
-    EventBus.$emit('dragSelectChange', this.selectVal)
   },
   mounted () {
     this.setSort()
