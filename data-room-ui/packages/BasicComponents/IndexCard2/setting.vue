@@ -216,7 +216,7 @@
             />
           </el-form-item>
           <el-form-item
-            label="第行文字内容"
+            label="第一行文字内容"
             label-width="100px"
           >
             <el-input
