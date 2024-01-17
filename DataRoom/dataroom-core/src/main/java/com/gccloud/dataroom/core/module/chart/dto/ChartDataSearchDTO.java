@@ -40,15 +40,6 @@ public class ChartDataSearchDTO {
     @ApiModelProperty(notes = "图表配置，仅在根据配置临时获取数据时使用")
     private Chart chart;
 
-    @ApiModelProperty("使用数据模型已有的关联关系进行联动查询")
-    private boolean linkByRelation = false;
-
-    @ApiModelProperty(notes = "联动模型编码")
-    private String relationModelCode;
-
-    @ApiModelProperty(notes = "联动关联值")
-    private String relationValue;
-
     @ApiModelProperty(notes = "过滤条件")
     private List<Filter> filterList;
 

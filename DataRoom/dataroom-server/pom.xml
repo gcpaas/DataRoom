@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.gccloud</groupId>
         <artifactId>dataroom</artifactId>
-        <version>2.0.1.2023122801.Alpha</version>
+        <version>2.0.1.2024011701.Alpha</version>
     </parent>
 
     <artifactId>dataroom-server</artifactId>
