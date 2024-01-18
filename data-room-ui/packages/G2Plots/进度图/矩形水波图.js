@@ -184,7 +184,7 @@ const option = {
   shape: 'rect',
   outline: {
     border: 2, // 边框宽度
-    distance: 1, // 边框距离
+    distance: 0, // 边框距离
     style: {
       stroke: '#FFFFFF' // 边框颜色
     }
