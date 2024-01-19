@@ -196,15 +196,6 @@ export default {
           const xAxis = config.setting.find(item => item.field === 'xField')?.value
           const yAxis = config.setting.find(item => item.field === 'yField')?.value
           config.option.data = data?.map(item => {
-            // 此处函数处理data
-            if (config.dataHandler) {
-              try {
-                // 此处函数处理data
-                eval(config.dataHandler)
-              } catch (e) {
-                console.error(e)
-              }
-            }
             if (config.chartType !== 'Bar' && xAxis && typeof item[xAxis] === 'number') {
               item[xAxis] = (item[xAxis]).toString()
             } else if (config.chartType === 'Bar' && yAxis && typeof item[yAxis] === 'number') {
