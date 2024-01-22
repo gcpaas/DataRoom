@@ -52,6 +52,18 @@ export default function axiosFormatting (customConfig) {
       method: newCustomConfig.method,
       url: newCustomConfig.url,
       params: newCustomConfig.params,
+      // params 序列化操作
+      paramsSerializer: (params) => {
+        return Object.keys(params)
+          .map(key => {
+            if (Array.isArray(params[key])) {
+              return params[key].map(value => `${key}=${value}`).join('&')
+            } else {
+              return `${key}=${params[key]}`
+            }
+          })
+          .join('&')
+      },
       data: newCustomConfig.method === 'post' ? body : undefined
     }).then(response => {
       resolve(response)
@@ -100,12 +112,20 @@ function evalArrFunc (paramsList, arr) {
     acc[cur.name] = cur.value
     return acc
   }, {})
-
   // 取name作为变量名, value作为变量值 { _name: '${name}', _token: '${token}'}
   const paramsListObj = arr.reduce((acc, cur) => {
-    acc[cur.key] = cur.value
+    if (acc[cur.key]) {
+      if (Array.isArray(acc[cur.key])) {
+        acc[cur.key].push(cur.value)
+      } else {
+        acc[cur.key] = [acc[cur.key], cur.value]
+      }
+    } else {
+      acc[cur.key] = cur.value
+    }
     return acc
   }, {})
+
   // 转成字符串
   const paramsListStr = JSON.stringify(paramsListObj)
 
