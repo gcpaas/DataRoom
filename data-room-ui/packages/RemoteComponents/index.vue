@@ -64,7 +64,7 @@ export default {
         remote.changeData(config, filterList)
       }
       // 调用混入中的方法
-      this.$options.mixins[1].methods.changeData.call(this, config, filterList)
+      return this.$options.mixins[1].methods.changeData.call(this, config, filterList)
     },
     ...mapMutations('bigScreen', ['changeChartConfig']),
     // 尝试渲染远程文件或远程字符串
@@ -120,7 +120,7 @@ export default {
         }
       }
     },
-        linkEvent (formData) {
+    linkEvent (formData) {
       this.linkage(formData)
     },
     /**
