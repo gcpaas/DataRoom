@@ -93,6 +93,7 @@ import { compile } from 'tiny-sass-compiler/dist/tiny-sass-compiler.esm-browser.
 import plotList, { getCustomPlots } from '../G2Plots/plotList'
 import { settingToTheme } from 'data-room-ui/js/utils/themeFormatting'
 import { getFileUrl } from 'data-room-ui/js/utils/file'
+import { customDeserialize } from 'data-room-ui/js/utils/jsonSerialize.js'
 
 export default {
   name: 'BigScreenRender',
@@ -351,7 +352,7 @@ export default {
     // 新增元素
     addChart (chart, position, isComponent) {
       const { left, top } = this.$el.getBoundingClientRect()
-      const _chart = !chart.code ? JSON.parse(chart) : chart
+      const _chart = !chart.code ? customDeserialize(chart) : chart
       let option = _chart.option
       if (_chart.type === 'customComponent') {
         option = {

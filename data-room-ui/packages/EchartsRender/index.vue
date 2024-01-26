@@ -75,9 +75,11 @@ export default {
     const resizeObserver = new ResizeObserver(entries => {
       if (this.chart) {
         this.chart.resize()
-        let config = this.observeChart(entries)
-        config = this.seriesStyle(config)
-        config.option && this.chart.setOption(config.option)
+        if(this.config.name.includes('3D')){
+          let config = this.observeChart(entries)
+          config = this.seriesStyle(config)
+          config.option && this.chart.setOption(config.option)
+        }
       }
     })
     resizeObserver.observe(dragSelect)
@@ -424,6 +426,9 @@ export default {
     },
     // 对series里面的样式进行配置
     seriesStyle (config) {
+      if(!config.name.includes('3D')){
+        return config
+      }
       const _config = CloneDeep(config)
       const seriesCustom = _config.option.seriesCustom
       const ids = Object.keys(config.option.seriesCustom)
