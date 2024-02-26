@@ -11,7 +11,7 @@
         :style="renderStyle"
       >
         <div
-          v-for="chart in chartList"
+          v-for="chart in initChartList"
           :key="chart.code"
           :style="getStyle(chart)"
         >
@@ -43,6 +43,7 @@ import NotPermission from 'data-room-ui/NotPermission'
 import Configuration from 'data-room-ui/Render/Configuration.vue'
 import DataViewDialog from 'data-room-ui/BigScreenDesign/DataViewDialog/index.vue'
 import { getFileUrl } from 'data-room-ui/js/utils/file'
+import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: 'BigScreenRun',
   components: {
@@ -66,7 +67,8 @@ export default {
       innerHeight: window.innerHeight,
       innerWidth: window.innerWidth,
       timer: null,
-      hasPermission: true
+      hasPermission: true,
+      initChartList: [],
     }
   },
   computed: {
@@ -145,6 +147,14 @@ export default {
           this.startTimer()
         }
       }
+    },
+    chartList: {
+      handler (val) {
+        if (this.initChartList.length === 0) {
+          this.initChartList = cloneDeep(this.chartList)
+        }
+      },
+      deep: true
     }
   },
   beforeRouteLeave (to, from, next) {
