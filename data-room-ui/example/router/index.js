@@ -6,9 +6,6 @@ const baseRoutes = [
   {
     path: '/notPermission',
     component: () => import('data-room-ui/NotPermission/index.vue')
-  }, {
-    path: '/test',
-    component: () => import('data-room-ui/BizComponent_Demo')
   }
 ]
 

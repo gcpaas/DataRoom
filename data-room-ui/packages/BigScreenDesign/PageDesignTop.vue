@@ -580,7 +580,7 @@ export default {
               }).then(() => { }).catch(() => { })
             }
           } else {
-            this.$message.warning('出现未知错误，请重试2')
+            this.$message.warning('出现未知错误，请重试')
           }
         })
     }
