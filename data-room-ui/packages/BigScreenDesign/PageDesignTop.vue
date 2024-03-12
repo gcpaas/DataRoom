@@ -446,26 +446,20 @@ export default {
           try {
             dataUrl = await toJpeg(node, { quality: 0.2 })
           } catch (error) {
-            if (error.type === 'error') {
-              // 判断的error.currentTarget是img标签，如果是的，就弹出消息说是图片跨域
-              if (error.currentTarget.tagName.toLowerCase() === 'img') {
-                // 确认框
-                this.$confirm('保存封面失败，我们将使用上次保存的封面，它不会影响其他数据的保存。由于图片资源跨域问题导致使用toDataURL API生成图片失败，我们需要将图片上传到资源库。然后在组件中使用资源库中的图片资源，以确保没有跨域问题。', '提示', {
-                  confirmButtonText: '确定',
-                  showCancelButton: false,
-                  type: 'warning',
-                  customClass: 'bs-el-message-box'
-                }).then(async () => {
-                  res = await saveScreen(pageInfo)
-                  this.$message.success('保存成功')
-                }).catch(async () => {
-                  res = await saveScreen(pageInfo)
-                  this.$message.success('保存成功')
-                })
-              }
-            } else {
-              this.$message.warning('出现未知错误，请重试')
-            }
+            // 判断的error.currentTarget是img标签，如果是的，就弹出消息说是图片跨域
+            // 确认框
+            this.$confirm('保存封面失败，我们将使用上次保存的封面，不会影响大屏数据的保存。可能是因为图片、视频资源跨域了导致使用toDataURL API生成图片失败，我们可以将资源上传到资源库。然后在组件中使用资源库中的图片资源，以确保没有跨域问题。', '提示', {
+              confirmButtonText: '确定',
+              showCancelButton: false,
+              type: 'warning',
+              customClass: 'bs-el-message-box'
+            }).then(async () => {
+              res = await saveScreen(pageInfo)
+              this.$message.success('保存成功')
+            }).catch(async () => {
+              res = await saveScreen(pageInfo)
+              this.$message.success('保存成功')
+            })
           }
           if (dataUrl) {
             if (showSize(dataUrl) > 200) {
@@ -586,7 +580,7 @@ export default {
               }).then(() => { }).catch(() => { })
             }
           } else {
-            this.$message.warning('出现未知错误，请重试')
+            this.$message.warning('出现未知错误，请重试2')
           }
         })
     }
