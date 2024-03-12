@@ -155,6 +155,7 @@ import decorationComponents from 'data-room-ui/js/config/decorationComponentsCon
 import LayerList from './LayerList/index.vue'
 import { mapMutations } from 'vuex'
 import IconSvg from 'data-room-ui/SvgIcon'
+import { customSerialize } from 'data-room-ui/js/utils/jsonSerialize.js'
 export default {
   name: 'PageLeftPanel',
   components: {
@@ -275,7 +276,7 @@ export default {
             /* 设置拖拽传输数据 */
             event.dataTransfer.setData(
               'dragComponent',
-              JSON.stringify({
+              customSerialize({
                 ...element,
                 offsetX: event.offsetX,
                 offsetY: event.offsetY
