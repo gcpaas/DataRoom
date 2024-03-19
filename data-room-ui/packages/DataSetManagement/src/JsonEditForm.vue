@@ -341,7 +341,7 @@
 
 <script>
 import LabelSelect from 'data-room-ui/DataSetLabelManagement/src/LabelSelect.vue'
-import vueJsonEditor from 'vue-json-editor'
+import vueJsonEditor from 'vue-json-editor-fix-cn'
 import vueJsonViewer from 'vue-json-viewer'
 import { getCategoryTree, datasetAdd, datasetUpdate, getDataset, nameCheckRepeat } from 'data-room-ui/js/utils/datasetConfigService'
 // import _ from 'lodash'

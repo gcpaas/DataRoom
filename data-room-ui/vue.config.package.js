@@ -35,7 +35,7 @@ module.exports = {
       'vue-codemirror': 'vue-codemirror',
       'vue-contextmenujs': 'vue-contextmenujs',
       'vue-draggable-resizable-gorkys': 'vue-draggable-resizable-gorkys',
-      'vue-json-editor': 'vue-json-editor',
+      'vue-json-editor-fix-cn': 'vue-json-editor-fix-cn',
       'vue-json-viewer': 'vue-json-viewer',
       'vue-quill-editor': 'vue-quill-editor',
       'vue-sketch-ruler': 'vue-sketch-ruler',
