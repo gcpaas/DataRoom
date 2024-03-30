@@ -1,15 +1,13 @@
-/*
- * @Descripttion:
- * @Author: liu.shiyi
- * @Date: 2024-01-30 14:36:24
- * @LastEditors: liu.shiyi
- * @LastEditTime: 2024-02-27 16:39:01
- */
 import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
-const baseRoutes = []
+const baseRoutes = [
+  {
+    path: '/notPermission',
+    component: () => import('data-room-ui/NotPermission/index.vue')
+  }
+]
 
 export const constantRoutes = []
 

@@ -346,6 +346,15 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
                 component.setComponentKey(newCode);
             }
         }
+        // 处理定时器
+        DataRoomPageDTO.PageConfig pageConfig = config.getPageConfig();
+        List<DataRoomPageDTO.RefreshConfig> refreshConfigList = pageConfig.getRefreshConfig();
+        if (refreshConfigList != null) {
+            for (DataRoomPageDTO.RefreshConfig refreshConfig : refreshConfigList) {
+                String oldChartCode = refreshConfig.getCode();
+                refreshConfig.setCode(chartCodeMap.get(oldChartCode));
+            }
+        }
         String copyUrl = this.copyCoverPicture(oldCode, screenEntity.getCode());
         if (StringUtils.isBlank(copyUrl)) {
             screenEntity.setCoverPicture(null);
