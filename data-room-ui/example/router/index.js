@@ -3,10 +3,6 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 const baseRoutes = [
-  {
-    path: '/notPermission',
-    component: () => import('data-room-ui/NotPermission/index.vue')
-  }
 ]
 
 export const constantRoutes = []
