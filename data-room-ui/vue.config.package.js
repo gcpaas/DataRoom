@@ -17,30 +17,22 @@ module.exports = {
   },
   configureWebpack: {
     externals: {
-      vuex: 'vuex',
       vue: 'vue',
       vueRouter: 'vue-router',
       '@antv/g2plot': '@antv/g2plot',
-      '@jiaminghi/data-view': '@jiaminghi/data-view',
       axios: 'axios',
-      echarts: 'echarts',
       'element-ui': 'element-ui',
       'insert-css': 'insert-css',
-      jquery: 'jquery',
       lodash: 'lodash',
-      moment: 'moment',
       qs: 'qs',
-      sortablejs: 'sortablejs',
       'tiny-sass-compiler': 'tiny-sass-compiler',
-      'vue-codemirror': 'vue-codemirror',
       'vue-contextmenujs': 'vue-contextmenujs',
       'vue-draggable-resizable-gorkys': 'vue-draggable-resizable-gorkys',
-      'vue-json-editor': 'vue-json-editor',
+      'vue-json-editor-fix-cn': 'vue-json-editor-fix-cn',
       'vue-json-viewer': 'vue-json-viewer',
       'vue-quill-editor': 'vue-quill-editor',
       'vue-sketch-ruler': 'vue-sketch-ruler',
       vuedraggable: 'vuedraggable',
-      ztree: 'ztree',
       // codemirror 导入但未声明的变量
       'codemirror/lib/codemirror.css': 'codemirror',
       'codemirror/theme/material-darker.css': 'codemirror',
@@ -64,9 +56,6 @@ module.exports = {
         deleteOriginalAssets: false // 是否删除原文件
       }),
       new ProvidePlugin({
-        jQuery: 'jquery',
-        $: 'jquery',
-        'window.jQuery': 'jquery'
       }),
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1
@@ -77,28 +66,16 @@ module.exports = {
     // set svg-sprite-loader
     config.module
       .rule('svg')
-      .exclude.add(resolve('packages/assets/images/bigScreenIcon/svg'))
-      .add(resolve('packages/Svgs/svg'))
-      .add(resolve('packages/assets/images/dataSourceIcon/svg'))
-      .add(resolve('packages/assets/images/pageIcon/svg'))
-      .add(resolve('packages/assets/images/alignIcon/svg'))
-      .end()
 
     config.module
       .rule('icons')
       .test(/\.svg$/)
-      .include.add(resolve('packages/assets/images/bigScreenIcon/svg'))
-      .add(resolve('packages/Svgs/svg'))
-      .add(resolve('packages/assets/images/dataSourceIcon/svg'))
-      .add(resolve('packages/assets/images/pageIcon/svg'))
-      .add(resolve('packages/assets/images/alignIcon/svg'))
       .end()
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
       .options({
         symbolId: 'icon-[name]'
       })
-      .end()
 
     const imagesRule = config.module.rule('images')
     imagesRule.uses.clear()

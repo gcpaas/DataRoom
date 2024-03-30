@@ -225,3 +225,32 @@ export function download (url, headers = {}, params = {}, body = {}) {
     })
   })
 }
+
+/**
+ * 文件上传
+ * @param url
+ * @param data
+ * @param customHandlerException
+ * @returns {Promise<unknown>}
+ */
+export function upload (url, data = {}, customHandlerException = false) {
+  if (!url.startsWith('http')) {
+    url = window.BS_CONFIG?.httpConfigs?.baseURL + url
+  }
+  const axiosInstance = customHandlerException ? httpCustom : http
+  return new Promise((resolve, reject) => {
+    axiosInstance.post(url, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then(response => {
+      if (customHandlerException) {
+        resolve(response)
+      } else {
+        resolve(response.data)
+      }
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}

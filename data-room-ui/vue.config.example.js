@@ -12,7 +12,6 @@ function resolve (dir) {
 }
 const publicPath = process.env.VUE_APP_HISTORY === 'y' ? process.env.VUE_APP_BASE + '/' : ''
 const JS_CDN = [
-  publicPath + 'static/libs/vuex/vuex.min.js',
   publicPath + 'static/libs/vue-router/vue-router.min.js'
 ]
 const CSS_CDN = []
@@ -24,11 +23,7 @@ const cdn = {
 const port = process.env.port || process.env.npm_config_port || 7521 // dev port
 
 const plugins = [
-  new webpack.ProvidePlugin({
-    jQuery: 'jquery',
-    $: 'jquery',
-    'window.jQuery': 'jquery'
-  })
+  new webpack.ProvidePlugin({ })
 ]
 module.exports = {
   parallel: require('os').cpus().length > 1,
@@ -42,7 +37,7 @@ module.exports = {
   },
   publicPath:
     process.env.VUE_APP_HISTORY === 'y' ? process.env.VUE_APP_BASE : './',
-  outputDir: 'dataRoomUi',
+  outputDir: 'dataroom',
   assetsDir: 'static',
   lintOnSave: false,
   productionSourceMap: false,
@@ -52,6 +47,16 @@ module.exports = {
     port: port,
     client: {
       overlay: false
+    }
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        implementation: require('sass'),
+        sassOptions: {
+          // 其他 Dart Sass 选项
+        }
+      }
     }
   },
   configureWebpack: config => {
@@ -67,8 +72,7 @@ module.exports = {
         '@': resolve('example'),
         vue$: 'vue/dist/vue.common',
         // 大屏工程路径别名
-        'data-room-ui': resolve('packages'),
-        '@gcpaas/data-room-ui': resolve('packages/index.js')
+        '@gcpaas/data-room-ui/packages': resolve('packages')
       },
       fallback: {
         path: false,
@@ -86,6 +90,7 @@ module.exports = {
     if (process.env.NODE_ENV === 'production') {
       return {
         plugins: [
+          // new webpack.CaseSensitivePathsPlugin({ ignore: /dataset/ }),
           // new BundleAnalyzerPlugin(),
           new CompressionPlugin({
             cache: true, // 开启缓存
@@ -108,21 +113,33 @@ module.exports = {
   chainWebpack: config => {
     config.optimization.splitChunks({
       cacheGroups: {
-        element: {
-          name: 'element-ui',
-          test: /[\\/]element-ui[\\/]/,
+        vue: {
+          name: 'vue',
+          test: /[\\/]vue[\\/]/,
           chunks: 'all',
           priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
-        // remotevue2loader: {
-        //   name: 'remote-vue2-loader',
-        //   test: /[\\/]remote-vue2-loader[\\/]/,
-        //   chunks: 'all',
-        //   priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
-        // },
-        echarts: {
-          name: 'echarts',
-          test: /[\\/]echarts[\\/]/,
+        vueRouter: {
+          name: 'vue-router',
+          test: /[\\/]vue-router[\\/]/,
+          chunks: 'all',
+          priority: 10
+        },
+        es6Promise: {
+          name: 'es6-promise',
+          test: /[\\/]es6-promise[\\/]/,
+          chunks: 'all',
+          priority: 10
+        },
+        vueContextMenuJs: {
+          name: 'vue-contextmenujs',
+          test: /[\\/]vue-contextmenujs[\\/]/,
+          chunks: 'all',
+          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        },
+        element: {
+          name: 'element-ui',
+          test: /[\\/]element-ui[\\/]/,
           chunks: 'all',
           priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
@@ -133,20 +150,32 @@ module.exports = {
           priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
         vueJsonEditor: {
-          name: 'vue-json-editor',
-          test: /[\\/]vue-json-editor[\\/]/,
-          chunks: 'all',
-          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
-        },
-        moment: {
-          name: 'moment',
-          test: /[\\/]moment[\\/]/,
+          name: 'vue-json-editor-fix-cn',
+          test: /[\\/]vue-json-editor-fix-cn[\\/]/,
           chunks: 'all',
           priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
         antv: {
           name: '@antv',
           test: /[\\/]@antv[\\/]/,
+          chunks: 'all',
+          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        },
+        html2canvas: {
+          name: 'html2canvas',
+          test: /[\\/]html2canvas[\\/]/,
+          chunks: 'all',
+          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        },
+        lodash: {
+          name: 'lodash',
+          test: /[\\/]lodash[\\/]/,
+          chunks: 'all',
+          priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
+        },
+        htmlToImage: {
+          name: 'html-to-image',
+          test: /[\\/]html-to-image[\\/]/,
           chunks: 'all',
           priority: 10 // 优化将优先考虑具有更高 priority（优先级）的缓存组
         },
@@ -168,25 +197,25 @@ module.exports = {
         return args
       })
     }
-
     config.plugins.delete('prefetch-index') //  关闭prefetch
     config.module
       .rule('svg')
-      .exclude.add(resolve('packages/assets/images/dataSourceIcon/svg'))
-      .add(resolve('packages/assets/images/pageIcon/svg'))
-      .add(resolve('packages/assets/images/bigScreenIcon/svg'))
-      .add(resolve('packages/Svgs/svg'))
-      .add(resolve('packages/assets/images/alignIcon/svg'))
+      // packages/assets/images/dataSourceIcon/svg
+      .exclude.add(resolve('packages'))
+      // .add(resolve('packages/assets/images/pageIcon/svg'))
+      // .add(resolve('packages/assets/images/bigScreenIcon/svg'))
+      // .add(resolve('packages/Svgs/svg'))
+      // .add(resolve('packages/assets/images/alignIcon/svg'))
       .end()
 
     config.module
       .rule('icons')
       .test(/\.svg$/)
-      .include.add(resolve('packages/assets/images/dataSourceIcon/svg'))
-      .add(resolve('packages/assets/images/pageIcon/svg'))
-      .add(resolve('packages/assets/images/bigScreenIcon/svg'))
-      .add(resolve('packages/Svgs/svg'))
-      .add(resolve('packages/assets/images/alignIcon/svg'))
+      .include.add(resolve('packages'))
+      // .add(resolve('packages/assets/images/pageIcon/svg'))
+      // .add(resolve('packages/assets/images/bigScreenIcon/svg'))
+      // .add(resolve('packages/Svgs/svg'))
+      // .add(resolve('packages/assets/images/alignIcon/svg'))
       .end()
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')

@@ -1,0 +1,176 @@
+//弹窗样式
+.dataroom-el-dialog {
+  ::v-deep .el-dialog {
+    margin-top: 5% !important;
+  }
+  ::v-deep .el-dialog__header {
+    background: #ffffff !important;
+    border-bottom: 2px solid #f5f7fa !important;
+    padding: 0 !important;
+    height: 40px;
+    line-height: 40px;
+    font-size: 15px;
+    font-weight: 700;
+    .el-dialog__title {
+      color: #36474f !important;
+      display: inline-block !important;
+      font-size: 16px !important;
+      position: relative !important;
+      padding-left: 20px !important;
+      border-left: none !important;
+    }
+    .el-dialog__title::before {
+      content: "" !important;
+      height: 16px !important;
+      position: absolute !important;
+      left: 0 !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      border-left: 4px solid #409eff !important;
+    }
+  }
+
+  ::v-deep .el-dialog__footer {
+    background: var(--db-background-2) !important;
+  }
+
+  ::v-deep .el-dialog__body {
+    max-height: 55vh;
+    overflow-y: auto;
+    .el-loading-mask {
+      opacity: 0.9 !important;
+    }
+
+    background: var(--db-background-2) !important;
+    overflow-y: auto !important;
+
+    .el-empty__image {
+      filter: opacity(0.5) !important;
+    }
+  }
+
+  ::v-deep .el-scrollbar {
+    height: 300px;
+    //overflow-x: hidden !important;
+
+    .el-scrollbar__view {
+      overflow-x: hidden !important;
+    }
+  }
+
+  ::v-deep ::-webkit-scrollbar {
+    width: 6px !important;
+    border-radius: 4px !important;
+    height: 4px !important;
+  }
+
+  ::v-deep ::-webkit-scrollbar-thumb {
+    background: #dddddd !important;
+    border-radius: 10px !important;
+  }
+  ::v-deep .el-dialog__headerbtn {
+    top: 10px;
+  }
+}
+
+// el 表格样式
+::v-deep .dataroom-el-table {
+  //padding: 0 16px;
+  th.el-table__cell.is-leaf {
+    border-bottom: 0px;
+  }
+  .el-table__cell.is-leaf {
+    background-color: #f5f5f5;
+    border-bottom: 0px;
+  }
+  td.el-table__cell {
+    border-bottom: 0px;
+  }
+  &:before {
+    display: none !important;
+  }
+}
+
+.bs-container {
+  position: relative;
+  height: 100%;
+  // width: 100%;
+  // position: absolute;
+  box-sizing: border-box;
+  // padding: 16px;
+  // background-color: var(--bs-background-1);
+  .inner-container {
+    height: 100%;
+    background-color: #ffffff;
+    // background-color: var(--bs-background-2);
+
+    .filter-container {
+      padding: 16px 16px 6px;
+
+      .filter-item:not(:last-child) {
+        margin-right: 10px;
+      }
+
+      .filter-item {
+        display: inline-block;
+        vertical-align: middle;
+        margin-bottom: 10px;
+      }
+
+      .el-input {
+        width: auto;
+      }
+
+      .el-select {
+        width: auto;
+      }
+    }
+
+    // page页样式
+    .bs-pagination {
+      text-align: right;
+      // position: absolute;
+      // right: 0;
+      // bottom: 16px;
+      padding-right: 16px;
+    }
+
+    //输入框样式
+    .el-input__inner {
+      height: 30px;
+      line-height: 30px;
+      font-size: 12px;
+    }
+
+    .el-input__icon {
+      line-height: 30px;
+    }
+
+    .el-form {
+      .el-input__inner {
+        width: 300px;
+      }
+
+      .el-select {
+        .el-input__inner {
+          width: auto;
+        }
+      }
+    }
+
+    //时间选择器样式
+    .el-date-editor .el-range-input {
+      height: 94%;
+      font-size: 12px;
+    }
+
+    .el-date-editor .el-range__icon {
+      line-height: 26px;
+    }
+
+    .el-date-editor .el-range-separator {
+      line-height: 26px;
+      font-size: 12px;
+    }
+  }
+}

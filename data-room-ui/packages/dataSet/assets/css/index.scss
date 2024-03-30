@@ -1,0 +1,137 @@
+.bs-container {
+  position: relative;
+  height: 100%;
+  // width: 100%;
+  // position: absolute;
+  box-sizing: border-box;
+  // padding: 16px;
+  // background-color: var(--bs-background-1);
+  .inner-container {
+    height: 100%;
+    background-color: #ffffff;
+    // background-color: var(--bs-background-2);
+
+    .filter-container {
+      padding: 16px 16px 6px;
+
+      .filter-item:not(:last-child) {
+        margin-right: 10px;
+      }
+
+      .filter-item {
+        display: inline-block;
+        vertical-align: middle;
+        margin-bottom: 10px;
+      }
+
+      .el-input {
+        width: auto;
+      }
+
+      .el-select {
+        width: auto;
+      }
+    }
+
+    // page页样式
+    .bs-pagination {
+      text-align: right;
+      // position: absolute;
+      // right: 0;
+      // bottom: 16px;
+      padding-right: 16px;
+    }
+
+    //输入框样式
+    .el-input__inner {
+      height: 30px;
+      line-height: 30px;
+      font-size: 12px;
+    }
+
+    .el-input__icon {
+      line-height: 30px;
+    }
+
+    .el-form {
+      .el-input__inner {
+        width: 300px;
+      }
+
+      .el-select {
+        .el-input__inner {
+          width: auto;
+        }
+      }
+    }
+
+    //时间选择器样式
+    .el-date-editor .el-range-input {
+      height: 94%;
+      font-size: 12px;
+    }
+
+    .el-date-editor .el-range__icon {
+      line-height: 26px;
+    }
+
+    .el-date-editor .el-range-separator {
+      line-height: 26px;
+      font-size: 12px;
+    }
+  }
+}
+
+.dataroom-table-box {
+  padding: 0 16px;
+}
+
+::v-deep .dataroom-dataset-el-scrollbar {
+  height: 100%;
+  overflow-y: auto;
+  .el-scrollbar__wrap {
+    overflow-x: hidden;
+  }
+}
+// 数据集设置标题样式
+.dataroom-dataset-basic-info {
+  font-size: 14px;
+  font-weight: 600;
+  position: relative;
+  padding: 16px 0;
+  padding-left: 12px;
+
+  &::before {
+    content: "";
+    height: 14px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: 4px solid #409eff;
+  }
+}
+
+.dataroom-dataset-right-setting {
+  margin-right: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .paramConfig {
+    max-height: 227px;
+
+    .field-wrap {
+      max-height: 175px;
+    }
+  }
+
+  .structure {
+    flex: 1;
+    overflow: hidden;
+
+    .field-wrap {
+      height: calc(100% - 40px);
+    }
+  }
+}

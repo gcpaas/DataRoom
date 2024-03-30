@@ -1,0 +1,91 @@
+/**
+* @Description: 大屏、仪表盘公用的样式
+* @author liu.shiyi
+* @date 2024/3/14 11:39
+*/
+.data-room-header-wrap {
+  height: 40px;
+  background-color: #007aff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  color: #ffffff;
+  padding: 0 5px;
+  border-bottom: 1px  solid #ededed;
+  .app-name {
+    cursor: pointer;
+  }
+
+  .head-btn-group {
+    display: flex;
+    margin-left: 50px;
+    align-items: center;
+
+    .zoom-slider{
+      width: 330px;
+      padding: 0 8px;
+      box-sizing: border-box;
+      display:flex;
+      justify-content: space-between;
+      align-items: center;
+      .slider-box{}
+      .select-box{
+        ::v-deep .el-input__inner{
+          width:80px
+        }
+      }
+      .icon{
+        font-size: 8px;
+      }
+      .el-icon-plus:hover{
+        cursor: zoom-in;
+      }
+      .el-icon-minus:hover{
+        cursor: zoom-out;
+      }
+    }
+  }
+
+  .item-wrap {
+    display: flex;
+    align-items: center;
+
+    .menu-img {
+      width: 18px;
+      height: 18px;
+      margin-left: 9px;
+      margin-right: 15px;
+      cursor: pointer;
+    }
+
+    .logo-text {
+      user-select: none;
+      margin-left: 9px;
+      font-size: 14px;
+    }
+
+    .name-span {
+      max-width: 300px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      &:hover{
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  ::v-deep .el-input__inner,
+  ::v-deep .el-color-picker__color-inner,
+  ::v-deep .el-input-number--mini,
+  ::v-deep .el-textarea__inner,
+  ::v-deep .el-input-group__append {
+    background: var(--bs-el-background-1);
+    color: var(--bs-el-text);
+    border: 0 !important;
+    width: 100px;
+  }
+
+}

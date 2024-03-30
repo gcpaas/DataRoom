@@ -1,0 +1,48 @@
+// tooltip 样式
+.dataroom-el-tooltip {
+  border: 1px solid transparent !important;
+  background-color: #007aff!important;
+  color: #fff!important;
+}
+.el-tooltip__popper[x-placement^=left] .popper__arrow::after {
+
+  border-left-color: #007aff;
+
+}
+
+.el-tooltip__popper[x-placement^=left] .popper__arrow{
+
+  border-left-color: #007aff;
+
+}
+.el-tooltip__popper[x-placement^=right] .popper__arrow::after {
+
+  border-right-color: #007aff;
+
+}
+
+.el-tooltip__popper[x-placement^=right] .popper__arrow{
+
+  border-right-color: #007aff;
+
+}.el-tooltip__popper[x-placement^=top] .popper__arrow::after {
+
+   border-top-color: #007aff;
+
+ }
+
+.el-tooltip__popper[x-placement^=top] .popper__arrow{
+
+  border-top-color: #007aff;
+
+}.el-tooltip__popper[x-placement^=bottom] .popper__arrow::after {
+
+   border-bottom-color: #007aff;
+
+ }
+
+.el-tooltip__popper[x-placement^=bottom] .popper__arrow{
+
+  border-bottom-color: #007aff;
+
+}

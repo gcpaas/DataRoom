@@ -368,9 +368,12 @@ GitHub.sublime-settings
 
 lib
 data-room-ui
-dataRoomUi
-dataRoomUi.zip
+dataRoomPro
+dataRoomPro.zip
 dataRoomPro
 dataRoomPro.zip
 bigScreen
 bigScreen.zip
+
+# Ignore public/config/index-development.js
+public/config/index-development.js

@@ -6,6 +6,7 @@ lib/
 hooks/
 dataRoomUi/
 dataRoomPro/
+dataRoomPro/
 
 # 只包含packages和public文件
 !packages/

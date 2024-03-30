@@ -1,62 +1,78 @@
-import { mapMutations, mapState } from 'vuex'
+
 import cloneDeep from 'lodash/cloneDeep'
-import { toJpeg, toPng } from 'html-to-image'
+import { toPng } from 'html-to-image'
 import isEmpty from 'lodash/isEmpty'
-import { randomString } from 'data-room-ui/js/utils'
+import { randomString } from '@gcpaas/data-room-ui/packages/js/utils'
 import Contextmenu from 'vue-contextmenujs'
 import Vue from 'vue'
 
 Vue.use(Contextmenu)
 export default {
   computed: {
-    ...mapState({
-      activeCode: state => state.bigScreen.activeCode,
-      activeCodes: state => state.bigScreen.activeCodes,
-      hoverCode: state => state.bigScreen.hoverCode,
-      activeItemConfig: state => state.bigScreen.activeItemConfig,
-      chartList: state => state.bigScreen.pageInfo.chartList,
-      presetLine: state => state.bigScreen.presetLine
-    })
+    chartList () {
+      return this.chartProvide.chartList()
+    }
   },
   data () {
     return {}
   },
+  inject: ['chartProvide'],
   mounted () {
   },
   methods: {
-    ...mapMutations('bigScreen', ['changeHoverCode', 'changeActiveCode', 'changeChartConfig', 'addItem', 'delItem', 'resetPresetLine', 'changeLayout', 'changeZIndex', 'changeLocked', 'saveTimeLine', 'copyCharts', 'pasteCharts', 'clearActiveCodes']), // 改变hover的组件
     changeHover (code) {
-      this.changeHoverCode(code)
-    }, // 改变激活的组件
-    changeActive (code) {
-      this.changeActiveCode(code)
-    }, // 打开右侧面板
+    },
+    // 打开右侧面板
     openRightPanel (config) {
-      this.changeActiveCode(config.code)
-      this.$emit('openRightPanel', config)
+      this.chartProvide.updateActiveChart(config.code)
+      this.chartProvide.openRightPanel()
+      this.chartProvide.changeIsScreenSet(false)
     }, // 查看数据
     dataView (config) {
       this.changeActiveCode(config.code)
       this.$emit('openDataViewDialog', config)
-    }, // 复制组件
+    },
+    // 复制组件
     copyItem (config) {
-      const newConfig = cloneDeep(config)
-      newConfig.code = randomString(8)
-      newConfig.title = newConfig.title + '_副本'
-      // 区分是从左侧添加还是复制的组件
-      newConfig.isCopy = true
-      newConfig.x = config.x + 20
-      newConfig.y = config.y + 20
-      if (config.group) {
-        newConfig.group = 'copy_' + config.group
+      const _config = cloneDeep(config)
+      const newConfig = this.replaceCodeWithrandom(_config)
+      newConfig.title.text = _config.title.text + '_副本'
+      const isCopy = true
+      this.chartProvide.addChart(newConfig, 'copy')
+    },
+    // 组件深克隆，当组件存在子组件时，需要更新子组件的父节点标识
+    replaceCodeWithrandom (config) {
+      // 如果 config 不存在，直接返回
+      if (!config) {
+        return
       }
-      this.addItem(newConfig)
-    }, // 删除单个组件
+
+      // 如果 config 是一个数组，则遍历数组中的每个元素
+      if (Array.isArray(config)) {
+        config.forEach(item => {
+          this.replaceCodeWithrandom(item) // 递归调用
+        })
+      } else if (typeof config === 'object') {
+        // 如果 config 是一个对象，则遍历对象的每个属性
+        for (const key in config) {
+          if (key === 'code') {
+            // 如果当前属性是 'code'，则将其替换为时间戳
+            config[key] = randomString(8)
+          } else if (Array.isArray(config[key]) || typeof config[key] === 'object') {
+            // 如果当前属性是一个数组或者对象，则递归调用 replaceCodeWithTimestamp 函数
+            this.replaceCodeWithrandom(config[key])
+          }
+        }
+      }
+
+      return config // 返回替换完成的 config 对象
+    },
+    // 删除单个组件
     deleteItem (config) {
       this.$confirm('确定删除该组件吗？', '提示', {
         confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning', customClass: 'bs-el-message-box'
       }).then(() => {
-        this.delItem(config.code)
+        this.chartProvide.deleteChart([config.code])
       })
     }, // 批量删除组合元素
     deleteGroupItem (config) {
@@ -66,39 +82,14 @@ export default {
         // 找到和本组件group相同的组件 删除
         const codes = this.chartList.filter(_chart => _chart.group === config.group && config.group).map(_chart => _chart.code)
         if (!isEmpty(codes)) {
-          this.delItem(codes)
+          this.chartProvide.deleteChart(codes)
         } else {
-          this.delItem(config.code)
+          this.chartProvide.deleteChart([config.code])
         }
       })
-    }, // 获取组件的坐标字符串，取整 （100， 100）
-    getPoint ({ x, y }) {
-      return `(${Math.round(x)}, ${Math.round(y)})`
-    }, // 组合/取消组合图表
+    },
+    // 组合/取消组合图表
     groupChart (chart) {
-      if (!chart.group || chart.group === 'tempGroup') {
-        // 添加组合
-        // eslint-disable-next-line no-unused-expressions
-        this.activeCodes?.forEach(code => {
-          const config = this.chartList.find(item => item.code === code)
-          this.changeChartConfig({
-            ...config, group: `group_${chart.code}`
-          })
-        })
-        this.saveTimeLine('组合图表')
-      } else {
-        // 取消组合
-        this.clearActiveCodes()
-        // 找到和本组件group相同的组件 取消group
-        this.chartList.forEach(_chart => {
-          if (_chart.group === chart.group) {
-            this.changeChartConfig({
-              ..._chart, group: ''
-            })
-          }
-        })
-        this.saveTimeLine('取消组合图表')
-      }
     }, // 生成图片
     generateImage (chart) {
       let componentDom = document.querySelector(`#${chart.code} .render-item-wrap`)
@@ -127,7 +118,7 @@ export default {
               }).then(() => { }).catch(() => { })
             }
           } else {
-            this.$message.warning('出现未知错误，请重试')
+            this.$message.warning('生成封面数据出现错误，请检查是否使用了跨域图片')
           }
         })
     }, // 右键菜单
@@ -187,8 +178,7 @@ export default {
             label: '组合复制',
             icon: 'el-icon-copy-document',
             onClick: () => {
-              this.copyCharts()
-              this.pasteCharts()
+              //  TODO: 组合复制的代码待补充
             }
           }, {
             label: '置于顶层',
@@ -198,8 +188,7 @@ export default {
               // 将当前图表置底
               chartList = chartList.filter(item => item.code !== chart.code)
               chartList.unshift(chart)
-              this.changeLayout(chartList)
-              this.changeZIndex(chartList)
+              // TODO:修改图层关系
             }
           }, {
             label: '置于底层',
@@ -209,14 +198,12 @@ export default {
               // 将当前图表置顶
               chartList = chartList.filter(item => item.code !== chart.code)
               chartList.push(chart)
-              this.changeLayout(chartList)
-              this.changeZIndex(chartList)
+              // TODO:修改图层关系
             }
           }, {
             label: chart.locked ? '解锁' : '锁定',
             icon: chart.locked ? 'el-icon-unlock' : 'el-icon-lock',
             onClick: () => {
-              this.changeLocked(chart)
             }
           }, {
             label: (chart.group && chart.group !== 'tempGroup') ? '取消组合' : '组合',

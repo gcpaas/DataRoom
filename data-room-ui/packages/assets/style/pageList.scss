@@ -1,0 +1,269 @@
+// 大屏、仪表盘、资源库等列表页面的公共样式
+.dataroom-page-list-wrap {
+  width: 100%;
+  position: relative;
+  height: 100%;
+  // margin:0 16px;
+  margin-left: 16px;
+  // padding: 16px;
+  color: #9ea9b2;
+  background-color: #ffffff;
+  .el-select {
+    display: inline-block !important;
+    position: relative !important;
+    width: auto !important;
+  }
+
+  .internal-box {
+    height: calc(100% - 32px);
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+  .top-search-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+
+    .el-input {
+      width: 200px;
+      margin-right: 20px;
+
+      ::v-deep.el-input__inner {
+        background-color: var(--bs-background-1) !important;
+      }
+    }
+  }
+
+  .list-wrap {
+    /* display: grid; */
+    overflow: auto;
+    //padding-right: 5px;
+    // 间隙自适应
+    justify-content: space-around;
+    // max-height: calc(100vh - 304px);
+    max-height: calc(100% - 90px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 15px;
+    //padding-bottom: 10px;
+    padding: 5px;
+    box-sizing: border-box;
+
+
+    .big-screen-card-wrap {
+      position: relative;
+      height: 180px;
+      cursor: pointer;
+
+      &:hover {
+        .screen-card__hover {
+          height: 180px;
+        }
+      }
+
+      .screen-card__hover {
+        position: absolute;
+        z-index: 999;
+        top: 0;
+        right: 0;
+        left: 0;
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+        height: 0;
+        transition: height 0.4s;
+        background: #00000099;
+
+        .screen-card__hover-box {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background: #00000080;
+          display: flex;
+          overflow: hidden;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .preview {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-evenly;
+          width: 100%;
+          cursor: pointer;
+          color: #007aff;
+
+          .circle {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #007aff;
+            border-radius: 50%;
+
+            &:hover {
+              color: #fff;
+              background: #007aff;
+            }
+
+            span {
+              font-size: 12px;
+            }
+          }
+        }
+      }
+
+      .big-screen-card-inner {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        background-color: #ffffff;
+        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+        color: #76838f;
+        border: 1px solid transparent;
+
+        &:hover {
+          color: var(--bs-el-text);
+          border: 1px solid #007aff;
+        }
+
+        .add-big-screen-card-text {
+          color: #007aff;
+          font-size: 24px;
+        }
+
+        .big-screen-card-img {
+          width: 100%;
+          height: 150px;
+          position: relative;
+          .big-screen-type{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 60px;
+            height: 30px;
+            background-color: #007aff;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            z-index: 1;
+          }
+          img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+          }
+
+          ::v-deep.image-slot {
+            height: 100%;
+            background-color: var(--bs-background-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          ::v-deep.el-image__error {
+            background-color: #1d1d1d;
+          }
+        }
+
+        .big-screen-bottom {
+          display: flex;
+          align-items: center;
+          flex-direction: row;
+          justify-content: space-between;
+          box-sizing: border-box;
+          width: 100%;
+          /*height: 26px;*/
+          padding: 0 10px;
+          height: calc(100% - 150px);
+          color: var(--bs-el-title);
+          background-color: var(--bs-background-2);
+
+          .left-bigscreen-title {
+            font-size: 14px;
+            overflow: hidden;
+            width: 100%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+
+          .right-bigscreen-time-title {
+            font-size: 14px;
+            overflow: hidden;
+            width: 140px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+
+        .big-screen-card-text {
+          font-size: 14px;
+          padding: 10px;
+          text-align: center;
+          color: #333;
+        }
+      }
+
+      .big-screen-card-inner-add {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    .error-img-text {
+      overflow: hidden;
+      padding: 0 10px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      -o-text-overflow: ellipsis;
+    }
+  }
+
+  .el-loading-parent--relative {
+    position: unset !important;
+  }
+
+  .footer-pagination-wrap {
+    width: 100%;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    text-align: right;
+  }
+  .empty-box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+}
+
+.bs-pagination {
+  ::v-deep .el-input__inner {
+    width: 110px !important;
+    border: none;
+    background: var(--bs-el-background-1);
+  }
+  text-align: right;
+}
+/*滚动条样式*/
+::v-deep ::-webkit-scrollbar {
+  width: 6px;
+  border-radius: 4px;
+  height: 4px;
+}
+::v-deep ::-webkit-scrollbar-thumb {
+  background: #E6E6E6 !important;
+  border-radius: 10px;
+}
