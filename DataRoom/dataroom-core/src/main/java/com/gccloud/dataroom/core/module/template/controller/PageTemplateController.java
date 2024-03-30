@@ -27,7 +27,7 @@ import java.util.List;
  * @date 2023/3/20 16:38
  */
 @RestController("dataRoomPageTemplateController")
-@RequestMapping("/bigScreen/template")
+@RequestMapping("/dataroom/template")
 @Api(tags = "页面模板")
 @ApiSort(value = 10)
 @Slf4j
@@ -37,7 +37,7 @@ public class PageTemplateController extends SuperController {
     private IPageTemplateService pageTemplateService;
 
     @Resource
-    private DataRoomConfig bigScreenConfig;
+    private DataRoomConfig dataRoomConfig;
 
     /**
      * 分页条件查询
@@ -53,7 +53,7 @@ public class PageTemplateController extends SuperController {
         PageVO<PageTemplateVO> pageVO = BeanConvertUtils.convertPage(page, PageTemplateVO.class, (source, target) -> {
             // 如果缩略图的不是http开头的，那么就拼接上当前服务后端地址
             if (target.getThumbnail() != null && !target.getThumbnail().startsWith("http")) {
-                target.setThumbnail(bigScreenConfig.getFile().getUrlPrefix() + target.getThumbnail());
+                target.setThumbnail(dataRoomConfig.getFile().getUrlPrefix() + target.getThumbnail());
             }
         });
         return success(pageVO);
@@ -72,7 +72,7 @@ public class PageTemplateController extends SuperController {
         List<PageTemplateVO> voList = BeanConvertUtils.convert(list, PageTemplateVO.class, (source, target) -> {
             // 如果缩略图的不是http开头的，那么就拼接上当前服务后端地址
             if (target.getThumbnail() != null && !target.getThumbnail().startsWith("http")) {
-                target.setThumbnail(bigScreenConfig.getFile().getUrlPrefix() + target.getThumbnail());
+                target.setThumbnail(dataRoomConfig.getFile().getUrlPrefix() + target.getThumbnail());
             }
         });
         return success(voList);

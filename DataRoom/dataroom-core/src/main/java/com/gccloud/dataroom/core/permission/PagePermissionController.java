@@ -21,15 +21,15 @@ import static com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePrevi
  */
 @Slf4j
 @RestController("dataRoomPagePermissionController")
-@RequestMapping("/bigScreen/permission")
-@Api(tags = "大屏页权限控制器")
+@RequestMapping("/dataroom/permission")
+@Api(tags = "页面权限控制器")
 public class PagePermissionController {
 
     @Resource
     private DataRoomPermissionClient permissionClient;
 
     @GetMapping("/check/{code}")
-    @ApiOperation(value = "校验大屏页权限")
+    @ApiOperation(value = "校验页面权限")
     public R<Boolean> checkPermission(HttpServletRequest request, @PathVariable("code") String code) {
         if (code.startsWith(PREVIEW_KEY)) {
             code = code.replace(PREVIEW_KEY + "_", "");

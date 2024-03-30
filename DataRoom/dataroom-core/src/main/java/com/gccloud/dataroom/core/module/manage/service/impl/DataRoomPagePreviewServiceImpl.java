@@ -5,11 +5,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.dataroom.core.module.basic.dao.DataRoomPagePreviewDao;
+import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
 import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
-import com.gccloud.dataroom.core.module.chart.bean.Chart;
-import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
+import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentDTO;
 import com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePreviewService;
-import com.gccloud.dataroom.core.utils.CodeGenerateUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -24,26 +23,26 @@ import java.util.List;
 public class DataRoomPagePreviewServiceImpl extends ServiceImpl<DataRoomPagePreviewDao, PagePreviewEntity> implements IDataRoomPagePreviewService {
 
     @Override
-    public String add(DataRoomPageDTO bigScreenPageDTO) {
-        String originalCode = bigScreenPageDTO.getCode();
+    public String add(BasePageDTO pageDTO) {
+        String originalCode = pageDTO.getCode();
         String code = PREVIEW_KEY + "_" + originalCode;
         LambdaQueryWrapper<PagePreviewEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PagePreviewEntity::getCode, code);
         List<PagePreviewEntity> list = this.list(queryWrapper);
         if (list != null && !list.isEmpty()) {
             // 有则直接更新
-            PagePreviewEntity pagePreviewEntity = list.get(0);
-            bigScreenPageDTO.setCode(code);
-            pagePreviewEntity.setConfig(bigScreenPageDTO);
-            pagePreviewEntity.setCreateDate(new Date());
-            this.updateById(pagePreviewEntity);
+            pageDTO.setCode(code);
+            pagePreview.setConfig(JSON.toJSONString(pageDTO));
+            pagePreview.setCreateDate(new Date());
+            this.updateById(pagePreview);
             return code;
         }
         // 没有则新增
-        bigScreenPageDTO.setCode(code);
-        PagePreviewEntity pagePreviewEntity = BeanConvertUtils.convert(bigScreenPageDTO, PagePreviewEntity.class);
+        pageDTO.setCode(code);
+        PagePreviewEntity pagePreviewEntity = BeanConvertUtils.convert(pageDTO, PagePreviewEntity.class);
+        pagePreviewEntity.setType(PageDesignConstant.Type.BIG_SCREEN);
         pagePreviewEntity.setCreateDate(new Date());
-        pagePreviewEntity.setConfig(bigScreenPageDTO);
+        pagePreviewEntity.setConfig(JSON.toJSONString(pageDTO));
         this.save(pagePreviewEntity);
         return code;
     }
@@ -54,7 +53,10 @@ public class DataRoomPagePreviewServiceImpl extends ServiceImpl<DataRoomPagePrev
         queryWrapper.eq(PagePreviewEntity::getCode, code);
         List<PagePreviewEntity> list = this.list(queryWrapper);
         if (list == null || list.isEmpty()) {
-            throw new GlobalException("大屏预览数据不存在，可能已过期");
+            if (throwException) {
+                throw new GlobalException("页面预览数据不存在，可能已过期");
+            }
+            return null;
         }
         return list.get(0);
     }

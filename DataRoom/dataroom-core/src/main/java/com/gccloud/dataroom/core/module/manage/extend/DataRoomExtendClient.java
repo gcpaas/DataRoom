@@ -18,7 +18,7 @@ public class DataRoomExtendClient {
 
 
     /**
-     * 删除大屏后的扩展方法
+     * 删除页面后的扩展方法
      * @param code
      */
     public void deleteByCode(String code) {
@@ -28,8 +28,8 @@ public class DataRoomExtendClient {
     }
 
     /**
-     * 大屏新增后的处理
-     * @param code 新增的大屏code
+     * 页面新增后的处理
+     * @param code 新增的页面code
      */
     public void afterAdd(String code) {
         if (extendService != null) {
@@ -38,8 +38,8 @@ public class DataRoomExtendClient {
     }
 
     /**
-     * 大屏删除后的处理
-     * @param code 删除的大屏code
+     * 页面删除后的处理
+     * @param code 删除的页面code
      */
     public void afterDelete(String code) {
         if (extendService != null) {

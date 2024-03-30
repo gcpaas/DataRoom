@@ -227,7 +227,7 @@ public class SftpClientUtils {
      * @param filePath
      * @return
      */
-    private boolean exist(String filePath) {
+    public boolean exist(String filePath) {
         ChannelSftp sftp = sFtpPoolService.borrowObject();
         try {
             sftp.lstat(filePath);
@@ -237,6 +237,33 @@ public class SftpClientUtils {
         } finally {
             sFtpPoolService.returnObject(sftp);
         }
+    }
+
+    /**
+     * 重命名文件
+     * @param sftpPath
+     * @param fileName
+     * @param newFileName
+     * @return
+     */
+    public boolean rename(String sftpPath, String fileName, String newFileName) {
+        ChannelSftp sftp = sFtpPoolService.borrowObject();
+        String[] paths = PathUtils.handlePath(sftpPath, fileName);
+        sftpPath = paths[0];
+        fileName = "/" + paths[1];
+        String filePath = sftpPath.concat(fileName);
+        String newFilePath = sftpPath.concat("/").concat(newFileName);
+        try {
+            sftp.rename(filePath, newFilePath);
+            log.info("文件重命名成功:{}", filePath);
+            return true;
+        } catch (SftpException e) {
+            log.info("文件重命名失败:{}", filePath);
+            log.error(ExceptionUtils.getStackTrace(e));
+        } finally {
+            sFtpPoolService.returnObject(sftp);
+        }
+        return false;
     }
 
 }

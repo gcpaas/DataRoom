@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * JSONObject 与 字符串自动转换
+ * BasePageDTO 与 字符串自动转换
  *
  * @author liuchengbiao
  * @version 1.0

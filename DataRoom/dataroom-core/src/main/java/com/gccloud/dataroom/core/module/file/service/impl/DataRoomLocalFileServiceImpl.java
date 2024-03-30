@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ import java.net.URLEncoder;
 public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
 
     @Resource
-    private DataRoomConfig bigScreenConfig;
+    private DataRoomConfig dataRoomConfig;
     @Resource
     private IDataRoomFileService sysFileService;
 
@@ -41,7 +42,7 @@ public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
         String originalFilename = file.getOriginalFilename();
         // 提取文件后缀名
         String extension = FilenameUtils.getExtension(originalFilename);
-        FileConfig fileConfig = bigScreenConfig.getFile();
+        FileConfig fileConfig = dataRoomConfig.getFile();
         if (!fileConfig.getAllowedFileExtensionName().contains("*") && !fileConfig.getAllowedFileExtensionName().contains(extension)) {
             log.error("不支持 {} 文件类型",extension);
             throw new GlobalException("不支持的文件类型");
@@ -50,7 +51,7 @@ public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
         String id = IdWorker.getIdStr();
         String newFileName = id + "." + extension;
         // 上传文件保存到的路径，根据实际情况修改，也可能是从配置文件获取到的文件存储路径
-        String basePath = bigScreenConfig.getFile().getBasePath();
+        String basePath = dataRoomConfig.getFile().getBasePath();
         String destPath = basePath + File.separator + newFileName;
         long size = file.getSize();
         try {
@@ -74,7 +75,7 @@ public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
     @Override
     public DataRoomFileEntity upload(InputStream inputStream, String fileName, long size, DataRoomFileEntity fileEntity) {
         // 上传文件保存到的路径, 从配置文件获取
-        String basePath = bigScreenConfig.getFile().getBasePath();
+        String basePath = dataRoomConfig.getFile().getBasePath();
         // 提取文件后缀名
         String extension = FilenameUtils.getExtension(fileName);
         String destPath = basePath + File.separator + fileName;
@@ -167,7 +168,7 @@ public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
 
     @Override
     public String copy(String sourcePath, String targetPath) {
-        String basePath = bigScreenConfig.getFile().getBasePath() + File.separator;
+        String basePath = dataRoomConfig.getFile().getBasePath() + File.separator;
         File sourceFile = new File(basePath + sourcePath);
         File targetFile = new File(basePath + targetPath);
         // 检查源文件是否存在
@@ -189,4 +190,53 @@ public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
         }
         return targetPath;
     }
+
+
+    @Override
+    public DataRoomFileEntity replace(MultipartFile file, DataRoomFileEntity entity, HttpServletResponse response, HttpServletRequest request) {
+        String originalFilename = file.getOriginalFilename();
+        // 提取文件后缀名
+        String extension = FilenameUtils.getExtension(originalFilename);
+        FileConfig fileConfig = dataRoomConfig.getFile();
+        if (!fileConfig.getAllowedFileExtensionName().contains("*") && !fileConfig.getAllowedFileExtensionName().contains(extension)) {
+            log.error("不支持 {} 文件类型",extension);
+            throw new GlobalException("不支持的文件类型");
+        }
+        // 重命名
+        String newFileName = entity.getNewName();
+        // 上传文件保存到的路径，根据实际情况修改，也可能是从配置文件获取到的文件存储路径
+        String basePath = dataRoomConfig.getFile().getBasePath();
+        String destPath = basePath + File.separator + newFileName;
+        long size = file.getSize();
+        String tempName = IdWorker.getIdStr() + RandomStringUtils.randomAlphanumeric(6);
+        File tempFile = new File(basePath + File.separator + tempName);
+        try {
+            File dest = new File(destPath);
+            if (dest.exists()) {
+                // 要替换的文件存在，则暂时重命名，如果替换成功，则删除重命名的文件
+                dest.renameTo(tempFile);
+                log.info("文件 {} 已存在，重命名为 {}", newFileName, tempName);
+            }
+            file.transferTo(dest);
+            // 替换成功，删除重命名的文件
+            if (tempFile.exists()) {
+                tempFile.delete();
+                log.info("文件 {} 替换成功，删除临时文件 {}", newFileName, tempName);
+            }
+        } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            log.error(String.format("文件 %s 存储到 %s 失败", originalFilename, destPath));
+            // 替换失败，将文件重命名回去
+            String oldName = basePath + File.separator + entity.getNewName();
+            tempFile.renameTo(new File(oldName));
+            log.info("文件 {} 替换失败，重命名回 {}", newFileName, entity.getNewName());
+            throw new GlobalException("文件替换失败");
+        }
+        entity.setOriginalName(originalFilename);
+        entity.setPath(basePath);
+        entity.setSize(size);
+        entity.setExtension(extension);
+        return entity;
+    }
+
 }

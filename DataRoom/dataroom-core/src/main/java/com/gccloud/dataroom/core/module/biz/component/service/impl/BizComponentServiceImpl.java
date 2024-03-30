@@ -14,7 +14,6 @@ import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.vo.PageVO;
 import com.gccloud.dataroom.core.utils.PathUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;

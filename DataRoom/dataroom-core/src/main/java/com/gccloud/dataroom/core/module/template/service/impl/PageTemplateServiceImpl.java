@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hongyang
@@ -42,10 +43,13 @@ public class PageTemplateServiceImpl extends ServiceImpl<DataRoomPageTemplateDao
         BasePageDTO config = pageTemplate.getConfig();
         // 清空数据配置
         ((DataRoomPageDTO) config).setId(null);
-        ((DataRoomPageDTO) config).getChartList().forEach(chart -> {
-            chart.setDataSource(new DataSetDataSource());
-            chart.setCode(null);
-        });
+        List<Map<String, Object>> chartList = ((DataRoomPageDTO) config).getChartList();
+        if (chartList != null) {
+            for (Map<String, Object> chart : chartList) {
+                chart.put("dataSource", new DataSetDataSource());
+                chart.put("code", null);
+            }
+        }
         this.save(pageTemplate);
         return pageTemplate.getId();
     }

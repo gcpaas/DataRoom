@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController("dataRoomTypeController")
-@RequestMapping("/bigScreen/type")
+@RequestMapping("/dataroom/type")
 @Api(tags = "分类管理")
 public class TypeController {
 

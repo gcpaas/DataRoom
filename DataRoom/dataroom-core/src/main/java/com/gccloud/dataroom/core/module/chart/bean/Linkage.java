@@ -35,9 +35,6 @@ public class Linkage {
         @ApiModelProperty("组件的唯一标识，用于知道和谁做联动")
         private String componentKey;
 
-        @ApiModelProperty("使用数据模型已有的关联关系进行联动查询")
-        private boolean linkByRelation;
-
         @ApiModelProperty("映射关系")
         private List<Mapping> maps;
     }

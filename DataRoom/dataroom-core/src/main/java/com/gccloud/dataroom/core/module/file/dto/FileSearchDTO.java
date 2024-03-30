@@ -18,11 +18,22 @@ public class FileSearchDTO extends SearchDTO {
      */
     private String extension;
 
+    /**
+     * 素材类型
+     */
+    private List<String> type;
+
 
     /**
      * 文件后缀列表，批量过滤
      */
     private List<String> extensionList;
+
+    /**
+     * 是否在资源管理中隐藏，0：否，1：是
+     */
+    private Integer hide;
+
 
 
 }

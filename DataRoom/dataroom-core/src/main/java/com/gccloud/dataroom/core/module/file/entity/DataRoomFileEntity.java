@@ -22,8 +22,16 @@ public class DataRoomFileEntity extends SuperEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(notes = "业务所属模块，非必须，提供给业务作为分类标识使用")
+    /**
+     * 导入/引用的资源，文件不由当前系统管理，仅仅通过url引用
+     */
+    public static final String IMPORT_RESOURCE = "<reference_resource>";
+
+    @ApiModelProperty(notes = "业务所属模块，分组")
     private String module;
+
+    @ApiModelProperty(notes = "图片：picture、视频：video、引用：reference,其他：other")
+    private String type;
 
     @ApiModelProperty(notes = "原文件名")
     private String originalName;
@@ -51,5 +59,15 @@ public class DataRoomFileEntity extends SuperEntity implements Serializable {
 
     @ApiModelProperty(notes = "桶名, 用于存储在云存储中的桶名")
     private String bucket;
+
+    @ApiModelProperty(notes = "是否在资源管理中隐藏，0：否，1：是")
+    private Integer hide;
+
+    @ApiModelProperty(notes = "封面地址")
+    private String coverUrl;
+
+    @ApiModelProperty(notes = "封面文件id")
+    private String coverId;
+
 
 }

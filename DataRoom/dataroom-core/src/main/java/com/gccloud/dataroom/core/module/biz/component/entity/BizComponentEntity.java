@@ -49,7 +49,4 @@ public class BizComponentEntity extends SuperEntity implements Serializable {
     @ApiModelProperty(notes = "排序")
     private Integer orderNum;
 
-    @ApiModelProperty(notes = "模块编码")
-    private String moduleCode;
-
 }

@@ -215,6 +215,47 @@ public class FtpClientUtil {
     }
 
     /**
+     * 重命名文件
+     * @param ftpPath
+     * @param fileName
+     * @param newFileName
+     * @return
+     */
+    public boolean rename(String ftpPath, String fileName, String newFileName) {
+        String[] paths = PathUtils.handlePath(ftpPath, fileName);
+        ftpPath = paths[0] + "/";
+        fileName = paths[1];
+        FTPClient ftpClient = ftpPoolService.borrowObject();
+        try {
+            // 检查目标文件是否存在
+            String finalFileName = fileName;
+            FTPFile[] ftpFiles = ftpClient.listFiles(ftpPath, file -> file.isFile() && file.getName().equals(finalFileName));
+            if (ftpFiles == null || ftpFiles.length == 0) {
+                log.error("FTP服务器文件不存在:{}", ftpPath + fileName);
+                return false;
+            }
+            ftpClient.setControlEncoding("UTF-8");
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            ftpClient.enterLocalPassiveMode();
+            ftpClient.changeWorkingDirectory(ftpPath);
+            boolean success = ftpClient.rename(fileName, newFileName);
+            if (!success) {
+                log.error("FTP文件重命名失败:{}", ftpPath + fileName);
+                return false;
+            }
+            log.info("FTP文件重命名成功:{}", ftpPath + fileName);
+            return true;
+        } catch (Exception e) {
+            log.info("FTP文件重命名失败:{}", ftpPath + fileName);
+            log.error(ExceptionUtils.getStackTrace(e));
+        } finally {
+            ftpPoolService.returnObject(ftpClient);
+        }
+        return false;
+    }
+
+
+    /**
      * 改变当前目录
      *
      * @param workPath 新的当前工作目录

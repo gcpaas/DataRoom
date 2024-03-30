@@ -37,7 +37,7 @@ public class DatasetExtendServiceImpl implements IDatasetExtendService {
         if (list == null || list.isEmpty()) {
             return null;
         }
-        String msg = "数据集已被以下大屏页面引用，无法删除：";
+        String msg = "数据集已被以下页面引用，无法删除：";
         for (PageEntity page : list) {
             msg += page.getName() + "、";
         }

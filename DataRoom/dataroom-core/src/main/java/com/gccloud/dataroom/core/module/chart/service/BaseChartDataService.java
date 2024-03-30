@@ -1,20 +1,16 @@
 package com.gccloud.dataroom.core.module.chart.service;
 
-import com.gccloud.dataroom.core.constant.PageDesignConstant;
-import com.gccloud.dataroom.core.module.chart.bean.Chart;
-import com.gccloud.dataroom.core.module.chart.bean.Filter;
-import com.gccloud.dataroom.core.module.chart.components.datasource.BaseChartDataSource;
-import com.gccloud.dataroom.core.module.chart.components.datasource.DataSetDataSource;
-import com.gccloud.dataroom.core.module.chart.dto.ChartDataSearchDTO;
-import com.gccloud.dataroom.core.module.chart.vo.ChartDataVO;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.JSON;
 import com.gccloud.common.vo.PageVO;
+import com.gccloud.dataroom.core.module.chart.bean.Filter;
+import com.gccloud.dataroom.core.module.chart.components.datasource.DataSetDataSource;
+import com.gccloud.dataroom.core.module.chart.dto.ChartDataSearchDTO;
+import com.gccloud.dataroom.core.module.chart.vo.ChartDataVO;
 import com.gccloud.dataset.constant.DatasetConstant;
 import com.gccloud.dataset.dto.DatasetParamDTO;
 import com.gccloud.dataset.entity.DatasetEntity;
 import com.gccloud.dataset.entity.config.JsonDataSetConfig;
-import com.gccloud.dataset.params.ParamsClient;
 import com.gccloud.dataset.service.IBaseDataSetService;
 import com.gccloud.dataset.service.factory.DataSetServiceFactory;
 import com.gccloud.dataset.vo.DatasetInfoVO;
@@ -28,7 +24,10 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author liuchengbiao
@@ -43,30 +42,23 @@ public class BaseChartDataService {
     @Resource
     private DataSetServiceFactory dataSetServiceFactory;
 
-    @Resource
-    private ParamsClient paramsClient;
 
-    public ChartDataVO dataQuery(Chart chart, ChartDataSearchDTO searchDTO) {
-        BaseChartDataSource dataSource = chart.getDataSource();
+    public ChartDataVO dataQuery(DataSetDataSource dataSource, ChartDataSearchDTO searchDTO) {
         if (dataSource == null) {
             return null;
         }
-        if (!dataSource.getClass().equals(DataSetDataSource.class)) {
+        if (StringUtils.isBlank(dataSource.getBusinessKey())) {
             return null;
         }
-        DataSetDataSource dataSetDataSource = (DataSetDataSource) dataSource;
-        if (StringUtils.isBlank(dataSetDataSource.getBusinessKey())) {
-            return null;
-        }
-        IBaseDataSetService dataSetService = dataSetServiceFactory.buildById(dataSetDataSource.getBusinessKey());
-        DatasetEntity datasetEntity = dataSetService.getByIdFromCache(dataSetDataSource.getBusinessKey());
+        IBaseDataSetService dataSetService = dataSetServiceFactory.buildById(dataSource.getBusinessKey());
+        DatasetEntity datasetEntity = dataSetService.getByIdFromCache(dataSource.getBusinessKey());
         if (datasetEntity == null) {
             return null;
         }
         if (DatasetConstant.DataSetType.JSON.equals(datasetEntity.getDatasetType())) {
-            return jsonDataQuery(datasetEntity, dataSetDataSource, dataSetService);
+            return jsonDataQuery(datasetEntity, dataSetService);
         }
-        return dataSetDataQuery(dataSetDataSource, chart,  searchDTO, dataSetService);
+        return dataSetDataQuery(dataSource, searchDTO, dataSetService);
     }
 
 
@@ -74,10 +66,9 @@ public class BaseChartDataService {
     /**
      * json类型的数据集数据处理
      * @param dataSet
-     * @param dataSetDataSource
      * @return
      */
-    private ChartDataVO jsonDataQuery(DatasetEntity dataSet, DataSetDataSource dataSetDataSource, IBaseDataSetService dataSetService) {
+    private ChartDataVO jsonDataQuery(DatasetEntity dataSet, IBaseDataSetService dataSetService) {
         ChartDataVO dataDTO = new ChartDataVO();
         JsonDataSetConfig config = (JsonDataSetConfig) dataSet.getConfig();
         Object jsonContent = dataSetService.execute(dataSet.getId(), null);
@@ -122,7 +113,7 @@ public class BaseChartDataService {
      * @param dataSource
      * @return
      */
-    private ChartDataVO dataSetDataQuery(DataSetDataSource dataSource, Chart chart, ChartDataSearchDTO searchDTO, IBaseDataSetService dataSetService) {
+    private ChartDataVO dataSetDataQuery(DataSetDataSource dataSource, ChartDataSearchDTO searchDTO, IBaseDataSetService dataSetService) {
         ChartDataVO dataDTO = new ChartDataVO();
         List<DatasetParamDTO> params = Lists.newArrayList();
         if (StringUtils.isBlank(dataSource.getBusinessKey())) {
@@ -142,19 +133,7 @@ public class BaseChartDataService {
             column.setType(type);
             columnData.put(field.get(DatasetInfoVO.FIELD_NAME).toString(), column);
         }
-        if (chart.getType().equals(PageDesignConstant.BigScreen.Type.TABLES)) {
-            // 表格的话，要按照dimensionFieldList对columnData进行排序
-            List<String> dimensionFieldList = dataSource.getDimensionFieldList();
-            LinkedHashMap<String, ChartDataVO.ColumnData> newColumnData = Maps.newLinkedHashMap();
-            dimensionFieldList.forEach(dimensionField -> newColumnData.put(dimensionField, columnData.get(dimensionField)));
-            // 剩下的字段按照原来的顺序放到后面
-            columnData.forEach((key, value) -> {
-                if (!newColumnData.containsKey(key)) {
-                    newColumnData.put(key, value);
-                }
-            });
-        }
-        if (dataSource.getParams() != null && dataSource.getParams().size() > 0) {
+        if (dataSource.getParams() != null && !dataSource.getParams().isEmpty()) {
             String setString = JSON.toJSONString(dataSetInfoVo.getParams());
             List<DatasetParamDTO> setParams = JSON.parseArray(setString, DatasetParamDTO.class);
             for (DatasetParamDTO param : setParams) {
@@ -163,13 +142,13 @@ public class BaseChartDataService {
                 }
                 String value = dataSource.getParams().get(param.getName()).toString();
                 // 如果传入了过滤条件，优先使用过滤条件
-                if (searchDTO.getFilterList() != null && searchDTO.getFilterList().size() > 0) {
+                if (searchDTO.getFilterList() != null && !searchDTO.getFilterList().isEmpty()) {
                     for (Filter filter : searchDTO.getFilterList()) {
                         if (filter.getColumn() == null) {
                             continue;
                         }
                         if (filter.getColumn().equals(param.getName())) {
-                            if (filter.getValue() == null || filter.getValue().size() == 0) {
+                            if (filter.getValue() == null || filter.getValue().isEmpty()) {
                                 continue;
                             }
                             value = filter.getValue().get(0);

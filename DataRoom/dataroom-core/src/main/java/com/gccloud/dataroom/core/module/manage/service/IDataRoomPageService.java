@@ -1,5 +1,6 @@
 package com.gccloud.dataroom.core.module.manage.service;
 
+import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
 import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
 import com.gccloud.dataroom.core.module.basic.service.IBasePageService;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
@@ -14,29 +15,29 @@ import com.gccloud.common.vo.PageVO;
 public interface IDataRoomPageService extends IBasePageService {
 
     /**
-     * 从空白新增大屏页
+     * 从空白新增页面
      *
-     * @param bigScreenPageDTO
+     * @param pageDTO
      * @return
      */
-    String add(DataRoomPageDTO bigScreenPageDTO);
+    String add(BasePageDTO pageDTO);
 
 
     /**
-     * 从模板新增大屏页
+     * 从模板新增页面
      *
-     * @param bigScreenPageDTO
+     * @param pageDTO
      * @return
      */
-    String addByTemplate(DataRoomPageDTO bigScreenPageDTO);
+    String addByTemplate(BasePageDTO pageDTO);
 
     /**
-     * 根据编码获取大屏页配置
+     * 根据编码获取页面配置
      *
-     * @param bigScreenPageDTO
+     * @param basePageDTO
      * @return
      */
-    DataRoomPageDTO getConfigByTemplate(DataRoomPageDTO bigScreenPageDTO);
+    BasePageDTO getConfigByTemplate(BasePageDTO basePageDTO);
 
     /**
      * 分页查询
@@ -47,18 +48,18 @@ public interface IDataRoomPageService extends IBasePageService {
     PageVO<PageEntity> getByCategory(DataRoomSearchDTO searchDTO);
 
     /**
-     * 更新大屏页
+     * 更新页面
      *
-     * @param bigScreenPageDTO
+     * @param pageDTO
      */
-    void update(DataRoomPageDTO bigScreenPageDTO);
+    void update(BasePageDTO pageDTO);
 
     /**
-     * 复制大屏页
-     * @param screenEntity
+     * 复制页面
+     * @param entity
      * @return
      */
-    String copy(PageEntity screenEntity);
+    String copy(PageEntity entity);
 
     /**
      * 根据编码删除

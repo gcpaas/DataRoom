@@ -12,18 +12,5 @@ import java.util.List;
  */
 @Mapper
 public interface DataRoomFileDao extends BaseMapper<DataRoomFileEntity> {
-    /**
-     * 更新文件下载次数
-     *
-     * @param addCount
-     */
-    void updateDownloadCount(@Param("addCount") Integer addCount, @Param("id") String fileId);
-
-
-    /**
-     * 获取所有文件后缀(去重)
-     * @return
-     */
-    List<String> getAllExtension();
 
 }

@@ -19,7 +19,7 @@ public class DataRoomPermissionClient {
 
 
     /**
-     * 校验大屏页面访问权限
+     * 校验页面访问权限
      * @param request 请求
      * @param pageCode 页面编码
      * @return 是否有权限
@@ -35,8 +35,8 @@ public class DataRoomPermissionClient {
 
     /**
      * 根据权限过滤
-     * @param allCode 全部的大屏code
-     * @return 当前用户有权限的大屏code
+     * @param allCode 全部的页面code
+     * @return 当前用户有权限的页面code
      */
     public List<String> filterByPermission(List<String> allCode) {
         if (permissionService != null) {

@@ -57,11 +57,11 @@ public class SwaggerBootstrapConfig implements WebMvcConfigurer {
     @Bean
     public Docket dataRoomDocket() {
         ApiInfo apiInfo = new ApiInfoBuilder()
-                .title("大屏")
+                .title("DataRoom")
                 .version("1.0.0")
                 .build();
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("大屏")
+                .groupName("DataRoom")
                 .apiInfo(apiInfo)
                 .useDefaultResponseMessages(false)
                 .globalResponseMessage(RequestMethod.GET, RESPONSE_MESSAGES)

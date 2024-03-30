@@ -23,7 +23,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @RestController("dataRoomBizComponentController")
-@RequestMapping("/bigScreen/bizComponent")
+@RequestMapping("/dataroom/bizComponent")
 @Api(tags = "业务组件")
 @ApiSort(value = 110)
 public class BizComponentController {
