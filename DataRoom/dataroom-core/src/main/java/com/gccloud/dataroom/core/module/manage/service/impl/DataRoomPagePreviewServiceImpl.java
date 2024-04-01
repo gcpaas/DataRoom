@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.BeanConvertUtils;
+import com.gccloud.common.utils.JSON;
+import com.gccloud.dataroom.core.constant.PageDesignConstant;
 import com.gccloud.dataroom.core.module.basic.dao.DataRoomPagePreviewDao;
 import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
 import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
@@ -26,10 +28,8 @@ public class DataRoomPagePreviewServiceImpl extends ServiceImpl<DataRoomPagePrev
     public String add(BasePageDTO pageDTO) {
         String originalCode = pageDTO.getCode();
         String code = PREVIEW_KEY + "_" + originalCode;
-        LambdaQueryWrapper<PagePreviewEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(PagePreviewEntity::getCode, code);
-        List<PagePreviewEntity> list = this.list(queryWrapper);
-        if (list != null && !list.isEmpty()) {
+        PagePreviewEntity pagePreview = this.getByCode(code, false);
+        if (pagePreview != null) {
             // 有则直接更新
             pageDTO.setCode(code);
             pagePreview.setConfig(JSON.toJSONString(pageDTO));
@@ -48,7 +48,40 @@ public class DataRoomPagePreviewServiceImpl extends ServiceImpl<DataRoomPagePrev
     }
 
     @Override
+    public String add(BizComponentDTO componentDTO) {
+        String originalCode = componentDTO.getCode();
+        String code = PREVIEW_KEY + "_" + originalCode;
+        PagePreviewEntity componentPreview = this.getByCode(code, false);
+        if (componentPreview != null) {
+            // 有则直接更新
+            componentDTO.setCode(code);
+            componentPreview.setConfig(JSON.toJSONString(componentDTO));
+            componentPreview.setCreateDate(new Date());
+            this.updateById(componentPreview);
+            return code;
+        }
+        // 没有则新增
+        componentDTO.setCode(code);
+        PagePreviewEntity componentPreviewEntity = BeanConvertUtils.convert(componentDTO, PagePreviewEntity.class);
+        componentPreviewEntity.setType(PageDesignConstant.Type.COMPONENT);
+        componentPreviewEntity.setCreateDate(new Date());
+        componentPreviewEntity.setConfig(JSON.toJSONString(componentDTO));
+        this.save(componentPreviewEntity);
+        return code;
+    }
+
+    @Override
     public PagePreviewEntity getByCode(String code) {
+        return this.getByCode(code, true);
+    }
+
+    /**
+     * 根据code获取页面预览数据
+     * @param code
+     * @param throwException
+     * @return
+     */
+    private PagePreviewEntity getByCode(String code, boolean throwException) {
         LambdaQueryWrapper<PagePreviewEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PagePreviewEntity::getCode, code);
         List<PagePreviewEntity> list = this.list(queryWrapper);

@@ -2,6 +2,7 @@ package com.gccloud.dataroom.core.module.manage.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gccloud.common.utils.JSON;
 import com.gccloud.dataroom.core.config.DataRoomConfig;
 import com.gccloud.dataroom.core.constant.PageDesignConstant;
 import com.gccloud.dataroom.core.module.basic.dao.DataRoomPageDao;
@@ -75,7 +76,12 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
     public PageEntity getByCode(String code) {
         if (code.startsWith(IDataRoomPagePreviewService.PREVIEW_KEY)) {
             PagePreviewEntity preview = previewService.getByCode(code);
-            return BeanConvertUtils.convert(preview, PageEntity.class);
+            // TODO 这里需要测试
+            BasePageDTO basePageDTO = JSON.parseObject(preview.getConfig(), BasePageDTO.class);
+            PageEntity pageEntity = BeanConvertUtils.convert(basePageDTO, PageEntity.class);
+            pageEntity.setConfig(basePageDTO);
+            pageEntity.setCode(preview.getCode());
+            return pageEntity;
         }
         return IDataRoomPageService.super.getByCode(code);
     }

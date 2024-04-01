@@ -27,9 +27,18 @@ public class BizComponentEntity extends SuperEntity implements Serializable {
     @ApiModelProperty(notes = "业务组件中文名称")
     private String name;
 
-    @ApiModelProperty(notes = "业务组件编码，页面唯一标识符")
+    @ApiModelProperty(notes = "业务组件编码，唯一标识符")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String code;
+
+    @ApiModelProperty(notes = "设计方式 1.低代码开发 2.在线开发")
+    private Integer designType;
+
+    @ApiModelProperty("可用范围 1：大屏 2：PC仪表盘 3：移动仪表盘")
+    private Integer scope;
+
+    @ApiModelProperty(notes = "低代码开发时，关联的自定义页面编码(因为这时候，数据保存在page表)")
+    private String pageCode;
 
     @ApiModelProperty(notes = "业务组件所属分组")
     private String type;
@@ -37,11 +46,17 @@ public class BizComponentEntity extends SuperEntity implements Serializable {
     @ApiModelProperty(notes = "组件封面")
     private String coverPicture;
 
-    @ApiModelProperty(notes = "vue组件内容")
+    @ApiModelProperty(notes = "组件源码vue内容")
     private String vueContent;
 
-    @ApiModelProperty(notes = "组件配置内容")
+    @ApiModelProperty(notes = "配置面板源码vue内容")
     private String settingContent;
+
+    @ApiModelProperty(notes = "默认数据json")
+    private String defaultData;
+
+    @ApiModelProperty(notes = "组件定义js")
+    private String componentDefine;
 
     @ApiModelProperty(notes = "备注")
     private String remark;
