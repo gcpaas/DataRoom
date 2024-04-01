@@ -35,7 +35,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/bigScreen/map")
+@RequestMapping("/dataroom/map")
 @Api(tags = "地图数据管理")
 @ApiSort(value = 110)
 public class DataRoomMapController {

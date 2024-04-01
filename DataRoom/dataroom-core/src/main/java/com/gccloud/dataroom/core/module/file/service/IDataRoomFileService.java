@@ -1,5 +1,6 @@
 package com.gccloud.dataroom.core.module.file.service;
 
+import com.gccloud.dataroom.core.module.file.dto.FileResourceDTO;
 import com.gccloud.dataroom.core.module.file.dto.FileSearchDTO;
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
 import com.gccloud.common.service.ISuperService;
@@ -37,5 +38,28 @@ public interface IDataRoomFileService extends ISuperService<DataRoomFileEntity> 
      * @return
      */
     List<String> getAllExtension();
+
+
+    /**
+     * 导入资源
+     * @param fileResourceDTO
+     * @return
+     */
+    String importResource(FileResourceDTO fileResourceDTO);
+
+    /**
+     * 更新资源
+     * @param fileResourceDTO
+     * @return
+     */
+    void updateResource(FileResourceDTO fileResourceDTO);
+
+
+    /**
+     * 根据新文件名获取文件
+     * @param newName
+     * @return
+     */
+    DataRoomFileEntity getByName(String newName);
 
 }

@@ -2,19 +2,26 @@ package com.gccloud.dataroom.core.module.biz.component.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.dataroom.core.config.DataRoomConfig;
+import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
+import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
 import com.gccloud.dataroom.core.module.biz.component.dao.DataRoomBizComponentDao;
+import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentDTO;
 import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentSearchDTO;
 import com.gccloud.dataroom.core.module.biz.component.entity.BizComponentEntity;
 import com.gccloud.dataroom.core.module.biz.component.service.IBizComponentService;
+import com.gccloud.dataroom.core.module.biz.component.vo.BizComponentVO;
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomOssService;
+import com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePreviewService;
+import com.gccloud.dataroom.core.module.manage.service.IDataRoomPageService;
 import com.gccloud.dataroom.core.utils.CodeGenerateUtils;
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.vo.PageVO;
 import com.gccloud.dataroom.core.utils.PathUtils;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
@@ -23,6 +30,9 @@ import javax.annotation.Resource;
 import java.io.*;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author hongyang
@@ -34,54 +44,76 @@ import java.util.List;
 public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao, BizComponentEntity> implements IBizComponentService {
 
     @Resource
-    private DataRoomConfig bigScreenConfig;
-
-    @Resource
     private IDataRoomOssService ossService;
 
+    @Resource
+    private IDataRoomPageService pageService;
+
     @Override
-    public PageVO<BizComponentEntity> getPage(BizComponentSearchDTO searchDTO) {
+    public PageVO<BizComponentVO> getPage(BizComponentSearchDTO searchDTO) {
         LambdaQueryWrapper<BizComponentEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(searchDTO.getName()), BizComponentEntity::getName, searchDTO.getName());
         queryWrapper.eq(StringUtils.isNotBlank(searchDTO.getType()), BizComponentEntity::getType, searchDTO.getType());
+        queryWrapper.eq(searchDTO.getDesignType() != null, BizComponentEntity::getDesignType, searchDTO.getDesignType());
+        queryWrapper.eq(searchDTO.getScope() != null, BizComponentEntity::getScope, searchDTO.getScope());
         queryWrapper.orderByAsc(BizComponentEntity::getOrderNum);
         queryWrapper.orderByDesc(BizComponentEntity::getCreateDate);
         PageVO<BizComponentEntity> page = this.page(searchDTO, queryWrapper);
         List<BizComponentEntity> list = page.getList();
-        String urlPrefix = bigScreenConfig.getFile().getUrlPrefix();
-        if (!urlPrefix.endsWith("/")) {
-            urlPrefix += "/";
-        }
-        for (BizComponentEntity entity : list) {
-            if (StringUtils.isBlank(entity.getCoverPicture())) {
-                continue;
+        List<BizComponentVO> voList = BeanConvertUtils.convert(list, BizComponentVO.class);
+        PageVO<BizComponentVO> pageVO = BeanConvertUtils.convert(page, PageVO.class);
+        pageVO.setList(voList);
+        // 如果designType为1，表示是低代码组件，需要查询配置信息
+        if (searchDTO.getDesignType() == null || searchDTO.getDesignType() == 1) {
+            // designType = 1 且 pageCode 不为空
+            Set<String> pageCodes = list.stream()
+                    .filter(e -> e.getDesignType() == 1 && StringUtils.isNotBlank(e.getPageCode()))
+                    .map(BizComponentEntity::getPageCode).collect(Collectors.toSet());
+            if (pageCodes.isEmpty()) {
+                return pageVO;
             }
-            entity.setCoverPicture(urlPrefix + entity.getCoverPicture().replace("\\", "/"));
+            LambdaQueryWrapper<PageEntity> pageQueryWrapper = new LambdaQueryWrapper<>();
+            pageQueryWrapper.in(PageEntity::getCode, pageCodes);
+            List<PageEntity> pageList = pageService.list(pageQueryWrapper);
+            Map<String, BasePageDTO> pageMap = pageList.stream().collect(Collectors.toMap(PageEntity::getCode, PageEntity::getConfig));
+            for (BizComponentVO vo : voList) {
+                BasePageDTO config = pageMap.get(vo.getPageCode());
+                vo.setConfig(config);
+            }
         }
-        return page;
+        return pageVO;
     }
 
     @Override
-    public List<BizComponentEntity> getList(BizComponentSearchDTO searchDTO) {
+    public List<BizComponentVO> getList(BizComponentSearchDTO searchDTO) {
         LambdaQueryWrapper<BizComponentEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(searchDTO.getName()), BizComponentEntity::getName, searchDTO.getName());
         queryWrapper.eq(StringUtils.isNotBlank(searchDTO.getType()), BizComponentEntity::getType, searchDTO.getType());
         List<BizComponentEntity> list = this.list(queryWrapper);
-        String urlPrefix = bigScreenConfig.getFile().getUrlPrefix();
-        if (!urlPrefix.endsWith("/")) {
-            urlPrefix += "/";
-        }
-        for (BizComponentEntity entity : list) {
-            if (StringUtils.isBlank(entity.getCoverPicture())) {
-                continue;
+        List<BizComponentVO> voList = BeanConvertUtils.convert(list, BizComponentVO.class);
+        // 如果designType为1，表示是低代码组件，需要查询配置信息
+        if (searchDTO.getDesignType() == null || searchDTO.getDesignType() == 1) {
+            // designType = 1 且 pageCode 不为空
+            Set<String> pageCodes = list.stream()
+                    .filter(e -> e.getDesignType() == 1 && StringUtils.isNotBlank(e.getPageCode()))
+                    .map(BizComponentEntity::getPageCode).collect(Collectors.toSet());
+            if (pageCodes.isEmpty()) {
+                return voList;
             }
-            entity.setCoverPicture(urlPrefix + entity.getCoverPicture().replace("\\", "/"));
+            LambdaQueryWrapper<PageEntity> pageQueryWrapper = new LambdaQueryWrapper<>();
+            pageQueryWrapper.in(PageEntity::getCode, pageCodes);
+            List<PageEntity> pageList = pageService.list(pageQueryWrapper);
+            Map<String, BasePageDTO> pageMap = pageList.stream().collect(Collectors.toMap(PageEntity::getCode, PageEntity::getConfig));
+            for (BizComponentVO vo : voList) {
+                BasePageDTO config = pageMap.get(vo.getPageCode());
+                vo.setConfig(config);
+            }
         }
-        return list;
+        return voList;
     }
 
     @Override
-    public BizComponentEntity getInfoByCode(String code) {
+    public BizComponentVO getInfoByCode(String code) {
         if (StringUtils.isBlank(code)) {
             throw new GlobalException("组件编码不能为空");
         }
@@ -92,52 +124,61 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
             throw new GlobalException("组件不存在");
         }
         BizComponentEntity bizComponentEntity = list.get(0);
-        String urlPrefix = bigScreenConfig.getFile().getUrlPrefix();
-        if (!urlPrefix.endsWith("/")) {
-            urlPrefix += "/";
+        BizComponentVO bizComponentVO = BeanConvertUtils.convert(bizComponentEntity, BizComponentVO.class);
+        if (bizComponentEntity.getDesignType() == 1 && StringUtils.isNotBlank(bizComponentEntity.getPageCode())) {
+            PageEntity pageEntity = pageService.getByCode(bizComponentEntity.getPageCode());
+            BasePageDTO config = pageEntity.getConfig();
+            bizComponentVO.setConfig(config);
         }
-        for (BizComponentEntity entity : list) {
-            String coverPicture = entity.getCoverPicture();
-            if (StringUtils.isBlank(coverPicture)) {
-                continue;
-            }
-            if (coverPicture.startsWith("/")) {
-                coverPicture = coverPicture.substring(1);
-            }
-            entity.setCoverPicture(urlPrefix + PathUtils.normalizePath(coverPicture));
-        }
-        return bizComponentEntity;
+        return bizComponentVO;
     }
 
     @Override
-    public String add(BizComponentEntity entity) {
-        boolean repeat = this.checkName(null, entity.getName());
+    public String add(BizComponentDTO componentDTO) {
+        boolean repeat = this.checkName(null, componentDTO.getName());
         if (repeat) {
             throw new GlobalException("组件名称重复");
         }
         String code = CodeGenerateUtils.generate("bizComponent");
-        entity.setCode(code);
-        if (StringUtils.isNotBlank(entity.getCoverPicture())) {
-            String base64Str = entity.getCoverPicture();
-            String fileUrl = this.saveCoverPicture(base64Str, entity.getCode());
-            entity.setCoverPicture(fileUrl);
+        componentDTO.setCode(code);
+        if (StringUtils.isNotBlank(componentDTO.getCoverPicture())) {
+            String base64Str = componentDTO.getCoverPicture();
+            String fileUrl = this.saveCoverPicture(base64Str, componentDTO.getCode());
+            componentDTO.setCoverPicture(fileUrl);
         }
-        this.save(entity);
+        // 如果是低代码组件，需要新增页面配置
+        if (componentDTO.getDesignType() == 1) {
+            BasePageDTO pageDTO = componentDTO.getConfig();
+            if (pageDTO == null) {
+                throw new GlobalException("页面配置不能为空");
+            }
+            String pageCode = pageService.add(pageDTO);
+            componentDTO.setPageCode(pageCode);
+        }
+        this.save(componentDTO);
         return code;
     }
 
     @Override
-    public void update(BizComponentEntity entity) {
-        boolean repeat = this.checkName(entity.getId(), entity.getName());
+    public void update(BizComponentDTO componentDTO) {
+        boolean repeat = this.checkName(componentDTO.getId(), componentDTO.getName());
         if (repeat) {
             throw new GlobalException("组件名称重复");
         }
-        if (StringUtils.isNotBlank(entity.getCoverPicture())) {
-            String base64Str = entity.getCoverPicture();
-            String fileUrl = this.saveCoverPicture(base64Str, entity.getCode());
-            entity.setCoverPicture(fileUrl);
+        if (StringUtils.isNotBlank(componentDTO.getCoverPicture())) {
+            String base64Str = componentDTO.getCoverPicture();
+            String fileUrl = this.saveCoverPicture(base64Str, componentDTO.getCode());
+            componentDTO.setCoverPicture(fileUrl);
         }
-        this.updateById(entity);
+        // 如果是低代码组件，需要更新页面配置
+        if (componentDTO.getDesignType() == 1) {
+            BasePageDTO pageDTO = componentDTO.getConfig();
+            if (pageDTO == null) {
+                throw new GlobalException("页面配置不能为空");
+            }
+            pageService.update(pageDTO);
+        }
+        this.updateById(componentDTO);
     }
 
 
@@ -197,6 +238,12 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
         } else {
             copyFrom.setCoverPicture(copyUrl);
         }
+        // 如果是低代码组件，需要复制页面配置
+        if (copyFrom.getDesignType() == 1 && StringUtils.isNotBlank(copyFrom.getPageCode())) {
+            PageEntity pageEntity = pageService.getByCode(copyFrom.getPageCode());
+            String pageCode = pageService.copy(pageEntity);
+            copyFrom.setPageCode(pageCode);
+        }
         this.save(copyFrom);
         return copyFrom.getCode();
     }
@@ -221,6 +268,11 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
     public void delete(String id) {
         if (StringUtils.isBlank(id)) {
             throw new GlobalException("组件id不能为空");
+        }
+        // 如果是低代码组件，需要删除页面配置
+        BizComponentEntity entity = this.getById(id);
+        if (entity.getDesignType() == 1 && StringUtils.isNotBlank(entity.getPageCode())) {
+            pageService.deleteByCode(entity.getPageCode());
         }
         this.removeById(id);
     }

@@ -1,9 +1,11 @@
 package com.gccloud.dataroom.core.module.biz.component.service;
 
+import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentDTO;
 import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentSearchDTO;
 import com.gccloud.dataroom.core.module.biz.component.entity.BizComponentEntity;
 import com.gccloud.common.service.ISuperService;
 import com.gccloud.common.vo.PageVO;
+import com.gccloud.dataroom.core.module.biz.component.vo.BizComponentVO;
 
 import java.util.List;
 
@@ -19,14 +21,14 @@ public interface IBizComponentService extends ISuperService<BizComponentEntity> 
      * @param searchDTO
      * @return
      */
-    PageVO<BizComponentEntity> getPage(BizComponentSearchDTO searchDTO);
+    PageVO<BizComponentVO> getPage(BizComponentSearchDTO searchDTO);
 
     /**
      * 获取组件列表
      * @param searchDTO
      * @return
      */
-    List<BizComponentEntity> getList(BizComponentSearchDTO searchDTO);
+    List<BizComponentVO> getList(BizComponentSearchDTO searchDTO);
 
 
     /**
@@ -34,20 +36,20 @@ public interface IBizComponentService extends ISuperService<BizComponentEntity> 
      * @param code
      * @return
      */
-    BizComponentEntity getInfoByCode(String code);
+    BizComponentVO getInfoByCode(String code);
 
     /**
      * 新增组件
      * @param entity
      * @return
      */
-    String add(BizComponentEntity entity);
+    String add(BizComponentDTO entity);
 
     /**
      * 更新组件
      * @param entity
      */
-    void update(BizComponentEntity entity);
+    void update(BizComponentDTO entity);
 
     /**
      * 复制

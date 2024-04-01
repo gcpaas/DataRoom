@@ -17,7 +17,6 @@ CREATE TABLE `ds_category_tree` (
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   `parent_id` bigint(64) DEFAULT NULL COMMENT '父级ID',
   `type` varchar(255) NOT NULL,
-  `module_code` varchar(255) DEFAULT NULL,
   `update_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识',
@@ -36,7 +35,6 @@ CREATE TABLE `ds_datasource` (
   `port` int(16) DEFAULT NULL COMMENT '端口',
   `username` varchar(255) DEFAULT NULL COMMENT '用户名',
   `password` text COMMENT '密码',
-  `module_code` varchar(255) DEFAULT NULL COMMENT '模块编码',
   `editable` tinyint(2) DEFAULT '0' COMMENT '是否可编辑，0 不可编辑 1 可编辑',
   `remark` varchar(255) DEFAULT NULL,
   `update_date` timestamp                        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -53,7 +51,6 @@ CREATE TABLE `ds_dataset` (
   `type_id` varchar(255) DEFAULT NULL COMMENT '种类ID',
   `remark` text CHARACTER SET utf8 COMMENT '描述',
   `dataset_type` varchar(64) CHARACTER SET utf8 NOT NULL COMMENT '数据集类型（自定义数据集 custom、模型数据集model、原始数据集original、API数据集api、JSON数据集 json）',
-  `module_code` varchar(255) COLLATE utf8_general_mysql500_ci DEFAULT NULL COMMENT '模块编码',
   `editable` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否可编辑，0 不可编辑 1 可编辑',
   `source_id` bigint(32) DEFAULT NULL COMMENT '数据源ID',
   `cache` tinyint(1) DEFAULT 0 NOT NULL COMMENT '是否对执行结构缓存 0 不缓存 1 缓存',
@@ -109,7 +106,7 @@ CREATE TABLE `ds_dataset_label` (
 ) ENGINE=InnoDB   DEFAULT CHARSET=utf8 COLLATE=utf8_general_mysql500_ci COMMENT='数据集与标签关联表';
 
 # 20230710 数据源新增字段
-ALTER TABLE `ds_datasource` ADD COLUMN `table_name` varchar(255) DEFAULT NULL COMMENT '表名' AFTER `module_code`;
+ALTER TABLE `ds_datasource` ADD COLUMN `table_name` varchar(255) DEFAULT NULL COMMENT '表名';
 
 
 # 20230907 新增地图数据维护表
@@ -150,3 +147,18 @@ alter table big_screen_page drop column icon;
 alter table big_screen_page drop column icon_color;
 alter table big_screen_page drop column layout;
 alter table big_screen_page drop column model_code;
+
+
+# 20240328 文件表、业务组件表、预览表、新增字段
+alter table big_screen_file add column type varchar(255) NOT NULL DEFAULT '' COMMENT '类型，图片：picture、视频：video、模型：model、引用：reference,其他：other';
+alter table big_screen_file add column hide tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否在资源库中隐藏，1是0否';
+alter table big_screen_file add column cover_url varchar(255) NOT NULL DEFAULT '' COMMENT '封面图片路径';
+alter table big_screen_file add column cover_id bigint(64) NOT NULL DEFAULT '0' COMMENT '封面图片id';
+
+alter table big_screen_biz_component add column default_data longtext COMMENT '默认数据json';
+alter table big_screen_biz_component add column component_define longtext COMMENT '组件定义js';
+alter table big_screen_biz_component add column design_type int(11) NOT NULL DEFAULT 1 COMMENT '设计方式 1.低代码开发 2.在线开发';
+alter table big_screen_biz_component add column scope int(11) NOT NULL DEFAULT 1 COMMENT '可用范围 1：大屏 2：PC仪表盘 3：移动仪表盘 4:3D的场景';
+alter table big_screen_biz_component add column page_code varchar(255) NOT NULL DEFAULT '' COMMENT '低代码开发时，关联的自定义页面编码(因为这时候，数据保存在page表)';
+
+alter table big_screen_page_preview add column type varchar(255) NOT NULL DEFAULT '' COMMENT '类型，bigScreen：大屏，dashboard：仪表盘，component：业务组件';

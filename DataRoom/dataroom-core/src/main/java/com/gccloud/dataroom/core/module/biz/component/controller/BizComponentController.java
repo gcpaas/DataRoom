@@ -1,13 +1,15 @@
 package com.gccloud.dataroom.core.module.biz.component.controller;
 
 import com.gccloud.common.permission.ApiPermission;
-import com.gccloud.common.utils.BeanConvertUtils;
+import com.gccloud.common.utils.JSON;
+import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
 import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentDTO;
 import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentSearchDTO;
-import com.gccloud.dataroom.core.module.biz.component.entity.BizComponentEntity;
 import com.gccloud.dataroom.core.module.biz.component.service.IBizComponentService;
 import com.gccloud.common.vo.PageVO;
 import com.gccloud.common.vo.R;
+import com.gccloud.dataroom.core.module.biz.component.vo.BizComponentVO;
+import com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePreviewService;
 import com.gccloud.dataroom.core.permission.Permission;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +25,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @RestController("dataRoomBizComponentController")
-@RequestMapping("/bigScreen/bizComponent")
+@RequestMapping("/dataroom/bizComponent")
 @Api(tags = "业务组件")
 @ApiSort(value = 110)
 public class BizComponentController {
@@ -31,6 +33,9 @@ public class BizComponentController {
 
     @Resource
     private IBizComponentService bizComponentService;
+
+    @Resource
+    private IDataRoomPagePreviewService previewService;
 
     @ApiPermission(permissions = {Permission.Component.VIEW})
     @GetMapping("/page")
@@ -40,27 +45,45 @@ public class BizComponentController {
             @ApiImplicitParam(name = "size", value = "每页条数", paramType = "query", required = true, dataType = "int"),
             @ApiImplicitParam(name = "name", value = "名称模糊查询", paramType = "query", dataType = "string")
     })
-    public R<PageVO<BizComponentEntity>> getPage(@ApiParam(name = "查询", value = "传入查询的业务条件", required = true) BizComponentSearchDTO searchDTO) {
-        PageVO<BizComponentEntity> page = bizComponentService.getPage(searchDTO);
+    public R<PageVO<BizComponentVO>> getPage(@ApiParam(name = "查询", value = "传入查询的业务条件", required = true) BizComponentSearchDTO searchDTO) {
+        PageVO<BizComponentVO> page = bizComponentService.getPage(searchDTO);
         return R.success(page);
     }
+
+    @ApiPermission(permissions = {Permission.Component.ADD})
+    @PostMapping("/preview/save")
+    @ApiOperation(value = "预览暂存", notes = "预览暂存", produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<String> preview(@RequestBody BizComponentDTO dto) {
+        // TODO
+        String code = previewService.add(dto);
+        return R.success(code);
+    }
+
+    @ApiPermission(permissions = {Permission.Component.VIEW})
+    @PostMapping("/preview/{code}")
+    @ApiOperation(value = "预览", notes = "获取预览暂存的数据", produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<BizComponentVO> preview(@PathVariable String code) {
+        // TODO 是不是根据设计类型返回不同的数据
+        PagePreviewEntity pagePreview = previewService.getByCode(code);
+        String config = pagePreview.getConfig();
+        BizComponentVO vo = JSON.parseObject(config, BizComponentVO.class);
+        return R.success(vo);
+    }
+
 
     @ApiPermission(permissions = {Permission.Component.ADD})
     @PostMapping("/add")
     @ApiOperation(value = "新增", notes = "新增", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> add(@ApiParam(name = "新增", value = "传入新增的业务条件", required = true) @RequestBody BizComponentDTO dto) {
-        BizComponentEntity entity = BeanConvertUtils.convert(dto, BizComponentEntity.class);
-        String code = bizComponentService.add(entity);
+        String code = bizComponentService.add(dto);
         return R.success(code);
     }
-
 
     @ApiPermission(permissions = {Permission.Component.UPDATE})
     @PostMapping("/update")
     @ApiOperation(value = "修改", notes = "修改", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Void> update(@ApiParam(name = "修改", value = "传入修改的业务条件", required = true) @RequestBody BizComponentDTO dto) {
-        BizComponentEntity entity = BeanConvertUtils.convert(dto, BizComponentEntity.class);
-        bizComponentService.update(entity);
+        bizComponentService.update(dto);
         return R.success();
     }
 
@@ -83,9 +106,9 @@ public class BizComponentController {
     @ApiPermission(permissions = {Permission.Component.VIEW})
     @GetMapping("/info/{code}")
     @ApiOperation(value = "根据编码获取组件", notes = "根据编码获取组件", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<BizComponentEntity> getInfoByCode(@ApiParam(name = "根据编码获取组件", value = "传入根据编码获取组件的业务条件", required = true) @PathVariable String code) {
-        BizComponentEntity entity = bizComponentService.getInfoByCode(code);
-        return R.success(entity);
+    public R<BizComponentVO> getInfoByCode(@ApiParam(name = "根据编码获取组件", value = "传入根据编码获取组件的业务条件", required = true) @PathVariable String code) {
+        BizComponentVO vo = bizComponentService.getInfoByCode(code);
+        return R.success(vo);
     }
 
     @ApiPermission(permissions = {Permission.Component.VIEW})

@@ -12,7 +12,7 @@ import java.util.List;
 public interface IDataRoomPermissionService {
 
     /**
-     * 校验大屏页面数据访问权限
+     * 校验页面数据访问权限
      * @param request
      * @param pageCode
      * @return
@@ -21,8 +21,8 @@ public interface IDataRoomPermissionService {
 
     /**
      * 根据权限过滤
-     * @param allCode 全部的大屏code
-     * @return 当前用户有权限的大屏code
+     * @param allCode 全部的页面code
+     * @return 当前用户有权限的页面code
      */
     default List<String> filterByPermission(List<String> allCode) {
         return allCode;

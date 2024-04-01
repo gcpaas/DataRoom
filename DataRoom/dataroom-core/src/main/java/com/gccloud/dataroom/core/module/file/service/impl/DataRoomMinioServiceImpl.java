@@ -44,7 +44,7 @@ public class DataRoomMinioServiceImpl implements IDataRoomOssService {
     private MinioClient minioclient;
 
     @Resource
-    private DataRoomConfig bigScreenConfig;
+    private DataRoomConfig dataRoomConfig;
 
     @Resource
     private IDataRoomFileService sysFileService;
@@ -60,7 +60,7 @@ public class DataRoomMinioServiceImpl implements IDataRoomOssService {
         String originalFilename = file.getOriginalFilename();
         // 提取文件后缀名
         String extension = FilenameUtils.getExtension(originalFilename);
-        FileConfig fileConfig = bigScreenConfig.getFile();
+        FileConfig fileConfig = dataRoomConfig.getFile();
         if (!fileConfig.getAllowedFileExtensionName().contains("*") && !fileConfig.getAllowedFileExtensionName().contains(extension)) {
             log.error("不支持 {} 文件类型", extension);
             throw new GlobalException("不支持的文件类型");
@@ -68,14 +68,14 @@ public class DataRoomMinioServiceImpl implements IDataRoomOssService {
         String module = request.getParameter("module");
         // 不同业务自己控制
         if (StringUtils.isBlank(module)) {
-            fileEntity.setModule("other");
+            fileEntity.setModule("");
         }
         // 重命名
         String newFileName = IdWorker.getIdStr() + "." + extension;
         // 组装路径:获取当前日期并格式化为"yyyy/mm/dd"格式的字符串
         String basePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         String filePath = basePath + "/" + newFileName;
-        DataRoomMinioConfig minioConfig = bigScreenConfig.getFile().getMinio();
+        DataRoomMinioConfig minioConfig = dataRoomConfig.getFile().getMinio();
         try (InputStream inputStream = file.getInputStream()) {
             PutObjectArgs args = PutObjectArgs.builder()
                     .bucket(minioConfig.getBucketName())
@@ -106,7 +106,7 @@ public class DataRoomMinioServiceImpl implements IDataRoomOssService {
     public DataRoomFileEntity upload(InputStream inputStream, String fileName, long size, DataRoomFileEntity entity) {
         fileName = PathUtils.normalizePath(fileName);
         String extension = FilenameUtils.getExtension(fileName);
-        DataRoomMinioConfig minioConfig = bigScreenConfig.getFile().getMinio();
+        DataRoomMinioConfig minioConfig = dataRoomConfig.getFile().getMinio();
         long fileSize = size == 0 ? -1 : size;
         // 使用minio的最小分片大小
         long partSize = fileSize == -1 ? ObjectWriteArgs.MIN_MULTIPART_SIZE : -1;
@@ -197,7 +197,7 @@ public class DataRoomMinioServiceImpl implements IDataRoomOssService {
 
     @Override
     public String copy(String sourcePath, String targetPath) {
-        DataRoomMinioConfig minioConfig = bigScreenConfig.getFile().getMinio();
+        DataRoomMinioConfig minioConfig = dataRoomConfig.getFile().getMinio();
         CopySource source = CopySource.builder().bucket(minioConfig.getBucketName()).object(sourcePath).build();
         CopyObjectArgs args = CopyObjectArgs.builder()
                 .bucket(minioConfig.getBucketName())
@@ -212,5 +212,32 @@ public class DataRoomMinioServiceImpl implements IDataRoomOssService {
             return "";
         }
         return minioConfig.getBucketName() + "/" + targetPath;
+    }
+
+    @Override
+    public DataRoomFileEntity replace(MultipartFile file, DataRoomFileEntity entity, HttpServletResponse response, HttpServletRequest request) {
+        String originalFilename = file.getOriginalFilename();
+        String extension = FilenameUtils.getExtension(originalFilename);
+        String filePath = entity.getPath();
+        DataRoomMinioConfig minioConfig = dataRoomConfig.getFile().getMinio();
+        try (InputStream inputStream = file.getInputStream()) {
+            PutObjectArgs args = PutObjectArgs.builder()
+                    .bucket(minioConfig.getBucketName())
+                    .object(filePath)
+                    .stream(inputStream, file.getSize(), -1)
+                    .contentType(file.getContentType())
+                    .build();
+            minioclient.putObject(args);
+        } catch (Exception e) {
+            log.error("上传文件到Minio失败");
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new GlobalException("上传文件失败");
+        }
+        // 现在url存储文件的相对路径，对于minio来说，就是bucketName/文件名
+        entity.setOriginalName(originalFilename);
+        entity.setSize(file.getSize());
+        entity.setExtension(extension);
+        entity.setBucket(minioConfig.getBucketName());
+        return entity;
     }
 }

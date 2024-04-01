@@ -41,7 +41,7 @@ public class PageEntity extends SuperEntity implements Serializable {
     @ApiModelProperty(notes = "页面类型")
     private String type;
 
-    @ApiModelProperty(notes = "大屏首页封面")
+    @ApiModelProperty(notes = "封面")
     private String coverPicture;
 
     @ApiModelProperty(notes = "具体组件配置、JSON格式")
@@ -53,9 +53,6 @@ public class PageEntity extends SuperEntity implements Serializable {
 
     @ApiModelProperty(notes = "排序")
     private Integer orderNum;
-
-    @ApiModelProperty(notes = "所属应用编码")
-    private String appCode;
 
 
 

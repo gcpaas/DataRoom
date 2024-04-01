@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author hongyang
@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2022/11/19 10:45
  */
 @Data
-public class DataSetDataSource extends BaseChartDataSource {
+public class DataSetDataSource {
 
     @ApiModelProperty(notes = "数据来源，可能为数据集或者表达式")
     private String source;
@@ -36,34 +36,22 @@ public class DataSetDataSource extends BaseChartDataSource {
     private String metricField;
 
     @ApiModelProperty(notes = "拆分字段")
-    private String seriesField;
-
-    @ApiModelProperty(notes = "维度字段列表")
-    private List<String> dimensionFieldList;
-
-    @ApiModelProperty(notes = "指标字段列表")
-    private List<String> metricFieldList;
-
-    @ApiModelProperty(notes = "拆分字段列表")
-    private List<String> seriesFieldList;
+    private String classifiedField;
 
     @ApiModelProperty(notes = "服务端分页")
     private Boolean serverPagination;
 
-    @ApiModelProperty(notes = "服务端分页页长")
-    private Integer pageSize;
+    public DataSetDataSource() {
+    }
 
-    /**
-     * 散点图特殊配置
-     */
 
-    @ApiModelProperty(notes = "颜色字段")
-    private String colorField;
-
-    @ApiModelProperty(notes = "形状字段")
-    private String shapeField;
-
-    @ApiModelProperty(notes = "散点大小字段")
-    private String sizeField;
-
+    public DataSetDataSource(Map<String, Object> map) {
+        this.businessKey = (String) map.get("businessKey");
+        this.dataSourceKey = (String) map.get("dataSourceKey");
+        this.dataSetType = (String) map.get("dataSetType");
+        this.params = (HashMap<String, Object>) map.get("params");
+        this.dimensionField = (String) map.get("dimensionField");
+        this.metricField = (String) map.get("metricField");
+        this.classifiedField = (String) map.get("groupField");
+    }
 }

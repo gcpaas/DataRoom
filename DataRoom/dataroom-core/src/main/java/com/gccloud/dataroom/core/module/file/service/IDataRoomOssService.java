@@ -38,6 +38,18 @@ public interface IDataRoomOssService {
 
 
     /**
+     * 替换已有文件
+     * @param file
+     * @param entity
+     * @param response
+     * @param request
+     * @return
+     */
+    DataRoomFileEntity replace(MultipartFile file, DataRoomFileEntity entity, HttpServletResponse response, HttpServletRequest request);
+
+
+
+    /**
      * 下载文件
      *
      * @param fileId

@@ -17,4 +17,10 @@ public class BizComponentSearchDTO extends SearchDTO {
 
     @ApiModelProperty(value = "名称")
     private String name;
+
+    @ApiModelProperty(notes = "设计方式 1.低代码开发 2.在线开发")
+    private Integer designType;
+
+    @ApiModelProperty("可用范围 1：大屏 2：PC仪表盘 3：移动仪表盘")
+    private Integer scope;
 }

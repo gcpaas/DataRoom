@@ -1,7 +1,9 @@
 package com.gccloud.dataroom.core.module.manage.controller;
 
+import com.gccloud.common.utils.JSON;
 import com.gccloud.dataroom.core.config.DataRoomConfig;
 import com.gccloud.dataroom.core.constant.DataRoomConst;
+import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
 import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
 import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
@@ -24,12 +26,13 @@ import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hongyang
@@ -38,40 +41,41 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/bigScreen/design")
-@Api(tags = "大屏页以及大屏组件设计")
+@RequestMapping("/dataroom/design")
+@Api(tags = "页面设计")
 public class DataRoomPageController {
 
     @Resource
-    private IDataRoomPageService bigScreenPageService;
+    private IDataRoomPageService dataRoomPageService;
     @Resource
-    private DataRoomConfig bigScreenConfig;
+    private DataRoomConfig dataRoomConfig;
     @Resource
     private IDataRoomPagePreviewService previewService;
 
     @ApiPermission(permissions = {Permission.DataRoom.VIEW})
     @GetMapping("/info/code/{code}")
-    @ApiOperation(value = "大屏页/组件详情", position = 10, produces = MediaType.APPLICATION_JSON_VALUE)
-    public MixinsResp<DataRoomPageDTO> info(@PathVariable("code") String code) {
+    @ApiOperation(value = "页面详情", position = 10, produces = MediaType.APPLICATION_JSON_VALUE)
+    public MixinsResp<BasePageDTO> info(@PathVariable("code") String code) {
         if (code.startsWith(IDataRoomPagePreviewService.PREVIEW_KEY)) {
             PagePreviewEntity preview = previewService.getByCode(code);
-            MixinsResp<DataRoomPageDTO> r = new MixinsResp<DataRoomPageDTO>().setData((DataRoomPageDTO) preview.getConfig());
+            BasePageDTO basePageDTO = JSON.parseObject(preview.getConfig(), BasePageDTO.class);
+            MixinsResp<BasePageDTO> r = new MixinsResp<BasePageDTO>().setData(basePageDTO);
             r.setCode(DataRoomConst.Response.Code.SUCCESS);
             return r;
         }
-        PageEntity bigScreen = bigScreenPageService.getByCode(code);
-        DataRoomPageDTO bigScreenPageDTO = (DataRoomPageDTO) bigScreen.getConfig();
-        BeanConvertUtils.convert(bigScreen, bigScreenPageDTO);
-        MixinsResp<DataRoomPageDTO> resp = new MixinsResp<DataRoomPageDTO>().setData(bigScreenPageDTO);
+        PageEntity pageEntity = dataRoomPageService.getByCode(code);
+        BasePageDTO pageDTO = pageEntity.getConfig();
+        BeanConvertUtils.convert(pageEntity, pageDTO);
+        MixinsResp<BasePageDTO> resp = new MixinsResp<BasePageDTO>().setData(pageDTO);
         resp.setCode(DataRoomConst.Response.Code.SUCCESS);
         return resp;
     }
 
     @ApiPermission(permissions = {Permission.DataRoom.VIEW})
     @GetMapping("/page")
-    @ApiOperation(value = "大屏/组件分页列表", position = 10, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "页面分页列表", position = 10, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixinsResp<PageVO<PageEntity>> page(DataRoomSearchDTO searchDTO) {
-        PageVO<PageEntity> page = bigScreenPageService.getByCategory(searchDTO);
+        PageVO<PageEntity> page = dataRoomPageService.getByCategory(searchDTO);
         MixinsResp<PageVO<PageEntity>> resp = new MixinsResp<PageVO<PageEntity>>().setData(page);
         resp.setCode(DataRoomConst.Response.Code.SUCCESS);
         return resp;
@@ -80,64 +84,89 @@ public class DataRoomPageController {
 
     @ApiPermission(permissions = {Permission.DataRoom.ADD})
     @PostMapping("/add")
-    @ApiOperation(value = "从空白新增大屏/组件", position = 20, produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<String> add(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
-        ValidatorUtils.validateEntity(bigScreenPageDTO, Insert.class);
-        bigScreenPageService.add(bigScreenPageDTO);
-        return R.success(bigScreenPageDTO.getCode());
+    @ApiOperation(value = "从空白新增页面", position = 20, produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<String> add(@RequestBody Map<String, Object> pageDTO) {
+        BasePageDTO basePageDTO = this.getInstanceByClassName(pageDTO);
+        // TODO 测试这里的校验实际上是根据示例的className还是实例化时的基类进行的
+        ValidatorUtils.validateEntity(basePageDTO, Insert.class);
+        dataRoomPageService.add(basePageDTO);
+        return R.success(basePageDTO.getCode());
     }
+
+
+
 
     @ApiPermission(permissions = {Permission.DataRoom.UPDATE})
     @PostMapping("/update")
-    @ApiOperation(value = "修改大屏/组件", position = 30, produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<String> update(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
-        if (Boolean.TRUE.equals(bigScreenPageDTO.getIsPreview())) {
+    @ApiOperation(value = "修改页面配置", position = 30, produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<String> update(@RequestBody Map<String, Object> pageDTO) {
+        BasePageDTO basePageDTO = this.getInstanceByClassName(pageDTO);
+        if (Boolean.TRUE.equals(pageDTO.get("isPreview"))) {
             // 保存到预览临时缓存表
-            String code = previewService.add(bigScreenPageDTO);
+            String code = previewService.add(basePageDTO);
             return R.success(code);
         }
-        ValidatorUtils.validateEntity(bigScreenPageDTO, Update.class);
-        bigScreenPageService.update(bigScreenPageDTO);
-        return R.success(bigScreenPageDTO.getCode());
+        ValidatorUtils.validateEntity(basePageDTO, Update.class);
+        dataRoomPageService.update(basePageDTO);
+        return R.success(basePageDTO.getCode());
+    }
+
+    /**
+     * 根据className实例化
+     * @param pageDTO
+     * @return
+     */
+    private BasePageDTO getInstanceByClassName(Map<String, Object> pageDTO) {
+        String className = pageDTO.get("className").toString();
+        BasePageDTO basePageDTO;
+        try {
+            // 根据className实例化
+            Class<?> clazz = Class.forName(className);
+            basePageDTO = (BasePageDTO) clazz.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new GlobalException("页面类型不存在");
+        }
+        basePageDTO = JSON.parseObject(JSON.toJSONString(pageDTO), basePageDTO.getClass());
+        return basePageDTO;
     }
 
     @ApiPermission(permissions = {Permission.DataRoom.DELETE})
     @PostMapping("/delete/{code}")
-    @ApiOperation(value = "删除大屏/组件", position = 40, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "删除页面", position = 40, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Void> delete(@PathVariable String code) {
-        PageEntity bigScreenPage = bigScreenPageService.getByCode(code);
-        if (bigScreenPage == null) {
+        PageEntity pageEntity = dataRoomPageService.getByCode(code);
+        if (pageEntity == null) {
             return R.success();
         }
-        bigScreenPageService.deleteByCode(code);
+        dataRoomPageService.deleteByCode(code);
         return R.success();
     }
 
     @ApiPermission(permissions = {Permission.DataRoom.ADD})
     @PostMapping("/copy/{code}")
-    @ApiOperation(value = "复制大屏/组件", position = 50, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "复制页面", position = 50, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> copy(@PathVariable String code) {
-        PageEntity bigScreenPage = bigScreenPageService.getByCode(code);
-        if (bigScreenPage == null) {
-            throw new GlobalException("大屏页不存在");
+        PageEntity pageEntity = dataRoomPageService.getByCode(code);
+        if (pageEntity == null) {
+            throw new GlobalException("页面不存在");
         }
-        String newCode = bigScreenPageService.copy(bigScreenPage);
+        String newCode = dataRoomPageService.copy(pageEntity);
         return R.success(newCode);
     }
 
     @ApiPermission(permissions = {Permission.DataRoom.ADD})
     @PostMapping("/add/template")
-    @ApiOperation(value = "从模板新增大屏页", position = 20, produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<String> addByTemplate(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
-        String code = bigScreenPageService.addByTemplate(bigScreenPageDTO);
+    @ApiOperation(value = "从模板新增页面", position = 20, produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<String> addByTemplate(@RequestBody BasePageDTO pageDTO) {
+        String code = dataRoomPageService.addByTemplate(pageDTO);
         return R.success(code);
     }
 
     @PostMapping("/get/template")
     @ApiOperation(value = "根据模板获取配置", position = 20, produces = MediaType.APPLICATION_JSON_VALUE)
-    public MixinsResp<DataRoomPageDTO> getByTemplate(@RequestBody DataRoomPageDTO bigScreenPageDTO) {
-        DataRoomPageDTO config = bigScreenPageService.getConfigByTemplate(bigScreenPageDTO);
-        MixinsResp<DataRoomPageDTO> resp = new MixinsResp<DataRoomPageDTO>().setData(config);
+    public MixinsResp<BasePageDTO> getByTemplate(@RequestBody BasePageDTO basePageDTO) {
+        BasePageDTO config = dataRoomPageService.getConfigByTemplate(basePageDTO);
+        MixinsResp<BasePageDTO> resp = new MixinsResp<BasePageDTO>().setData(config);
         resp.setCode(DataRoomConst.Response.Code.SUCCESS);
         return resp;
     }
@@ -149,7 +178,7 @@ public class DataRoomPageController {
     public R<List<StaticFileVO>> getBgList() {
         List<String> staticFileList = Webjars.BIG_SCREEN_BG;
         List<StaticFileVO> bgList = Lists.newArrayList();
-        String urlPrefix = bigScreenConfig.getFile().getUrlPrefix() + "bigScreenBg/";
+        String urlPrefix = dataRoomConfig.getFile().getUrlPrefix() + "bigScreenBg/";
         for (String fileName : staticFileList) {
             StaticFileVO fileVO = new StaticFileVO();
             fileVO.setUrl(urlPrefix + fileName);
@@ -183,9 +212,9 @@ public class DataRoomPageController {
 
     @ApiPermission
     @PostMapping("/name/repeat")
-    @ApiOperation(value = "大屏/组件名称是否重复", position = 60, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "页面名称是否重复", position = 60, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<Boolean> nameRepeat(@RequestBody PageEntity pageEntity) {
-        boolean repeat = bigScreenPageService.checkNameRepeat(pageEntity);
+        boolean repeat = dataRoomPageService.checkNameRepeat(pageEntity);
         return R.success(repeat);
     }
 }

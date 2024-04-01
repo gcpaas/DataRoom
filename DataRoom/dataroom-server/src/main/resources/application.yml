@@ -1,8 +1,8 @@
 # 工程访问配置
 server:
-  port: 8081
+  port: 8082
   servlet:
-    context-path: /bigScreenServer
+    context-path: /dataRoomServer
 
 # spring环境配置
 spring:

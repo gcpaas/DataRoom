@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.gccloud</groupId>
         <artifactId>dataroom</artifactId>
-        <version>2.0.1.2024032201.Alpha</version>
+        <version>3.0.0</version>
     </parent>
 
     <artifactId>dataroom-core</artifactId>
@@ -65,7 +65,12 @@
             <artifactId>jackson-datatype-json-org</artifactId>
             <version>${jackson.version.core}</version>
         </dependency>
-
+        <!--  websocket依赖  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+            <version>2.3.12.RELEASE</version>
+        </dependency>
         <!-- Minio -->
         <dependency>
             <groupId>io.minio</groupId>
@@ -89,6 +94,11 @@
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
             <version>${jsch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.8.0</version>
         </dependency>
 
     </dependencies>

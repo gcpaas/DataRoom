@@ -7,6 +7,7 @@ import com.gccloud.dataroom.core.config.bean.FileConfig;
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomFileService;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomOssService;
+import com.gccloud.dataroom.core.utils.PathUtils;
 import com.gccloud.dataroom.core.utils.SftpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -38,7 +39,7 @@ public class DataRoomSftpFileServiceImpl implements IDataRoomOssService {
     @Resource
     private SftpClientUtils sftpUtil;
     @Resource
-    private DataRoomConfig bigScreenConfig;
+    private DataRoomConfig dataRoomConfig;
     @Resource
     private IDataRoomFileService sysFileService;
 
@@ -48,7 +49,7 @@ public class DataRoomSftpFileServiceImpl implements IDataRoomOssService {
         String originalFilename = file.getOriginalFilename();
         // 提取文件后缀名
         String extension = FilenameUtils.getExtension(originalFilename);
-        FileConfig fileConfig = bigScreenConfig.getFile();
+        FileConfig fileConfig = dataRoomConfig.getFile();
         if (!fileConfig.getAllowedFileExtensionName().contains("*") && !fileConfig.getAllowedFileExtensionName().contains(extension)) {
             log.error("不支持 {} 文件类型",extension);
             throw new GlobalException("不支持的文件类型");
@@ -75,7 +76,7 @@ public class DataRoomSftpFileServiceImpl implements IDataRoomOssService {
         // 提取文件后缀名
         String extension = FilenameUtils.getExtension(fileName);
         // 上传的目标路径
-        String basePath = bigScreenConfig.getFile().getBasePath();
+        String basePath = dataRoomConfig.getFile().getBasePath();
         // 上传文件到sftp
         boolean upload = sftpUtil.upload(basePath, fileName, inputStream);
         if (!upload) {
@@ -146,7 +147,7 @@ public class DataRoomSftpFileServiceImpl implements IDataRoomOssService {
 
     @Override
     public String copy(String sourcePath, String targetPath) {
-        String basePath = bigScreenConfig.getFile().getBasePath() + File.separator;
+        String basePath = dataRoomConfig.getFile().getBasePath() + File.separator;
 
         boolean copySuccess = sftpUtil.copy(basePath + sourcePath, basePath + targetPath);
         if (!copySuccess) {
@@ -154,4 +155,62 @@ public class DataRoomSftpFileServiceImpl implements IDataRoomOssService {
         }
         return targetPath;
     }
+
+    @Override
+    public DataRoomFileEntity replace(MultipartFile file, DataRoomFileEntity entity, HttpServletResponse response, HttpServletRequest request) {
+        String originalFilename = file.getOriginalFilename();
+        // 提取文件后缀名
+        String extension = FilenameUtils.getExtension(originalFilename);
+        FileConfig fileConfig = dataRoomConfig.getFile();
+        if (!fileConfig.getAllowedFileExtensionName().contains("*") && !fileConfig.getAllowedFileExtensionName().contains(extension)) {
+            log.error("不支持 {} 文件类型",extension);
+            throw new GlobalException("不支持的文件类型");
+        }
+        long size = file.getSize();
+        String newFileName = entity.getNewName();
+        InputStream inputStream;
+
+
+        // 先将原来的文件重命名为一个临时文件，再上传新文件，上传成功后删除临时文件，如果上传失败，再将临时文件重命名回原来的文件名
+        String tempFileName = newFileName + ".temp";
+        // 检查原来的文件是否存在
+        String[] paths = PathUtils.handlePath(entity.getPath(), newFileName);
+        boolean exist = sftpUtil.exist(paths[0] + paths[1]);
+        if (exist) {
+            boolean rename = sftpUtil.rename(entity.getPath(), newFileName, tempFileName);
+            if (!rename) {
+                log.error("重命名文件失败");
+                throw new GlobalException("替换文件失败");
+            }
+        }
+        // 上传新文件
+        try {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            log.error("上传文件到SFTP服务失败：获取文件流失败");
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new GlobalException("获取文件流失败");
+        }
+        // 上传文件到sftp
+        boolean upload = sftpUtil.upload(fileConfig.getBasePath(), newFileName, inputStream);
+        if (!upload) {
+            log.error("上传文件到sftp失败");
+            throw new GlobalException("替换失败，上传文件到sftp失败");
+        }
+        // 删除临时文件
+        if (exist) {
+            boolean delete = sftpUtil.delete(entity.getPath(), tempFileName);
+            if (!delete) {
+                log.error("删除临时文件失败");
+            }
+        }
+        entity.setOriginalName(originalFilename);
+        entity.setNewName(newFileName);
+        entity.setPath(fileConfig.getBasePath());
+        entity.setSize(size);
+        entity.setExtension(extension);
+        entity.setUrl("/" + newFileName);
+        return entity;
+    }
+
 }

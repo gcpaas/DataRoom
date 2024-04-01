@@ -1,7 +1,9 @@
 package com.gccloud.dataroom.core.module.manage.service;
 
 import com.gccloud.common.service.ISuperService;
+import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
 import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
+import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentDTO;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
 
 /**
@@ -14,15 +16,21 @@ public interface IDataRoomPagePreviewService extends ISuperService<PagePreviewEn
     String PREVIEW_KEY = "preview";
 
     /**
-     * 保存大屏预览数据
-     * @param bigScreenPageDTO
+     * 保存页面预览数据
+     * @param pageDTO
      * @return
      */
-    String add(DataRoomPageDTO bigScreenPageDTO);
-
+    String add(BasePageDTO pageDTO);
 
     /**
-     * 根据code获取大屏预览数据
+     * 保存组件预览数据
+     * @param componentDTO
+     * @return
+     */
+    String add(BizComponentDTO componentDTO);
+
+    /**
+     * 根据code获取页面预览数据
      * @param code
      * @return
      */

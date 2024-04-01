@@ -28,7 +28,8 @@ public class FileConfig {
             "doc", "docx",
             "txt", "pdf",
             "mp4", "mov", "mp3",
-            "rar", "zip"
+            "rar", "zip",
+            "glb", "gltf"
     );
 
     /**

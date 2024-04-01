@@ -38,7 +38,7 @@ public class DataRoomFtpFileServiceImpl implements IDataRoomOssService {
     @Resource
     private FtpClientUtil ftpUtil;
     @Resource
-    private DataRoomConfig bigScreenConfig;
+    private DataRoomConfig dataRoomConfig;
     @Resource
     private IDataRoomFileService sysFileService;
 
@@ -48,7 +48,7 @@ public class DataRoomFtpFileServiceImpl implements IDataRoomOssService {
         String originalFilename = file.getOriginalFilename();
         // 提取文件后缀名
         String extension = FilenameUtils.getExtension(originalFilename);
-        FileConfig fileConfig = bigScreenConfig.getFile();
+        FileConfig fileConfig = dataRoomConfig.getFile();
         if (!fileConfig.getAllowedFileExtensionName().contains("*") && !fileConfig.getAllowedFileExtensionName().contains(extension)) {
             log.error("不支持 {} 文件类型",extension);
             throw new GlobalException("不支持的文件类型");
@@ -74,7 +74,7 @@ public class DataRoomFtpFileServiceImpl implements IDataRoomOssService {
         // 提取文件后缀名
         String extension = FilenameUtils.getExtension(fileName);
         // 上传的目标路径
-        String basePath = bigScreenConfig.getFile().getBasePath();
+        String basePath = dataRoomConfig.getFile().getBasePath();
         // 上传文件到ftp
         boolean upload = ftpUtil.upload(basePath, fileName, inputStream);
         if (!upload) {
@@ -144,11 +144,58 @@ public class DataRoomFtpFileServiceImpl implements IDataRoomOssService {
 
     @Override
     public String copy(String sourcePath, String targetPath) {
-        String basePath = bigScreenConfig.getFile().getBasePath() + File.separator;
+        String basePath = dataRoomConfig.getFile().getBasePath() + File.separator;
         boolean copySuccess = ftpUtil.copy(basePath + sourcePath, basePath + targetPath);
         if (!copySuccess) {
             return "";
         }
         return targetPath;
+    }
+
+
+    @Override
+    public DataRoomFileEntity replace(MultipartFile file, DataRoomFileEntity entity, HttpServletResponse response, HttpServletRequest request) {
+        String originalFilename = file.getOriginalFilename();
+        // 提取文件后缀名
+        String extension = FilenameUtils.getExtension(originalFilename);
+        FileConfig fileConfig = dataRoomConfig.getFile();
+        if (!fileConfig.getAllowedFileExtensionName().contains("*") && !fileConfig.getAllowedFileExtensionName().contains(extension)) {
+            log.error("不支持 {} 文件类型",extension);
+            throw new GlobalException("不支持的文件类型");
+        }
+        // 重命名
+        String newFileName = entity.getNewName();
+        long size = file.getSize();
+        InputStream inputStream;
+        try {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            log.error("上传文件到FTP服务失败：获取文件流失败");
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new GlobalException("获取文件流失败");
+        }
+        // 先将原来的文件重命名为一个临时文件，再上传新文件，上传成功后删除临时文件，如果上传失败，再将临时文件重命名回原来的文件名
+        String tempFileName = newFileName + ".temp";
+        boolean rename = ftpUtil.rename(entity.getPath(), newFileName, tempFileName);
+        if (!rename) {
+            log.error("重命名文件失败");
+            throw new GlobalException("替换文件失败");
+        }
+        boolean upload = ftpUtil.upload(fileConfig.getBasePath(), newFileName, inputStream);
+        if (!upload) {
+            log.error("上传文件到ftp失败");
+            // 上传失败，将临时文件重命名回原来的文件名
+            ftpUtil.rename(entity.getPath(), tempFileName, newFileName);
+            throw new GlobalException("替换文件失败");
+        }
+        // 上传成功，删除临时文件
+        ftpUtil.delete(entity.getPath(), tempFileName);
+        entity.setOriginalName(originalFilename);
+        entity.setNewName(newFileName);
+        entity.setPath(fileConfig.getBasePath());
+        entity.setSize(size);
+        entity.setExtension(extension);
+        entity.setUrl("/" + newFileName);
+        return entity;
     }
 }

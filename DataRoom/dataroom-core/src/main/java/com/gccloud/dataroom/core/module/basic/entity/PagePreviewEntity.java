@@ -27,12 +27,17 @@ public class PagePreviewEntity implements Serializable {
     @ApiModelProperty(notes = "主键")
     private String id;
 
+    /**
+     * 参考：{@link com.gccloud.dataroom.core.constant.PageDesignConstant.Type}
+     */
+    @ApiModelProperty(notes = "类型，bigScreen：大屏，dashboard：仪表盘，component：业务组件")
+    private String type;
+
     @ApiModelProperty(notes = "页面编码，页面唯一标识符")
     private String code;
 
     @ApiModelProperty(notes = "具体组件配置、JSON格式")
-    @TableField(typeHandler = BasePageDTOTypeHandler.class)
-    private BasePageDTO config;
+    private String config;
 
     @TableField(fill = FieldFill.INSERT, updateStrategy = FieldStrategy.NEVER)
     @ApiModelProperty(notes = "创建时间")

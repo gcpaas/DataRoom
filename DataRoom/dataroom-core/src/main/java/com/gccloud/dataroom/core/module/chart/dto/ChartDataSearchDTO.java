@@ -1,11 +1,12 @@
 package com.gccloud.dataroom.core.module.chart.dto;
 
-import com.gccloud.dataroom.core.module.chart.bean.Chart;
 import com.gccloud.dataroom.core.module.chart.bean.Filter;
+import com.gccloud.dataroom.core.module.chart.components.datasource.DataSetDataSource;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据查询
@@ -22,23 +23,14 @@ public class ChartDataSearchDTO {
     @ApiModelProperty(notes = "图表编码")
     private String chartCode;
 
-    @ApiModelProperty(notes = "内部图表编码")
-    private String innerChartCode;
-
-    @ApiModelProperty(notes = "类型")
-    private String type;
-
     @ApiModelProperty(notes = "当前页")
     private Integer current;
 
     @ApiModelProperty(notes = "每页记录数")
     private Integer size;
 
-    @ApiModelProperty(notes = "树父节点id")
-    private String treeParentId;
-
-    @ApiModelProperty(notes = "图表配置，仅在根据配置临时获取数据时使用")
-    private Chart chart;
+    @ApiModelProperty(notes = "数据来源")
+    private DataSetDataSource dataSource;
 
     @ApiModelProperty(notes = "过滤条件")
     private List<Filter> filterList;

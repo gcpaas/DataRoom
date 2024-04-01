@@ -17,12 +17,4 @@ import java.util.List;
 @Mapper
 public interface DataRoomMapDao extends BaseMapper<DataRoomMapEntity> {
 
-    /**
-     * 根据层级获取地图列表
-     * 列表包括所有目标层级的地图，以及目标层级的父地图...
-     * @param level
-     * @return
-     */
-    List<DataRoomMapEntity> getMapByLevel(@Param("level") Integer level);
-
 }
