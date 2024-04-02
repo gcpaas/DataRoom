@@ -402,3 +402,4 @@ build/
 # 忽略配置文件提交
 application-*.yml
 !application-demo.yml
+!application-h2.yml
