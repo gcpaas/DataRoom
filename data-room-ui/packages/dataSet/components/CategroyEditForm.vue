@@ -68,6 +68,10 @@ export default {
     TypeSelect
   },
   props: {
+    appCode: {
+      type: String,
+      default: ''
+    },
     treeData: {
       type: Array,
       default: () => []
@@ -172,7 +176,7 @@ export default {
             id: this.dataForm.id,
             name: this.dataForm.name,
             parentId: parentId,
-            type: this.type
+            type: this.type,
           }
           if (id) {
             categoryUpdate(params).then((r) => {

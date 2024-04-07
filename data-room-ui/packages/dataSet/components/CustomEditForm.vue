@@ -453,7 +453,7 @@ export default {
     const validateName = (rule, value, callback) => {
       nameCheckRepeat({
         id: this.datasetId,
-        name: value
+        name: value,
       }).then((r) => {
         if (r) {
           callback(new Error('数据集名称已存在'))
@@ -642,7 +642,7 @@ export default {
     getDataSource () {
       const params = {
         sourceName: '',
-        sourceType: ''
+        sourceType: '',
       }
       datasourceList(params).then((data) => {
         this.sourceList = data
@@ -751,6 +751,7 @@ export default {
           remark: this.dataForm.remark,
           sourceId: this.dataForm.sourceId,
           cache: this.dataForm.cache,
+          editable: this.appCode ? 1 : 0,
           labelIds: this.dataForm.labelIds,
           config: {
             className: 'com.gccloud.dataset.entity.config.CustomDataSetConfig',

@@ -144,7 +144,7 @@
           />
           <el-table-column
             key="labelType"
-            label="标签类型"
+            label="标签标识"
             prop="labelType"
             show-overflow-tooltip
           />
@@ -177,19 +177,21 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="bs-pagination">
-          <el-pagination
-            class="bs-el-pagination"
-            popper-class="bs-el-pagination"
-            :current-page="current"
-            :page-size="sizeLabel"
-            :page-sizes="[10, 20, 50, 100]"
-            :total="totalCount"
-            background
-            layout="total, prev, pager, next,sizes,jumper"
-            @size-change="sizeChangeHandle"
-            @current-change="currentChangeHandle"
-          />
+        <div class="footer-pagination-wrap">
+          <div class="bs-pagination">
+            <el-pagination
+              class="bs-el-pagination"
+              popper-class="bs-el-pagination"
+              :current-page="current"
+              :page-size="sizeLabel"
+              :page-sizes="[10, 20, 50, 100]"
+              :total="totalCount"
+              background
+              layout="total, prev, pager, next,sizes"
+              @size-change="sizeChangeHandle"
+              @current-change="currentChangeHandle"
+            />
+          </div>
         </div>
       </div>
 
@@ -384,7 +386,7 @@ export default {
     insertLabel () {
       this.editFormVisible = true
       this.$nextTick(() => {
-        this.$refs.labelEdit.labelTypeList = this.labelTypeList
+        // this.$refs.labelEdit.labelTypeList = this.labelTypeList
         this.$refs.labelEdit.init()
       })
     },
@@ -411,8 +413,7 @@ export default {
           }
           this.selectLabelListInitial = cloneDeep(this.selectLabelList)
         })
-      }).catch(() => {
-      })
+      }).catch(() => { })
     },
     /**
      * 标签选项组选中事件
@@ -528,10 +529,11 @@ export default {
 .bs-pagination {
   ::v-deep .el-input__inner {
     border: none;
-    background: var(--bs-el-background-1);
   }
 }
 </style>
-<style lang="scss">
+<style lang="scss" scoped>
+@import '@gcpaas/data-room-ui/packages/assets/style/index.scss';
+@import '@gcpaas/data-room-ui/packages/assets/style/pageList.scss';
 @import "@gcpaas/data-room-ui/packages/assets/style/tooltip.scss";
 </style>

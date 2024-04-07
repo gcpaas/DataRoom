@@ -252,7 +252,7 @@ export default {
     const validateName = (rule, value, callback) => {
       nameCheckRepeat({
         id: this.datasetId,
-        name: value
+        name: value,
       }).then((r) => {
         if (r) {
           callback(new Error('数据集名称已存在'))
@@ -454,6 +454,7 @@ return ElasticsearchDsService.query(host, port, username, password, path, dsl);
           remark: this.dataForm.remark,
           cache: this.dataForm.cache,
           sourceId: this.dataForm.sourceId,
+          editable: this.appCode ? 1 : 0,
           labelIds: this.dataForm.labelIds,
           config: {
             className: 'com.gccloud.dataset.entity.config.GroovyDataSetConfig',
@@ -518,7 +519,6 @@ return ElasticsearchDsService.query(host, port, username, password, path, dsl);
                 }
               })
             }
-            console.log(this.headerFields)
           }
           if (this.structurePreviewList.length && this.dataForm.fieldDesc) {
             this.buildFieldDesc()

@@ -28,10 +28,14 @@
       </el-form-item>
 
       <el-form-item
-        label="标签类型"
+        label="标签标识"
         prop="labelType"
       >
-        <el-select
+        <el-input
+          v-model="dataForm.labelType"
+          clear
+        />
+        <!-- <el-select
           ref="searchSelect"
           v-model="dataForm.labelType"
           class="bs-el-select"
@@ -49,7 +53,7 @@
             :label="item"
             :value="item"
           />
-        </el-select>
+        </el-select> -->
       </el-form-item>
 
       <el-form-item
@@ -86,7 +90,7 @@
 </template>
 
 <script>
-// import { addOrUpdateLabel, checkRepeatLabel } from '@gcpaas/data-room-ui/packages/js/utils/LabelConfigService'
+import { addOrUpdateLabel, checkRepeatLabel } from '@gcpaas/data-room-ui/packages/assets/js/api/LabelConfigService.js'
 
 export default {
   name: 'LabelEdit',
@@ -102,7 +106,7 @@ export default {
         labelDesc: '',
         relList: []
       },
-      formVisible: true,
+      formVisible: false,
       rules: {
         labelName: [
           { required: true, message: '标签名称不能为空', trigger: 'blur' },
@@ -116,7 +120,7 @@ export default {
       categoryData: [],
       relVisible: false,
       // 标签分类列表
-      labelTypeList: [],
+      // labelTypeList: [],
       // 选中的数据集id列表
       datasetIdList: []
     }
@@ -134,22 +138,22 @@ export default {
      * @param row 标签信息
      */
     init (row) {
-      this.$nextTick(() => {
-        this.$refs.ruleForm.clearValidate()
-      })
-      this.dataForm.id = row ? row.id : ''
       this.formVisible = true
-      if (row) {
-        this.dataForm.id = row.id
-        this.dataForm.labelName = row.labelName
-        this.dataForm.labelType = row.labelType
-        this.dataForm.labelDesc = row.labelDesc
-      } else {
-        this.dataForm.id = ''
-        this.dataForm.labelName = ''
-        this.dataForm.labelType = ''
-        this.dataForm.labelDesc = ''
-      }
+      this.$nextTick(() => {
+        this.$refs.ruleForm.resetFields()
+        this.dataForm.id = row ? row.id : ''
+        if (row) {
+          this.dataForm.id = row.id
+          this.dataForm.labelName = row.labelName
+          this.dataForm.labelType = row.labelType
+          this.dataForm.labelDesc = row.labelDesc
+        } else {
+          this.dataForm.id = ''
+          this.dataForm.labelName = ''
+          this.dataForm.labelType = ''
+          this.dataForm.labelDesc = ''
+        }
+      })
     },
     /**
      * 标签名称校验

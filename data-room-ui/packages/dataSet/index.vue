@@ -19,6 +19,7 @@
           <TypeTree
             ref="datasetsTypeTree"
             :dataset-type-list="datasetTypeList"
+            :app-code="appCode"
             @nodeClick="nodeClick"
             @refreshData="refreshData"
             @expandedNodes="expandedNodes"
@@ -83,7 +84,7 @@
             prop="labelIds"
           >
             <el-select
-              v-model="queryForm.labelIds"
+              v-model="labelIds"
               class="bs-el-select"
               popper-class="bs-el-select"
               clearable
@@ -206,7 +207,7 @@
                 <el-button
                   v-if="doEdit"
                   class="bs-el-button-default"
-                  :disabled="scope.row.editable === 1"
+                  :disabled="scope.row.editable === 1 && !appCode"
                   @click="
                     toEdit(
                       scope.row.id,
@@ -222,7 +223,7 @@
                   v-if="isDelete"
                   class="bs-el-button-default"
                   :loading="scope.row.loading"
-                  :disabled="scope.row.editable === 1 "
+                  :disabled="scope.row.editable === 1 && !appCode"
                   @click="delDataset(scope.row)"
                 >
                   删除
@@ -316,7 +317,7 @@
                 <el-button
                   v-if="doEdit"
                   class="bs-el-button-default"
-                  :disabled="scope.row.editable === 1"
+                  :disabled="scope.row.editable === 1 && !appCode"
                   @click="
                     toEdit(
                       scope.row.id,
@@ -332,7 +333,7 @@
                   v-if="isDelete"
                   class="bs-el-button-default"
                   :loading="scope.row.loading"
-                  :disabled="scope.row.editable === 1 "
+                  :disabled="scope.row.editable === 1 && !appCode"
                   @click="delDataset(scope.row)"
                 >
                   删除
@@ -379,6 +380,7 @@
       :dataset-name="datasetName"
       :type-id="typeId"
       :is-edit="isEdit"
+      :app-code="appCode"
       @back="back"
     >
       <template #output-field-table-column>
@@ -436,6 +438,10 @@ export default {
       type: [Array, Object],
       default: null
     },
+    appCode: {
+      type: String,
+      default: ''
+    },
     isBorder: {
       type: Boolean,
       default: false
@@ -460,6 +466,7 @@ export default {
       isEdit: false,
       categoryData: [],
       tableData: [], // 表格数据
+      labelIds: [],
       queryForm: {
         name: '',
         datasetType: '',
@@ -776,8 +783,12 @@ export default {
     getDataList () {
       getLabelList().then((res) => {
         this.labelList = res
+        // this.labelList.unshift({ id: '', labelName: '全部' })
       })
       this.dataListLoading = true
+      if (this.labelIds.length > 0) {
+        this.queryForm.labelIds.push(this.labelIds)
+      }
       datasetPage({
         current: this.current,
         size: this.size,
@@ -818,12 +829,19 @@ export default {
     },
     nodeClick (row, type) {
       this.current = 1
+      const { id } = row
       if (type === 'group') {
-        this.queryForm.typeId = row.id
-        this.queryForm.datasetType = ''
+        Object.assign(this.queryForm, { typeId: id, datasetType: '', labelIds: [] })
       } else if (type === 'type') {
-        this.queryForm.typeId = ''
-        this.queryForm.datasetType = row
+        Object.assign(this.queryForm, { typeId: '', datasetType: row, labelIds: [] })
+      } else if (type === 'tag') {
+        // Object.assign(this.queryForm, { typeId: '', datasetType: '', labelIds: [] })
+        // 将 id 和 原本的 labelIds 进行合并
+        if (this.queryForm.labelIds.includes(id)) {
+          this.queryForm.labelIds = this.queryForm.labelIds.filter((item) => item !== id)
+        } else {
+          this.queryForm.labelIds.push(id)
+        }
       }
       this.getDataList()
     },

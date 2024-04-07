@@ -208,7 +208,7 @@ export default {
     const validateName = (rule, value, callback) => {
       nameCheckRepeat({
         id: this.datasetId,
-        name: value
+        name: value,
       }).then((r) => {
         if (r) {
           callback(new Error('数据集名称已存在'))
@@ -324,6 +324,7 @@ export default {
           typeId: this.dataForm.typeId,
           datasetType: 'json',
           remark: this.dataForm.remark,
+          editable: this.appCode ? 1 : 0,
           labelIds: this.dataForm.labelIds,
           config: {
             className: 'com.gccloud.dataset.entity.config.JsonDataSetConfig',

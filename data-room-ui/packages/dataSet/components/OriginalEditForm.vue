@@ -371,7 +371,7 @@ export default {
     const validateName = (rule, value, callback) => {
       nameCheckRepeat({
         id: this.datasetId,
-        name: value
+        name: value,
       }).then((res) => {
         if (res) {
           callback(new Error('数据集名称已存在'))
@@ -636,7 +636,8 @@ export default {
             fieldDesc: columnMap,
             fieldList,
             repeatStatus: this.dataForm.repeatStatus
-          }
+          },
+          editable: this.appCode ? 1 : 0
         }
         this.saveLoading = true
         this.saveText = '正在保存...'
@@ -661,7 +662,7 @@ export default {
     queryAllSource () {
       const params = {
         sourceName: '',
-        sourceType: ''
+        sourceType: '',
       }
       datasourceList(params).then(res => {
         this.sourceList = res

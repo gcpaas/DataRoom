@@ -603,13 +603,17 @@ export default {
     typeId: {
       type: String,
       default: ''
+    },
+    appCode: {
+      type: String,
+      default: ''
     }
   },
   data () {
     const validateName = (rule, value, callback) => {
       nameCheckRepeat({
         id: this.datasetId,
-        name: value
+        name: value,
       }).then((r) => {
         if (r) {
           callback(new Error('数据集名称已存在'))
@@ -746,7 +750,7 @@ export default {
             cache,
             config
           } = res
-          const { paramsList, fieldDesc, fieldList } = config
+          const { script, paramsList, fieldDesc, fieldList } = config
           this.dataForm = {
             id,
             name,
@@ -812,7 +816,7 @@ export default {
               fieldType
             })
           )
-          const { datasetId, dataForm, fieldDesc } = this
+          const { datasetId, dataForm, appCode, fieldDesc } = this
           const form = {
             id: datasetId,
             name: dataForm.name,
@@ -820,6 +824,7 @@ export default {
             remark: dataForm.remark,
             cache: dataForm.cache,
             datasetType: 'http',
+            editable: appCode ? 1 : 0,
             labelIds: dataForm.labelIds,
             config: {
               className: 'com.gccloud.dataset.entity.config.HttpDataSetConfig',

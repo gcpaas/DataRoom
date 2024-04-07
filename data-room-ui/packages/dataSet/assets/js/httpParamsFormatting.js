@@ -112,6 +112,7 @@ function evalArrFunc (paramsList, arr) {
     acc[cur.name] = cur.value
     return acc
   }, {})
+
   // 取name作为变量名, value作为变量值 { _name: '${name}', _token: '${token}'}
   const paramsListObj = arr.reduce((acc, cur) => {
     if (acc[cur.key]) {
@@ -125,7 +126,6 @@ function evalArrFunc (paramsList, arr) {
     }
     return acc
   }, {})
-
   // 转成字符串
   const paramsListStr = JSON.stringify(paramsListObj)
 

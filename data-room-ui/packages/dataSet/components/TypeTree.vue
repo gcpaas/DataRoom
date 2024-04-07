@@ -6,7 +6,7 @@
           v-model="queryForm.searchKey"
           class="dataroom-dataset-type-tree-input bs-el-input"
           clearable
-          placeholder="请输入数据集分组"
+          :placeholder="activeName === 'tag' ? '请输入标签名称' : '请输入数据集分组'"
           @clear="reSearch()"
           @keyup.enter.native="reSearch()"
         />
@@ -29,6 +29,10 @@
           label="类型"
           name="type"
         />
+        <el-tab-pane
+          label="标签"
+          name="tag"
+        />
       </el-tabs>
       <div
         v-show="activeName === 'group'"
@@ -50,12 +54,15 @@
               </el-button>
             </div>
             <el-tree
+              v-if="categoryData.length"
               ref="datasetTypeTree"
               :data="categoryData"
               :expand-on-click-node="false"
               node-key="id"
+              :current-node-key="categoryData[0].id"
               :props="{
                 label: 'name',
+                id:'id',
                 children: 'children',
               }"
               :filter-node-method="filterNode"
@@ -145,28 +152,84 @@
           </ul>
         </div>
       </div>
+      <div
+        v-show="activeName === 'tag'"
+        class="left"
+      >
+        <div class="tag-box">
+          <el-scrollbar
+            v-if="labelList.length>0"
+            ref="list"
+            :key="updateKey"
+            class="scroll"
+          >
+            <ul class="tag-list">
+              <li
+                v-for="item in labelList"
+                :key="item.id"
+                :class="{
+                  'tab-active': item.id === tagId
+                }"
+                @click="clicTag(item)"
+              >
+                {{ item.labelName }}
+                <el-popover
+                  trigger="hover"
+                  placement="bottom"
+                  popper-class="tree-popover"
+                >
+                  <el-menu active-text-color="#000000">
+                    <el-menu-item @click="editTag(item)">
+                      <span slot="title">编辑</span>
+                    </el-menu-item>
+                    <el-menu-item @click="delTag(item)">
+                      <span slot="title">删除</span>
+                    </el-menu-item>
+                  </el-menu>
+                  <i
+                    slot="reference"
+                    class="el-icon-more"
+                  />
+                </el-popover>
+              </li>
+            </ul>
+          </el-scrollbar>
+        </div>
+        <div
+          class="add-catalog-box"
+          @click="addTag()"
+        >
+          <i class="el-icon-plus" />
+          <div>新建标签</div>
+        </div>
+      </div>
       <CategroyEditForm
         v-if="editFormVisible"
         ref="categroyEditForm"
+        :app-code="appCode"
         :tree-data="categoryData"
         @addOrUpdateNode="addOrUpdateNode"
+      />
+      <label-edit
+        ref="labelEditRef"
+        @afterEdit="init()"
       />
     </div>
   </div>
 </template>
 
 <script>
-import {
-  categoryDele,
-  categoryRemove,
-  getCategoryTree
-} from '@gcpaas/data-room-ui/packages/assets/js/api/datasetConfigService.js'
+// import LabelSelect from '@gcpaas/data-room-ui/packages/dataSet/components/LabelSelect.vue'
+import LabelEdit from '@gcpaas/data-room-ui/packages/dataSet/components/LabelConfigEdit.vue'
+import { labelList, removeLabel } from '@gcpaas/data-room-ui/packages/assets/js/api/LabelConfigService.js'
 import CategroyEditForm from '@gcpaas/data-room-ui/packages/dataSet/components/CategroyEditForm.vue'
+import { categoryDele, categoryRemove, getCategoryTree } from '@gcpaas/data-room-ui/packages/assets/js/api/datasetConfigService.js'
 
 export default {
   name: 'DatasetTypeTreeIndex',
   components: {
-    CategroyEditForm
+    CategroyEditForm,
+    LabelEdit
   },
   props: {
     datasetTypeList: {
@@ -178,13 +241,27 @@ export default {
         'json',
         'script'
       ]
+    },
+    appCode: {
+      type: String,
+      default: ''
     }
   },
   data: function () {
     return {
+      tagId: '',
+      count: 0,
+      updateKey: Math.random(),
       isPopoverShow: false,
       activeName: 'group',
-      categoryData: [],
+      // 标签列表
+      labelList: [],
+      // 列表分页
+      tabPage: {
+        currentPage: 1,
+        pageSize: 20
+      },
+      categoryData: [{ name: '全部', id: '', parentId: '0' }],
       curType: null,
       noData: false,
       loading: false,
@@ -208,11 +285,48 @@ export default {
     }
   },
   computed: {},
+  watch: {
+    activeName (val) {
+      this.tagId = ''
+      if (val === 'group') {
+        this.curType = null
+        this.$emit('nodeClick', '', 'group')
+        const treeRef = this.$refs.datasetTypeTree
+        if (treeRef) {
+          const currentNode = treeRef.getCurrentNode()
+          if (currentNode && currentNode.id !== '') {
+            console.log(this.$refs.datasetTypeTree)
+            currentNode.isCurrent = false
+            treeRef.setCurrentKey('')
+          }
+        }
+        this.setDefaultCurrentNode(true)
+      } else if (val === 'type') {
+        this.curType = ''
+        this.$emit('nodeClick', '-1', 'type')
+      } else if (val === 'tag') {
+        this.updateKey = Math.random()
+        this.$emit('nodeClick', '', 'tag')
+        this.handleScroll()
+      }
+    }
+  },
   mounted () {
     this.init()
   },
-
   methods: {
+    loadMoreData () {
+      this.tabPage.currentPage++
+      const params = {
+        current: this.tabPage.currentPage,
+        size: 30,
+        labelName: '',
+        labelType: ''
+      }
+      labelList(params).then((res) => {
+        this.labelList = this.labelList.concat(res.list)
+      })
+    },
     // 新增根节点
     addRootNode () {
       this.editFormVisible = true
@@ -227,20 +341,40 @@ export default {
     // 初始化树节点
     init () {
       this.loading = true
-      getCategoryTree({ type: 'dataset' })
+      this.tabPage.currentPage = 1
+      const list = this.$refs.list
+      if (list) {
+        // 滚动条回到顶部
+        list.$el.querySelector('.el-scrollbar__wrap').scrollTop = 0
+      }
+      // 获取分组数据
+      getCategoryTree({ type: 'dataset'})
         .then((res) => {
-          this.categoryData = res.map((item) => {
-            return { isParent: item.hasChildren, ...item }
-          })
-          this.categoryData.unshift({ name: '全部', id: '', parentId: '0' })
-          this.$emit('reCategory')
-        })
-        .then((e) => {
           this.loading = false
+          res.forEach((item) => {
+            this.categoryData.push({ isParent: item.hasChildren, ...item })
+          })
+          this.$emit('reCategory')
         })
         .catch((e) => {
           this.loading = false
         })
+        // 获取标签数据
+      const params = {
+        current: this.tabPage.currentPage,
+        size: 30,
+        labelName: '',
+        labelType: ''
+      }
+      labelList(params).then((res) => {
+        this.updateKey = Math.random()
+        this.labelList = res.list
+        // 加入最上面一条全部数据
+        this.labelList.unshift({ labelName: '全部', id: '' })
+        // 根据 res.totalCount 计算执行 loadMoreData 方法的次数
+        this.count = Math.ceil(res.totalCount / 30) + 1
+        this.handleScroll()
+      })
     },
     // filter方法
     filterNode (value, data) {
@@ -272,6 +406,7 @@ export default {
     },
     // 类型点击事件
     getTypeData (datasetType) {
+      console.log(datasetType)
       this.curType = datasetType
       this.$emit('nodeClick', datasetType, this.activeName)
     },
@@ -366,12 +501,75 @@ export default {
     addOrUpdateNode (params, isAdd) {
       this.init()
     },
-    // 重新绘制树
-    redrawTree () {},
     clickNode (nodeData) {
       this.curType = '-1'
       this.rightClickForm.org = nodeData
       this.$emit('nodeClick', nodeData, 'group')
+      this.setDefaultCurrentNode(nodeData.id === '')
+    },
+    // 点击标签
+    clicTag (item) {
+      this.tagId = item.id
+      this.$emit('nodeClick', item, 'tag')
+    },
+    // 新增标签
+    addTag () {
+      this.$refs.labelEditRef.init()
+    },
+    // 编辑标签
+    editTag (item) {
+      this.$refs.labelEditRef.init(item)
+    },
+    // 删除标签
+    delTag (item) {
+      this.$confirm('确定删除当前标签吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        customClass: 'bs-el-message-box'
+      }).then(() => {
+        removeLabel(item.id).then(() => {
+          this.$message.success('删除成功')
+        }).then(() => {
+          this.init()
+        })
+      }).catch(() => { })
+    },
+    // eltree 默认高亮第一个
+    setDefaultCurrentNode (bol) {
+      const tree = this.$refs.datasetTypeTree
+      if (tree && tree.store && tree.store.root.childNodes.length > 0) {
+        const firstNode = tree.store.root.childNodes[0]
+        if (firstNode) {
+          this.$set(firstNode, 'isCurrent', bol)
+        }
+      }
+    },
+    // 监听标签分组的滚动
+    handleScroll () {
+      this.$nextTick(() => {
+        const list = this.$refs.list
+        const scrollWrap = list.$el.querySelector('.el-scrollbar__wrap')
+        const scrollHandler = () => {
+          const scrollTop = scrollWrap.scrollTop
+          const scrollHeight = scrollWrap.scrollHeight
+          const clientHeight = scrollWrap.clientHeight
+          if (scrollTop + clientHeight >= scrollHeight) {
+            if (this.tabPage.currentPage < this.count) {
+              this.loadMoreData()
+            }
+          }
+        }
+
+        const removeScrollListener = () => {
+          scrollWrap.removeEventListener('scroll', scrollHandler)
+        }
+
+        removeScrollListener() // 移除之前的监听
+
+        scrollWrap.addEventListener('scroll', scrollHandler)
+        this.$once('hook:beforeDestroy', removeScrollListener)
+      })
     }
   }
 }
@@ -414,8 +612,7 @@ export default {
       width: 100%;
 
       .el-tabs__item {
-        // color: var(--bs-el-text);
-        width: 50%;
+        // width: 50%;
         text-align: center;
       }
 
@@ -438,32 +635,12 @@ export default {
     display: none;
   }
 }
-// ::v-deep .dataroom-dataset-type-tree {
-//   span {
-//     color: var(--bs-el-text);
-//   }
-
-//   li:hover {
-//     background: transparent !important;
-//     background-color: transparent !important;
-//   }
-
-//   .curSelectedNode {
-//     background: var(--bs-el-background-3) !important;
-//     background-color: var(--bs-el-background-3) !important;
-//   }
-
-//   a:hover {
-//     background: rgba(64, 158, 255, 0.1) !important;
-//     background-color: rgba(64, 158, 255, 0.1) !important;
-//   }
-// }
-
 ::v-deep .el-tabs__nav-wrap::after {
   display: none !important;
 }
 
 .left-tab-box ul {
+  margin: 0;
   padding-left: 0px;
   li {
     font-size: 12px;
@@ -475,12 +652,10 @@ export default {
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
-    height: 34px;
+    height: 36px;
     line-height: 40px;
     cursor: pointer;
-    padding-left: 20px;
-    margin: 2px 0;
-
+    padding-left: 24px;
     &:hover,
     &.tab-active {
       color: #409eff;
@@ -489,7 +664,7 @@ export default {
 
     &.tab-active::before {
       content: "";
-      height: 34px;
+      height: 36px;
       line-height: 40px;
       position: absolute;
       left: 0;
@@ -525,7 +700,6 @@ export default {
 }
 ::v-deep .el-tree {
   .el-tree-node {
-    // height: 34px;
     .el-tree-node__content {
       height: 36px;
     }
@@ -552,6 +726,9 @@ export default {
   .is-current {
     .el-tree-node__content {
       background-color: rgba(64, 158, 255, 0.1);
+      span{
+        color: #409eff;
+      }
       // &::before {
       //   content: "";
       //   height: 100%;
@@ -580,5 +757,62 @@ export default {
   .el-icon-plus {
     padding: 0 5px;
   }
+}
+
+// el-tag 样式调整
+::v-deep .el-tabs__nav{
+  display: flex;
+  justify-content: space-around;
+}
+// 标签列表
+.tag-box{
+  overflow: hidden;
+  height: calc(100vh - 316px);
+  .scroll{
+    height: 100%;
+    width: 100%;
+  }
+}
+.tag-list{
+  // max-height: 69vh;
+  // overflow-x: hidden;
+  // overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  li{
+  display: flex;
+    height: 36px;
+    font-size: 12px;
+    line-height: 36px;
+    list-style: none;
+    cursor: pointer;
+    padding-left: 24px;
+    position: relative;
+    &:hover{
+      background-color: #f5f7fa;
+    }
+    .el-icon-more{
+      top: 50%;
+      right: 15px;
+      position: absolute;
+      transform: translateY(-50%) rotate(90deg) !important;
+    }
+  }
+  .tab-active{
+    color: #409eff;
+    background-color: #f2f7fe;
+    &.tab-active::before {
+      content: "";
+      height: 36px;
+      line-height: 40px;
+      position: absolute;
+      left: 0;
+      border-left: 4px solid #409eff;
+    }
+  }
+}
+// 隐藏横向滚动条
+::v-deep .el-scrollbar__wrap{
+  overflow-x: hidden;
 }
 </style>
