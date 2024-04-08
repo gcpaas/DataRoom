@@ -5,7 +5,7 @@
       :key="label.id"
       :closable="isEdit"
       :disable-transitions="false"
-      style="margin-right: 2px;margin-left: 2px;background-color: #2f3440;border-color: #313640;"
+      style="margin-right: 2px;margin-left: 2px;"
       @close="handleCloseTag(label)"
     >
       {{ label.labelName }}

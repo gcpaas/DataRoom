@@ -168,12 +168,13 @@
                 v-for="item in labelList"
                 :key="item.id"
                 :class="{
-                  'tab-active': item.id === tagId
+                  'tab-active':tagActiveList.includes(item.id)
                 }"
                 @click="clicTag(item)"
               >
                 {{ item.labelName }}
                 <el-popover
+                  v-if="item.id"
                   trigger="hover"
                   placement="bottom"
                   popper-class="tree-popover"
@@ -249,7 +250,7 @@ export default {
   },
   data: function () {
     return {
-      tagId: '',
+      tagActiveList: [],
       count: 0,
       updateKey: Math.random(),
       isPopoverShow: false,
@@ -287,10 +288,10 @@ export default {
   computed: {},
   watch: {
     activeName (val) {
-      this.tagId = ''
+      this.tagActiveList = []
       if (val === 'group') {
         this.curType = null
-        this.$emit('nodeClick', '', 'group')
+        this.$emit('nodeClick', { name: '全部', id: '' }, 'group')
         const treeRef = this.$refs.datasetTypeTree
         if (treeRef) {
           const currentNode = treeRef.getCurrentNode()
@@ -305,8 +306,9 @@ export default {
         this.curType = ''
         this.$emit('nodeClick', '-1', 'type')
       } else if (val === 'tag') {
+        this.tagActiveList = ['']
         this.updateKey = Math.random()
-        this.$emit('nodeClick', '', 'tag')
+        this.$emit('nodeClick', [''], 'tag')
         this.handleScroll()
       }
     }
@@ -509,8 +511,25 @@ export default {
     },
     // 点击标签
     clicTag (item) {
-      this.tagId = item.id
-      this.$emit('nodeClick', item, 'tag')
+      const tagSet = new Set(this.tagActiveList)
+      if (item.id === '') {
+        // 如果点击的是全部，则清空其他选中的标签, 加入全部标签
+        tagSet.clear()
+        tagSet.add('')
+      } else {
+        // 如果点击的是其他标签，则清空全部标签
+        tagSet.delete('')
+        if (tagSet.has(item.id)) {
+          // 如果 item.id 已经存在，则删除
+          tagSet.delete(item.id)
+        } else {
+          // 如果 item.id 不存在，则添加
+          tagSet.add(item.id)
+        }
+      }
+      this.tagActiveList = Array.from(tagSet)
+
+      this.$emit('nodeClick', this.tagActiveList, 'tag')
     },
     // 新增标签
     addTag () {

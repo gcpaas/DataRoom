@@ -79,7 +79,7 @@
               @clear="handleSearch()"
             />
           </el-form-item>
-          <el-form-item
+          <!-- <el-form-item
             class="filter-item"
             prop="labelIds"
           >
@@ -101,7 +101,7 @@
                 :value="labelItem.id"
               />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item class="filter-item">
             <el-button
               :loading="dataListLoading"
@@ -466,7 +466,7 @@ export default {
       isEdit: false,
       categoryData: [],
       tableData: [], // 表格数据
-      labelIds: [],
+      // labelIds: [],
       queryForm: {
         name: '',
         datasetType: '',
@@ -786,9 +786,6 @@ export default {
         // this.labelList.unshift({ id: '', labelName: '全部' })
       })
       this.dataListLoading = true
-      if (this.labelIds.length > 0) {
-        this.queryForm.labelIds.push(this.labelIds)
-      }
       datasetPage({
         current: this.current,
         size: this.size,
@@ -828,6 +825,7 @@ export default {
       }
     },
     nodeClick (row, type) {
+      console.log(row)
       this.current = 1
       const { id } = row
       if (type === 'group') {
@@ -835,13 +833,7 @@ export default {
       } else if (type === 'type') {
         Object.assign(this.queryForm, { typeId: '', datasetType: row, labelIds: [] })
       } else if (type === 'tag') {
-        // Object.assign(this.queryForm, { typeId: '', datasetType: '', labelIds: [] })
-        // 将 id 和 原本的 labelIds 进行合并
-        if (this.queryForm.labelIds.includes(id)) {
-          this.queryForm.labelIds = this.queryForm.labelIds.filter((item) => item !== id)
-        } else {
-          this.queryForm.labelIds.push(id)
-        }
+        Object.assign(this.queryForm, { typeId: '', datasetType: '', labelIds: row })
       }
       this.getDataList()
     },
