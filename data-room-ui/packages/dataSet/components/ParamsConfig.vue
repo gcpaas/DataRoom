@@ -182,21 +182,25 @@ export default {
     return {
       fieldTypeOptions: [
         {
-          value: "text",
-          label: "文本",
+          value: "String",
+          label: "字符串",
         },
         {
-          value: "number",
-          label: "数字",
+          value: "Integer",
+          label: "整数",
         },
         {
-          value: "date",
-          label: "时间",
+          value: "Double",
+          label: "双精度浮点数",
         },
         {
-          value: "boolean",
-          label: "布尔值",
+          value: "Long",
+          label: "长整数",
         },
+        {
+          value:"Date",
+          label:"日期"
+        }
       ],
       // Your data properties here
     };
