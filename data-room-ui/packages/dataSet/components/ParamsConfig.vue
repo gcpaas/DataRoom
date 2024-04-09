@@ -1,9 +1,7 @@
 <template>
   <div>
     <div>
-      <span class="dataroom-dataset-params-config-title">
-        输入参数配置
-      </span>
+      <span class="dataroom-dataset-params-config-title"> 输入参数配置 </span>
     </div>
     <el-button
       type="primary"
@@ -39,12 +37,7 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="remark"
-          label="备注"
-          width="130"
-          align="center"
-        >
+        <el-table-column prop="remark" label="备注" width="130" align="center">
           <template slot-scope="scope">
             <el-form :model="scope.row">
               <el-form-item>
@@ -96,21 +89,18 @@
           <template slot-scope="scope">
             <el-form :model="scope.row">
               <el-form-item>
-                <el-switch v-model="scope.row.require" />
+                <el-switch
+                  v-model="scope.row.require"
+                  :inactive-value="0"
+                  :active-value="1"
+                />
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="value"
-          label="默认值"
-          align="center"
-        >
+        <el-table-column prop="value" label="默认值" align="center">
           <template slot-scope="scope">
-            <el-form
-              ref="valueForm"
-              :model="scope.row"
-            >
+            <el-form ref="valueForm" :model="scope.row">
               <el-form-item
                 :show-message="scope.row.require === 1"
                 prop="value"
@@ -130,16 +120,9 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="testValue"
-          label="测试值"
-          align="center"
-        >
+        <el-table-column prop="testValue" label="测试值" align="center">
           <template slot-scope="scope">
-            <el-form
-              ref="testValueForm"
-              :model="scope.row"
-            >
+            <el-form ref="testValueForm" :model="scope.row">
               <el-form-item
                 :show-message="scope.row.require === 1"
                 prop="value"
@@ -159,11 +142,7 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column
-          label="操作"
-          width="80"
-          align="center"
-        >
+        <el-table-column label="操作" width="80" align="center">
           <template slot-scope="scope">
             <el-button
               type="text"
@@ -180,87 +159,87 @@
 </template>
 
 <script>
-import resizeTableHeight from '@gcpaas/data-room-ui/packages/assets/js/utils/resizeHeightDirevtive.js'
-import cloneDeep from 'lodash/cloneDeep'
+import resizeTableHeight from "@gcpaas/data-room-ui/packages/assets/js/utils/resizeHeightDirevtive.js";
+import cloneDeep from "lodash/cloneDeep";
 
 export default {
-  name: 'ParamsConfig',
+  name: "ParamsConfig",
   directives: {
-    resizeTableHeight
+    resizeTableHeight,
   },
   props: {
     data: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   computed: {
-    innerData () {
-      return cloneDeep(this.data)
-    }
+    innerData() {
+      return cloneDeep(this.data);
+    },
   },
-  data () {
+  data() {
     return {
       fieldTypeOptions: [
         {
-          value: 'text',
-          label: '文本'
+          value: "text",
+          label: "文本",
         },
         {
-          value: 'number',
-          label: '数字'
+          value: "number",
+          label: "数字",
         },
         {
-          value: 'date',
-          label: '时间'
+          value: "date",
+          label: "时间",
         },
         {
-          value: 'boolean',
-          label: '布尔值'
-        }
-      ]
+          value: "boolean",
+          label: "布尔值",
+        },
+      ],
       // Your data properties here
-    }
+    };
   },
-  mounted () { },
+  mounted() {},
   methods: {
-    addParam () {
+    addParam() {
       this.innerData.push({
-        name: '',
-        type: 'text',
+        name: "",
+        type: "text",
         require: 0,
         status: 1,
-        value: '',
-        testValue: '',
-        remark: ''
-      })
+        value: "",
+        testValue: "",
+        remark: "",
+      });
     },
-    delRow (index) {
-      this.innerData.splice(index, 1)
+    delRow(index) {
+      this.innerData.splice(index, 1);
     },
-    checkParamsName (row) {
-      if (row.name === '') {
-        this.$message.error('参数名称不能为空')
+    checkParamsName(row) {
+      if (row.name === "") {
+        this.$message.error("参数名称不能为空");
       }
     },
-    checkParamsType (row) {
-      const typesToClear = ['text', 'date', 'number', 'boolean']
+    checkParamsType(row) {
+      const typesToClear = ["text", "date", "number", "boolean"];
       if (typesToClear.includes(row.type)) {
-        row.value = ''
-        row.testValue = ''
+        row.value = "";
+        row.testValue = "";
       }
     },
-    getRules (row) {
+    getRules(row) {
       return [
         {
           required: row.require === 1,
-          message: '参数值不能为空',
-          trigger: ['blur', 'change']
-        }
-      ]
-    }
-  }
-}
+          message: "参数值不能为空",
+          trigger: ["blur", "change"],
+        },
+      ];
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -281,12 +260,12 @@ export default {
 ::v-deep .el-date-editor.el-input {
   width: 140px;
 }
-.dataroom-el-button{
+.dataroom-el-button {
   color: #e47470;
   margin-bottom: 13px;
 }
 
-.dataroom-dataset-params-config-title{
+.dataroom-dataset-params-config-title {
   font-size: 14px;
   font-weight: 600;
   position: relative;
