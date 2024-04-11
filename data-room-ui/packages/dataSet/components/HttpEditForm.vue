@@ -774,7 +774,7 @@ export default {
               ? 'text/javascript'
               : 'text/x-groovy'
           // this.replaceParams(paramsList)
-          this.scriptExecute(false)
+          // this.scriptExecute(false)
         })
       }
     },
@@ -1027,12 +1027,15 @@ export default {
     },
     // 调接口
     getData () {
+      const paramsList = cloneDeep(
+            this.$refs.paramsConfig?.innerData ?? []
+          )
       // 如果是前端代理，则自行组装接口及参数并调接口
       if (this.dataForm.config.requestType === 'frontend') {
         // this.replaceParams(this.dataForm.config.paramsList)
         axiosFormatting({
           ...this.dataForm.config,
-          paramsList: this.newParamsList
+          paramsList: paramsList
         })
           .then((res) => {
             if (this.headerFields.length === 0) {
@@ -1059,10 +1062,11 @@ export default {
           })
       } else {
         // 如果是后端代理，则将配置传到后端
+        this.dataForm.config.paramsList = paramsList
         const script = JSON.stringify(this.dataForm.config)
         const executeParams = {
           script,
-          params: this.newParamsList,
+          params: paramsList,
           dataSetType: 'http'
         }
         datasetExecuteTest(executeParams)

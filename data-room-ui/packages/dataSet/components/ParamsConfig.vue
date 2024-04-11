@@ -210,7 +210,7 @@ export default {
     addParam() {
       this.innerData.push({
         name: "",
-        type: "text",
+        type: "String",
         require: 0,
         status: 1,
         value: "",
