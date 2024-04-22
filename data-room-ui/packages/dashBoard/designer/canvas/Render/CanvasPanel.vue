@@ -15,7 +15,8 @@
       :prevent-collision="true"
       :style="{
         backgroundColor: pageConfig.bgColor,
-        opacity: pageConfig.opacity
+        opacity: pageConfig.opacity,
+        height:'100%'
       }"
     >
       <grid-item
