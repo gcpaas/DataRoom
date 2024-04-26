@@ -645,7 +645,7 @@ export default {
     margin-right: 2px;
     color: #36474f;
 
-    ::v-deep.el-form-item {
+    ::v-deep .el-form-item {
       margin-bottom: 0 !important;
     }
 

@@ -352,11 +352,11 @@ export default {
     left: 50%;
     transform: translateX(-40%);
     width: 100px!important;
-    ::v-deep.el-dropdown-menu__item{
+    ::v-deep .el-dropdown-menu__item{
       text-align: center;
       padding: 5px;
     }
-    ::v-deep.popper__arrow{
+    ::v-deep .popper__arrow{
       left: 50% !important;
       transform: translateX(-50%) !important;
     }

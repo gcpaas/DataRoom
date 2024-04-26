@@ -824,7 +824,7 @@ export default {
           position: relative;
           overflow: auto;
           overflow-x: hidden;
-          ::v-deep.el-input__suffix-inner{
+          ::v-deep .el-input__suffix-inner{
             /*pointer-events: none!important;*/
           }
           .preview-wrap{
@@ -935,11 +935,11 @@ export default {
     }
   }
   /*当前tree节点激活样式*/
- .page-list-tree ::v-deep.is-current>.el-tree-node__content{
+ .page-list-tree ::v-deep .is-current>.el-tree-node__content{
     background: #007aff10;
     color: var(--bs-el-color-primary);
   }
-  .page-list-tree ::v-deep.is-current>.el-tree-node__content::before{
+  .page-list-tree ::v-deep .is-current>.el-tree-node__content::before{
     position: absolute;
     left: 0;
     border-left: 4px solid var(--bs-el-color-primary);

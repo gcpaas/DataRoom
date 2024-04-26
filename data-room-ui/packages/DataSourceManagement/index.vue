@@ -172,7 +172,7 @@ export default {
     height: 100%;
     box-sizing: border-box;
   }
-  ::v-deep.el-scrollbar__view{
+  ::v-deep .el-scrollbar__view{
     height: 100%;
     .inner-router-view-wrap{
       height: 100%;

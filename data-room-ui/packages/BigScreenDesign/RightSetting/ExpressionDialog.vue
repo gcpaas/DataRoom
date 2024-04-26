@@ -207,7 +207,7 @@ export default {
 <style scoped lang="scss">
 @import '../../assets/style/bsTheme.scss';
 .bs-dialog-wrap{
-  ::v-deep.el-dialog__body{
+  ::v-deep .el-dialog__body{
     min-height: 500px;
   }
 }

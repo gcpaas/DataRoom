@@ -468,7 +468,7 @@ export default {
   border-left: 1px dashed #0089d0 !important;
   border-top: 1px dashed #0089d0 !important;
 }
-::v-deep.action {
+::v-deep .action {
   .value {
     background: var(--bs-el-color-primary);
     padding: 4px;

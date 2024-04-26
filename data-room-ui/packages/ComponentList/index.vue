@@ -470,7 +470,7 @@ export default {
       width: 200px;
       margin-right: 20px;
 
-      ::v-deep.el-input__inner {
+      ::v-deep .el-input__inner {
         background-color: var(--bs-background-1) !important;
       }
     }
@@ -478,7 +478,7 @@ export default {
     .el-select {
       margin-right: 20px;
 
-      ::v-deep.el-input__inner {
+      ::v-deep .el-input__inner {
         background-color: var(--bs-background-1) !important;
       }
     }
@@ -602,7 +602,7 @@ export default {
             object-fit: cover;
           }
 
-          ::v-deep.image-slot {
+          ::v-deep .image-slot {
             height: 100%;
             background-color: var(--bs-background-2);
             display: flex;
@@ -610,7 +610,7 @@ export default {
             justify-content: center;
           }
 
-          ::v-deep.el-image__error {
+          ::v-deep .el-image__error {
             background-color: #1d1d1d;
           }
         }

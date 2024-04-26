@@ -123,7 +123,7 @@
 .design-tab-warp {
   padding: 10px;
 }
-::v-deep.el-tabs--top {
+::v-deep .el-tabs--top {
   height: 100%;
 }
 ::v-deep .el-tabs__content {

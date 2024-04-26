@@ -199,7 +199,7 @@ export default {
 .design-tab-warp {
   padding: 10px;
 }
-::v-deep.el-tabs--top {
+::v-deep .el-tabs--top {
   height: 100%;
 }
 ::v-deep .el-tabs__content {
@@ -235,7 +235,7 @@ export default {
     justify-content: center;
     margin-right: 2px;
 
-    ::v-deep.el-form-item {
+    ::v-deep .el-form-item {
       margin-bottom: 0 !important;
     }
 
