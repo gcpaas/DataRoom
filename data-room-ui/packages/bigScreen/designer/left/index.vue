@@ -41,7 +41,7 @@
             @closePanel="closePanel"
           />
           <globalVariableList
-            v-else-if="activeName === menu.name && show && menu.name === 'globalVariable'"
+            v-else-if="activeName === menu.code && show && menu.code === 'globalVariable'"
             @closePanel="closePanel"
           />
           <!-- 素材库(通过弹窗展示） -->
