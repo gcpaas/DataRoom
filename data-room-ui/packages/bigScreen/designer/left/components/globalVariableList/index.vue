@@ -27,7 +27,7 @@
           <div>
             <el-form ref="form" :model="variable" label-width="80px" label-position="left">
               <el-form-item label="来源">
-                <el-select v-model="variable.source" placeholder="请选择">
+                <el-select v-model="variable.source" placeholder="请选择" @change="changeVariableSource(variable)">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -42,7 +42,7 @@
               <el-form-item label="描述">
                 <el-input v-model="variable.desc"></el-input>
               </el-form-item>
-              <el-form-item label="初始值">
+              <el-form-item label="初始值" v-if="variable.source === 'static'">
                 <el-input  v-model="variable.initialValue" @blur="changeVariableInitValue(variable)"> </el-input>
                 <!--                <smart-input v-model="variable.initialValue" ></smart-input>-->
               </el-form-item>
@@ -163,6 +163,15 @@ export default {
     // 全局变量初始值修改
     changeVariableInitValue (variable) {
       this.canvasInst.updateGlobalNameToValue(variable,variable.initialValue)
+    },
+    changeVariableSource (variable) {
+      if (variable.source === 'fromURL') {
+        // 获取URL中获取对应的值
+        const value = this.$route.query[variable.name]
+        this.canvasInst.updateGlobalNameToValue(variable, value)
+      } else {
+        this.canvasInst.updateGlobalNameToValue(variable, variable.initialValue)
+      }
     },
     // 全局变量更新方法修改---定时器开启、修改以及销毁
     triggerTimer (variable) {
