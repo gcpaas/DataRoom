@@ -60,6 +60,7 @@ export default {
   },
   data () {
     return {
+      pageInfo: null,
       dataHandleFilters: {},
       timers: {}, // 计时器
       chartInst: {},
