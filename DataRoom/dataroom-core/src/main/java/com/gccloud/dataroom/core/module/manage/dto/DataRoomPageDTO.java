@@ -44,6 +44,9 @@ public class DataRoomPageDTO extends BasePageDTO {
     @ApiModelProperty(notes = "交互")
     private List<Map<String, Object>> interactions;
 
+    @ApiModelProperty(notes = "全局变量")
+    private List<Map<String, Object>> globalVariable;
+
     @ApiModelProperty(notes = "弹窗")
     private Map<String, Object> dialog;
 
