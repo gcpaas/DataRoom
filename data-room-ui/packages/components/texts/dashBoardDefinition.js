@@ -6,6 +6,15 @@ import baseDefinition from './baseDefinition'
 function getInstance () {
   const chartDefinition = {
     ...baseDefinition,
+    props: {
+      ...baseDefinition.props,
+      textStyle: { // 字体样式设置
+        color: '#000',
+        fontSize: 24,
+        fontFamily: 'arial',
+        fontWeight: 'normal'
+      }
+    },
     w: 6,
     h: 4,
     i: null // 组件拖拽唯一标识

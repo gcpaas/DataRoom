@@ -5,6 +5,7 @@
   >
     <div :class="!rightVisiable ? 'bs-page-right bs-page-right-fold' : 'bs-page-right'">
       <RightSetting
+        :config="config"
       />
     </div>
   </div>
@@ -32,6 +33,9 @@ export default {
   watch: {
   },
   computed: {
+    config () {
+      return this.canvasInst.activeChart
+    }
   },
   mounted () { },
   methods: {

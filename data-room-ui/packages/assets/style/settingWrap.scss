@@ -230,6 +230,12 @@
     border-radius: 10px;
   }
 }
+// 普通组件的样式配置面板样式
+.props-box{
+  padding: 10px;
+  box-sizing: border-box;
+
+}
 ::v-deep .el-input-number--mini{
   width: 100% !important;
 }

@@ -107,7 +107,6 @@ export default {
   },
   created () {},
   mounted () {
-    console.log(this.chartList)
     this.moveableRef = this.$refs.moveableRef
     this.rootContainer = document.querySelector('.container')
   },

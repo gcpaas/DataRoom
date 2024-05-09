@@ -2,33 +2,39 @@
 import componentsMenu from '../../../components/menuInstall.js'
 export default [
   {
-    name: 'coverage',
-    title: '图层',
+    code: 'coverage',
+    name: '图层',
     icon: 'el-icon-document-copy',
     children: []
   },
   {
-    name: 'component',
-    title: '组件库',
+    code: 'component',
+    name: '组件库',
     icon: 'el-icon-postcard',
     children: [...componentsMenu]
   },
   {
-    name: 'resource',
-    title: '素材库',
+    code: 'resource',
+    name: '素材库',
     icon: 'el-icon-collection',
     children: []
   },
   {
-    name: 'globalVariable',
-    title: '全局变量',
+    code: 'interactions',
+    name: '交互',
+    icon: 'el-icon-collection',
+    children: []
+  },
+  {
+    code: 'modelComDialog',
+    name: '弹窗下钻',
+    icon: 'el-icon-collection',
+    children: []
+  },
+  {
+    code: 'globalVariable',
+    name: '全局变量',
     icon: 'el-icon-tickets',
     children: []
   }
-  // {
-  //   name: 'history',
-  //   title: '历史记录',
-  //   icon: 'el-icon-alarm-clock',
-  //   children: []
-  // }
 ]

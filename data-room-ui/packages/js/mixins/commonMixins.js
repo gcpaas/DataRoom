@@ -34,17 +34,5 @@ export default {
       this.canvasInst.updateChartConfig(this.config)
       this.canvasInst.updateStyleHandler(this.config)
     }
-    // // 根据配置调获取数据接口
-    // getDataByChart () {
-    //   // 将修改过的配置更新到chartList中
-    //   this.canvasInst.updateChartConfig(this.config)
-    //   return new Promise((resolve, reject) => {
-    //     this.canvasInst.updateDataHandler(this.config).then(res => {
-    //       resolve(res)
-    //     }).catch(err => {
-    //       reject(err)
-    //     })
-    //   })
-    // }
   }
 }

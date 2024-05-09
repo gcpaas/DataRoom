@@ -27,6 +27,12 @@ export default {
     ...panelList,
     ScreenSetPanel
   },
+  props: {
+    config: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data () {
     return {
       activeName: 'data',
@@ -35,12 +41,6 @@ export default {
   },
   inject: ['canvasInst'],
   computed: {
-    config () {
-      return this.canvasInst.activeChart
-    },
-    pageCode () {
-      return this.$route.query.code
-    },
     isScreenSet () {
       return this.canvasInst.isScreenSet
     }

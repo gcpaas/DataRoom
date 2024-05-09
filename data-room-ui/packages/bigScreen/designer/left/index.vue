@@ -16,8 +16,8 @@
       >
         <el-tab-pane
           v-for="menu in menuList"
-          :key="menu.name"
-          :name="menu.name"
+          :key="menu.code"
+          :name="menu.code"
         >
           <div
             slot="label"
@@ -27,13 +27,16 @@
               class="icon"
               :class="menu.icon"
             />
-            <span class="menu-title-span">{{ menu.title }}</span>
+            <span class="menu-title-span">{{ menu.name }}</span>
           </div>
           <!-- 图层 -->
-          <Coverage v-if="activeName === menu.name && show && menu.name === 'coverage'"        @closePanel="closePanel"/>
+          <Coverage
+            v-if="activeName === menu.code && show && menu.code === 'coverage'"
+            @closePanel="closePanel"
+          />
           <!-- 组件库 -->
           <ComponentLibrary
-            v-else-if="activeName === menu.name && show && menu.name === 'component'"
+            v-else-if="activeName === menu.code && show && menu.code === 'component'"
             :menu="componentMenu"
             @closePanel="closePanel"
           />
@@ -42,12 +45,18 @@
             @closePanel="closePanel"
           />
           <!-- 素材库(通过弹窗展示） -->
+          <!-- 交互(通过弹窗展示） -->
+          <!-- 下钻组件(通过弹窗展示） -->
         </el-tab-pane>
       </el-tabs>
       <resource-library
         ref="resourceLibrary"
         @chooseResource="chooseResource"
       />
+      <interaction-dialog
+        ref="interactionDialog"
+      />
+      <model-com-dialog ref="modelComDialog" />
     </div>
   </transition>
 </template>
@@ -59,9 +68,15 @@ const ResourceLibrary = () => import('./components/ResourceLibrary/index.vue')
 const Coverage = () => import('./components/coverage/index.vue')
 const globalVariableList = () => import('./components/globalVariableList/index.vue')
 
+const InteractionDialog =
+  () => import('@gcpaas/data-room-ui/packages/bigScreen/designer/left/components/InteractionDialog/index.vue')
+const ModelComDialog =
+  () => import('@gcpaas/data-room-ui/packages/bigScreen/designer/left/components/ModelComDialog/index.vue')
 export default {
   name: 'LeftPanel',
   components: {
+    ModelComDialog,
+    InteractionDialog,
     ComponentLibrary,
     ResourceLibrary,
     Coverage,
@@ -89,10 +104,10 @@ export default {
   inject: ['canvasInst'],
   computed: {
     componentMenu () {
-      return this.menuList.find(item => item.name === 'component')
+      return this.menuList.find(item => item.code === 'component')
     },
     designLibraryMenu () {
-      return this.menuList.find(item => item.name === 'designLibrary')
+      return this.menuList.find(item => item.code === 'designLibrary')
     }
   },
   watch: {
@@ -133,6 +148,11 @@ export default {
       this.currentTab = tab.name
       if (tab.name === 'resource') {
         this.$refs.resourceLibrary.dialogVisible = true
+      } else if (tab.name === 'interactions') {
+        console.log(this.$refs.interactionDialog)
+        this.$refs.interactionDialog.init()
+      } else if (tab.name === 'modelComDialog') {
+        this.$refs.modelComDialog.init()
       }
     }
   }

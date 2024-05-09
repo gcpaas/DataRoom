@@ -13,31 +13,7 @@
           class="bs-setting-wrap"
           @click.stop
         >
-          <el-form
-            ref="form"
-            :model="config"
-            label-width="100px"
-            label-position="left"
-            class="setting-body bs-el-form"
-          >
-            <div class="data-setting-box">
-              <div
-                class="data-setting-data-box"
-              >
-                <div class="lc-field-body">
-                  <el-form-item
-                    label="字体颜色"
-                    label-width="100px"
-                  >
-                    <el-color-picker
-                      v-model="config.color"
-                      @change="changeStyle"
-                    />
-                  </el-form-item>
-                </div>
-              </div>
-            </div>
-          </el-form>
+          <StylePanel :config="config" />
         </div>
       </el-tab-pane>
       <el-tab-pane
@@ -69,13 +45,15 @@
 import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
 import DataPanel from '@gcpaas/data-room-ui/packages/components/common/panel/dataPanel/index.vue'
 import AdvancedPanel from "@gcpaas/data-room-ui/packages/components/common/panel/advancedPanel/index.vue"
+import StylePanel from './StylePanel.vue'
 import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: '',
   mixins: [commonMixins],
   components: {
     DataPanel,
-    AdvancedPanel
+    AdvancedPanel,
+    StylePanel
   },
   props: {
     config: {
@@ -105,4 +83,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@gcpaas/data-room-ui/packages/assets/style/settingWrap.scss';
+.bs-setting-wrap{
+  height: 100%;
+}
 </style>

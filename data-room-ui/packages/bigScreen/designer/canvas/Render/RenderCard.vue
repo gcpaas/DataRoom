@@ -16,6 +16,9 @@
       :ref="`border${config.code}`"
       :key="`border${config.key}`"
       :config="config"
+      :is-external-data="isExternalData"
+      :external-data="externalData"
+      :external-params="externalParams"
     >
       <slot />
     </component>
@@ -34,7 +37,9 @@
         :id="`${config.code}`"
         :ref="config.code"
         :config="config"
-        @styleHandler="styleHandler"
+        :is-external-data="isExternalData"
+        :external-data="externalData"
+        :external-params="externalParams"
       >
         <slot />
       </component>
@@ -54,6 +59,18 @@ export default {
     config: {
       type: Object,
       default: () => ({})
+    },
+    isExternalData: {
+      type: Boolean,
+      default: false
+    },
+    externalData: {
+      type: Array,
+      default: () => ([])
+    },
+    externalParams: {
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
@@ -70,11 +87,7 @@ export default {
   beforeDestroy () {
   },
   methods: {
-    resolveComponentType,
-    // 切换主题时针对远程组件触发样式修改的方法
-    styleHandler (config) {
-      this.$emit('styleHandler', config)
-    }
+    resolveComponentType
   }
 }
 </script>

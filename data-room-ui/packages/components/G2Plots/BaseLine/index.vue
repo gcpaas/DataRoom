@@ -5,7 +5,7 @@
     class="dataroom-chart-baseLine-wrapper"
   >
     <div
-      :id="'test' + config.code"
+      :id="'chart' + config.code"
       style="width: 100%;height: 100%"
     />
   </div>

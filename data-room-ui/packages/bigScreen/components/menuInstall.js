@@ -7,21 +7,13 @@ import ContainerDesc from '@gcpaas/data-room-ui/packages/components/container/de
 import PictureDesc from '@gcpaas/data-room-ui/packages/components/media/picture/declaration.js'
 export default [
   {
-    name: 'g2Plot',
-    title: '图表',
+    code: 'g2Plot',
+    name: '图表',
     icon: 'el-icon-s-data',
     children: [
       {
-        name: 'all',
-        title: '全部',
-        icon: 'el-icon-s-data',
-        children: [{
-          ...BaseLineDesc
-        }]
-      },
-      {
-        name: 'bar',
-        title: '柱状图',
+        code: 'bar',
+        name: '柱状图',
         icon: 'el-icon-s-data',
         children: [{
           ...BaseBarDesc
@@ -30,8 +22,8 @@ export default [
         }]
       },
       {
-        name: 'strip',
-        title: '条形图',
+        code: 'strip',
+        name: '条形图',
         icon: 'el-icon-s-data',
         children: [{
           ...BaseBarDesc
@@ -40,56 +32,56 @@ export default [
         }]
       },
       {
-        name: 'zhexiantu',
-        title: '折线图',
+        code: 'zhexiantu',
+        name: '折线图',
         icon: 'el-icon-s-data',
         children: [{
           ...BaseLineDesc
         }]
       },
       {
-        name: 'quyutu',
-        title: '区域图',
+        code: 'quyutu',
+        name: '区域图',
         icon: 'el-icon-s-data',
         children: [{
           ...BaseLineDesc
         }]
       },
       {
-        name: 'binhuantu',
-        title: '饼环图',
+        code: 'binhuantu',
+        name: '饼环图',
         icon: 'el-icon-s-data',
         children: [{
           ...BaseLineDesc
         }]
       },
       {
-        name: 'sandiantu',
-        title: '散点图',
+        code: 'sandiantu',
+        name: '散点图',
         icon: 'el-icon-s-data',
         children: [{
           ...BaseLineDesc
         }]
       },
       {
-        name: 'leidatu',
-        title: '雷达图',
+        code: 'leidatu',
+        name: '雷达图',
         icon: 'el-icon-s-data',
         children: [{
           ...BaseLineDesc
         }]
       },
       {
-        name: 'guanxitu',
-        title: '关系图',
+        code: 'guanxitu',
+        name: '关系图',
         icon: 'el-icon-s-data',
         children: [{
           ...BaseLineDesc
         }]
       },
       {
-        name: 'qita',
-        title: '其他',
+        code: 'qita',
+        name: '其他',
         icon: 'el-icon-s-data',
         children: [{
           ...BaseLineDesc
@@ -98,46 +90,46 @@ export default [
     ]
   },
   {
-    name: 'ditu',
-    title: '地图',
+    code: 'ditu',
+    name: '地图',
     icon: 'el-icon-tickets',
     children: []
   },
   {
-    name: 'info',
-    title: '信息',
+    code: 'info',
+    name: '信息',
     icon: 'el-icon-tickets',
     children: [{ ...TextsDesc }]
   },
   {
-    name: 'biaoge',
-    title: '表格',
+    code: 'biaoge',
+    name: '表格',
     icon: 'el-icon-tickets',
     children: []
   },
   {
-    name: 'kongjian',
-    title: '控件',
+    code: 'kongjian',
+    name: '控件',
     icon: 'el-icon-s-data',
     children: []
   },
   {
-    name: 'container',
-    title: '容器',
+    code: 'container',
+    name: '容器',
     icon: 'el-icon-postcard',
     children: [{ ...ContainerDesc }]
   },
   {
-    name: 'meiti',
-    title: '媒体',
+    code: 'meiti',
+    name: '媒体',
     icon: 'el-icon-tickets',
     children: [
       { ...PictureDesc }
     ]
   },
   {
-    name: 'qita',
-    title: '其他',
+    code: 'qita',
+    name: '其他',
     icon: 'el-icon-tickets',
     children: []
   }

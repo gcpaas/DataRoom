@@ -66,6 +66,7 @@ export default {
   },
   data () {
     return {
+      chartInst: {},
       isReady: false,
       pageInfo: null,
       isScreenSet: false, // 设置面板是大屏设置还是组件设置
@@ -80,32 +81,13 @@ export default {
   // 注入
   provide () {
     return {
-      canvasInst: Vue.observable({
-        currentPageType: () => this.currentPageType,
-        chartList: () => this.chartList,
-        updatePageInfo: this.updatePageInfo,
-        updateChartList: this.updateChartList,
-        updateChartConfig: this.updateChartConfig,
-        updateStyleHandler: this.updateStyleHandler,
-        updateDataHandler: this.updateDataHandler,
-        activeChart: () => this.activeChart,
-        updateActiveChart: this.updateActiveChart,
-        pageInfo: () => this.pageInfo,
-        pageConfig: () => this.pageInfo.pageConfig,
-        addChart: this.addChart,
-        deleteChart: this.deleteChart,
-        coverageList: () => this.coverageList,
-        openRightPanel: this.openRightPanel,
-        isScreenSet: () => this.isScreenSet,
-        changeIsScreenSet: this.changeIsScreenSet,
-        changePageConfig: this.changePageConfig,
-        filters: () => this.pageInfo?.filters || {},
-        dataHandleFilters: () => this.dataHandleFilters,
-        updateDataScript: this.updateDataScript
-      })
+      canvasInst: Vue.observable(this.canvasInst)
     }
   },
   computed: {
+    canvasInst () {
+      return this
+    },
     currentPageType () {
       return this.$route.path === (window.BS_CONFIG?.routers?.bigScreenDesignUrl || '/big-screen/design') ? 'bigScreen' : 'dashBoard'
     },
@@ -179,6 +161,14 @@ export default {
         this.pageInfo.chartList = newChartList
       })
     },
+    // 根据code获取实例
+    getChartInst (code) {
+      return this.chartInst[code]
+    },
+    // 将画布上的组件实例保存起来
+    updateChartInst (code, chartInstItem) {
+      this.chartInst[code] = chartInstItem
+    },
     updatePageInfo (pageInfo) {
       this.pageInfo = pageInfo
     },
@@ -236,6 +226,10 @@ export default {
     changeIsScreenSet (isScreenSet) {
       this.isScreenSet = isScreenSet
     },
+    // 获取事件列表
+    getChartEvens (code) {
+      return this.pageInfo.interactions?.find(item => item.code === code)?.children
+    },
     // 点击当前组件时打开右侧面板
     openRightPanel () {
       this.rightVisiable = true
@@ -275,19 +269,21 @@ export default {
     },
     // 组件样式修改
     updateStyleHandler (config) {
-      // 遍历组件树，找到需要修改样式的组件，并调用其 changeStyle 方法
-      this.traverseComponents(this.$root, config, 'updateChartStyle')
+      if (this.chartInst.hasOwnProperty(config.code)) {
+        this.chartInst[config.code].updateChartStyle()
+      }
     },
     // 组件数据修改
-    updateDataHandler (config, isData, data) {
-      // 遍历组件树，找到需要修改样式的组件，并调用其 changeStyle 方法
-      this.traverseComponents(this.$root, config, 'updateChartData', isData, data)
+    updateDataHandler (config) {
+      if (this.chartInst.hasOwnProperty(config.code)) {
+        this.chartInst[config.code].updateChartData()
+      }
     },
     // 将页面中所有的数据脚本（数据过滤）都保存起来
     getDataScript () {
       if (this.pageInfo.filters) {
         for (const key in this.pageInfo.filters) {
-          this.dataHandleFilters[key] = new Function('params', this.pageInfo.filters[key].script)
+          this.dataScripts[key] = new Function('params', this.pageInfo.filters[key].script)
         }
       }
     },
@@ -297,7 +293,7 @@ export default {
         name: '',
         script: filter
       }
-      this.dataHandleFilters[id] = new Function('params', filter)
+      this.dataScripts[id] = new Function('params', filter)
     },
     // 遍历组件树，找到需要修改样式的组件，并调用其 changeStyle 方法
     traverseComponents (component, config, eventType, isData, data) {

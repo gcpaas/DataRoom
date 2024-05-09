@@ -22,8 +22,8 @@
       >
         <el-tab-pane
           v-for="i in menu.children"
-          :key="i.name"
-          :name="i.name"
+          :key="i.code"
+          :name="i.code"
           class="bottom-tab-pane"
         >
           <div
@@ -41,10 +41,10 @@
             <!--                :class="i.icon"-->
             <!--              />-->
             <!--            </el-tooltip>-->
-            {{ i.title }}
+            {{ i.name }}
           </div>
           <div
-            v-if="i.name !=='g2Plot'"
+            v-if="i.code !=='g2Plot'"
             class="item-second-panel"
           >
             <div
@@ -83,16 +83,16 @@
             >
               <el-tab-pane
                 v-for="j in i.children"
-                :key="j.name"
-                :name="j.name"
+                :key="j.code"
+                :name="j.code"
                 class="bottom-tab-pane"
               >
                 <div
                   slot="label"
                   class="menu-slot"
-                  :class="{'active-title': thirdActiveName === j.name}"
+                  :class="{'active-title': thirdActiveName === j.code}"
                 >
-                  {{ j.title }}
+                  {{ j.name }}
                 </div>
                 <div
                   v-for="chart in j.children"

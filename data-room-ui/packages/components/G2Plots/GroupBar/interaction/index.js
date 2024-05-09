@@ -3,7 +3,7 @@ export default [
   // 事件列表
   {
     name: '点击柱子',
-    eventCode: 'click', // click等
+    code: 'click', // click等
     desc: '点击柱子',
     event: true,
     paramsList: [

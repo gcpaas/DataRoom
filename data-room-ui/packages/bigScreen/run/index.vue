@@ -26,18 +26,24 @@
         </Configuration>
       </div>
     </div>
+    <!-- 组件交互动作触发的弹窗 -->
+    <canvas-dialog
+      ref="canvasDialog"
+    />
   </div>
 </template>
 <script>
 
 import Vue from 'vue'
-import { replaceElement } from '@gcpaas/data-room-ui/packages/js/utils'
+import { randomString, replaceElement } from '@gcpaas/data-room-ui/packages/js/utils'
 import { getPageInfo } from '@gcpaas/data-room-ui/packages/js/api/pageApi'
+import CanvasDialog from '@gcpaas/data-room-ui/packages/bigScreen/common/CanvasDialog/index.vue'
 const Configuration = () => import('@gcpaas/data-room-ui/packages/bigScreen/designer/canvas/Render/Configuration.vue')
 const RenderCard = () => import('@gcpaas/data-room-ui/packages/bigScreen/designer/canvas/Render/RenderCard.vue')
 export default {
   name: 'BigScreenRun',
   components: {
+    CanvasDialog,
     Configuration,
     RenderCard
   },
@@ -54,11 +60,12 @@ export default {
   },
   data () {
     return {
-      pageInfo:{},
+      dataHandleFilters: {},
+      timers: {}, // 计时器
+      chartInst: {},
       pageConfig: {},
       chartList: [],
       globalVariableTimers: {}, // 更新全局变量的计时器
-      dataHandleFilters: {},
       fitMode: '',
       autofill: false,
       screenRunStyle: {},
@@ -70,12 +77,48 @@ export default {
   // 注入
   provide () {
     return {
-      canvasInst: this.canvasInst
+      canvasInst: Vue.observable(this.canvasInst)
     }
   },
   computed: {
     pageCode () {
       return this.code || this.$route.query.code
+    },
+    dialogChartList: {
+      get () {
+        return this.pageInfo?.dialog.chartList
+      },
+      set () {
+
+      }
+
+    },
+    dialogStyle: {
+      get () {
+        return this.pageInfo?.dialog.dialogStyle
+      },
+      set () {
+
+      }
+
+    },
+    filters: {
+      get () {
+        return this.pageInfo?.filters
+      },
+      set () {
+
+      }
+
+    },
+    interactions: {
+      get () {
+        return this.pageInfo?.interactions
+      },
+      set () {
+
+      }
+
     },
     canvasInst () {
       return this
@@ -95,7 +138,7 @@ export default {
   methods: {
     // 初始化页面信息
     PageInfoInit () {
-      getPageInfo(this.pageCode).then(res => {
+      this.$dataRoomAxios.get(`/dataroom/design/info/code/${this.pageCode}?preview=true`).then(res => {
         this.pageInfo = res
         this.pageConfig = this.pageInfo?.pageConfig || {}
         this.chartList = this.pageInfo?.chartList || []
@@ -114,22 +157,55 @@ export default {
           opacity: this.pageConfig.opacity || 1,
           transform: 'scaleX(1) scaleY(1)'
         }
+        this.pageInfo.dialog = this.pageInfo?.dialog || {
+          dialogStyle: {
+            width: 80,
+            height: 500,
+            fullPage: false,
+            title: {
+              content: '弹窗',
+              fontSize: 20,
+              fontColor: '#000',
+              bgColor: '#eee',
+              height: 50
+            },
+            body: {
+              bgColor: '#fff',
+              padding: {
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: 20
+              }
+            },
+            buttons: [{
+              name: '确定',
+              code: 'confirm'
+            }]
+          },
+          chartList: []
+        }
         this.pageInfo.filters = this.pageInfo?.filters || {}
         this.pageInfo.globalNameToValue = {}
         this.getGlobalNameToValue()
         this.getDataScript()
         this.screenFixInit()
         this.triggerGlobalVariableTimer()
+        this.triggerTimer()
       }).catch(err => {
         console.log(err)
       })
+    },
+    // 获取事件列表
+    getChartEvens (code) {
+      return this.pageInfo.interactions?.find(item => item.code === code)?.children
     },
     // 更新chartList
     updateChartList (chartList) {
       this.chartList = chartList
     },
     // 初始化获取全局变量的映射列表
-    getGlobalNameToValue(){
+    getGlobalNameToValue () {
       this.pageInfo.globalVariable.forEach(variable => {
         this.pageInfo.globalNameToValue[variable.id] = {
           name: variable.name,
@@ -142,7 +218,7 @@ export default {
       this.pageInfo.globalNameToValue[id].value = value
     },
     // 更新全局变量映射列表
-    updateGlobalNameToValue (variable,value) {
+    updateGlobalNameToValue (variable, value) {
       this.pageInfo.globalNameToValue[variable.id] = {
         name: variable.name,
         value: value
@@ -152,16 +228,16 @@ export default {
     getGlobalValueById (id) {
       const variable = this.pageInfo.globalVariable.find(item => item.id === id)
       if (variable && variable.filterId) {
-        return this.canvasInst.dataHandleFilters[variable.filterId](this.pageInfo.globalNameToValue[variable.id].value) || this.pageInfo.globalNameToValue[variable.id].value
+        return this.dataHandleFilters[variable.filterId](this.pageInfo.globalNameToValue[variable.id].value) || this.pageInfo.globalNameToValue[variable.id].value
       } else {
         return this.pageInfo.globalNameToValue[variable.id].value
       }
     },
     // 根据name获取全局变量
-    getGlobalValueByName(name){
+    getGlobalValueByName (name) {
       const variable = this.pageInfo.globalVariable.find(item => item.name === name)
       if (variable && variable.filterId) {
-        return this.canvasInst.dataHandleFilters[variable.filterId](this.pageInfo.globalNameToValue[variable.id].value) || this.pageInfo.globalNameToValue[variable.id].value
+        return this.dataHandleFilters[variable.filterId](this.pageInfo.globalNameToValue[variable.id].value) || this.pageInfo.globalNameToValue[variable.id].value
       } else {
         return this.pageInfo.globalNameToValue[variable.id].value
       }
@@ -177,7 +253,7 @@ export default {
             clearInterval(this.globalVariableTimers[variable.id]) // 调用 clearInterval 来终止定时器的执行
           }
           this.globalVariableTimers[variable.id] = setInterval(() => {
-            const newValue = this.canvasInst.dataHandleFilters[variable.filterId](variable.initialValue) || variable.initialValue
+            const newValue = this.dataHandleFilters[variable.filterId](variable.initialValue) || variable.initialValue
             this.canvasInst.setGlobalValue(variable.id, newValue)
           }, variable.updateFrequency * 1000)
         } else {
@@ -187,9 +263,82 @@ export default {
         }
       })
     },
+    // 根据code获取实例
+    getChartInst (code) {
+      return this.chartInst[code]
+    },
+    // 将画布上的组件实例保存起来
+    updateChartInst (code, chartInstItem) {
+      this.chartInst[code] = chartInstItem
+    },
+    // 打开弹窗
+    openDialog (dialogConfig) {
+      this.$nextTick(() => {
+        this.$refs.canvasDialog.init(dialogConfig)
+      })
+    },
+    // 触发定时器
+    triggerTimer () {
+      // 销毁定时器
+      for (const timeId in this.timers) {
+        if (this.timers.hasOwnProperty(timeId)) {
+          clearInterval(this.timers[timeId])
+        }
+      }
+      // const chartInst = this.chartInst
+      // 获取定时器列表
+      const timerList = this.pageInfo?.interactions?.find(item => item.code === 'global')?.children?.filter(i => i.trigger === 'timer')
+      if (timerList && timerList.length) {
+        timerList.forEach(timer => {
+          // 如果存在脚本
+          if (timer.filterId) {
+            // 如果是循环的定时器
+            if (timer.loop) {
+              // 如果是延迟的
+              if (timer.method === 'delay') {
+                this.timers[timer.code] = setInterval(() => {
+                  // 执行逻辑
+                  this.dataHandleFilters[timer.filterId]({}, this.canvasInst)
+                }, timer.delay * 1000)
+              } else {
+                // 到了约定的事件开始执行
+                this.timers[timer.code] = setInterval(() => {
+                  // 执行逻辑
+                  if (new Date().getTime() >= timer.time) {
+                    this.dataHandleFilters[timer.filterId]({}, this.canvasInst)
+                  }
+                }, timer.delay * 1000)
+              }
+            } else {
+              // 如果是单次的定时器
+              // 如果是延迟的
+              if (timer.method === 'delay') {
+                this.timers[timer.code] = setTimeout(() => {
+                  // 执行逻辑
+                  this.dataHandleFilters[timer.filterId]({}, this.canvasInst)
+                }, timer.delay * 1000)
+              } else {
+                this.timers[timer.code] = setInterval(() => {
+                  // 到了约定的事件开始执行,不间断的判断
+                  if (new Date().getTime() >= timer.time) {
+                    // 执行逻辑
+                    this.dataHandleFilters[timer.filterId]({}, this.canvasInst)
+                    clearInterval(this.timers[timer.code]) // 调用 clearInterval 来终止定时器的执行
+                  }
+                }, 1000)
+              }
+            }
+          }
+        })
+      }
+    },
     // 更新单个chart配置
     updateChartConfig (chartConfig) {
       replaceElement(this.chartList, chartConfig)
+    },
+    // 更新画布弹窗的统一配置
+    updateDialogStyle (dialogStyle) {
+      this.$set(this.pageInfo?.dialog, 'dialogStyle', dialogStyle)
     },
     getStyle (chart) {
       return {
@@ -218,7 +367,7 @@ export default {
     getDataScript () {
       if (this.pageInfo.filters) {
         for (const key in this.pageInfo.filters) {
-          this.dataHandleFilters[key] = new Function('params', this.pageInfo.filters[key].script)
+          this.dataHandleFilters[key] = new Function('params', 'canvasInst', this.pageInfo.filters[key].script)
         }
       }
     },

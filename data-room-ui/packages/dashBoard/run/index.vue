@@ -44,10 +44,11 @@ export default {
   },
   data () {
     return {
+      chartInst: {},
       pageInfo: {},
       pageConfig: {},
       chartList: [],
-      dataHandleFilters: {},
+      dataScripts: {},
       screenWrapStyle: {},
       draggable: false,
       resizable: false,
@@ -55,20 +56,26 @@ export default {
     }
   },
   computed: {
+    canvasInst () {
+      return this
+    },
     pageCode () {
       return this.code || this.$route.query.code
+    },
+    filters: {
+      get () {
+        return this.pageInfo?.filters
+      },
+      set () {
+
+      }
+
     }
   },
   // 注入
   provide () {
     return {
-      canvasInst: Vue.observable({
-        chartList: this.chartList,
-        updateChartList: this.updateChartList,
-        updateChartConfig: this.updateChartConfig,
-        filters: () => this.pageInfo?.filters || {},
-        dataHandleFilters: () => this.dataHandleFilters
-      })
+      canvasInst: this.canvasInst
     }
   },
   mounted () {
@@ -95,9 +102,17 @@ export default {
     getDataScript () {
       if (this.pageInfo.filters) {
         for (const key in this.pageInfo.filters) {
-          this.dataHandleFilters[key] = new Function('params', this.pageInfo.filters[key].script)
+          this.dataScripts[key] = new Function('params', this.pageInfo.filters[key].script)
         }
       }
+    },
+    // 将画布上的组件实例保存起来
+    updateChartInst (code, chartInstItem) {
+      this.chartInst[code] = chartInstItem
+    },
+    // 根据code获取实例
+    getChartInst (code) {
+      return this.chartInst[code]
     },
     // 更新chartList
     updateChartList (chartList) {

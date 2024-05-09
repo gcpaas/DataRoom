@@ -6,8 +6,8 @@ import baseDefinition from './baseDefinition'
 function getInstance () {
   const chartDefinition = {
     ...baseDefinition,
-    w: 200,
-    h: 40
+    w: 300,
+    h: 100
   }
   // 每个组件实现自己的初始化逻辑
   return chartDefinition

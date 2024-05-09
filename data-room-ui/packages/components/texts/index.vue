@@ -1,18 +1,24 @@
 <template>
   <div
-    class="bs-design-wrap"
+    class="dataroom-chart-texts-wrapper"
   >
     <div
       class="content-box"
-      :style="{'color': config.color}"
+      :style="contentStyle"
+      @click="goLink"
     >
-      {{ config.text }}
+      <p
+        class="text"
+        :style="textStyle"
+      >
+        {{ content }}
+      </p>
     </div>
   </div>
 </template>
 <script>
 import baseChartMixins from '@gcpaas/data-room-ui/packages/js/mixins/baseChartMixins'
-import cloneDeep from 'lodash/cloneDeep'
+import mockData from './data.json'
 export default {
   name: 'Texts',
   components: {},
@@ -26,39 +32,96 @@ export default {
   },
   data () {
     return {
-      customClass: {}
+      mockData
     }
   },
 
   computed: {
+    content () {
+      if (this.config.dataSource && this.config.dataSource.businessKey && this.temporaryData && this.temporaryData.length) {
+        return this.temporaryData[0][this.config.dataSource.dimensionField]
+      }
+      return this.config.props.content
+    },
+    url () {
+      if (this.config.dataSource && this.config.dataSource.businessKey && this.temporaryData && this.temporaryData.length) {
+        return this.temporaryData[0][this.config.dataSource.metricField]
+      }
+      return this.config.props.urlConfig.url
+    },
+    textShadow () {
+      if (this.config.props.textShadow && this.config.props.textShadow.length) {
+        const textShadowList = this.config.props.textShadow.map(item => {
+          const offsetX = item.offset.offsetX + 'px'
+          const offsetY = item.offset.offsetY + 'px'
+          const blur = item.blur + 'px'
+          const color = item.color
+          return `${offsetX} ${offsetY} ${blur} ${color}`
+        })
+
+        // 将多个 text-shadow 字符串用逗号连接起来
+        return textShadowList.join(', ')
+      } else {
+        return ''
+      }
+    },
+    contentStyle () {
+      return {
+        alignItems: this.config.props.textAlign.vertiAlign,
+        justifyContent: this.config.props.textAlign.horiAlign,
+        backgroundColor: this.config.props.backgroundStyle.bgColor,
+        borderRadius: this.config.props.backgroundStyle.borderRadius + 'px',
+        borderWidth: this.config.props.backgroundStyle.bgBorder.width + 'px',
+        borderStyle: this.config.props.backgroundStyle.bgBorder.style,
+        borderColor: this.config.props.backgroundStyle.bgBorder.color,
+        cursor: this.config.props.cursor ? 'pointer' : 'default'
+      }
+    },
+    textStyle () {
+      return {
+        color: this.config.props.textStyle.color,
+        fontSize: this.config.props.textStyle.fontSize + 'px',
+        fontWeight: this.config.props.textStyle.fontWeight,
+        fontFamily: this.config.props.textStyle.fontFamily,
+        writingMode: this.config.props.writingMode,
+        letterSpacing: this.config.props.letterSpacing + 'px',
+        whiteSpace: this.config.props.ellipsis ? 'nowrap' : 'normal',
+        textOverflow: this.config.props.ellipsis ? 'ellipsis' : 'clip',
+        textShadow: this.textShadow
+      }
+    }
   },
   mounted () {
   },
   methods: {
     // 获取图表数据后的处理
-    handleChartData (data) {
-      const config = cloneDeep(this.config)
-      config.data = data
-      this.chartProvide.updateChartConfig(config)
-      this.updateChartStyle(this.config)
+    updateChartDataWithData (data) {
+      this.temporaryData = data || []
     },
-    // 更新配置
-    updateChartStyle (config) {
-      this.config.text = config.data && config.data.length ? config.data[0][config.dataSource.metricField] : '暂无数据'
+    // 跳转链接
+    goLink () {
+      if (this.url) {
+        window.open(this.url, this.config.props.urlConfig.ifBlank ? '_blank' : '_self')
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.bs-design-wrap{
+.dataroom-chart-texts-wrapper{
   width: 100%;
-  display: flex;
-  align-items: center;
-  //justify-content: center;
-}
-.content-box{
-  width: 100%;
-  text-align: center;
+  height: 100%;
+  .content-box {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* 超出部分隐藏 */
+  }
+
+  .text {
+    overflow: hidden;
+    max-width: 100%; /* 限制文本的最大宽度 */
+  }
 }
 </style>
