@@ -20,11 +20,13 @@ import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gccloud.common.entity.SuperEntity;
+import com.gccloud.dataroom.core.module.basic.entity.type.ListTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 页面基本信息表
@@ -50,8 +52,13 @@ public class BizComponentEntity extends SuperEntity implements Serializable {
     @ApiModelProperty(notes = "设计方式 1.低代码开发 2.在线开发")
     private Integer designType;
 
+    @ApiModelProperty(notes = "组件类型 1.组件 2.模板 3.区块")
+    private Integer bizType;
+
+
     @ApiModelProperty("可用范围 1：大屏 2：PC仪表盘 3：移动仪表盘")
-    private Integer scope;
+    @TableField(typeHandler = ListTypeHandler.class)
+    private List<Integer> scope;
 
     @ApiModelProperty(notes = "低代码开发时，关联的自定义页面编码(因为这时候，数据保存在page表)")
     private String pageCode;
@@ -73,6 +80,9 @@ public class BizComponentEntity extends SuperEntity implements Serializable {
 
     @ApiModelProperty(notes = "组件定义js")
     private String componentDefine;
+
+    @ApiModelProperty(notes = "交互配置")
+    private String interaction;
 
     @ApiModelProperty(notes = "备注")
     private String remark;

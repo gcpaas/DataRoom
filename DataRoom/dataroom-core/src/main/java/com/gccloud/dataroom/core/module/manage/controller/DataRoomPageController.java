@@ -16,37 +16,35 @@
 
 package com.gccloud.dataroom.core.module.manage.controller;
 
-import com.gccloud.common.utils.JSON;
-import com.gccloud.dataroom.core.config.DataRoomConfig;
-import com.gccloud.dataroom.core.constant.DataRoomConst;
-import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
-import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
-import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
-import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
-import com.gccloud.dataroom.core.module.manage.dto.DataRoomSearchDTO;
-import com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePreviewService;
-import com.gccloud.dataroom.core.module.manage.service.IDataRoomPageService;
-import com.gccloud.dataroom.core.module.manage.vo.StaticFileVO;
-import com.gccloud.dataroom.core.permission.Permission;
-import com.gccloud.common.permission.ApiPermission;
-import com.gccloud.dataroom.core.utils.Webjars;
 import com.gccloud.common.exception.GlobalException;
+import com.gccloud.common.permission.ApiPermission;
 import com.gccloud.common.utils.BeanConvertUtils;
+import com.gccloud.common.utils.JSON;
 import com.gccloud.common.validator.ValidatorUtils;
 import com.gccloud.common.validator.group.Insert;
 import com.gccloud.common.validator.group.Update;
 import com.gccloud.common.vo.MixinsResp;
 import com.gccloud.common.vo.PageVO;
 import com.gccloud.common.vo.R;
+import com.gccloud.dataroom.core.constant.DataRoomConst;
+import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
+import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
+import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
+import com.gccloud.dataroom.core.module.manage.dto.DataRoomSearchDTO;
+import com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePreviewService;
+import com.gccloud.dataroom.core.module.manage.service.IDataRoomPageService;
+import com.gccloud.dataroom.core.module.manage.vo.StaticFileVO;
+import com.gccloud.dataroom.core.permission.Permission;
+import com.gccloud.dataroom.core.utils.Webjars;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -64,17 +62,16 @@ public class DataRoomPageController {
     @Resource
     private IDataRoomPageService dataRoomPageService;
     @Resource
-    private DataRoomConfig dataRoomConfig;
-    @Resource
     private IDataRoomPagePreviewService previewService;
 
     @ApiPermission(permissions = {Permission.DataRoom.VIEW})
     @GetMapping("/info/code/{code}")
     @ApiOperation(value = "页面详情", position = 10, produces = MediaType.APPLICATION_JSON_VALUE)
-    public MixinsResp<BasePageDTO> info(@PathVariable("code") String code) {
-        if (code.startsWith(IDataRoomPagePreviewService.PREVIEW_KEY)) {
-            PagePreviewEntity preview = previewService.getByCode(code);
-            BasePageDTO basePageDTO = JSON.parseObject(preview.getConfig(), BasePageDTO.class);
+    public MixinsResp<BasePageDTO> info(@ApiParam(name = "页面编码", value = "页面编码", required = true)@PathVariable("code") String code,
+                                        @ApiParam(name = "是否预览", value = "true表示获取预览数据") Boolean preview) {
+        if (Boolean.TRUE.equals(preview)) {
+            PagePreviewEntity previewEntity = previewService.getByCode(code);
+            BasePageDTO basePageDTO = JSON.parseObject(previewEntity.getConfig(), BasePageDTO.class);
             MixinsResp<BasePageDTO> r = new MixinsResp<BasePageDTO>().setData(basePageDTO);
             r.setCode(DataRoomConst.Response.Code.SUCCESS);
             return r;
@@ -185,23 +182,6 @@ public class DataRoomPageController {
         MixinsResp<BasePageDTO> resp = new MixinsResp<BasePageDTO>().setData(config);
         resp.setCode(DataRoomConst.Response.Code.SUCCESS);
         return resp;
-    }
-
-
-    @ApiPermission
-    @GetMapping("/bg/list")
-    @ApiOperation(value = "背景图片列表", position = 60, produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<List<StaticFileVO>> getBgList() {
-        List<String> staticFileList = Webjars.BIG_SCREEN_BG;
-        List<StaticFileVO> bgList = Lists.newArrayList();
-        String urlPrefix = dataRoomConfig.getFile().getUrlPrefix() + "bigScreenBg/";
-        for (String fileName : staticFileList) {
-            StaticFileVO fileVO = new StaticFileVO();
-            fileVO.setUrl(urlPrefix + fileName);
-            fileVO.setName(fileName);
-            bgList.add(fileVO);
-        }
-        return R.success(bgList);
     }
 
     @ApiPermission

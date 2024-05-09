@@ -29,8 +29,6 @@ import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
  */
 public interface IDataRoomPagePreviewService extends ISuperService<PagePreviewEntity> {
 
-    String PREVIEW_KEY = "preview";
-
     /**
      * 保存页面预览数据
      * @param pageDTO

@@ -72,11 +72,31 @@ public interface IBasePageService extends ISuperService<PageEntity> {
         }
         LambdaQueryWrapper<PageEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PageEntity::getCode, code);
-        PageEntity pageEntity = getBaseMapper().selectOne(queryWrapper);
+        List<PageEntity> list = getBaseMapper().selectList(queryWrapper);
+        PageEntity pageEntity = !list.isEmpty() ? list.get(0) : null;
         if (pageEntity != null) {
             PAGE_ENTITY_CACHE.put(code, pageEntity);
         }
         return pageEntity;
+    }
+
+    /**
+     * 检查页面是否存在
+     * @param code
+     * @return
+     */
+    default boolean checkPageExist(String code) {
+        // 先检查缓存中是否存在
+        PageEntity pageEntity = PAGE_ENTITY_CACHE.getIfPresent(code);
+        if (pageEntity != null) {
+            return true;
+        }
+        // 缓存中不存在，再去数据库中查找
+        LambdaQueryWrapper<PageEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(PageEntity::getId);
+        queryWrapper.eq(PageEntity::getCode, code);
+        List<PageEntity> list = getBaseMapper().selectList(queryWrapper);
+        return !list.isEmpty();
     }
 
     /**

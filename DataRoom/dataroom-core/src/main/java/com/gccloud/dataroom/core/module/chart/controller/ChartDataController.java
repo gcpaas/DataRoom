@@ -57,53 +57,23 @@ public class ChartDataController {
     @Resource
     private BaseChartDataService baseChartDataService;
 
-    @PostMapping("/list")
-    @ApiOperation(value = "图表数据", position = 10, notes = "获取指定图表的数据(通过唯一编码)", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<ChartDataVO> getDataByCode(@RequestBody ChartDataSearchDTO chartDataSearchDTO) {
-        PageEntity pageEntity = pageService.getByCode(chartDataSearchDTO.getPageCode());
-        AssertUtils.isTrue(pageEntity != null, "页面不存在");
-        BasePageDTO config = pageEntity.getConfig();
-        List<Map<String, Object>> chartList = null;
-        if (config.getClass().equals(DataRoomPageDTO.class)) {
-            chartList = config.getChartList();
-        }
-        if (chartList == null) {
-            return R.success(new ChartDataVO());
-        }
-        Map<String, Object> chart = getByCode(chartList, chartDataSearchDTO.getChartCode());
-        if (chart == null) {
-            return R.success(new ChartDataVO());
-        }
-        Object dataSourceObj = chart.get("dataSource");
-        if (dataSourceObj == null) {
-            return R.success(new ChartDataVO());
-        }
-        // 转换数据源，dataSourceObj是一个Map
-        DataSetDataSource dataSource = new DataSetDataSource((Map<String, Object>) dataSourceObj);
-        return getChartData(chartDataSearchDTO, dataSource);
-    }
-
     @PostMapping("/chart")
     @ApiOperation(value = "图表数据", position = 20, notes = "获取指定图表的数据(通过配置)", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<ChartDataVO> getDataByConfig(@RequestBody ChartDataSearchDTO chartDataSearchDTO) {
-        PageEntity pageEntity = pageService.getByCode(chartDataSearchDTO.getPageCode());
-        AssertUtils.isTrue(pageEntity != null, "页面不存在");
-        DataSetDataSource dataSource = chartDataSearchDTO.getDataSource();
-        return getChartData(chartDataSearchDTO, dataSource);
+        // NOTE 这里暂时去除了页面存在性的校验，因为业务组件设计时，也会调用这个接口，而业务组件设计时，没有页面编码
+//        AssertUtils.isTrue(pageService.checkPageExist(chartDataSearchDTO.getPageCode()), "页面不存在");
+        return getChartData(chartDataSearchDTO);
     }
-
-
 
     /**
      * 获取图表数据
      * @param chartDataSearchDTO
-     * @param dataSource
      * @return
      */
-    private R<ChartDataVO> getChartData(ChartDataSearchDTO chartDataSearchDTO, DataSetDataSource dataSource) {
+    private R<ChartDataVO> getChartData(ChartDataSearchDTO chartDataSearchDTO) {
         ChartDataVO failChartDataVO = new ChartDataVO();
         try {
-            ChartDataVO chartDataVO = baseChartDataService.dataQuery(dataSource, chartDataSearchDTO);
+            ChartDataVO chartDataVO = baseChartDataService.dataQuery(chartDataSearchDTO);
             if (chartDataVO == null) {
                 return R.success(failChartDataVO);
             }
@@ -114,24 +84,4 @@ public class ChartDataController {
         }
     }
 
-    /**
-     * 从组件列表中获取指定code的图表组件
-     * @param chartList
-     * @param code
-     * @return
-     */
-    public Map<String, Object> getByCode(List<Map<String, Object>> chartList, String code) {
-        for (Map<String, Object> chart : chartList) {
-            if (chart.get("code").equals(code)) {
-                return chart;
-            }
-            if (chart.containsKey("children")) {
-                Map<String, Object> childChart = getByCode((List<Map<String, Object>>) chart.get("children"), code);
-                if (childChart != null) {
-                    return childChart;
-                }
-            }
-        }
-        return null;
-    }
 }
