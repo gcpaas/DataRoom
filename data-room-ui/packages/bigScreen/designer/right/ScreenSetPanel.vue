@@ -147,13 +147,11 @@ export default {
   methods: {
     // 获取大屏封面地址
     getCoverPicture (url) {
-      console.log('封面', url)
       if (url.startsWith('data:image/')) {
         // 如果是Base64格式，则直接返回URL
         return url
       } else {
         // 如果不是Base64格式，则调用getFileUrl方法获取文件URL
-        console.log('封面', getFileUrl(url))
         return getFileUrl(url)
       }
     },

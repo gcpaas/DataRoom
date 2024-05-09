@@ -505,7 +505,6 @@ export default {
     },
     // 新增弹窗组件
     addDialogChartList (element) {
-      console.log('element', this.pageInfo)
       this.pageInfo.dialog.chartList.push(element)
     },
     // 更新画布弹窗的统一配置

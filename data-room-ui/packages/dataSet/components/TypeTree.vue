@@ -296,7 +296,6 @@ export default {
         if (treeRef) {
           const currentNode = treeRef.getCurrentNode()
           if (currentNode && currentNode.id !== '') {
-            console.log(this.$refs.datasetTypeTree)
             currentNode.isCurrent = false
             treeRef.setCurrentKey('')
           }
@@ -408,7 +407,6 @@ export default {
     },
     // 类型点击事件
     getTypeData (datasetType) {
-      console.log(datasetType)
       this.curType = datasetType
       this.$emit('nodeClick', datasetType, this.activeName)
     },

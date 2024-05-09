@@ -194,7 +194,6 @@ export default {
         const eventList = this.canvasInst.getChartEvens(this.config.code)
         const filterId = eventList?.find(e => e.event === 'click')?.filterId || ''
         if (filterId) {
-          console.log(this.dataHandleFilters)
           this.dataHandleFilters[filterId](data, this.canvasInst)
         }
       })

@@ -100,7 +100,6 @@ export default {
     },
     // 滑动滑块来对画布进行缩放
     sliderHandler (scale) {
-      console.log('scale', scale)
       this.canvasInst.changeZoom(scale)
     },
     // 修改下拉选项来对画布进行缩放

@@ -16,7 +16,6 @@ function getDeclarationByType (type) {
   }
 }
 export function getDeclaration (type) {
-  console.log('getDeclaration', type)
   return new Promise((resolve, reject) => {
     getDeclarationByType(type)
       .then((configModule) => {

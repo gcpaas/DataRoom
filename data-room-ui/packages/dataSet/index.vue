@@ -825,7 +825,6 @@ export default {
       }
     },
     nodeClick (row, type) {
-      console.log(row)
       this.current = 1
       const { id } = row
       if (type === 'group') {

@@ -450,7 +450,6 @@ export default {
       this.uploadLoading = false
     },
     getDataList () {
-      console.log('getDataList', this.searchKey)
       this.loading = true
       this.$dataRoomAxios.get('/dataroom/file', {
         module: this.catalogInfo.page.code,

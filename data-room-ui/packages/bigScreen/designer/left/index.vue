@@ -149,7 +149,6 @@ export default {
       if (tab.name === 'resource') {
         this.$refs.resourceLibrary.dialogVisible = true
       } else if (tab.name === 'interactions') {
-        console.log(this.$refs.interactionDialog)
         this.$refs.interactionDialog.init()
       } else if (tab.name === 'modelComDialog') {
         this.$refs.modelComDialog.init()
