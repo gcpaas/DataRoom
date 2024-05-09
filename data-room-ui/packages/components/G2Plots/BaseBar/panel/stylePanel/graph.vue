@@ -365,7 +365,7 @@ export default {
     TransformSet
   },
   mixins: [commonMixins],
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   props: {
     config: {
       type: Object,
@@ -381,7 +381,7 @@ export default {
   },
   computed: {
     currentPageType () {
-      return this.chartProvide.currentPageType()
+      return this.canvasInst.currentPageType
     }
   },
   watch: {},

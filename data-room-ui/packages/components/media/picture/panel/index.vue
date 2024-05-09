@@ -45,12 +45,20 @@
         name="datasource"
       >
         <span slot="label"><i class="label-icon el-icon-menu" />数据源</span>
+        <DataPanel
+          :config="config"
+          :field-name-mapping="fieldNameMapping"
+        />
       </el-tab-pane>
       <el-tab-pane
         label="高级"
         name="advanced"
       >
         <span slot="label"><i class="label-icon el-icon-s-finance" />高级</span>
+        <AdvancedPanel
+          :config="config"
+          :field-name-mapping="fieldNameMapping"
+        ></AdvancedPanel>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -59,10 +67,15 @@
 <script>
 
 import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
+import AdvancedPanel from "@gcpaas/data-room-ui/packages/components/common/panel/advancedPanel/index.vue"
+import DataPanel from '@gcpaas/data-room-ui/packages/components/common/panel/dataPanel/index.vue'
+
 export default {
   name: '',
   mixins: [commonMixins],
   components: {
+    DataPanel,
+    AdvancedPanel
   },
   props: {
     config: {
@@ -72,6 +85,10 @@ export default {
   },
   data () {
     return {
+      fieldNameMapping: {
+        dimensionField: '图片地址',
+        metricField: '链接地址'
+      },
       fieldsList: [],
       activeName: 'style'
     }

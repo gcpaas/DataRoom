@@ -68,13 +68,13 @@ export default {
       index: 0
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     chartList () {
-      return this.chartProvide.chartList()
+      return this.canvasInst.chartList
     },
     pageConfig () {
-      return this.chartProvide.pageConfig()
+      return this.canvasInst.pageConfig
     }
   },
   mounted () {
@@ -89,7 +89,7 @@ export default {
       if (chart) {
         chart.x = newX
         chart.y = newY
-        this.chartProvide.updateChartConfig(chart)
+        this.canvasInst.updateChartConfig(chart)
       }
     },
     movedEvent (i, newX, newY) {
@@ -97,7 +97,7 @@ export default {
       if (chart) {
         chart.x = newX
         chart.y = newY
-        this.chartProvide.updateChartConfig(chart)
+        this.canvasInst.updateChartConfig(chart)
       }
     },
     resizeEvent (i, newH, newW, newHPx, newWPx) {
@@ -105,7 +105,7 @@ export default {
       if (chart) {
         chart.w = newW
         chart.h = newH
-        this.chartProvide.updateChartConfig(chart)
+        this.canvasInst.updateChartConfig(chart)
       }
     },
     resizedEvent (i, newH, newW, newHPx, newWPx) {
@@ -113,7 +113,7 @@ export default {
       if (chart) {
         chart.w = newW
         chart.h = newH
-        this.chartProvide.updateChartConfig(chart)
+        this.canvasInst.updateChartConfig(chart)
       }
     }
   }

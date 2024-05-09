@@ -99,10 +99,10 @@ export default {
       activeFitMode: 'fitWidth'
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     pageInfo () {
-      return this.chartProvide.pageInfo()
+      return this.canvasInst.pageInfo
     }
   },
   watch: {},
@@ -142,7 +142,7 @@ export default {
             } else {
               _pageInfo.coverPicture = dataUrl
             }
-            this.chartProvide.updatePageInfo(_pageInfo)
+            this.canvasInst.updatePageInfo(_pageInfo)
           }
           this.saveAndPreviewLoading = false
         }).catch((error) => {
@@ -175,14 +175,14 @@ export default {
       } else {
         const _pageInfo = JSON.parse(JSON.stringify(this.pageInfo))
         _pageInfo.coverPicture = response.data.url
-        this.chartProvide.updatePageInfo(_pageInfo)
+        this.canvasInst.updatePageInfo(_pageInfo)
       }
     },
     // 删除封面
     removeImg () {
       const _pageInfo = JSON.parse(JSON.stringify(this.pageInfo))
       _pageInfo.coverPicture = ''
-      this.chartProvide.updatePageInfo(_pageInfo)
+      this.canvasInst.updatePageInfo(_pageInfo)
     },
     beforeUpload (file) {
       if (file.size > 30 * 1024 * 1024) {

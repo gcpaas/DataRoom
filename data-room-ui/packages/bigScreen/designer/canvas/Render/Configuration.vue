@@ -33,15 +33,15 @@ export default {
 
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   mounted () {},
   methods: {
     // 改变激活的组件
     changeActive (code) {
       // 设计态需要
       if (this.isPreview) return
-      this.chartProvide.updateActiveChart(code)
-      this.chartProvide.changeIsScreenSet(false)
+      this.canvasInst.updateActiveChart(code)
+      this.canvasInst.changeIsScreenSet(false)
     }
   }
 }

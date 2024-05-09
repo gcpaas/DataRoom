@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="show"
+    v-show="initRequestData"
     style="width: 100%;height: 100%"
     class="dataroom-chart-baseBar-wrapper"
   >
@@ -14,11 +14,7 @@
 <script>
 // 引入g2plot图表的公共方法
 import g2plotMixins from '@gcpaas/data-room-ui/packages/components/G2Plots/js/mixins/g2plotMixins.js'
-import axios from 'axios'
-import cloneDeep from 'lodash/cloneDeep'
-import * as g2Plot from '@antv/g2plot'
-import chartData from './data.json'
-import { getData } from '@gcpaas/data-room-ui/packages/js/api/pageApi'
+import mockData from './data.json'
 export default {
   name: 'BaseBar',
   components: {},
@@ -27,7 +23,7 @@ export default {
   },
   data () {
     return {
-      chartData,
+      mockData,
       show: true
     }
   },

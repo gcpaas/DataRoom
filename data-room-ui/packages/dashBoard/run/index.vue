@@ -47,7 +47,7 @@ export default {
       pageInfo: {},
       pageConfig: {},
       chartList: [],
-      dataScripts: {},
+      dataHandleFilters: {},
       screenWrapStyle: {},
       draggable: false,
       resizable: false,
@@ -62,12 +62,12 @@ export default {
   // 注入
   provide () {
     return {
-      chartProvide: Vue.observable({
+      canvasInst: Vue.observable({
         chartList: this.chartList,
         updateChartList: this.updateChartList,
         updateChartConfig: this.updateChartConfig,
         filters: () => this.pageInfo?.filters || {},
-        dataScripts: () => this.dataScripts
+        dataHandleFilters: () => this.dataHandleFilters
       })
     }
   },
@@ -95,7 +95,7 @@ export default {
     getDataScript () {
       if (this.pageInfo.filters) {
         for (const key in this.pageInfo.filters) {
-          this.dataScripts[key] = new Function('params', this.pageInfo.filters[key].script)
+          this.dataHandleFilters[key] = new Function('params', this.pageInfo.filters[key].script)
         }
       }
     },

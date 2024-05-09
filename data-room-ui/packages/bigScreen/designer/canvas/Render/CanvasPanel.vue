@@ -97,10 +97,10 @@ export default {
       rootContainer: null
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     scale () {
-      return this.chartProvide.zoom() / 100
+      return this.canvasInst.zoom / 100
     }
   },
   watch: {
@@ -155,7 +155,7 @@ export default {
         transform: newTransform
       }
       const chartList = replaceElement(this.chartList, config)
-      this.chartProvide.updateChartList(chartList)
+      this.canvasInst.updateChartList(chartList)
     },
     onResize (e) {
       // // 记录开始位置
@@ -184,7 +184,7 @@ export default {
         transform: e.transform
       }
       const chartList = replaceElement(this.chartList, config)
-      this.chartProvide.updateChartList(chartList)
+      this.canvasInst.updateChartList(chartList)
     },
     onRotate (e) {
       e.target.style.transform = e.drag.transform
@@ -195,7 +195,7 @@ export default {
         transform: e.transform
       }
       const chartList = replaceElement(this.chartList, config)
-      this.chartProvide.updateChartList(chartList)
+      this.canvasInst.updateChartList(chartList)
     },
     onDragGroup (e) {
       e.events.forEach(ev => {

@@ -22,7 +22,7 @@ export default {
       chart: null
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   watch: {},
   created () {},
   mounted () {
@@ -31,15 +31,15 @@ export default {
     // 修改样式
     changeStyle () {
       // 将修改过的配置更新到chartList中
-      this.chartProvide.updateChartConfig(this.config)
-      this.chartProvide.updateStyleHandler(this.config)
+      this.canvasInst.updateChartConfig(this.config)
+      this.canvasInst.updateStyleHandler(this.config)
     }
     // // 根据配置调获取数据接口
     // getDataByChart () {
     //   // 将修改过的配置更新到chartList中
-    //   this.chartProvide.updateChartConfig(this.config)
+    //   this.canvasInst.updateChartConfig(this.config)
     //   return new Promise((resolve, reject) => {
-    //     this.chartProvide.updateDataHandler(this.config).then(res => {
+    //     this.canvasInst.updateDataHandler(this.config).then(res => {
     //       resolve(res)
     //     }).catch(err => {
     //       reject(err)

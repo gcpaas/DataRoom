@@ -33,16 +33,16 @@ export default {
       rawChart: []
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     chartList () {
-      return this.chartProvide.chartList()
+      return this.canvasInst.chartList
     },
     pageInfo () {
-      return this.chartProvide.pageInfo()
+      return this.canvasInst.pageInfo
     },
     pageConfig () {
-      return this.chartProvide.pageConfig()
+      return this.canvasInst.pageConfig
     }
   },
   watch: {
@@ -66,7 +66,7 @@ export default {
       const transferData = e.dataTransfer.getData('dragComponent')
       if (transferData) {
         const element = JSON.parse(transferData)
-        this.chartProvide.addChart(element)
+        this.canvasInst.addChart(element)
       }
     }
   }

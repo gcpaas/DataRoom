@@ -54,9 +54,11 @@ export default {
   },
   data () {
     return {
+      pageInfo:{},
       pageConfig: {},
       chartList: [],
-      dataScripts: {},
+      globalVariableTimers: {}, // 更新全局变量的计时器
+      dataHandleFilters: {},
       fitMode: '',
       autofill: false,
       screenRunStyle: {},
@@ -68,18 +70,15 @@ export default {
   // 注入
   provide () {
     return {
-      chartProvide: Vue.observable({
-        chartList: this.chartList,
-        updateChartList: this.updateChartList,
-        updateChartConfig: this.updateChartConfig,
-        filters: () => this.pageInfo?.filters || {},
-        dataScripts: () => this.dataScripts
-      })
+      canvasInst: this.canvasInst
     }
   },
   computed: {
     pageCode () {
       return this.code || this.$route.query.code
+    },
+    canvasInst () {
+      return this
     }
   },
   watch: {
@@ -116,8 +115,11 @@ export default {
           transform: 'scaleX(1) scaleY(1)'
         }
         this.pageInfo.filters = this.pageInfo?.filters || {}
+        this.pageInfo.globalNameToValue = {}
+        this.getGlobalNameToValue()
         this.getDataScript()
         this.screenFixInit()
+        this.triggerGlobalVariableTimer()
       }).catch(err => {
         console.log(err)
       })
@@ -125,6 +127,65 @@ export default {
     // 更新chartList
     updateChartList (chartList) {
       this.chartList = chartList
+    },
+    // 初始化获取全局变量的映射列表
+    getGlobalNameToValue(){
+      this.pageInfo.globalVariable.forEach(variable => {
+        this.pageInfo.globalNameToValue[variable.id] = {
+          name: variable.name,
+          value: variable.initialValue
+        }
+      })
+    },
+    // 更新全局变量
+    setGlobalValue (id, value) {
+      this.pageInfo.globalNameToValue[id].value = value
+    },
+    // 更新全局变量映射列表
+    updateGlobalNameToValue (variable,value) {
+      this.pageInfo.globalNameToValue[variable.id] = {
+        name: variable.name,
+        value: value
+      }
+    },
+    // 根据ID获取全局变量
+    getGlobalValueById (id) {
+      const variable = this.pageInfo.globalVariable.find(item => item.id === id)
+      if (variable && variable.filterId) {
+        return this.canvasInst.dataHandleFilters[variable.filterId](this.pageInfo.globalNameToValue[variable.id].value) || this.pageInfo.globalNameToValue[variable.id].value
+      } else {
+        return this.pageInfo.globalNameToValue[variable.id].value
+      }
+    },
+    // 根据name获取全局变量
+    getGlobalValueByName(name){
+      const variable = this.pageInfo.globalVariable.find(item => item.name === name)
+      if (variable && variable.filterId) {
+        return this.canvasInst.dataHandleFilters[variable.filterId](this.pageInfo.globalNameToValue[variable.id].value) || this.pageInfo.globalNameToValue[variable.id].value
+      } else {
+        return this.pageInfo.globalNameToValue[variable.id].value
+      }
+    },
+    // 触发更新全局变量的定时器
+    triggerGlobalVariableTimer () {
+      this.canvasInst.pageInfo.globalVariable.forEach(variable => {
+        // 自动更新全局变量的值
+        if (variable.autoUpdate) {
+          // 判断该全局变量是否有已存在的定时器
+          if (this.globalVariableTimers[variable.id]) {
+            // 先销毁再新建
+            clearInterval(this.globalVariableTimers[variable.id]) // 调用 clearInterval 来终止定时器的执行
+          }
+          this.globalVariableTimers[variable.id] = setInterval(() => {
+            const newValue = this.canvasInst.dataHandleFilters[variable.filterId](variable.initialValue) || variable.initialValue
+            this.canvasInst.setGlobalValue(variable.id, newValue)
+          }, variable.updateFrequency * 1000)
+        } else {
+          if (this.globalVariableTimers[variable.id]) {
+            clearInterval(this.globalVariableTimers[variable.id]) // 调用 clearInterval 来终止定时器的执行
+          }
+        }
+      })
     },
     // 更新单个chart配置
     updateChartConfig (chartConfig) {
@@ -157,7 +218,7 @@ export default {
     getDataScript () {
       if (this.pageInfo.filters) {
         for (const key in this.pageInfo.filters) {
-          this.dataScripts[key] = new Function('params', this.pageInfo.filters[key].script)
+          this.dataHandleFilters[key] = new Function('params', this.pageInfo.filters[key].script)
         }
       }
     },

@@ -37,6 +37,10 @@
             :menu="componentMenu"
             @closePanel="closePanel"
           />
+          <globalVariableList
+            v-else-if="activeName === menu.name && show && menu.name === 'globalVariable'"
+            @closePanel="closePanel"
+          />
           <!-- 素材库(通过弹窗展示） -->
         </el-tab-pane>
       </el-tabs>
@@ -53,13 +57,15 @@ import pictureConfig from '@gcpaas/data-room-ui/packages/components/media/pictur
 const ComponentLibrary = () => import('./components/ComponentLibrary/index.vue')
 const ResourceLibrary = () => import('./components/ResourceLibrary/index.vue')
 const Coverage = () => import('./components/coverage/index.vue')
+const globalVariableList = () => import('./components/globalVariableList/index.vue')
 
 export default {
   name: 'LeftPanel',
   components: {
     ComponentLibrary,
     ResourceLibrary,
-    Coverage
+    Coverage,
+    globalVariableList
   },
   props: {
     headerShow: {
@@ -80,7 +86,7 @@ export default {
       menuList: menuList
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     componentMenu () {
       return this.menuList.find(item => item.name === 'component')
@@ -112,7 +118,7 @@ export default {
         ...pictureConfig(),
         url: resource.url
       }
-      this.chartProvide.addChart(config, 'import')
+      this.canvasInst.addChart(config, 'import')
       this.dialogVisible = false
     },
     // 点击tab标签

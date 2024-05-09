@@ -39,10 +39,10 @@ export default {
       dialogVisible: false
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     pageInfo () {
-      return this.chartProvide.pageInfo()
+      return this.canvasInst.pageInfo
     }
   },
   watch: {},
@@ -60,7 +60,7 @@ export default {
     },
     sure () {
       const _pageInfo = { ...this.pageInfo, name: this.pageName }
-      this.chartProvide.updatePageInfo(_pageInfo)
+      this.canvasInst.updatePageInfo(_pageInfo)
       this.dialogVisible = false
     }
   }

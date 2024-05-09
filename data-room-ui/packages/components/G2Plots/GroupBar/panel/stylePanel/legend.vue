@@ -427,7 +427,7 @@ export default {
       legendPositionList
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {},
   watch: {},
   created () {},

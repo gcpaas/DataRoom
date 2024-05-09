@@ -133,8 +133,8 @@ export default {
       const config = cloneDeep(this.config)
       config.transform = newTransform
       // 更新图表的配置和样式处理器
-      this.chartProvide.updateChartConfig(config)
-      this.chartProvide.updateStyleHandler(config)
+      this.canvasInst.updateChartConfig(config)
+      this.canvasInst.updateStyleHandler(config)
     }
 
   }

@@ -19,10 +19,7 @@
         <span slot="label"><i class="label-icon el-icon-menu" />数据源</span>
         <DataPanel
           :config="config"
-          :dimension-field-name="dimensionFieldName"
-          :metric-field-name="metricFieldName"
-          :classified-field-name="classifiedFieldName"
-          :is-group="isGroup"
+          :field-name-mapping="fieldNameMapping"
         />
       </el-tab-pane>
       <el-tab-pane
@@ -30,6 +27,10 @@
         name="advanced"
       >
         <span slot="label"><i class="label-icon el-icon-s-finance" />高级</span>
+        <AdvancedPanel
+          :config="config"
+          :field-name-mapping="fieldNameMapping"
+        ></AdvancedPanel>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -40,12 +41,14 @@
 import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
 import StylePanel from './stylePanel/index.vue'
 import DataPanel from '@gcpaas/data-room-ui/packages/components/common/panel/dataPanel/index.vue'
+import AdvancedPanel from '@gcpaas/data-room-ui/packages/components/common/panel/advancedPanel/index.vue'
 export default {
   name: '',
   mixins: [commonMixins],
   components: {
     StylePanel,
-    DataPanel
+    DataPanel,
+    AdvancedPanel
   },
   props: {
     config: {
@@ -55,10 +58,10 @@ export default {
   },
   data () {
     return {
-      dimensionFieldName: 'X轴字段',
-      metricFieldName: 'Y轴字段',
-      classifiedFieldName: '分组字段',
-      isGroup: false,
+      fieldNameMapping: {
+        dimensionField: 'X轴字段',
+        metricField: 'Y轴字段'
+      },
       fieldsList: [],
       activeName: 'style'
     }

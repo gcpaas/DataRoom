@@ -34,16 +34,16 @@ export default {
       isOperationRollback: false
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     config () {
-      return this.chartProvide.activeChart()
+      return this.canvasInst.activeChart
     },
     pageCode () {
       return this.$route.query.code
     },
     isScreenSet () {
-      return this.chartProvide.isScreenSet()
+      return this.canvasInst.isScreenSet
     }
   },
   mounted () {

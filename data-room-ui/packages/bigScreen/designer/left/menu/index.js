@@ -18,6 +18,12 @@ export default [
     title: '素材库',
     icon: 'el-icon-collection',
     children: []
+  },
+  {
+    name: 'globalVariable',
+    title: '全局变量',
+    icon: 'el-icon-tickets',
+    children: []
   }
   // {
   //   name: 'history',

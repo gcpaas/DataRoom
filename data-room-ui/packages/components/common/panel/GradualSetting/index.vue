@@ -56,7 +56,7 @@ export default {
   },
   computed: {
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   watch: {
   },
   mounted () {
@@ -79,8 +79,8 @@ export default {
       this.colorsValue = `${this.position} 0:${this.startColor} 1:${this.endColor}`
       const config = cloneDeep(this.config)
       config.option.columnStyle.fill = this.colorsValue
-      this.chartProvide.updateChartConfig(config)
-      this.chartProvide.updateStyleHandler(config)
+      this.canvasInst.updateChartConfig(config)
+      this.canvasInst.updateStyleHandler(config)
     },
     positionChange () {
       // 将position的值循环移动一位

@@ -73,7 +73,8 @@ export default {
       isScreenSet: false, // 设置面板是大屏设置还是组件设置
       rightVisiable: false,
       pageInfoVisiable: false,
-      dataScripts: {},
+      globalVariableTimers:{},// 全局变量定时器
+      dataHandleFilters: {},
       zoom: 100,
       // 自适应下的缩放比例
       fitZoom: 100
@@ -82,33 +83,7 @@ export default {
   // 注入
   provide () {
     return {
-      chartProvide: Vue.observable({
-        currentPageType: () => this.currentPageType,
-        chartList: () => this.chartList,
-        updatePageInfo: this.updatePageInfo,
-        updateChartList: this.updateChartList,
-        updateChartConfig: this.updateChartConfig,
-        updateStyleHandler: this.updateStyleHandler,
-        updateDataHandler: this.updateDataHandler,
-        activeChart: () => this.activeChart,
-        updateActiveChart: this.updateActiveChart,
-        pageInfo: () => this.pageInfo,
-        pageConfig: () => this.pageConfig,
-        addChart: this.addChart,
-        deleteChart: this.deleteChart,
-        zoom: () => this.zoom,
-        fitZoom: () => this.fitZoom,
-        changeZoom: this.changeZoom,
-        changeFitZoom: this.changeFitZoom,
-        coverageList: () => this.coverageList,
-        openRightPanel: this.openRightPanel,
-        isScreenSet: () => this.isScreenSet,
-        changeIsScreenSet: this.changeIsScreenSet,
-        changePageConfig: this.changePageConfig,
-        filters: () => this.pageInfo?.filters || {},
-        dataScripts: () => this.dataScripts,
-        updateDataScript: this.updateDataScript
-      })
+      canvasInst: this.canvasInst
     }
   },
   computed: {
@@ -120,6 +95,9 @@ export default {
     },
     scale () {
       return this.zoom / 100
+    },
+    canvasInst () {
+      return this
     },
     pageConfig: {
       get () {
@@ -160,19 +138,24 @@ export default {
     PageInfoInit () {
       getPageInfo(this.pageCode).then(res => {
         this.pageInfo = res
+        this.pageInfo.filters = this.pageInfo.filters || {}
+        this.pageInfo.chartList = this.pageInfo.chartList || []
+        this.pageInfo.globalVariable = this.pageInfo.globalVariable || []
+        this.pageInfo.globalNameToValue = {}
         // 配置兼容
         this.configCompatibility()
         this.isReady = true
-        this.pageInfo.filters = this.pageInfo.filters || {}
         this.pageInfo.pageConfig.opacity = this.pageInfo?.pageConfig?.opacity || 1
         this.getDataScript()
+        this.getGlobalNameToValue()
+        this.openGlobalVariableTimer()
       }).catch(err => {
         console.log(err)
       })
     },
     // 配置兼容
     configCompatibility () {
-      Promise.all(this.pageInfo.chartList.map(item => {
+      Promise.all(this.pageInfo?.chartList?.map(item => {
         return getDeclaration(item.type).then(configModule => {
           let config = cloneDeep(configModule)
           config = {
@@ -316,17 +299,75 @@ export default {
     getDataScript () {
       if (this.pageInfo.filters) {
         for (const key in this.pageInfo.filters) {
-            this.dataScripts[key] = new Function('params', this.pageInfo.filters[key].script)
+            this.dataHandleFilters[key] = new Function('params', this.pageInfo.filters[key].script)
         }
       }
     },
     // 修改页面的脚本：
     updateDataScript (id, filter) {
-      this.pageInfo.filters[id] = {
-        name: '',
-        script: filter
+      this.$set(this.pageInfo.filters, id, { ...filter })
+      this.dataHandleFilters[id] = new Function('params', 'canvasInst', filter.script)
+    },
+    // 更新全局变量
+    setGlobalValue (id, value) {
+      this.pageInfo.globalNameToValue[id].value = value
+    },
+    // 初始化获取全局变量的映射列表
+    getGlobalNameToValue(){
+      this.pageInfo.globalVariable.forEach(variable => {
+        this.pageInfo.globalNameToValue[variable.id] = {
+          name: variable.name,
+          value: variable.initialValue
+        }
+      })
+    },
+    // 更新全局变量映射列表
+    updateGlobalNameToValue (variable,value) {
+      this.pageInfo.globalNameToValue[variable.id] = {
+        name: variable.name,
+        value: value
       }
-      this.dataScripts[id] = new Function('params', filter)
+    },
+    // 根据ID获取全局变量
+    getGlobalValueByID (id) {
+      const variable = this.pageInfo.globalVariable.find(item => item.id === id)
+      if (variable && variable.filterId) {
+        return this.dataHandleFilters[variable.filterId](this.pageInfo.globalNameToValue[variable.id].value) || this.pageInfo.globalNameToValue[variable.id].value
+      } else {
+        return this.pageInfo.globalNameToValue[variable.id].value
+      }
+    },
+    // 根据name获取全局变量
+    getGlobalValueByName(name){
+      const variable = this.pageInfo.globalVariable.find(item => item.name === name)
+      if (variable && variable.filterId) {
+        return this.dataHandleFilters[variable.filterId](this.pageInfo.globalNameToValue[variable.id].value) || this.pageInfo.globalNameToValue[variable.id].value
+      } else {
+        return this.pageInfo.globalNameToValue[variable.id].value
+      }
+    },
+    openGlobalVariableTimer(){
+      this.canvasInst.pageInfo.globalVariable.forEach(variable =>{
+        this.triggerGlobalVariableTimer(variable)
+      })
+    },
+    triggerGlobalVariableTimer(variable){
+      // 自动更新全局变量的值
+      if (variable.autoUpdate){
+        // 判断该全局变量是否有已存在的定时器
+        if (this.globalVariableTimers[variable.id]){
+          // 先销毁再新建
+          clearInterval(this.globalVariableTimers[variable.id]) // 调用 clearInterval 来终止定时器的执行
+        }
+        this.globalVariableTimers[variable.id] = setInterval(() => {
+          const newValue = this.canvasInst.dataHandleFilters[variable.filterId](variable.initialValue) || variable.initialValue
+          this.canvasInst.setGlobalValue(variable.id,newValue)
+        }, variable.updateFrequency * 1000)
+      }else{
+        if (this.globalVariableTimers[variable.id]){
+          clearInterval(this.globalVariableTimers[variable.id]) // 调用 clearInterval 来终止定时器的执行
+        }
+      }
     },
     // 遍历组件树，找到需要修改样式的组件，并调用其 changeStyle 方法
     traverseComponents (component, config, eventType, isData, data) {

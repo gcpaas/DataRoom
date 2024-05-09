@@ -83,7 +83,7 @@ export default {
       menuList: menuList
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     componentMenu () {
       return this.menuList.find(item => item.name === 'component')
@@ -115,7 +115,7 @@ export default {
         ...pictureConfig(),
         url: resource.url
       }
-      this.chartProvide.addChart(config, 'import')
+      this.canvasInst.addChart(config, 'import')
       this.dialogVisible = false
     },
     // 点击tab标签

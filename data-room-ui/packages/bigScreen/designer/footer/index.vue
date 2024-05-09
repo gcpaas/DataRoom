@@ -63,20 +63,20 @@ export default {
       zoomList: ['50%', '100%', '150%', '200%', '250%', '300%']
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     scale () {
       return this.zoom() / 100
     },
     fitZoom () {
-      return this.chartProvide.fitZoom()
+      return this.canvasInst.fitZoom
     },
     zoom: {
       get () {
-        return this.chartProvide.zoom()
+        return this.canvasInst.zoom
       },
       set (value) {
-        this.chartProvide.changeZoom(value)
+        this.canvasInst.changeZoom(value)
       }
     },
     zoomPercent: {
@@ -101,24 +101,24 @@ export default {
     // 滑动滑块来对画布进行缩放
     sliderHandler (scale) {
       console.log('scale', scale)
-      this.chartProvide.changeZoom(scale)
+      this.canvasInst.changeZoom(scale)
     },
     // 修改下拉选项来对画布进行缩放
     selectHandler (val) {
-      this.chartProvide.changeZoom(parseInt(val))
+      this.canvasInst.changeZoom(parseInt(val))
     },
     // 点击减号缩放画布
     minusHandler () {
       const scale = this.zoom
       if (scale > 15) {
-        this.chartProvide.changeZoom(scale - 5)
+        this.canvasInst.changeZoom(scale - 5)
       }
     },
     // 点击加号缩放画布
     plusHandler () {
       const scale = this.zoom
       if (scale < 295) {
-        this.chartProvide.changeZoom(scale + 5)
+        this.canvasInst.changeZoom(scale + 5)
       }
     }
   }

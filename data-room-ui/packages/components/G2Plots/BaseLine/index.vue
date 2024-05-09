@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="show"
+    v-show="initRequestData"
     style="width: 100%;height: 100%"
     class="dataroom-chart-baseLine-wrapper"
   >
@@ -16,7 +16,7 @@
 import g2plotMixins from '@gcpaas/data-room-ui/packages/components/G2Plots/js/mixins/g2plotMixins.js'
 import { getData } from '@gcpaas/data-room-ui/packages/js/api/pageApi'
 import cloneDeep from 'lodash/cloneDeep'
-import chartData from './data.json'
+import mockData from './data.json'
 
 export default {
   name: 'BaseLine',
@@ -26,7 +26,7 @@ export default {
   },
   data () {
     return {
-      chartData,
+      mockData,
       show: true
     }
   },

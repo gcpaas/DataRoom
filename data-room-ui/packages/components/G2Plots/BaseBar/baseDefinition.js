@@ -14,7 +14,7 @@ export default {
   // transform: 'perspective(none) translate(255px, 225px) skew(8deg, 7deg) rotateX(34deg) rotateY(13deg) rotateZ(0deg)',
   // 图表的基础配置，配置格式与G2plot、EChart官网保持一致
   option: {
-    data: [],
+    // data: []//data不在配置中保存,
     // 图表内边距
     appendPadding: [0, 0, 0, 0],
     minColumnWidth: 0,

@@ -24,13 +24,13 @@ export default {
     return {
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     pageCode () {
       return this.$route.query.code
     },
-    dataScripts () {
-      return this.chartProvide.dataScripts()
+    dataHandleFilters () {
+      return this.canvasInst.dataHandleFilters
     }
   },
   watch: {},
@@ -61,7 +61,7 @@ export default {
               data
             }
             if (this.config.dataSource.dataHandleFilterId) {
-              data = this.dataScripts[this.config.dataSource.dataHandleFilterId](params) || res.data
+              data = this.dataHandleFilters[this.config.dataSource.dataHandleFilterId](params) || res.data
             }
             resolve(data)
           }).catch(err => {

@@ -73,14 +73,14 @@ export default {
       mouseInDesign: false,
       mapShow: true, // 小地图显示与否
       rightVisiable: false,
-      dataScripts: {},
+      dataHandleFilters: {},
       pageInfoVisiable: false
     }
   },
   // 注入
   provide () {
     return {
-      chartProvide: Vue.observable({
+      canvasInst: Vue.observable({
         currentPageType: () => this.currentPageType,
         chartList: () => this.chartList,
         updatePageInfo: this.updatePageInfo,
@@ -100,7 +100,7 @@ export default {
         changeIsScreenSet: this.changeIsScreenSet,
         changePageConfig: this.changePageConfig,
         filters: () => this.pageInfo?.filters || {},
-        dataScripts: () => this.dataScripts,
+        dataHandleFilters: () => this.dataHandleFilters,
         updateDataScript: this.updateDataScript
       })
     }
@@ -287,7 +287,7 @@ export default {
     getDataScript () {
       if (this.pageInfo.filters) {
         for (const key in this.pageInfo.filters) {
-          this.dataScripts[key] = new Function('params', this.pageInfo.filters[key].script)
+          this.dataHandleFilters[key] = new Function('params', this.pageInfo.filters[key].script)
         }
       }
     },
@@ -297,7 +297,7 @@ export default {
         name: '',
         script: filter
       }
-      this.dataScripts[id] = new Function('params', filter)
+      this.dataHandleFilters[id] = new Function('params', filter)
     },
     // 遍历组件树，找到需要修改样式的组件，并调用其 changeStyle 方法
     traverseComponents (component, config, eventType, isData, data) {

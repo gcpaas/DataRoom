@@ -28,7 +28,7 @@ export default {
       count: 0
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   watch: {
   },
   computed: {

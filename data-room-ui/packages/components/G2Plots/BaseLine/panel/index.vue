@@ -47,10 +47,7 @@
         <span slot="label"><i class="label-icon el-icon-menu" />数据源</span>
         <DataPanel
           :config="config"
-          :dimension-field-name="dimensionFieldName"
-          :metric-field-name="metricFieldName"
-          :classified-field-name="classifiedFieldName"
-          :is-group="isGroup"
+          :field-name-mapping="fieldNameMapping"
         />
       </el-tab-pane>
       <el-tab-pane
@@ -81,10 +78,11 @@ export default {
   },
   data () {
     return {
-      dimensionFieldName: 'X轴字段',
-      metricFieldName: 'Y轴字段',
-      classifiedFieldName: '分组字段',
-      isGroup: false,
+      fieldNameMapping: {
+        dimensionField: 'X轴字段',
+        metricField: 'Y轴字段',
+        classifiedField: '分组字段'
+      },
       fieldsList: [],
       activeName: 'style'
     }

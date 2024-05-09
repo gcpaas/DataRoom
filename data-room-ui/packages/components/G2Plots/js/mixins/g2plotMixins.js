@@ -25,16 +25,23 @@ export default {
   },
   data () {
     return {
-      chart: null
+      isInit: true,
+      temporaryData: null// 将获取的数据保存到改变量中，不保存在配置中
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     pageCode () {
       return this.$route.query.code
     },
-    dataScripts () {
-      return this.chartProvide.dataScripts()
+    dataHandleFilters () {
+      return this.canvasInst.dataHandleFilters
+    },
+    isPreview () {
+      return (this.$route.path === window?.BS_CONFIG?.routers?.bigScreenPreviewUrl) || (this.$route.path === '/big-screen/preview')
+    },
+    initRequestData () {
+      return !(this.isPreview && (!this.config.dataSource.initRequestData) && this.isInit)
     }
   },
   watch: {},
@@ -51,16 +58,17 @@ export default {
       }
       this.getChartData().then(res => {
         const config = cloneDeep(this.config)
-        config.option.data = res
-        this.chartProvide.updateChartConfig(config)
+        this.temporaryData = res
         this.chart = new g2Plot[this.config.chartType]('test' + this.config.code, {
           renderer: 'canvas',
           // 仪表盘缩放状态下，点击准确
           supportCSSTransform: true,
           ...config.option,
+          data: this.temporaryData,
           legend: config.option.showLegend ? config.option.legend : false
         })
         this.chart.render()
+        this.triggerClickEvent()
       }).catch(err => {
         console.log(err)
       })
@@ -69,61 +77,119 @@ export default {
     handleChartData (data) {
       const _config = cloneDeep(this.config)
       _config.option.data = data
-      this.chartProvide.updateChartConfig(_config)
+      this.canvasInst.updateChartConfig(_config)
       if (this.chart) {
         this.chart.changeData(data)
       }
     },
     // 调接口获取数据
     getChartData () {
-      const params = {
-        current: 1,
-        filterList: [],
-        pageCode: this.pageCode,
-        chartCode: this.config.code,
-        dataSource: { ...this.config.dataSource }
-      }
-      return new Promise((resolve, reject) => {
-        // 判断组件是否存在数据集,存在则调接口，不存在则返回模拟数据
-        if (this.config.dataSource && this.config.dataSource.businessKey) {
-          getDataByChart(params).then(res => {
-            let data = res.data
-            const params = {
-              data
-            }
-            if (this.config.dataSource.dataHandleFilterId) {
-              data = this.dataScripts[this.config.dataSource.dataHandleFilterId](params) || res.data
-            }
-            resolve(data)
-          }).catch(err => {
-            reject(err)
-          })
+      return new Promise((resolve,reject) => {
+        if (!this.initRequestData){
+          // 如果是初始化的时候不请求数据,则返回空数据，否则按照正常逻辑执行
+          resolve([])
         } else {
-          // 否则返回模拟数据
-          resolve(this.chartData)
+          const param = {
+            params: {},
+            pageCode: this.pageCode,
+            chartCode: this.config.code,
+            businessKey: this.config.dataSource.businessKey
+          }
+          // 全局变量
+          const params = {}
+          this.config.dataSource.parameterMapping.forEach(item => {
+            if (item.globalVariableId !== '') {
+              params[item.name] = this.canvasInst.getGlobalValueById(item.globalVariableId)
+            }
+          })
+          // 合并传入的变量（优先级高）和全局变量（优先级低
+          param.params = { ...params}
+          // 判断组件是否存在数据集,存在则调接口，不存在则返回模拟数据
+          if (this.config.dataSource && this.config.dataSource.businessKey) {
+            getDataByChart(param).then(res => {
+              let data = res.data
+              const params = {
+                data
+              }
+              if (this.config.dataSource.dataHandleFilterId) {
+                data = this.dataHandleFilters[this.config.dataSource.dataHandleFilterId](params) || res.data
+              }
+              resolve(data)
+            }).catch(err => {
+              reject(err)
+            })
+          } else {
+            // 否则返回模拟数据
+            resolve(this.mockData)
+          }
         }
       })
     },
 
     // 更新图表数据
     updateChartData () {
-      // 调接口获取数据
-      this.getChartData().then(res => {
-        const data = res || []
-        this.handleChartData(data)
-      }).catch(err => {
-        console.log(err)
+      this.isInit = false
+      this.$nextTick(() => {
+        // 调接口获取数据
+        this.getChartData().then(res => {
+          console.log(res)
+          const data = res || []
+          this.updateChartDataWithData(data)
+          console.log(data)
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+    },
+    /**
+     * 使用指定数据更新图表数据
+     * @param data
+     */
+    updateChartDataWithData (data = []) {
+      this.isInit = false
+      this.$nextTick(() => {
+        this.temporaryData = data
+        if (this.chart) {
+          this.chart.changeData(data)
+        }
       })
     },
     // 更新图表配置
-    updateChartStyle (config) {
+    updateChartStyle () {
       if (this.chart) {
-        // 如果不显示图例
-        if (!config.option.showLegend) {
-          this.chart.update({ ...config.option, legend: false })
-        } else {
-          this.chart.update(config.option)
-        }
+        this.$nextTick(() => {
+          const option = {
+            ...this.config.option,
+            data: this.temporaryData
+          }
+          // 如果不显示图例
+          if (!this.config.option.showLegend) {
+            this.chart.update({ ...option, legend: false })
+          } else {
+            this.chart.update(option)
+          }
+          this.$forceUpdate()
+        })
+      }
+    },
+    // TODO 这里是注册事件还是触发事件
+    triggerClickEvent () {
+      const _this = this
+      this.chart.on('plot:click', (...args) => {
+        const data = args[0]?.data?.data
+        // 执行交互逻辑
+        this.handleChartEvent('click', data)
+      })
+    },
+    handleChartEvent (eventType, data) {
+      // 判断是否需要更新全局变量
+      const dataItemMap = this.config.fieldMapping.find(item => item.eventCode = eventType)
+      if (dataItemMap && dataItemMap.enable) {
+        dataItemMap.fieldList.forEach(field => {
+          if (field.globalVariableId !== '' && data) {
+            this.canvasInst.setGlobalValue(field.globalVariableId, data[this.config.dataSource[field.name]])
+          }
+        })
       }
     }
   },

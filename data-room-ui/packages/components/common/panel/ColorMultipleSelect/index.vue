@@ -85,7 +85,7 @@ export default {
 
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   created () {
   },
   mounted () {
@@ -124,8 +124,8 @@ export default {
       // this.$emit('update', colors)
       const config = cloneDeep(this.config)
       config.option.color = colors
-      this.chartProvide.updateChartConfig(config)
-      this.chartProvide.updateStyleHandler(config)
+      this.canvasInst.updateChartConfig(config)
+      this.canvasInst.updateStyleHandler(config)
     }
   }
 }

@@ -10,13 +10,13 @@ Vue.use(Contextmenu)
 export default {
   computed: {
     chartList () {
-      return this.chartProvide.chartList()
+      return this.canvasInst.chartList
     }
   },
   data () {
     return {}
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   mounted () {
   },
   methods: {
@@ -24,9 +24,9 @@ export default {
     },
     // 打开右侧面板
     openRightPanel (config) {
-      this.chartProvide.updateActiveChart(config.code)
-      this.chartProvide.openRightPanel()
-      this.chartProvide.changeIsScreenSet(false)
+      this.canvasInst.updateActiveChart(config.code)
+      this.canvasInst.openRightPanel()
+      this.canvasInst.changeIsScreenSet(false)
     }, // 查看数据
     dataView (config) {
       this.changeActiveCode(config.code)
@@ -38,7 +38,7 @@ export default {
       const newConfig = this.replaceCodeWithrandom(_config)
       newConfig.title.text = _config.title.text + '_副本'
       const isCopy = true
-      this.chartProvide.addChart(newConfig, 'copy')
+      this.canvasInst.addChart(newConfig, 'copy')
     },
     // 组件深克隆，当组件存在子组件时，需要更新子组件的父节点标识
     replaceCodeWithrandom (config) {
@@ -72,7 +72,7 @@ export default {
       this.$confirm('确定删除该组件吗？', '提示', {
         confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning', customClass: 'bs-el-message-box'
       }).then(() => {
-        this.chartProvide.deleteChart([config.code])
+        this.canvasInst.deleteChart([config.code])
       })
     }, // 批量删除组合元素
     deleteGroupItem (config) {
@@ -82,9 +82,9 @@ export default {
         // 找到和本组件group相同的组件 删除
         const codes = this.chartList.filter(_chart => _chart.group === config.group && config.group).map(_chart => _chart.code)
         if (!isEmpty(codes)) {
-          this.chartProvide.deleteChart(codes)
+          this.canvasInst.deleteChart(codes)
         } else {
-          this.chartProvide.deleteChart([config.code])
+          this.canvasInst.deleteChart([config.code])
         }
       })
     },

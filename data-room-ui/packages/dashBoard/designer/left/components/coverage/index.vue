@@ -121,14 +121,14 @@ export default {
       activeCoverage: ''
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     // 图层列表
     coverageList () {
-      return this.chartProvide.chartList()
+      return this.canvasInst.chartList
     },
     scale () {
-      return (this.chartProvide.zoom() / 100).toFixed(2)
+      return (this.canvasInst.zoom / 100).toFixed(2)
     }
   },
   watch: {},
@@ -173,7 +173,7 @@ export default {
       // 将其他组件拖拽到容器里面:
       // 1. 每次拖拽到容器时保持组件在容器中心
       if (dropNode.data.type === 'container' && dropType === 'inner') {
-        let chartList = this.chartProvide.chartList()
+        let chartList = this.canvasInst.chartList()
         const h =
           (draggingNode.data.h) * this.scale
         // 需要将位移保存到组件的配置中
@@ -182,7 +182,7 @@ export default {
           transform: `translate(0, -${h}px)`
         }
         chartList = replaceElement(chartList, config)
-        this.chartProvide.updateChartList(chartList)
+        this.canvasInst.updateChartList(chartList)
       }
     }
   }

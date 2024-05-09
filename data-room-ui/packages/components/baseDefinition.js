@@ -36,8 +36,10 @@ export default {
     classifiedField: '', // 分类
     params: {}, // 数据集参数
     dataHandleFilterId: '', // 数据处理过滤器id
-    dataSetType: '1' // 数据集类型
+    parameterMapping: [], // 数据集参数映射
+    initRequestData: true// 初始化请求数据
   },
+  fieldMapping: [],
   interaction: [// 交互列表
     // {
     //   name: '事件名称',

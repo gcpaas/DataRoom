@@ -151,7 +151,7 @@ export default {
   created () {
     this.nodeDrag()
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   mounted () {},
   methods: {
     nodeDrag () {
@@ -184,7 +184,7 @@ export default {
     },
     // 左侧组件列表点击添加组件
     elementClickHandler (element) {
-      this.chartProvide.addChart(element)
+      this.canvasInst.addChart(element)
     },
     // 点击关闭按钮关闭tab面板
     closePanel () {

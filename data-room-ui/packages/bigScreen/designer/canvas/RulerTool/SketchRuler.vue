@@ -127,7 +127,7 @@ export default {
       innerWidth: 0
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   watch: {
     // 缩放改变的时候，改变startX，startY
     scale (scale) {
@@ -147,13 +147,13 @@ export default {
   },
   computed: {
     scale () {
-      return this.chartProvide.zoom() / 100
+      return this.canvasInst.zoom / 100
     },
     fitZoom () {
-      return this.chartProvide.fitZoom()
+      return this.canvasInst.fitZoom
     },
     zoom () {
-      return this.chartProvide.zoom()
+      return this.canvasInst.zoom
     },
     presetLines () {
       // TODO:参考线的方法
@@ -361,11 +361,11 @@ export default {
       // 取最小的适应比例
       const scale = Math.floor(Math.min(xRadio * 100, yRadio * 100))
       if (scale < 100) {
-        this.chartProvide.changeZoom(scale)
-        this.chartProvide.changeFitZoom(scale)
+        this.canvasInst.changeZoom(scale)
+        this.canvasInst.changeFitZoom(scale)
       } else {
-        this.chartProvide.changeZoom(100)
-        this.chartProvide.changeFitZoom(100)
+        this.canvasInst.changeZoom(100)
+        this.canvasInst.changeFitZoom(100)
       }
     }
   }

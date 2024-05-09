@@ -94,7 +94,7 @@ export default {
       ]
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   watch: {
     fitZoom (zoom) {
       this.zoomList[0] = {
@@ -105,16 +105,16 @@ export default {
   },
   computed: {
     scale () {
-      return this.chartProvide.zoom() / 100
+      return this.canvasInst.zoom / 100
     },
     fitZoom () {
-      return this.chartProvide.fitZoom()
+      return this.canvasInst.fitZoom
     },
     zoom () {
-      return this.chartProvide.zoom()
+      return this.canvasInst.zoom
     },
     pageConfig () {
-      return this.chartProvide.pageConfig()
+      return this.canvasInst.pageConfig
     },
     pageCode () {
       return this.code || this.$route.query.code
@@ -138,8 +138,8 @@ export default {
       const clickedElement = e.target
       if (['canvas', 'container'].includes(clickedElement.id)) {
         // 点击了画布空白处
-        // this.chartProvide.openRightPanel()
-        this.chartProvide.changeIsScreenSet(true)
+        // this.canvasInst.openRightPanel()
+        this.canvasInst.changeIsScreenSet(true)
       }
     },
     // 控制小地图显示与隐藏

@@ -30,10 +30,10 @@ export default {
       rightVisiable: false
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     chartList () {
-      return this.chartProvide.chartList()
+      return this.canvasInst.chartList
     }
   },
   created () {
@@ -46,7 +46,7 @@ export default {
       const clickedElement = e.target
       if (['canvas', 'container'].includes(clickedElement.id)) {
         // 点击了画布空白处
-        this.chartProvide.changeIsScreenSet(true)
+        this.canvasInst.changeIsScreenSet(true)
       }
     },
     // 点击当前组件时打开右侧面板

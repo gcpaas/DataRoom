@@ -47,9 +47,7 @@
         <span slot="label"><i class="label-icon el-icon-menu" />数据源</span>
         <DataPanel
           :config="config"
-          :metric-field-name="metricFieldName"
-          :is-dimension="isDimension"
-          :is-group="isGroup"
+          :field-name-mapping="fieldNameMapping"
         />
       </el-tab-pane>
       <el-tab-pane
@@ -57,6 +55,10 @@
         name="advanced"
       >
         <span slot="label"><i class="label-icon el-icon-s-finance" />高级</span>
+        <AdvancedPanel
+          :config="config"
+          :field-name-mapping="fieldNameMapping">
+        </AdvancedPanel>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -66,12 +68,14 @@
 
 import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
 import DataPanel from '@gcpaas/data-room-ui/packages/components/common/panel/dataPanel/index.vue'
+import AdvancedPanel from "@gcpaas/data-room-ui/packages/components/common/panel/advancedPanel/index.vue"
 import cloneDeep from 'lodash/cloneDeep'
 export default {
   name: '',
   mixins: [commonMixins],
   components: {
-    DataPanel
+    DataPanel,
+    AdvancedPanel
   },
   props: {
     config: {
@@ -81,9 +85,10 @@ export default {
   },
   data () {
     return {
-      metricFieldName: '文本内容',
-      isDimension: false,
-      isGroup: false,
+      fieldNameMapping: {
+        dimensionField: '文本内容',
+        metricField: '链接地址'
+      },
       fieldsList: [],
       activeName: 'style'
     }

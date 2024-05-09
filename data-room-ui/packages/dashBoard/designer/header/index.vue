@@ -95,16 +95,16 @@ export default {
       saveAndPreviewLoading: false
     }
   },
-  inject: ['chartProvide'],
+  inject: ['canvasInst'],
   computed: {
     chartList () {
-      return this.chartProvide.chartList()
+      return this.canvasInst.chartList
     },
     pageCode () {
       return this.$route.query.code || this.code
     },
     pageInfo () {
-      return this.chartProvide.pageInfo()
+      return this.canvasInst.pageInfo
     },
     pageName () {
       return this.pageInfo?.name || ''
@@ -138,7 +138,7 @@ export default {
     },
     // 清空
     empty () {
-      this.chartProvide.updateActiveChart('')
+      this.canvasInst.updateActiveChart('')
       this.$emit('empty')
     },
     // 预览
