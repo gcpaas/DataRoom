@@ -145,10 +145,8 @@ export default {
       this.$nextTick(() => {
         // 调接口获取数据
         this.getChartData(interactionParams).then(res => {
-          console.log(res)
           const data = res || []
           this.updateChartDataWithData(data)
-          console.log(data)
         }).catch(err => {
           console.log(err)
         })
