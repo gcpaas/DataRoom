@@ -153,7 +153,7 @@ export default {
     },
     interactions: {
       get () {
-        return this.pageInfo?.interactions
+        return this.pageInfo?.interactions || []
       },
       set () {
 
