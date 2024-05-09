@@ -201,7 +201,7 @@ export default {
     },
     handleChartEvent (eventType, data) {
       // 判断是否需要更新全局变量
-      const dataItemMap = this.config.fieldMapping.find(item => item.eventCode = eventType)
+      const dataItemMap = this.config.fieldMapping.find(item => item.code = eventType)
       if (dataItemMap && dataItemMap.enable) {
         dataItemMap.fieldList.forEach(field => {
           if (field.globalVariableId !== '' && data) {

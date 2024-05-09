@@ -317,6 +317,8 @@ export default {
 
 <style lang="scss" scoped>
 .dataroom-data-panel-wrap{
+  height: 100%;
+  overflow-y: scroll;
 .data-setting-box{
   .lc-field-head{
     .lc-field-title{

@@ -144,6 +144,7 @@ export default {
     },
     // 新建全局变量
     addGlobalVariable(){
+      console.log('新建')
       const random = randomString(8)
       const variable = {
         "id": random,

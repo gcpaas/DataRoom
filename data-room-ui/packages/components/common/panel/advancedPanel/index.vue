@@ -69,11 +69,11 @@ export default {
         // 为对应的事件添加变量映射
         this.eventList.forEach(event => {
           // 判断是否已经存在该事件映射
-          if (!this.config.fieldMapping.some(item => item.eventCode === event.eventCode)){
+          if (!this.config.fieldMapping.some(item => item.code === event.code)){
             this.config.fieldMapping.push({
               name:event.name,
               enable: false,
-              eventCode: event.eventCode,
+              code: event.code,
               fieldList: []
             })
           }

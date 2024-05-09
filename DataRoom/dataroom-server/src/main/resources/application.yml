@@ -1,6 +1,6 @@
 # 工程访问配置
 server:
-  port: 8082
+  port: 8083
   servlet:
     context-path: /dataRoomServer
 

@@ -427,7 +427,6 @@ export default {
         name: variable.name,
         value: value
       }
-      this.dataHandleFilters[id] = new Function('params', 'canvasInst', filter.script)
     },
     // 修改交互列表
     updateInteractions (interactions) {
