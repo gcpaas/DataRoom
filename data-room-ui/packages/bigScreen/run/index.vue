@@ -207,12 +207,14 @@ export default {
     },
     // 初始化获取全局变量的映射列表
     getGlobalNameToValue () {
-      this.pageInfo.globalVariable.forEach(variable => {
-        this.pageInfo.globalNameToValue[variable.id] = {
-          name: variable.name,
-          value: variable.initialValue
-        }
-      })
+      if (this.pageInfo.globalVariable && this.pageInfo.globalVariable.length) {
+        this.pageInfo.globalVariable.forEach(variable => {
+          this.pageInfo.globalNameToValue[variable.id] = {
+            name: variable.name,
+            value: variable.initialValue
+          }
+        })
+      }
     },
     // 更新全局变量
     setGlobalValue (id, value) {
@@ -366,6 +368,7 @@ export default {
     },
     // 将页面中所有的数据脚本（数据过滤）都保存起来
     getDataScript () {
+      debugger
       if (this.pageInfo.filters) {
         for (const key in this.pageInfo.filters) {
           this.dataHandleFilters[key] = new Function('params', 'canvasInst', this.pageInfo.filters[key].script)
