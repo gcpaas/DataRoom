@@ -107,7 +107,7 @@ export default {
               const inputParams = (this.externalParams && Object.keys(this.externalParams).length) ? this.externalParams : interactionParams
               // 全局变量
               const params = {}
-              this.config.dataSource.parameterMapping.forEach(item => {
+              this.config?.dataSource?.parameterMapping?.forEach(item => {
                 if (item.globalVariableId !== '') {
                   params[item.name] = this.canvasInst.getGlobalValueById(item.globalVariableId)
                 }
