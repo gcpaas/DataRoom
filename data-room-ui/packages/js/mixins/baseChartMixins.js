@@ -47,6 +47,9 @@ export default {
     },
     chartInst () {
       return this.canvasInst.chartInst
+    },
+    initRequestData () {
+      return !(this.isPreview && (!this.config.dataSource.initRequestData) && this.isInit)
     }
   },
   watch: {},
