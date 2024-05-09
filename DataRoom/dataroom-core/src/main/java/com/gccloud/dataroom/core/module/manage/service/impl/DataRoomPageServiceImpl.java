@@ -74,9 +74,6 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
     private IPageTemplateService pageTemplateService;
 
     @Resource
-    private DataRoomConfig dataRoomConfig;
-
-    @Resource
     private DataRoomExtendClient dataRoomExtendClient;
 
     @Resource
@@ -90,15 +87,6 @@ public class DataRoomPageServiceImpl extends ServiceImpl<DataRoomPageDao, PageEn
 
     @Override
     public PageEntity getByCode(String code) {
-        if (code.startsWith(IDataRoomPagePreviewService.PREVIEW_KEY)) {
-            PagePreviewEntity preview = previewService.getByCode(code);
-            // TODO 这里需要测试
-            BasePageDTO basePageDTO = JSON.parseObject(preview.getConfig(), BasePageDTO.class);
-            PageEntity pageEntity = BeanConvertUtils.convert(basePageDTO, PageEntity.class);
-            pageEntity.setConfig(basePageDTO);
-            pageEntity.setCode(preview.getCode());
-            return pageEntity;
-        }
         return IDataRoomPageService.super.getByCode(code);
     }
 

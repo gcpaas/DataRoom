@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 大屏页面
@@ -39,6 +40,12 @@ public class DataRoomPageDTO extends BasePageDTO {
 
     @ApiModelProperty(notes = "大屏整体样式")
     private String style;
+
+    @ApiModelProperty(notes = "交互")
+    private List<Map<String, Object>> interactions;
+
+    @ApiModelProperty(notes = "弹窗")
+    private Map<String, Object> dialog;
 
     @ApiModelProperty(notes = "页面配置")
     private PageConfig pageConfig;

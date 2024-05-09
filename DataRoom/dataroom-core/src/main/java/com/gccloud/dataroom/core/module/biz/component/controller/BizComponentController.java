@@ -16,23 +16,34 @@
 
 package com.gccloud.dataroom.core.module.biz.component.controller;
 
+import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.permission.ApiPermission;
 import com.gccloud.common.utils.JSON;
+import com.gccloud.common.vo.PageVO;
+import com.gccloud.common.vo.R;
 import com.gccloud.dataroom.core.module.basic.entity.PagePreviewEntity;
 import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentDTO;
 import com.gccloud.dataroom.core.module.biz.component.dto.BizComponentSearchDTO;
 import com.gccloud.dataroom.core.module.biz.component.service.IBizComponentService;
-import com.gccloud.common.vo.PageVO;
-import com.gccloud.common.vo.R;
 import com.gccloud.dataroom.core.module.biz.component.vo.BizComponentVO;
 import com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePreviewService;
 import com.gccloud.dataroom.core.permission.Permission;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author hongyang
@@ -106,7 +117,7 @@ public class BizComponentController {
     @ApiPermission(permissions = {Permission.Component.ADD})
     @PostMapping("/copy/{code}")
     @ApiOperation(value = "复制", notes = "复制", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<String> copy( @PathVariable String code) {
+    public R<String> copy(@PathVariable String code) {
         String newCode = bizComponentService.copy(code);
         return R.success(newCode);
     }
@@ -122,7 +133,14 @@ public class BizComponentController {
     @ApiPermission(permissions = {Permission.Component.VIEW})
     @GetMapping("/info/{code}")
     @ApiOperation(value = "根据编码获取组件", notes = "根据编码获取组件", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<BizComponentVO> getInfoByCode(@ApiParam(name = "根据编码获取组件", value = "传入根据编码获取组件的业务条件", required = true) @PathVariable String code) {
+    public R<BizComponentVO> getInfoByCode(@ApiParam(name = "业务组件编码", value = "业务组件编码", required = true) @PathVariable String code,
+                                           @ApiParam(name = "是否预览", value = "true表示获取预览数据") Boolean preview) {
+        if (preview != null && preview) {
+            PagePreviewEntity pagePreview = previewService.getByCode(code);
+            String config = pagePreview.getConfig();
+            BizComponentVO vo = JSON.parseObject(config, BizComponentVO.class);
+            return R.success(vo);
+        }
         BizComponentVO vo = bizComponentService.getInfoByCode(code);
         return R.success(vo);
     }
@@ -134,4 +152,32 @@ public class BizComponentController {
         return R.success(bizComponentService.checkName(dto.getId(), dto.getName()));
     }
 
+    @ApiPermission(permissions = {Permission.Component.VIEW})
+    @GetMapping("/template/{name}")
+    @ApiOperation(value = "获取组件模板", notes = "根据名称获取组件模板", produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<BizComponentVO> getTemplateByName(@ApiParam(name = "根据编码获取组件", value = "传入根据编码获取组件的业务条件", required = true) @PathVariable String name) {
+        // 避免读取其他文件内容
+        Set<String> templateNameSet = Sets.newHashSet("empty", "advanced");
+        if (!templateNameSet.contains(name)) {
+            throw new GlobalException("不存在" + name + "模板");
+        }
+        String pPath = "static/dataroom/bizComponent/template/" + name;
+        List<String> fileNameList = Lists.newArrayList("data.json", "definition.js", "index.vue", "interaction.json", "panel.vue");
+        Map<String, String> fileContentMap = new HashMap<>();
+        for (String fileName : fileNameList) {
+            try (InputStream is = BizComponentController.class.getClassLoader().getResourceAsStream(pPath + "/" + fileName)) {
+                String content = IOUtils.toString(is, Charset.forName("utf-8"));
+                fileContentMap.put(fileName, content);
+            } catch (Exception e) {
+                log.error(ExceptionUtils.getStackTrace(e));
+            }
+        }
+        BizComponentVO bizCom = new BizComponentVO();
+        bizCom.setDefaultData(fileContentMap.getOrDefault("data.json", "[]"));
+        bizCom.setComponentDefine(fileContentMap.getOrDefault("definition.js", ""));
+        bizCom.setVueContent(fileContentMap.getOrDefault("index.vue", ""));
+        bizCom.setSettingContent(fileContentMap.getOrDefault("panel.vue", ""));
+        bizCom.setInteraction(fileContentMap.getOrDefault("interaction.json", "[]"));
+        return R.success(bizCom);
+    }
 }

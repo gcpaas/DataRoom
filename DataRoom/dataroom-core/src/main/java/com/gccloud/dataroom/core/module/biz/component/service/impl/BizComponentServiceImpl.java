@@ -18,8 +18,10 @@ package com.gccloud.dataroom.core.module.biz.component.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.BeanConvertUtils;
-import com.gccloud.dataroom.core.config.DataRoomConfig;
+import com.gccloud.common.vo.PageVO;
+import com.gccloud.dataroom.core.constant.PageDesignConstant;
 import com.gccloud.dataroom.core.module.basic.dto.BasePageDTO;
 import com.gccloud.dataroom.core.module.basic.entity.PageEntity;
 import com.gccloud.dataroom.core.module.biz.component.dao.DataRoomBizComponentDao;
@@ -30,20 +32,17 @@ import com.gccloud.dataroom.core.module.biz.component.service.IBizComponentServi
 import com.gccloud.dataroom.core.module.biz.component.vo.BizComponentVO;
 import com.gccloud.dataroom.core.module.file.entity.DataRoomFileEntity;
 import com.gccloud.dataroom.core.module.file.service.IDataRoomOssService;
-import com.gccloud.dataroom.core.module.manage.service.IDataRoomPagePreviewService;
 import com.gccloud.dataroom.core.module.manage.service.IDataRoomPageService;
 import com.gccloud.dataroom.core.utils.CodeGenerateUtils;
-import com.gccloud.common.exception.GlobalException;
-import com.gccloud.common.vo.PageVO;
-import com.gccloud.dataroom.core.utils.PathUtils;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -68,10 +67,21 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
     @Override
     public PageVO<BizComponentVO> getPage(BizComponentSearchDTO searchDTO) {
         LambdaQueryWrapper<BizComponentEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(BizComponentEntity::getId,BizComponentEntity::getCode,BizComponentEntity::getBizType,BizComponentEntity::getCoverPicture,
+                BizComponentEntity::getName,BizComponentEntity::getOrderNum,BizComponentEntity::getType,BizComponentEntity::getRemark,BizComponentEntity::getPageCode,BizComponentEntity::getDesignType);
         queryWrapper.like(StringUtils.isNotBlank(searchDTO.getName()), BizComponentEntity::getName, searchDTO.getName());
         queryWrapper.eq(StringUtils.isNotBlank(searchDTO.getType()), BizComponentEntity::getType, searchDTO.getType());
         queryWrapper.eq(searchDTO.getDesignType() != null, BizComponentEntity::getDesignType, searchDTO.getDesignType());
-        queryWrapper.eq(searchDTO.getScope() != null, BizComponentEntity::getScope, searchDTO.getScope());
+        if (searchDTO.getScope() != null && !searchDTO.getScope().isEmpty()) {
+            // 数据库中存储的是;分割的字符串
+            queryWrapper.and(
+                    wrapper -> {
+                        for (Integer scope : searchDTO.getScope()) {
+                            wrapper.like(BizComponentEntity::getScope, scope + ";");
+                        }
+                    }
+            );
+        }
         queryWrapper.orderByAsc(BizComponentEntity::getOrderNum);
         queryWrapper.orderByDesc(BizComponentEntity::getCreateDate);
         PageVO<BizComponentEntity> page = this.page(searchDTO, queryWrapper);
@@ -166,7 +176,8 @@ public class BizComponentServiceImpl extends ServiceImpl<DataRoomBizComponentDao
         if (componentDTO.getDesignType() == 1) {
             BasePageDTO pageDTO = componentDTO.getConfig();
             if (pageDTO == null) {
-                throw new GlobalException("页面配置不能为空");
+                pageDTO = BeanConvertUtils.convert(componentDTO, BasePageDTO.class);
+                pageDTO.setType(PageDesignConstant.Type.BIG_SCREEN);
             }
             String pageCode = pageService.add(pageDTO);
             componentDTO.setPageCode(pageCode);

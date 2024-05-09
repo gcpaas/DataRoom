@@ -162,3 +162,8 @@ alter table big_screen_biz_component add column scope int(11) NOT NULL DEFAULT 1
 alter table big_screen_biz_component add column page_code varchar(255) NOT NULL DEFAULT '' COMMENT '低代码开发时，关联的自定义页面编码(因为这时候，数据保存在page表)';
 
 alter table big_screen_page_preview add column type varchar(255) NOT NULL DEFAULT '' COMMENT '类型，bigScreen：大屏，dashboard：仪表盘，component：业务组件';
+
+# 20240402 业务组件表新增字段
+alter table big_screen_biz_component add interaction text null comment '组件交互配置';
+alter table big_screen_biz_component add biz_type int null comment '组件类型 1.组件 2.模板 3.区块';
+

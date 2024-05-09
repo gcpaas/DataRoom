@@ -42,8 +42,7 @@ public class DataRoomPagePreviewServiceImpl extends ServiceImpl<DataRoomPagePrev
 
     @Override
     public String add(BasePageDTO pageDTO) {
-        String originalCode = pageDTO.getCode();
-        String code = PREVIEW_KEY + "_" + originalCode;
+        String code = pageDTO.getCode();
         PagePreviewEntity pagePreview = this.getByCode(code, false);
         if (pagePreview != null) {
             // 有则直接更新
@@ -65,8 +64,7 @@ public class DataRoomPagePreviewServiceImpl extends ServiceImpl<DataRoomPagePrev
 
     @Override
     public String add(BizComponentDTO componentDTO) {
-        String originalCode = componentDTO.getCode();
-        String code = PREVIEW_KEY + "_" + originalCode;
+        String code = componentDTO.getCode();
         PagePreviewEntity componentPreview = this.getByCode(code, false);
         if (componentPreview != null) {
             // 有则直接更新

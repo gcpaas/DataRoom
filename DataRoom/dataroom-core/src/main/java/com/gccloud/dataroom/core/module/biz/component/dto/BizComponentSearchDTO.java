@@ -20,6 +20,8 @@ import com.gccloud.common.dto.SearchDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author hongyang
  * @version 1.0
@@ -38,5 +40,5 @@ public class BizComponentSearchDTO extends SearchDTO {
     private Integer designType;
 
     @ApiModelProperty("可用范围 1：大屏 2：PC仪表盘 3：移动仪表盘")
-    private Integer scope;
+    private List<Integer> scope;
 }

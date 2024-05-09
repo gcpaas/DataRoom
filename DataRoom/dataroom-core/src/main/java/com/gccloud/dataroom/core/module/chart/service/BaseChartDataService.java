@@ -18,9 +18,6 @@ package com.gccloud.dataroom.core.module.chart.service;
 
 import com.gccloud.common.exception.GlobalException;
 import com.gccloud.common.utils.JSON;
-import com.gccloud.common.vo.PageVO;
-import com.gccloud.dataroom.core.module.chart.bean.Filter;
-import com.gccloud.dataroom.core.module.chart.components.datasource.DataSetDataSource;
 import com.gccloud.dataroom.core.module.chart.dto.ChartDataSearchDTO;
 import com.gccloud.dataroom.core.module.chart.vo.ChartDataVO;
 import com.gccloud.dataset.constant.DatasetConstant;
@@ -59,22 +56,20 @@ public class BaseChartDataService {
     private DataSetServiceFactory dataSetServiceFactory;
 
 
-    public ChartDataVO dataQuery(DataSetDataSource dataSource, ChartDataSearchDTO searchDTO) {
-        if (dataSource == null) {
+    public ChartDataVO dataQuery(ChartDataSearchDTO searchDTO) {
+        String businessKey = searchDTO.getBusinessKey();
+        if (StringUtils.isBlank(businessKey)) {
             return null;
         }
-        if (StringUtils.isBlank(dataSource.getBusinessKey())) {
-            return null;
-        }
-        IBaseDataSetService dataSetService = dataSetServiceFactory.buildById(dataSource.getBusinessKey());
-        DatasetEntity datasetEntity = dataSetService.getByIdFromCache(dataSource.getBusinessKey());
+        IBaseDataSetService dataSetService = dataSetServiceFactory.buildById(businessKey);
+        DatasetEntity datasetEntity = dataSetService.getByIdFromCache(businessKey);
         if (datasetEntity == null) {
             return null;
         }
         if (DatasetConstant.DataSetType.JSON.equals(datasetEntity.getDatasetType())) {
             return jsonDataQuery(datasetEntity, dataSetService);
         }
-        return dataSetDataQuery(dataSource, searchDTO, dataSetService);
+        return dataSetDataQuery(searchDTO, dataSetService);
     }
 
 
@@ -126,16 +121,18 @@ public class BaseChartDataService {
 
     /**
      * 根据数据集数据源查询数据
-     * @param dataSource
+     * @param searchDTO 查询条件
+     * @param dataSetService 数据集服务
      * @return
      */
-    private ChartDataVO dataSetDataQuery(DataSetDataSource dataSource, ChartDataSearchDTO searchDTO, IBaseDataSetService dataSetService) {
+    private ChartDataVO dataSetDataQuery(ChartDataSearchDTO searchDTO, IBaseDataSetService dataSetService) {
         ChartDataVO dataDTO = new ChartDataVO();
         List<DatasetParamDTO> params = Lists.newArrayList();
-        if (StringUtils.isBlank(dataSource.getBusinessKey())) {
+        String businessKey = searchDTO.getBusinessKey();
+        if (StringUtils.isBlank(businessKey)) {
             throw new GlobalException("图表未配置数据集");
         }
-        DatasetInfoVO dataSetInfoVo = dataSetService.getInfoById(dataSource.getBusinessKey());
+        DatasetInfoVO dataSetInfoVo = dataSetService.getInfoById(businessKey);
         HashMap<String, ChartDataVO.ColumnData> columnData = Maps.newHashMap();
         List<Map<String, Object>> fieldJson = dataSetInfoVo.getFields();
         for (Map<String, Object> field : fieldJson) {
@@ -149,54 +146,22 @@ public class BaseChartDataService {
             column.setType(type);
             columnData.put(field.get(DatasetInfoVO.FIELD_NAME).toString(), column);
         }
-        if (dataSource.getParams() != null && !dataSource.getParams().isEmpty()) {
-            String setString = JSON.toJSONString(dataSetInfoVo.getParams());
-            List<DatasetParamDTO> setParams = JSON.parseArray(setString, DatasetParamDTO.class);
-            for (DatasetParamDTO param : setParams) {
-                if (!dataSource.getParams().containsKey(param.getName())) {
-                    continue;
+        // 将过滤条件与数据集原始参数合并，注意使用JSON序列化和反序列化，避免修改缓存中的数据集数据
+        List<DatasetParamDTO> setParams = JSON.parseArray(JSON.toJSONString(dataSetInfoVo.getParams()), DatasetParamDTO.class);
+        Map<String, String> inParams = searchDTO.getParams();
+        if (inParams != null && !inParams.isEmpty()) {
+            for (DatasetParamDTO defaultParam : setParams) {
+                if (inParams.containsKey(defaultParam.getName())) {
+                    defaultParam.setValue(inParams.get(defaultParam.getName()));
+                    params.add(defaultParam);
                 }
-                String value = dataSource.getParams().get(param.getName()).toString();
-                // 如果传入了过滤条件，优先使用过滤条件
-                if (searchDTO.getFilterList() != null && !searchDTO.getFilterList().isEmpty()) {
-                    for (Filter filter : searchDTO.getFilterList()) {
-                        if (filter.getColumn() == null) {
-                            continue;
-                        }
-                        if (filter.getColumn().equals(param.getName())) {
-                            if (filter.getValue() == null || filter.getValue().isEmpty()) {
-                                continue;
-                            }
-                            value = filter.getValue().get(0);
-                            break;
-                        }
-                    }
-                }
-                param.setValue(value);
-                param.setStatus(1);
-                params.add(param);
             }
-        } else {
-            // 组件配置的数据集参数为空，则使用数据集默认的参数
-            List<DatasetParamDTO> setParams = dataSetInfoVo.getParams();
-            if (setParams == null) {
-                setParams = Lists.newArrayList();
-            }
-            String setString = JSON.toJSONString(setParams);
-            params = JSON.parseArray(setString, DatasetParamDTO.class);
         }
         dataDTO.setColumnData(columnData);
         Object data;
         log.info("查询数据集数据，参数：{}", JSON.toJSONString(params));
-        if (dataSource.getServerPagination() != null && dataSource.getServerPagination() && searchDTO.getSize() != null && searchDTO.getCurrent() != null) {
-            PageVO<Object> pageResult = dataSetService.execute(dataSource.getBusinessKey(), params, searchDTO.getCurrent(), searchDTO.getSize());
-            data = pageResult.getList();
-            dataDTO.setTotalCount((int)pageResult.getTotalCount());
-            dataDTO.setTotalPage((int)pageResult.getTotalPage());
-        } else {
-            data = dataSetService.execute(dataSource.getBusinessKey(), params);
-        }
-        boolean backendExecutionNeeded = dataSetService.checkBackendExecutionNeeded(dataSource.getBusinessKey());
+        data = dataSetService.execute(businessKey, params);
+        boolean backendExecutionNeeded = dataSetService.checkBackendExecutionNeeded(businessKey);
         dataDTO.setExecutionByFrontend(!backendExecutionNeeded);
         dataDTO.setData(data);
         dataDTO.setSuccess(true);
