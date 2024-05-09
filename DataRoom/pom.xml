@@ -5,7 +5,7 @@
 
     <groupId>com.gccloud</groupId>
     <artifactId>dataroom</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.0.2024041901.Alpha</version>
 
     <packaging>pom</packaging>
     <name>dataroom</name>
