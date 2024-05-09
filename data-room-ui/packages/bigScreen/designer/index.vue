@@ -463,7 +463,7 @@ export default {
       this.pageInfo.dialog.chartList = chartList
     },
     // 根据ID获取全局变量
-    getGlobalValueByID (id) {
+    getGlobalValueById (id) {
       const variable = this.pageInfo.globalVariable.find(item => item.id === id)
       if (variable && variable.filterId) {
         return this.dataHandleFilters[variable.filterId](this.pageInfo.globalNameToValue[variable.id].value) || this.pageInfo.globalNameToValue[variable.id].value
