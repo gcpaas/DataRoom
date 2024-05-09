@@ -3,6 +3,7 @@
     class="dataroom-chart-texts-wrapper"
   >
     <div
+      ref="contentBox"
       class="content-box"
       :style="contentStyle"
       @click="goLink"
