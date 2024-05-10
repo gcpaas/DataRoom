@@ -415,10 +415,19 @@ export default {
     // 初始化获取全局变量的映射列表
     getGlobalNameToValue () {
       this.pageInfo.globalVariable.forEach(variable => {
-        this.pageInfo.globalNameToValue[variable.id] = {
-          name: variable.name,
-          value: variable.initialValue
-        }
+          if (variable.source === 'fromURL') {
+            // 获取URL中获取对应的值
+            const value = this.$route.query[variable.name]
+            this.pageInfo.globalNameToValue[variable.id] = {
+              name: variable.name,
+              value: value
+            }
+          } else {
+            this.pageInfo.globalNameToValue[variable.id] = {
+              name: variable.name,
+              value: variable.initialValue
+            }
+          }
       })
     },
     // 更新全局变量映射列表
