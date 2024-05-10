@@ -3,18 +3,14 @@ import TextsDesc from '@gcpaas/data-room-ui/packages/components/texts/declaratio
 import BaseLineDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLine/declaration.js'
 import BaseBarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBar/declaration.js'
 import BaseColumnDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseColumn/declaration.js'
-import BaseAreaDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseArea/declaration.js'
-import BasePieDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BasePie/declaration.js'
-import BaseRadarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseRadar/declaration.js'
-import BasePointDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BasePoint/declaration.js'
-import BaseGridDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseGrid/declaration.js'
 import GroupBarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupBar/declaration.js'
 import ContainerDesc from '@gcpaas/data-room-ui/packages/components/container/declaration.js'
 import PictureDesc from '@gcpaas/data-room-ui/packages/components/media/picture/declaration.js'
-import BaseMap from '@gcpaas/data-room-ui/packages/components/map/BaseMap/declaration.js'
-import BaseTable from '@gcpaas/data-room-ui/packages/components/tables/BaseTable/declaration.js'
-import BasePie from "@gcpaas/data-room-ui/packages/components/G2Plots/BasePie/index.vue";
-import BaseRadar from "@gcpaas/data-room-ui/packages/components/G2Plots/BaseRadar/index.vue";
+import BaseMapDesc from '@gcpaas/data-room-ui/packages/components/map/BaseMap/declaration.js'
+import BaseTableDesc from '@gcpaas/data-room-ui/packages/components/tables/BaseTable/declaration.js'
+import ButtonsDesc from '@gcpaas/data-room-ui/packages/components/controls/buttons/declaration.js'
+import WordCloudDesc from '@gcpaas/data-room-ui/packages/components/rests/WordCloud/declaration.js'
+import HeatmapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/rests/Heatmap/declaration.js'
 export default [
   {
     code: 'g2Plot',
@@ -32,7 +28,7 @@ export default [
         }]
       },
       {
-        code: 'column',
+        code: 'strip',
         name: '条形图',
         icon: 'el-icon-s-data',
         children: [{
@@ -48,43 +44,43 @@ export default [
         }]
       },
       {
-        code: 'area',
+        code: 'quyutu',
         name: '区域图',
         icon: 'el-icon-s-data',
         children: [{
-          ...BaseAreaDesc
+          ...BaseLineDesc
         }]
       },
       {
-        code: 'pie',
+        code: 'binhuantu',
         name: '饼环图',
         icon: 'el-icon-s-data',
         children: [{
-          ...BasePieDesc
+          ...BaseLineDesc
         }]
       },
       {
-        code: 'point',
+        code: 'sandiantu',
         name: '散点图',
         icon: 'el-icon-s-data',
         children: [{
-          ...BasePointDesc
+          ...BaseLineDesc
         }]
       },
       {
-        code: 'radar',
+        code: 'leidatu',
         name: '雷达图',
         icon: 'el-icon-s-data',
         children: [{
-          ...BaseRadarDesc
+          ...BaseLineDesc
         }]
       },
       {
-        code: 'grid',
+        code: 'guanxitu',
         name: '关系图',
         icon: 'el-icon-s-data',
         children: [{
-          ...BaseGridDesc
+          ...BaseLineDesc
         }]
       },
       {
@@ -92,7 +88,7 @@ export default [
         name: '其他',
         icon: 'el-icon-s-data',
         children: [{
-          ...BaseLineDesc
+          ...HeatmapDesc
         }]
       }
     ]
@@ -101,7 +97,7 @@ export default [
     code: 'ditu',
     name: '地图',
     icon: 'el-icon-tickets',
-    children: [{ ...BaseMap }]
+    children: [{ ...BaseMapDesc }]
   },
   {
     code: 'info',
@@ -113,13 +109,13 @@ export default [
     code: 'biaoge',
     name: '表格',
     icon: 'el-icon-tickets',
-    children: [{ ...BaseTable }]
+    children: [{ ...BaseTableDesc }]
   },
   {
     code: 'kongjian',
     name: '控件',
     icon: 'el-icon-s-data',
-    children: []
+    children: [{ ...ButtonsDesc }]
   },
   {
     code: 'container',
@@ -139,6 +135,6 @@ export default [
     code: 'qita',
     name: '其他',
     icon: 'el-icon-tickets',
-    children: []
+    children: [{ ...WordCloudDesc }]
   }
 ]
