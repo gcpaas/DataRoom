@@ -15,6 +15,8 @@ export default {
   option: {
     xField: 'Date',
     yField: 'scales',
+    dimensionField: 'xField',
+    metricField: 'yField',
     // 图表内边距
     appendPadding: [
       0,

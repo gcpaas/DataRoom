@@ -1,26 +1,26 @@
 [
   {
     "Date": "2010-01",
-    "scales": 1998
+    "scales": 20
   },
   {
     "Date": "2010-02",
-    "scales": 1850
+    "scales": 100
   },
   {
     "Date": "2010-03",
-    "scales": 1720
+    "scales": 2
   },
   {
     "Date": "2010-04",
-    "scales": 1818
+    "scales": 13
   },
   {
     "Date": "2010-05",
-    "scales": 1920
+    "scales": 30
   },
   {
     "Date": "2010-06",
-    "scales": 1802
+    "scales": 66
   }
 ]
