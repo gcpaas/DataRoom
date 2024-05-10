@@ -6,6 +6,8 @@ const Container = () => import(/* webpackChunkName: "BaseBar" */ '@gcpaas/data-r
 const Picture = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/media/picture/index.vue')
 const BaseMap = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/map/BaseMap/index.vue')
 const BaseTable = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/tables/BaseTable/index.vue')
+const Buttons = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/controls/buttons/index.vue')
+
 // 将组件添加到对象中
 export default {
   Texts,
@@ -15,5 +17,6 @@ export default {
   Container,
   Picture,
   BaseMap,
-  BaseTable
+  BaseTable,
+  Buttons
 }

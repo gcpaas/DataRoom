@@ -5,8 +5,9 @@ import BaseBarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBa
 import GroupBarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupBar/declaration.js'
 import ContainerDesc from '@gcpaas/data-room-ui/packages/components/container/declaration.js'
 import PictureDesc from '@gcpaas/data-room-ui/packages/components/media/picture/declaration.js'
-import BaseMap from '@gcpaas/data-room-ui/packages/components/map/BaseMap/declaration.js'
-import BaseTable from '@gcpaas/data-room-ui/packages/components/tables/BaseTable/declaration.js'
+import BaseMapDesc from '@gcpaas/data-room-ui/packages/components/map/BaseMap/declaration.js'
+import BaseTableDesc from '@gcpaas/data-room-ui/packages/components/tables/BaseTable/declaration.js'
+import ButtonsDesc from '@gcpaas/data-room-ui/packages/components/controls/buttons/declaration.js'
 export default [
   {
     code: 'g2Plot',
@@ -95,7 +96,7 @@ export default [
     code: 'ditu',
     name: '地图',
     icon: 'el-icon-tickets',
-    children: [{ ...BaseMap }]
+    children: [{ ...BaseMapDesc }]
   },
   {
     code: 'info',
@@ -107,13 +108,13 @@ export default [
     code: 'biaoge',
     name: '表格',
     icon: 'el-icon-tickets',
-    children: [{ ...BaseTable }]
+    children: [{ ...BaseTableDesc }]
   },
   {
     code: 'kongjian',
     name: '控件',
     icon: 'el-icon-s-data',
-    children: []
+    children: [{ ...ButtonsDesc }]
   },
   {
     code: 'container',
