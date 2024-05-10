@@ -30,7 +30,7 @@ export default [
         }]
       },
       {
-        name: 'strip',
+        name: 'column',
         title: '条形图',
         icon: 'el-icon-s-data',
         children: [{

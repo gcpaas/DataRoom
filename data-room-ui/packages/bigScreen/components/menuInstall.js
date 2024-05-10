@@ -2,6 +2,7 @@
 import TextsDesc from '@gcpaas/data-room-ui/packages/components/texts/declaration.js'
 import BaseLineDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLine/declaration.js'
 import BaseBarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBar/declaration.js'
+import BaseColumnDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseColumn/declaration.js'
 import GroupBarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupBar/declaration.js'
 import ContainerDesc from '@gcpaas/data-room-ui/packages/components/container/declaration.js'
 import PictureDesc from '@gcpaas/data-room-ui/packages/components/media/picture/declaration.js'
@@ -27,9 +28,7 @@ export default [
         name: '条形图',
         icon: 'el-icon-s-data',
         children: [{
-          ...BaseBarDesc
-        }, {
-          ...GroupBarDesc
+          ...BaseColumnDesc
         }]
       },
       {

@@ -116,6 +116,13 @@
                 >
                   <div class="bottom-pane-content-title">
                     {{ chart.name }}
+                    <el-tag
+                      v-if="chart.disabled"
+                      style="float: right"
+                      type="warning"
+                    >
+                      正在开发中
+                    </el-tag>
                   </div>
                   <div class="bottom-pane-content-img">
                     <img
