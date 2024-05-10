@@ -6,7 +6,10 @@ const GroupBarSetting = () => import(/* webpackChunkName: "BaseBarSetting" */ '@
 const ContainerSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/container/panel/index.vue')
 const PictureSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/media/picture/panel/index.vue')
 const BaseMapSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/map/BaseMap/panel/index.vue')
+const BaseTableSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/tables/BaseTable/panel/index.vue')
+
 // 将组件添加到对象中
+
 export default {
   TextsSetting,
   BaseLineSetting,
@@ -14,5 +17,6 @@ export default {
   GroupBarSetting,
   ContainerSetting,
   PictureSetting,
-  BaseMapSetting
+  BaseMapSetting,
+  BaseTableSetting
 }

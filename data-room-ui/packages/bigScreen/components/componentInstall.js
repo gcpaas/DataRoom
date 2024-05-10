@@ -5,6 +5,7 @@ const GroupBar = () => import(/* webpackChunkName: "BaseBar" */ '@gcpaas/data-ro
 const Container = () => import(/* webpackChunkName: "BaseBar" */ '@gcpaas/data-room-ui/packages/components/container/index.vue')
 const Picture = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/media/picture/index.vue')
 const BaseMap = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/map/BaseMap/index.vue')
+const BaseTable = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/tables/BaseTable/index.vue')
 // 将组件添加到对象中
 export default {
   Texts,
@@ -13,5 +14,6 @@ export default {
   GroupBar,
   Container,
   Picture,
-  BaseMap
+  BaseMap,
+  BaseTable
 }

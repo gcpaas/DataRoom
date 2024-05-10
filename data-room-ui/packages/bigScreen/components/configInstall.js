@@ -15,6 +15,9 @@ function getDeclarationByType (type) {
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/media/picture/bigScreenDefinition.js')
     case 'BaseMap':
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/map/BaseMap/bigScreenDefinition.js')
+    case 'BaseTable':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/tables/BaseTable/bigScreenDefinition.js')
+
   }
 }
 export function getDeclaration (type) {
