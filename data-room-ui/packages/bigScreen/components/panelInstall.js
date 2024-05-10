@@ -3,6 +3,11 @@ const TextsSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaa
 const BaseLineSetting = () => import(/* webpackChunkName: "BaseLineSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLine/panel/index.vue')
 const BaseBarSetting = () => import(/* webpackChunkName: "BaseBarSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBar/panel/index.vue')
 const BaseColumnSetting = () => import(/* webpackChunkName: "BaseColumnSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseColumn/panel/index.vue')
+const BaseAreaSetting = () => import(/* webpackChunkName: "BaseColumnSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseArea/panel/index.vue')
+const BasePieSetting = () => import(/* webpackChunkName: "BaseColumnSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BasePie/panel/index.vue')
+const BasePointSetting = () => import(/* webpackChunkName: "BaseColumnSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BasePoint/panel/index.vue')
+const BaseRadarSetting = () => import(/* webpackChunkName: "BaseColumnSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseRadar/panel/index.vue')
+const BaseGridSetting = () => import(/* webpackChunkName: "BaseColumnSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseGrid/panel/index.vue')
 const GroupBarSetting = () => import(/* webpackChunkName: "BaseBarSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupBar/panel/index.vue')
 const ContainerSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/container/panel/index.vue')
 const PictureSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/media/picture/panel/index.vue')
@@ -16,7 +21,13 @@ export default {
   BaseLineSetting,
   BaseBarSetting,
   GroupBarSetting,
+  BaseGridSetting,
   ContainerSetting,
+  BaseColumnSetting,
+  BaseAreaSetting,
+  BasePieSetting,
+  BasePointSetting,
+  BaseRadarSetting,
   PictureSetting,
   BaseMapSetting,
   BaseTableSetting
