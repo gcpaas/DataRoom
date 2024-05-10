@@ -18,6 +18,66 @@ export const fonFamilyList = [
   { label: '黑体', value: '黑体' },
   { label: '宋体', value: '宋体' }
 ]
+export const lineTypeOptions = [
+  { label: '折线', value: 'line' },
+  { label: '曲线', value: 'smooth' },
+  { label: '阶梯', value: 'ladder' }
+]
+export const lineStyleOptions = [
+  { label: '实线', value: 0 },
+  { label: '虚线', value: 5 },
+  { label: '点线', value: 10 }
+]
+export const pointShapeOptions = [
+  {
+    label: '无',
+    value: false
+  },
+  {
+    label: '空心圆',
+    value: 'hollow-circle'
+  },
+  {
+    label: '圆形',
+    value: 'circle'
+  },
+  {
+    label: '正方形',
+    value: 'square'
+  },
+  {
+    label: '菱形',
+    value: 'diamond'
+  },
+  {
+    label: '三角形',
+    value: 'triangle'
+  },
+  {
+    label: '六边形',
+    value: 'hexagon'
+  },
+  {
+    label: '菱形交叉',
+    value: 'bowtie'
+  },
+  {
+    label: '十字形',
+    value: 'cross'
+  },
+  {
+    label: 'I形',
+    value: 'tick'
+  },
+  {
+    label: '加号',
+    value: 'plus'
+  },
+  {
+    label: '连字号',
+    value: 'hyphen'
+  }
+]
 export const markrList = [
   { value: 'circle', label: '圆' },
   { value: 'square', label: '矩形' },
