@@ -9,6 +9,10 @@ const PictureSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcp
 const BaseMapSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/map/BaseMap/panel/index.vue')
 const BaseTableSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/tables/BaseTable/panel/index.vue')
 
+const WordCloudSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/rests/WordCloud/panel/index.vue')
+
+const HeatmapDescSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/Heatmap/panel/index.vue')
+
 // 将组件添加到对象中
 
 export default {
@@ -19,5 +23,7 @@ export default {
   ContainerSetting,
   PictureSetting,
   BaseMapSetting,
-  BaseTableSetting
+  BaseTableSetting,
+  WordCloudSetting,
+  HeatmapDescSetting
 }

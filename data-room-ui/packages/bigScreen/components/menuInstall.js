@@ -10,6 +10,7 @@ import BaseMapDesc from '@gcpaas/data-room-ui/packages/components/map/BaseMap/de
 import BaseTableDesc from '@gcpaas/data-room-ui/packages/components/tables/BaseTable/declaration.js'
 import ButtonsDesc from '@gcpaas/data-room-ui/packages/components/controls/buttons/declaration.js'
 import WordCloudDesc from '@gcpaas/data-room-ui/packages/components/rests/WordCloud/declaration.js'
+import HeatmapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/rests/Heatmap/declaration.js'
 export default [
   {
     code: 'g2Plot',
@@ -87,7 +88,7 @@ export default [
         name: '其他',
         icon: 'el-icon-s-data',
         children: [{
-          ...BaseLineDesc
+          ...HeatmapDesc
         }]
       }
     ]

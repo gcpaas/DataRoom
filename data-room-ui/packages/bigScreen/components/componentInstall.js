@@ -9,6 +9,7 @@ const BaseMap = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-
 const BaseTable = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/tables/BaseTable/index.vue')
 const Buttons = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/controls/buttons/index.vue')
 const WordCloud = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/rests/WordCloud/index.vue')
+const Heatmap = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/Heatmap/index.vue')
 
 // 将组件添加到对象中
 export default {
@@ -22,5 +23,6 @@ export default {
   BaseMap,
   BaseTable,
   Buttons,
-  WordCloud
+  WordCloud,
+  Heatmap
 }
