@@ -9,6 +9,7 @@ import PictureDesc from '@gcpaas/data-room-ui/packages/components/media/picture/
 import BaseMapDesc from '@gcpaas/data-room-ui/packages/components/map/BaseMap/declaration.js'
 import BaseTableDesc from '@gcpaas/data-room-ui/packages/components/tables/BaseTable/declaration.js'
 import ButtonsDesc from '@gcpaas/data-room-ui/packages/components/controls/buttons/declaration.js'
+import WordCloudDesc from '@gcpaas/data-room-ui/packages/components/rests/WordCloud/declaration.js'
 export default [
   {
     code: 'g2Plot',
@@ -133,6 +134,6 @@ export default [
     code: 'qita',
     name: '其他',
     icon: 'el-icon-tickets',
-    children: []
+    children: [{ ...WordCloudDesc }]
   }
 ]

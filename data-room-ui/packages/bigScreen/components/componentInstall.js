@@ -8,6 +8,7 @@ const Picture = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-
 const BaseMap = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/map/BaseMap/index.vue')
 const BaseTable = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/tables/BaseTable/index.vue')
 const Buttons = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/controls/buttons/index.vue')
+const WordCloud = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/rests/WordCloud/index.vue')
 
 // 将组件添加到对象中
 export default {
@@ -20,5 +21,6 @@ export default {
   Picture,
   BaseMap,
   BaseTable,
-  Buttons
+  Buttons,
+  WordCloud
 }
