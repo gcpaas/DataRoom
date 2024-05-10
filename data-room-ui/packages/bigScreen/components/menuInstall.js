@@ -7,6 +7,7 @@ import GroupBarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/Group
 import ContainerDesc from '@gcpaas/data-room-ui/packages/components/container/declaration.js'
 import PictureDesc from '@gcpaas/data-room-ui/packages/components/media/picture/declaration.js'
 import BaseMap from '@gcpaas/data-room-ui/packages/components/map/BaseMap/declaration.js'
+import BaseTable from '@gcpaas/data-room-ui/packages/components/tables/BaseTable/declaration.js'
 export default [
   {
     code: 'g2Plot',
@@ -105,7 +106,7 @@ export default [
     code: 'biaoge',
     name: '表格',
     icon: 'el-icon-tickets',
-    children: []
+    children: [{ ...BaseTable }]
   },
   {
     code: 'kongjian',
