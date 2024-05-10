@@ -70,7 +70,11 @@ export default {
       const transferData = e.dataTransfer.getData('dragComponent')
       if (transferData) {
         const element = JSON.parse(transferData)
-        this.canvasInst.addChart(element,'add')
+        if (element.disabled) {
+          this.$message.warning('组件正在开发中...')
+        } else {
+          this.canvasInst.addChart(element, 'add')
+        }
       }
     }
   }

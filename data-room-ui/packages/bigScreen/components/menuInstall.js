@@ -5,6 +5,7 @@ import BaseBarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBa
 import GroupBarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupBar/declaration.js'
 import ContainerDesc from '@gcpaas/data-room-ui/packages/components/container/declaration.js'
 import PictureDesc from '@gcpaas/data-room-ui/packages/components/media/picture/declaration.js'
+import BaseMap from '@gcpaas/data-room-ui/packages/components/map/BaseMap/declaration.js'
 export default [
   {
     code: 'g2Plot',
@@ -93,7 +94,7 @@ export default [
     code: 'ditu',
     name: '地图',
     icon: 'el-icon-tickets',
-    children: []
+    children: [{ ...BaseMap }]
   },
   {
     code: 'info',

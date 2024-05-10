@@ -62,6 +62,13 @@
             >
               <div class="bottom-pane-content-title">
                 {{ element.name }}
+                <el-tag
+                  v-if="element.disabled"
+                  style="float: right"
+                  type="warning"
+                >
+                  正在开发中
+                </el-tag>
               </div>
               <div class="bottom-pane-content-img">
                 <img
@@ -185,7 +192,11 @@ export default {
     },
     // 左侧组件列表点击添加组件
     elementClickHandler (element) {
-      this.canvasInst.addChart(element, 'add')
+      if (element.disabled) {
+        this.$message.warning('组件正在开发中...')
+      } else {
+        this.canvasInst.addChart(element, 'add')
+      }
     },
     // 点击关闭按钮关闭tab面板
     closePanel () {
