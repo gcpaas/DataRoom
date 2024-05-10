@@ -52,21 +52,14 @@
       class="form-item-box"
     >
       <GradualSetting
-        v-model="config"
+        v-model="config.option.lineStyle.stroke"
+        @change="changeStyle"
       />
     </el-form-item>
     <el-form-item
       label="不透明度"
       class="form-item-box"
     >
-      <el-slider
-        v-model="config.option.lineStyle.opacity"
-        show-alpha
-        :min="0"
-        :max="1"
-        :step="0.1"
-        @change="changeStyle"
-      />
       <el-input-number
         v-model="config.option.lineStyle.opacity"
         class="number-input-box number-input-half "
