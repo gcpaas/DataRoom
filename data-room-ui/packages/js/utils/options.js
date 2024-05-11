@@ -102,6 +102,11 @@ export const positionOptions = [
   { value: 'middle', label: '中间' },
   { value: 'bottom', label: '底部' }
 ]
+export const fontStyleList = [
+  { value: 'normal', label: 'normal' },
+  { value: 'italic', label: 'italic' },
+  { value: 'oblique', label: 'oblique' }
+]
 export const axisXTitlePositionOptions = [
   { value: 'start', label: '靠左' },
   { value: 'center', label: '居中' },

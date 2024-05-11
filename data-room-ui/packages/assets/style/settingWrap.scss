@@ -87,7 +87,7 @@
         }
         ::v-deep .el-tabs__item{
           padding-left:0!important;
-          padding-top: 16px!important;
+          padding-top: 16px;
           height: 70px;
         }
         .label-box{
@@ -233,7 +233,43 @@
 // 普通组件的样式配置面板样式
 .props-box{
   padding: 10px;
+  padding-left: 0;
   box-sizing: border-box;
+  .props-box-contain{
+    padding-left: 10px;
+  }
+  .tabs-set-box{
+    padding-top:20px;
+    padding-right: 24px;
+    box-sizing: border-box;
+    border: none!important;
+    //height:500px;
+    ::v-deep .el-tabs__nav{
+      display: unset!important;
+    }
+    ::v-deep .el-tabs__header{
+      width: 36px;
+      height: 500px;
+    }
+    ::v-deep .el-tabs--left{
+      height: 100% !important;
+    }
+    ::v-deep .el-tabs__content{
+      height: 100%;
+    }
+    ::v-deep .el-tabs__nav-wrap.is-left::after{
+      display: none;
+    }
+    ::v-deep .el-tabs__item{
+      padding: 0!important;
+      padding-top: 0 !important;
+      height: 70px;
+      writing-mode: vertical-rl;
+    }
+    .label-box{
+      writing-mode: vertical-rl;
+    }
+  }
 
 }
 ::v-deep .el-input-number--mini{

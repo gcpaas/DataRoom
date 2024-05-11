@@ -32,14 +32,6 @@ export default {
         fill: 'rgba(255,255,255,0.2)'
       }
     },
-    // columnWidth: {
-    //   isSelfAdapt: true,
-    //   minColumnWidth: 0,
-    //   maxColumnWidth: 100,
-    //   width: 20
-    // },
-    // minColumnWidth: 0,
-    // maxColumnWidth: 100,
 
     xField: '月份',
     yField: '月均降雨量',

@@ -15,6 +15,7 @@ import PictureDesc from '@gcpaas/data-room-ui/packages/components/media/picture/
 import BaseMapDesc from '@gcpaas/data-room-ui/packages/components/map/BaseMap/declaration.js'
 import BaseTableDesc from '@gcpaas/data-room-ui/packages/components/tables/BaseTable/declaration.js'
 import ButtonsDesc from '@gcpaas/data-room-ui/packages/components/controls/buttons/declaration.js'
+import InputsDesc from '@gcpaas/data-room-ui/packages/components/controls/inputs/declaration.js'
 import WordCloudDesc from '@gcpaas/data-room-ui/packages/components/rests/WordCloud/declaration.js'
 import HeatmapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/rests/Heatmap/declaration.js'
 export default [
@@ -121,7 +122,7 @@ export default [
     code: 'kongjian',
     name: '控件',
     icon: 'el-icon-s-data',
-    children: [{ ...ButtonsDesc }]
+    children: [{ ...ButtonsDesc },{...InputsDesc}]
   },
   {
     code: 'container',

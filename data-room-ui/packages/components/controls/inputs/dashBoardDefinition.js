@@ -1,4 +1,4 @@
-import baseDefinition from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseColumn/baseDefinition'
+import baseDefinition from './baseDefinition'
 
 /**
  * 根据图表配置生成对应的实例，用于初始化
@@ -6,13 +6,17 @@ import baseDefinition from '@gcpaas/data-room-ui/packages/components/G2Plots/Bas
 function getInstance () {
   const chartDefinition = {
     ...baseDefinition,
-    type: 'BaseColumn',
-    option: {
-      ...baseDefinition.option,
-      color: ['rgba(1, 238, 255, 1)']
+    props: {
+      ...baseDefinition.props,
+      textStyle: { // 字体样式设置
+        color: '#000',
+        fontSize: 24,
+        fontFamily: 'arial',
+        fontWeight: 'normal'
+      }
     },
     w: 6,
-    h: 7,
+    h: 4,
     i: null // 组件拖拽唯一标识
   }
   // 每个组件实现自己的初始化逻辑
