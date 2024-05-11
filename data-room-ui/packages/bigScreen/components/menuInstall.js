@@ -3,6 +3,7 @@ import TextsDesc from '@gcpaas/data-room-ui/packages/components/texts/declaratio
 import BaseLineDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLine/declaration.js'
 import BaseBarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBar/declaration.js'
 import BaseColumnDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseColumn/declaration.js'
+import SingleColorColumnDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/SingleColorColumn/declaration.js'
 import BaseAreaDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseArea/declaration.js'
 import BasePieDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BasePie/declaration.js'
 import BaseRadarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseRadar/declaration.js'
@@ -38,7 +39,7 @@ export default [
         icon: 'el-icon-s-data',
         children: [{
           ...BaseColumnDesc
-        }]
+        }, { ...SingleColorColumnDesc }]
       },
       {
         code: 'zhexiantu',
