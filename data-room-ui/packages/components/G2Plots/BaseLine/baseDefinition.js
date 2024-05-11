@@ -29,7 +29,7 @@ export default {
     stepType: '', // 阶梯
     lineStyle: { // 线样式
       stroke: 'l(90) 0:rgba(0, 155, 255, 1) 1:rgba(0, 155, 255, 0.1)',
-      lineDash: [0, 0],
+      lineDash: [5, 0],
       lineWidth: 4,
       opacity: 0.9
     },
@@ -41,7 +41,7 @@ export default {
         stroke: '#5B8FF9',
         lineWidth: 2,
         lineDash: [
-          0,
+          3,
           0
         ]
       }
@@ -100,7 +100,7 @@ export default {
         style: {
           stroke: 'rgba(208,208,208,1)',
           lineWidth: 1,
-          lineDash: [4, 5]
+          lineDash: [0, 0]
         }
       },
       tickLine: {
@@ -137,6 +137,13 @@ export default {
           fontFamily: '',
           stroke: '#00FF00',
           lineWidth: 0
+        }
+      },
+      line: {
+        style: {
+          stroke: 'rgba(208,208,208,1)',
+          lineWidth: 0,
+          lineDash: [0, 0]
         }
       },
       grid: {

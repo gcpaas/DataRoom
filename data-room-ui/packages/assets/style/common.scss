@@ -90,7 +90,15 @@
     display: none !important;
   }
 }
-
+// 单选框样式
+.dr-radio{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  ::v-deep .el-radio-button__inner{
+    padding: 7px 13px;
+  }
+}
 .bs-container {
   position: relative;
   height: 100%;

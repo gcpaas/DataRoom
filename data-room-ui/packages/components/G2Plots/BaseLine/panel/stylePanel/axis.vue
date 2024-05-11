@@ -101,16 +101,35 @@
           </el-select>
         </el-form-item>
         <el-form-item
-          label="偏移"
+          label="展示方式"
           class="form-item-box"
         >
           <el-row>
-            <el-col :span="24">
+            <el-col
+              :span="12"
+              style="padding-right: 5px"
+            >
+              <el-input-number
+                v-model="config.option[axis].title.rotate"
+                controls-position="right"
+                @change="changeStyle"
+              />
+              <div class="set-desc">
+                角度
+              </div>
+            </el-col>
+            <el-col
+              :span="12"
+              style="padding-left: 5px"
+            >
               <el-input-number
                 v-model="config.option[axis].title.offset"
                 controls-position="right"
                 @change="changeStyle"
               />
+              <div class="set-desc">
+                偏移
+              </div>
             </el-col>
           </el-row>
         </el-form-item>
@@ -193,10 +212,27 @@
       >
         <el-form-item
           class="form-item-box radio"
-          label="偏移"
+          label="标签展示"
         >
           <el-row>
-            <el-col :span="24">
+            <el-col
+              :span="12"
+              style="padding-right: 5px"
+            >
+              <el-input-number
+                v-model="config.option[axis].label.rotate"
+                controls-position="right"
+                placeholder="请输入内容"
+                @change="changeStyle"
+              />
+              <div class="set-desc">
+                角度
+              </div>
+            </el-col>
+            <el-col
+              :span="12"
+              style="padding-left: 5px"
+            >
               <el-input-number
                 v-model="config.option[axis].label.offset"
                 controls-position="right"
@@ -204,6 +240,9 @@
                 @change="changeStyle"
               />
             </el-col>
+            <div class="set-desc">
+              偏移
+            </div>
           </el-row>
         </el-form-item>
         <el-form-item

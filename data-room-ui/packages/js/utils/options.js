@@ -25,8 +25,8 @@ export const lineTypeOptions = [
 ]
 export const lineStyleOptions = [
   { label: '实线', value: 0 },
-  { label: '虚线', value: 5 },
-  { label: '点线', value: 10 }
+  { label: '虚线', value: 5 }
+  // { label: '点线', value: 10 }
 ]
 export const pointShapeOptions = [
   {

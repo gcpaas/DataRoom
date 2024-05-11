@@ -7,6 +7,7 @@
       <el-radio-group
         v-model="lineType"
         size="mini"
+        class="dr-radio"
         placeholder="请选择折线类型"
       >
         <el-radio-button
@@ -66,6 +67,7 @@
         type="number"
         :min="0"
         :max="1"
+        :step="0.1"
         controls-position="right"
         @change="changeStyle"
       />
@@ -81,53 +83,129 @@
     <el-form-item
       label="标记符号"
     >
-      <el-select
-        v-model="config.option.point.shape"
-        placeholder="请选择"
-        @change="changeStyle"
-      >
-        <el-option
-          v-for="item in pointShapeOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-      <el-input-number
-        v-model="config.option.point.size"
-        class="number-input-box number-input-half "
-        type="number"
-        controls-position="right"
-        @change="changeStyle"
-      />
+      <el-row>
+        <el-col
+          :span="12"
+          style="padding-right: 5px"
+        >
+          <el-select
+            v-model="config.option.point.shape"
+            placeholder="请选择"
+            @change="changeStyle"
+          >
+            <el-option
+              v-for="item in pointShapeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <div class="set-desc">
+            形状
+          </div>
+        </el-col>
+        <el-col
+          :span="12"
+          style="padding-left: 5px"
+        >
+          <el-input-number
+            v-model="config.option.point.size"
+            class="number-input-box number-input-half "
+            type="number"
+            controls-position="right"
+            @change="changeStyle"
+          />
+        </el-col>
+        <div class="set-desc">
+          大小
+        </div>
+      </el-row>
     </el-form-item>
     <el-form-item
       label="标记描边"
       class="form-item-box"
     >
-      <el-select
-        v-model="config.option.point.style.lineDash[1]"
-        placeholder="请选择"
-        @change="changeStyle"
-      >
-        <el-option
-          v-for="item in lineStyleOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-      <el-input-number
-        v-model="config.option.point.style.lineWidth"
-        class="number-input-box number-input-half "
-        type="number"
-        controls-position="right"
-        @change="changeStyle"
-      />
-      <el-color-picker
-        v-model="config.option.point.style.stroke"
-        @change="changeStyle"
-      />
+      <el-row>
+        <el-col
+          :span="12"
+          style="padding-right: 5px"
+        >
+          <el-select
+            v-model="config.option.point.style.lineDash[1]"
+            placeholder="请选择"
+            @change="changeStyle"
+          >
+            <el-option
+              v-for="item in lineStyleOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <div class="set-desc">
+            线型
+          </div>
+        </el-col>
+        <el-col
+          :span="12"
+          style="padding-left: 5px"
+        >
+          <el-input-number
+            v-model="config.option.point.style.lineWidth"
+            class="number-input-box number-input-half "
+            type="number"
+            controls-position="right"
+            @change="changeStyle"
+          />
+          <div class="set-desc">
+            粗细
+          </div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col
+          :span="5"
+          style="padding-right: 5px"
+          class="form-item-col"
+        >
+          <el-color-picker
+            v-model="config.option.point.style.stroke"
+            @change="changeStyle"
+          />
+          <div class="set-desc color-desc">
+            颜色
+          </div>
+        </el-col>
+        <el-col
+          :span="19"
+          style="padding-left: 5px"
+        >
+          <el-input-number
+            v-model="config.option.point.style.lineDash[0]"
+            class="number-input-box number-input-half "
+            type="number"
+            controls-position="right"
+            @change="changeStyle"
+          />
+          <div class="set-desc">
+            长度
+          </div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-input-number
+            v-model="config.option.point.style.lineDash[1]"
+            class="number-input-box number-input-half "
+            type="number"
+            controls-position="right"
+            @change="changeStyle"
+          />
+          <div style="text-align: left">
+            间距
+          </div>
+        </el-col>
+      </el-row>
     </el-form-item>
     <el-collapse>
       <el-collapse-item
@@ -435,5 +513,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@gcpaas/data-room-ui/packages/assets/style/common.scss';
 @import '@gcpaas/data-room-ui/packages/assets/style/settingWrap.scss';
 </style>
