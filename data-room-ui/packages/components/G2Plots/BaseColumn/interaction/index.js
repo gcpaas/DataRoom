@@ -1,32 +1,73 @@
 // 事件与动作定义
-export default [{
-    name: "事件名称",
-    code: "事件标识",
-    desc: "事件描述信息，描述该事件详细信息",
+export default [
+  // 事件列表
+  {
+    name: '点击柱子',
+    code: 'click', // click等
+    desc: '点击柱子',
     event: true,
-    paramsList: [{
-        name: "字段名称",
-        desc: "字段描述",
-        type: "字段类型",
-        required: "是否必填；true、false",
-        defaultValue: "默认值"
-    }],
-    paramsExample: [{
-        newValue: '合肥'
-    }]
-}, {
-    name: "动作名称",
-    code: "动作名",
-    desc: "动作描述信息，描述该动作的详细信息",
+    paramsList: [
+      {
+        name: 'date',
+        desc: '日期',
+        type: 'string',
+        required: 'false',
+        defaultValue: '2020-01-01',
+        explain: 'x轴字段'
+      },
+      {
+        name: 'value',
+        desc: '产量',
+        type: 'number',
+        required: 'false',
+        defaultValue: 100,
+        explain: 'y轴字段'
+      }
+    ],
+    paramsExample: {
+      date: '2020-01-01',
+      value: 100
+    }
+  },
+  // 动作列表
+  {
+    name: '重新获取数据',
+    code: 'updateChartData', // 与组件的内部的方法名保持一致
+    desc: '重新获取数据',
     event: false,
-    paramsList: [{
-        name: "字段名称",
-        desc: "字段描述",
-        type: "字段类型",
-        required: "是否必填；true、false",
-        defaultValue: "默认值"
-    }],
-    paramsExample: [{
-        time: '2024-03-21'
-    }]
-}]
+    paramsList: [
+      {
+        name: 'date',
+        desc: '日期',
+        type: 'string',
+        required: 'false',
+        defaultValue: '2020-01-01',
+        explain: 'x轴字段'
+      }
+    ],
+    paramsExample: {
+      date: '2020-01-01'
+    }
+  },
+  {
+    name: '更新数据',
+    code: 'updateChartDataWithData', // 与组件的内部的方法名保持一致
+    desc: '重新获取数据',
+    event: false,
+    paramsList: [
+      {
+        name: 'date',
+        desc: '数据',
+        type: 'Array',
+        required: 'false',
+        defaultValue: '[]',
+        explain: '组件所需数据'
+      }
+    ],
+    paramsExample: [
+      { date: '2018年', value: 300 },
+      { date: '2019年', value: 200 }
+    ]
+
+  }
+]

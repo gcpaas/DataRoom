@@ -33,6 +33,20 @@ export default {
   mounted () {
   },
   methods: {
+    // 更新图表配置
+    updateChartStyle () {
+      this.config.option.seriesField = this.config.option.xField
+      if (this.chart) {
+        this.$nextTick(() => {
+          const option = {
+            ...this.config.option,
+            data: this.temporaryData
+          }
+          this.chart.update(option)
+          this.$forceUpdate()
+        })
+      }
+    }
   }
 }
 </script>

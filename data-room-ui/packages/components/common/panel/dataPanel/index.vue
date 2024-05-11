@@ -168,7 +168,7 @@ export default {
       type: Object,
       default: () => ({})
     },
-    fieldNameMapping:{
+    fieldNameMapping: {
       type: Object,
       default: () => {}
     }

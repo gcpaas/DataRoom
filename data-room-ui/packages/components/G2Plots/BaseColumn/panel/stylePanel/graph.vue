@@ -5,7 +5,7 @@
       class="form-item-box"
     >
       <el-input-number
-        v-model="config.option.minColumnWidth"
+        v-model="config.option.minBarWidth"
         controls-position="right"
         @change="changeStyle"
       />
@@ -15,7 +15,7 @@
       class="form-item-box"
     >
       <el-input-number
-        v-model="config.option.maxColumnWidth"
+        v-model="config.option.maxBarWidth"
         controls-position="right"
         @change="changeStyle"
       />

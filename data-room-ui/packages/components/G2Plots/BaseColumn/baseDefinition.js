@@ -16,8 +16,8 @@ export default {
     // data: []//data不在配置中保存,
     // 图表内边距
     appendPadding: [0, 0, 0, 0],
-    minColumnWidth: 0,
-    maxColumnWidth: 100,
+    minBarWidth: 0,
+    maxBarWidth: 100,
     color: ['rgba(1, 238, 255, 1)', 'rgba(0, 155, 255, 1)', '#38bbe5', '#69d6fd', '#36c6a0'],
     // 柱子样式
     barStyle: {
@@ -28,7 +28,7 @@ export default {
     barBackground: {
       style: {
         fill: 'rgba(0,0,0,0)',
-      },
+      }
     },
     xField: 'year',
     yField: 'value',
