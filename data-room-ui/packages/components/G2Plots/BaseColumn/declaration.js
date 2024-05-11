@@ -8,6 +8,5 @@ export default {
   implType: 'BaseColumn',
   img: require(`./${name}.png`),
   path: 'components/G2Plots/BaseColumn',
-  disabled: true,
-  classify: 'column'// 属于哪个大类，方便图层图标显示（图层不需要分类则可去掉）
+  classify: 'G2Plots'// 属于哪个大类，方便图层图标显示（图层不需要分类则可去掉）
 }
