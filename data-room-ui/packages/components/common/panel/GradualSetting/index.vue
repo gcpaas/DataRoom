@@ -70,7 +70,7 @@ export default {
       // 设置颜色的正则表达式 # 匹配RGBA颜色值的模式
       const pattern = /rgba\(\d+,\s*\d+,\s*\d+,\s*[\d.]+\)/g // 匹配RGBA颜色值的模式
       // 使用正则表达式查找匹配项
-      const matches = this.config?.option?.columnStyle?.fill?.match(pattern)
+      const matches = this.color?.match(pattern)
       // 提取匹配项中的颜色
       this.startColor = matches[0]
       this.endColor = matches[1]

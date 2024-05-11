@@ -28,7 +28,7 @@ export default {
     smooth: false, // 折线？曲线
     stepType: '', // 阶梯
     lineStyle: { // 线样式
-      stroke: 'l(0) 0:#5F92F9 1:#62FF00',
+      stroke: 'l(90) 0:rgba(0, 155, 255, 1) 1:rgba(0, 155, 255, 0.1)',
       lineDash: [0, 0],
       lineWidth: 4,
       opacity: 0.9

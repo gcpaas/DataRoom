@@ -94,7 +94,8 @@
       class="form-item-box"
     >
       <GradualSetting
-        v-model="config"
+        v-model="config.option.columnStyle.fill"
+        @change="changeStyle"
       />
     </el-form-item>
     <el-form-item
