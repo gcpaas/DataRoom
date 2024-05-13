@@ -107,6 +107,11 @@ export const fontStyleList = [
   { value: 'italic', label: 'italic' },
   { value: 'oblique', label: 'oblique' }
 ]
+export const textAlignList = [
+  { value: 'center', label: '居中对齐' },
+  { value: 'left', label: '左对齐' },
+  { value: 'right', label: '右对齐' }
+]
 export const axisXTitlePositionOptions = [
   { value: 'start', label: '靠左' },
   { value: 'center', label: '居中' },
@@ -130,4 +135,9 @@ export const legendPositionList = [
   { label: '右侧顶部', value: 'right-top' },
   { label: '右侧居中', value: 'right' },
   { label: '右侧底部', value: 'right-bottom' }
+]
+export const imgSizeList = [
+  { label: 'contain', value: 'contain' },
+  { label: 'cover', value: 'cover' },
+  { label: 'auto', value: 'auto' }
 ]

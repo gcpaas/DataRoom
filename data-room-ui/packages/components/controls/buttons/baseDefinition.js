@@ -1,70 +1,89 @@
 import baseDefinition from '@gcpaas/data-room-ui/packages/components/baseDefinition.js'
-// 打包自动生成
-const version = '5c7a46df7973ea21d162e7f42e3c024b'
+
 export default {
   ...baseDefinition,
-  version: version,
+  type: 'Buttons',
+  name: '按钮',
   // 每个组件自定义各自的属性
-  type: 'buttons',
-  title: '按钮',
-  // 样式属性配置
+  title: {
+    enable: true,
+    text: '按钮'
+  },
   props: {
-    inputStyle: {
-      // 提示文字
-      placeholder: '请输入文本...',
-      // 缩进
-      indent: 16,
-      // 输入框背景颜色
-      background: '#fff',
-      textStyle: { // 字体样式设置
+    global: {
+      buttonContent: '文字内容'
+    },
+    normal: {
+      border: {
+        borderWidth: 1,
+        borderColor: '#ff4d4f',
+        borderRadius: 1,
+        borderStyle: 'dashed'
+      },
+      background: {
+        color: '#ff7875',
+        img: 'https://cdn-upload.datav.aliyun.com/upload/download/1681887697352-aUNVxoWM.png',
+        repeat: false,
+        size: 'cover'
+      },
+      textStyle: {
         color: '#fff',
-        fontSize: 24,
-        fontFamily: 'arial',
+        fontStyle: 'normal',
         fontWeight: 'normal',
-        italic: 'none'// 倾斜程度
+        fontFamily: 'Microsoft Yahei',
+        fontSize: 15,
+        textAlign: 'center'
       }
-    }, // 输入框样式
-    buttonStyle: {}, // 按键样式
-    cursor: true, // 是否显示链接的鼠标样式
-    content: '我是标题数据', // 标题内容
-    ellipsis: true, // 是否显示省略号
-    textAlign: { // 文本对齐
-      horiAlign: 'center',
-      vertiAlign: 'center'
     },
-    textStyle: { // 字体样式设置
-      color: '#fff',
-      fontSize: 24,
-      fontFamily: 'arial',
-      fontWeight: 'normal'
+    // 点击
+    click: {
+      border: {
+        borderWidth: 0,
+        borderColor: '#00a5ff',
+        borderRadius: 0.8,
+        borderStyle: 'solid'
+      },
+      background: {
+        color: 'rgba(78, 157, 255, 0)',
+        img: 'https://cdn-upload.datav.aliyun.com/upload/download/1681887801422-69RWO_Ap.png',
+        repeat: false,
+        size: 'contain'
+      },
+      textStyle: {
+        color: '#fff',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+        fontFamily: 'Microsoft Yahei',
+        fontSize: 15,
+        textAlign: 'center'
+      }
     },
-    urlConfig: { // 链接设置
+    // 悬浮
+    hover: {
+      border: {
+        borderWidth: 0,
+        borderColor: '#00a5ff',
+        borderRadius: 0,
+        borderStyle: 'solid'
+      },
+      background: {
+        color: 'rgba(78, 157, 255, 0)',
+        img: 'https://cdn-upload.datav.aliyun.com/upload/download/1681887801422-69RWO_Ap.png',
+        repeat: false,
+        size: 'contain'
+      },
+      textStyle: {
+        color: '#fff',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+        fontFamily: 'Microsoft Yahei',
+        fontSize: 15,
+        textAlign: 'center'
+      }
+    },
+    urlConfig: {
       url: '',
       ifBlank: false
-    },
-    textShadow: [// 文本阴影
-      {
-        blur: 0,
-        color: '#ffe58f',
-        offset: {
-          offsetX: 0,
-          offsetY: 0
-        },
-        _active: true
-      }
-    ],
-    writingMode: 'horizontal-tb', // 文字排列方向
-    letterSpacing: 10, // 文本间隔
-    backgroundStyle: { // 背景样式设置
-      show: false,
-      bgColor: '',
-      bgBorder: {
-        color: '',
-        curve: 'polyline',
-        style: 'solid',
-        width: 0
-      },
-      borderRadius: 10
     }
   }
 }

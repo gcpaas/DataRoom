@@ -3,11 +3,10 @@ const name = '按钮'
 export default {
   name: name,
   // 与index.vue 定义的name保持一致
-  type: 'buttons',
+  type: 'Buttons',
   // 具体的实现组件，对应type值
-  implType: 'buttons',
+  implType: 'Buttons',
   img: require(`./${name}.png`),
   path: 'components/controls/buttons',
-  disabled: true,
   classify: 'controls'// 属于哪个大类，方便图层图标显示（图层不需要分类则可去掉）
 }
