@@ -4,6 +4,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { setModules, dataModules } from 'data-room-ui/js/utils/configImport'
 import { getScreenInfo, getDataSetDetails, getDataByDataSetId } from '../api/bigScreenApi'
 import plotSettings from 'data-room-ui/G2Plots/settings'
+import echartSettings from 'data-room-ui/Echarts/settings'
 import { stringToFunction } from '../utils/evalFunctions'
 import { EventBus } from '../utils/eventBus'
 import plotList from 'data-room-ui/G2Plots/plotList'
@@ -34,7 +35,8 @@ export default {
             chart.border.padding = [0, 0, 0, 0]
           }
           const plotSettingsIterator = false
-          if (chart.type == 'customComponent') {
+          const echartSettingsIterator = false
+          if (chart.type === 'customComponent') {
             // 为本地G2组件配置添加迭代器
             if (!plotSettingsIterator) {
               plotSettings[Symbol.iterator] = function * () {
@@ -45,6 +47,32 @@ export default {
               }
             }
             for (const [key, localPlotSetting] of plotSettings) {
+              if (chart.name == localPlotSetting.name) {
+                // 本地配置项
+                const localSettings = JSON.parse(JSON.stringify(localPlotSetting.setting))
+                chart.setting = localSettings.map((localSet) => {
+                  // 在远程组件配置中找到 与 本地组件的配置项 相同的项索引
+                  const index = chart.setting.findIndex(remoteSet => remoteSet.field == localSet.field)
+                  if (index !== -1) {
+                    // 使用远程的值替换本地值
+                    localSet.field = chart.setting[index].field
+                    localSet.value = chart.setting[index].value
+                  }
+                  return localSet
+                })
+              }
+            }
+          } else if (chart.type === 'echartsComponent') {
+            // 为本地echarts组件配置添加迭代器
+            if (!echartSettingsIterator) {
+              echartSettings[Symbol.iterator] = function * () {
+                const keys = Object.keys(echartSettings)
+                for (const k of keys) {
+                  yield [k, echartSettings[k]]
+                }
+              }
+            }
+            for (const [key, localPlotSetting] of echartSettings) {
               if (chart.name == localPlotSetting.name) {
                 // 本地配置项
                 const localSettings = JSON.parse(JSON.stringify(localPlotSetting.setting))
@@ -163,6 +191,7 @@ export function handleResData (data) {
   localStorage.setItem('pageInfo', JSON.stringify(pageInfo))
   return pageInfo
 }
+
 // 组件属性兼容
 function compatibility (config, originalConfig) {
   const newConfig = config
@@ -170,18 +199,26 @@ function compatibility (config, originalConfig) {
   newConfig.optionHandler = originalConfig.optionHandler || ''
   newConfig.dataSource = objCompare(newConfig?.dataSource, originalConfig?.dataSource)
   newConfig.customize = objCompare(newConfig?.customize, originalConfig?.customize)
-  newConfig.option = { ...objCompare(newConfig.option, originalConfig?.option), displayOption: originalConfig?.option?.displayOption }
+  newConfig.option = {
+    ...objCompare(newConfig.option, originalConfig?.option),
+    displayOption: originalConfig?.option?.displayOption
+  }
   newConfig.setting = arrCompare(newConfig?.setting, originalConfig?.setting)
   return newConfig
 }
+
 // 对象比较
 function objCompare (obj1, obj2) {
   const keys1 = obj1 ? Object.keys(obj1) : []
   const keys2 = obj2 ? Object.keys(obj2) : []
   // 交集
-  const intersection = keys1?.filter(function (v) { return keys2.indexOf(v) > -1 }) || []
+  const intersection = keys1?.filter(function (v) {
+    return keys2.indexOf(v) > -1
+  }) || []
   // 差集
-  const differenceSet = keys2?.filter(function (v) { return keys1.indexOf(v) === -1 }) || []
+  const differenceSet = keys2?.filter(function (v) {
+    return keys1.indexOf(v) === -1
+  }) || []
   const obj = {}
   for (const item of intersection) {
     obj[item] = obj1[item]
@@ -191,6 +228,7 @@ function objCompare (obj1, obj2) {
   }
   return obj
 }
+
 // 数组比较
 function arrCompare (list1, list2) {
   const fieldList = list1?.map(item => item.field) || []
@@ -213,6 +251,7 @@ function arrCompare (list1, list2) {
   }) || []
   return list
 }
+
 // 推送数据到各个组件
 function emitDataToChart (dataSetId, data) {
   if (data && data.length) {
