@@ -1,6 +1,7 @@
 // 组件声明，这个文件是否需要，是不是根据path直接可以解析出来对应的信息
 const name = '按钮'
 export default {
+  disabled: true,
   name: name,
   // 与index.vue 定义的name保持一致
   type: 'Buttons',

@@ -22,6 +22,24 @@
               @change="changeStyle"
             />
           </el-form-item>
+          <el-form-item
+            class="radio form-item-box"
+            label="超链接"
+          >
+            <el-input
+              v-model="config.props.urlConfig.url"
+              @change="changeStyle"
+            />
+          </el-form-item>
+          <el-form-item
+            class="radio form-item-box"
+            label="是否新开窗口"
+          >
+            <el-switch
+              v-model="config.props.urlConfig.ifBlank"
+              @change="changeStyle"
+            />
+          </el-form-item>
         </div>
         <div class="tabs-set-box">
           <el-tabs

@@ -66,9 +66,9 @@ export default {
   methods: {
     // 跳转链接
     goLink () {
-      // if (this.linkUrl) {
-      //   window.open(this.linkUrl, this.config.props.urlConfig.ifBlank ? '_blank' : '_self')
-      // }
+      if (this.config.props.urlConfig.url) {
+        window.open(this.config.props.urlConfig.url, this.config.props.urlConfig.ifBlank ? '_blank' : '_self')
+      }
     },
     // 获取图表数据后的处理
     updateChartDataWithData (data) {
