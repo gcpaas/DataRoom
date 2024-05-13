@@ -112,6 +112,16 @@ export const textAlignList = [
   { value: 'left', label: '左对齐' },
   { value: 'right', label: '右对齐' }
 ]
+export const borderStyleList = [
+  { label: '实线', value: 'solid' },
+  { label: '虚线', value: 'dashed' },
+  { label: '点线', value: 'dotted' },
+  { label: '双实线', value: 'double' },
+  { label: '雕刻效果', value: 'groove' },
+  { label: '浮雕效果', value: 'ridge' },
+  { label: '陷入效果', value: 'inset' },
+  { label: '突出效果', value: 'outset' }
+]
 export const axisXTitlePositionOptions = [
   { value: 'start', label: '靠左' },
   { value: 'center', label: '居中' },

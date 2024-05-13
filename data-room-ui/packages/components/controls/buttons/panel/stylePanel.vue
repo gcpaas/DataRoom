@@ -76,12 +76,10 @@
                       @change="changeStyle"
                     >
                       <el-option
-                        label="实线"
-                        value="solid"
-                      />
-                      <el-option
-                        label="虚线"
-                        value="dashed"
+                        v-for="item in borderStyleList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
                       />
                     </el-select>
                   </el-form-item>
@@ -109,10 +107,21 @@
                   </el-form-item>
                   <el-form-item
                     class="radio form-item-box"
+                  >
+                    <el-image
+                      style="width: 100px; height: 100px"
+                      :src="config.props[activeName].background.img"
+                      fit="contain"
+                    />
+                  </el-form-item>
+                  <el-form-item
+                    class="radio form-item-box"
                     label="背景图片重复"
                   >
                     <el-switch
                       v-model="config.props[activeName].background.repeat"
+                      active-value="repeat"
+                      inactive-value="no-repeat"
                       @change="changeStyle"
                     />
                   </el-form-item>
@@ -152,7 +161,7 @@
                   >
                     <el-select
                       v-model="config.props[activeName].textStyle.fontStyle"
-                      placeholder="请选择文本样式"
+                      placeholder="请选择字体样式"
                       @change="changeStyle"
                     >
                       <el-option
@@ -185,12 +194,12 @@
                     label="字体"
                   >
                     <el-select
-                      v-model="config.props[activeName].textStyle.textAlign"
-                      placeholder="请选择文字对齐方式"
+                      v-model="config.props[activeName].textStyle.fontFamily"
+                      placeholder="请选择字体"
                       @change="changeStyle"
                     >
                       <el-option
-                        v-for="item in textAlignList"
+                        v-for="item in fonFamilyList"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -211,12 +220,12 @@
                     label="文字对齐方式"
                   >
                     <el-select
-                      v-model="config.props[activeName].textStyle.fontFamily"
+                      v-model="config.props[activeName].textStyle.textAlign"
                       placeholder="请选择文本样式"
                       @change="changeStyle"
                     >
                       <el-option
-                        v-for="item in fonFamilyList"
+                        v-for="item in textAlignList"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -241,7 +250,8 @@ import {
   positionOptions,
   fontStyleList,
   textAlignList,
-  imgSizeList
+  imgSizeList,
+  borderStyleList
 } from '@gcpaas/data-room-ui/packages/js/utils/options'
 import BaseSet from '@gcpaas/data-room-ui/packages/components/common/panel/baseSet/index.vue'
 
@@ -277,7 +287,8 @@ export default {
       positionOptions,
       fontStyleList,
       textAlignList,
-      imgSizeList
+      imgSizeList,
+      borderStyleList
     }
   },
   computed: {
