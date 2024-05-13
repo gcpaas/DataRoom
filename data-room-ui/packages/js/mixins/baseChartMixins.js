@@ -130,14 +130,16 @@ export default {
       })
     },
     // 更新图表配置
-    updateChartStyle (config) {
+    updateChartStyle () {
     },
     triggerClickEvent () {
-      this.$refs.contentBox.addEventListener('click', () => {
-        const data = null
-        // 执行交互逻辑
-        this.handleChartEvent('click', data)
-      })
+      if (this.$refs.contentBox) {
+        this.$refs.contentBox.addEventListener('click', () => {
+          const data = null
+          // 执行交互逻辑
+          this.handleChartEvent('click', data)
+        })
+      }
     },
     // 根据事件处理相应的动作
     handleChartEvent (eventType, data) {

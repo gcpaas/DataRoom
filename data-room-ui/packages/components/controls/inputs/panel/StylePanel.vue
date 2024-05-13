@@ -36,6 +36,14 @@
               v-model="config.props.background"
             />
           </el-form-item>
+          <el-form-item
+            class="radio form-item-box"
+            label="关闭按钮"
+          >
+            <el-switch
+              v-model="config.props.clearable"
+            />
+          </el-form-item>
         </div>
 
         <div class="tabs-set-box">

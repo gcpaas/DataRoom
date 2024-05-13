@@ -12,7 +12,6 @@ export default {
   },
   // 样式属性配置
   props: {
-    content: '我是输入框', // 标题内容
     placeholder: '请输入文本...', // 占位符内容
     indent: 15, // 缩进
     clearable: true, // 可清空

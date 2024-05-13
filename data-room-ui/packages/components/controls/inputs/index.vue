@@ -1,20 +1,17 @@
 <template>
   <div
-    class="dataroom-chart-texts-wrapper"
+    class="dataroom-chart-inputs-wrapper"
+    @click="clickHandler"
   >
     <el-input
       ref="contentBox"
-      class="content-box"
-      :style="contentStyle"
+      v-model="inputValue"
+      class="content-box inputs-box"
+      :style="inputsStyle"
+      :placeholder="config.props.placeholder"
+      :clearable="config.props.clearable"
       @change="changeHandler"
-    >
-      <p
-        class="text"
-        :style="textStyle"
-      >
-        {{ content }}
-      </p>
-    </el-input>
+    />
   </div>
 </template>
 <script>
@@ -33,35 +30,59 @@ export default {
   },
   data () {
     return {
-      mockData
+      mockData,
+      inputValue: '12345678899'
     }
   },
 
   computed: {
-    contentStyle () {
+    inputInnerStyle () {
       return {
+        color: this.config.props.textStyle.color,
+        fontSize: this.config.props.textStyle.fontSize,
+        fontWeight: this.config.props.textStyle.fontWeight,
+        fontStyle: this.config.props.textStyle.fontStyle,
+        fontFamily: this.config.props.textStyle.fontFamily,
+        backgroundColor: this.config.props.background
+      }
+    },
+    inputsStyle () {
+      return {
+        color: 'red'
       }
     }
   },
   mounted () {
   },
   methods: {
+    // 更新组件样式
+    updateChartStyle () {
+      const inputEl = this.$refs.contentBox.$refs.$el.querySelector('.el-input__inner')
+      Object.keys(this.inputInnerStyle).forEach(key => {
+        inputEl.style[key] = this.inputInnerStyle[key]
+      })
+    },
     // 获取图表数据后的处理
     updateChartDataWithData (data) {
       this.temporaryData = data || []
     },
-    // 跳转链接
-    goLink () {
-      if (this.url) {
-        window.open(this.url, this.config.props.urlConfig.ifBlank ? '_blank' : '_self')
-      }
+    // 事件注册
+    triggerClickEvent () {
+    },
+    // 输入框内容改变
+    changeHandler () {
+      console.log('changeHandler', this.inputValue)
+    },
+    clickHandler () {
+      console.log(this.$refs.contentBox)
+      this.$refs.contentBox.focus()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.dataroom-chart-texts-wrapper{
+.dataroom-chart-inputs-wrapper{
   width: 100%;
   height: 100%;
   .content-box {
@@ -70,10 +91,12 @@ export default {
     height: 100%;
     overflow: hidden; /* 超出部分隐藏 */
   }
+  .inputs-box{
+    ::v-deep .el-input__inner{
+      height: 100%;
 
-  .text {
-    overflow: hidden;
-    max-width: 100%; /* 限制文本的最大宽度 */
+    }
   }
+
 }
 </style>
