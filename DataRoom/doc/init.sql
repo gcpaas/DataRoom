@@ -14,7 +14,7 @@ CREATE TABLE `big_screen_file`
     `user_name`      varchar(20)  NOT NULL DEFAULT '' COMMENT '上传用户',
     `hide`           tinyint(4)   NOT NULL DEFAULT 0 COMMENT '是否在资源库中隐藏，1是0否',
     `cover_url`      varchar(255) NOT NULL DEFAULT '' COMMENT '封面图片路径',
-    `cover_id`       bigint(64)   NOT NULL DEFAULT '0' COMMENT '封面图片id',
+    `cover_id`       varchar(64)   NOT NULL DEFAULT '0' COMMENT '封面图片id',
     `bucket`         varchar(100) NOT NULL DEFAULT 'gc-starter' COMMENT '桶名称',
     `create_date`    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_date`    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',

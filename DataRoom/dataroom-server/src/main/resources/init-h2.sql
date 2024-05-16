@@ -80,6 +80,8 @@ CREATE TABLE IF NOT EXISTS big_screen_biz_component
     cover_picture    varchar(255) NOT NULL DEFAULT '' COMMENT '封面图片文件路径',
     vue_content      clob COMMENT 'vue组件内容',
     setting_content  clob COMMENT '组件配置内容',
+    interaction      text COMMENT '组件交互配置',
+    biz_type         int          NOT NULL DEFAULT 1 COMMENT '组件类型 1.组件 2.模板 3.区块',
     order_num        bigint       NOT NULL DEFAULT '0' COMMENT '排序',
     remark           varchar(100) NOT NULL DEFAULT '' COMMENT '备注',
     update_date      timestamp    NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
