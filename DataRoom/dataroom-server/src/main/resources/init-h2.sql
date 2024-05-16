@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS big_screen_file
     type           VARCHAR(255)          NOT NULL DEFAULT '' COMMENT '类型，图片：picture、视频：video、模型：model、引用：reference,其他：other',
     hide           TINYINT               NOT NULL DEFAULT '0' COMMENT '是否在资源库中隐藏，1是0否',
     cover_url      VARCHAR(255)          NOT NULL DEFAULT '' COMMENT '封面图片路径',
-    cover_id       BIGINT                NOT NULL DEFAULT '0' COMMENT '封面图片id',
+    cover_id       VARCHAR(255)          NOT NULL DEFAULT '0' COMMENT '封面图片id',
     PRIMARY KEY (id)
 );
 
