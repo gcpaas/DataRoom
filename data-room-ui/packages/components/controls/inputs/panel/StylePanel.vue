@@ -26,6 +26,7 @@
             <el-input-number
               v-model="config.props.indent"
               controls-position="right"
+              @change="changeStyle"
             />
           </el-form-item>
           <el-form-item
@@ -34,6 +35,7 @@
           >
             <el-color-picker
               v-model="config.props.background"
+              @change="changeStyle"
             />
           </el-form-item>
           <el-form-item
@@ -64,7 +66,10 @@
                     class="radio form-item-box"
                     label="颜色"
                   >
-                    <el-color-picker v-model="config.props.textStyle.color" />
+                    <el-color-picker
+                      v-model="config.props.textStyle.color"
+                      @change="changeStyle"
+                    />
                   </el-form-item>
                   <el-form-item
                     class="radio form-item-box"
@@ -121,76 +126,76 @@
                     class="radio form-item-box"
                     label="字号"
                   >
-                    <el-input-number v-model="config.props.textStyle.fontSize" />
+                    <el-input-number v-model="config.props.textStyle.fontSize"          @change="changeStyle"/>
                   </el-form-item>
                 </el-collapse-item>
-                <el-collapse-item
-                  title="提示样式"
-                >
-                  <el-form-item
-                    class="radio form-item-box"
-                    label="颜色"
-                  >
-                    <el-color-picker v-model="config.props.placeholderStyle.color" />
-                  </el-form-item>
-                  <el-form-item
-                    class="radio form-item-box"
-                    label="字体样式"
-                  >
-                    <el-select
-                      v-model="config.props.placeholderStyle.fontStyle"
-                      placeholder="请选择文本样式"
-                      @change="changeStyle"
-                    >
-                      <el-option
-                        v-for="item in fontStyleList"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      />
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item
-                    class="radio form-item-box"
-                    label="字体粗细"
-                  >
-                    <el-select
-                      v-model="config.props.placeholderStyle.fontWeight"
-                      placeholder="请选择文字粗细"
-                      @change="changeStyle"
-                    >
-                      <el-option
-                        v-for="item in fontWeightOptions"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      />
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item
-                    class="radio form-item-box"
-                    label="字体"
-                  >
-                    <el-select
-                      v-model="config.props.placeholderStyle.fontFamily"
-                      placeholder="请选择文本样式"
-                      @change="changeStyle"
-                    >
-                      <el-option
-                        v-for="item in fonFamilyList"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      />
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item
-                    class="radio form-item-box"
-                    label="字号"
-                  >
-                    <el-input-number v-model="config.props.placeholderStyle.fontSize" />
-                  </el-form-item>
-                </el-collapse-item>
+                <!--                <el-collapse-item-->
+                <!--                  title="提示样式"-->
+                <!--                >-->
+                <!--                  <el-form-item-->
+                <!--                    class="radio form-item-box"-->
+                <!--                    label="颜色"-->
+                <!--                  >-->
+                <!--                    <el-color-picker v-model="config.props.placeholderStyle.color" />-->
+                <!--                  </el-form-item>-->
+                <!--                  <el-form-item-->
+                <!--                    class="radio form-item-box"-->
+                <!--                    label="字体样式"-->
+                <!--                  >-->
+                <!--                    <el-select-->
+                <!--                      v-model="config.props.placeholderStyle.fontStyle"-->
+                <!--                      placeholder="请选择文本样式"-->
+                <!--                      @change="changeStyle"-->
+                <!--                    >-->
+                <!--                      <el-option-->
+                <!--                        v-for="item in fontStyleList"-->
+                <!--                        :key="item.value"-->
+                <!--                        :label="item.label"-->
+                <!--                        :value="item.value"-->
+                <!--                      />-->
+                <!--                    </el-select>-->
+                <!--                  </el-form-item>-->
+                <!--                  <el-form-item-->
+                <!--                    class="radio form-item-box"-->
+                <!--                    label="字体粗细"-->
+                <!--                  >-->
+                <!--                    <el-select-->
+                <!--                      v-model="config.props.placeholderStyle.fontWeight"-->
+                <!--                      placeholder="请选择文字粗细"-->
+                <!--                      @change="changeStyle"-->
+                <!--                    >-->
+                <!--                      <el-option-->
+                <!--                        v-for="item in fontWeightOptions"-->
+                <!--                        :key="item.value"-->
+                <!--                        :label="item.label"-->
+                <!--                        :value="item.value"-->
+                <!--                      />-->
+                <!--                    </el-select>-->
+                <!--                  </el-form-item>-->
+                <!--                  <el-form-item-->
+                <!--                    class="radio form-item-box"-->
+                <!--                    label="字体"-->
+                <!--                  >-->
+                <!--                    <el-select-->
+                <!--                      v-model="config.props.placeholderStyle.fontFamily"-->
+                <!--                      placeholder="请选择文本样式"-->
+                <!--                      @change="changeStyle"-->
+                <!--                    >-->
+                <!--                      <el-option-->
+                <!--                        v-for="item in fonFamilyList"-->
+                <!--                        :key="item.value"-->
+                <!--                        :label="item.label"-->
+                <!--                        :value="item.value"-->
+                <!--                      />-->
+                <!--                    </el-select>-->
+                <!--                  </el-form-item>-->
+                <!--                  <el-form-item-->
+                <!--                    class="radio form-item-box"-->
+                <!--                    label="字号"-->
+                <!--                  >-->
+                <!--                    <el-input-number v-model="config.props.placeholderStyle.fontSize" />-->
+                <!--                  </el-form-item>-->
+                <!--                </el-collapse-item>-->
                 <el-collapse-item
                   title="边框样式"
                 >
@@ -198,19 +203,28 @@
                     class="radio form-item-box"
                     label="边框宽度"
                   >
-                    <el-input-number v-model="config.props.normal.border.borderWidth" />
+                    <el-input-number
+                      v-model="config.props.normal.border.borderWidth"
+                      @change="changeStyle"
+                    />
                   </el-form-item>
                   <el-form-item
                     class="radio form-item-box"
                     label="边框颜色"
                   >
-                    <el-color-picker v-model="config.props.normal.border.borderWidth" />
+                    <el-color-picker
+                      v-model="config.props.normal.border.borderColor"
+                      @change="changeStyle"
+                    />
                   </el-form-item>
                   <el-form-item
                     class="radio form-item-box"
                     label="边框圆角"
                   >
-                    <el-input-number v-model="config.props.normal.border.borderRadius" />
+                    <el-input-number
+                      v-model="config.props.normal.border.borderRadius"
+                      @change="changeStyle"
+                    />
                   </el-form-item>
                   <el-form-item
                     class="radio form-item-box"
@@ -246,27 +260,35 @@
                     class="radio form-item-box"
                     label="边框宽度"
                   >
-                    <el-input-number v-model="config.props.normal.border.borderWidth" />
+                    <el-input-number
+                      v-model="config.props.hover.border.borderWidth"
+                      @change="changeStyle"
+                    />
                   </el-form-item>
                   <el-form-item
                     class="radio form-item-box"
                     label="边框颜色"
                   >
-                    <el-color-picker v-model="config.props.normal.border.borderWidth" />
+                    <el-color-picker
+                      v-model="config.props.hover.border.borderColor"
+                      @change="changeStyle"
+                    />
                   </el-form-item>
                   <el-form-item
                     class="radio form-item-box"
                     label="边框圆角"
                   >
-                    <el-input-number v-model="config.props.normal.border.borderRadius" />
+                    <el-input-number
+                      v-model="config.props.hover.border.borderRadius"
+                      @change="changeStyle"
+                    />
                   </el-form-item>
                   <el-form-item
                     class="radio form-item-box"
                     label="线条类型"
                   >
                     <el-select
-                      v-model="config.props.normal.border.borderStyle"
-                      placeholder="请选择文本样式"
+                      v-model="config.props.hover.border.borderStyle"
                       @change="changeStyle"
                     >
                       <el-option

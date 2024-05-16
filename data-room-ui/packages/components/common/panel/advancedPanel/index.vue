@@ -6,29 +6,35 @@
       <span>关联全局变量</span>
     </div>
     <div class="advanced-panel-content">
-      <el-collapse v-for="event in config.fieldMapping" :key="event.name">
+      <el-collapse
+        v-for="event in config.fieldMapping"
+        :key="event.name"
+      >
         <el-collapse-item>
           <template slot="title">
-           <div class="collapse-item-title">
-             <span>{{ event.name }}</span>
-             <el-switch
-               @click.native.stop
-               v-model="event.enable"
-               active-color="#13ce66"
-               inactive-color="#ff4949">
-             </el-switch>
-           </div>
+            <div class="collapse-item-title">
+              <span>{{ event.name }}</span>
+              <el-switch
+                v-model="event.enable"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                @click.native.stop
+              />
+            </div>
           </template>
-          <update-to-global-variable :config="config" :field-map="event" :fieldNameMapping="fieldNameMapping"></update-to-global-variable>
-          <div>
-          </div>
+          <update-to-global-variable
+            :config="config"
+            :field-map="event"
+            :field-name-mapping="fieldNameMapping"
+          />
+          <div />
         </el-collapse-item>
       </el-collapse>
     </div>
   </div>
 </template>
 <script>
-import {getInteraction} from "@gcpaas/data-room-ui/packages/bigScreen/components/interactionInstall";
+import { getInteraction } from '@gcpaas/data-room-ui/packages/bigScreen/components/interactionInstall'
 import updateToGlobalVariable from './updateToGlobalVariable.vue'
 export default {
   name: 'AdvancedPanel',
@@ -41,7 +47,7 @@ export default {
       type: Object,
       default: () => ({})
     },
-    fieldNameMapping:{
+    fieldNameMapping: {
       type: Object,
       default: () => {}
     }
@@ -65,13 +71,13 @@ export default {
     init () {
       // 获取事件列表
       getInteraction(this.config.type).then((res) => {
-        this.eventList = res.filter((item) => item.event)
+        this.eventList = res?.filter((item) => item.event)
         // 为对应的事件添加变量映射
         this.eventList.forEach(event => {
           // 判断是否已经存在该事件映射
-          if (!this.config.fieldMapping.some(item => item.code === event.code)){
+          if (!this.config.fieldMapping.some(item => item.code === event.code)) {
             this.config.fieldMapping.push({
-              name:event.name,
+              name: event.name,
               enable: false,
               code: event.code,
               fieldList: []

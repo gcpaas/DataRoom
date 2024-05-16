@@ -7,7 +7,7 @@ function getInstance () {
   const chartDefinition = {
     ...baseDefinition,
     w: 300,
-    h: 100
+    h: 50
   }
   // 每个组件实现自己的初始化逻辑
   return chartDefinition

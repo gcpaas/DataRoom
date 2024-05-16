@@ -67,7 +67,7 @@
                   style="float: right"
                   type="warning"
                 >
-                  正在开发中
+                  开发中
                 </el-tag>
               </div>
               <div class="bottom-pane-content-img">
@@ -121,7 +121,7 @@
                       style="float: right"
                       type="warning"
                     >
-                      正在开发中
+                      开发中
                     </el-tag>
                   </div>
                   <div class="bottom-pane-content-img">

@@ -64,6 +64,7 @@ export default {
     initChart () {
       this.updateChartData()
       this.triggerClickEvent()
+      this.updateChartStyle()
     },
     // 调接口获取数据
     getChartData (interactionParams = {}) {

@@ -20,17 +20,17 @@ export default {
       fontStyle: 'normal',
       fontWeight: 'normal',
       fontFamily: 'Microsoft Yahei',
-      fontSize: 15
+      fontSize: 20
     },
 
     placeholderStyle: { // 占位符样式
       color: '#ffccc7',
       fontStyle: 'italic',
       fontWeight: 'bold',
-      fontFamily: 'Microsoft Yahei',
+      fontFamily: 'sans-serif',
       fontSize: 14
     },
-    background: '#363636', // 输入框背景颜色
+    background: '#EDEDED', // 输入框背景颜色
     normal: { // 普通样式
       border: {
         borderWidth: 0,

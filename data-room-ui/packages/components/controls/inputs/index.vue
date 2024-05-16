@@ -2,6 +2,8 @@
   <div
     class="dataroom-chart-inputs-wrapper"
     @click="clickHandler"
+    @mouseenter="hoverHandler"
+    @mouseleave="leaveHandler"
   >
     <el-input
       ref="contentBox"
@@ -30,6 +32,7 @@ export default {
   },
   data () {
     return {
+      isHover: false,
       mockData,
       inputValue: '12345678899'
     }
@@ -39,11 +42,16 @@ export default {
     inputInnerStyle () {
       return {
         color: this.config.props.textStyle.color,
-        fontSize: this.config.props.textStyle.fontSize,
+        fontSize: this.config.props.textStyle.fontSize + 'px',
         fontWeight: this.config.props.textStyle.fontWeight,
         fontStyle: this.config.props.textStyle.fontStyle,
         fontFamily: this.config.props.textStyle.fontFamily,
-        backgroundColor: this.config.props.background
+        backgroundColor: this.config.props.background,
+        paddingLeft: this.config.props.indent + 'px',
+        border: this.isHover ? `${this.config.props.hover.border.borderWidth}px ${this.config.props.hover.border.borderStyle} ${this.config.props.hover.border.borderColor}`
+          : `${this.config.props.normal.border.borderWidth}px ${this.config.props.normal.border.borderStyle} ${this.config.props.normal.border.borderColor}`,
+        borderRadius: this.isHover ? this.config.props.hover.border.borderRadius + 'px'
+          : this.config.props.normal.border.borderRadius + 'px'
       }
     },
     inputsStyle () {
@@ -57,10 +65,22 @@ export default {
   methods: {
     // 更新组件样式
     updateChartStyle () {
-      const inputEl = this.$refs.contentBox.$refs.$el.querySelector('.el-input__inner')
-      Object.keys(this.inputInnerStyle).forEach(key => {
-        inputEl.style[key] = this.inputInnerStyle[key]
+      this.$nextTick(() => {
+        const inputEl = this.$refs?.contentBox?.$refs?.input
+        // if (!inputEl) {
+        Object.keys(this.inputInnerStyle).forEach(key => {
+          inputEl.style[key] = this.inputInnerStyle[key]
+        })
+        // }
       })
+    },
+    hoverHandler () {
+      this.isHover = true
+      this.updateChartStyle()
+    },
+    leaveHandler () {
+      this.isHover = false
+      this.updateChartStyle()
     },
     // 获取图表数据后的处理
     updateChartDataWithData (data) {
@@ -71,10 +91,8 @@ export default {
     },
     // 输入框内容改变
     changeHandler () {
-      console.log('changeHandler', this.inputValue)
     },
     clickHandler () {
-      console.log(this.$refs.contentBox)
       this.$refs.contentBox.focus()
     }
   }

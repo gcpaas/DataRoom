@@ -16,26 +16,26 @@
           <StylePanel :config="config" />
         </div>
       </el-tab-pane>
-      <el-tab-pane
-        label="数据源"
-        name="datasource"
-      >
-        <span slot="label"><i class="label-icon el-icon-menu" />数据源</span>
-        <DataPanel
-          :config="config"
-          :field-name-mapping="fieldNameMapping"
-        />
-      </el-tab-pane>
-      <el-tab-pane
-        label="高级"
-        name="advanced"
-      >
-        <span slot="label"><i class="label-icon el-icon-s-finance" />高级</span>
-        <AdvancedPanel
-          :config="config"
-          :field-name-mapping="fieldNameMapping">
-        </AdvancedPanel>
-      </el-tab-pane>
+<!--      <el-tab-pane-->
+<!--        label="数据源"-->
+<!--        name="datasource"-->
+<!--      >-->
+<!--        <span slot="label"><i class="label-icon el-icon-menu" />数据源</span>-->
+<!--        <DataPanel-->
+<!--          :config="config"-->
+<!--          :field-name-mapping="fieldNameMapping"-->
+<!--        />-->
+<!--      </el-tab-pane>-->
+<!--      <el-tab-pane-->
+<!--        label="高级"-->
+<!--        name="advanced"-->
+<!--      >-->
+<!--        <span slot="label"><i class="label-icon el-icon-s-finance" />高级</span>-->
+<!--        <AdvancedPanel-->
+<!--          :config="config"-->
+<!--          :field-name-mapping="fieldNameMapping">-->
+<!--        </AdvancedPanel>-->
+<!--      </el-tab-pane>-->
     </el-tabs>
   </div>
 </template>

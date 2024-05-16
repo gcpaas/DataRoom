@@ -7,6 +7,5 @@ export default {
   // 具体的实现组件，对应type值
   implType: 'inputs',
   img: require(`./${name}.png`),
-  disabled: true,
   classify: 'controls'// 属于哪个大类，方便图层图标显示（图层不需要分类则可去掉）
 }
