@@ -14,7 +14,7 @@
         class="dataroom-chart-button"
         :style="buttonStyle"
       >
-        {{ config.props.global.buttonContent }}
+        {{ content }}
       </button>
     </div>
   </div>
@@ -34,6 +34,12 @@ export default {
   mixins: [baseChartMixins],
   inject: ['canvasInst'],
   computed: {
+    content () {
+      if (this.config.dataSource && this.config.dataSource.businessKey && this.temporaryData && this.temporaryData.length) {
+        return this.temporaryData[0][this.config.dataSource.dimensionField]
+      }
+      return this.config.props.global.buttonContent
+    },
     contentStyle () {
       return {
         borderWidth: this.config.props[this.state].border.borderWidth + 'px',

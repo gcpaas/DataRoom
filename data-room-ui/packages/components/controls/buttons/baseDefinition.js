@@ -11,20 +11,20 @@ export default {
   },
   props: {
     global: {
-      buttonContent: '文字内容'
+      buttonContent: '按钮内容'
     },
     normal: {
       border: {
-        borderWidth: 1,
-        borderColor: '#ff4d4f',
-        borderRadius: 1,
-        borderStyle: 'dashed'
+        borderWidth: 0,
+        borderColor: '#0a73ff',
+        borderRadius: 0,
+        borderStyle: 'solid'
       },
       background: {
-        color: '#ff7875',
-        img: 'https://cdn-upload.datav.aliyun.com/upload/download/1681887697352-aUNVxoWM.png',
+        color: 'rgba(10, 115, 255, 0.01)',
+        img: '',
         repeat: false,
-        size: 'cover'
+        size: 'contain'
       },
       textStyle: {
         color: '#fff',
@@ -45,7 +45,7 @@ export default {
       },
       background: {
         color: 'rgba(78, 157, 255, 0)',
-        img: 'https://cdn-upload.datav.aliyun.com/upload/download/1681887801422-69RWO_Ap.png',
+        img: '',
         repeat: false,
         size: 'contain'
       },
@@ -63,12 +63,12 @@ export default {
       border: {
         borderWidth: 0,
         borderColor: '#00a5ff',
-        borderRadius: 0,
+        borderRadius: 0.8,
         borderStyle: 'solid'
       },
       background: {
         color: 'rgba(78, 157, 255, 0)',
-        img: 'https://cdn-upload.datav.aliyun.com/upload/download/1681887801422-69RWO_Ap.png',
+        img: '',
         repeat: false,
         size: 'contain'
       },
