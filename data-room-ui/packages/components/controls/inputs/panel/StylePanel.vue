@@ -237,7 +237,7 @@
                     >
                       <el-option
                         label="实线"
-                        value="slide"
+                        value="solid"
                       />
                       <el-option
                         label="虚线"
@@ -293,7 +293,7 @@
                     >
                       <el-option
                         label="实线"
-                        value="slide"
+                        value="solid"
                       />
                       <el-option
                         label="虚线"
