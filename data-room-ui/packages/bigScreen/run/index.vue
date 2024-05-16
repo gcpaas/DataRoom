@@ -82,6 +82,9 @@ export default {
     }
   },
   computed: {
+    isVisit () {
+      return this.$route.query.isVisit || false
+    },
     pageCode () {
       return this.code || this.$route.query.code
     },
@@ -139,7 +142,8 @@ export default {
   methods: {
     // 初始化页面信息
     PageInfoInit () {
-      this.$dataRoomAxios.get(`/dataroom/design/info/code/${this.pageCode}?preview=true`).then(res => {
+      const url = this.isVisit ? `/dataroom/design/info/code/${this.pageCode}` : `/dataroom/design/info/code/${this.pageCode}?preview=true`
+      this.$dataRoomAxios.get(url).then(res => {
         this.pageInfo = res
         this.pageConfig = this.pageInfo?.pageConfig || {}
         this.chartList = this.pageInfo?.chartList || []
@@ -377,7 +381,6 @@ export default {
     },
     // 将页面中所有的数据脚本（数据过滤）都保存起来
     getDataScript () {
-      debugger
       if (this.pageInfo.filters) {
         for (const key in this.pageInfo.filters) {
           this.dataHandleFilters[key] = new Function('params', 'canvasInst', this.pageInfo.filters[key].script)

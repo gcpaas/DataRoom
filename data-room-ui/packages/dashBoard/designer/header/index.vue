@@ -144,7 +144,7 @@ export default {
     // 预览
     execRun () {
       // 保存
-      this.save().then((res) => {
+      this.save({ isBack: false, isPreview: true }).then((res) => {
         this.preview()
       })
     },
@@ -161,16 +161,16 @@ export default {
       window.open(href, '_blank')
     },
     // 保存
-    async save (isBack = false) {
+    async save (params = { isBack: false, isPreview: false }) {
       return new Promise((resolve, reject) => {
-        saveScreen(this.pageInfo).then(res => {
+        saveScreen({ ...this.pageInfo, isPreview: params.isPreview }).then(res => {
           this.$message.success('保存成功')
           resolve(res)
         }).catch(err => {
           reject(err)
         }).finally(() => {
           this.saveLoading = false
-          if (isBack) {
+          if (params.isBack) {
             this.$router.push({ path: '/' })
           }
         })

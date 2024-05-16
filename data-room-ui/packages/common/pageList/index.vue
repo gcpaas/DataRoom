@@ -74,7 +74,7 @@
                 <div class="preview">
                   <div
                     class="screen-card__oper-label circle"
-                    @click="preview(screen)"
+                    @click="visit(screen)"
                   >
                     <span>访问</span>
                   </div>
@@ -247,7 +247,7 @@ export default {
           this.loading = false
         })
     },
-    preview (screen) {
+    visit (screen) {
       let path = ''
       switch (screen.type) {
         case 'bigScreen':
@@ -265,7 +265,8 @@ export default {
       const { href } = this.$router.resolve({
         path,
         query: {
-          code: screen.code
+          code: screen.code,
+          isVisit: true
         }
       })
       window.open(href, '_blank')

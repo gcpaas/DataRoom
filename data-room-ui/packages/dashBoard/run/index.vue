@@ -56,6 +56,9 @@ export default {
     }
   },
   computed: {
+    isVisit () {
+      return this.$route.query.isVisit || false
+    },
     canvasInst () {
       return this
     },
@@ -84,7 +87,8 @@ export default {
   methods: {
     // 初始化页面信息
     PageInfoInit () {
-      getPageInfo(this.pageCode).then(res => {
+      const url = this.isVisit ? `/dataroom/design/info/code/${this.pageCode}` : `/dataroom/design/info/code/${this.pageCode}?preview=true`
+      this.$dataRoomAxios.get(url).then(res => {
         this.pageInfo = res
         this.pageConfig = this.pageInfo?.pageConfig || {}
         this.chartList = this.pageInfo?.chartList || []
