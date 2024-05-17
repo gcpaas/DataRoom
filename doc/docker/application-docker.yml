@@ -18,14 +18,19 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: org.h2.Driver
-    # 文件模式，保存到当前目录下的h2DBData.mv.db
-    url: jdbc:h2:file:/db/h2DBData # jdbc:h2:mem:test
+    # 文件模式，保存到当前db目录下的dataroom.mv.db
+    url: jdbc:h2:file:/db/dataroom # jdbc:h2:mem:test
     username: root
     password: ${DB_PASSWORD:123456}
   sql:
     init:
       schema-locations: classpath:init-h2.sql
       mode: always
+  h2:
+    console:
+      enabled: ${DB_CONSOLE:true}
+      path: /dataroom-db
+
 gc:
   starter:
     file:
