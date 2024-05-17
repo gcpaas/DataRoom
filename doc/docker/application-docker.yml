@@ -30,6 +30,8 @@ spring:
     console:
       enabled: ${DB_CONSOLE:true}
       path: /dataroom-db
+      settings:
+        webAllowOthers: true
 
 gc:
   starter:
