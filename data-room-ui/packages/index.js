@@ -1,5 +1,5 @@
 
-import registerConfig from '@gcpaas/data-room-ui/packages/js/utils/registerConfig'
+import registerDataRoomUI from '@gcpaas/data-room-ui/packages/js/utils/registerConfig'
 import * as $dataRoomAxios from '@gcpaas/data-room-ui/packages/js/utils/http.js'
 // 大屏设计页面
 const BigScreenDesign = () => import('./bigScreen/designer/index.js')
@@ -29,7 +29,7 @@ function install (Vue) {
 export {
   install,
   $dataRoomAxios,
-  registerConfig,
+  registerDataRoomUI,
   BigScreenDesign,
   BigScreenRun,
   DashBoardDesign,
@@ -39,7 +39,7 @@ export {
 export default {
   install,
   $dataRoomAxios,
-  registerConfig,
+  registerDataRoomUI,
   BigScreenDesign,
   BigScreenRun,
   DashBoardDesign,
