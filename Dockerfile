@@ -10,7 +10,7 @@ COPY doc/docker/application-docker.yml /app/dataRoom/config
 # 创建前端运行目录
 RUN mkdir -p /app/dataRoom/ui
 # 复制前端文件到运行目录
-COPY data-room-ui/dataRoomUi /app/dataRoom/ui
+COPY data-room-ui/dataroom /app/dataRoom/ui
 # 复制docker环境的配置文件到运行目录
 COPY doc/docker/index-production.js /app/dataRoom/ui/config
 # 创建资源保存目录
