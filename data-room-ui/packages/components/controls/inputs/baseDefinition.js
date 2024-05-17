@@ -16,7 +16,7 @@ export default {
     indent: 15, // 缩进
     clearable: true, // 可清空
     textStyle: {
-      color: '#ffffff',
+      color: '#000',
       fontStyle: 'normal',
       fontWeight: 'normal',
       fontFamily: 'Microsoft Yahei',
