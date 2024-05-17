@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     isPreview () {
-      return (this.$route.path === window?.BS_CONFIG?.routers?.dashBoardPreviewUrl) || (this.$route.path === '/dash-bord/preview')
+      return (this.$route.path === window?.SITE_CONFIG.dataRoom?.routers?.dashBoardPreviewUrl) || (this.$route.path === '/dash-bord/preview')
     }
   },
   data () {

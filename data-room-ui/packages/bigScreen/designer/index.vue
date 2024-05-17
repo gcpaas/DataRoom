@@ -95,7 +95,7 @@ export default {
   },
   computed: {
     currentPageType () {
-      return this.$route.path === (window.BS_CONFIG?.routers?.bigScreenDesignUrl || '/big-screen/design') ? 'bigScreen' : 'dashBoard'
+      return this.$route.path === (window.SITE_CONFIG.dataRoom?.routers?.bigScreenDesignUrl || '/big-screen/design') ? 'bigScreen' : 'dashBoard'
     },
     pageCode () {
       return this.code || this.$route.query.code

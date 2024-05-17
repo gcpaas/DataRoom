@@ -49,7 +49,7 @@ export default {
       return this.canvasInst.dataHandleFilters
     },
     isPreview () {
-      return (this.$route.path === window?.BS_CONFIG?.routers?.bigScreenPreviewUrl) || (this.$route.path === '/big-screen/preview')
+      return (this.$route.path === window?.SITE_CONFIG.dataRoom?.routers?.bigScreenPreviewUrl) || (this.$route.path === '/big-screen/preview')
     },
     initRequestData () {
       return !(this.isPreview && (!this.config.dataSource.initRequestData) && this.isInit)

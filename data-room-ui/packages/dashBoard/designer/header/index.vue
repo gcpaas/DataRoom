@@ -150,7 +150,7 @@ export default {
     },
     // 预览
     preview (previewCode) {
-      const path = window?.BS_CONFIG?.routers?.dashBoardPreviewUrl || '/dash-bord/preview'
+      const path = window?.SITE_CONFIG.dataRoom?.routers?.dashBoardPreviewUrl || '/dash-bord/preview'
 
       const { href } = this.$router.resolve({
         path,

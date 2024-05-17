@@ -190,16 +190,16 @@ export default {
         url: ''
       },
       file: null,
-      upLoadUrl: window.BS_CONFIG?.httpConfigs?.baseURL + '/dataroom/file/add',
-      replaceUrl: window.BS_CONFIG?.httpConfigs?.baseURL + '/dataroom/file/replace',
+      upLoadUrl: window.SITE_CONFIG.dataRoom?.baseURL + '/dataroom/file/add',
+      replaceUrl: window.SITE_CONFIG.dataRoom?.baseURL + '/dataroom/file/replace',
       searchKey: '',
       extend: '',
       resourceTypeList: [],
-      sourceExtends: window.BS_CONFIG?.sourceExtends || ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'xls', 'xlsx', 'csv'],
+      sourceExtends: window.SITE_CONFIG.dataRoom?.sourceExtends || ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'xls', 'xlsx', 'csv'],
       list: [],
       fileUploadParam: {},
       headers: {
-        ...window.BS_CONFIG?.httpConfigs?.headers
+        ...window.SITE_CONFIG.dataRoom?.headers
       },
       fileList: [],
       loading: false,

@@ -669,11 +669,11 @@ export default {
       const components = Object.values(this.$options.components)
       let remoteComponentData = null
       if (
-        window.BS_CONFIG?.customDatasetComponents &&
-        window.BS_CONFIG?.customDatasetComponents.length > 0
+        window.SITE_CONFIG.dataRoom?.customDatasetComponents &&
+        window.SITE_CONFIG.dataRoom?.customDatasetComponents.length > 0
       ) {
         // 获取远程组件
-        remoteComponentData = window.BS_CONFIG?.customDatasetComponents.find(
+        remoteComponentData = window.SITE_CONFIG.dataRoom?.customDatasetComponents.find(
           (item) => item.config.componentName === componentName
         )
       }
@@ -738,14 +738,14 @@ export default {
         }
       ]
       if (
-        window.BS_CONFIG?.datasetTypeList &&
-        window.BS_CONFIG?.datasetTypeList?.length !== 0
+        window.SITE_CONFIG.dataRoom?.datasetTypeList &&
+        window.SITE_CONFIG.dataRoom?.datasetTypeList?.length !== 0
       ) {
         this.datasetTypeList = [
           { name: '全部', datasetType: '' },
           ...list.filter(
             (item) =>
-              window.BS_CONFIG?.datasetTypeList.findIndex(
+              window.SITE_CONFIG.dataRoom?.datasetTypeList.findIndex(
                 (x) => x === item.datasetType
               ) !== -1
           )
@@ -754,11 +754,11 @@ export default {
         this.datasetTypeList = [...list]
       }
       if (
-        window.BS_CONFIG?.customDatasetComponents &&
-        window.BS_CONFIG?.customDatasetComponents.length > 0
+        window.SITE_CONFIG.dataRoom?.customDatasetComponents &&
+        window.SITE_CONFIG.dataRoom?.customDatasetComponents.length > 0
       ) {
         // 将获得到的远程数据集进行组装
-        window.BS_CONFIG?.customDatasetComponents.forEach((item) => {
+        window.SITE_CONFIG.dataRoom?.customDatasetComponents.forEach((item) => {
           this.datasetTypeList.push({
             name: item.config.name,
             datasetType: item.config.datasetType,

@@ -194,10 +194,10 @@ export default {
       fileUploadParam: {
         hide: 1
       },
-      actionUrl: window.BS_CONFIG?.httpConfigs?.baseURL + '/dataroom/file/upload',
-      sourceExtends: window.BS_CONFIG?.sourceExtends || ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'xls', 'xlsx', 'csv'],
+      actionUrl: window.SITE_CONFIG.dataRoom?.baseURL + '/dataroom/file/upload',
+      sourceExtends: window.SITE_CONFIG.dataRoom?.sourceExtends || ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'xls', 'xlsx', 'csv'],
       headers: {
-        ...window.BS_CONFIG?.httpConfigs?.headers
+        ...window.SITE_CONFIG.dataRoom?.headers
       },
       formVisible: false,
       uploadLoading: false,

@@ -4,7 +4,7 @@ function getFileUrl (url) {
     return url
   }
   if (url.startsWith('/dataroom/file/reference')) {
-    return window.BS_CONFIG?.httpConfigs?.baseURL + url
+    return window.SITE_CONFIG.dataRoom?.baseURL + url
   }
   // 如果是http开头的直接返回
   if (/^http/.test(url)) {
@@ -14,7 +14,7 @@ function getFileUrl (url) {
   if (!/^\//.test(url)) {
     url = `/${url}`
   }
-  return `${window.BS_CONFIG?.httpConfigs?.fileUrlPrefix}${url}`
+  return `${window.SITE_CONFIG.dataRoom?.fileUrlPrefix}${url}`
 }
 
 export {

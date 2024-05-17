@@ -296,7 +296,7 @@ export default {
   },
   computed: {
     sourceTypeList () {
-      return window.BS_CONFIG?.sourceTypeList || [
+      return window.SITE_CONFIG.dataRoom?.sourceTypeList || [
         { label: 'MySQL', code: 'mysql', name: 'com.mysql.jdbc.Driver', url: 'jdbc:mysql://localhost:3306/db_name?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false&useOldAliasMetadataBehavior=true' },
         { label: 'ClickHouse', code: 'clickhouse', name: 'ru.yandex.clickhouse.ClickHouseDriver', url: 'jdbc:clickhouse://localhost:8123/db_name' },
         { label: 'PostgreSQL', code: 'postgresql', name: 'org.postgresql.Driver', url: 'jdbc:postgresql://localhost:13308/db_name' },

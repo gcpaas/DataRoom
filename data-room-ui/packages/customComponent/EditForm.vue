@@ -447,7 +447,7 @@ export default {
     // 跳转设计态
     toDesign () {
       this.$router.push({
-        path: this.dataForm.type === 'bigScreen' ? window.BS_CONFIG?.routers?.bigScreenDesignUrl || '/big-screen/design' : window.BS_CONFIG?.routers?.dashBoardDesignUrl || '/dash-bord/design',
+        path: this.dataForm.type === 'bigScreen' ? window.SITE_CONFIG.dataRoom?.routers?.bigScreenDesignUrl || '/big-screen/design' : window.SITE_CONFIG.dataRoom?.routers?.dashBoardDesignUrl || '/dash-bord/design',
         query: {
           code: this.dataForm.code
         }

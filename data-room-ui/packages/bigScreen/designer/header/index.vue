@@ -164,7 +164,7 @@ export default {
     },
     // 预览
     preview (previewCode) {
-      const path = window?.BS_CONFIG?.routers?.bigScreenPreviewUrl || '/big-screen/preview'
+      const path = window?.SITE_CONFIG.dataRoom?.routers?.bigScreenPreviewUrl || '/big-screen/preview'
 
       const { href } = this.$router.resolve({
         path,

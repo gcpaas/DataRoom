@@ -1,8 +1,13 @@
+
 import axios from 'axios'
 import qs from 'qs'
-// import _ from 'lodash'
-import merge from 'lodash/merge'
 import { Message } from 'element-ui'
+import { configDeepMerge } from '@gcpaas/data-room-ui/packages/js/utils/registerConfig'
+const fileUrlPrefix = window.SITE_CONFIG.dataRoom.fileUrlPrefix || process.env?.VUE_DATA_ROOM_FILE_URL_PREFIX
+window.SITE_CONFIG.dataRoom = configDeepMerge(window.SITE_CONFIG.dataRoom, {
+  baseURL: window.SITE_CONFIG.dataRoom.baseURL || process.env?.VUE_DATA_ROOM_BASE_URL,
+  fileUrlPrefix: fileUrlPrefix || window.CONFIG?.baseUrl + '/static'
+})
 /**
  * 统一进行异常输出
  * 如果异常只是弹框显示即可，可使用该实例
@@ -15,7 +20,6 @@ const httpConfig = {
   }
 }
 
-const httpCustom = axios.create(httpConfig)
 /**
  *对于出现异常时还需要做其他操作，可使用该实例
  */
@@ -38,18 +42,8 @@ function EipException (message, code) {
  */
 http.interceptors.request.use(config => {
   return {
-    ...config,
-    ...merge(httpConfig, window.BS_CONFIG?.httpConfigs)
+    ...config
   }
-}, error => {
-  return Promise.reject(error)
-})
-
-/**
- * 自定义请求拦截
- */
-httpCustom.interceptors.request.use(config => {
-  return config
 }, error => {
   return Promise.reject(error)
 })
@@ -90,51 +84,27 @@ http.interceptors.response.use(response => {
 })
 
 /**
- * 响应拦截
- */
-httpCustom.interceptors.response.use(response => {
-  const res = response.data
-  return res
-}, error => {
-  if (error.message && error.message === 'Network Error') {
-    return Promise.reject(error)
-  // eslint-disable-next-line no-empty
-  } else {
-  }
-  Message({
-    message: '服务异常',
-    type: 'error'
-  })
-  return Promise.reject(error)
-})
-
-/**
  * get请求
  * @param url
  * @param params
  * @returns {Promise<any>}
  */
-export function get (url, params = {}, customHandlerException = false) {
+export function get (url, params = {}) {
   if (!url.startsWith('http')) {
-    url = window.BS_CONFIG?.httpConfigs?.baseURL + url
+    url = window?.SITE_CONFIG.dataRoom?.baseURL + url
   }
   // 如果是ie浏览器要添加个时间戳，解决浏览器缓存问题
   if (!!window.ActiveXObject || 'ActiveXObject' in window) {
     params._t = new Date().getTime()
   }
-  const axiosInstance = customHandlerException ? httpCustom : http
   return new Promise((resolve, reject) => {
-    axiosInstance.get(url, {
+    http.get(url, {
       params: params,
       paramsSerializer: params => {
         return qs.stringify(params, { indices: false })
       }
     }).then(response => {
-      if (customHandlerException) {
-        resolve(response)
-      } else {
-        resolve(response.data)
-      }
+      resolve(response.data)
     }).catch(err => {
       reject(err)
     })
@@ -147,19 +117,14 @@ export function get (url, params = {}, customHandlerException = false) {
  * @param params
  * @returns {Promise<any>}
  */
-export function post (url, data = {}, customHandlerException = false) {
+export function post (url, data = {}) {
   if (!url.startsWith('http')) {
-    url = window.BS_CONFIG?.httpConfigs?.baseURL + url
+    url = window?.SITE_CONFIG?.dataRoom?.baseURL + url
   }
-  const axiosInstance = customHandlerException ? httpCustom : http
   data = JSON.stringify(data)
   return new Promise((resolve, reject) => {
-    axiosInstance.post(url, data).then(response => {
-      if (customHandlerException) {
-        resolve(response)
-      } else {
-        resolve(response.data)
-      }
+    http.post(url, data).then(response => {
+      resolve(response.data)
     }).catch(err => {
       reject(err)
     })
@@ -172,7 +137,7 @@ export function post (url, data = {}, customHandlerException = false) {
 
 export function download (url, headers = {}, params = {}, body = {}) {
   if (!url.startsWith('http')) {
-    url = window.BS_CONFIG?.httpConfigs?.baseURL + url
+    url = window?.SITE_CONFIG?.dataRoom?.baseURL + url
   }
   // 如果是ie浏览器要添加个时间戳，解决浏览器缓存问题
   if (!!window.ActiveXObject || 'ActiveXObject' in window) {
@@ -233,22 +198,17 @@ export function download (url, headers = {}, params = {}, body = {}) {
  * @param customHandlerException
  * @returns {Promise<unknown>}
  */
-export function upload (url, data = {}, customHandlerException = false) {
+export function upload (url, data = {}) {
   if (!url.startsWith('http')) {
-    url = window.BS_CONFIG?.httpConfigs?.baseURL + url
+    url = window?.SITE_CONFIG.dataRoom?.baseURL + url
   }
-  const axiosInstance = customHandlerException ? httpCustom : http
   return new Promise((resolve, reject) => {
-    axiosInstance.post(url, data, {
+    http.post(url, data, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     }).then(response => {
-      if (customHandlerException) {
-        resolve(response)
-      } else {
-        resolve(response.data)
-      }
+      resolve(response.data)
     }).catch(err => {
       reject(err)
     })

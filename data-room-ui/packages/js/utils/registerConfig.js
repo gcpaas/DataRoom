@@ -1,10 +1,11 @@
+
 /**
  * 对象属性合并，与 Object.assign 语法不同
  * @param target
  * @param source
  * @returns {{}}
  */
-function configDeepMerge (target, source) {
+export function configDeepMerge (target, source) {
   const merged = {}
   for (const each in source) {
     if (target.hasOwnProperty(each) && source.hasOwnProperty(each)) {
@@ -28,8 +29,9 @@ function configDeepMerge (target, source) {
   return merged
 }
 // 自动注册路由
-function registerRouters (router, config = { registerRouter: true }) {
+function registerRouters (config = { registerRouter: true }) {
   // 没有router对象不注册路由
+  const { router } = config
   if (!router) {
     return
   }
@@ -107,13 +109,7 @@ function registerRouters (router, config = { registerRouter: true }) {
 }
 
 // 注册配置
-export default function (router, config) {
-  window.BS_CONFIG = {}
-  window.BS_CONFIG = configDeepMerge(window.BS_CONFIG, config)
-  if (!config?.httpConfigs?.fileUrlPrefix) {
-    // 如果没有配置文件访问前缀，使用baseURL加上/static作为文件前缀
-    window.BS_CONFIG.httpConfigs.fileUrlPrefix = window.BS_CONFIG.httpConfigs.baseURL + '/static'
-  }
+export default function (config = { }) {
   // 注册路由
-  registerRouters(router, config)
+  registerRouters(config)
 }

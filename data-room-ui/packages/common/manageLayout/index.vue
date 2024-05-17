@@ -56,14 +56,14 @@ export default {
       return 'DataRoom设计器'
     },
     logo () {
-      return window?.BS_CONFIG?.starter?.logo ?? require('./images/logo.png')
+      return window?.SITE_CONFIG.dataRoom?.starter?.logo ?? require('./images/logo.png')
     },
     tabList () {
       if (this.$route.query.edit) {
         return [
           {
             name: '素材库',
-            path: window?.BS_CONFIG?.routers?.pageListUrl || '/page-list',
+            path: window?.SITE_CONFIG.dataRoom?.routers?.pageListUrl || '/page-list',
             icon: 'icon-tupian',
             type: 'resource'
           }
@@ -72,13 +72,13 @@ export default {
       return [
         {
           name: '页面设计',
-          path: window?.BS_CONFIG?.routers?.pageListUrl || '/page-list',
+          path: window?.SITE_CONFIG.dataRoom?.routers?.pageListUrl || '/page-list',
           icon: 'icon-icon-shujudaping',
           type: 'page'
         },
         {
           name: '素材库',
-          path: window?.BS_CONFIG?.routers?.pageListUrl || '/page-list',
+          path: window?.SITE_CONFIG.dataRoom?.routers?.pageListUrl || '/page-list',
           icon: 'icon-tupian',
           type: 'resource'
         },
