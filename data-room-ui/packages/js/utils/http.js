@@ -2,7 +2,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import { Message } from 'element-ui'
-import { configDeepMerge } from '@gcpaas/data-room-ui/packages/js/utils/registerConfig'
+import { configDeepMerge } from '@gcpaas/data-room-ui/packages/js/utils/registerDataRoomUI'
 const fileUrlPrefix = window.SITE_CONFIG.dataRoom.fileUrlPrefix || process.env?.VUE_DATA_ROOM_FILE_URL_PREFIX
 window.SITE_CONFIG.dataRoom = configDeepMerge(window.SITE_CONFIG.dataRoom, {
   baseURL: window.SITE_CONFIG.dataRoom.baseURL || process.env?.VUE_DATA_ROOM_BASE_URL,

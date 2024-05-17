@@ -9,6 +9,7 @@ import router from './router'
 import 'element-ui/lib/theme-chalk/index.css'
 // import '@gcpaas/data-room-ui/packages/assets/style/common.scss'
 import * as $dataRoomAxios from '@gcpaas/data-room-ui/packages/js/utils/http.js'
+
 import { registerDataRoomUI } from '@gcpaas/data-room-ui/packages/index.js'
 // import customPlots from '@/customPlots/exports'
 Vue.use(ElementUI, { size: 'mini' })

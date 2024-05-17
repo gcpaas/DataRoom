@@ -1,5 +1,5 @@
 
-import registerDataRoomUI from '@gcpaas/data-room-ui/packages/js/utils/registerConfig'
+import registerDataRoomUI from '@gcpaas/data-room-ui/packages/js/utils/registerDataRoomUI'
 import * as $dataRoomAxios from '@gcpaas/data-room-ui/packages/js/utils/http.js'
 // 大屏设计页面
 const BigScreenDesign = () => import('./bigScreen/designer/index.js')
