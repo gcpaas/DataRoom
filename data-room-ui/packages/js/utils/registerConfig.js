@@ -28,7 +28,7 @@ function configDeepMerge (target, source) {
   return merged
 }
 // 自动注册路由
-function registerRouters (config, router) {
+function registerRouters (router, config = { registerRouter: true }) {
   // 没有router对象不注册路由
   if (!router) {
     return
@@ -107,7 +107,7 @@ function registerRouters (config, router) {
 }
 
 // 注册配置
-export default function (config, router) {
+export default function (router, config) {
   window.BS_CONFIG = {}
   window.BS_CONFIG = configDeepMerge(window.BS_CONFIG, config)
   if (!config?.httpConfigs?.fileUrlPrefix) {
@@ -115,5 +115,5 @@ export default function (config, router) {
     window.BS_CONFIG.httpConfigs.fileUrlPrefix = window.BS_CONFIG.httpConfigs.baseURL + '/static'
   }
   // 注册路由
-  registerRouters(config, router)
+  registerRouters(router, config)
 }

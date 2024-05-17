@@ -13,22 +13,8 @@ import { registerDataRoomUI } from '@gcpaas/data-room-ui/packages/index.js'
 // import customPlots from '@/customPlots/exports'
 Vue.use(ElementUI, { size: 'mini' })
 registerDataRoomUI(
+  router,
   {
-    routers: {
-      // 大屏设计路由
-      bigScreenDesignUrl: '/big-screen/design',
-      // 大屏预览路由
-      bigScreenPreviewUrl: '/big-screen/preview',
-      // 大屏设计路由
-      dashBoardDesignUrl: '/dash-bord/design',
-      // 大屏预览路由
-      dashBoardPreviewUrl: '/dash-bord/preview',
-      // 数据源管理路由
-      datasourceManageUrl: '/big-screen/datasource',
-      // 数据集管理路由
-      datasetManageUrl: '/big-screen/dataSet'
-
-    },
     // 控制自定义路由是否加入到大屏的路由中，方便做权限控制
     registerRouter: true,
     httpConfigs: {
@@ -37,8 +23,7 @@ registerDataRoomUI(
       // 现在文件路径保存的是相对路径，所以需要加上前缀,这个值一般和后端的gc.starter.file.urlPrefix一致
       fileUrlPrefix: window.CONFIG.fileUrlPrefix ? window.CONFIG.fileUrlPrefix : window.CONFIG?.baseUrl + '/static'
     }
-  },
-  router
+  }
 )
 promise.polyfill()
 // 自定义指令
