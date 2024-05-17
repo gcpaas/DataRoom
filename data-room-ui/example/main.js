@@ -30,7 +30,7 @@ registerDataRoomUI(
 
     },
     // 控制自定义路由是否加入到大屏的路由中，方便做权限控制
-    notRegisterRouter: false,
+    registerRouter: true,
     httpConfigs: {
       baseURL: window.CONFIG?.baseUrl,
       headers: { 'Dataroom-Token': 'eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIyIiwiYXVkIjoiMiIsInVuYW1lIjoiYWRtaW4iLCJybmFtZSI6IueuoeeQhuWRmCIsImlzcyI6ImdjIiwib2lkIjoiMSIsImlkIjoiYWRtaW46cGNfMTc0NTYzODc5Njg4OTc5MjUxMyIsImV4cCI6MTcwNTExNDA5NiwiaWF0IjoxNzA1MDI3Njk2LCJ0aWQiOiIyIiwianRpIjoiYWRtaW46cGNfMTc0NTYzODc5Njg4OTc5MjUxMyJ9.3aOT1x4M-ngHNfcSnyoMgP3MGTenDhQwyCO_3nUqoRU' },

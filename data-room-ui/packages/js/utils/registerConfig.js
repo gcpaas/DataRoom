@@ -93,7 +93,7 @@ function registerRouters (config, router) {
     }
   ]
   // 如果router有addRoutes方法
-  if (!config.notRegisterRouter) {
+  if (config.registerRouter) {
     if (router?.addRoutes) {
       router?.addRoutes(routers)
     } else {
