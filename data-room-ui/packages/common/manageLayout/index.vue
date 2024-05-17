@@ -66,12 +66,6 @@ export default {
             path: window?.BS_CONFIG?.routers?.pageListUrl || '/page-list',
             icon: 'icon-tupian',
             type: 'resource'
-          },
-          {
-            name: '组件库',
-            path: window?.BS_CONFIG?.routers?.componentUrl || '/big-screen-components',
-            icon: 'icon-zujian1',
-            type: 'component'
           }
         ]
       }
@@ -82,23 +76,11 @@ export default {
           icon: 'icon-icon-shujudaping',
           type: 'page'
         },
-        // {
-        //   name: '仪表盘管理',
-        //   path: window?.BS_CONFIG?.routers?.pageListUrl || '/page-list',
-        //   icon: 'icon-icon-shujudaping',
-        //   type: 'dashboard'
-        // },
         {
           name: '素材库',
           path: window?.BS_CONFIG?.routers?.pageListUrl || '/page-list',
           icon: 'icon-tupian',
           type: 'resource'
-        },
-        {
-          name: '组件库',
-          path: window?.BS_CONFIG?.routers?.pageListUrl || '/page-list',
-          icon: 'icon-zujian1',
-          type: 'component'
         },
         {
           name: '数据源',
@@ -112,12 +94,6 @@ export default {
           icon: 'icon-data',
           type: 'dataset'
         }
-        // {
-        //   id: 6,
-        //   name: '地图数据管理',
-        //   path: window?.BS_CONFIG?.routers?.mapData || '/big-screen-map-data',
-        //   icon: 'icon-data'
-        // }
       ]
     }
   },
