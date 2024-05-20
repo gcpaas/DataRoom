@@ -34,7 +34,7 @@ export default {
     return {
       isHover: false,
       mockData,
-      inputValue: '12345678899'
+      inputValue: ''
     }
   },
 
@@ -110,6 +110,7 @@ export default {
     overflow: hidden; /* 超出部分隐藏 */
   }
   .inputs-box{
+    color:red;
     ::v-deep .el-input__inner{
       height: 100%;
 
