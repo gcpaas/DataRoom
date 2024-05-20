@@ -6,6 +6,7 @@
     @mouseleave="leaveHandler"
   >
     <el-input
+      :id="`el-input-${config.code}`"
       ref="contentBox"
       v-model="inputValue"
       class="content-box inputs-box"
@@ -56,7 +57,11 @@ export default {
     },
     inputsStyle () {
       return {
-        color: 'red'
+        '--input-placeholder-color': this.config.props.placeholderStyle.color,
+        '--input-placeholder-font-size': this.config.props.placeholderStyle.fontStyle + 'px',
+        '--input-placeholder-font-weight': this.config.props.placeholderStyle.fontWeight,
+        '--input-placeholder-font-style': this.config.props.placeholderStyle.fontStyle,
+        '--input-placeholder-font-family': this.config.props.placeholderStyle.fontFamily
       }
     }
   },
@@ -66,7 +71,7 @@ export default {
     // 更新组件样式
     updateChartStyle () {
       this.$nextTick(() => {
-        const inputEl = this.$refs?.contentBox?.$refs?.input
+        const inputEl = document.querySelector(`#el-input-${this.config.code}`)
         // if (!inputEl) {
         Object.keys(this.inputInnerStyle).forEach(key => {
           inputEl.style[key] = this.inputInnerStyle[key]
@@ -110,10 +115,16 @@ export default {
     overflow: hidden; /* 超出部分隐藏 */
   }
   .inputs-box{
-    color:red;
     ::v-deep .el-input__inner{
       height: 100%;
 
+    }
+    ::v-deep .el-input__inner::placeholder {
+      color: var(--input-placeholder-color);
+      font-size: var(--input-placeholder-font-size);
+      font-weight: var(--input-placeholder-font-weight);
+      font-family: var(--input-placeholder-font-family);
+      font-style: var(--input-placeholder-font-style);
     }
   }
 

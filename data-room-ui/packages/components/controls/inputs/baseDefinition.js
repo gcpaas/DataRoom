@@ -24,9 +24,9 @@ export default {
     },
 
     placeholderStyle: { // 占位符样式
-      color: '#ffccc7',
+      color: '#C0C1C3',
       fontStyle: 'italic',
-      fontWeight: 'bold',
+      fontWeight: 'normal',
       fontFamily: 'sans-serif',
       fontSize: 14
     },
