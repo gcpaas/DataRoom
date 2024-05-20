@@ -19,7 +19,7 @@ export default {
       color: '#000',
       fontStyle: 'normal',
       fontWeight: 'normal',
-      fontFamily: 'Microsoft Yahei',
+      fontFamily: 'sans-serif',
       fontSize: 20
     },
 
