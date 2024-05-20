@@ -1,6 +1,6 @@
 window.ENV = 'production'
 var productionConfig = {
-  baseUrl: getIpPort(),
+  baseURL: getIpPort(),
   fileUrlPrefix: getIpPort() + '/dataroom',
 }
 // 必须的
