@@ -314,9 +314,9 @@ export default {
           this.sureLoading = true
           let url = ''
           if (this.dataForm.id) {
-            url = window.CONFIG?.baseUrl + '/dataroom/file/update'
+            url = window?.SITE_CONFIG?.dataRoom?.baseURL + '/dataroom/file/update'
           } else {
-            url = window.CONFIG?.baseUrl + '/dataroom/file/add'
+            url = window?.SITE_CONFIG?.dataRoom?.baseURL + '/dataroom/file/add'
           }
           const formData = new FormData()
           Object.keys(this.dataForm).forEach(key => {

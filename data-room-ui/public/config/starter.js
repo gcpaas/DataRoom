@@ -1,5 +1,7 @@
 (function(window) {
-  window.CONFIG = {}
+  window.SITE_CONFIG = {
+    dataRoom:{}
+  }
 })(window);
 
 /**
