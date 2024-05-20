@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.gccloud</groupId>
         <artifactId>dataroom</artifactId>
-        <version>3.0.0.2024041901.Alpha</version>
+        <version>3.0.0.2024051701</version>
     </parent>
 
     <artifactId>dataroom-server</artifactId>
@@ -63,6 +63,17 @@
                 <!-- 定义打包后的名称 -->
                 <finalName>dataroom-server</finalName>
                 <plugins>
+                    <!--打包去掉jar包内的配置文件-->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>application-dev.yml</exclude>
+                                <exclude>application-prod.yml</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
