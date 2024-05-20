@@ -4,7 +4,7 @@
       <div class="logo-title">
         <img
           class="logo"
-          :src="logo"
+          src="./images/logo.png"
         >
         <span>{{ title }}</span>
       </div>
@@ -54,9 +54,6 @@ export default {
     title () {
       if (this.$route.query.edit) return 'DataRoom设计器'
       return 'DataRoom设计器'
-    },
-    logo () {
-      return window?.SITE_CONFIG.dataRoom?.starter?.logo ?? require('./images/logo.png')
     },
     tabList () {
       if (this.$route.query.edit) {
@@ -125,6 +122,7 @@ export default {
 .big-screen-home-wrap > * {
   box-sizing: border-box;
 }
+
 .big-screen-home-wrap {
   height: 100%;
 
@@ -196,12 +194,14 @@ export default {
     -webkit-background-clip: text;
   }
 }
-.fork-me-on-gitee{
+
+.fork-me-on-gitee {
   position: absolute;
   top: 0;
   right: 0;
   z-index: 999;
-  img{
+
+  img {
     width: 120px;
     height: 120px;
   }
