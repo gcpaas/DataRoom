@@ -1,4 +1,3 @@
-
 /**
  * 对象属性合并，与 Object.assign 语法不同
  * @param target
@@ -11,7 +10,7 @@ export function configDeepMerge (target, source) {
     if (target.hasOwnProperty(each) && source.hasOwnProperty(each)) {
       if (
         typeof target[each] === 'object' &&
-          typeof source[each] === 'object'
+        typeof source[each] === 'object'
       ) {
         merged[each] = configDeepMerge(target[each], source[each])
       } else {
@@ -28,6 +27,7 @@ export function configDeepMerge (target, source) {
   }
   return merged
 }
+
 // 自动注册路由
 function registerRouters (config = { registerRouter: true }) {
   // 没有router对象不注册路由
@@ -109,7 +109,8 @@ function registerRouters (config = { registerRouter: true }) {
 }
 
 // 注册配置
-export default function (config = { }) {
+export default function (config = {}) {
+  window.SITE_CONFIG.dataRoom = configDeepMerge(window.SITE_CONFIG.dataRoom, config)
   // 注册路由
   registerRouters(config)
 }
