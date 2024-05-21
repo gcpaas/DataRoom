@@ -3,7 +3,7 @@
     <div class="logo-wrap item-wrap">
       <img
         class="menu-img"
-        src="../../../assets/images/goBack.png"
+        src="../../../assets/images/logo.png"
         alt="返回"
         @click="goBackManage"
       >
@@ -13,16 +13,6 @@
       >{{ pageName }}</span>
     </div>
     <div class="head-btn-group">
-      <el-tooltip
-        class="item"
-        content="刷新画布"
-        placement="top"
-        popper-class="dataroom-el-tooltip"
-      >
-        <CusBtn>
-          <i class="el-icon-refresh-right" />
-        </CusBtn>
-      </el-tooltip>
       <el-tooltip
         class="item"
         effect="dark"
@@ -37,12 +27,21 @@
           <i class="el-icon-s-unfold" />
         </CusBtn>
       </el-tooltip>
+      <CusBtn @click="empty">
+        清空
+      </CusBtn>
       <CusBtn
         :loading="saveAndPreviewLoading"
         @click.native="execRun()"
       >
         <i class="el-icon-s-platform" />
         预览
+      </CusBtn>
+      <CusBtn
+        :loading="saveLoading"
+        @click="save"
+      >
+        保存
       </CusBtn>
       <CusBtn
         type="primary"
@@ -52,15 +51,6 @@
         <i class="el-icon-s-promotion" />
         发布
       </CusBtn>
-      <CusBtn
-        :loading="saveLoading"
-        @click="save"
-      >
-        保存
-      </CusBtn>
-      <CusBtn @click="empty">
-        清空
-      </CusBtn>
     </div>
     <PageNameEditDialog ref="pageNameEditDialog" />
   </div>
@@ -69,6 +59,7 @@
 import { saveScreen } from '@gcpaas/data-room-ui/packages/js/api/pageApi'
 import PageNameEditDialog from './EditForm.vue'
 import CusBtn from '@gcpaas/data-room-ui/packages/common/customBtn'
+
 export default {
   name: 'PageTopSetting',
   components: {
