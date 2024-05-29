@@ -11,7 +11,7 @@
         :style="renderStyle"
       >
         <div
-          v-for="chart in initChartList"
+          v-for="chart in chartList"
           :key="chart.code"
           :style="getStyle(chart)"
         >
