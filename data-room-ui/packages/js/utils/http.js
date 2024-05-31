@@ -3,10 +3,12 @@ import axios from 'axios'
 import qs from 'qs'
 import { Message } from 'element-ui'
 import { configDeepMerge } from '@gcpaas/data-room-ui/packages/js/utils/registerDataRoomUI'
-const baseURL = window?.SITE_CONFIG.dataRoom?.baseURL || process.env?.VUE_DATA_ROOM_BASE_URL
-window.SITE_CONFIG.dataRoom = configDeepMerge(window.SITE_CONFIG.dataRoom, {
+const baseURL = window?.SITE_CONFIG?.dataRoom?.baseURL || process.env?.VUE_APP_DATA_ROOM_BASE_URL
+window.SITE_CONFIG = window.SITE_CONFIG || {}
+window.SITE_CONFIG.dataRoom = window?.SITE_CONFIG?.dataRoom || {}
+window.SITE_CONFIG.dataRoom = configDeepMerge(window?.SITE_CONFIG?.dataRoom, {
   baseURL,
-  fileUrlPrefix: window?.SITE_CONFIG.dataRoom?.fileUrlPrefix || process.env?.VUE_DATA_ROOM_FILE_URL_PREFIX || baseURL
+  fileUrlPrefix: window?.SITE_CONFIG?.dataRoom?.fileUrlPrefix || process.env?.VUE_APP_DATA_ROOM_FILE_URL_PREFIX || (baseURL + '/static')
 })
 /**
  * 统一进行异常输出
