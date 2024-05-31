@@ -338,7 +338,7 @@ export default {
           Object.keys(this.dataForm).forEach(key => {
             formData.append(key, this.dataForm[key])
           })
-          axios.post(url, formData).then(res => {
+          this.$dataRoomAxios.upload(url, formData).then(res => {
             this.sureLoading = false
             this.$message.success('操作成功')
             this.formVisible = false
