@@ -113,11 +113,11 @@
             :before-upload="beforeUpload"
             :on-success="uploadSuccess"
             :data="fileUploadParam"
-            :headers="headers"
+            :http-request="uploadRequest"
             :on-remove="removeImg"
             :auto-upload="true"
           >
-            <el-button>
+            <el-button :loading="uploadLoading">
               上传
             </el-button>
           </el-upload>
@@ -173,6 +173,7 @@
 <script>
 import { getFileUrl } from '@gcpaas/data-room-ui/packages/js/utils/file'
 import axios from 'axios'
+import { uploadRequest } from '@gcpaas/data-room-ui/packages/js/utils'
 
 export default {
   name: 'ImportResource',
@@ -288,6 +289,21 @@ export default {
     },
     beforeUpload () {
 
+    },
+    // 自定义请求上传文件
+    uploadRequest (params) {
+      uploadRequest(params).then((res) => {
+        this.uploadLoading = false
+        this.$message({
+          type: 'success',
+          message: '上传成功'
+        })
+        this.dataForm.coverUrl = res.url
+        this.dataForm.coverId = res.id
+      }).catch((err) => {
+        this.uploadLoading = false
+        console.log(err)
+      })
     },
     // 上传封面
     uploadSuccess (response, file) {

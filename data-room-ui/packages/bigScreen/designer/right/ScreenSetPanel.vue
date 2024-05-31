@@ -77,7 +77,7 @@
                 :limit="1"
                 :on-success="uploadImg"
                 :data="fileUploadParam"
-                :headers="headers"
+                :http-request="uploadRequest"
                 :on-remove="removeImg"
                 :before-upload="beforeUpload"
                 :auto-upload="true"
@@ -108,7 +108,7 @@
 
 <script>
 import { toPng } from 'html-to-image'
-import { compressImage, showSize } from '@gcpaas/data-room-ui/packages/js/utils'
+import { compressImage, showSize, uploadRequest } from '@gcpaas/data-room-ui/packages/js/utils'
 import { getFileUrl } from '@gcpaas/data-room-ui/packages/js/utils/file'
 
 export default {
@@ -199,6 +199,22 @@ export default {
             this.$message.warning('生成封面数据出现错误，请检查是否使用了跨域图片')
           }
         })
+    },
+    // 自定义请求上传文件
+    uploadRequest (params) {
+      uploadRequest(params).then((res) => {
+        this.uploadLoading = false
+        this.$message({
+          type: 'success',
+          message: '上传成功'
+        })
+        const _pageInfo = JSON.parse(JSON.stringify(this.pageInfo))
+        _pageInfo.coverPicture = res.url
+        this.canvasInst.updatePageInfo(_pageInfo)
+      }).catch((err) => {
+        this.uploadLoading = false
+        console.log(err)
+      })
     },
     // 上传封面
     uploadImg (response, file) {

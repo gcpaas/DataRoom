@@ -1,5 +1,6 @@
 // import _ from 'lodash'
 import upperFirst from 'lodash/upperFirst'
+import Vue from 'vue'
 export const randomString = e => {
   e = e || 32
   const t = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz'
@@ -176,5 +177,22 @@ export function compressImage (base64, { width: w = 1280, height: h = 720, size 
     newImage.onerror = function () {
       reject(new Error('Failed to load image'))
     }
+  })
+}
+// 统一的上传文件的调接口的方法
+export function uploadRequest (params) {
+  return new Promise((resolve, reject) => {
+    const fd = new FormData()
+    if (params.data && Object.keys(params.data).length) {
+      for (const key in params.data) {
+        fd.append(key, params.data[key])
+      }
+    }
+    fd.append('file', params?.file)
+    Vue.prototype.$dataRoomAxios.upload(params?.action, fd).then((res) => {
+      resolve(res)
+    }).catch((err) => {
+      reject(err)
+    })
   })
 }

@@ -52,7 +52,7 @@
             accept=".jpg,.jpeg,.PNG,.JPG"
             :action="actionUrl"
             :data="fileUploadParam"
-            :headers="headers"
+            :http-request="uploadRequest"
             :before-upload="beforeUpload"
             :on-success="uploadSuccess"
             :show-file-list="false"
@@ -289,6 +289,7 @@ import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
 import { fontWeightOptions, fonFamilyList, positionOptions } from '@gcpaas/data-room-ui/packages/js/utils/options'
 import BaseSet from '@gcpaas/data-room-ui/packages/components/common/panel/baseSet/index.vue'
 import { getFileUrl } from '@gcpaas/data-room-ui/packages/js/utils/file'
+import { uploadRequest } from '@gcpaas/data-room-ui/packages/js/utils'
 export default {
   name: '',
   components: {
@@ -340,6 +341,26 @@ export default {
       this.changeStyle()
     },
     beforeUpload () {
+    },
+    // 自定义请求上传文件
+    uploadRequest (params) {
+      uploadRequest(params).then((res) => {
+        this.uploadLoading = false
+        this.$message({
+          type: 'success',
+          message: '上传成功'
+        })
+        const config = this.config
+        if (this.config.props.imageType === 'bitmap') {
+          config.props.backgroundImage = res.url
+        } else {
+          config.props.vectorImage = res.url
+        }
+        this.changeStyle()
+      }).catch((err) => {
+        this.uploadLoading = false
+        console.log(err)
+      })
     },
     uploadSuccess (response) {
       const config = this.config

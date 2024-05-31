@@ -118,11 +118,11 @@
                       :before-upload="beforeUpload"
                       :data="{ module: catalogCode, id: resource.id ,type: resource.type}"
                       :file-list="fileList"
-                      :headers="headers"
                       :on-error="uploadError"
                       :on-success="uploadSuccess"
                       :show-file-list="false"
                       class="upload-demo"
+                      :http-request="uploadRequest"
                       :accept="acceptOption[resource.type]"
                       multiple
                     >
@@ -249,6 +249,7 @@ import { pageMixins } from '@gcpaas/data-room-ui/packages/js/mixins/page'
 import ImportResource from './ImportResource'
 import { getFileUrl } from '@gcpaas/data-room-ui/packages/js/utils/file'
 import { upload } from '@gcpaas/data-room-ui/packages/js/utils/http'
+import { uploadRequest } from '@gcpaas/data-room-ui/packages/js/utils'
 
 export default {
   name: 'ResourceList',
@@ -360,15 +361,7 @@ export default {
   methods: {
     // 自定义请求上传文件
     uploadRequest (params) {
-      this.uploadLoading = true
-      const fd = new FormData()
-      if (params.data && Object.keys(params.data).length) {
-        for (const key in params.data) {
-          fd.append(key, params.data[key])
-        }
-      }
-      fd.append('file', params?.file)
-      this.$dataRoomAxios.upload(params?.action, fd).then((res) => {
+      uploadRequest(params).then((res) => {
         this.uploadLoading = false
         this.$message({
           type: 'success',

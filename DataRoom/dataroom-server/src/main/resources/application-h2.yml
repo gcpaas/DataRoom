@@ -24,6 +24,6 @@ gc:
   starter:
     file:
       # 一个存储文件的绝对路径，需要有写入权限
-      basePath: /home/dataroom/file/
+      basePath: D:\kdgc\后端静态资源
       # 启动服务的访问地址
       urlPrefix: http://127.0.0.1:${server.port}${server.servlet.context-path}/static/
