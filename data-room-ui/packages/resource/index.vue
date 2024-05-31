@@ -39,10 +39,10 @@
           :before-upload="beforeUpload"
           :data="uploadParams"
           :file-list="fileList"
-          :headers="headers"
           :on-error="uploadError"
           :on-success="uploadSuccess"
           :show-file-list="false"
+          :http-request="uploadRequest"
           class="upload-demo"
           :accept="acceptOption[uploadParams.type]"
           multiple
@@ -248,6 +248,7 @@
 import { pageMixins } from '@gcpaas/data-room-ui/packages/js/mixins/page'
 import ImportResource from './ImportResource'
 import { getFileUrl } from '@gcpaas/data-room-ui/packages/js/utils/file'
+import { upload } from '@gcpaas/data-room-ui/packages/js/utils/http'
 
 export default {
   name: 'ResourceList',
@@ -324,9 +325,6 @@ export default {
       sourceExtends: window.SITE_CONFIG.dataRoom?.sourceExtends || ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'xls', 'xlsx', 'csv'],
       list: [],
       fileUploadParam: {},
-      headers: {
-        ...window.SITE_CONFIG.dataRoom?.headers
-      },
       fileList: [],
       loading: false,
       imgExtends: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'image'],
@@ -360,6 +358,28 @@ export default {
     this.getDataList()
   },
   methods: {
+    // 自定义请求上传文件
+    uploadRequest (params) {
+      this.uploadLoading = true
+      const fd = new FormData()
+      if (params.data && Object.keys(params.data).length) {
+        for (const key in params.data) {
+          fd.append(key, params.data[key])
+        }
+      }
+      fd.append('file', params?.file)
+      this.$dataRoomAxios.upload(params?.action, fd).then((res) => {
+        this.uploadLoading = false
+        this.$message({
+          type: 'success',
+          message: '上传成功'
+        })
+        this.getDataList()
+      }).catch((err) => {
+        this.uploadLoading = false
+        console.log(err)
+      })
+    },
     // 选择上传的资源类型
     selectHandler (type) {
       // 每次上传资源前先重置参数
