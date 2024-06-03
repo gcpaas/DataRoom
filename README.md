@@ -134,10 +134,12 @@
 
 
 ## 联系我们
-
-<p>
-    <img alt="logo" width="200" src="./doc/images/qq.png">
-</p>
+<table>
+    <tr>
+        <td style="text-align: center;font-weight: bold;"><p>群1(已满)</p><p><img alt="logo" width="200" src="./doc/images/qq1.png"></p></td>
+        <td style="text-align: center;font-weight: bold;"><p>群2</p><p><img alt="logo" width="200" src="./doc/images/qq2.png"></p></td>
+    </tr>
+</table>
 
 
 ## 许可证
