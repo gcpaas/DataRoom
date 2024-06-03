@@ -454,6 +454,7 @@ export default {
       nameCheckRepeat({
         id: this.datasetId,
         name: value,
+        moduleCode: this.appCode
       }).then((r) => {
         if (r) {
           callback(new Error('数据集名称已存在'))
@@ -527,8 +528,8 @@ export default {
       passTest: false, // 通过测试
       // paramsVisible: false,
       tableNameList: [],
-      paramsListCopy: [],
-      isTest: false // 是否执行测试
+      paramsListCopy: []
+      // isTest: false // 是否执行测试
     }
   },
   computed: {
@@ -604,6 +605,7 @@ export default {
         this.dataForm.typeId = res.typeId
         this.dataForm.remark = res.remark
         this.dataForm.datasetType = res.datasetType
+        this.dataForm.moduleCode = res.moduleCode
         this.dataForm.editable = res.editable
         this.dataForm.sourceId = res.sourceId
         this.dataForm.cache = res.cache
@@ -643,9 +645,13 @@ export default {
       const params = {
         sourceName: '',
         sourceType: '',
+        moduleCode: this.appCode
       }
       datasourceList(params).then((data) => {
         this.sourceList = data
+        if(!this.dataForm.sourceId ) {
+          this.dataForm.sourceId = this.sourceId || ''
+        }
       })
     },
     /**
@@ -751,6 +757,7 @@ export default {
           remark: this.dataForm.remark,
           sourceId: this.dataForm.sourceId,
           cache: this.dataForm.cache,
+          moduleCode: this.appCode,
           editable: this.appCode ? 1 : 0,
           labelIds: this.dataForm.labelIds,
           config: {
@@ -764,13 +771,14 @@ export default {
           }
         }
         datasetSave(datasetParams)
-          .then(() => {
+          .then((r) => {
+            this.$emit('saveSuccess',r)
             this.$message.success('保存成功')
+            this.goBack()
             this.$parent.init(false)
             this.$parent.setType = null
             this.saveLoading = false
             this.saveText = ''
-            this.goBack()
           })
           .catch(() => {
             this.saveLoading = false
@@ -784,41 +792,7 @@ export default {
      * 解析并运行数据集
      */
     buildParamsAndRun () {
-      this.isTest = true
-      // 匹配 ${}
-      // const reg = /\${(.*?)}/g
-      // const paramNames = [
-      //   ...new Set(
-      //     [...this.dataForm.sqlProcess.matchAll(reg)].map((item) => item[1])
-      //   )
-      // ]
-      // // 匹配 #{}
-      // const reg2 = /#{(.*?)}/g
-      // const paramNames2 = [
-      //   ...new Set(
-      //     [...this.dataForm.sqlProcess.matchAll(reg2)].map((item) => item[1])
-      //   )
-      // ]
-      // paramNames.push(...paramNames2)
-      // const names = this.dataForm.paramsList.map((item) => item.name)
-      // const params = []
-      // paramNames.forEach((name) => {
-      //   if (names.includes(name)) {
-      //     const param = this.dataForm.paramsList.find(
-      //       (item) => item.name === name
-      //     )
-      //     params.push(param)
-      //   } else {
-      //     params.push({
-      //       name: name,
-      //       type: 'String',
-      //       value: '',
-      //       status: 1,
-      //       require: 0,
-      //       remark: ''
-      //     })
-      //   }
-      // })
+      // this.isTest = true
       // this.dataForm.paramsList = cloneDeep(params)
       this.dataForm.paramsList = cloneDeep(
         this.$refs.paramsConfig?.innerData ?? []
@@ -870,101 +844,106 @@ export default {
         .then((res) => {
           this.dataPreviewList = res.data.list
           this.structurePreviewList = res.structure
-          if (res.structure.length > 0) {
+          this.$nextTick(() => {
+            if (res.structure.length > 0) {
+              const { headerColumnObj } = this.$refs.dataPreview ?? {}
+              const fieldList = Object.values(headerColumnObj ?? {}).map(
+                ({ fieldName, fieldDesc = '', fieldType = 'text' }) => ({
+                  fieldName,
+                  fieldDesc,
+                  fieldType
+                })
+              )
+              res.structure.forEach((item) => {
+                const headerField = fieldList.find(
+                  (headerItem) => headerItem.fieldName === item.fieldName
+                )
+                if (headerField) {
+                  item.fieldDesc = headerField.fieldDesc || headerField.fieldName
+                  item.fieldType = headerField.fieldType
+                }
+              })
+            }
+            this.headerFields = cloneDeep(res.structure)
+            // 输出字段描述合并
+            this.structurePreviewList.forEach((field) => {
+              const fieldInfo = this.dataForm.fieldList.find(
+                (item) => item.fieldName === field.fieldName
+              )
+              if (fieldInfo) {
+                const { fieldDesc, fieldType, orderNum, sourceTable, ...rest } =
+                fieldInfo
+                field.fieldDesc = fieldDesc
+                field.fieldType = fieldType
+                field.orderNum = orderNum
+                field.sourceTable = sourceTable
+                Object.keys(rest).forEach((key) => {
+                  if (!field.hasOwnProperty(key)) {
+                    this.$set(field, key, rest[key])
+                  }
+                })
+              }
+            })
+            this.structurePreviewList.forEach((item) => {
+              if (!item.hasOwnProperty('orderNum')) {
+                this.$set(item, 'orderNum', 0)
+              }
+              if (!item.hasOwnProperty('sourceTable')) {
+                this.$set(item, 'sourceTable', '')
+              }
+              if (!item.hasOwnProperty('fieldDesc')) {
+                this.$set(item, 'fieldDesc', '')
+              }
+            })
+            this.totalCount = res.data.totalCount
+            this.tableNameList = res.tableNameList
+            // 如果只有一个表，自动填充字段表名
+            if (this.tableNameList && this.tableNameList.length === 1) {
+              this.structurePreviewList.forEach((item) => {
+                item.sourceTable = this.tableNameList[0]
+              })
+            }
+            this.structurePreviewListCopy = cloneDeep(
+              this.structurePreviewList
+            ).sort((a, b) => {
+              return a.orderNum - b.orderNum
+            })
+            let paramsNameCheck = false
             const { headerColumnObj } = this.$refs.dataPreview ?? {}
-            const fieldList = Object.values(headerColumnObj ?? {}).map(
+            const paramsList = Object.values(headerColumnObj ?? {}).map(
               ({ fieldName, fieldDesc = '', fieldType = 'text' }) => ({
                 fieldName,
                 fieldDesc,
                 fieldType
               })
             )
-            res.structure.forEach((item) => {
-              const headerField = fieldList.find(
-                (headerItem) => headerItem.fieldName === item.fieldName
-              )
-              if (headerField) {
-                item.fieldDesc = headerField.fieldDesc || headerField.fieldName
-                item.fieldType = headerField.fieldType
-              }
-            })
-          }
-          this.headerFields = cloneDeep(res.structure)
-          // 输出字段描述合并
-          this.structurePreviewList.forEach((field) => {
-            const fieldInfo = this.dataForm.fieldList.find(
-              (item) => item.fieldName === field.fieldName
-            )
-            if (fieldInfo) {
-              const { fieldDesc, fieldType, orderNum, sourceTable, ...rest } =
-                fieldInfo
-              field.fieldDesc = fieldDesc
-              field.fieldType = fieldType
-              field.orderNum = orderNum
-              field.sourceTable = sourceTable
-              Object.keys(rest).forEach((key) => {
-                if (!field.hasOwnProperty(key)) {
-                  this.$set(field, key, rest[key])
+            if (paramsList.length) {
+              paramsList.forEach((param) => {
+                if (param.name === '') {
+                  this.$message.warning('参数名称不能为空！')
+                  paramsNameCheck = true
+                }
+                const checkList = paramsList.filter(
+                  (item) => item.fieldName === param.name
+                )
+                if (checkList.length) {
+                  paramsNameCheck = true
+                  // param.name = ''
                 }
               })
             }
+
+            if (paramsNameCheck) {
+              this.$message.warning('参数名称不可以与字段名相同！')
+              this.passTest = false
+            } else {
+              if (val) this.$message.success('脚本执行通过')
+              this.exception = ''
+              this.msg = ''
+              this.passTest = true
+            }
+            this.saveLoading = false
           })
-          this.structurePreviewList.forEach((item) => {
-            if (!item.hasOwnProperty('orderNum')) {
-              this.$set(item, 'orderNum', 0)
-            }
-            if (!item.hasOwnProperty('sourceTable')) {
-              this.$set(item, 'sourceTable', '')
-            }
-            if (!item.hasOwnProperty('fieldDesc')) {
-              this.$set(item, 'fieldDesc', '')
-            }
-          })
-          this.totalCount = res.data.totalCount
-          this.tableNameList = res.tableNameList
-          // 如果只有一个表，自动填充字段表名
-          if (this.tableNameList && this.tableNameList.length === 1) {
-            this.structurePreviewList.forEach((item) => {
-              item.sourceTable = this.tableNameList[0]
-            })
-          }
-          this.structurePreviewListCopy = cloneDeep(
-            this.structurePreviewList
-          ).sort((a, b) => {
-            return a.orderNum - b.orderNum
-          })
-          let paramsNameCheck = false
-          const { headerColumnObj } = this.$refs.dataPreview ?? {}
-          const fieldList = Object.values(headerColumnObj ?? {}).map(
-            ({ fieldName, fieldDesc = '', fieldType = 'text' }) => ({
-              fieldName,
-              fieldDesc,
-              fieldType
-            })
-          )
-          fieldList.paramsList.forEach((param) => {
-            if (param.name === '') {
-              this.$message.warning('参数名称不能为空！')
-              paramsNameCheck = true
-            }
-            const checkList = fieldList.filter(
-              (item) => item.fieldName === param.name
-            )
-            if (checkList.length) {
-              paramsNameCheck = true
-              // param.name = ''
-            }
-          })
-          if (paramsNameCheck) {
-            this.$message.warning('参数名称不可以与字段名相同！')
-            this.passTest = false
-          } else {
-            if (val) this.$message.success('脚本执行通过')
-            this.exception = ''
-            this.msg = ''
-            this.passTest = true
-          }
-          this.saveLoading = false
         })
         .catch((e) => {
           this.passTest = false

@@ -39,8 +39,16 @@
         class="left"
       >
         <div class="dataroom-dataset-type-tree dataroom-dataset-type-el-tree-box">
-          <el-scrollbar class="scroll">
-            <el-empty v-show="noData" />
+          <el-scrollbar
+            :key="updateKey"
+            class="scroll"
+          >
+            <!-- <el-empty v-show="noData" /> -->
+            <div v-show="noData">
+              <span>
+                暂无数据
+              </span>
+            </div>
             <div
               v-if="!categoryData.length"
               style="text-align: center"
@@ -220,7 +228,6 @@
 </template>
 
 <script>
-// import LabelSelect from '@gcpaas/data-room-ui/packages/dataSet/components/LabelSelect.vue'
 import LabelEdit from '@gcpaas/data-room-ui/packages/dataSet/components/LabelConfigEdit.vue'
 import { labelList, removeLabel } from '@gcpaas/data-room-ui/packages/assets/js/api/LabelConfigService.js'
 import CategroyEditForm from '@gcpaas/data-room-ui/packages/dataSet/components/CategroyEditForm.vue'
@@ -306,10 +313,10 @@ export default {
         this.$emit('nodeClick', '-1', 'type')
       } else if (val === 'tag') {
         this.tagActiveList = ['']
-        this.updateKey = Math.random()
         this.$emit('nodeClick', [''], 'tag')
         this.handleScroll()
       }
+      this.updateKey = Math.random()
     }
   },
   mounted () {
@@ -349,11 +356,12 @@ export default {
         list.$el.querySelector('.el-scrollbar__wrap').scrollTop = 0
       }
       // 获取分组数据
-      getCategoryTree({ type: 'dataset'})
+      this.categoryData = [{ name: '全部', id: '', parentId: '0' }]
+      getCategoryTree({ type: 'dataset', moduleCode: this.appCode })
         .then((res) => {
           this.loading = false
           res.forEach((item) => {
-            this.categoryData.push({ isParent: item.hasChildren, ...item })
+            this.categoryData.push({ isParent: item.hasChildren,  ...item })
           })
           this.$emit('reCategory')
         })
@@ -486,7 +494,7 @@ export default {
         }
         categoryRemove(org.id).then((data) => {
           this.$message.success('操作成功')
-          this.init()
+          this.$refs.datasetTypeTree.remove(org.id)
           // 刷新右侧表格
           this.$emit('refreshData', org)
         })
@@ -499,7 +507,19 @@ export default {
     },
     // 新增或修改节点
     addOrUpdateNode (params, isAdd) {
-      this.init()
+      let parentNode = this.$refs.datasetTypeTree.getNode(params.parentId)
+      if (!isAdd) {
+        // 编辑=》先删除，再新增
+        this.$refs.datasetTypeTree.remove(params.id)
+      }
+      // 新增
+      if(parentNode) {
+        // 新增子节点
+        this.$refs.datasetTypeTree.append(params, parentNode)
+      } else {
+        // 新增根节点
+        this.categoryData.push(params)
+      }
     },
     clickNode (nodeData) {
       this.curType = '-1'
