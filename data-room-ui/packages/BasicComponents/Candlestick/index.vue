@@ -17,7 +17,7 @@ import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
 
 export default {
-  name: 'MapCharts',
+  name: 'Candlestick',
   mixins: [paramsMixins, commonMixins, linkageMixins],
   props: {
     id: {

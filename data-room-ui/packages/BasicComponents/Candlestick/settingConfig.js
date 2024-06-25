@@ -115,7 +115,7 @@ export const candlestickData = {
   icon: Icon.getNameList()[34],
   border: { type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [0, 0, 0, 0] },
   className:
-    'com.gccloud.dataroom.core.module.chart.components.ScreenMapChart',
+    'com.gccloud.dataroom.core.module.chart.components.ScreenCandlestickChart',
   w: 450,
   h: 320,
   x: 0,
