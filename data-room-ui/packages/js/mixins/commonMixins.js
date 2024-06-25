@@ -264,8 +264,9 @@ export default {
             } else {
               this.chart.changeData(config.option.data)
             }
-          }
-          if (this.charts) {
+          } if (this.config.type === 'candlestick' && this.charts) {
+            this.updateChartData(config, _res)
+          } else if (this.charts) {
             // 地图组件的被联动更新
             this.changeMapData(config.option.data)
           }
@@ -278,6 +279,10 @@ export default {
           resolve(config)
         })
       })
+    },
+    // 更新图表数据
+    updateChartData () {
+
     },
     // http前台代理需要对返回的数据进行重新组装
     httpDataFormatting (chartRes, httpRes) {

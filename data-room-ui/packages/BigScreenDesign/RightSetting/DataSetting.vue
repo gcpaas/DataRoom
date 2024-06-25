@@ -120,7 +120,7 @@
             </div>
           </div>
           <!--  基础组件数据配置  -->
-          <template v-if="!['customComponent', 'remoteComponent','echartsComponent'].includes(config.type)">
+          <template v-if="!['customComponent', 'remoteComponent','echartsComponent','candlestick'].includes(config.type)">
             <!--维度多选-->
             <el-form-item
               v-if="config.option.displayOption.dimensionField.enable"
@@ -190,6 +190,41 @@
             >
               <el-select
                 v-model="config.dataSource.metricField"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                filterable
+                clearable
+              >
+                <el-option
+                  v-for="(field, index) in dataSourceDataList"
+                  :key="index"
+                  :label="field.comment"
+                  :value="field.name"
+                >
+                  <div class="source-key-option">
+                    <div>
+                      {{ field.comment !== "" ? field.comment : field.name }}
+                    </div>
+                    <div class="option-txt">
+                      {{ field.name }}
+                    </div>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </template>
+          <!--  K线图数据配置  -->
+          <template v-if="config.type === 'candlestick'">
+            <el-form-item
+              v-for="(fieldItem, i) in fieldNameMapping"
+              :key="i"
+              prop="dataSource.xField"
+              class="data-form-item"
+              :label="fieldItem.desc"
+            >
+              <el-select
+                v-model="config.dataSource[fieldItem.name]"
+                :multiple="fieldItem.multiple"
                 class="bs-el-select"
                 popper-class="bs-el-select"
                 filterable
@@ -890,6 +925,33 @@ export default {
   },
   data () {
     return {
+      fieldNameMapping: [ // k线图的字段列表
+        {
+          name: 'xField',
+          desc: 'X轴',
+          multiple: false
+        },
+        {
+          name: 'openField',
+          desc: '开盘价',
+          multiple: false
+        },
+        {
+          name: 'closeField',
+          desc: '收盘价',
+          multiple: false
+        },
+        {
+          name: 'lowField',
+          desc: '最低价',
+          multiple: false
+        },
+        {
+          name: 'highField',
+          desc: '最高价',
+          multiple: false
+        }
+      ],
       fieldsList: [],
       params: [], // 参数配置
       datasetName: '',

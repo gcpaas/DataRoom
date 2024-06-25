@@ -3,7 +3,7 @@ import Icon from 'data-room-ui/assets/images/bigScreenIcon/export'
 import cloneDeep from 'lodash/cloneDeep'
 
 export const settingConfig = {
-  padding: [30, 30, 50, 80],
+  padding: [0, 30, 50, 80],
   legend: false,
   isGroup: true,
   data: [],
@@ -16,21 +16,6 @@ export const settingConfig = {
     },
     headerField: {
       enable: false
-    },
-    mapField: {
-      enable: true
-    },
-    metricField: {
-      // 指标
-      label: '维度',
-      enable: false,
-      multiple: false // 是否多选
-    },
-    dimensionField: {
-      // 表格列
-      label: '展示字段', // 维度/查询字段
-      enable: false,
-      multiple: false // 是否多选
     }
   }
 }
@@ -131,8 +116,8 @@ export const candlestickData = {
   border: { type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [0, 0, 0, 0] },
   className:
     'com.gccloud.dataroom.core.module.chart.components.ScreenMapChart',
-  w: 800,
-  h: 700,
+  w: 450,
+  h: 320,
   x: 0,
   y: 0,
   type: 'candlestick',
@@ -141,5 +126,13 @@ export const candlestickData = {
   },
   setting: undefined, // 右侧面板自定义配置
   dataHandler: {}, // 数据自定义处理js脚本
-  ...cloneDeep(dataConfig)
+  ...cloneDeep(dataConfig),
+  dataSource: {
+    ...cloneDeep(dataConfig.dataSource),
+    xField: '',
+    openField: '',
+    closeField: '',
+    lowField: '',
+    highField: ''
+  }
 }
