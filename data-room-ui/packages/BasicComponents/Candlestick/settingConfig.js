@@ -36,72 +36,36 @@ const customConfig = {
     skewY: 0
   },
   customize: {
-    mapId: '667',
-    // 缩放尺寸
-    zoom: 1,
-    center1: 50,
-    center2: 50,
-    // 是否显示文字
-    mapName: true,
-    // 文字颜色
-    mapNameColor: '#fff',
-    // 文字大小
-    mapNameSize: 8,
-    // 文字权重
-    mapNameWeight: 500,
-    // 地图背景色
-    backgroundColor: 'rgb(0,0,0,0)',
-    // 是否打点
-    scatter: true,
-    // 悬浮框背景色
-    tooltipBackgroundColor: '#0C121C',
-    // 悬浮框边框色
-    borderColor: 'rgba(0, 0, 0, 0.16)',
-    // 悬浮框数值标题
-    tooltipTitle: 'GDP',
-    // 点颜色
-    scatterBackgroundColor: 'rgba(255,0,0,.7)',
-    // 显示点文字
-    showScatterValue: true,
-    // 点文字颜色
-    scatterColor: '#fff',
-    // 点形状
-    scatterSymbol: 'circle',
-    // 点大小
-    scatterSize: 40,
-    // 分割线颜色
-    mapLineColor: 'rgba(53, 86, 165, 1)',
-    fontGraphicColor: '#fff',
-    fontSize: '30',
-    // 是否开启下钻
-    down: true,
-    // 允许下钻的层级
-    downLevel: 1,
-    // 地图级别
-    level: '2',
-    // 范围
-    scope: '中国',
-    // 地图区域颜色
-    areaColor: 'rgba(31, 50, 121, 1)',
-    // 地图区域悬浮颜色
-    emphasisColor: '#389BB7',
-    // 是否开启筛选
-    visual: false,
-    // 筛选范围
-    range: [0, 6000],
-    // 从上到下的颜色
-    rangeColor: ['#007aff', '#A5CC82'],
-    // 地图数据
-    dataMap: '中华人民共和国.json',
-    // 展示字段
-    value: '',
-    // 横坐标
-    xaxis: '',
-    // 纵坐标
-    yaxis: '',
-    // 名称
-    name: ''
-
+    // 自定义样式
+    highColor: '#c23531',
+    lowColor: '#314656',
+    gridShow: true,
+    gridColor: '#314656',
+    gridWidth: 1,
+    xAxis: {
+      name: '',
+      nameColor: '#fff',
+      nameSize: 16,
+      position: 'end',
+      tickWidth: 1,
+      tickColor: '#fff',
+      labelColor: '#fff',
+      labelSize: 12,
+      lineColor: '#fff',
+      lineWidth: 1
+    },
+    yAxis: {
+      name: '',
+      nameColor: '#fff',
+      nameSize: 16,
+      position: 'end',
+      tickWidth: 1,
+      tickColor: '#fff',
+      labelColor: '#fff',
+      labelSize: 12,
+      lineColor: '#fff',
+      lineWidth: 1
+    }
   }
 }
 

@@ -90,6 +90,7 @@ export default {
             }
           }
         })
+        console.log('pageInfo', pageInfo.chartList)
 
         // 改变页面数据
         commit('changePageInfo', pageInfo)
@@ -186,7 +187,7 @@ export function handleResData (data) {
     chart.key = chart.code
   })
   // 主题兼容
-  pageInfo.chartList = themeToSetting(pageInfo.chartList, pageInfo.pageConfig.customTheme)
+  // pageInfo.chartList = themeToSetting(pageInfo.chartList, pageInfo.pageConfig.customTheme)
   // 存储修改后的配置
   localStorage.setItem('pageInfo', JSON.stringify(pageInfo))
   return pageInfo
