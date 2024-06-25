@@ -197,6 +197,11 @@ public interface PageDesignConstant {
              */
             String CUSTOM_HTML = "customHtml";
 
+            /**
+             * K线图
+             */
+            String K_LINE = "kLine";
+
         }
     }
 
