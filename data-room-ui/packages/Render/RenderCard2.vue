@@ -26,8 +26,9 @@ import CustomComponent from '../PlotRender/index.vue'
 import Svgs from '../Svgs/index.vue'
 import EchartsComponent from '../EchartsRender/index.vue'
 import RemoteComponent from 'data-room-ui/RemoteComponents/index.vue'
-import Map  from 'data-room-ui/BasicComponents/Map/index.vue'
+import Map from 'data-room-ui/BasicComponents/Map/index.vue'
 import FlyMap from 'data-room-ui/BasicComponents/FlyMap/index.vue'
+import candlestick from 'data-room-ui/BasicComponents/Candlestick/index.vue'
 const components = {}
 for (const key in pcComponent) {
   if (Object.hasOwnProperty.call(pcComponent, key)) {
@@ -43,6 +44,7 @@ export default {
     Svgs,
     Map,
     FlyMap,
+    candlestick,
     RemoteComponent,
     EchartsComponent
   },
@@ -76,7 +78,7 @@ export default {
     // 切换主题时针对远程组件触发样式修改的方法
     styleHandler (config) {
       this.$emit('styleHandler', config)
-    },
+    }
     // // 打开右侧面板
     // openRightPanel () {
     //   this.$emit('openRightPanel', this.currentChart)

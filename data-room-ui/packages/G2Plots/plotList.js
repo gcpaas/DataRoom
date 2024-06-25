@@ -6,6 +6,7 @@
 import { dataConfig, settingConfig } from '../PlotRender/settingConfig'
 import { mapData } from 'data-room-ui/BasicComponents/Map/settingConfig'
 import { FlyMapData } from 'data-room-ui/BasicComponents/FlyMap/settingConfig'
+import { candlestickData } from 'data-room-ui/BasicComponents/Candlestick/settingConfig'
 // import _ from 'lodash'
 import cloneDeep from 'lodash/cloneDeep'
 import sortList from './plotListSort'
@@ -96,5 +97,6 @@ export function getCustomPlots () {
   return list
 }
 
-const plots = [...plotList, ...customPlots, mapData, FlyMapData]
+const plots = [...plotList, ...customPlots, candlestickData, mapData, FlyMapData]
+console.log('plotList', plots)
 export default plots

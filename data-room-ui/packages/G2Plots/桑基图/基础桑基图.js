@@ -68,7 +68,7 @@ const setting = [
     optionField: 'nodeStyle.fill',
     value: '#E5E6EB10',
     tabName: 'custom',
-    groupName: 'grid'
+    groupName: 'graph'
   },
   {
     label: '节点边框颜色',
@@ -77,7 +77,7 @@ const setting = [
     optionField: 'nodeStyle.stroke',
     value: '#E5E6EB10',
     tabName: 'custom',
-    groupName: 'grid'
+    groupName: 'graph'
   }
   // X轴 xAxis
 ]
