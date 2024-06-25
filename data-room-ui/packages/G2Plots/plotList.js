@@ -24,6 +24,7 @@ function getPlotList (files) {
   })
   const plotList = []
   for (const configMapKey in configMapList) {
+    console.log('sortList', sortList)
     const index = sortList.findIndex((item) => item === configMapKey)
     const config = configMapList[configMapKey]
 
@@ -32,7 +33,7 @@ function getPlotList (files) {
       category: configMapKey,
       name: config.name,
       title: config.title,
-      border:{ type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [16, 16, 16, 16] },
+      border: { type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [16, 16, 16, 16] },
       icon: null,
       img: require(`../G2Plots/images/componentLogo/${config.title}.png`),
       className:
@@ -60,6 +61,7 @@ function getPlotList (files) {
       ...cloneDeep(dataConfig)
     }
   }
+  console.log('plotList', plotList)
   return plotList
 }
 export function getCustomPlots () {
@@ -72,7 +74,7 @@ export function getCustomPlots () {
       category: config.category,
       name: config.name,
       title: config.title,
-      border:{ type: '', titleHeight: 60, fontSize: 16 , isTitle: true, padding: [16, 16, 16, 16] },
+      border: { type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [16, 16, 16, 16] },
       icon: null,
       img: config.img,
       className:
