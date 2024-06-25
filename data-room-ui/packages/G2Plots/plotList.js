@@ -24,7 +24,6 @@ function getPlotList (files) {
   })
   const plotList = []
   for (const configMapKey in configMapList) {
-    console.log('sortList', sortList)
     const index = sortList.findIndex((item) => item === configMapKey)
     const config = configMapList[configMapKey]
 
@@ -61,7 +60,6 @@ function getPlotList (files) {
       ...cloneDeep(dataConfig)
     }
   }
-  console.log('plotList', plotList)
   return plotList
 }
 export function getCustomPlots () {
