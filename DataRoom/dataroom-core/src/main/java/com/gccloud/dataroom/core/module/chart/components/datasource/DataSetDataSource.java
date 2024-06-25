@@ -66,4 +66,24 @@ public class DataSetDataSource extends BaseChartDataSource {
     @ApiModelProperty(notes = "散点大小字段")
     private String sizeField;
 
+    /**
+     * K线图特殊配置
+     */
+
+    @ApiModelProperty(notes = "x轴字段")
+    private String xField;
+
+    @ApiModelProperty(notes = "开盘字段")
+    private String openField;
+
+    @ApiModelProperty(notes = "收盘字段")
+    private String closeField;
+
+    @ApiModelProperty(notes = "最低字段")
+    private String lowField;
+
+    @ApiModelProperty(notes = "最高字段")
+    private String highField;
+
+
 }
