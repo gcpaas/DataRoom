@@ -129,7 +129,7 @@
               class="data-form-item"
             >
               <el-drag-select
-                v-if="config.option.displayOption.dimensionField.enable && config.option.displayOption.dimensionField.multiple"
+                v-if="config.option.displayOption.dimensionField.multiple"
                 v-model="config.dataSource.dimensionFieldList"
                 class="bs-el-select"
                 popper-class="bs-el-select"
@@ -193,6 +193,36 @@
                 class="bs-el-select"
                 popper-class="bs-el-select"
                 filterable
+                clearable
+              >
+                <el-option
+                  v-for="(field, index) in dataSourceDataList"
+                  :key="index"
+                  :label="field.comment"
+                  :value="field.name"
+                >
+                  <div class="source-key-option">
+                    <div>
+                      {{ field.comment !== "" ? field.comment : field.name }}
+                    </div>
+                    <div class="option-txt">
+                      {{ field.name }}
+                    </div>
+                  </div>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <!--分组-->
+            <el-form-item
+              v-if="config.option.displayOption.metricField.enable"
+              :label="config.option.displayOption.seriesField.label"
+              prop="dataSource.metricField"
+              class="data-form-item"
+            >
+              <el-select
+                v-model="config.dataSource.seriesField"
+                class="bs-el-select"
+                popper-class="bs-el-select"
                 clearable
               >
                 <el-option

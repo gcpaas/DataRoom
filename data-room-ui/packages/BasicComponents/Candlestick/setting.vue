@@ -349,7 +349,6 @@ import { predefineColors } from 'data-room-ui/js/utils/colorList'
 export default {
   name: 'BarSetting',
   components: {
-    ColorSelect,
     ColorPicker,
     PosWhSetting,
     SettingTitle,
