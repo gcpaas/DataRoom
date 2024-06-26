@@ -1,5 +1,6 @@
 <template>
   <div
+    :id="config.code + 'wrap'"
     class="bs-design-wrap bs-bar"
     style="width: 100%; height: 100%"
   >
@@ -43,29 +44,34 @@ export default {
     }
   },
   computed: {
-    Data () {
-      return JSON.parse(JSON.stringify(this.config))
-    }
   },
   watch: {
-    Data: {
-      handler (newVal, oldVal) {
-        if (newVal.w !== oldVal.w || newVal.h !== oldVal.h) {
-          this.$nextTick(() => {
-            this.charts.resize()
-          })
-        }
-      },
-      deep: true
-    }
   },
   mounted () {
     this.chartInit()
+    // 监听窗口或者父盒子大小变化
+    this.chartResize()
   },
   beforeDestroy () {
     this.charts?.clear()
   },
   methods: {
+    chartResize () {
+      window.addEventListener('resize', () => {
+        if (this.charts) {
+          this.charts.resize()
+        }
+      })
+      const dom = document.getElementById(`${this.config.code}wrap`)
+      if (dom) {
+        this.resizeObserver = new ResizeObserver(() => {
+          if (this.charts) {
+            this.charts.resize()
+          }
+        })
+        this.resizeObserver.observe(dom)
+      }
+    },
     chartInit () {
       const config = this.config
       // key和code相等，说明是一进来刷新，调用list接口
@@ -94,7 +100,7 @@ export default {
     dataFormatting (config, _data) {
       const data = _data?.data
       if (data && data.length) {
-        this.xData = data.map(item => item[config.dataSource.x])
+        this.xData = data.map(item => item[config.dataSource.xField])
         this.yData = data.map(item => [item[config.dataSource.openField], item[config.dataSource.closeField], item[config.dataSource.lowField], item[config.dataSource.highField]])
       } else {
         this.xData = ['2017-10-24', '2017-10-25', '2017-10-26', '2017-10-27']
@@ -220,7 +226,7 @@ export default {
         tooltip: {
           // 显示提示框
           show: true,
-          trigger: 'axis',
+          trigger: 'item',
           backgroundColor: 'rgba(50,50,50,0.7)',
           borderColor: '#333',
           borderWidth: 1,
@@ -231,7 +237,7 @@ export default {
           },
 
           axisPointer: {
-            type: 'cross'
+            type: 'line'
           }
         },
         series: [

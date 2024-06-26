@@ -61,19 +61,6 @@
             :predefine-colors="predefineThemeColors"
           />
         </el-form-item>
-        <el-form-item
-
-          label="地名字体权重"
-          label-width="100px"
-        >
-          <el-input-number
-            v-model="config.customize.mapNameWeight"
-            class="bs-el-input-number"
-            placeholder="请输入字体权重"
-            :min="100"
-            :step="100"
-          />
-        </el-form-item>
       </div>
       <SettingTitle>
         网格线
@@ -390,36 +377,7 @@ export default {
         {
           label: '右',
           value: 'end'
-        }],
-      levelList: [
-        { value: '0', label: '世界' },
-        { value: '1', label: '国家' },
-        { value: '2', label: '省份' },
-        { value: '3', label: '城市' },
-        { value: '4', label: '区县' }
-      ],
-      symbolList: [
-        { value: 'circle', label: '圆形' },
-        { value: 'rect', label: '矩形' },
-        { value: 'roundRect', label: '圆角矩形' },
-        { value: 'triangle', label: '三角形' },
-        { value: 'diamond', label: '菱形' },
-        { value: 'pin', label: '水滴' },
-        { value: 'arrow', label: '箭头' }
-      ],
-      // 旧版本地图等级，该数据用于兼容旧版本
-      oldLevelMap: {
-        world: '0',
-        country: '1',
-        province: '2'
-      },
-      downLevelList: [
-        { value: 1, label: '下钻一层' },
-        { value: 2, label: '下钻两层' },
-        { value: 3, label: '下钻三层' },
-        { value: 4, label: '下钻四层' },
-        { value: 5, label: '下钻五层' }
-      ]
+        }]
     }
   },
   computed: {
@@ -434,29 +392,9 @@ export default {
   },
   watch: {},
   mounted () {
-    this.getMapTree()
     this.colors = this.config.customize.rangeColor
   },
   methods: {
-    getMapTree () {
-      const levelConst = ['0', '1', '2', '3', '4']
-      if (!levelConst.includes(this.config.customize.level)) {
-        this.config.customize.level = this.oldLevelMap[this.config.customize.level] || '0'
-      }
-      this.$dataRoomAxios.get(`/bigScreen/map/tree/${this.config.customize.level}`).then((res) => {
-        this.mapTree = res
-      })
-    },
-    mapSelect (mapId) {
-      const mapData = this.$refs.cascade.getCheckedNodes()[0].data
-      this.currentMap = mapData
-    },
-    changeMap (val) {
-      this.config.customize.scope = val.slice(0, -5)
-    },
-    changeLevel () {
-      this.getMapTree()
-    },
     delColor () {
       if (this.colors.length <= 2) return
       this.colors.pop()
