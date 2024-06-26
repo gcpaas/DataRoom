@@ -240,6 +240,12 @@ export default {
             type: 'line'
           }
         },
+        grid: {
+          left: config.customize.left || 50,
+          right: config.customize.right || 20,
+          bottom: config.customize.bottom || 60,
+          top: config.customize.top || 20
+        },
         series: [
           {
             type: 'candlestick',

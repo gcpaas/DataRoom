@@ -42,6 +42,10 @@ const customConfig = {
     gridShow: true,
     gridColor: '#314656',
     gridWidth: 1,
+    left: 50,
+    right: 20,
+    top: 20,
+    bottom: 60,
     xAxis: {
       name: '',
       nameColor: '#fff',
