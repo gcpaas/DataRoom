@@ -214,7 +214,7 @@
             </el-form-item>
           </template>
           <!--  K线图数据配置  -->
-          <template v-if="config.type === 'candlestick'">
+          <template v-else-if="config.type === 'candlestick'">
             <el-form-item
               v-for="(fieldItem, i) in fieldNameMapping"
               :key="i"
