@@ -93,7 +93,7 @@ export const candlestickData = {
   ...cloneDeep(dataConfig),
   dataSource: {
     ...cloneDeep(dataConfig.dataSource),
-    xField: '',
+    xfield: '',
     openField: '',
     closeField: '',
     lowField: '',

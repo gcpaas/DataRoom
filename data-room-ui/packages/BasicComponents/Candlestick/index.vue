@@ -100,7 +100,7 @@ export default {
     dataFormatting (config, _data) {
       const data = _data?.data
       if (data && data.length) {
-        this.xData = data.map(item => item[config.dataSource.xField])
+        this.xData = data.map(item => item[config.dataSource.xfield])
         this.yData = data.map(item => [item[config.dataSource.openField], item[config.dataSource.closeField], item[config.dataSource.lowField], item[config.dataSource.highField]])
       } else {
         this.xData = ['2017-10-24', '2017-10-25', '2017-10-26', '2017-10-27']

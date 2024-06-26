@@ -957,7 +957,7 @@ export default {
     return {
       fieldNameMapping: [ // k线图的字段列表
         {
-          name: 'xField',
+          name: 'xfield',
           desc: 'X轴',
           multiple: false
         },
