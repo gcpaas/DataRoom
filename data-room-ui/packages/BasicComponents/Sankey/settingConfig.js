@@ -51,6 +51,10 @@ const customConfig = {
   },
   customize: {
     // 自定义样式
+    top: 20,
+    bottom: 20,
+    left: 20,
+    right: 50,
     normal: {
       labelPosition: 'right',
       labelColor: '#fff',
@@ -83,7 +87,7 @@ export const dataConfig = {
 export const sankeyData = {
   name: '桑基图',
   title: '桑基图',
-  icon: Icon.getNameList()[18],
+  icon: Icon.getNameList()[35],
   border: { type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [0, 0, 0, 0] },
   className:
     'com.gccloud.dataroom.core.module.chart.components.ScreenCandlestickChart',

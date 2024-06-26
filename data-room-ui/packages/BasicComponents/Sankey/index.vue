@@ -199,6 +199,10 @@ export default {
         series: [
           {
             type: 'sankey',
+            top: config.customize.top || 20,
+            bottom: config.customize.bottom || 20,
+            left: config.customize.left || 20,
+            right: config.customize.right || 50,
             label: {
               show: true,
               position: config.customize.normal.labelPosition || 'right',

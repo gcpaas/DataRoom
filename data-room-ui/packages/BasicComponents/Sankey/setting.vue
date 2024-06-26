@@ -290,6 +290,35 @@
           </el-select>
         </el-form-item>
       </div>
+      <SettingTitle>
+        边距
+      </SettingTitle>
+      <div class="lc-field-body">
+        <el-form-item label="上边距">
+          <el-input-number
+            v-model="config.customize.top"
+            class="bs-el-input-number"
+          />
+        </el-form-item>
+        <el-form-item label="下边距">
+          <el-input-number
+            v-model="config.customize.bottom"
+            class="bs-el-input-number"
+          />
+        </el-form-item>
+        <el-form-item label="左边距">
+          <el-input-number
+            v-model="config.customize.left"
+            class="bs-el-input-number"
+          />
+        </el-form-item>
+        <el-form-item label="右边距">
+          <el-input-number
+            v-model="config.customize.right"
+            class="bs-el-input-number"
+          />
+        </el-form-item>
+      </div>
     </el-form>
   </div>
 </template>
