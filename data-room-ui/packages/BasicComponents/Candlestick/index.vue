@@ -141,11 +141,11 @@ export default {
      */
     handleOption (config) {
       this.option = {
-        xAxis: [
+        xAxis:
           {
             show: true,
             name: config.customize.xAxis.name,
-            nameGap: 30,
+            nameGap: config.customize.xAxis.nameGap,
             data: this.xData,
             nameTextStyle: {
               color: config.customize.xAxis.nameColor,
@@ -178,11 +178,10 @@ export default {
               },
               margin: 30
             }
-          }
-        ],
+          },
         yAxis: {
           name: config.customize.yAxis.name,
-          nameGap: 10,
+          nameGap: config.customize.yAxis.nameGap,
           nameTextStyle: {
             color: config.customize.yAxis.nameColor,
             fontSize: config.customize.yAxis.nameSize

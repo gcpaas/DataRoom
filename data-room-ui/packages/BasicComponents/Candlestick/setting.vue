@@ -129,6 +129,19 @@
         </el-form-item>
 
         <el-form-item
+          label="标题间距"
+          label-width="100px"
+        >
+          <el-input-number
+            v-model="config.customize.xAxis.nameGap"
+            class="bs-el-input-number"
+            placeholder="请输入标题间距"
+            :min="0"
+            clearable
+          />
+        </el-form-item>
+
+        <el-form-item
           label="标题字体大小"
           label-width="100px"
         >
@@ -246,6 +259,18 @@
               :value="item.value"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item
+          label="标题间距"
+          label-width="100px"
+        >
+          <el-input-number
+            v-model="config.customize.yAxis.nameGap"
+            class="bs-el-input-number"
+            placeholder="请输入标题间距"
+            :min="0"
+            clearable
+          />
         </el-form-item>
 
         <el-form-item

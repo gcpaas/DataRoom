@@ -48,6 +48,7 @@ const customConfig = {
     bottom: 60,
     xAxis: {
       name: '',
+      nameGap: 30,
       nameColor: '#fff',
       nameSize: 16,
       position: 'end',
@@ -60,6 +61,7 @@ const customConfig = {
     },
     yAxis: {
       name: '',
+      nameGap: 10,
       nameColor: '#fff',
       nameSize: 16,
       position: 'end',
