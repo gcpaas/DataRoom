@@ -90,7 +90,7 @@ export const sankeyData = {
   icon: Icon.getNameList()[35],
   border: { type: '', titleHeight: 60, fontSize: 16, isTitle: true, padding: [0, 0, 0, 0] },
   className:
-    'com.gccloud.dataroom.core.module.chart.components.ScreenCandlestickChart',
+    'com.gccloud.dataroom.core.module.chart.components.ScreenSankeyChart',
   w: 450,
   h: 320,
   x: 0,
