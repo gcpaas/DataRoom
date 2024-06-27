@@ -214,7 +214,7 @@
             </el-form-item>
             <!--分组-->
             <el-form-item
-              v-if="config.option.displayOption.metricField.enable"
+              v-if="config.option.displayOption.seriesField.enable"
               :label="config.option.displayOption.seriesField.label"
               prop="dataSource.metricField"
               class="data-form-item"
