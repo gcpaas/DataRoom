@@ -8,7 +8,7 @@ server:
 spring:
   profiles:
     # 默认使用h2数据库
-    active: h2
+    active: dev
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss

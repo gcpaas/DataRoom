@@ -16,6 +16,11 @@ const Buttons = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-
 const Inputs = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/controls/inputs/index.vue')
 const WordCloud = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/rests/WordCloud/index.vue')
 const Heatmap = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/Heatmap/index.vue')
+const StackBar = () => import(/* webpackChunkName: "StackBar" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackBar/index.vue')
+const RoundBar = () => import(/* webpackChunkName: "StackBar" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RoundBar/index.vue')
+const StackColumn = () => import(/* webpackChunkName: "BaseColumn" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackColumn/index.vue')
+const GroupColumn = () => import(/* webpackChunkName: "BaseColumn" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupColumn/index.vue')
+const MultiLine = () => import(/* webpackChunkName: "BaseLine" */ '@gcpaas/data-room-ui/packages/components/G2Plots/MultiLine/index.vue')
 
 // 将组件添加到对象中
 export default {
@@ -36,5 +41,10 @@ export default {
   Buttons,
   Inputs,
   WordCloud,
-  Heatmap
+  Heatmap,
+  StackBar,
+  RoundBar,
+  StackColumn,
+  GroupColumn,
+  MultiLine
 }

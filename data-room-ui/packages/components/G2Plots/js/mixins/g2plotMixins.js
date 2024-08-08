@@ -161,6 +161,7 @@ export default {
       this.$nextTick(() => {
         this.temporaryData = data
         if (this.chart) {
+          console.log(this.config)
           this.chart.changeData(data)
         }
       })
@@ -173,6 +174,7 @@ export default {
             ...this.config.option,
             data: this.temporaryData
           }
+          console.log(option)
           // 如果不显示图例
           if (!this.config.option.showLegend) {
             this.chart.update({ ...option, legend: false })

@@ -40,6 +40,16 @@ function getDeclarationByType (type) {
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/rests/WordCloud/bigScreenDefinition.js')
     case 'Heatmap':
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/Heatmap/bigScreenDefinition.js')
+    case 'StackBar':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackBar/bigScreenDefinition.js')
+    case 'RoundBar':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RoundBar/bigScreenDefinition.js')
+    case 'StackColumn':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackColumn/bigScreenDefinition.js')
+    case 'GroupColumn':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupColumn/bigScreenDefinition')
+    case 'MultiLine':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/MultiLine/bigScreenDefinition')
   }
 }
 
