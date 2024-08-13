@@ -91,7 +91,7 @@ export default {
         autoEllipsis: true,
         autoHideEnable: true,
         autoHideMinGap: 2,
-        rotation: 30,
+        // rotation: 30,
         offset: 10,
         // position: 'left',
         style: {

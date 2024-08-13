@@ -65,6 +65,20 @@
           </el-row>
         </el-form-item>
         <el-form-item
+          v-if="axisType==='Y'"
+          class="radio form-item-box"
+          label="标题过长时旋转"
+        >
+          <el-row>
+            <el-col :span="24">
+              <el-switch
+                v-model="config.option[axis].title.autoRotate"
+                @change="changeStyle"
+              />
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item
           v-if="axisType==='X'"
           class="radio form-item-box"
           label="标题位置"

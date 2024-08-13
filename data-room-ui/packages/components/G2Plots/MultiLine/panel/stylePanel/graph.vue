@@ -48,13 +48,22 @@
         @change="changeStyle"
       />
     </el-form-item>
+<!--    <el-form-item-->
+<!--      label="折线颜色"-->
+<!--      class="form-item-box"-->
+<!--    >-->
+<!--      <GradualSetting-->
+<!--        v-model="config.option.lineStyle.stroke"-->
+<!--        @change="changeStyle"-->
+<!--      />-->
+<!--    </el-form-item>-->
     <el-form-item
       label="折线颜色"
       class="form-item-box"
     >
-      <GradualSetting
-        v-model="config.option.lineStyle.stroke"
-        @change="changeStyle"
+      <ColorMultipleSelect
+        v-model="config"
+        :config="config"
       />
     </el-form-item>
     <el-form-item
@@ -452,11 +461,13 @@ import TransformSet from '@gcpaas/data-room-ui/packages/components/common/panel/
 import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
 import GradualSetting from '@gcpaas/data-room-ui/packages/components/common/panel/GradualSetting/index.vue'
 import { fontWeightOptions, fonFamilyList, positionOptions, lineTypeOptions, lineStyleOptions, pointShapeOptions } from '@gcpaas/data-room-ui/packages/js/utils/options'
+import ColorMultipleSelect from '@gcpaas/data-room-ui/packages/components/common/panel/ColorMultipleSelect/index.vue'
 export default {
   name: '',
   components: {
     GradualSetting,
-    TransformSet
+    TransformSet,
+    ColorMultipleSelect
   },
   mixins: [commonMixins],
   inject: ['canvasInst'],

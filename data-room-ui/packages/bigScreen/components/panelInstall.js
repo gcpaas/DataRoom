@@ -23,6 +23,13 @@ const RoundBarSetting = () => import(/* webpackChunkName: "BaseBarSetting" */ '@
 const StackColumnSetting = () => import(/* webpackChunkName: "BaseColumnSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackColumn/panel/index.vue')
 const GroupColumnSetting = () => import(/* webpackChunkName: "BaseColumnSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupColumn/panel/index.vue')
 const MultiLineSetting = () => import(/* webpackChunkName: "BaseLineSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/MultiLine/panel/index.vue')
+const RaceLineSetting = () => import(/* webpackChunkName: "BaseLineSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RaceLine/panel/index.vue')
+const QuarterPieSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/QuarterPie/panel/index.vue')
+const InteractivePieSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/InteractivePie/panel/index.vue')
+const BaseDonutSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseDonut/panel/index.vue')
+const CardDonutSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/CardDonut/panel/index.vue')
+const BaseRoseSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseRose/panel/index.vue')
+
 // 将组件添加到对象中
 
 export default {
@@ -48,5 +55,11 @@ export default {
   RoundBarSetting,
   StackColumnSetting,
   GroupColumnSetting,
-  MultiLineSetting
+  MultiLineSetting,
+  RaceLineSetting,
+  QuarterPieSetting,
+  InteractivePieSetting,
+  BaseDonutSetting,
+  CardDonutSetting,
+  BaseRoseSetting
 }

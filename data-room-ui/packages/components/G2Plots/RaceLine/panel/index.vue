@@ -60,7 +60,8 @@ export default {
     return {
       fieldNameMapping: {
         dimensionField: 'X轴字段',
-        metricField: 'Y轴字段'
+        metricField: 'Y轴字段',
+        classifiedField: '分组字段'
       },
       fieldsList: [],
       activeName: 'style'

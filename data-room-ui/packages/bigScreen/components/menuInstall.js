@@ -23,6 +23,13 @@ import RoundBarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/Round
 import StackColumnDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/StackColumn/declaration.js'
 import GroupColumnDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupColumn/declaration.js'
 import MultiLineDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/MultiLine/declaration.js'
+import RaceLineDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/RaceLine/declaration.js'
+import QuarterPieDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/QuarterPie/declaration.js'
+import InteractivePieDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/InteractivePie/declaration.js'
+import BaseDonutDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseDonut/declaration.js'
+import CardDonutDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/CardDonut/declaration.js'
+import BaseRoseDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseRose/declaration.js'
+
 export default [
   {
     code: 'g2Plot',
@@ -59,6 +66,8 @@ export default [
           ...BaseLineDesc
         }, {
           ...MultiLineDesc
+        }, {
+          ...RaceLineDesc
         }]
       },
       {
@@ -75,6 +84,14 @@ export default [
         icon: 'el-icon-s-data',
         children: [{
           ...BasePieDesc
+        }, {
+          ...QuarterPieDesc
+        }, {
+          ...InteractivePieDesc
+        }, {
+          ...BaseDonutDesc
+        }, {
+          ...CardDonutDesc
         }]
       },
       {
@@ -107,6 +124,8 @@ export default [
         icon: 'el-icon-s-data',
         children: [{
           ...HeatmapDesc
+        }, {
+          ...BaseRoseDesc
         }]
       }
     ]

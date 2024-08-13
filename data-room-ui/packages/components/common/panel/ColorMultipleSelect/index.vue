@@ -54,15 +54,15 @@ export default {
       colorList: [
         {
           label: '配色1',
-          value: JSON.stringify(['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0'])
+          value: JSON.stringify(['#6b74e4', '#4391f4', '#38bbe5', '#69d6fd', '#36c6a0', '#ff5733'])
         },
         {
           label: '配色2',
-          value: JSON.stringify(['#1DAEFF', '#25A979', '#D19C4C', '#654FEA', '#C957CB'])
+          value: JSON.stringify(['#1DAEFF', '#25A979', '#D19C4C', '#654FEA', '#C957CB', '#ff0000'])
         },
         {
           label: '配色3',
-          value: JSON.stringify(['#1DAEFF', '#15BCE0', '#1FD7CC', '#43D4A0', '#25A979'])
+          value: JSON.stringify(['#1DAEFF', '#15BCE0', '#1FD7CC', '#43D4A0', '#25A979', '#ff007f'])
         }
       ],
       colorValue: []

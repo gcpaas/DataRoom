@@ -28,6 +28,14 @@ export const lineStyleOptions = [
   { label: '虚线', value: 5 }
   // { label: '点线', value: 10 }
 ]
+export const animationOptions = [
+  { label: '缩放入场', value: 'zoom-in' },
+  { label: '缩放出场', value: 'zoom-out' },
+  { label: '波浪入场', value: 'wave-in' },
+  { label: '沿着xy方向放大', value: 'grow-in-xy' },
+  { label: '渐显入场', value: 'fade-in' },
+  { label: '渐隐出场', value: 'fade-out' }
+]
 export const pointShapeOptions = [
   {
     label: '无',
@@ -101,6 +109,36 @@ export const positionOptions = [
   { value: 'top', label: '顶部' },
   { value: 'middle', label: '中间' },
   { value: 'bottom', label: '底部' }
+]
+export const pieTypeOptions = [
+  { value: 'inner', label: '内部' },
+  { value: 'outer', label: '外间' },
+  { value: 'spider', label: '蜘蛛布局' }
+]
+export const roseLabelPositionOptions = [
+  { value: -15, label: '内部' },
+  { value: 15, label: '外部' }
+]
+
+// export const pieLabelResourceOptions = [
+//   { value: ({ percent }) => `${(percent * 100).toFixed(0)}%`, label: '百分比' },
+//   { value: ({ value }) => `${value}`, label: '指标' },
+//   { value: ({ type }) => `${type}`, label: '维度' },
+//   { value: ({ type, value, percent }) => `${type}: ${value} (${(percent * 100).toFixed(0)}%)`, label: '维度+指标+百分比' }
+// ]
+export const labelFunctions = {
+  percentage: ({ percent }) => `${(percent * 100).toFixed(2)}%`, // 保留两位小数
+  value: ({ value }) => `${value}`,
+  type: ({ type }) => `${type}`,
+  all: ({ type, value, percent }) => `${type}: ${value} (${(percent * 100).toFixed(2)}%)`
+}
+
+// 定义选项列表
+export const pieLabelResourceOptions = [
+  { value: 'percentage', label: '百分比' },
+  { value: 'value', label: '指标' },
+  { value: 'type', label: '维度' },
+  { value: 'all', label: '维度+指标+百分比' }
 ]
 export const fontStyleList = [
   { value: 'normal', label: 'normal' },

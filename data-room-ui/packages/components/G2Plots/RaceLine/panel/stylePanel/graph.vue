@@ -52,8 +52,38 @@
       label="折线颜色"
       class="form-item-box"
     >
-      <GradualSetting
-        v-model="config.option.lineStyle.stroke"
+      <ColorMultipleSelect
+        v-model="config"
+        :config="config"
+      />
+    </el-form-item>
+    <el-form-item
+      label="动画效果"
+      class="form-item-box"
+    >
+      <el-select
+        v-model="config.option.animation.appear.animation"
+        placeholder="请选择动画效果"
+        @change="changeStyle"
+      >
+        <el-option
+          v-for="item in animationOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </el-form-item>
+    <el-form-item
+      label="动画时长"
+      class="form-item-box"
+    >
+      <el-input-number
+        v-model="config.option.animation.appear.duration"
+        class="number-input-box number-input-half "
+        type="number"
+        :step="500"
+        controls-position="right"
         @change="changeStyle"
       />
     </el-form-item>
@@ -451,12 +481,14 @@
 import TransformSet from '@gcpaas/data-room-ui/packages/components/common/panel/TransformSet/index.vue'
 import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
 import GradualSetting from '@gcpaas/data-room-ui/packages/components/common/panel/GradualSetting/index.vue'
-import { fontWeightOptions, fonFamilyList, positionOptions, lineTypeOptions, lineStyleOptions, pointShapeOptions } from '@gcpaas/data-room-ui/packages/js/utils/options'
+import { fontWeightOptions, fonFamilyList, positionOptions, lineTypeOptions, lineStyleOptions, pointShapeOptions, animationOptions } from '@gcpaas/data-room-ui/packages/js/utils/options'
+import ColorMultipleSelect from '@gcpaas/data-room-ui/packages/components/common/panel/ColorMultipleSelect/index.vue'
 export default {
   name: '',
   components: {
     GradualSetting,
-    TransformSet
+    TransformSet,
+    ColorMultipleSelect
   },
   mixins: [commonMixins],
   inject: ['canvasInst'],
@@ -473,7 +505,8 @@ export default {
       positionOptions,
       lineTypeOptions,
       lineStyleOptions,
-      pointShapeOptions
+      pointShapeOptions,
+      animationOptions
     }
   },
   computed: {

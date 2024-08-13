@@ -1,0 +1,16 @@
+{
+  "xAxis": {
+    "show": true,
+    "position": "top",
+    "nameTextStyle": {
+      "color": "#007aff"
+    }
+  },
+  "yAxis": {
+    "show": true,
+    "position": "top",
+    "nameTextStyle": {
+      "color": "#007aff"
+    }
+  }
+}

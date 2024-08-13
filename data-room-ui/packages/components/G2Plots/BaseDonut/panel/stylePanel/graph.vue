@@ -1,0 +1,475 @@
+<template>
+  <div class="dataroom-graph-wrapper">
+    <el-form-item
+      label="环图颜色"
+      class="form-item-box"
+    >
+      <ColorMultipleSelect
+        v-model="config"
+        :config="config"
+      />
+    </el-form-item>
+    <el-form-item
+      label="外环半径"
+      class="form-item-box"
+    >
+      <el-input-number
+        v-model="config.option.radius"
+        class="number-input-box number-input-half "
+        type="number"
+        :min="0"
+        :max="1"
+        :step="0.01"
+        controls-position="right"
+        @change="changeStyle"
+      />
+    </el-form-item>
+    <el-form-item
+      label="内环半径"
+      class="form-item-box"
+    >
+      <el-input-number
+        v-model="config.option.innerRadius"
+        class="number-input-box number-input-half "
+        type="number"
+        :min="0"
+        :max="1"
+        :step="0.01"
+        controls-position="right"
+        @change="changeStyle"
+      />
+    </el-form-item>
+    <el-collapse>
+      <el-collapse-item
+        v-if="currentPageType === 'bigScreen'"
+        title="环图标签"
+      >
+        <el-form-item
+          label="显示"
+          class="form-item-box"
+        >
+          <el-switch
+            v-model="config.option.label.style.opacity"
+            :active-value="1"
+            :inactive-value="0"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <template v-if="config.option.label.style.opacity">
+          <el-form-item
+            label="标签文本来源"
+            class="form-item-box"
+          >
+            <el-select
+              v-model="selectedLabelType"
+              placeholder="请选择"
+              @change="changeStyle"
+            >
+              <el-option
+                v-for="item in pieLabelResourceOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            class="radio form-item-box"
+            label="标签位置"
+          >
+            <el-row>
+              <el-col :span="24">
+                <el-select
+                  v-model="config.option.label.type"
+                  placeholder="请选择"
+                  @change="changeStyle"
+                >
+                  <el-option
+                    v-for="item in pieTypeOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item
+            class="form-item-box radio"
+            label="标签内部旋转"
+          >
+            <el-row>
+              <el-col :span="24">
+                <el-switch
+                  v-model="config.option.label.autoRotate"
+                  @change="changeStyle"
+                />
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item
+            class="radio form-item-box"
+            label="文本样式"
+          >
+            <el-row>
+              <el-col
+                :span="12"
+                style="padding-right: 5px"
+              >
+                <el-select
+                  v-model="config.option.label.style.fontFamily"
+                  placeholder="请选择字体"
+                  @change="changeStyle"
+                >
+                  <el-option
+                    v-for="item in fonFamilyList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+                <div class="set-desc">
+                  字体
+                </div>
+              </el-col>
+              <el-col
+                :span="12"
+                style="padding-left: 5px"
+              >
+                <el-select
+                  v-model="config.option.label.style.fontWeight"
+                  placeholder="请选择文字粗细"
+                  @change="changeStyle"
+                >
+                  <el-option
+                    v-for="item in fontWeightOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+                <div class="set-desc">
+                  文字粗细
+                </div>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="18">
+                <el-input-number
+                  v-model="config.option.label.style.fontSize"
+                  controls-position="right"
+                  @change="changeStyle"
+                />
+                <div class="set-desc">
+                  字号
+                </div>
+              </el-col>
+              <el-col
+                :span="6"
+                class="form-item-col"
+              >
+                <el-color-picker
+                  v-model="config.option.label.style.fill"
+                  @change="changeStyle"
+                />
+                <div class="set-desc color-desc">
+                  颜色
+                </div>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item
+            class="radio form-item-box"
+            label="文本描边"
+          >
+            <el-row>
+              <el-col :span="18">
+                <el-input-number
+                  v-model="config.option.label.style.lineWidth"
+                  controls-position="right"
+                  :min="0"
+                  :max="10"
+                  @change="changeStyle"
+                />
+                <div class="set-desc">
+                  粗细
+                </div>
+              </el-col>
+              <el-col
+                :span="6"
+                class="form-item-col"
+              >
+                <el-color-picker
+                  v-model="config.option.label.style.stroke"
+                  @change="changeStyle"
+                />
+                <div
+                  class="set-desc color-desc"
+                >
+                  颜色
+                </div>
+              </el-col>
+            </el-row>
+          </el-form-item>
+        </template>
+      </el-collapse-item>
+      <el-collapse-item
+        v-if="currentPageType === 'bigScreen'"
+        title="环中心"
+      >
+        <el-form-item
+          class="radio form-item-box"
+          label="主标题"
+        >
+          <el-row>
+            <el-col :span="24">
+              <el-input
+                v-model="config.option.statistic.title.content"
+                placeholder="请输入标签内容"
+                @change="changeStyle"
+              />
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item
+          label="主标题颜色"
+          class="form-item-box"
+        >
+          <el-color-picker
+            v-model="config.option.statistic.title.style.color"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="主标题大小"
+          class="form-item-box"
+        >
+          <el-input-number
+            v-model="config.option.statistic.title.style.fontSize"
+            controls-position="right"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          class="radio form-item-box"
+          label="副标题"
+        >
+          <el-row>
+            <el-col :span="24">
+              <el-input
+                v-model="config.option.statistic.content.content"
+                placeholder="请输入标签内容"
+                @change="changeStyle"
+              />
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item
+          label="副标题大小"
+          class="form-item-box"
+        >
+          <el-input-number
+            v-model="config.option.statistic.content.style.fontSize"
+            controls-position="right"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="副标题颜色"
+          class="form-item-box"
+        >
+          <el-color-picker
+            v-model="config.option.statistic.content.style.color"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="标签间距大小"
+          class="form-item-box"
+        >
+          <el-input-number
+            v-model="config.option.statistic.title.offsetY"
+            controls-position="right"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="指标间距大小"
+          class="form-item-box"
+        >
+          <el-input-number
+            v-model="config.option.statistic.content.offsetY"
+            controls-position="right"
+            @change="changeStyle"
+          />
+        </el-form-item>
+      </el-collapse-item>
+      <el-collapse-item
+        title="内边距"
+      >
+        <el-form-item
+          label=""
+          label-width="0"
+          class="form-item-box"
+        >
+          <el-row>
+            <el-col
+              :span="12"
+              style="padding-right: 5px"
+            >
+              <el-input-number
+                v-model="config.option.appendPadding[0]"
+                controls-position="right"
+                @change="changeStyle"
+              />
+              <div class="set-desc">
+                上边距
+              </div>
+            </el-col>
+            <el-col
+              :span="12"
+              style="padding-left: 5px"
+            >
+              <el-input-number
+                v-model="config.option.appendPadding[1]"
+                controls-position="right"
+                @change="changeStyle"
+              />
+              <div class="set-desc">
+                右边距
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col
+              :span="12"
+              style="padding-right: 5px"
+            >
+              <el-input-number
+                v-model="config.option.appendPadding[2]"
+                controls-position="right"
+                @change="changeStyle"
+              />
+              <div class="set-desc">
+                下边距
+              </div>
+            </el-col>
+            <el-col
+              :span="12"
+              style="padding-left: 5px"
+            >
+              <el-input-number
+                v-model="config.option.appendPadding[3]"
+                controls-position="right"
+                @change="changeStyle"
+              />
+              <div class="set-desc">
+                左边距
+              </div>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-collapse-item>
+      <el-collapse-item
+        v-if="currentPageType === 'bigScreen'"
+        title="旋转"
+      >
+        <TransformSet :config="config" />
+      </el-collapse-item>
+    </el-collapse>
+  </div>
+</template>
+
+<script>
+import TransformSet from '@gcpaas/data-room-ui/packages/components/common/panel/TransformSet/index.vue'
+import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
+import GradualSetting from '@gcpaas/data-room-ui/packages/components/common/panel/GradualSetting/index.vue'
+import {
+  fontWeightOptions,
+  fonFamilyList,
+  positionOptions,
+  lineTypeOptions,
+  lineStyleOptions,
+  pointShapeOptions,
+  animationOptions,
+  pieTypeOptions,
+  pieLabelResourceOptions,
+  labelFunctions
+} from '@gcpaas/data-room-ui/packages/js/utils/options'
+import ColorMultipleSelect from '@gcpaas/data-room-ui/packages/components/common/panel/ColorMultipleSelect/index.vue'
+export default {
+  name: '',
+  components: {
+    GradualSetting,
+    TransformSet,
+    ColorMultipleSelect
+  },
+  mixins: [commonMixins],
+  inject: ['canvasInst'],
+  props: {
+    config: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  data () {
+    return {
+      fontWeightOptions,
+      fonFamilyList,
+      positionOptions,
+      pieTypeOptions,
+      lineTypeOptions,
+      lineStyleOptions,
+      pointShapeOptions,
+      animationOptions,
+      pieLabelResourceOptions,
+      selectedLabelType: 'percentage' // 添加了 selectedLabelType 属性
+    }
+  },
+  computed: {
+    lineType: {
+      get () {
+        if (this.config.option.stepType) {
+          return 'ladder'
+        } else if (this.config.option.smooth) {
+          return 'smooth'
+        } else {
+          return 'line'
+        }
+      },
+      set (val) {
+        if (val === 'ladder') {
+          this.config.option.stepType = 'vh'
+        } else if (val === 'smooth') {
+          this.config.option.stepType = ''
+          this.config.option.smooth = true
+        } else {
+          this.config.option.stepType = ''
+          this.config.option.smooth = false
+        }
+        this.changeStyle()
+      }
+    },
+    currentPageType () {
+      return this.canvasInst.currentPageType
+    }
+  },
+  watch: { // 监听 selectedLabelType 的变化并更新标签内容
+    selectedLabelType (newValue) {
+      this.config.option.label.content = labelFunctions[newValue] || (() => '')
+      this.changeStyle() // 更新样式
+    }
+  },
+  created () { // 初始化时设置默认标签内容
+    this.config.option.label.content = labelFunctions[this.selectedLabelType] || (() => '')
+  },
+  mounted () {},
+  methods: {
+  }
+}
+</script>
+
+<style scoped lang="scss">
+@import '@gcpaas/data-room-ui/packages/assets/style/common.scss';
+@import '@gcpaas/data-room-ui/packages/assets/style/settingWrap.scss';
+</style>

@@ -21,6 +21,12 @@ const RoundBar = () => import(/* webpackChunkName: "StackBar" */ '@gcpaas/data-r
 const StackColumn = () => import(/* webpackChunkName: "BaseColumn" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackColumn/index.vue')
 const GroupColumn = () => import(/* webpackChunkName: "BaseColumn" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupColumn/index.vue')
 const MultiLine = () => import(/* webpackChunkName: "BaseLine" */ '@gcpaas/data-room-ui/packages/components/G2Plots/MultiLine/index.vue')
+const RaceLine = () => import(/* webpackChunkName: "BaseLine" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RaceLine/index.vue')
+const QuarterPie = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/QuarterPie/index.vue')
+const InteractivePie = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/InteractivePie/index.vue')
+const BaseDonut = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseDonut/index.vue')
+const CardDonut = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/CardDonut/index.vue')
+const BaseRose = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseRose/index.vue')
 
 // 将组件添加到对象中
 export default {
@@ -46,5 +52,11 @@ export default {
   RoundBar,
   StackColumn,
   GroupColumn,
-  MultiLine
+  MultiLine,
+  RaceLine,
+  QuarterPie,
+  InteractivePie,
+  BaseDonut,
+  CardDonut,
+  BaseRose
 }
