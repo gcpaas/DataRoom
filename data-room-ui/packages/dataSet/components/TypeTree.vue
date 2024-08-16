@@ -87,34 +87,34 @@
                   popper-class="tree-popover"
                   @show="openNodeMenu(node, data)"
                 >
-<!--                  <el-menu active-text-color="#000000">-->
-<!--                    <el-menu-item-->
-<!--                      v-if="!isBoth"-->
-<!--                      @click="menuClick(editTypeConstant.editOrg)"-->
-<!--                    >-->
-<!--                      <span slot="title">编辑</span>-->
-<!--                    </el-menu-item>-->
-<!--                    <el-menu-item-->
-<!--                      v-if="!isBoth"-->
-<!--                      @click="menuClick(editTypeConstant.deleteOrg)"-->
-<!--                    >-->
-<!--                      <span slot="title">删除</span>-->
-<!--                    </el-menu-item>-->
-<!--                    <el-menu-item-->
-<!--                      @click="menuClick(editTypeConstant.addSiblingOrg)"-->
-<!--                    >-->
-<!--                      <span slot="title">新增同级</span>-->
-<!--                    </el-menu-item>-->
-<!--                    <el-menu-item-->
-<!--                      v-if="!isBoth"-->
-<!--                      @click="menuClick(editTypeConstant.addChildOrg)"-->
-<!--                    >-->
-<!--                      <span-->
-<!--                        slot="title"-->
-<!--                        class="menu-icon"-->
-<!--                      > 新增子级 </span>-->
-<!--                    </el-menu-item>-->
-<!--                  </el-menu>-->
+                  <el-menu active-text-color="#000000">
+                    <el-menu-item
+                      v-if="!isBoth"
+                      @click="menuClick(editTypeConstant.editOrg)"
+                    >
+                      <span slot="title">编辑</span>
+                    </el-menu-item>
+                    <el-menu-item
+                      v-if="!isBoth"
+                      @click="menuClick(editTypeConstant.deleteOrg)"
+                    >
+                      <span slot="title">删除</span>
+                    </el-menu-item>
+                    <el-menu-item
+                      @click="menuClick(editTypeConstant.addSiblingOrg)"
+                    >
+                      <span slot="title">新增同级</span>
+                    </el-menu-item>
+                    <el-menu-item
+                      v-if="!isBoth"
+                      @click="menuClick(editTypeConstant.addChildOrg)"
+                    >
+                      <span
+                        slot="title"
+                        class="menu-icon"
+                      > 新增子级 </span>
+                    </el-menu-item>
+                  </el-menu>
                   <i
                     slot="reference"
                     class="el-icon-more"
@@ -429,6 +429,10 @@ export default {
             this.$message.error('当前节点下存在已定义数据集，无法删除')
           }
         })
+        return
+      }
+      if (window.SITE_CONFIG.dataRoom.datasetBtn.disabled) {
+        this.$message.error(window.SITE_CONFIG.dataRoom.datasetBtn.message)
         return
       }
       // 编辑节点
