@@ -4,7 +4,7 @@ example/
 dist/
 lib/
 hooks/
-dataRoomUi/
+bigScreen/
 dataRoomPro/
 
 # 只包含packages和public文件
