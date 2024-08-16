@@ -62,65 +62,65 @@
             />
           </el-scrollbar>
         </div>
-<!--        <div-->
-<!--          v-show="rightClickForm.visible"-->
-<!--          class="ztreeNodeMenu"-->
-<!--          @mouseleave="rightClickForm.visible = false"-->
-<!--          @mouseenter="rightClickForm.visible = true"-->
-<!--        >-->
-<!--          <div class="node-bottom-menu">-->
-<!--            <div class="triangle" />-->
-<!--            <ul>-->
-<!--              <li-->
-<!--                v-if="!isBoth"-->
-<!--                @click="menuClick(editTypeConstant.editOrg)"-->
-<!--              >-->
-<!--                <span slot="title">编辑</span>-->
-<!--              </li>-->
-<!--              <li-->
-<!--                v-if="!isBoth"-->
-<!--                @click="menuClick(editTypeConstant.deleteOrg)"-->
-<!--              >-->
-<!--                <span slot="title">删除</span>-->
-<!--              </li>-->
-<!--              <li @click="menuClick(editTypeConstant.addSiblingOrg)">-->
-<!--                <span slot="title">新增同级</span>-->
-<!--              </li>-->
-<!--              <li-->
-<!--                v-if="!isBoth"-->
-<!--                @click="menuClick(editTypeConstant.addChildOrg)"-->
-<!--              >-->
-<!--                <span slot="title">新增子级</span>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </div>-->
-<!--          <div class="node-top-menu">-->
-<!--            <ul>-->
-<!--              <li-->
-<!--                v-if="!isBoth"-->
-<!--                @click="menuClick(editTypeConstant.addChildOrg)"-->
-<!--              >-->
-<!--                <span slot="title">新增子级</span>-->
-<!--              </li>-->
-<!--              <li @click="menuClick(editTypeConstant.addSiblingOrg)">-->
-<!--                <span slot="title">新增同级</span>-->
-<!--              </li>-->
-<!--              <li-->
-<!--                v-if="!isBoth"-->
-<!--                @click="menuClick(editTypeConstant.deleteOrg)"-->
-<!--              >-->
-<!--                <span slot="title">删除</span>-->
-<!--              </li>-->
-<!--              <li-->
-<!--                v-if="!isBoth"-->
-<!--                @click="menuClick(editTypeConstant.editOrg)"-->
-<!--              >-->
-<!--                <span slot="title">编辑</span>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--            <div class="triangle" />-->
-<!--          </div>-->
-<!--        </div>-->
+        <div
+          v-show="rightClickForm.visible"
+          class="ztreeNodeMenu"
+          @mouseleave="rightClickForm.visible = false"
+          @mouseenter="rightClickForm.visible = true"
+        >
+          <div class="node-bottom-menu">
+            <div class="triangle" />
+            <ul>
+              <li
+                v-if="!isBoth"
+                @click="menuClick(editTypeConstant.editOrg)"
+              >
+                <span slot="title">编辑</span>
+              </li>
+              <li
+                v-if="!isBoth"
+                @click="menuClick(editTypeConstant.deleteOrg)"
+              >
+                <span slot="title">删除</span>
+              </li>
+              <li @click="menuClick(editTypeConstant.addSiblingOrg)">
+                <span slot="title">新增同级</span>
+              </li>
+              <li
+                v-if="!isBoth"
+                @click="menuClick(editTypeConstant.addChildOrg)"
+              >
+                <span slot="title">新增子级</span>
+              </li>
+            </ul>
+          </div>
+          <div class="node-top-menu">
+            <ul>
+              <li
+                v-if="!isBoth"
+                @click="menuClick(editTypeConstant.addChildOrg)"
+              >
+                <span slot="title">新增子级</span>
+              </li>
+              <li @click="menuClick(editTypeConstant.addSiblingOrg)">
+                <span slot="title">新增同级</span>
+              </li>
+              <li
+                v-if="!isBoth"
+                @click="menuClick(editTypeConstant.deleteOrg)"
+              >
+                <span slot="title">删除</span>
+              </li>
+              <li
+                v-if="!isBoth"
+                @click="menuClick(editTypeConstant.editOrg)"
+              >
+                <span slot="title">编辑</span>
+              </li>
+            </ul>
+            <div class="triangle" />
+          </div>
+        </div>
       </div>
       <div
         v-show="activeName == 'type'"
@@ -380,6 +380,10 @@ export default {
             this.$message.error('当前节点下存在已定义数据集，无法删除')
           }
         })
+        return
+      }
+      if (window.CONFIG.dataRoom.datasetBtn.disabled) {
+        this.$message.error(window.CONFIG.dataRoom.datasetBtn.message)
         return
       }
       // 编辑节点
