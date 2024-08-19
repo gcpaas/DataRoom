@@ -3,13 +3,13 @@ import baseDefinition from '@gcpaas/data-room-ui/packages/components/baseDefinit
 export default {
   ...baseDefinition,
   // 每个组件自定义各自的属性
-  type: 'BasePoint',
+  type: 'RegLinePoint',
 
   chartType: 'Scatter',
-  name: '基础散点图', //  组件名称不可修改
+  name: '散点图-回归线', //  组件名称不可修改
   title: { // 标题
     enable: true,
-    text: '基础散点图'
+    text: '散点图-回归线'
   },
   option: {
     xField: 'Revenue (Millions)',

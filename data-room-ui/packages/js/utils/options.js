@@ -157,7 +157,15 @@ export const YuJueGraphOptions = [
   { value: 'line', label: '线形' },
   { value: '', label: '柱形' }
 ]
-
+export const regressionLineOptions = [
+  { label: '线性回归', value: 'linear' },
+  { label: '指数回归', value: 'exp' },
+  { label: '局部加权散点图平滑（LOWESS）', value: 'loess' },
+  { label: '对数回归', value: 'log' },
+  { label: '多项式回归', value: 'poly' },
+  { label: '幂回归', value: 'pow' },
+  { label: '二次回归', value: 'quad' }
+]
 export const fontStyleList = [
   { value: 'normal', label: 'normal' },
   { value: 'italic', label: 'italic' },
