@@ -382,10 +382,6 @@ export default {
         })
         return
       }
-      if (window.CONFIG.dataRoom.datasetBtn.disabled) {
-        this.$message.error(window.CONFIG.dataRoom.datasetBtn.message)
-        return
-      }
       // 编辑节点
       this.editFormVisible = true
       if (editType === this.editTypeConstant.editOrg) {

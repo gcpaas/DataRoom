@@ -591,10 +591,6 @@ export default {
       this.isEdit = false
     },
     toEdit (id, type, name, typeId) {
-      if (window.CONFIG.dataRoom.datasetBtn.disabled) {
-        this.$message.error(window.CONFIG.dataRoom.datasetBtn.message)
-        return
-      }
       this.datasetId = id
       this.datasetType = type
       this.componentData = this.getComponents(this.datasetTypeList.find(item => item?.datasetType === type)?.componentName) ?? ''
@@ -674,10 +670,6 @@ export default {
     },
     // 新增数据集
     addDataset () {
-      if (window.CONFIG.dataRoom.datasetBtn.disabled) {
-        this.$message.error(window.CONFIG.dataRoom.datasetBtn.message)
-        return
-      }
       this.$refs.DatasetTypeDialog.dialogVisible = true
     },
     selectChange () {

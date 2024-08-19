@@ -14,10 +14,11 @@ import * as $dataRoomAxios from '../packages/js/utils/http.js'
 import { registerConfig } from '@gcpaas/data-room-ui'
 import remoteComponents from '@/remoteComponents/exports.js'
 import customDatasetComponents from '@/customDatasetComponents/exports.js'
-import { Column } from '@antv/g2plot';
+import { Column } from '@antv/g2plot'
 // import customPlots from '@/customPlots/exports'
 Vue.use(ElementUI, { size: 'mini' })
 Vue.prototype.Column = Column
+console.log('window.CONFIG', window.CONFIG)
 registerConfig(
   {
     routers: {
@@ -41,9 +42,9 @@ registerConfig(
       componentUrl: '/big-screen-components'
     },
     httpConfigs: {
-      baseURL: window.CONFIG?.baseUrl,
+      baseURL: window.CONFIG?.baseURL,
       // 现在文件路径保存的是相对路径，所以需要加上前缀,这个值一般和后端的gc.starter.file.urlPrefix一致
-      fileUrlPrefix: window.CONFIG.fileUrlPrefix ? window.CONFIG.fileUrlPrefix : window.CONFIG?.baseUrl + '/static',
+      fileUrlPrefix: window.CONFIG?.fileUrlPrefix ? window.CONFIG.fileUrlPrefix : window.CONFIG?.baseUrl + '/static'
     },
     customTheme: {
       '--bs-background-1': '#151a26', // 整体背景色
