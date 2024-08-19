@@ -317,7 +317,7 @@
                 <el-button
                   v-if="doEdit"
                   class="bs-el-button-default"
-                  :disabled="scope.row.editable === 1 && !appCode"
+                  :disabled="(scope.row.editable === 1 && !appCode)"
                   @click="
                     toEdit(
                       scope.row.id,
@@ -634,6 +634,10 @@ export default {
       this.isEdit = false
     },
     toEdit (id, type, name, typeId) {
+      if (window.SITE_CONFIG.dataRoom.datasetBtn.disabled) {
+        this.$message.error(window.SITE_CONFIG.dataRoom.datasetBtn.message)
+        return
+      }
       this.datasetId = id
       this.datasetType = type
       this.componentData =
@@ -773,6 +777,10 @@ export default {
     },
     // 新增数据集
     addDataset () {
+      if (window.SITE_CONFIG.dataRoom.datasetBtn.disabled) {
+        this.$message.error(window.SITE_CONFIG.dataRoom.datasetBtn.message)
+        return
+      }
       this.$refs.DatasetTypeDialog.dialogVisible = true
     },
     selectChange () {
