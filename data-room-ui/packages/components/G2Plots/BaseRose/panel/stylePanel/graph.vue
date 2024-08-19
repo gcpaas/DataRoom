@@ -26,7 +26,6 @@
     </el-form-item>
     <el-collapse>
       <el-collapse-item
-        v-if="currentPageType === 'bigScreen'"
         title="玫瑰标签"
       >
         <el-form-item

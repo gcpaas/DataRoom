@@ -11,7 +11,6 @@
     </el-form-item>
     <el-collapse>
       <el-collapse-item
-        v-if="currentPageType === 'bigScreen'"
         title="饼图标签"
       >
         <el-form-item
@@ -26,43 +25,12 @@
           />
         </el-form-item>
         <template v-if="config.option.label.style.opacity">
-          <!--        <el-form-item
-          class="radio form-item-box"
-          label="相对偏移量"
-        >
-          <el-row>
-            <el-col
-              :span="24"
-            >
-              <el-input-number
-                v-model="config.option.label.offsetX"
-                controls-position="right"
-                @change="changeStyle"
-              />
-              <div class="set-desc">
-                水平
-              </div>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-input-number
-                v-model="config.option.label.offsetY"
-                controls-position="right"
-                @change="changeStyle"
-              />
-              <div class="set-desc">
-                垂直
-              </div>
-            </el-col>
-          </el-row>
-        </el-form-item>-->
           <el-form-item
             label="标签文本来源"
             class="form-item-box"
           >
             <el-select
-              v-model="selectedLabelType"
+              v-model="config.option.label.content"
               placeholder="请选择"
               @change="changeStyle"
             >
@@ -83,7 +51,7 @@
                 <el-select
                   v-model="config.option.label.type"
                   placeholder="请选择"
-                  @change="changeStyle"
+                  @change="changeLabelOffset"
                 >
                   <el-option
                     v-for="item in pieTypeOptions"
@@ -107,6 +75,52 @@
                 />
               </el-col>
             </el-row>
+          </el-form-item>
+          <el-form-item
+            label="标签线颜色"
+            class="form-item-box"
+          >
+            <el-color-picker
+              v-model="config.option.label.labelLine.style.stroke"
+              @change="changeStyle"
+            />
+          </el-form-item>
+          <el-form-item
+            label="标签线粗细"
+            class="form-item-box"
+          >
+            <el-input-number
+              v-model="config.option.label.labelLine.style.lineWidth"
+              :step="1"
+              controls-position="right"
+              @change="changeStyle"
+            />
+          </el-form-item>
+          <el-form-item
+            label="标签线透明度"
+            class="form-item-box"
+          >
+            <el-input-number
+              v-model="config.option.label.labelLine.style.opacity"
+              class="number-input-box number-input-half "
+              type="number"
+              :min="0"
+              :max="1"
+              :step="0.1"
+              controls-position="right"
+              @change="changeStyle"
+            />
+          </el-form-item>
+          <el-form-item
+            label="标签偏移量"
+            class="form-item-box"
+          >
+            <el-input-number
+              v-model.number="labelOffset"
+              :step="5"
+              controls-position="right"
+              @change="changeStyle"
+            />
           </el-form-item>
           <el-form-item
             class="radio form-item-box"
@@ -303,14 +317,12 @@ import {
   pointShapeOptions,
   animationOptions,
   pieTypeOptions,
-  pieLabelResourceOptions,
-  labelFunctions
+  pieLabelResourceOptions
 } from '@gcpaas/data-room-ui/packages/js/utils/options'
 import ColorMultipleSelect from '@gcpaas/data-room-ui/packages/components/common/panel/ColorMultipleSelect/index.vue'
 export default {
   name: '',
   components: {
-    GradualSetting,
     TransformSet,
     ColorMultipleSelect
   },
@@ -332,49 +344,39 @@ export default {
       lineStyleOptions,
       pointShapeOptions,
       animationOptions,
-      pieLabelResourceOptions,
-      selectedLabelType: 'percentage' // 添加了 selectedLabelType 属性
+      pieLabelResourceOptions
     }
   },
   computed: {
-    lineType: {
+    labelOffset: {
       get () {
-        if (this.config.option.stepType) {
-          return 'ladder'
-        } else if (this.config.option.smooth) {
-          return 'smooth'
-        } else {
-          return 'line'
-        }
+        // 将偏移量字符串转换为数值
+        return parseFloat(this.config.option.label.offset)
       },
-      set (val) {
-        if (val === 'ladder') {
-          this.config.option.stepType = 'vh'
-        } else if (val === 'smooth') {
-          this.config.option.stepType = ''
-          this.config.option.smooth = true
-        } else {
-          this.config.option.stepType = ''
-          this.config.option.smooth = false
-        }
-        this.changeStyle()
+      set (value) {
+        // 更新偏移量字符串
+        this.config.option.label.offset = `${value}%`
       }
     },
     currentPageType () {
       return this.canvasInst.currentPageType
     }
   },
-  watch: { // 监听 selectedLabelType 的变化并更新标签内容
-    selectedLabelType (newValue) {
-      this.config.option.label.content = labelFunctions[newValue] || (() => '')
-      this.changeStyle() // 更新样式
-    }
-  },
-  created () { // 初始化时设置默认标签内容
-    this.config.option.label.content = labelFunctions[this.selectedLabelType] || (() => '')
-  },
+  watch: {},
+  created () {},
   mounted () {},
   methods: {
+    changeLabelOffset () {
+      // 判断选择的标签类型
+      if (this.config.option.label.type === 'spider') {
+        this.config.option.label.offset = '18%'
+      } else if (this.config.option.label.type === 'outer') {
+        this.config.option.label.offset = '10%'
+      } else {
+        this.config.option.label.offset = '-30%'
+      }
+      this.changeStyle()
+    }
   }
 }
 </script>

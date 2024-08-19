@@ -27,6 +27,11 @@ const InteractivePie = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/d
 const BaseDonut = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseDonut/index.vue')
 const CardDonut = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/CardDonut/index.vue')
 const BaseRose = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseRose/index.vue')
+const StackArea = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackArea/index.vue')
+const PercentArea = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/PercentArea/index.vue')
+const BaseYuJue = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseYuJue/index.vue')
+const StackYuJue = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackYuJue/index.vue')
+const GroupRadar = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRadar/index.vue')
 
 // 将组件添加到对象中
 export default {
@@ -58,5 +63,10 @@ export default {
   InteractivePie,
   BaseDonut,
   CardDonut,
-  BaseRose
+  BaseRose,
+  StackArea,
+  PercentArea,
+  BaseYuJue,
+  StackYuJue,
+  GroupRadar
 }

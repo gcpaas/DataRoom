@@ -35,22 +35,22 @@
       label="折线粗细"
     >
       <el-input-number
-        v-model="config.option.areaStyle.lineWidth"
+        v-model="config.option.line.size"
         class="number-input-box number-input-half "
         type="number"
         controls-position="right"
         @change="changeStyle"
       />
     </el-form-item>
-<!--    <el-form-item
+    <el-form-item
       label="折线颜色"
       class="form-item-box"
     >
       <GradualSetting
-        v-model="config.option.areaStyle.stroke"
+        v-model="config.option.line.color"
         @change="changeStyle"
       />
-    </el-form-item>-->
+    </el-form-item>
     <el-form-item
       label="面积透明度"
       class="form-item-box"

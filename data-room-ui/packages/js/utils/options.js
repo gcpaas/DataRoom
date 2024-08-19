@@ -126,19 +126,45 @@ export const roseLabelPositionOptions = [
 //   { value: ({ type }) => `${type}`, label: '维度' },
 //   { value: ({ type, value, percent }) => `${type}: ${value} (${(percent * 100).toFixed(0)}%)`, label: '维度+指标+百分比' }
 // ]
-export const labelFunctions = {
-  percentage: ({ percent }) => `${(percent * 100).toFixed(2)}%`, // 保留两位小数
-  value: ({ value }) => `${value}`,
-  type: ({ type }) => `${type}`,
-  all: ({ type, value, percent }) => `${type}: ${value} (${(percent * 100).toFixed(2)}%)`
-}
-
-// 定义选项列表
+// export const labelFunctions = {
+//   percentage: ({ percent }) => `${(percent * 100).toFixed(2)}%`, // 保留两位小数
+//   value: ({ value }) => `${value}`,
+//   type: ({ type }) => `${type}`,
+//   all: ({ type, value, percent }) => `${type}: ${value} (${(percent * 100).toFixed(2)}%)`
+// }
+//
+// // 定义选项列表
+// export const pieLabelResourceOptions = [
+//   { value: 'percentage', label: '百分比' },
+//   { value: 'value', label: '指标' },
+//   { value: 'type', label: '维度' },
+//   { value: 'all', label: '维度+指标+百分比' }
+// ]
+// 饼状图文本标签来源的选项列表
 export const pieLabelResourceOptions = [
-  { value: 'percentage', label: '百分比' },
-  { value: 'value', label: '指标' },
-  { value: 'type', label: '维度' },
-  { value: 'all', label: '维度+指标+百分比' }
+  { value: '{percentage}', label: '百分比' },
+  { value: '{value}', label: '指标' },
+  { value: '{name}', label: '维度' },
+  { value: '{name}\n{value}\n{percentage}', label: '维度+指标+百分比' }
+]
+// 玉珏图的圆角和直角
+export const lineCapOptions = [
+  { value: 'round', label: '圆角' },
+  { value: '', label: '直角' }
+]
+// 玉珏图的图表类型
+export const YuJueGraphOptions = [
+  { value: 'line', label: '线形' },
+  { value: '', label: '柱形' }
+]
+export const regressionLineOptions = [
+  { label: '线性回归', value: 'linear' },
+  { label: '指数回归', value: 'exp' },
+  { label: '局部加权散点图平滑（LOWESS）', value: 'loess' },
+  { label: '对数回归', value: 'log' },
+  { label: '多项式回归', value: 'poly' },
+  { label: '幂回归', value: 'pow' },
+  { label: '二次回归', value: 'quad' }
 ]
 export const fontStyleList = [
   { value: 'normal', label: 'normal' },

@@ -62,6 +62,16 @@ function getDeclarationByType (type) {
       return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/CardDonut/bigScreenDefinition')
     case 'BaseRose':
       return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseRose/bigScreenDefinition')
+    case 'StackArea':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackArea/bigScreenDefinition')
+    case 'PercentArea':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/PercentArea/bigScreenDefinition')
+    case 'BaseYuJue':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseYuJue/bigScreenDefinition')
+    case 'StackYuJue':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackYuJue/bigScreenDefinition')
+    case 'GroupRadar':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRadar/bigScreenDefinition')
   }
 }
 

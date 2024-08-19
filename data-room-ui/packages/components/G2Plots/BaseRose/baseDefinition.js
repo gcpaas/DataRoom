@@ -17,6 +17,8 @@ export default {
     yField: 'value',
     xField: 'type',
     seriesField: 'type',
+    dimensionField: 'xField',
+    metricField: 'yField',
     radius: 0.9,
     color: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', '#ff9f40'], // 常用的六种配色方案
     label: {

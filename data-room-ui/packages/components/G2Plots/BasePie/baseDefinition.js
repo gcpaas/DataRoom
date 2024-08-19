@@ -28,13 +28,15 @@ export default {
     appendPadding: [10, 10, 10, 10],
     angleField: 'value',
     colorField: 'type',
+    dimensionField: 'colorField',
+    metricField: 'angleField',
     radius: 0.9,
     color: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', '#ff9f40'], // 常用的六种配色方案
     label: {
       type: 'inner',
       offset: '-30%',
       autoRotate: false,
-      content: '',
+      content: '{percentage}',
       style: {
         fontSize: 14,
         textAlign: 'center',
@@ -42,8 +44,15 @@ export default {
         opacity: 0,
         fontWeight: 'lighter',
         fontFamily: '',
-        stroke: '#00FF00',
+        stroke: '#FCFC27',
         lineWidth: 0
+      },
+      labelLine: {
+        style: {
+          stroke: '#1EFF00',
+          lineWidth: 6,
+          opacity: 0.6
+        }
       }
     },
     showLegend: false,
