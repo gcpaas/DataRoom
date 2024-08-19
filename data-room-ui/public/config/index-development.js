@@ -1,7 +1,9 @@
 window.ENV = 'development'
 var developmentConfig = {
-  baseUrl: 'http://127.0.0.1:8081/bigScreenServer',
-  fileUrlPrefix: 'http://127.0.0.1:8081/bigScreenServer' + '/static'
+  baseURL: 'http://gcpaas.gccloud.com/bigScreenServer',
+  fileUrlPrefix: 'http://gcpaas.gccloud.com/bigScreenServer' + '/static'
 }
 // 必须的
+window.CONFIG={}
 window.CONFIG = configDeepMerge(window.CONFIG, developmentConfig)
+
