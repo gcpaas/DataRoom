@@ -16,6 +16,7 @@
 
 package com.gccloud.dataroom.core.config;
 
+import com.gccloud.dataroom.core.config.bean.DemoEnv;
 import com.gccloud.dataroom.core.config.bean.FileConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -39,4 +40,10 @@ public class DataRoomConfig {
      */
     @NestedConfigurationProperty
     private FileConfig file = new FileConfig();
+
+    /**
+     * 演示环境
+     */
+    @NestedConfigurationProperty
+    private DemoEnv demoEnv = new DemoEnv();
 }

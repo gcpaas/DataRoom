@@ -170,14 +170,6 @@ public class DataRoomFileController extends SuperController {
     }
 
 
-    @ApiPermission(permissions = {Permission.File.UPLOAD})
-    @PostMapping("/import")
-    @ApiOperation(value = "导入资源", notes = "导入/引用资源，通过url引用，无需文件上传", produces = MediaType.APPLICATION_JSON_VALUE)
-    public R<String> importResource(@RequestBody FileResourceDTO fileResourceDTO){
-        String id = fileService.importResource(fileResourceDTO);
-        return R.success(id);
-    }
-
     @ApiPermission(permissions = {Permission.File.VIEW})
     @GetMapping("/reference/{name}")
     @ApiOperation(value = "引用资源重定向", notes = "引用资源重定向", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -201,6 +193,14 @@ public class DataRoomFileController extends SuperController {
             log.error("引用的资源重定向失败，文件名："+ name);
             return;
         }
+    }
+
+    @ApiPermission(permissions = {Permission.File.UPLOAD})
+    @PostMapping("/import")
+    @ApiOperation(value = "导入资源", notes = "导入/引用资源，通过url引用，无需文件上传", produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<String> importResource(@RequestBody FileResourceDTO fileResourceDTO){
+        String id = fileService.importResource(fileResourceDTO);
+        return R.success(id);
     }
 
 
