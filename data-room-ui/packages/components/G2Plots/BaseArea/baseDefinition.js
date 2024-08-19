@@ -5,15 +5,17 @@ export default {
   // 每个组件自定义各自的属性
   type: 'BaseArea',
   chartType: 'Area',
-  name: '区域图',
+  name: '基础区域图',
   title: { // 标题
     enable: true,
-    text: '区域图'
+    text: '基础区域图'
   },
   // 图表的基础配置，配置格式与G2plot、EChart官网保持一致
   option: {
     xField: 'timePeriod',
     yField: 'value',
+    dimensionField: 'xField',
+    metricField: 'yField',
     startOnZero: true,
     // 图表内边距
     appendPadding: [
@@ -25,11 +27,10 @@ export default {
     lineType: '', // 折线样式（额外属性，通过它来决定smooth和stepType
     smooth: false, // 折线？曲线
     stepType: '', // 阶梯
-    // lineStyle: { // 线样式
-    //   stroke: 'l(90) 0:rgba(0, 155, 255, 1) 1:rgba(0, 155, 255, 0.1)',
-    //   lineWidth: 4,
-    //   opacity: 0.9
-    // },
+    line: {
+      size: 4,
+      color: 'l(0) 0:rgba(0, 98, 255, 0.49) 1:rgba(0, 98, 255, 0.49)'
+    },
     point: { // 点样式
       size: 2,
       shape: 'diamond',

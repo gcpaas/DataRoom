@@ -7,7 +7,6 @@ export default {
   // 具体的实现组件，对应type值
   implType: 'BasePoint',
   img: require(`./${name}.png`),
-  path: 'components/G2Plots/BaseColumn',
-  disabled: true,
+  path: 'components/G2Plots/BasePoint',
   classify: 'point'// 属于哪个大类，方便图层图标显示（图层不需要分类则可去掉）
 }

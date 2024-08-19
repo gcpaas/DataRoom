@@ -29,6 +29,11 @@ import InteractivePieDesc from '@gcpaas/data-room-ui/packages/components/G2Plots
 import BaseDonutDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseDonut/declaration.js'
 import CardDonutDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/CardDonut/declaration.js'
 import BaseRoseDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseRose/declaration.js'
+import StackAreaDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/StackArea/declaration.js'
+import PercentAreaDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/PercentArea/declaration.js'
+import BaseYuJueDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseYuJue/declaration.js'
+import StackYuJueDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/StackYuJue/declaration.js'
+import GroupRadarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRadar/declaration.js'
 
 export default [
   {
@@ -76,6 +81,10 @@ export default [
         icon: 'el-icon-s-data',
         children: [{
           ...BaseAreaDesc
+        }, {
+          ...StackAreaDesc
+        }, {
+          ...PercentAreaDesc
         }]
       },
       {
@@ -108,6 +117,8 @@ export default [
         icon: 'el-icon-s-data',
         children: [{
           ...BaseRadarDesc
+        }, {
+          ...GroupRadarDesc
         }]
       },
       {
@@ -126,6 +137,10 @@ export default [
           ...HeatmapDesc
         }, {
           ...BaseRoseDesc
+        }, {
+          ...BaseYuJueDesc
+        }, {
+          ...StackYuJueDesc
         }]
       }
     ]

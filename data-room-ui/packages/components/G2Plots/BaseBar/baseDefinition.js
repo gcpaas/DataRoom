@@ -55,18 +55,6 @@ export default {
         lineWidth: 0
       }
     },
-    // pattern: {
-    //   type: '',
-    //   cfg: {
-    //     size: 4,
-    //     padding: 4,
-    //     rotation: 0,
-    //     fill: '#FF0',
-    //     isStagger: true,
-    //     stroke: 'red',
-    //     lineWidth: 0
-    //   }
-    // },
     xAxis: {
       title: {
         text: '',
@@ -97,7 +85,6 @@ export default {
           fontWeight: 'lighter',
           fontFamily: '',
           opacity: 1
-
         }
       },
       line: {

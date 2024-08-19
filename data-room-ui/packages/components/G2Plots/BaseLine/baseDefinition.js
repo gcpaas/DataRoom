@@ -1,4 +1,3 @@
-
 import baseDefinition from '@gcpaas/data-room-ui/packages/components/baseDefinition.js'
 
 export default {
