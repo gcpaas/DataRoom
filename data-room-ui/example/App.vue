@@ -55,8 +55,8 @@ export default {
   },
   methods: {
     init () {
-      // 如果不是演示环境或者已经阅读过免责声明，则不显示弹窗
-      if (!window?.SITE_CONFIG?.demoEnv && sessionStorage.getItem('disclaimer') === 'read ') {
+      // 条件1 如果不是演示环境或者已经阅读过免责声明，则不显示弹窗
+      if ((!window?.SITE_CONFIG?.demoEnv) || sessionStorage.getItem('disclaimer') === 'read ') {
         return
       }
       this.dialogVisible = true
@@ -74,10 +74,11 @@ export default {
       })
     },
     out () {
-      window.close()
+      // window.close()
+      window.location.href = 'about:blank'
     },
     agree () {
-      sessionStorage.setItem('disclaimer', 'true')
+      sessionStorage.setItem('disclaimer', 'read')
       this.dialogVisible = false
     }
   }
