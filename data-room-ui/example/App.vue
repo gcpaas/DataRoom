@@ -74,8 +74,11 @@ export default {
       })
     },
     out () {
-      window.close()
-      // window.location.href = 'about:blank'
+      try {
+        window.close()
+      } catch (e) {
+        window.location.href = 'about:blank'
+      }
     },
     agree () {
       sessionStorage.setItem('disclaimer', 'read ')
