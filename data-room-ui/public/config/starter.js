@@ -1,6 +1,6 @@
 (function(window) {
   window.SITE_CONFIG = {
-    demoEnv:true
+    demoEnv:false
   }
 })(window);
 
