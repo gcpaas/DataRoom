@@ -6,7 +6,7 @@
           class="logo"
           src="./images/logo.png"
         >
-        <span>{{ title }}</span>
+        <span>{{ title }}</span><span style="font-size: 18px;margin-left: 8px">3.x</span>
       </div>
 
       <div class="big-screen-nav-container">

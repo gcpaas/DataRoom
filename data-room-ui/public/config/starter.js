@@ -1,12 +1,6 @@
 (function(window) {
   window.SITE_CONFIG = {
-    dataRoom:{
-      datasetBtn:{// 数据集按钮的配置
-        disabled: true, // 是否禁用数据集按钮
-        message: '演示环境不允许操作' // 按钮提示信息
-
-      }
-    }
+    demoEnv:false
   }
 })(window);
 
@@ -36,3 +30,5 @@ function configDeepMerge(target, source) {
   }
   return merged;
 }
+
+console.log(window.SITE_CONFIG )
