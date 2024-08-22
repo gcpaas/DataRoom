@@ -6,7 +6,7 @@
           class="logo"
           :src="logo"
         >
-        <span>{{ title }}</span>
+        <span>{{ title }}</span><span style="font-size: 18px;margin-left: 8px">2.x</span>
       </div>
 
       <div class="big-screen-nav-container">
