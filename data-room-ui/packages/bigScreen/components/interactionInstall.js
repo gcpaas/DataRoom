@@ -66,6 +66,32 @@ function getInteractionInstall (type) {
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackYuJue/interaction/index')
     case 'GroupRadar':
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRadar/interaction/index')
+    case 'RegLinePoint':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RegLinePoint/interaction/index')
+    case 'BaseSankey':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseSankey/interaction/index')
+    case 'DragSankey':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DragSankey/interaction/index')
+    case 'ShapeHeatmap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/ShapeHeatmap/index')
+    case 'SizeHeatmap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/SizeHeatmap/index')
+    case 'PolarHeatmap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/PolarHeatmap/index')
+    case 'BaseFunnel':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseFunnel/interaction/index')
+    case 'CompareFunnel':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/CompareFunnel/interaction/index')
+    case 'FacetedFunnel':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/FacetedFunnel/interaction/index')
+    case 'BaseLiquid':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLiquid/interaction/index')
+    case 'BaseGauge':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseGauge/interaction/index')
+    case 'BaseProgress':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseProgress/interaction/index')
+    case 'BaseBullet':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBullet/interaction/index')
   }
 }
 export function getInteraction (type) {

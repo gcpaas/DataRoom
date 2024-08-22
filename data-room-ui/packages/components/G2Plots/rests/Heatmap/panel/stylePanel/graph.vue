@@ -1,115 +1,17 @@
 <template>
   <div class="dataroom-graph-wrapper">
     <el-form-item
-      label="柱最小宽度"
+      label="颜色"
       class="form-item-box"
     >
-      <el-input-number
-        v-model="config.option.minColumnWidth"
-        controls-position="right"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      label="柱最大宽度"
-      class="form-item-box"
-    >
-      <el-input-number
-        v-model="config.option.maxColumnWidth"
-        controls-position="right"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      class="radio form-item-box"
-      label="柱子圆角"
-    >
-      <el-row>
-        <el-col
-          :span="12"
-          style="padding-right: 5px"
-        >
-          <el-input-number
-            v-model="config.option.columnStyle.radius[0]"
-            class="number-input-box number-input-half "
-            type="number"
-            controls-position="right"
-            @change="changeStyle"
-          />
-          <div class="set-desc">
-            左上
-          </div>
-        </el-col>
-        <el-col
-          :span="12"
-          style="padding-left: 5px"
-        >
-          <el-input-number
-            v-model="config.option.columnStyle.radius[1]"
-            class="number-input-box number-input-half "
-            type="number"
-            controls-position="right"
-            @change="changeStyle"
-          />
-          <div class="set-desc">
-            右上
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col
-          :span="12"
-          style="padding-right: 5px"
-        >
-          <el-input-number
-            v-model="config.option.columnStyle.radius[2]"
-            class="number-input-box number-input-half "
-            type="number"
-            controls-position="right"
-            @change="changeStyle"
-          />
-          <div class="set-desc">
-            左下
-          </div>
-        </el-col>
-        <el-col
-          :span="12"
-          style="padding-left: 5px"
-        >
-          <el-input-number
-            v-model="config.option.columnStyle.radius[3]"
-            class="number-input-box number-input-half "
-            type="number"
-            controls-position="right"
-            @change="changeStyle"
-          />
-          <div class="set-desc">
-            右下
-          </div>
-        </el-col>
-      </el-row>
-    </el-form-item>
-    <el-form-item
-      label="柱子颜色"
-      class="form-item-box"
-    >
-      <GradualSetting
+      <ColorMultipleSelect
         v-model="config"
-      />
-    </el-form-item>
-    <el-form-item
-      label="柱子背景色"
-      class="form-item-box"
-    >
-      <el-color-picker
-        v-model="config.option.columnBackground.style.fill"
-        show-alpha
-        @change="changeStyle"
+        :config="config"
       />
     </el-form-item>
     <el-collapse>
       <el-collapse-item
-        title="柱子标签"
+        title="标签"
       >
         <el-form-item
           label="显示"
@@ -358,9 +260,11 @@ import TransformSet from '@gcpaas/data-room-ui/packages/components/common/panel/
 import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
 import GradualSetting from '@gcpaas/data-room-ui/packages/components/common/panel/GradualSetting/index.vue'
 import { fontWeightOptions, fonFamilyList, positionOptions } from '@gcpaas/data-room-ui/packages/js/utils/options'
+import ColorMultipleSelect from '@gcpaas/data-room-ui/packages/components/common/panel/ColorMultipleSelect/index.vue'
 export default {
   name: '',
   components: {
+    ColorMultipleSelect,
     GradualSetting,
     TransformSet
   },

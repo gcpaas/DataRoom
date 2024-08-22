@@ -12,14 +12,12 @@ export default {
     text: '散点图-回归线'
   },
   option: {
-    xField: 'Revenue (Millions)',
-    yField: 'Rating',
+    xField: 'x',
+    yField: 'y',
     dimensionField: 'xField',
     metricField: 'yField',
     shape: 'circle',
-    colorField: 'Genre',
-    seriesField: 'colorField',
-    size: 4,
+    size: 5,
     // 图表内边距
     appendPadding: [
       10,
@@ -29,9 +27,9 @@ export default {
     ],
     color: ['#ff5733', '#ff9800', '#4caf50', '#2196f3', '#9c27b0', '#e91e63'],
     pointStyle: { // 点样式
-      // fill: 'red',
-      stroke: '',
-      lineWidth: 0,
+      // fill: '#5B8FF9',
+      stroke: '#777777',
+      lineWidth: 1,
       lineDash: [
         3,
         0
@@ -53,7 +51,6 @@ export default {
       }
     },
     xAxis: {
-      min: -100,
       tickCount: 10, // 轴刻度线展示个数，（等同于轴标签个数）
       title: {
         text: '',
@@ -232,6 +229,15 @@ export default {
         symbol: 'circle',
         style: {}
       }
+    },
+    regressionLine: {
+      top: false,
+      style: {
+        stroke: '#c6bfbf',
+        opacity: 0,
+        lineWidth: 2
+      },
+      type: 'pow' // linear, exp, loess, log, poly, pow, quad
     }
   }
 }

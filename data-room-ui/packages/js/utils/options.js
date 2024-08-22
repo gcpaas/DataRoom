@@ -166,6 +166,38 @@ export const regressionLineOptions = [
   { label: '幂回归', value: 'pow' },
   { label: '二次回归', value: 'quad' }
 ]
+export const heatShapeOptions = [
+  { value: 'circle', label: '圆' },
+  { value: 'rect', label: '矩形' },
+  { value: 'square', label: '正方形' }
+]
+export const liquidShapeOptions = [
+  { value: 'circle', label: '圆形' },
+  { value: 'diamond', label: '钻石' },
+  { value: 'triangle', label: '三角形' },
+  { value: 'pin', label: '大头针' },
+  { value: 'rect', label: '矩形' }
+]
+export const patternTypeOptions = [
+  { value: 'dot', label: '点状' },
+  { value: 'line', label: '线状' },
+  { value: 'square', label: '方块状' }
+]
+export const gaugeTypeOptions = [
+  { value: '', label: '默认' },
+  { value: 'meter', label: '米轨' }
+]
+export const bulletLayoutOptions = [
+  { value: 'horizontal', label: '水平' },
+  { value: 'vertical', label: '垂直' }
+]
+export const bulletLabelPositionOptions = [
+  { value: 'top', label: '顶部' },
+  { value: 'middle', label: '中间' },
+  { value: 'bottom', label: '底部' },
+  { value: 'left', label: '左边' },
+  { value: 'right', label: '右边' }
+]
 export const fontStyleList = [
   { value: 'normal', label: 'normal' },
   { value: 'italic', label: 'italic' },

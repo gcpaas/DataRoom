@@ -405,6 +405,7 @@
 </template>
 
 <script>
+import cloneDeep from 'lodash/cloneDeep'
 import { fontWeightOptions, fonFamilyList, markrList, railList, legendPositionList } from '@gcpaas/data-room-ui/packages/js/utils/options'
 import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
 export default {
