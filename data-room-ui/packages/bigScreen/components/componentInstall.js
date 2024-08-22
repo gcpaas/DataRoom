@@ -32,6 +32,19 @@ const PercentArea = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data
 const BaseYuJue = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseYuJue/index.vue')
 const StackYuJue = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackYuJue/index.vue')
 const GroupRadar = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRadar/index.vue')
+const RegLinePoint = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RegLinePoint/index.vue')
+const BaseSankey = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseSankey/index.vue')
+const DragSankey = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DragSankey/index.vue')
+const ShapeHeatmap = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/ShapeHeatmap/index.vue')
+const SizeHeatmap = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/SizeHeatmap/index.vue')
+const PolarHeatmap = () => import(/* webpackChunkName: "Texts" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/PolarHeatmap/index.vue')
+const BaseFunnel = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseFunnel/index.vue')
+const CompareFunnel = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/CompareFunnel/index.vue')
+const FacetedFunnel = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/FacetedFunnel/index.vue')
+const BaseLiquid = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLiquid/index.vue')
+const BaseGauge = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseGauge/index.vue')
+const BaseProgress = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseProgress/index.vue')
+const BaseBullet = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBullet/index.vue')
 
 // 将组件添加到对象中
 export default {
@@ -68,5 +81,18 @@ export default {
   PercentArea,
   BaseYuJue,
   StackYuJue,
-  GroupRadar
+  GroupRadar,
+  RegLinePoint,
+  BaseSankey,
+  DragSankey,
+  ShapeHeatmap,
+  SizeHeatmap,
+  PolarHeatmap,
+  BaseFunnel,
+  CompareFunnel,
+  FacetedFunnel,
+  BaseLiquid,
+  BaseGauge,
+  BaseProgress,
+  BaseBullet
 }

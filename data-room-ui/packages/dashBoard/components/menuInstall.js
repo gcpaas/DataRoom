@@ -34,6 +34,16 @@ import PercentAreaDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/Pe
 import BaseYuJueDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseYuJue/declaration.js'
 import StackYuJueDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/StackYuJue/declaration.js'
 import GroupRadarDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRadar/declaration.js'
+import RegLinePointDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/RegLinePoint/declaration.js'
+import BaseSankeyDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseSankey/declaration.js'
+import DragSankeyDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/DragSankey/declaration.js'
+import ShapeHeatmapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/rests/ShapeHeatmap/declaration.js'
+import SizeHeatmapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/rests/SizeHeatmap/declaration.js'
+import PolarHeatmapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/rests/PolarHeatmap/declaration.js'
+import BaseFunnelDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseFunnel/declaration.js'
+import CompareFunnelDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/CompareFunnel/declaration.js'
+import FacetedFunnelDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/FacetedFunnel/declaration.js'
+import BaseLiquidDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLiquid/declaration.js'
 
 export default [
   {
@@ -118,6 +128,8 @@ export default [
         icon: 'el-icon-s-data',
         children: [{
           ...BasePointDesc
+        }, {
+          ...RegLinePointDesc
         }]
       },
       {
@@ -136,6 +148,44 @@ export default [
         icon: 'el-icon-s-data',
         children: [{
           ...BaseGridDesc
+        }, {
+          ...BaseSankeyDesc
+        }, {
+          ...DragSankeyDesc
+        }]
+      },
+      {
+        name: 'heatMap',
+        title: '热力图',
+        icon: 'el-icon-s-data',
+        children: [{
+          ...HeatmapDesc
+        }, {
+          ...ShapeHeatmapDesc
+        }, {
+          ...SizeHeatmapDesc
+        }, {
+          ...PolarHeatmapDesc
+        }]
+      },
+      {
+        name: 'funnel',
+        title: '漏斗图',
+        icon: 'el-icon-s-data',
+        children: [{
+          ...BaseFunnelDesc
+        }, {
+          ...CompareFunnelDesc
+        }, {
+          ...FacetedFunnelDesc
+        }]
+      },
+      {
+        name: 'jindutu',
+        title: '进度图',
+        icon: 'el-icon-s-data',
+        children: [{
+          ...BaseLiquidDesc
         }]
       },
       {
@@ -143,8 +193,6 @@ export default [
         title: '其他',
         icon: 'el-icon-s-data',
         children: [{
-          ...HeatmapDesc
-        }, {
           ...BaseRoseDesc
         }, {
           ...BaseYuJueDesc

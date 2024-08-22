@@ -41,10 +41,6 @@
               :axis-type="nav.name"
               :config="config"
             />
-            <Legend
-              v-if="activeName === 'legend' && nav.name === 'legend'"
-              :config="config"
-            />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -56,11 +52,9 @@
 import BaseSet from '@gcpaas/data-room-ui/packages/components/common/panel/baseSet/index.vue'
 import Graph from './graph.vue'
 import Axis from './axis.vue'
-import Legend from './legend.vue';
 export default {
   name: '',
   components: {
-    Legend,
     Axis,
     BaseSet,
     Graph
@@ -88,11 +82,6 @@ export default {
         {
           name: 'Y',
           label: 'Y轴'
-          // icon: 'el-icon-picture'
-        },
-        {
-          name: 'legend',
-          label: '图例'
           // icon: 'el-icon-picture'
         }
 

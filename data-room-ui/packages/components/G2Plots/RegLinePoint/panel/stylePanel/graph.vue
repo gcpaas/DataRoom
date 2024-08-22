@@ -138,6 +138,72 @@
     </el-form-item>
     <el-collapse>
       <el-collapse-item
+        title="回归线"
+      >
+        <el-form-item
+          label="显示"
+          class="form-item-box"
+        >
+          <el-switch
+            v-model="config.option.regressionLine.style.opacity"
+            :active-value="1"
+            :inactive-value="0"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <template v-if="config.option.regressionLine.style.opacity">
+          <el-form-item
+            label="类型"
+            class="form-item-box"
+          >
+            <el-select
+              v-model="config.option.regressionLine.type"
+              placeholder="请选择"
+              @change="changeStyle"
+            >
+              <el-option
+                v-for="item in regressionLineOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            label="颜色"
+            class="form-item-box"
+          >
+            <el-color-picker
+              v-model="config.option.regressionLine.style.stroke"
+              @change="changeStyle"
+            />
+          </el-form-item>
+          <el-form-item
+            label="是否顶层显示"
+            class="form-item-box"
+          >
+            <el-switch
+              v-model="config.option.regressionLine.top"
+              :active-value="true"
+              :inactive-value="false"
+              @change="changeStyle"
+            />
+          </el-form-item>
+          <el-form-item
+            label="回归线粗细"
+            class="form-item-box"
+          >
+            <el-input-number
+              v-model="config.option.regressionLine.style.lineWidth"
+              class="number-input-box number-input-half "
+              type="number"
+              controls-position="right"
+              @change="changeStyle"
+            />
+          </el-form-item>
+        </template>
+      </el-collapse-item>
+      <el-collapse-item
         title="数据点标签"
       >
         <el-form-item
@@ -379,7 +445,15 @@
 <script>
 import TransformSet from '@gcpaas/data-room-ui/packages/components/common/panel/TransformSet/index.vue'
 import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
-import { fontWeightOptions, fonFamilyList, positionOptions, lineTypeOptions, lineStyleOptions, pointShapeOptions } from '@gcpaas/data-room-ui/packages/js/utils/options'
+import {
+  fontWeightOptions,
+  fonFamilyList,
+  positionOptions,
+  lineTypeOptions,
+  lineStyleOptions,
+  pointShapeOptions,
+  regressionLineOptions
+} from '@gcpaas/data-room-ui/packages/js/utils/options'
 import ColorMultipleSelect from '@gcpaas/data-room-ui/packages/components/common/panel/ColorMultipleSelect/index.vue'
 export default {
   name: '',
@@ -402,7 +476,8 @@ export default {
       positionOptions,
       lineTypeOptions,
       lineStyleOptions,
-      pointShapeOptions
+      pointShapeOptions,
+      regressionLineOptions
     }
   },
   computed: {

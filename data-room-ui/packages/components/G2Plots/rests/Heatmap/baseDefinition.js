@@ -14,30 +14,20 @@ export default {
   // transform: 'perspective(none) translate(255px, 225px) skew(8deg, 7deg) rotateX(34deg) rotateY(13deg) rotateZ(0deg)',
   // 图表的基础配置，配置格式与G2plot、EChart官网保持一致
   option: {
-    // data: []//data不在配置中保存,
-    // 图表内边距
     appendPadding: [0, 0, 0, 0],
-    minColumnWidth: 0,
-    maxColumnWidth: 100,
-    // 柱子样式
-    columnStyle: {
-      // 圆角
-      radius: [0, 0, 0, 0],
-      fill: 'l(90) 0:rgba(0, 155, 255, 1) 1:rgba(0, 155, 255, 0.1)'
-    },
-    // 背景图设置
-    columnBackground: {
-      style: {
-        fill: 'rgba(255,255,255,0.2)'
-      }
-    },
-    xField: 'date',
-    yField: 'value',
+    xField: 'Month of Year',
+    yField: 'District',
     dimensionField: 'xField',
     metricField: 'yField',
     yFieldAlias: '',
-    meta: {},
-    // color: '#007aff',
+    colorField: 'AQHI',
+    classifiedField: 'colorField',
+    color: ['#174c83', '#7eb6d4', '#efefeb', '#efa759', '#9b4d16'],
+    meta: {
+      'Month of Year': {
+        type: 'cat'
+      }
+    },
     label: {
       // 可手动配置 label 数据标签位置
       position: 'middle', // 'top', 'bottom', 'middle',
@@ -47,7 +37,7 @@ export default {
       // 配置样式
       style: {
         fill: 'rgba(255, 255, 255, 1)',
-        opacity: 1,
+        opacity: 0,
         fontSize: 14,
         fontWeight: 'lighter',
         fontFamily: '',
@@ -55,18 +45,6 @@ export default {
         lineWidth: 0
       }
     },
-    // pattern: {
-    //   type: '',
-    //   cfg: {
-    //     size: 4,
-    //     padding: 4,
-    //     rotation: 0,
-    //     fill: '#FF0',
-    //     isStagger: true,
-    //     stroke: 'red',
-    //     lineWidth: 0
-    //   }
-    // },
     xAxis: {
       title: {
         text: '',
@@ -157,14 +135,6 @@ export default {
         }
       },
       label: {
-        formatter: (v) => {
-          if (v < 1e3) return v
-          // 数值格式化为千分位
-          if (v >= 1e3 && v < 1e6) return `${v}`.replace(/\d{1,3}(?=(\d{3})+$)/g, (s) => `${s},`)
-          if (v >= 1e6 && v < 1e9) return `${(v / 1e6).toFixed(1)} M`
-          if (v >= 1e9 && v < 1e12) return `${(v / 1e9).toFixed(1)} B`
-          return `${(v / 10e8).toFixed(1)} B`
-        },
         style: {
           fill: 'rgba(140, 140, 140, 1)',
           fontSize: 12,

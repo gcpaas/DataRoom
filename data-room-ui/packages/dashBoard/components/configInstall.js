@@ -72,6 +72,26 @@ function getDeclarationByType (type) {
       return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackYuJue/dashBoardDefinition')
     case 'GroupRadar':
       return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRadar/dashBoardDefinition')
+    case 'RegLinePoint':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RegLinePoint/dashBoardDefinition')
+    case 'BaseSankey':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseSankey/dashBoardDefinition')
+    case 'DragSankey':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DragSankey/dashBoardDefinition')
+    case 'ShapeHeatmap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/ShapeHeatmap/dashBoardDefinition')
+    case 'SizeHeatmap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/SizeHeatmap/dashBoardDefinition')
+    case 'PolarHeatmap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/PolarHeatmap/dashBoardDefinition')
+    case 'BaseFunnel':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseFunnel/dashBoardDefinition')
+    case 'CompareFunnel':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/CompareFunnel/dashBoardDefinition')
+    case 'FacetedFunnel':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/FacetedFunnel/dashBoardDefinition')
+    case 'BaseLiquid':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLiquid/dashBoardDefinition')
   }
 }
 export function getDeclaration (type) {

@@ -16,7 +16,7 @@ const BaseTableSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@g
 
 const WordCloudSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/rests/WordCloud/panel/index.vue')
 const ButtonsSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/controls/buttons/panel/index.vue')
-const HeatmapDescSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/Heatmap/panel/index.vue')
+const HeatmapSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/Heatmap/panel/index.vue')
 const InputsSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/controls/inputs/panel/index.vue')
 const StackBarSetting = () => import(/* webpackChunkName: "BaseBarSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackBar/panel/index.vue')
 const RoundBarSetting = () => import(/* webpackChunkName: "BaseBarSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RoundBar/panel/index.vue')
@@ -34,6 +34,16 @@ const PercentAreaSetting = () => import(/* webpackChunkName: "BasePieSetting" */
 const BaseYuJueSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseYuJue/panel/index.vue')
 const StackYuJueSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackYuJue/panel/index.vue')
 const GroupRadarSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRadar/panel/index.vue')
+const RegLinePointSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RegLinePoint/panel/index.vue')
+const BaseSankeySetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseSankey/panel/index.vue')
+const DragSankeySetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DragSankey/panel/index.vue')
+const ShapeHeatmapSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/ShapeHeatmap/panel/index.vue')
+const SizeHeatmapSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/SizeHeatmap/panel/index.vue')
+const PolarHeatmapSetting = () => import(/* webpackChunkName: "TextsSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/PolarHeatmap/panel/index.vue')
+const BaseFunnelSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseFunnel/panel/index.vue')
+const CompareFunnelSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/CompareFunnel/panel/index.vue')
+const FacetedFunnelSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/FacetedFunnel/panel/index.vue')
+const BaseLiquidSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLiquid/panel/index.vue')
 
 // 将组件添加到对象中
 
@@ -53,7 +63,7 @@ export default {
   BaseMapSetting,
   BaseTableSetting,
   WordCloudSetting,
-  HeatmapDescSetting,
+  HeatmapSetting,
   ButtonsSetting,
   InputsSetting,
   StackBarSetting,
@@ -71,5 +81,15 @@ export default {
   PercentAreaSetting,
   BaseYuJueSetting,
   StackYuJueSetting,
-  GroupRadarSetting
+  GroupRadarSetting,
+  RegLinePointSetting,
+  BaseSankeySetting,
+  DragSankeySetting,
+  ShapeHeatmapSetting,
+  SizeHeatmapSetting,
+  PolarHeatmapSetting,
+  BaseFunnelSetting,
+  CompareFunnelSetting,
+  FacetedFunnelSetting,
+  BaseLiquidSetting
 }

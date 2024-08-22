@@ -72,6 +72,32 @@ function getDeclarationByType (type) {
       return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackYuJue/bigScreenDefinition')
     case 'GroupRadar':
       return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRadar/bigScreenDefinition')
+    case 'RegLinePoint':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RegLinePoint/bigScreenDefinition')
+    case 'BaseSankey':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseSankey/bigScreenDefinition')
+    case 'DragSankey':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DragSankey/bigScreenDefinition')
+    case 'ShapeHeatmap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/ShapeHeatmap/bigScreenDefinition.js')
+    case 'SizeHeatmap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/SizeHeatmap/bigScreenDefinition.js')
+    case 'PolarHeatmap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/rests/PolarHeatmap/bigScreenDefinition.js')
+    case 'BaseFunnel':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseFunnel/bigScreenDefinition.js')
+    case 'CompareFunnel':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/CompareFunnel/bigScreenDefinition.js')
+    case 'FacetedFunnel':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/FacetedFunnel/bigScreenDefinition.js')
+    case 'BaseLiquid':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLiquid/bigScreenDefinition.js')
+    case 'BaseGauge':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseGauge/bigScreenDefinition.js')
+    case 'BaseProgress':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseProgress/bigScreenDefinition.js')
+    case 'BaseBullet':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBullet/bigScreenDefinition.js')
   }
 }
 

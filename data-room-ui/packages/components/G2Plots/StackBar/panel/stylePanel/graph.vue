@@ -363,7 +363,7 @@
 import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
 import ColorMultipleSelect from '@gcpaas/data-room-ui/packages/components/common/panel/ColorMultipleSelect/index.vue'
 import { fontWeightOptions, fonFamilyList, positionOptions } from '@gcpaas/data-room-ui/packages/js/utils/options'
-import TransformSet from "@gcpaas/data-room-ui/packages/components/common/panel/TransformSet/index.vue";
+import TransformSet from '@gcpaas/data-room-ui/packages/components/common/panel/TransformSet/index.vue'
 export default {
   name: '',
   components: {
