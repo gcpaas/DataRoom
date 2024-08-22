@@ -47,6 +47,11 @@ import BaseLiquidDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/Bas
 import BaseGaugeDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseGauge/declaration.js'
 import BaseProgressDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseProgress/declaration.js'
 import BaseBulletDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBullet/declaration.js'
+import StackBulletDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/StackBullet/declaration.js'
+import GroupBulletDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupBullet/declaration.js'
+import BaseTreeMapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseTreeMap/declaration.js'
+import DrillDownTreeMapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/DrillDownTreeMap/declaration.js'
+import NestTreeMapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/NestTreeMap/declaration.js'
 
 export default [
   {
@@ -175,6 +180,18 @@ export default [
         }]
       },
       {
+        code: 'treemap',
+        name: '树图',
+        icon: 'el-icon-s-data',
+        children: [{
+          ...BaseTreeMapDesc
+        }, {
+          ...NestTreeMapDesc
+        }, {
+          ...DrillDownTreeMapDesc
+        }]
+      },
+      {
         code: 'jindutu',
         name: '进度图',
         icon: 'el-icon-s-data',
@@ -183,9 +200,11 @@ export default [
         }, {
           ...BaseGaugeDesc
         }, {
-          ...BaseProgressDesc
-        }, {
           ...BaseBulletDesc
+        }, {
+          ...StackBulletDesc
+        }, {
+          ...GroupBulletDesc
         }]
       },
       {
@@ -198,6 +217,8 @@ export default [
           ...BaseYuJueDesc
         }, {
           ...StackYuJueDesc
+        }, {
+          ...BaseProgressDesc
         }]
       }
     ]
