@@ -8,5 +8,5 @@ export default {
   implType: 'BaseRose',
   img: require(`./${name}.png`),
   path: 'components/G2Plots/BaseRose',
-  classify: 'qita'// 属于哪个大类，方便图层图标显示（图层不需要分类则可去掉）
+  classify: 'rose'// 属于哪个大类，方便图层图标显示（图层不需要分类则可去掉）
 }

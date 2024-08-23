@@ -102,6 +102,16 @@ function getInteractionInstall (type) {
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DrillDownTreeMap/interaction/index')
     case 'NestTreeMap':
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/NestTreeMap/interaction/index')
+    case 'BaseWaterfall':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseWaterfall/interaction/index')
+    case 'GroupRose':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRose/interaction/index')
+    case 'StackRose':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackRose/interaction/index')
+    case 'GroupYuJue':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/interaction/index')
+    case 'RingProgress':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/interaction/index')
   }
 }
 export function getInteraction (type) {

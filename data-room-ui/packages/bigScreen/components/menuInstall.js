@@ -52,6 +52,11 @@ import GroupBulletDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/Gr
 import BaseTreeMapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseTreeMap/declaration.js'
 import DrillDownTreeMapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/DrillDownTreeMap/declaration.js'
 import NestTreeMapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/NestTreeMap/declaration.js'
+import BaseWaterfallDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseWaterfall/declaration.js'
+import GroupRoseDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRose/declaration.js'
+import StackRoseDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/StackRose/declaration.js'
+import GroupYuJueDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/declaration.js'
+import RingProgressDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/declaration.js'
 
 export default [
   {
@@ -208,17 +213,39 @@ export default [
         }]
       },
       {
-        code: 'qita',
-        name: '其他',
+        code: 'radialBar',
+        name: '玉珏图',
         icon: 'el-icon-s-data',
         children: [{
-          ...BaseRoseDesc
-        }, {
           ...BaseYuJueDesc
         }, {
           ...StackYuJueDesc
         }, {
+          ...GroupYuJueDesc
+        }]
+      },
+      {
+        code: 'rose',
+        name: '玫瑰图',
+        icon: 'el-icon-s-data',
+        children: [{
+          ...BaseRoseDesc
+        }, {
+          ...GroupRoseDesc
+        }, {
+          ...StackRoseDesc
+        }]
+      },
+      {
+        code: 'qita',
+        name: '其他',
+        icon: 'el-icon-s-data',
+        children: [{
           ...BaseProgressDesc
+        }, {
+          ...RingProgressDesc
+        }, {
+          ...BaseWaterfallDesc
         }]
       }
     ]

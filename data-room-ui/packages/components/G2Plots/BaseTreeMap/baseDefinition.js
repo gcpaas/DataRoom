@@ -13,6 +13,8 @@ export default {
   option: {
     appendPadding: [0, 0, 0, 0],
     colorField: 'name',
+    dimensionField: 'colorField',
+    metricField: 'value',
     color: '',
     showLegend: true,
     rectStyle: {

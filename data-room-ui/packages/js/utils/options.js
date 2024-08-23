@@ -191,6 +191,10 @@ export const bulletLayoutOptions = [
   { value: 'horizontal', label: '水平' },
   { value: 'vertical', label: '垂直' }
 ]
+export const labelModeOptions = [
+  { value: 'difference', label: '相对差值' },
+  { value: 'absolute', label: '绝对值' }
+]
 export const bulletLabelPositionOptions = [
   { value: 'top', label: '顶部' },
   { value: 'middle', label: '中间' },

@@ -44,6 +44,19 @@ const BaseFunnelSetting = () => import(/* webpackChunkName: "BasePieSetting" */ 
 const CompareFunnelSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/CompareFunnel/panel/index.vue')
 const FacetedFunnelSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/FacetedFunnel/panel/index.vue')
 const BaseLiquidSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLiquid/panel/index.vue')
+const BaseGaugeSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseGauge/panel/index.vue')
+const BaseProgressSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseProgress/panel/index.vue')
+const BaseBulletSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBullet/panel/index.vue')
+const StackBulletSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackBullet/panel/index.vue')
+const GroupBulletSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupBullet/panel/index.vue')
+const BaseTreeMapSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseTreeMap/panel/index.vue')
+const DrillDownTreeMapSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DrillDownTreeMap/panel/index.vue')
+const NestTreeMapSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/NestTreeMap/panel/index.vue')
+const BaseWaterfallSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseWaterfall/panel/index.vue')
+const GroupRoseSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRose/panel/index.vue')
+const StackRoseSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackRose/panel/index.vue')
+const GroupYuJueSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/panel/index.vue')
+const RingProgressSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/panel/index.vue')
 
 // 将组件添加到对象中
 
@@ -91,5 +104,18 @@ export default {
   BaseFunnelSetting,
   CompareFunnelSetting,
   FacetedFunnelSetting,
-  BaseLiquidSetting
+  BaseLiquidSetting,
+  BaseGaugeSetting,
+  BaseProgressSetting,
+  BaseBulletSetting,
+  StackBulletSetting,
+  GroupBulletSetting,
+  BaseTreeMapSetting,
+  DrillDownTreeMapSetting,
+  NestTreeMapSetting,
+  BaseWaterfallSetting,
+  GroupRoseSetting,
+  StackRoseSetting,
+  GroupYuJueSetting,
+  RingProgressSetting
 }

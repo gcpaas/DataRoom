@@ -108,6 +108,16 @@ function getDeclarationByType (type) {
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DrillDownTreeMap/bigScreenDefinition.js')
     case 'NestTreeMap':
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/NestTreeMap/bigScreenDefinition.js')
+    case 'BaseWaterfall':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseWaterfall/bigScreenDefinition.js')
+    case 'GroupRose':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRose/bigScreenDefinition')
+    case 'StackRose':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackRose/bigScreenDefinition')
+    case 'GroupYuJue':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/bigScreenDefinition')
+    case 'RingProgress':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/bigScreenDefinition')
   }
 }
 

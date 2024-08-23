@@ -44,6 +44,19 @@ import BaseFunnelDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/Bas
 import CompareFunnelDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/CompareFunnel/declaration.js'
 import FacetedFunnelDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/FacetedFunnel/declaration.js'
 import BaseLiquidDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLiquid/declaration.js'
+import BaseGaugeDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseGauge/declaration.js'
+import BaseProgressDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseProgress/declaration.js'
+import BaseBulletDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBullet/declaration.js'
+import StackBulletDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/StackBullet/declaration.js'
+import GroupBulletDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupBullet/declaration.js'
+import BaseTreeMapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseTreeMap/declaration.js'
+import DrillDownTreeMapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/DrillDownTreeMap/declaration.js'
+import NestTreeMapDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/NestTreeMap/declaration.js'
+import BaseWaterfallDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseWaterfall/declaration.js'
+import GroupRoseDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRose/declaration.js'
+import StackRoseDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/StackRose/declaration.js'
+import GroupYuJueDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/declaration.js'
+import RingProgressDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/declaration.js'
 
 export default [
   {
@@ -181,11 +194,55 @@ export default [
         }]
       },
       {
+        name: 'treemap',
+        title: '树图',
+        icon: 'el-icon-s-data',
+        children: [{
+          ...BaseTreeMapDesc
+        }, {
+          ...NestTreeMapDesc
+        }, {
+          ...DrillDownTreeMapDesc
+        }]
+      },
+      {
         name: 'jindutu',
         title: '进度图',
         icon: 'el-icon-s-data',
         children: [{
           ...BaseLiquidDesc
+        }, {
+          ...BaseGaugeDesc
+        }, {
+          ...BaseBulletDesc
+        }, {
+          ...StackBulletDesc
+        }, {
+          ...GroupBulletDesc
+        }]
+      },
+      {
+        name: 'radialBar',
+        title: '玉珏图',
+        icon: 'el-icon-s-data',
+        children: [{
+          ...BaseYuJueDesc
+        }, {
+          ...StackYuJueDesc
+        }, {
+          ...GroupYuJueDesc
+        }]
+      },
+      {
+        name: 'rose',
+        title: '玫瑰图',
+        icon: 'el-icon-s-data',
+        children: [{
+          ...BaseRoseDesc
+        }, {
+          ...GroupRoseDesc
+        }, {
+          ...StackRoseDesc
         }]
       },
       {
@@ -193,11 +250,11 @@ export default [
         title: '其他',
         icon: 'el-icon-s-data',
         children: [{
-          ...BaseRoseDesc
+          ...BaseProgressDesc
         }, {
-          ...BaseYuJueDesc
+          ...RingProgressDesc
         }, {
-          ...StackYuJueDesc
+          ...BaseWaterfallDesc
         }]
       }
     ]

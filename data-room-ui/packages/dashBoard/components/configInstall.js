@@ -92,6 +92,32 @@ function getDeclarationByType (type) {
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/FacetedFunnel/dashBoardDefinition')
     case 'BaseLiquid':
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLiquid/dashBoardDefinition')
+    case 'BaseGauge':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseGauge/dashBoardDefinition')
+    case 'BaseProgress':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseProgress/dashBoardDefinition')
+    case 'BaseBullet':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBullet/dashBoardDefinition')
+    case 'StackBullet':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackBullet/dashBoardDefinition')
+    case 'GroupBullet':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupBullet/dashBoardDefinition')
+    case 'BaseTreeMap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseTreeMap/dashBoardDefinition')
+    case 'DrillDownTreeMap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DrillDownTreeMap/dashBoardDefinition')
+    case 'NestTreeMap':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/NestTreeMap/dashBoardDefinition')
+    case 'BaseWaterfall':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseWaterfall/dashBoardDefinition')
+    case 'GroupRose':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRose/dashBoardDefinition')
+    case 'StackRose':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackRose/dashBoardDefinition')
+    case 'GroupYuJue':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/dashBoardDefinition')
+    case 'RingProgress':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/dashBoardDefinition')
   }
 }
 export function getDeclaration (type) {

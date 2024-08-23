@@ -50,6 +50,11 @@ const GroupBullet = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data
 const BaseTreeMap = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseTreeMap/index.vue')
 const DrillDownTreeMap = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DrillDownTreeMap/index.vue')
 const NestTreeMap = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/NestTreeMap/index.vue')
+const BaseWaterfall = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseWaterfall/index.vue')
+const GroupRose = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRose/index.vue')
+const StackRose = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackRose/index.vue')
+const GroupYuJue = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/index.vue')
+const RingProgress = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/index.vue')
 
 // 将组件添加到对象中
 export default {
@@ -104,5 +109,10 @@ export default {
   GroupBullet,
   BaseTreeMap,
   DrillDownTreeMap,
-  NestTreeMap
+  NestTreeMap,
+  BaseWaterfall,
+  GroupRose,
+  StackRose,
+  GroupYuJue,
+  RingProgress
 }

@@ -42,6 +42,19 @@ const BaseFunnel = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-
 const CompareFunnel = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/CompareFunnel/index.vue')
 const FacetedFunnel = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/FacetedFunnel/index.vue')
 const BaseLiquid = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseLiquid/index.vue')
+const BaseGauge = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseGauge/index.vue')
+const BaseProgress = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseProgress/index.vue')
+const BaseBullet = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseBullet/index.vue')
+const StackBullet = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackBullet/index.vue')
+const GroupBullet = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupBullet/index.vue')
+const BaseTreeMap = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseTreeMap/index.vue')
+const DrillDownTreeMap = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DrillDownTreeMap/index.vue')
+const NestTreeMap = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/NestTreeMap/index.vue')
+const BaseWaterfall = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseWaterfall/index.vue')
+const GroupRose = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRose/index.vue')
+const StackRose = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackRose/index.vue')
+const GroupYuJue = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/index.vue')
+const RingProgress = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/index.vue')
 
 // 将组件添加到对象中
 export default {
@@ -88,5 +101,18 @@ export default {
   BaseFunnel,
   CompareFunnel,
   FacetedFunnel,
-  BaseLiquid
+  BaseLiquid,
+  BaseGauge,
+  BaseProgress,
+  BaseBullet,
+  StackBullet,
+  GroupBullet,
+  BaseTreeMap,
+  DrillDownTreeMap,
+  NestTreeMap,
+  BaseWaterfall,
+  GroupRose,
+  StackRose,
+  GroupYuJue,
+  RingProgress
 }

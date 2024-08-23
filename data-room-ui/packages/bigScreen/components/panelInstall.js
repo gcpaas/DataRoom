@@ -52,6 +52,11 @@ const GroupBulletSetting = () => import(/* webpackChunkName: "BasePieSetting" */
 const BaseTreeMapSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseTreeMap/panel/index.vue')
 const DrillDownTreeMapSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/DrillDownTreeMap/panel/index.vue')
 const NestTreeMapSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/NestTreeMap/panel/index.vue')
+const BaseWaterfallSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseWaterfall/panel/index.vue')
+const GroupRoseSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupRose/panel/index.vue')
+const StackRoseSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackRose/panel/index.vue')
+const GroupYuJueSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/panel/index.vue')
+const RingProgressSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/panel/index.vue')
 
 // 将组件添加到对象中
 
@@ -107,5 +112,10 @@ export default {
   GroupBulletSetting,
   BaseTreeMapSetting,
   DrillDownTreeMapSetting,
-  NestTreeMapSetting
+  NestTreeMapSetting,
+  BaseWaterfallSetting,
+  GroupRoseSetting,
+  StackRoseSetting,
+  GroupYuJueSetting,
+  RingProgressSetting
 }
