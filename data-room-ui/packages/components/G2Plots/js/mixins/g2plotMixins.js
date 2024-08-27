@@ -123,6 +123,8 @@ export default {
                 if (this.config.dataSource.dataHandleFilterId) {
                   data = this.dataHandleFilters[this.config.dataSource.dataHandleFilterId](params) || res.data
                 }
+                // 在这里对数据进一步处理符合标准要求
+                data = this.handleData(data)
                 resolve(data)
               }).catch(err => {
                 reject(err)
@@ -206,6 +208,9 @@ export default {
           }
         })
       }
+    },
+    handleData (data) {
+      return data
     }
   },
   beforeDestroy () {
@@ -214,4 +219,5 @@ export default {
       this.chart.destroy()
     }
   }
+
 }

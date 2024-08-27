@@ -6,7 +6,7 @@
     <el-form-item
       v-for="field in fieldList"
       :key="field.name"
-      :label="fieldNameMapping[field.name]"
+      :label="fieldNameMapping[field.desc]"
       class="data-form-item"
     >
       <el-select
@@ -41,13 +41,13 @@ export default {
       type: Object,
       default: () => ({})
     },
-    fieldMap:{
+    fieldMap: {
       type: Object,
-      default: () => []
+      default: () => ({})
     },
-    fieldNameMapping:{
-      type: Object,
-      default: () => {}
+    fieldNameMapping: {
+      type: Array, // 将类型改为 Array
+      default: () => [] // 设置默认值为一个空数组
     }
   },
   components: {
@@ -57,12 +57,12 @@ export default {
     return {}
   },
   computed: {
-    globalVariableList() {
+    globalVariableList () {
       return this.canvasInst.pageInfo.globalVariable
     },
-    fieldList(){
+    fieldList () {
       for (const key in this.fieldNameMapping) {
-        if (!this.fieldMap.fieldList.some(item => item.name === key)){
+        if (!this.fieldMap.fieldList.some(item => item.name === key)) {
           this.fieldMap.fieldList.push({
             name: key,
             globalVariableId: ''

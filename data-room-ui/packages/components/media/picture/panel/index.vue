@@ -64,10 +64,18 @@ export default {
   },
   data () {
     return {
-      fieldNameMapping: {
-        dimensionField: '图片地址',
-        metricField: '链接地址'
-      },
+      fieldNameMapping: [
+        {
+          name: 'dimensionField',
+          desc: '图片地址',
+          multiple: false
+        },
+        {
+          name: 'metricField',
+          desc: '链接地址',
+          multiple: false
+        }
+      ],
       fieldsList: [],
       activeName: 'style'
     }

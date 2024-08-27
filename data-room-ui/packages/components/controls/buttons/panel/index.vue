@@ -64,9 +64,13 @@ export default {
   },
   data () {
     return {
-      fieldNameMapping: {
-        dimensionField: '文本内容'
-      },
+      fieldNameMapping: [
+        {
+          name: 'dimensionField',
+          desc: '文本内容',
+          multiple: false
+        }
+      ],
       fieldsList: [],
       activeName: 'style'
     }

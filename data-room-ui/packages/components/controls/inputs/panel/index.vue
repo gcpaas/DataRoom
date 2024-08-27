@@ -63,10 +63,18 @@ export default {
   },
   data () {
     return {
-      fieldNameMapping: {
-        dimensionField: '文本内容',
-        metricField: '链接地址'
-      },
+      fieldNameMapping: [
+        {
+          name: 'dimensionField',
+          desc: '文本内容',
+          multiple: false
+        },
+        {
+          name: 'metricField',
+          desc: '链接地址',
+          multiple: false
+        }
+      ],
       fieldsList: [],
       activeName: 'style'
     }

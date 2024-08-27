@@ -27,12 +27,12 @@ export default {
     // 背景图设置
     barBackground: {
       style: {
-        fill: 'rgba(0,0,0,0)',
+        fill: 'rgba(0,0,0,0)'
       }
     },
-    xField: 'year',
-    yField: 'value',
-    seriesField: 'value',
+    xField: 'value',
+    yField: 'year',
+    seriesField: 'year',
     dimensionField: 'xField',
     metricField: 'yField',
     yFieldAlias: '',
@@ -157,14 +157,6 @@ export default {
         }
       },
       label: {
-        formatter: (v) => {
-          if (v < 1e3) return v
-          // 数值格式化为千分位
-          if (v >= 1e3 && v < 1e6) return `${v}`.replace(/\d{1,3}(?=(\d{3})+$)/g, (s) => `${s},`)
-          if (v >= 1e6 && v < 1e9) return `${(v / 1e6).toFixed(1)} M`
-          if (v >= 1e9 && v < 1e12) return `${(v / 1e9).toFixed(1)} B`
-          return `${(v / 10e8).toFixed(1)} B`
-        },
         style: {
           fill: 'rgba(140, 140, 140, 1)',
           fontSize: 12,

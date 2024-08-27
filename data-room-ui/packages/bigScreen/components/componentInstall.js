@@ -55,6 +55,8 @@ const GroupRose = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-r
 const StackRose = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/StackRose/index.vue')
 const GroupYuJue = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/index.vue')
 const RingProgress = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/index.vue')
+const BaseStock = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseStock/index.vue')
+const VerticalBullet = () => import(/* webpackChunkName: "BasePie" */ '@gcpaas/data-room-ui/packages/components/G2Plots/VerticalBullet/index.vue')
 
 // 将组件添加到对象中
 export default {
@@ -114,5 +116,7 @@ export default {
   GroupRose,
   StackRose,
   GroupYuJue,
-  RingProgress
+  RingProgress,
+  BaseStock,
+  VerticalBullet
 }

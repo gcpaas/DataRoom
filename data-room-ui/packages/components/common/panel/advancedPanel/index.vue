@@ -48,8 +48,8 @@ export default {
       default: () => ({})
     },
     fieldNameMapping: {
-      type: Object,
-      default: () => {}
+      type: Array, // 将类型改为 Array
+      default: () => [] // 设置默认值为一个空数组
     }
   },
   components: {

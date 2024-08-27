@@ -77,7 +77,7 @@
           </div>
           <!--  基础组件数据配置  -->
           <div class="lc-field-body">
-            <el-form-item
+<!--            <el-form-item
               v-for="(value,key) in fieldNameMapping"
               :key="key"
               :label="value"
@@ -90,6 +90,32 @@
                 filterable
                 clearable
                 @change="changeOption(key)"
+              >
+                <el-option
+                  v-for="(field, index) in fieldList"
+                  :key="index"
+                  :label="field.fieldDesc"
+                  :value="field.fieldName"
+                >
+                  <span style="float: left">  {{ field.fieldDesc !== "" ? field.fieldDesc : field.fieldName }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ field.fieldName }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>-->
+            <el-form-item
+              v-for="(item,index) in fieldNameMapping"
+              :key="index"
+              :label="item.desc"
+              class="data-form-item"
+            >
+              <el-select
+                v-model="config.dataSource[item.name]"
+                class="bs-el-select"
+                popper-class="bs-el-select"
+                :multiple="item.multiple"
+                filterable
+                clearable
+                @change="changeOption(item.name)"
               >
                 <el-option
                   v-for="(field, index) in fieldList"
@@ -169,8 +195,8 @@ export default {
       default: () => ({})
     },
     fieldNameMapping: {
-      type: Object,
-      default: () => {}
+      type: Array, // 将类型改为 Array
+      default: () => [] // 设置默认值为一个空数组
     }
   },
   components: {

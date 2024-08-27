@@ -16,7 +16,11 @@ export default {
     rangeField: 'ranges',
     targetField: 'target',
     xField: 'title',
-    layout: 'vertical',
+    classifiedField: 'xField',
+    metricField: 'targetField',
+    dimensionField: 'rangeField',
+    seriesField: 'measureField',
+    layout: 'horizontal',
     color: {
       range: '#f0efff', // ['#FFbcb8', '#FFe0b0', '#bfeec8']
       measure: '#5B8FF9',

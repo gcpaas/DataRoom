@@ -118,6 +118,10 @@ function getDeclarationByType (type) {
       return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/bigScreenDefinition')
     case 'RingProgress':
       return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/bigScreenDefinition')
+    case 'BaseStock':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseStock/bigScreenDefinition')
+    case 'VerticalBullet':
+      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/VerticalBullet/bigScreenDefinition')
   }
 }
 

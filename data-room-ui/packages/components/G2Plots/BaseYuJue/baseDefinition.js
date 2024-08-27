@@ -19,6 +19,7 @@ export default {
     dimensionField: 'xField',
     metricField: 'yField',
     colorField: 'name',
+    classifiedField: 'colorField',
     maxAngle: 270,
     minBarWidth: 10,
     maxBarWidth: 100,

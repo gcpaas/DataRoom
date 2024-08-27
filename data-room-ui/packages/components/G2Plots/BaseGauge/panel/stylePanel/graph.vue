@@ -1,5 +1,18 @@
 <template>
   <div class="dataroom-graph-wrapper">
+<!--    <el-form-item
+      label="百分比"
+      class="form-item-box"
+    >
+      <el-input-number
+        v-model="config.option.percent"
+        controls-position="right"
+        :min="0"
+        :max="1"
+        :step="0.05"
+        @change="changeStyle"
+      />
+    </el-form-item>-->
     <el-form-item
       label="表盘类型"
       class="form-item-box"

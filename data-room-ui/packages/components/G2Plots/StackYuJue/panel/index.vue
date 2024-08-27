@@ -58,11 +58,23 @@ export default {
   },
   data () {
     return {
-      fieldNameMapping: {
-        dimensionField: '维度字段',
-        metricField: '指标字段',
-        seriesField: '分组字段'
-      },
+      fieldNameMapping: [
+        {
+          name: 'dimensionField',
+          desc: '维度字段',
+          multiple: false
+        },
+        {
+          name: 'metricField',
+          desc: '指标字段',
+          multiple: false
+        },
+        {
+          name: 'seriesField',
+          desc: '分组字段',
+          multiple: false
+        }
+      ],
       fieldsList: [],
       activeName: 'style'
     }

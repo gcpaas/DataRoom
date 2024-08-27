@@ -58,9 +58,13 @@ export default {
   },
   data () {
     return {
-      fieldNameMapping: {
-        metricField: '指标字段'
-      },
+      fieldNameMapping: [
+        {
+          name: 'metricField',
+          desc: '指标字段',
+          multiple: false
+        }
+      ],
       fieldsList: [],
       activeName: 'style'
     }

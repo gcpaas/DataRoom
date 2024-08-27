@@ -112,6 +112,10 @@ function getInteractionInstall (type) {
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/interaction/index')
     case 'RingProgress':
       return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/interaction/index')
+    case 'BaseStock':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseStock/interaction/index')
+    case 'VerticalBullet':
+      return import(/* webpackChunkName: "BaseBarConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/VerticalBullet/interaction/index')
   }
 }
 export function getInteraction (type) {

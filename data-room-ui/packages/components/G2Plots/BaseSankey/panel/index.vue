@@ -58,11 +58,23 @@ export default {
   },
   data () {
     return {
-      fieldNameMapping: {
-        dimensionField: '起始节点',
-        metricField: '目标节点',
-        classifiedField: '权重'
-      },
+      fieldNameMapping: [
+        {
+          name: 'dimensionField',
+          desc: '起始节点',
+          multiple: false
+        },
+        {
+          name: 'metricField',
+          desc: '目标节点',
+          multiple: false
+        },
+        {
+          name: 'classifiedField',
+          desc: '权重',
+          multiple: false
+        }
+      ],
       fieldsList: [],
       activeName: 'style'
     }
