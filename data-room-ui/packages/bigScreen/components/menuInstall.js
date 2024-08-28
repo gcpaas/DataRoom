@@ -58,7 +58,6 @@ import StackRoseDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/Stac
 import GroupYuJueDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/declaration.js'
 import RingProgressDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/declaration.js'
 import BaseStockDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/BaseStock/declaration.js'
-import VerticalBulletDesc from '@gcpaas/data-room-ui/packages/components/G2Plots/VerticalBullet/declaration.js'
 
 export default [
   {
@@ -208,8 +207,6 @@ export default [
           ...BaseGaugeDesc
         }, {
           ...BaseBulletDesc
-        }, {
-          ...VerticalBulletDesc
         }, {
           ...StackBulletDesc
         }, {

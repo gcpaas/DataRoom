@@ -58,7 +58,6 @@ const StackRoseSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '
 const GroupYuJueSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/GroupYuJue/panel/index.vue')
 const RingProgressSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/panel/index.vue')
 const BaseStockSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseStock/panel/index.vue')
-const VerticalBulletSetting = () => import(/* webpackChunkName: "BasePieSetting" */ '@gcpaas/data-room-ui/packages/components/G2Plots/VerticalBullet/panel/index.vue')
 
 // 将组件添加到对象中
 
@@ -120,6 +119,5 @@ export default {
   StackRoseSetting,
   GroupYuJueSetting,
   RingProgressSetting,
-  BaseStockSetting,
-  VerticalBulletSetting
+  BaseStockSetting
 }

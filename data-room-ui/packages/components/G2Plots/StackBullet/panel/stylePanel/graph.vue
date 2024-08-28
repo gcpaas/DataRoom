@@ -1,6 +1,6 @@
 <template>
   <div class="dataroom-graph-wrapper">
-<!--    <el-form-item
+    <el-form-item
       label="方向"
       class="form-item-box"
     >
@@ -16,7 +16,7 @@
           :value="item.value"
         />
       </el-select>
-    </el-form-item>-->
+    </el-form-item>
     <el-form-item
       label="范围区间颜色"
       class="form-item-box"

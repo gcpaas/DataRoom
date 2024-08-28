@@ -13,7 +13,6 @@ export default {
   },
   option: {
     appendPadding: [0, 0, 0, 0],
-    metricField: 'percent',
     percent: 0.25,
     shape: 'circle',
     outline: {

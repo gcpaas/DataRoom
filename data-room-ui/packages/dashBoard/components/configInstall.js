@@ -120,8 +120,6 @@ function getDeclarationByType (type) {
       return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/RingProgress/dashBoardDefinition')
     case 'BaseStock':
       return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/BaseStock/dashBoardDefinition')
-    case 'VerticalBullet':
-      return import(/* webpackChunkName: "BaseLineConfig" */ '@gcpaas/data-room-ui/packages/components/G2Plots/VerticalBullet/dashBoardDefinition')
   }
 }
 export function getDeclaration (type) {

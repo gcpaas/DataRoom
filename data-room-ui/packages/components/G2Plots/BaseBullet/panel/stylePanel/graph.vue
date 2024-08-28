@@ -1,6 +1,6 @@
 <template>
   <div class="dataroom-graph-wrapper">
-<!--    <el-form-item
+    <el-form-item
       label="方向"
       class="form-item-box"
     >
@@ -16,74 +16,32 @@
           :value="item.value"
         />
       </el-select>
-    </el-form-item>-->
-    <el-form-item
-      label="范围区间颜色"
-      class="form-item-box"
-    >
-      <el-color-picker
-        v-model="config.option.color.range"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      label="实际值颜色"
-      class="form-item-box"
-    >
-      <el-color-picker
-        v-model="config.option.color.measure"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      label="目标值颜色"
-      class="form-item-box"
-    >
-      <el-color-picker
-        v-model="config.option.color.target"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      label="区间背景粗细"
-      class="form-item-box"
-    >
-      <el-input-number
-        v-model="config.option.size.range"
-        :min="0"
-        :step="5"
-        controls-position="right"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      label="实际值粗细"
-      class="form-item-box"
-    >
-      <el-input-number
-        v-model="config.option.size.measure"
-        :min="0"
-        :step="5"
-        controls-position="right"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      label="目标值粗细"
-      class="form-item-box"
-    >
-      <el-input-number
-        v-model="config.option.size.target"
-        :min="0"
-        :step="5"
-        controls-position="right"
-        @change="changeStyle"
-      />
     </el-form-item>
     <el-collapse>
       <el-collapse-item
         title="范围区间标签"
       >
+        <el-form-item
+          label="范围区间颜色"
+          class="form-item-box"
+        >
+          <el-color-picker
+            v-model="config.option.color.range"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="区间背景粗细"
+          class="form-item-box"
+        >
+          <el-input-number
+            v-model="config.option.size.range"
+            :min="0"
+            :step="5"
+            controls-position="right"
+            @change="changeStyle"
+          />
+        </el-form-item>
         <el-form-item
           label="显示"
           class="form-item-box"
@@ -251,10 +209,31 @@
         </template>
       </el-collapse-item>
       <el-collapse-item
-        title="实际值标签"
+        title="实际值"
       >
         <el-form-item
-          label="显示"
+          label="实际值颜色"
+          class="form-item-box"
+        >
+          <el-color-picker
+            v-model="config.option.color.measure"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="实际值粗细"
+          class="form-item-box"
+        >
+          <el-input-number
+            v-model="config.option.size.measure"
+            :min="0"
+            :step="5"
+            controls-position="right"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="标签显示"
           class="form-item-box"
         >
           <el-switch
@@ -420,10 +399,31 @@
         </template>
       </el-collapse-item>
       <el-collapse-item
-        title="目标值标签"
+        title="目标值"
       >
         <el-form-item
-          label="显示"
+          label="目标值颜色"
+          class="form-item-box"
+        >
+          <el-color-picker
+            v-model="config.option.color.target"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="目标值粗细"
+          class="form-item-box"
+        >
+          <el-input-number
+            v-model="config.option.size.target"
+            :min="0"
+            :step="5"
+            controls-position="right"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="标签显示"
           class="form-item-box"
         >
           <el-switch
