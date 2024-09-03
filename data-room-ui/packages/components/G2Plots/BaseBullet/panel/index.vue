@@ -60,23 +60,13 @@ export default {
     return {
       fieldNameMapping: [
         {
-          name: 'classifiedField',
-          desc: '类型字段',
+          name: 'dimensionField',
+          desc: '实际值字段',
           multiple: false
         },
         {
           name: 'metricField',
           desc: '目标值字段',
-          multiple: false
-        },
-        {
-          name: 'dimensionField',
-          desc: '区间范围字段',
-          multiple: false
-        },
-        {
-          name: 'seriesField',
-          desc: '实际值字段',
           multiple: false
         }
       ],

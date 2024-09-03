@@ -26,7 +26,9 @@ export default {
     return {
       previousLayout: 'horizontal', // 保存上一次的 layout 属性值
       mockData,
-      show: true
+      show: true,
+      respData: null, // 指的是后端返回的整个数据
+      temporaryData: null// 指的是处理后的适用于当前图表的数据格式的数据
     }
   },
   computed: {},
@@ -35,26 +37,20 @@ export default {
   mounted () {
   },
   methods: {
+    // 方法：
     updateChartStyle () {
       if (this.chart) {
         this.$nextTick(() => {
           const config = cloneDeep(this.config)
-
-          // 处理子弹图的数据，将字段值包裹在数组中
-          this.temporaryData = this.wrapFieldsInArray(
-            this.temporaryData,
-            config.dataSource.dimensionField,
-            config.dataSource.seriesField
-          )
-
+          this.temporaryData = this.handleData(this.respData)
+          console.log('temporaryData', this.temporaryData)
           const option = {
             ...config.option,
             data: this.temporaryData
           }
-
+          console.log('option', option)
           // 获取当前 layout 属性
           const currentLayout = this.config.option.layout
-
           if (this.previousLayout !== currentLayout) {
             // 如果 layout 属性发生变化，销毁现有图表实例并重新创建
             this.previousLayout = currentLayout // 更新 previousLayout 为当前 layout 属性
@@ -73,31 +69,30 @@ export default {
       }
     },
     handleData (data) {
-      // 处理子弹图的数据
-      return this.wrapFieldsInArray(
-        data,
-        this.config.dataSource.dimensionField,
-        this.config.dataSource.seriesField
-      )
-    },
-    wrapFieldsInArray (list, dimensionField, seriesField) {
-      function transformNode (node) {
-        const newNode = {}
-
-        for (const key in node) {
-          if (key === dimensionField || key === seriesField) {
-            // 将 dimensionField 和 seriesField 的值包裹成数组
-            newNode[key] = [node[key]]
-          } else {
-            newNode[key] = node[key]
-          }
+      // console.log('data', data)
+      this.respData = cloneDeep(data)
+      // console.log('respData', this.respData)
+      // console.log(this.config.prop.data[0].ranges)
+      // return [{
+      //   ...this.config.prop.data[0],
+      //   measures: [data[0][this.config.dataSource.dimensionField]],
+      //   target: data[0][this.config.dataSource.metricField]
+      // }
+      // ]
+      if (this.config.dataSource.businessKey !== '') {
+        return [{
+          ...this.config.prop.data[0],
+          measures: [data[0][this.config.dataSource.dimensionField]],
+          target: data[0][this.config.dataSource.metricField]
         }
-
-        return newNode
+        ]
+      } else {
+        // console.log(this.config.prop.data[0])
+        return [{
+          ...this.config.prop.data[0]
+        }
+        ]
       }
-
-      // 直接返回转换后的节点列表
-      return list.map(transformNode)
     }
   }
 

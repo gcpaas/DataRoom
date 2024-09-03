@@ -13,6 +13,7 @@ export default {
   option: {
     appendPadding: [0, 0, 0, 0],
     metricField: 'percent',
+    index: 0,
     percent: 0.75,
     innerRadius: 0.9,
     radius: 1,

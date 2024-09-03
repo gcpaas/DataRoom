@@ -37,18 +37,28 @@ export default {
       if (this.chart) {
         this.$nextTick(() => {
           // 确保 temporaryData 不为空
-          if (this.temporaryData.length > 0) {
-            // 提取第一个对象的第一个值
-            const value = Object.values(this.temporaryData[0])[0]
-
-            // 确保 value 是有效的数字
-            if (typeof value === 'number' && !isNaN(value)) {
-              this.config.option.percent = value
-            } else {
-              console.warn('Invalid value for percent:', value)
-            }
-          } else {
+          if (this.temporaryData.length === 0) {
             console.warn('temporaryData is empty')
+            return
+          }
+          // console.log(this.temporaryData)
+          const index = this.config.option.index
+
+          // 检查 index 的有效性
+          if (index < 0 || index >= this.temporaryData.length) {
+            console.warn(`Index ${index} is out of range. Max index is ${this.temporaryData.length - 1}`)
+            return
+          }
+
+          // console.log(this.temporaryData[index][this.config.dataSource.metricField])
+          // const value = Object.values(this.temporaryData[index])[0]
+          const value = this.temporaryData[index][this.config.dataSource.metricField]
+
+          // 确保 value 是有效的数字
+          if (typeof value === 'number' && !isNaN(value)) {
+            this.config.option.percent = value
+          } else {
+            console.warn('Invalid value for percent:', value)
           }
 
           const option = {

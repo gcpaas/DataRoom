@@ -13,6 +13,17 @@
         @change="changeStyle"
       />
     </el-form-item>-->
+<!--    <el-form-item
+      label="展示数据序号"
+      class="form-item-box"
+    >
+      <el-input-number
+        v-model="config.option.index"
+        controls-position="right"
+        :min="0"
+        @change="changeStyle"
+      />
+    </el-form-item>-->
     <el-form-item
       label="形状"
       class="form-item-box"

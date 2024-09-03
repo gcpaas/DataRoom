@@ -14,6 +14,7 @@ export default {
     appendPadding: [0, 0, 0, 0],
     metricField: 'percent',
     percent: 0.75,
+    index: 0,
     barWidthRatio: 0.5,
     color: ['#5B8FF9', '#E8EDF3'],
     progressStyle: {

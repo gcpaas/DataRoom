@@ -14,6 +14,7 @@ export default {
     appendPadding: [0, 0, 0, 0],
     metricField: 'percent',
     percent: 0.7,
+    index: 0,
     radius: 1,
     innerRadius: 0.8,
     color: ['#5B8FF9', '#E8EDF3'],

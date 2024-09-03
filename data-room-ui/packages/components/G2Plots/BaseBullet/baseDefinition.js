@@ -10,19 +10,25 @@ export default {
     enable: true,
     text: '基础子弹图'
   },
+  prop: {
+    data: [ // 在 prop 中添加初始数据
+      {
+        title: '满意度',
+        ranges: [30, 40, 90],
+        measures: [60],
+        target: 85
+      }
+    ]
+  },
   option: {
     appendPadding: [0, 0, 0, 0],
     measureField: 'measures',
     rangeField: 'ranges',
     targetField: 'target',
     xField: 'title',
-    classifiedField: 'xField',
-    metricField: 'targetField',
-    dimensionField: 'rangeField',
-    seriesField: 'measureField',
     layout: 'horizontal',
     color: {
-      range: '#f0efff', // ['#FFbcb8', '#FFe0b0', '#bfeec8']
+      range: ['#FFbcb8', '#FFe0b0', '#bfeec8'],
       measure: '#5B8FF9',
       target: '#3D76DD'
     },

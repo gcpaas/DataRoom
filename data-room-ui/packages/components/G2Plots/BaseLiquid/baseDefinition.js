@@ -14,6 +14,7 @@ export default {
   option: {
     appendPadding: [0, 0, 0, 0],
     percent: 0.25,
+    index: 0,
     shape: 'circle',
     outline: {
       border: 4,
