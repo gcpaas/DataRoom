@@ -10,16 +10,40 @@ export default {
     enable: true,
     text: '分组子弹图'
   },
+  prop: {
+    data: [
+      {
+        title: '重庆',
+        ranges: [30, 90, 120],
+        measures: [65],
+        target: 80
+      },
+      {
+        title: '杭州',
+        ranges: [30, 90, 120],
+        measures: [50],
+        target: 100
+      },
+      {
+        title: '广州',
+        ranges: [30, 90, 120],
+        measures: [40],
+        target: 85
+      },
+      {
+        title: '深圳',
+        ranges: [30, 90, 120],
+        measures: [50],
+        target: 100
+      }
+    ]
+  },
   option: {
     appendPadding: [0, 0, 0, 0],
     measureField: 'measures',
     rangeField: 'ranges',
     targetField: 'target',
     xField: 'title',
-    classifiedField: 'xField',
-    metricField: 'targetField',
-    dimensionField: 'rangeField',
-    seriesField: 'measureField',
     layout: 'horizontal',
     color: {
       range: ['#FFbcb8', '#FFe0b0', '#bfeec8'],

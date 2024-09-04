@@ -61,21 +61,16 @@ export default {
       fieldNameMapping: [
         {
           name: 'classifiedField',
-          desc: '类型字段',
-          multiple: false
-        },
-        {
-          name: 'metricField',
-          desc: '目标值字段',
+          desc: '标题字段',
           multiple: false
         },
         {
           name: 'dimensionField',
-          desc: '区间范围字段',
+          desc: '目标字段',
           multiple: false
         },
         {
-          name: 'seriesField',
+          name: 'metricField',
           desc: '实际值字段',
           multiple: false
         }

@@ -25,6 +25,7 @@
           :key="i.code"
           :name="i.code"
           class="bottom-tab-pane"
+          style="overflow-y: auto"
         >
           <div
             slot="label"
@@ -93,6 +94,7 @@
                 :key="j.code"
                 :name="j.code"
                 class="bottom-tab-pane"
+                style="overflow-y: auto"
               >
                 <div
                   slot="label"

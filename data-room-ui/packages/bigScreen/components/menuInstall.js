@@ -211,6 +211,10 @@ export default [
           ...StackBulletDesc
         }, {
           ...GroupBulletDesc
+        }, {
+          ...BaseProgressDesc
+        }, {
+          ...RingProgressDesc
         }]
       },
       {
@@ -242,10 +246,6 @@ export default [
         name: '其他',
         icon: 'el-icon-s-data',
         children: [{
-          ...BaseProgressDesc
-        }, {
-          ...RingProgressDesc
-        }, {
           ...BaseWaterfallDesc
         }, {
           ...BaseStockDesc

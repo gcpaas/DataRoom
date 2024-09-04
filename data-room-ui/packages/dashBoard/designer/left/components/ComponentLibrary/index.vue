@@ -86,6 +86,7 @@
                 :key="j.name"
                 :name="j.name"
                 class="bottom-tab-pane"
+                style="overflow-y: auto"
               >
                 <div
                   slot="label"

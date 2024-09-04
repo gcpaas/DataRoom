@@ -43,12 +43,12 @@ export default {
         this.$nextTick(() => {
           const config = cloneDeep(this.config)
           this.temporaryData = this.handleData(this.respData)
-          console.log('temporaryData', this.temporaryData)
+          // console.log('temporaryData', this.temporaryData)
           const option = {
             ...config.option,
             data: this.temporaryData
           }
-          console.log('option', option)
+          // console.log('option', option)
           // 获取当前 layout 属性
           const currentLayout = this.config.option.layout
           if (this.previousLayout !== currentLayout) {

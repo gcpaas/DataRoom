@@ -10,22 +10,23 @@ export default {
     enable: true,
     text: '堆叠子弹图'
   },
+  prop: {
+    data: [
+      {
+        title: '满意度',
+        ranges: [40, 70, 100],
+        measures: [30, 50],
+        target: 85
+      }
+    ]
+  },
   option: {
     appendPadding: [0, 0, 0, 0],
     measureField: 'measures',
     rangeField: 'ranges',
     targetField: 'target',
     xField: 'title',
-    classifiedField: 'xField',
-    metricField: 'targetField',
-    dimensionField: 'rangeField',
-    seriesField: 'measureField',
     layout: 'horizontal',
-    /*color: {
-      range: '#f0efff', // ['#FFbcb8', '#FFe0b0', '#bfeec8']
-      measure: '#5B8FF9',
-      target: '#3D76DD'
-    },*/
     color: {
       range: ['#FFbcb8', '#FFe0b0', '#bfeec8'],
       measure: ['#5B8FF9', '#61DDAA'],

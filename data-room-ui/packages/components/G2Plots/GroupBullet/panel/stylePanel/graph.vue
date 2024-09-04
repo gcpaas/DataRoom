@@ -1,6 +1,6 @@
 <template>
   <div class="dataroom-graph-wrapper">
-<!--    <el-form-item
+    <el-form-item
       label="方向"
       class="form-item-box"
     >
@@ -16,74 +16,143 @@
           :value="item.value"
         />
       </el-select>
-    </el-form-item>-->
-    <el-form-item
-      label="范围区间颜色"
-      class="form-item-box"
-    >
-      <el-color-picker
-        v-model="config.option.color.range"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      label="实际值颜色"
-      class="form-item-box"
-    >
-      <el-color-picker
-        v-model="config.option.color.measure"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      label="目标值颜色"
-      class="form-item-box"
-    >
-      <el-color-picker
-        v-model="config.option.color.target"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      label="区间背景粗细"
-      class="form-item-box"
-    >
-      <el-input-number
-        v-model="config.option.size.range"
-        :min="0"
-        :step="5"
-        controls-position="right"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      label="实际值粗细"
-      class="form-item-box"
-    >
-      <el-input-number
-        v-model="config.option.size.measure"
-        :min="0"
-        :step="5"
-        controls-position="right"
-        @change="changeStyle"
-      />
-    </el-form-item>
-    <el-form-item
-      label="目标值粗细"
-      class="form-item-box"
-    >
-      <el-input-number
-        v-model="config.option.size.target"
-        :min="0"
-        :step="5"
-        controls-position="right"
-        @change="changeStyle"
-      />
     </el-form-item>
     <el-collapse>
       <el-collapse-item
-        title="范围区间标签"
+        title="区间标签"
       >
+        <el-row>
+          <el-col
+            :span="14"
+            style="padding-right: 10px; padding-bottom: 5px"
+          >
+            <div class="set-desc">
+              区间值
+            </div>
+          </el-col>
+          <el-col
+            :span="6"
+            class="form-item-col"
+            style="padding-left: 10px; padding-bottom: 5px"
+          >
+            <div class="set-desc">
+              颜色
+            </div>
+          </el-col>
+        </el-row>
+<!--        <el-row
+          v-for="(range, index) in config.prop.data[0].ranges"
+          :key="index"
+        >
+          <el-col
+            :span="14"
+            style="padding-right: 10px; padding-bottom: 5px"
+          >
+            <el-input
+              v-model.number="config.prop.data[0].ranges[index]"
+              placeholder="请输入值"
+              size="mini"
+              @change="changeStyle"
+            />
+          </el-col>
+          <el-col
+            :span="6"
+            class="form-item-col"
+            style="padding-left: 10px; padding-bottom: 5px"
+          >
+            <el-color-picker
+              v-model="config.option.color.range[index]"
+              @change="changeStyle"
+            />
+          </el-col>
+          <el-col
+            :span="4"
+            class="form-item-col"
+          >
+            <el-button
+              v-if="config.option.color.range.length > 1"
+              icon="el-icon-minus"
+              size="mini"
+              @click="removeRangeAndColor(0, index)"
+            />
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col
+            :span="4"
+            class="form-item-col"
+            style="float: right"
+          >
+            <el-button
+              icon="el-icon-plus"
+              size="mini"
+              @click="addRangeAndColor(0)"
+            />
+          </el-col>
+        </el-row>-->
+        <el-row
+          v-for="(range, index) in config.prop.data[0].ranges"
+          :key="index"
+        >
+          <el-col
+            :span="14"
+            style="padding-right: 10px; padding-bottom: 5px"
+          >
+            <el-input
+              v-model.number="config.prop.data[0].ranges[index]"
+              placeholder="请输入值"
+              size="mini"
+              @change="updateAllRanges(index, config.prop.data[0].ranges[index])"
+            />
+          </el-col>
+          <el-col
+            :span="6"
+            class="form-item-col"
+            style="padding-left: 10px; padding-bottom: 5px"
+          >
+            <el-color-picker
+              v-model="config.option.color.range[index]"
+              @change="changeStyle"
+            />
+          </el-col>
+          <el-col
+            :span="4"
+            class="form-item-col"
+          >
+            <el-button
+              v-if="config.option.color.range.length > 1"
+              icon="el-icon-minus"
+              size="mini"
+              @click="removeRangeAndColor(index)"
+            />
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col
+            :span="4"
+            class="form-item-col"
+            style="float: right"
+          >
+            <el-button
+              icon="el-icon-plus"
+              size="mini"
+              @click="addRangeAndColor()"
+            />
+          </el-col>
+        </el-row>
+
+        <el-form-item
+          label="区间背景粗细"
+          class="form-item-box"
+        >
+          <el-input-number
+            v-model="config.option.size.range"
+            :min="0"
+            :step="5"
+            controls-position="right"
+            @change="changeStyle"
+          />
+        </el-form-item>
         <el-form-item
           label="显示"
           class="form-item-box"
@@ -251,10 +320,32 @@
         </template>
       </el-collapse-item>
       <el-collapse-item
-        title="实际值标签"
+        title="实际值"
       >
         <el-form-item
-          label="显示"
+          label="颜色"
+          class="form-item-box"
+        >
+          <el-color-picker
+            v-model="config.option.color.measure"
+            show-alpha
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="实际值粗细"
+          class="form-item-box"
+        >
+          <el-input-number
+            v-model="config.option.size.measure"
+            :min="0"
+            :step="5"
+            controls-position="right"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="标签显示"
           class="form-item-box"
         >
           <el-switch
@@ -420,10 +511,31 @@
         </template>
       </el-collapse-item>
       <el-collapse-item
-        title="目标值标签"
+        title="目标值"
       >
         <el-form-item
-          label="显示"
+          label="目标值颜色"
+          class="form-item-box"
+        >
+          <el-color-picker
+            v-model="config.option.color.target"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="目标值粗细"
+          class="form-item-box"
+        >
+          <el-input-number
+            v-model="config.option.size.target"
+            :min="0"
+            :step="5"
+            controls-position="right"
+            @change="changeStyle"
+          />
+        </el-form-item>
+        <el-form-item
+          label="标签显示"
           class="form-item-box"
         >
           <el-switch
@@ -673,14 +785,10 @@ import {
   positionOptions,
   bulletLayoutOptions, bulletLabelPositionOptions
 } from '@gcpaas/data-room-ui/packages/js/utils/options'
-import ColorMultipleSelect from '@gcpaas/data-room-ui/packages/components/common/panel/ColorMultipleSelect/index.vue'
-import GradualSetting from '@gcpaas/data-room-ui/packages/components/common/panel/GradualSetting/index.vue'
 export default {
   name: '',
   components: {
-    TransformSet,
-    GradualSetting,
-    ColorMultipleSelect
+    TransformSet
   },
   mixins: [commonMixins],
   inject: ['canvasInst'],
@@ -708,7 +816,27 @@ export default {
   created () {},
   mounted () {},
   methods: {
+    updateAllRanges (index, value) {
+      this.config.prop.data.forEach(item => {
+        item.ranges.splice(index, 1, value)
+      })
+      this.changeStyle()
+    },
+    addRangeAndColor () {
+      this.config.prop.data.forEach(item => {
+        item.ranges.push(0)
+      })
+      this.config.option.color.range.push('')
+    },
+    removeRangeAndColor (index) {
+      this.config.prop.data.forEach(item => {
+        item.ranges.splice(index, 1)
+      })
+      this.config.option.color.range.splice(index, 1)
+      this.changeStyle()
+    }
   }
+
 }
 </script>
 

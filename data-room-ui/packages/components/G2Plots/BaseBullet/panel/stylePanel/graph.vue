@@ -31,9 +31,25 @@
       <el-collapse-item
         title="区间标签"
       >
-        <div class="set-desc">
-          区间值-颜色
-        </div>
+        <el-row>
+          <el-col
+            :span="14"
+            style="padding-right: 10px; padding-bottom: 5px"
+          >
+            <div class="set-desc">
+              区间值
+            </div>
+          </el-col>
+          <el-col
+            :span="6"
+            class="form-item-col"
+            style="padding-left: 10px; padding-bottom: 5px"
+          >
+            <div class="set-desc">
+              颜色
+            </div>
+          </el-col>
+        </el-row>
         <el-row
           v-for="(range, index) in config.prop.data[0].ranges"
           :key="index"
@@ -719,7 +735,6 @@
 </template>
 
 <script>
-import data from '../../data.json'
 import TransformSet from '@gcpaas/data-room-ui/packages/components/common/panel/TransformSet/index.vue'
 import commonMixins from '@gcpaas/data-room-ui/packages/js/mixins/commonMixins'
 import {
@@ -728,15 +743,11 @@ import {
   positionOptions,
   bulletLayoutOptions, bulletLabelPositionOptions
 } from '@gcpaas/data-room-ui/packages/js/utils/options'
-import ColorMultipleSelect from '@gcpaas/data-room-ui/packages/components/common/panel/ColorMultipleSelect/index.vue'
-import GradualSetting from '@gcpaas/data-room-ui/packages/components/common/panel/GradualSetting/index.vue'
 
 export default {
   name: '',
   components: {
-    TransformSet,
-    GradualSetting,
-    ColorMultipleSelect
+    TransformSet
   },
   mixins: [commonMixins],
   inject: ['canvasInst'],
@@ -752,8 +763,7 @@ export default {
       fonFamilyList,
       positionOptions,
       bulletLayoutOptions,
-      bulletLabelPositionOptions,
-      data: data
+      bulletLabelPositionOptions
     }
   },
   computed: {
