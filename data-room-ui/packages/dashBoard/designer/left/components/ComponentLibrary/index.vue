@@ -237,11 +237,13 @@ export default {
         height: 100% !important;
         background-color: #F7F7F7;
         padding: 18px;
+        box-sizing: border-box;
       }
       ::v-deep .el-tabs__header{
         width: 40px !important;
         padding-top: 10px;
         border: none!important;
+        box-sizing: border-box;
       }
       ::v-deep .el-tabs__nav-wrap::after {
         background-color: transparent!important;
@@ -353,6 +355,17 @@ export default {
         }
       }
     }
+  }
+  /*滚动条样式*/
+  ::-webkit-scrollbar {
+    width: 4px;
+    border-radius: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #dddddd !important;
+    border-radius: 10px;
   }
 }
 </style>

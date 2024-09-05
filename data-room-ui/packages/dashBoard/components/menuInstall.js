@@ -65,15 +65,17 @@ export default [
     title: '图表',
     icon: 'el-icon-s-data',
     children: [
-      /*{
+      {
         name: 'all',
         title: '全部',
         icon: 'el-icon-s-data',
         children: [{ ...BaseBarDesc }, { ...GroupBarDesc }, { ...StackBarDesc }, { ...RoundBarDesc }, { ...BaseColumnDesc }, { ...SingleColorColumnDesc }, { ...StackColumnDesc }, { ...GroupColumnDesc },
-          { ...BaseLineDesc }, { ...MultiLineDesc }, { ...RaceLineDesc }, { ...BaseAreaDesc }, { ...BasePieDesc }, { ...QuarterPieDesc },
-          { ...InteractivePieDesc }, { ...BaseDonutDesc }, { ...CardDonutDesc }, { ...BasePointDesc }, { ...BaseRadarDesc },
-          { ...BaseGridDesc }, { ...HeatmapDesc }, { ...BaseRoseDesc }]
-      },*/
+          { ...BaseLineDesc }, { ...MultiLineDesc }, { ...RaceLineDesc }, { ...BaseAreaDesc }, { ...StackAreaDesc }, { ...PercentAreaDesc }, { ...BasePieDesc }, { ...QuarterPieDesc },
+          { ...InteractivePieDesc }, { ...BaseDonutDesc }, { ...CardDonutDesc }, { ...BasePointDesc }, { ...RegLinePointDesc }, { ...BaseRadarDesc }, { ...GroupRadarDesc }, { ...BaseGridDesc }, { ...BaseSankeyDesc }, { ...DragSankeyDesc },
+          { ...HeatmapDesc }, { ...ShapeHeatmapDesc }, { ...SizeHeatmapDesc }, { ...PolarHeatmapDesc }, { ...BaseFunnelDesc }, { ...CompareFunnelDesc }, { ...FacetedFunnelDesc }, { ...BaseTreeMapDesc },
+          { ...NestTreeMapDesc }, { ...DrillDownTreeMapDesc }, { ...BaseLiquidDesc}, { ...BaseGaugeDesc }, { ...BaseBulletDesc }, { ...StackBulletDesc }, { ...GroupBulletDesc }, { ...BaseProgressDesc },
+          { ...RingProgressDesc }, { ...BaseYuJueDesc }, { ...StackYuJueDesc }, { ...GroupYuJueDesc }, { ...BaseRoseDesc }, { ...GroupRoseDesc }, { ...StackRoseDesc }, { ...BaseWaterfallDesc }, { ...BaseStockDesc }]
+      },
       {
         name: 'bar',
         title: '柱状图',

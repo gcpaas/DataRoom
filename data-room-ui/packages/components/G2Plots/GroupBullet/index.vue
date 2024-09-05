@@ -48,7 +48,7 @@ export default {
             ...config.option,
             data: this.temporaryData
           }
-          console.log('option', option)
+          // console.log('option', option)
           // 获取当前 layout 属性
           const currentLayout = this.config.option.layout
           if (this.previousLayout !== currentLayout) {
