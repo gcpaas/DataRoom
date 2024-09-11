@@ -132,6 +132,10 @@
 
 <br/>
 
+## 公司登记
+
+为了更好的做开源与产品推广，欢迎接入的公司在[此处登记](https://gitee.com/gcpaas/DataRoom/issues/IAQO4F )
+
 
 ## 联系我们
 <table>
