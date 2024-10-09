@@ -94,7 +94,7 @@ export default {
       return this.config?.option
     },
     optionData () {
-      return this.option?.data || 80
+      return this.option?.data ?? 80
     },
     customize () {
       return this.config?.customize
