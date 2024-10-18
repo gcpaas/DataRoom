@@ -53,8 +53,8 @@ export default {
     // 表格点击事件
     rowClick (row) {
       const origData = this.config.option.origData
-      if (row && row.rowIndex && this.config && this.config.option && origData && origData.length){
-        this.linkage(origData [row.rowIndex])
+      if (row && this.config && this.config.option && origData && origData.length && origData[row.rowIndex]) {
+        this.linkage(origData[row.rowIndex])
       }
     },
     dataFormatting (config, data) {
@@ -67,7 +67,7 @@ export default {
       if (config.customize.columnConfig.length === 0) {
         const key = []
         for (const i in data.columnData) {
-          header.push(data.columnData[i].remark||data.columnData[i].alias)
+          header.push(data.columnData[i].remark || data.columnData[i].alias)
           key.push(i)
         }
         data.data.forEach((item) => {
