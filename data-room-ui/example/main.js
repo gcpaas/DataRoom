@@ -44,7 +44,7 @@ registerConfig(
     httpConfigs: {
       baseURL: window.CONFIG?.baseURL,
       // 现在文件路径保存的是相对路径，所以需要加上前缀,这个值一般和后端的gc.starter.file.urlPrefix一致
-      fileUrlPrefix: window.CONFIG?.fileUrlPrefix ? window.CONFIG.fileUrlPrefix : window.CONFIG?.baseUrl + '/static'
+      fileUrlPrefix: window.CONFIG?.fileUrlPrefix ? window.CONFIG.fileUrlPrefix : window.CONFIG?.baseURL + '/static'
     },
     customTheme: {
       '--bs-background-1': '#151a26', // 整体背景色
