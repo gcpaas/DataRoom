@@ -45,7 +45,7 @@
         <jackson.version.core>2.13.3</jackson.version.core>
         <json.version>20220320</json.version>
         <minio.version>8.2.2</minio.version>
-        <dataset.core.version>3.0.0.2024051701</dataset.core.version>
+        <dataset.core.version>3.0.0.2025010701</dataset.core.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
         <commons-net.version>3.6</commons-net.version>
         <commons-dbcp2.version>2.10.0</commons-dbcp2.version>
