@@ -116,7 +116,7 @@
 
 <br/>
 
-## 常见问题
+## 常见问题（文档访问密码在QQ群公告中）
 
 ⚠️&nbsp;&nbsp;[使用手册、二次开发、部署手册、常见问题](https://www.yuque.com/chuinixiongkou/bigscreen/index)<br/>
 ⚠️&nbsp;&nbsp;[(码云仓库](https://gitee.com/gcpaas/DataRoom)<br/>
