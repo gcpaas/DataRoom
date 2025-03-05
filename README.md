@@ -142,7 +142,7 @@
     <tr>
         <td style="text-align: center;font-weight: bold;"><p>群1(已满)</p><p><img alt="logo" width="200" src="./doc/images/qq1.png"></p></td>
         <td style="text-align: center;font-weight: bold;"><p>群2(已满)</p><p><img alt="logo" width="200" src="./doc/images/qq2.png"></p></td>
-        <td style="text-align: center;font-weight: bold;"><p>群3</p><p><img alt="logo" width="200" src="./doc/images/qq3.png"></p></td>
+        <td style="text-align: center;font-weight: bold;"><p>群3(已满)</p><p><img alt="logo" width="200" src="./doc/images/qq3.png"></p></td>
         <td style="text-align: center;font-weight: bold;"><p>群4</p><p><img alt="logo" width="200" src="./doc/images/qq4.png"></p></td>
 
 </tr>
