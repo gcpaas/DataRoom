@@ -103,7 +103,8 @@
 
 <script>
 import { getUUID,msgEncode } from 'data-room-ui/js/utils'
-import tokenCacheService from 'data-room-ui/js/utils/tokenCacheService'
+import * as tokenCacheService from 'data-room-ui/js/utils/tokenCacheService'
+
 
 export default {
   name: 'SysLogin',
