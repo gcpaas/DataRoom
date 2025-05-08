@@ -40,3 +40,31 @@ mybatis-plus:
     db-config:
       #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"唯一ID";
       id-type: AUTO
+gc:
+  starter:
+    captcha:
+      enable: true
+    jwt:
+      # 密钥，每个系统一定要自己修改下
+      secret: vT9~lW1^
+      alg: HS256
+      issuer: gc
+    dataroom:
+      users:
+        - username: admin
+          userId: 1
+          password: kdgc@2025
+          role:
+            - dataRoomWrite
+            - dataRoomRead
+        - username: sysadmin
+          userId: 2
+          password: KDGC@2025
+          role:
+            - dataRoomWrite
+            - dataRoomRead
+        - username: user
+          userId: 3
+          password: user@2025
+          role:
+            - dataRoomRead

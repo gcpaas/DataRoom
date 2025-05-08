@@ -50,6 +50,10 @@
         <commons-net.version>3.6</commons-net.version>
         <commons-dbcp2.version>2.10.0</commons-dbcp2.version>
         <jsch.version>0.1.55</jsch.version>
+        <jjwt.version>0.9.1</jjwt.version>
+        <captcha.version>1.6.2</captcha.version>
+        <fastjson.version>1.2.72</fastjson.version>
+        <shiro.version>1.7.1</shiro.version>
     </properties>
 
     <dependencyManagement>
