@@ -99,5 +99,4 @@ export function getCustomPlots () {
 }
 
 const plots = [...plotList, ...customPlots, sankeyData, candlestickData, mapData, FlyMapData]
-console.log('plotList', plots)
 export default plots
