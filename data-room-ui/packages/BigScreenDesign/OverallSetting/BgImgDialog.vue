@@ -83,6 +83,7 @@
 </template>
 <script>
 import { getFileUrl } from 'data-room-ui/js/utils/file'
+import * as tokenCacheService from 'data-room-ui/js/utils/tokenCacheService'
 
 export default {
   name: 'BgImgDialog',
@@ -103,7 +104,8 @@ export default {
         module: 'attachment'
       },
       headers: {
-        ...window.BS_CONFIG?.httpConfigs?.headers
+        ...window.BS_CONFIG?.httpConfigs?.headers,
+        token: tokenCacheService.get()
       },
       actionUrl: window?.BS_CONFIG.httpConfigs?.baseURL + '/bigScreen/file/upload'
     }

@@ -182,6 +182,7 @@
 import {pageMixins} from 'data-room-ui/js/mixins/page'
 import EditForm from './EditForm.vue'
 import { getFileUrl } from 'data-room-ui/js/utils/file'
+import * as tokenCacheService from 'data-room-ui/js/utils/tokenCacheService'
 
 export default {
   name: 'BigScreenList',
@@ -208,7 +209,9 @@ export default {
       list: [],
       fileUploadParam: {},
       headers: {
-        ...window.BS_CONFIG?.httpConfigs?.headers
+        ...window.BS_CONFIG?.httpConfigs?.headers,
+        token: tokenCacheService.get()
+
       },
       fileList: [],
       loading: false,

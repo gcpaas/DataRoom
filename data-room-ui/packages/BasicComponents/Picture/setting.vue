@@ -124,6 +124,8 @@ import BorderSetting from 'data-room-ui/BigScreenDesign/RightSetting/BorderSetti
 import PosWhSetting from 'data-room-ui/BigScreenDesign/RightSetting/PosWhSetting.vue'
 import { getFileUrl } from 'data-room-ui/js/utils/file'
 import RotateSetting from 'data-room-ui/BigScreenDesign/RightSetting/RotateSetting.vue'
+import * as tokenCacheService from 'data-room-ui/js/utils/tokenCacheService'
+
 export default {
   name: 'PicSetting',
   components: {
@@ -140,7 +142,8 @@ export default {
         module: 'form'
       },
       headers: {
-        ...window.BS_CONFIG?.httpConfigs?.headers
+        ...window.BS_CONFIG?.httpConfigs?.headers,
+        token: tokenCacheService.get()
       },
       fileList: [],
       accept: 'image/*',

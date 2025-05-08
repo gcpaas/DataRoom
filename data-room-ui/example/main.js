@@ -11,7 +11,6 @@ import './permission'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/styles/index.scss'
 import * as $dataRoomAxios from '../packages/js/utils/http.js'
-import * as tokenCacheService from 'data-room-ui/js/utils/tokenCacheService'
 import { registerConfig } from '@gcpaas/data-room-ui'
 import remoteComponents from '@/remoteComponents/exports.js'
 import customDatasetComponents from '@/customDatasetComponents/exports.js'
@@ -46,9 +45,6 @@ registerConfig(
       componentUrl: '/big-screen-components'
     },
     httpConfigs: {
-      headers:{
-        token:tokenCacheService.get()
-      },
       baseURL: window.CONFIG?.baseURL,
       // 现在文件路径保存的是相对路径，所以需要加上前缀,这个值一般和后端的gc.starter.file.urlPrefix一致
       fileUrlPrefix: window.CONFIG?.fileUrlPrefix ? window.CONFIG.fileUrlPrefix : window.CONFIG?.baseURL + '/static'
