@@ -55,6 +55,7 @@ public class SysUserConfig {
                     permissions.add(DatasetConstant.Permission.Dataset.CATEGORY_VIEW);
                     permissions.add(DatasetConstant.Permission.Dataset.LABEL_VIEW);
                     permissions.add(DatasetConstant.Permission.Datasource.TEST);
+                    permissions.add(DatasetConstant.Permission.Datasource.VIEW);
                     break;
                 case "dataRoomWrite":
                     // 写权限
@@ -75,6 +76,8 @@ public class SysUserConfig {
                     permissions.add(DatasetConstant.Permission.Dataset.CATEGORY_EDIT);
                     permissions.add(DatasetConstant.Permission.Dataset.LABEL_EDIT);
                     permissions.add(DatasetConstant.Permission.Datasource.DELETE);
+                    permissions.add(DatasetConstant.Permission.Datasource.ADD);
+                    permissions.add(DatasetConstant.Permission.Datasource.UPDATE);
                     break;
                 default:
                     throw new IllegalArgumentException("未知角色: " + role);
