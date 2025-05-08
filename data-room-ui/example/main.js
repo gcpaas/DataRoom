@@ -7,18 +7,21 @@ import ElementUI from 'element-ui'
 import App from './App'
 import store from './store'
 import router from './router'
+import './permission'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/styles/index.scss'
-// import * as $dataRoomAxios from 'data-room-ui/js/utils/http.js'
 import * as $dataRoomAxios from '../packages/js/utils/http.js'
 import { registerConfig } from '@gcpaas/data-room-ui'
 import remoteComponents from '@/remoteComponents/exports.js'
 import customDatasetComponents from '@/customDatasetComponents/exports.js'
+import supportIE from 'data-room-ui/js/utils/supportPlaceholder'
 import { Column } from '@antv/g2plot'
 // import customPlots from '@/customPlots/exports'
 Vue.use(ElementUI, { size: 'mini' })
+Vue.use(supportIE)
 Vue.prototype.Column = Column
-console.log('window.CONFIG', window.CONFIG)
+
+
 registerConfig(
   {
     routers: {

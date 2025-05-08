@@ -4,6 +4,10 @@ import Router from 'vue-router'
 Vue.use(Router)
 const baseRoutes = [
   {
+    path: '/login',
+    component: () => import('data-room-ui/Login/index.vue')
+  },
+  {
     path: '/notPermission',
     component: () => import('data-room-ui/NotPermission/index.vue')
   }

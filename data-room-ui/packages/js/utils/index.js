@@ -1,4 +1,5 @@
 // import _ from 'lodash'
+import { sha256 } from 'js-sha256'
 import upperFirst from 'lodash/upperFirst'
 export const randomString = e => {
   e = e || 32
@@ -54,4 +55,152 @@ export function deepCompare (obj1, obj2, excludeKeys = []) {
 
   // 如果上面的检查都通过，则对象是相等的
   return false
+}
+export function msgEncode (message, salt) {
+  return sha256(sha256(message) + salt)
+}
+
+
+/**
+ * Parse the time to string
+ * @param {(Object|string|number)} time
+ * @param {string} cFormat
+ * @returns {string | null}
+ */
+export function parseTime (time, cFormat) {
+  if (arguments.length === 0) {
+    return null
+  }
+  const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+  let date
+  if (typeof time === 'object') {
+    date = time
+  } else {
+    if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
+      time = parseInt(time)
+    }
+    if ((typeof time === 'number') && (time.toString().length === 10)) {
+      time = time * 1000
+    }
+    date = new Date(time)
+  }
+  const formatObj = {
+    y: date.getFullYear(),
+    m: date.getMonth() + 1,
+    d: date.getDate(),
+    h: date.getHours(),
+    i: date.getMinutes(),
+    s: date.getSeconds(),
+    a: date.getDay()
+  }
+  const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
+    const value = formatObj[key]
+    // Note: getDay() returns 0 on Sunday
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value]
+    }
+    return value.toString().padStart(2, '0')
+  })
+  return time_str
+}
+
+/**
+ * @param {number} time
+ * @param {string} option
+ * @returns {string}
+ */
+export function formatTime (time, option) {
+  if (('' + time).length === 10) {
+    time = parseInt(time) * 1000
+  } else {
+    time = +time
+  }
+  const d = new Date(time)
+  const now = Date.now()
+
+  const diff = (now - d) / 1000
+
+  if (diff < 30) {
+    return '刚刚'
+  } else if (diff < 3600) {
+    // less 1 hour
+    return Math.ceil(diff / 60) + '分钟前'
+  } else if (diff < 3600 * 24) {
+    return Math.ceil(diff / 3600) + '小时前'
+  } else if (diff < 3600 * 24 * 2) {
+    return '1天前'
+  }
+  if (option) {
+    return parseTime(time, option)
+  } else {
+    return (
+      d.getMonth() +
+      1 +
+      '月' +
+      d.getDate() +
+      '日' +
+      d.getHours() +
+      '时' +
+      d.getMinutes() +
+      '分'
+    )
+  }
+}
+
+/**
+ * @param {string} url
+ * @returns {Object}
+ */
+export function param2Obj (url) {
+  const search = url.split('?')[1]
+  if (!search) {
+    return {}
+  }
+  return JSON.parse(
+    '{"' +
+    decodeURIComponent(search)
+      .replace(/"/g, '\\"')
+      .replace(/&/g, '","')
+      .replace(/=/g, '":"')
+      .replace(/\+/g, ' ') +
+    '"}'
+  )
+}
+
+/**
+ * 获取uuid
+ */
+export function getUUID () {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    return (c === 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
+  })
+}
+/**
+ * 将给定的对象值添加到url后面
+ * @param url
+ * @param params
+ * @returns {string}
+ */
+export function joinObjectToUrl (url, params) {
+  if (!params) {
+    return url
+  }
+  let queryStr = ''
+  const i = Object.keys(params).length
+  if (!params) {
+    queryStr = ''
+  }
+  Object.keys(params).forEach((key, index) => {
+    if (i === (index + 1)) {
+      queryStr += (key + '=' + params[key])
+    } else {
+      queryStr += (key + '=' + params[key] + '&')
+    }
+  })
+  if (url.indexOf('?') !== -1) {
+    url = url + '&' + queryStr
+  } else {
+    url = url + '?' + queryStr
+  }
+  return url
 }
