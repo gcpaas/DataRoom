@@ -26,6 +26,9 @@ public class PermissionServiceImpl implements IApiPermissionService {
     @Override
     public boolean verifyApiPermission(HttpServletRequest httpServletRequest, String... permission) {
         Set<String> userPermissions = getUserPermissions(httpServletRequest);
+        if (permission.length == 0) {
+            return true;
+        }
         if (userPermissions.isEmpty()) {
             throw new GlobalException("无接口访问权限");
         }

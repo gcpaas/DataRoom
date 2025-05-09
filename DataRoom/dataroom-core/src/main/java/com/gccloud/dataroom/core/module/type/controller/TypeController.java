@@ -1,5 +1,6 @@
 package com.gccloud.dataroom.core.module.type.controller;
 
+import com.gccloud.common.permission.ApiPermission;
 import com.gccloud.dataroom.core.module.type.dto.TypeDTO;
 import com.gccloud.dataroom.core.module.type.entity.TypeEntity;
 import com.gccloud.dataroom.core.module.type.service.ITypeService;
@@ -42,7 +43,7 @@ public class TypeController {
         return R.success(typeVOList);
     }
 
-
+    @ApiPermission
     @PostMapping("/add")
     @ApiOperation(value = "新增分类", position = 10, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> add(@RequestBody TypeDTO typeDTO) {
@@ -51,7 +52,7 @@ public class TypeController {
         return R.success(id);
     }
 
-
+    @ApiPermission
     @PostMapping("/update")
     @ApiOperation(value = "修改分类", position = 20, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> update(@RequestBody TypeDTO typeDTO) {
@@ -60,7 +61,7 @@ public class TypeController {
         return R.success();
     }
 
-
+    @ApiPermission
     @PostMapping("/delete/{id}")
     @ApiOperation(value = "删除分类", position = 30, produces = MediaType.APPLICATION_JSON_VALUE)
     public R<String> delete(@PathVariable("id") String id) {

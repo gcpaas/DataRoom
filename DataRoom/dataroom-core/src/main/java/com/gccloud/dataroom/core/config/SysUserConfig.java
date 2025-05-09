@@ -1,7 +1,6 @@
 package com.gccloud.dataroom.core.config;
 
 import com.gccloud.dataroom.core.permission.Permission;
-import com.gccloud.dataset.constant.DatasetConstant;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -49,12 +48,12 @@ public class SysUserConfig {
                     permissions.add(Permission.File.DOWNLOAD);
                     permissions.add(Permission.Component.VIEW);
                     permissions.add(Permission.Map.VIEW);
-                    permissions.add(DatasetConstant.Permission.Dataset.VIEW);
-                    permissions.add(DatasetConstant.Permission.Dataset.EXECUTE);
-                    permissions.add(DatasetConstant.Permission.Dataset.CATEGORY_VIEW);
-                    permissions.add(DatasetConstant.Permission.Dataset.LABEL_VIEW);
-                    permissions.add(DatasetConstant.Permission.Datasource.TEST);
-                    permissions.add(DatasetConstant.Permission.Datasource.VIEW);
+                    permissions.add(Permission.Dataset.VIEW);
+                    permissions.add(Permission.Dataset.EXECUTE);
+                    permissions.add(Permission.Dataset.CATEGORY_VIEW);
+                    permissions.add(Permission.Dataset.LABEL_VIEW);
+                    permissions.add(Permission.Datasource.TEST);
+                    permissions.add(Permission.Datasource.VIEW);
                     break;
                 case "dataRoomWrite":
                     // 写权限
@@ -69,14 +68,14 @@ public class SysUserConfig {
                     permissions.add(Permission.Map.ADD);
                     permissions.add(Permission.Map.UPDATE);
                     permissions.add(Permission.Map.DELETE);
-                    permissions.add(DatasetConstant.Permission.Dataset.DELETE);
-                    permissions.add(DatasetConstant.Permission.Dataset.ADD);
-                    permissions.add(DatasetConstant.Permission.Dataset.UPDATE);
-                    permissions.add(DatasetConstant.Permission.Dataset.CATEGORY_EDIT);
-                    permissions.add(DatasetConstant.Permission.Dataset.LABEL_EDIT);
-                    permissions.add(DatasetConstant.Permission.Datasource.DELETE);
-                    permissions.add(DatasetConstant.Permission.Datasource.ADD);
-                    permissions.add(DatasetConstant.Permission.Datasource.UPDATE);
+                    permissions.add(Permission.Dataset.DELETE);
+                    permissions.add(Permission.Dataset.ADD);
+                    permissions.add(Permission.Dataset.UPDATE);
+                    permissions.add(Permission.Dataset.CATEGORY_EDIT);
+                    permissions.add(Permission.Dataset.LABEL_EDIT);
+                    permissions.add(Permission.Datasource.DELETE);
+                    permissions.add(Permission.Datasource.ADD);
+                    permissions.add(Permission.Datasource.UPDATE);
                     break;
                 default:
                     throw new IllegalArgumentException("未知角色: " + role);
