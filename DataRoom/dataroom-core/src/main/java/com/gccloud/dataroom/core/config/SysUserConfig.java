@@ -33,7 +33,6 @@ public class SysUserConfig {
 
     @PostConstruct
     public void init() {
-        log.info("users: {}", users);
         for (User user : users) {
             user.setPermissions(mapRoleToPermissions(user.getRole()));
         }

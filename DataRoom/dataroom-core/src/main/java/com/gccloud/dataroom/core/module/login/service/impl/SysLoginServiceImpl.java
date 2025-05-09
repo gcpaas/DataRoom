@@ -11,6 +11,7 @@ import com.gccloud.dataroom.core.constant.DataRoomConst;
 import com.gccloud.dataroom.core.module.login.cache.SysTokenCache;
 import com.gccloud.dataroom.core.module.login.dto.SysLoginDTO;
 import com.gccloud.dataroom.core.module.login.service.ISysLoginService;
+import com.gccloud.dataroom.core.module.login.vo.SysCurrentUserVO;
 import com.gccloud.dataroom.core.module.login.vo.SysTokenVO;
 import com.gccloud.dataroom.core.utils.IPUtils;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -175,6 +176,20 @@ public class SysLoginServiceImpl implements ISysLoginService {
                 .filter(u -> u.getUserId().equals(claims.get(DataRoomConst.Jwt.USER_ID)))
                 .findFirst()
                 .orElseThrow(() -> new GlobalException("用户不存在", DataRoomConst.Response.Code.NO_FOUND));
+    }
+
+    @Override
+    public SysCurrentUserVO current() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String token = request.getHeader("token");
+        if ("null".equals(token) || StringUtils.isBlank(token)) {
+            throw new GlobalException(DataRoomConst.Response.Msg.NO_LOGIN, DataRoomConst.Response.Code.NO_LOGIN);
+        }
+        SysUserConfig.User currentUser = getUserFromToken(token);
+        if (currentUser == null) {
+            throw new GlobalException("TOKEN无效或已过期", DataRoomConst.Response.Code.NO_FOUND);
+        }
+        return BeanConvertUtils.convert(currentUser, SysCurrentUserVO.class);
     }
 
     @Override

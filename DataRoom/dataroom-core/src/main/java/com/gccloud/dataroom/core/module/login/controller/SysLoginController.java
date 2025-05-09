@@ -7,6 +7,7 @@ import com.gccloud.dataroom.core.config.SysUserConfig;
 import com.gccloud.dataroom.core.constant.DataRoomConst;
 import com.gccloud.dataroom.core.module.login.dto.SysLoginDTO;
 import com.gccloud.dataroom.core.module.login.service.ISysLoginService;
+import com.gccloud.dataroom.core.module.login.vo.SysCurrentUserVO;
 import com.gccloud.dataroom.core.module.login.vo.SysTokenVO;
 import com.wf.captcha.*;
 import com.wf.captcha.base.Captcha;
@@ -90,6 +91,12 @@ public class SysLoginController {
         sysLoginService.saveCaptcha(uuid, code);
         captcha.out(response.getOutputStream());
         return R.success();
+    }
+
+    @GetMapping("/current")
+    @ApiOperation(value = "当前登录用户", notes = "当前登录用户", produces = MediaType.APPLICATION_JSON_VALUE)
+    public R<SysCurrentUserVO> current() {
+        return R.success(sysLoginService.current());
     }
 
 }
