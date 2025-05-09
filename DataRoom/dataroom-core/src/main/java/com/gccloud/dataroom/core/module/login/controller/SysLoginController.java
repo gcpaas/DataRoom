@@ -96,6 +96,10 @@ public class SysLoginController {
     @GetMapping("/current")
     @ApiOperation(value = "当前登录用户", notes = "当前登录用户", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<SysCurrentUserVO> current() {
+        SysCurrentUserVO vo = sysLoginService.current();
+        if (vo == null) {
+            return R.error("未获取到当前用户信息");
+        }
         return R.success(sysLoginService.current());
     }
 

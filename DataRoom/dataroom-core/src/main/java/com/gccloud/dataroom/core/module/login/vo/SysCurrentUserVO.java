@@ -3,7 +3,6 @@ package com.gccloud.dataroom.core.module.login.vo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.List;
 
 /**
  * @author chen.hu
