@@ -33,5 +33,5 @@ public class Jwt {
     /**
      * tokenKey
      */
-    public String tokenKey = "token";
+    public String tokenKey = "dataRoomToken";
 }
