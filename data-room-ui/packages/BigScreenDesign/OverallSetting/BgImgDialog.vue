@@ -105,7 +105,7 @@ export default {
       },
       headers: {
         ...window.BS_CONFIG?.httpConfigs?.headers,
-        token: tokenCacheService.get()
+        dataRoomToken: tokenCacheService.get()
       },
       actionUrl: window?.BS_CONFIG.httpConfigs?.baseURL + '/bigScreen/file/upload'
     }

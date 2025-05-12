@@ -210,7 +210,7 @@ export default {
       fileUploadParam: {},
       headers: {
         ...window.BS_CONFIG?.httpConfigs?.headers,
-        token: tokenCacheService.get()
+        dataRoomToken: tokenCacheService.get()
 
       },
       fileList: [],
