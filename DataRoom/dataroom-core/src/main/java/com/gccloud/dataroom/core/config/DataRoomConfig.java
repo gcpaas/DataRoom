@@ -16,8 +16,10 @@
 
 package com.gccloud.dataroom.core.config;
 
+import com.gccloud.dataroom.core.config.bean.Captcha;
 import com.gccloud.dataroom.core.config.bean.DemoEnv;
 import com.gccloud.dataroom.core.config.bean.FileConfig;
+import com.gccloud.dataroom.core.config.bean.Jwt;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -46,4 +48,15 @@ public class DataRoomConfig {
      */
     @NestedConfigurationProperty
     private DemoEnv demoEnv = new DemoEnv();
+
+    /**
+     * jwt的配置
+     */
+    @NestedConfigurationProperty
+    private Jwt jwt = new Jwt();
+    /**
+     * 验证码配置
+     */
+    @NestedConfigurationProperty
+    private Captcha captcha = new Captcha();
 }

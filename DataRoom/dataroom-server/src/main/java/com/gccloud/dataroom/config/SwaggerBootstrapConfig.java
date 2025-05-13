@@ -64,7 +64,7 @@ public class SwaggerBootstrapConfig implements WebMvcConfigurer {
 
     private static final List<ResponseMessage> RESPONSE_MESSAGES = Lists.newArrayList(
             new ResponseMessageBuilder().code(DataRoomConst.Response.Code.SUCCESS).message("成功").build(),
-            new ResponseMessageBuilder().code(DataRoomConst.Response.Code.NO_FOUNT).message("您访问的资源不存在").build(),
+            new ResponseMessageBuilder().code(DataRoomConst.Response.Code.NO_FOUND).message("您访问的资源不存在").build(),
             new ResponseMessageBuilder().code(DataRoomConst.Response.Code.NO_LOGIN).message("您没有登录或token已过期").build(),
             new ResponseMessageBuilder().code(DataRoomConst.Response.Code.NO_ACCESS).message("您无权访问该资源").build(),
             new ResponseMessageBuilder().code(DataRoomConst.Response.Code.SERVER_ERROR).message("系统内部异常").build()

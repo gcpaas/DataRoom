@@ -16,6 +16,7 @@
 
 package com.gccloud.dataroom.core.module.chart.controller;
 
+import com.gccloud.common.permission.ApiPermission;
 import com.gccloud.common.utils.AssertUtils;
 import com.gccloud.common.utils.BeanConvertUtils;
 import com.gccloud.common.vo.R;
@@ -27,6 +28,7 @@ import com.gccloud.dataroom.core.module.chart.service.BaseChartDataService;
 import com.gccloud.dataroom.core.module.chart.vo.ChartDataVO;
 import com.gccloud.dataroom.core.module.manage.dto.DataRoomPageDTO;
 import com.gccloud.dataroom.core.module.manage.service.IDataRoomPageService;
+import com.gccloud.dataroom.core.permission.Permission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +59,7 @@ public class ChartDataController {
     @Resource
     private BaseChartDataService baseChartDataService;
 
+    @ApiPermission(permissions = {Permission.Dataset.VIEW})
     @PostMapping("/chart")
     @ApiOperation(value = "图表数据", position = 20, notes = "获取指定图表的数据(通过配置)", produces = MediaType.APPLICATION_JSON_VALUE)
     public R<ChartDataVO> getDataByConfig(@RequestBody ChartDataSearchDTO chartDataSearchDTO) {

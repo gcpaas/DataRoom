@@ -27,3 +27,23 @@ gc:
       basePath: D:\kdgc\后端静态资源
       # 启动服务的访问地址
       urlPrefix: http://127.0.0.1:${server.port}${server.servlet.context-path}/static/
+    captcha:
+      enable: true
+    jwt:
+      # 密钥，每个系统一定要自己修改下
+      secret: vT9~lW1^
+      alg: HS256
+      issuer: gc
+    dataroom:
+      users:
+        - username: admin
+          userId: 1
+          password: kdgc@2025
+          role:
+            - dataRoomWrite
+            - dataRoomRead
+        - username: user
+          userId: 2
+          password: user@2025
+          role:
+            - dataRoomRead
