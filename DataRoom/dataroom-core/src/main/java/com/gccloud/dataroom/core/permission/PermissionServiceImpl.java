@@ -41,7 +41,7 @@ public class PermissionServiceImpl implements IApiPermissionService {
     }
 
     private Set<String> getUserPermissions(HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader("dataRoomToken");
+        String token = httpServletRequest.getHeader("gcpaasToken");
         if ("null".equals(token) || StringUtils.isBlank(token)) {
             throw new GlobalException(DataRoomConst.Response.Msg.NO_LOGIN, DataRoomConst.Response.Code.NO_LOGIN);
         }

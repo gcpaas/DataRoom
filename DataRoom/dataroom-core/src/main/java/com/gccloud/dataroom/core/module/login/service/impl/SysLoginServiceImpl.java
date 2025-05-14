@@ -182,7 +182,7 @@ public class SysLoginServiceImpl implements ISysLoginService {
     @Override
     public SysCurrentUserVO current() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String token = request.getHeader("dataRoomToken");
+        String token = request.getHeader("gcpaasToken");
         if ("null".equals(token) || StringUtils.isBlank(token)) {
             throw new GlobalException(DataRoomConst.Response.Msg.NO_LOGIN, DataRoomConst.Response.Code.NO_LOGIN);
         }
