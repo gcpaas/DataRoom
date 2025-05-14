@@ -1,8 +1,9 @@
-
 import axios from 'axios'
 import qs from 'qs'
 import { Message } from 'element-ui'
 import { configDeepMerge } from '@gcpaas/data-room-ui/packages/js/utils/registerDataRoomUI'
+import * as tokenCacheService from '@gcpaas/data-room-ui/packages/js/utils/tokenCacheService'
+import vm from '@gcpaas/data-room-ui/packages/js/utils/vm'
 const baseURL = window?.SITE_CONFIG?.dataRoom?.baseURL || process.env?.VUE_APP_DATA_ROOM_BASE_URL
 window.SITE_CONFIG = window.SITE_CONFIG || {}
 window.SITE_CONFIG.dataRoom = window?.SITE_CONFIG?.dataRoom || {}
@@ -43,6 +44,7 @@ function EipException (message, code) {
  * 请求拦截
  */
 http.interceptors.request.use(config => {
+  config.headers.gcpaasToken = tokenCacheService.get()
   return {
     ...config
   }
@@ -58,6 +60,12 @@ http.interceptors.response.use(response => {
   // 异常拦截
   // eslint-disable-next-line no-empty
   if (res && res.code === 401) {
+    // 跳转到登录页面，发送事件
+    console.error('接口没有携带：%s 或 已过期 或 用户未登录 ','gcpaasToken')
+    // 清空token，防止死循环发送请求
+    tokenCacheService.remove()
+    // Token校验失败
+    vm.$emit('TokenVerifyError')
   } else if (res && res.code !== 200) {
     // return Promise.reject(response.data.msg)
     Message({
@@ -215,4 +223,10 @@ export function upload (url, data = {}) {
       reject(err)
     })
   })
+}
+export function wrapUrl (url) {
+  if (!url.startsWith('http')) {
+    url = window?.SITE_CONFIG.dataRoom?.baseURL + url
+  }
+  return url
 }

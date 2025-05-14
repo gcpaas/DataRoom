@@ -75,7 +75,9 @@
     "vue-router": "3.0.6",
     "vue-selecto": "^1.26.3",
     "vue-sketch-ruler": "^1.0.3",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^2.24.3",
+    "js-sha256": "0.9.0",
+    "vue-cookie": "^1.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -127,7 +129,8 @@
     "url-loader": "^4.1.1",
     "vue": "2.6.10",
     "vue-template-compiler": "2.6.10",
-    "webpack-bundle-analyzer": "^4.9.0"
+    "webpack-bundle-analyzer": "^4.9.0",
+    "nprogress": "0.2.0"
   },
   "engines": {
     "node": ">=8.9",

@@ -3,14 +3,15 @@ import promise from 'es6-promise'
 
 import Vue from 'vue'
 import ElementUI from 'element-ui'
-
+import './permission'
+import supportIE from '@gcpaas/data-room-ui/packages/js/utils/supportPlaceholder'
 import App from './App'
 import router from './router'
 import 'element-ui/lib/theme-chalk/index.css'
-// import '@gcpaas/data-room-ui/packages/assets/style/common.scss'
 
 import { registerDataRoomUI } from '@gcpaas/data-room-ui/packages/index.js'
 // import customPlots from '@/customPlots/exports'
+Vue.use(supportIE)
 Vue.use(ElementUI, { size: 'mini' })
 registerDataRoomUI(
   {

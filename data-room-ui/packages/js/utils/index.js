@@ -1,5 +1,6 @@
 // import _ from 'lodash'
 import upperFirst from 'lodash/upperFirst'
+import { sha256 } from 'js-sha256'
 import Vue from 'vue'
 export const randomString = e => {
   e = e || 32
@@ -195,4 +196,15 @@ export function uploadRequest (params) {
       reject(err)
     })
   })
+}
+/**
+ * 获取uuid
+ */
+export function getUUID () {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    return (c === 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
+  })
+}
+export function msgEncode (message, salt) {
+  return sha256(sha256(message) + salt)
 }

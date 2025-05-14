@@ -3,6 +3,10 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 const baseRoutes = [
+  {
+    path: '/login',
+    component: () => import('@gcpaas/data-room-ui/packages/login/index.vue')
+  }
 ]
 
 export const constantRoutes = []

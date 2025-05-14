@@ -8,24 +8,29 @@
         >
         <span>{{ title }}</span><span style="font-size: 18px;margin-left: 8px">3.x</span>
       </div>
-
-      <div class="big-screen-nav-container">
-        <Nav
-          :navs="tabList"
-          @change="changeTab"
-        />
+      <div class="menu-info-wrap">
+        <div class="big-screen-nav-container">
+          <Nav
+            :navs="tabList"
+            @change="changeTab"
+          />
+        </div>
+        <div class="right-bar">
+          <img
+            class="avatar"
+            :src="require('./images/avatar.png')"
+          ></img>
+          <el-dropdown class="avatar-container" trigger="click" size="small" @command="handleCommand">
+            <span class="el-dropdown-link">
+              {{user}}
+            <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
       </div>
-      <!-- <a
-        v-if="giteeSvg && giteeHref"
-        class="fork-me-on-gitee"
-        :href="giteeHref"
-        target="_blank"
-      >
-        <img
-          :src="giteeSvg"
-          alt="Fork me on Gitee"
-        >
-      </a> -->
     </header>
     <div class="big-screen-router-view-wrap">
       <keep-alive>
@@ -36,6 +41,9 @@
 </template>
 <script>
 import Nav from './NavTop.vue'
+import * as tokenCacheService from "@gcpaas/data-room-ui/packages/js/utils/tokenCacheService"
+import vm from "@gcpaas/data-room-ui/packages/js/utils/vm";
+
 // import Nav from './Nav.vue'
 export default {
   name: 'BigScreenHome',
@@ -48,6 +56,7 @@ export default {
       // 和此处路由保持一致，将会激活tab，请按需更改
       // giteeHref: '',
       // giteeSvg: ''
+      user: ''
     }
   },
   computed: {
@@ -99,8 +108,30 @@ export default {
   mounted () {
     // this.giteeHref = 'https://gitee.com/gcpaas/DataRoom'
     // this.giteeSvg = 'https://gitee.com/gcpaas/DataRoom/widgets/widget_1.svg?color=007bff'
+    this.getUserInfo()
+
   },
   methods: {
+    getUserInfo () {
+      this.$dataRoomAxios.get('/sys/current').then(res => {
+        this.user = res.username
+      }).catch(err=>{
+        console.error(err)
+        this.$message.error('获取用户信息失败')
+      })
+    },
+    handleCommand(){
+      this.$confirm(`确认退出系统?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      ).then(() => {
+        tokenCacheService.remove()
+        this.$router.push({ path: '/login' })
+
+      }).catch(() => {})
+    },
     changeTab (tab) {
       if (this.$route.query.edit) {
         this.$router.push({
@@ -159,6 +190,33 @@ export default {
         padding-left: 8px;
         -webkit-background-clip: text;
         background-size: 400% 400%;
+      }
+    }
+    .menu-info-wrap{
+      width: 100%;
+      display: flex;
+      .big-screen-nav-container{
+        width: 90%;
+      }
+      .right-bar{
+        width: 10%;
+        height: 30px;
+        margin-top: 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        .avatar-container{
+          height: 100%;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          user-select: none;
+        }
+        .avatar{
+          height: 80%;
+          object-fit: cover;
+        }
       }
     }
   }

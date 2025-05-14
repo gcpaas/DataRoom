@@ -12,6 +12,7 @@ const DashBoardDesign = () => import('./dashBoard/designer/index.js')
 // 仪表盘预览页面
 const DashBoardRun = () => import('./dashBoard/run/index.js')
 Vue.prototype.$dataRoomAxios = $dataRoomAxios
+Vue.prototype.$wrapUrl = $dataRoomAxios.wrapUrl
 // 存储组件列表
 const components = [
   BigScreenDesign,

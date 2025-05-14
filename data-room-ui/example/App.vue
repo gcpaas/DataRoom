@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import vm from '@gcpaas/data-room-ui/packages/js/utils/vm'
 export default {
   name: 'App',
   updated () {
@@ -52,6 +53,9 @@ export default {
   },
   mounted () {
     this.init()
+    vm.$on('TokenVerifyError', ()=>{
+      this.noLoginConfirm()
+    })
   },
   methods: {
     init () {
@@ -91,6 +95,18 @@ export default {
     agree () {
       sessionStorage.setItem('disclaimer', 'read')
       this.dialogVisible = false
+    },
+    noLoginConfirm () {
+      this.$confirm(`系统登录超时`, '提示', {
+          confirmButtonText: '现在去登录',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      ).then(() => {
+        this.$router.push({ path: '/login' })
+      }).catch(() => {
+        this.$router.push({ path: '/notPermission' })
+      })
     }
   }
 }
