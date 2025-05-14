@@ -146,14 +146,15 @@ export default {
       return e.target.value
     },
     getAccount(){
-      const imgUrl = require('./assets/QQ.png') // 先获取图片路径
+      const imgUrl = process.env.VUE_APP_HISTORY === 'y' ? process.env.VUE_APP_BASE + '/static/images/QQ.png':'/static/images/QQ.png' // 先获取图片路径
       this.$alert(`
     <div>
       <p>请加入官方交流群获取演示环境登录账号：</p>
       <div style="display: flex;justify-content: center">
        <img
         src="${imgUrl}"
-        alt="891384200"
+        style="width: 80%;"
+        alt=""
       />
        </div>
     </div>
