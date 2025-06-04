@@ -5,10 +5,7 @@
 -->
 <template>
   <transition name="slide-fade">
-    <div
-      class="bs-left-panel"
-      @click.stop
-    >
+    <div class="bs-left-panel" @click.stop>
       <div
         :class="fold ? 'page-left page-left-fold' : 'page-left'"
         :style="{ height }"
@@ -20,10 +17,7 @@
           class="left-tabs-box"
           @tab-click="tabClick"
         >
-          <el-tab-pane
-            name="default"
-            @click.native="changeActiveCode('')"
-          >
+          <el-tab-pane name="default" @click.native="changeActiveCode('')">
             <span
               slot="label"
               class="menu-slot"
@@ -52,9 +46,7 @@
             </div>
             <div class="page-left-content">
               <div class="page-left-content-title">
-                <div class="page-left-content-title-text">
-                  图层
-                </div>
+                <div class="page-left-content-title-text">图层</div>
               </div>
               <div class="page-left-content-components">
                 <el-scrollbar>
@@ -68,19 +60,12 @@
             :key="menu.id"
             :name="menu.name"
             @click.stop.native="
-              fold = false
-              changeActiveCode('')
+              fold = false;
+              changeActiveCode('');
             "
           >
-            <div
-              slot="label"
-              class="menu-slot"
-              @dbclick="toggleSidebar"
-            >
-              <i
-                :class="['iconfont-bigscreen', menu.icon]"
-                class="menu-icon"
-              />
+            <div slot="label" class="menu-slot" @dbclick="toggleSidebar">
+              <i :class="['iconfont-bigscreen', menu.icon]" class="menu-icon" />
               <span class="menu-title-span">{{ menu.title }}</span>
             </div>
             <div class="page-left-content">
@@ -95,9 +80,10 @@
                     <div
                       v-for="element in menu.components"
                       :key="element.type + element.name"
-                      :class="element.component
-                        ? 'item menu-component drag-node'
-                        : 'item drag-node'
+                      :class="
+                        element.component
+                          ? 'item menu-component drag-node'
+                          : 'item drag-node'
                       "
                       draggable="true"
                       :data-type="element.type"
@@ -127,7 +113,7 @@
                           :src="element.img"
                           class="page-opt-list-img"
                           alt=""
-                        >
+                        />
                         <component
                           :is="element.component"
                           :key="new Date().getTime() + 1"
@@ -146,204 +132,215 @@
   </transition>
 </template>
 <script>
-import cloneDeep from 'lodash/cloneDeep'
-import basicComponents from 'data-room-ui/js/config/basicComponentsConfig'
-import g2PlotComponents, { getCustomPlots } from '../G2Plots/plotList'
-import echartsComponents from '../Echarts/echartList'
-import borderComponents from 'data-room-ui/js/config/borderComponentsConfig'
-import decorationComponents from 'data-room-ui/js/config/decorationComponentsConfig'
-import LayerList from './LayerList/index.vue'
-import { mapMutations } from 'vuex'
-import IconSvg from 'data-room-ui/SvgIcon'
-import { customSerialize } from 'data-room-ui/js/utils/jsonSerialize.js'
+import cloneDeep from "lodash/cloneDeep";
+import basicComponents from "data-room-ui/js/config/basicComponentsConfig";
+import g2PlotComponents, { getCustomPlots } from "../G2Plots/plotList";
+import vChartComponents from "../VChart/vchartList";
+import echartsComponents from "../Echarts/echartList";
+import borderComponents from "data-room-ui/js/config/borderComponentsConfig";
+import decorationComponents from "data-room-ui/js/config/decorationComponentsConfig";
+import LayerList from "./LayerList/index.vue";
+import { mapMutations } from "vuex";
+import IconSvg from "data-room-ui/SvgIcon";
+import { customSerialize } from "data-room-ui/js/utils/jsonSerialize.js";
 export default {
-  name: 'PageLeftPanel',
+  name: "PageLeftPanel",
   components: {
     LayerList,
-    IconSvg
+    IconSvg,
   },
   props: {
     headerShow: {
       type: Boolean,
-      default: true
+      default: true,
     },
     height: {
       type: String,
-      default: '100vh'
-    }
+      default: "100vh",
+    },
   },
-  data () {
+  data() {
     return {
       echartsComponents,
       g2PlotComponents,
-      activeName: 'chart', // 设置左侧tab栏的默认值
+      vChartComponents,
+      activeName: "chart", // 设置左侧tab栏的默认值
       fold: false, // 控制左侧菜单栏伸缩
-      currentTab: 'basic',
+      currentTab: "basic",
       menuList: [
         {
           id: 1,
-          name: 'chart',
-          title: '基础',
-          icon: 'icon-zujian',
-          components: basicComponents
+          name: "chart",
+          title: "基础",
+          icon: "icon-zujian",
+          components: basicComponents,
         },
         {
           id: 2,
-          name: 'g2PlotComponents',
-          title: '图表',
-          icon: 'icon-jichushuju',
-          components: this.g2PlotComponents
+          name: "g2PlotComponents",
+          title: "图表",
+          icon: "icon-jichushuju",
+          components: this.g2PlotComponents,
         },
         {
           id: 7,
-          name: 'echart',
-          title: '3D',
-          icon: 'icon-jichushuju',
-          components: this.echartsComponents
+          name: "echart",
+          title: "3D",
+          icon: "icon-jichushuju",
+          components: this.echartsComponents,
+        },
+        {
+          id: 8,
+          name: "vChartComponents",
+          title: "VChart",
+          icon: "icon-jichushuju",
+          components: this.vchartComponents,
         },
         {
           id: 3,
-          name: 'dataV',
-          title: '边框',
-          icon: 'icon-border-outer',
-          components: borderComponents
+          name: "dataV",
+          title: "边框",
+          icon: "icon-border-outer",
+          components: borderComponents,
         },
         {
           id: 4,
-          name: 'decoration',
-          title: '装饰',
-          icon: 'icon-a-1',
-          components: decorationComponents
+          name: "decoration",
+          title: "装饰",
+          icon: "icon-a-1",
+          components: decorationComponents,
         },
         {
           id: 5,
-          name: 'source',
-          title: '资源',
-          icon: 'icon-tupian',
-          components: []
+          name: "source",
+          title: "资源",
+          icon: "icon-tupian",
+          components: [],
         },
         {
           id: 6,
-          name: 'component',
-          title: '组件',
-          icon: 'icon-zujian1',
-          components: ''
-        }
+          name: "component",
+          title: "组件",
+          icon: "icon-zujian1",
+          components: "",
+        },
       ],
-      currentActive: 'chart'
-    }
+      currentActive: "chart",
+    };
   },
   computed: {
     // 获取当前类型的组件
-    currentComponentList () {
-      return this.componentList.filter((item) => item.type === this.currentTab)
+    currentComponentList() {
+      return this.componentList.filter((item) => item.type === this.currentTab);
     },
-    foldText () {
-      return this.fold ? '展开' : '收起'
-    }
+    foldText() {
+      return this.fold ? "展开" : "收起";
+    },
   },
   watch: {
-    fold (isExpand) {
-      if (isExpand && this.activeName === 'default') {
-        this.activeName = 'chart'
+    fold(isExpand) {
+      if (isExpand && this.activeName === "default") {
+        this.activeName = "chart";
       }
-    }
+    },
   },
-  created () {
-    this.initList()
-    this.g2PlotComponents = [...this.g2PlotComponents, ...getCustomPlots()]
-    this.menuList[1].components = this.g2PlotComponents
-    this.menuList[2].components = this.echartsComponents
+  created() {
+    this.initList();
+    this.g2PlotComponents = [...this.g2PlotComponents, ...getCustomPlots()];
+    this.vChartComponents = [...this.vChartComponents];
+    this.menuList[1].components = this.g2PlotComponents;
+    this.menuList[2].components = this.echartsComponents;
+    this.menuList[3].components = this.vChartComponents;
   },
-  mounted () {
-    this.nodeDrag()
+  mounted() {
+    this.nodeDrag();
   },
   methods: {
-    ...mapMutations('bigScreen', ['changeActiveCode']),
-    nodeDrag () {
+    ...mapMutations("bigScreen", ["changeActiveCode"]),
+    nodeDrag() {
       this.$nextTick(() => {
-        const nodes = document.querySelectorAll('.drag-node')
+        const nodes = document.querySelectorAll(".drag-node");
         nodes.forEach((node) => {
-          node.addEventListener('dragstart', (event) => {
-            const type = node.getAttribute('data-type')
-            const name = node.getAttribute('data-name')
+          node.addEventListener("dragstart", (event) => {
+            const type = node.getAttribute("data-type");
+            const name = node.getAttribute("data-name");
             // 从menuList中获取当前拖拽的组件
             const element = this.menuList
               .find((item) => item.name === this.activeName)
               ?.components.find(
-                (item) => item.type === type && item.name === name
-              )
+                (item) => item.type === type && item.name === name,
+              );
             /* 设置拖拽传输数据 */
             event.dataTransfer.setData(
-              'dragComponent',
+              "dragComponent",
               customSerialize({
                 ...element,
                 offsetX: event.offsetX,
-                offsetY: event.offsetY
-              })
-            )
-          })
-        })
+                offsetY: event.offsetY,
+              }),
+            );
+          });
+        });
         // 阻止默认动作
         document.addEventListener(
-          'drop',
+          "drop",
           (e) => {
-            e.preventDefault()
+            e.preventDefault();
           },
-          false
-        )
-      })
+          false,
+        );
+      });
     },
-    onClone (e) {
-      return cloneDeep(e)
+    onClone(e) {
+      return cloneDeep(e);
     },
-    onStart (e) {
+    onStart(e) {
       // this.$emit('onStart', e)
     },
     // 拖拽组件时触发
-    onEnd (e) { },
+    onEnd(e) {},
     // 点击左侧组件时触发
-    addComponent (element) {
-      this.$store.commit('bigScreen/changeActiveItem', element)
-      this.$emit('addComponent', element)
+    addComponent(element) {
+      this.$store.commit("bigScreen/changeActiveItem", element);
+      this.$emit("addComponent", element);
     },
     // 初始化
-    initList () { },
+    initList() {},
     // 点击tab标签
-    tabClick (tab) {
-      this.nodeDrag()
-      if (tab.index !== '0') {
-        this.fold = false
-        this.currentActive = this.activeName
+    tabClick(tab) {
+      this.nodeDrag();
+      if (tab.index !== "0") {
+        this.fold = false;
+        this.currentActive = this.activeName;
       }
-      if (tab.name === 'source') {
-        this.fold = true
-        this.$emit('toggleLeftSidebar')
-        this.$emit('openResource')
-        this.$emit('toggleLeftSidebar')
+      if (tab.name === "source") {
+        this.fold = true;
+        this.$emit("toggleLeftSidebar");
+        this.$emit("openResource");
+        this.$emit("toggleLeftSidebar");
       }
-      if (tab.name === 'component') {
-        this.fold = true
-        this.$emit('toggleLeftSidebar')
-        this.$emit('openComponent')
+      if (tab.name === "component") {
+        this.fold = true;
+        this.$emit("toggleLeftSidebar");
+        this.$emit("openComponent");
       }
     },
-    toggleSidebar () {
-      this.fold = !this.fold
-      this.$emit('toggleLeftSidebar')
+    toggleSidebar() {
+      this.fold = !this.fold;
+      this.$emit("toggleLeftSidebar");
       setTimeout(() => {
-        this.activeName = this.currentActive
-      })
+        this.activeName = this.currentActive;
+      });
     },
-    openRightPanel (config) {
-      this.$emit('openRightPanel', config)
-    }
-  }
-}
+    openRightPanel(config) {
+      this.$emit("openRightPanel", config);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import '../BigScreenDesign/fonts/iconfont.css';
+@import "../BigScreenDesign/fonts/iconfont.css";
 
 .bs-left-panel {
   display: flex;
@@ -372,7 +369,7 @@ export default {
   .page-left {
     box-sizing: border-box;
 
-    >* {
+    > * {
       color: #fff;
     }
 
@@ -431,7 +428,7 @@ export default {
               left: 0;
               top: 50%;
               transform: translateY(-50%);
-              content: '';
+              content: "";
               width: 4px;
               height: 14px;
               background-color: var(--bs-el-color-primary);
@@ -592,8 +589,7 @@ export default {
 .slide-fade-enter,
 .slide-fade-leave-to
 
-/* .slide-fade-leave-active for below version 2.1.8 */
-  {
+/* .slide-fade-leave-active for below version 2.1.8 */ {
   transform: translateX(10px);
   opacity: 0;
 }

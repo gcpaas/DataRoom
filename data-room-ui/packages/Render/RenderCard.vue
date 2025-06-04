@@ -8,7 +8,7 @@
   <div class="content">
     <component
       :is="resolveComponentType(config.border.type)"
-      v-if="config.border&&config.border.type"
+      v-if="config.border && config.border.type"
       :id="`border${config.code}`"
       :ref="`border${config.code}`"
       :key="`border${config.key}`"
@@ -16,12 +16,11 @@
     />
     <div
       class="render-item-wrap"
-      :style="
-        `height:calc(100% - ${(config.border&&config.title&&config.border.type&&config.border.type!='GcBorder11'&&config.border.isTitle)?config.border.titleHeight:0}px);
-      padding-top:${config.border?config.border.padding[0]:0}px;
-      padding-right:${config.border?config.border.padding[1]:0}px;
-      padding-bottom:${config.border?config.border.padding[2]:0}px;
-      padding-left:${config.border?config.border.padding[3]:0}px
+      :style="`height:calc(100% - ${config.border && config.title && config.border.type && config.border.type != 'GcBorder11' && config.border.isTitle ? config.border.titleHeight : 0}px);
+      padding-top:${config.border ? config.border.padding[0] : 0}px;
+      padding-right:${config.border ? config.border.padding[1] : 0}px;
+      padding-bottom:${config.border ? config.border.padding[2] : 0}px;
+      padding-left:${config.border ? config.border.padding[3] : 0}px
       `"
     >
       <component
@@ -37,74 +36,73 @@
 </template>
 <script>
 // import commonMixins from 'data-room-ui/js/mixins/commonMixins'
-import { mapMutations } from 'vuex'
-import { resolveComponentType } from 'data-room-ui/js/utils'
-import pcComponent from 'data-room-ui/js/utils/componentImport'
-import { dataInit, destroyedEvent } from 'data-room-ui/js/utils/eventBus'
-import CustomComponent from '../PlotRender/index.vue'
-import EchartsComponent from '../EchartsRender/index.vue'
-import Svgs from '../Svgs/index.vue'
-import RemoteComponent from 'data-room-ui/RemoteComponents/index.vue'
-const components = {}
+import { mapMutations } from "vuex";
+import { resolveComponentType } from "data-room-ui/js/utils";
+import pcComponent from "data-room-ui/js/utils/componentImport";
+import { dataInit, destroyedEvent } from "data-room-ui/js/utils/eventBus";
+import CustomComponent from "../PlotRender/index.vue";
+import EchartsComponent from "../EchartsRender/index.vue";
+import VChartComponent from "../VChartRender/index.vue";
+import Svgs from "../Svgs/index.vue";
+import RemoteComponent from "data-room-ui/RemoteComponents/index.vue";
+const components = {};
 for (const key in pcComponent) {
   if (Object.hasOwnProperty.call(pcComponent, key)) {
-    components[key] = pcComponent[key]
+    components[key] = pcComponent[key];
   }
 }
 export default {
-  name: 'RenderCard',
+  name: "RenderCard",
   // mixins: [commonMixins],
   components: {
     ...components,
     CustomComponent,
     Svgs,
     RemoteComponent,
-    EchartsComponent
+    EchartsComponent,
+    VChartComponent,
   },
   props: {
     // 卡片的属性
     config: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     ruleKey: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
-  data () {
+  data() {
     return {
-      height: 0
-    }
+      height: 0,
+    };
   },
-  computed: {
-  },
-  mounted () {
+  computed: {},
+  mounted() {
     // 调用初始化方法
-    dataInit(this)
+    dataInit(this);
   },
-  beforeDestroy () {
-    destroyedEvent()
+  beforeDestroy() {
+    destroyedEvent();
   },
   methods: {
-    ...mapMutations('bigScreen', [
-      'changeChartConfig'
-    ]),
+    ...mapMutations("bigScreen", ["changeChartConfig"]),
     resolveComponentType,
     // 切换主题时针对远程组件触发样式修改的方法
-    styleHandler (config) {
-      this.$emit('styleHandler', config)
-    }
+    styleHandler(config) {
+      this.$emit("styleHandler", config);
+    },
     // // 打开右侧面板
     // openRightPanel () {
     //   this.$emit('openRightPanel', this.currentChart)
     // }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-.content{
+.content {
   position: relative;
   width: 100%;
   height: 100%;
