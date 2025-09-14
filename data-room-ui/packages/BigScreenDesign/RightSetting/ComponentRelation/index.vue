@@ -78,6 +78,7 @@
     </div>
     <RelationSetting
       :setting-visible.sync="settingVisible"
+      :config="config"
       :config-map="configMap"
       :source-field-list="sourceFieldList"
       :target-field-list="targetFieldList"

@@ -26,6 +26,7 @@
       >
         <el-empty />
         <el-table-column
+          v-if="config.type === 'tables'"
           label="联动时机"
           align="center"
         >
@@ -64,6 +65,7 @@
           </template>
         </el-table-column>
         <el-table-column
+          v-if="config.type === 'tables'"
           label="组件数据映射索引"
           align="center"
         >
@@ -171,6 +173,10 @@ export default {
     }
   },
   props: {
+    config: {
+      type: Object,
+      default: () => ({})
+    },
     settingVisible: {
       type: Boolean,
       default: false
