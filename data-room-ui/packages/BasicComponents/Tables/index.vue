@@ -17,6 +17,28 @@
       @row-click="rowClick"
     >
       <el-table-column
+        v-if="config.customize.alarmEnable && hasAlarm"
+        :width="config.customize.alarmLabelWidth"
+      >
+        <template #default="scope">
+          <el-image
+            v-if="getAlarmSatisfy(scope)"
+            :src="getCoverPicture(config.customize.alarmUrl)"
+            fit="fill"
+            :style="{height: config.customize.alarmSize + 'px',width: config.customize.alarmSize + 'px'}"
+            draggable="false"
+          >
+            <div
+              slot="placeholder"
+              class="image-slot"
+            >
+              加载中···
+            </div>
+          </el-image>
+          <div v-else />
+        </template>
+      </el-table-column>
+      <el-table-column
         v-for="(col, index) in config.option.columnData"
         :key="index"
         show-overflow-tooltip
@@ -28,6 +50,7 @@
   </div>
 </template>
 <script>
+import { getFileUrl } from 'data-room-ui/js/utils/file'
 import commonMixins from 'data-room-ui/js/mixins/commonMixins'
 import paramsMixins from 'data-room-ui/js/mixins/paramsMixins'
 import linkageMixins from 'data-room-ui/js/mixins/linkageMixins'
@@ -57,7 +80,8 @@ export default {
       },
       columnData: {},
       // 第一次获取
-      isInit: true
+      isInit: true,
+      hasAlarm: false
     }
   },
   computed: {
@@ -103,6 +127,19 @@ export default {
   },
   beforeDestroy () { },
   methods: {
+    getHasAlarm (data) {
+      if (!this.config.customize.alarmConditions) return false
+      const fn = new Function('data', this.config.customize.alarmConditions)
+      return data.some(item => fn(item))
+    },
+    getCoverPicture (url) {
+      return getFileUrl(url)
+    },
+    getAlarmSatisfy (scope) {
+      if (!this.config.customize.alarmConditions) return false
+      const fn = new Function('data', this.config.customize.alarmConditions)
+      return fn(scope.row)
+    },
     cellStyle ({ row, column, rowIndex, columnIndex }) {
       const bodyBackgroundColor = {
         light: '#ffffff',
@@ -161,6 +198,7 @@ export default {
       }
       config.option.tableData =
         data?.data && data.data.length > 0 ? data.data : []
+      this.hasAlarm = this.getHasAlarm(config.option.tableData)
       const filteredData = {}
       const columnData = data?.columnData || {}
       const dimensionFieldList = config.dataSource.dimensionFieldList || []

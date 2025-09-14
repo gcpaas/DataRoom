@@ -67,9 +67,16 @@ const customConfig = {
     // 表格奇数行背景颜色
     oddRowBackgroundColor: '',
     // 表格偶数行背景颜色‘
-    evenRowBackgroundColor: ''
-    // 表格是否需要边框
-    // border: false,
+    evenRowBackgroundColor: '',
+    // 是否开启告警列
+    alarmEnable: false,
+    alarmTitle: '',
+    // 告警图片配置
+    alarmUrl: '',
+    alarmSize: 14,
+    alarmLabelWidth: 80,
+    // 告警条件
+    alarmConditions: ''
   }
 }
 export const dataConfig = {
