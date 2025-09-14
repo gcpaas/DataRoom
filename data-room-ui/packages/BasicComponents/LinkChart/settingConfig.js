@@ -49,6 +49,7 @@ const customConfig = {
     color: 'left,#007aff,#007aff',
     url: 'http://gcpaas.gccloud.com', // 链接地址
     openType: '_blank', // 打开方式
+    dialogTitle: '超链接', // 弹窗标题
     dialogW: 1000, // 弹窗宽度
     dialogH: 500// 弹窗高度
   }

@@ -47,7 +47,7 @@ export default {
     ...mapMutations('bigScreen', ['changeIframeDialog']),
     linkHandle () {
       // 设计态点击不进行跳转,预览态进行跳转
-      if (this.isPreview){
+      if (this.isPreview) {
         if (this.config.customize.url) {
           if (this.config.customize.openType === 'dialog') {
             if (this.isPreview) {
@@ -60,7 +60,6 @@ export default {
           }
         }
       }
-
     },
     dataFormatting (config, data) {
       // 文本数据配置原则：选择数据集则以后端返回的数据为主，否则以设置面板中标题设置为准

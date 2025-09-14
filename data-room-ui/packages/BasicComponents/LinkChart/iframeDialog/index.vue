@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="超链接"
+    :title="dialogTitle"
     :visible.sync="iframeDialog"
     :width="dialogW"
     :modal="true"
@@ -41,6 +41,9 @@ export default {
       },
       set () {
       }
+    },
+    dialogTitle () {
+      return this.config?.customize?.dialogTitle || '超链接'
     },
     url () {
       return this.config?.customize?.url || ''

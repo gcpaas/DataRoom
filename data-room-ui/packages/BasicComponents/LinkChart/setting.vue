@@ -80,6 +80,18 @@
         </el-form-item>
         <el-form-item
           v-if="config.customize.openType === 'dialog'"
+          label="弹窗标题"
+          label-width="100px"
+        >
+          <el-input
+            v-model="config.customize.dialogTitle"
+            class="bs-el-input"
+            placeholder="请输入弹窗标题"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="config.customize.openType === 'dialog'"
           label="弹窗宽度"
           label-width="100px"
         >

@@ -1,7 +1,7 @@
 <template>
   <div @click.stop>
     <el-dialog
-      title="超链接"
+      :title="dialogTitle"
       :visible.sync="dialogVisible"
       :width="dialogW"
       :modal="true"
@@ -42,6 +42,9 @@ export default {
     }
   },
   computed: {
+    dialogTitle () {
+      return this.config?.customize?.dialogTitle || '超链接'
+    },
     url () {
       return this.config?.customize?.url || ''
     },
