@@ -44,6 +44,11 @@ public class Linkage {
 
     @Data
     public static class Mapping {
+        @ApiModelProperty("联动时机")
+        private String timing;
+
+        @ApiModelProperty("联动索引")
+        private String mappingIndex;
 
         @ApiModelProperty("源字段")
         private String sourceField;
