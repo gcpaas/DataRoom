@@ -42,7 +42,7 @@ function dataInitHandler (_this, formData, bindComponents, linkageType) {
       })
     } else {
       const maps = com.maps
-      const filterList = maps?.filter(param => param.timing !== 'dataLoaded')
+      const filterList = maps?.filter(param => !param?.timing || param.timing !== 'dataLoaded')
         .map(param => ({
           column: param.targetField,
           operator: param.queryRule,

@@ -214,6 +214,7 @@ export default {
       if (config.maps && config.maps.length > 0) {
         config.maps.forEach(item => {
           item.timing = item.timing || 'click'
+          item.mappingIndex = item.mappingIndex || 'first'
         })
       }
       return config
