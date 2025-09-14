@@ -26,6 +26,25 @@
       >
         <el-empty />
         <el-table-column
+          label="联动时机"
+          align="center"
+        >
+          <template #default="scope">
+            <el-select
+              v-model="configMapConfig.maps[scope.$index].timing"
+              popper-class="bs-el-select"
+              class="bs-el-select"
+            >
+              <el-option
+                v-for="timing in timingOptions"
+                :key="timing.value"
+                :label="timing.label"
+                :value="timing.value"
+              />
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column
           label="当前组件映射参数"
           align="center"
         >
@@ -42,6 +61,31 @@
                 :value="sourceField.value"
               />
             </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="组件数据映射索引"
+          align="center"
+        >
+          <template #default="scope">
+            <el-select
+              v-if="configMapConfig.maps[scope.$index].timing === 'dataLoaded'"
+              v-model="configMapConfig.maps[scope.$index].mappingIndex"
+              popper-class="bs-el-select"
+              class="bs-el-select"
+              placeholder="请选择或输入"
+              filterable
+              allow-create
+              default-first-option
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+            <span v-else>—</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -65,7 +109,6 @@
                 :key="targetField.value"
                 :label="targetField.label"
                 :value="targetField.value"
-                :disabled="choosedTargetFields.includes(targetField.value)"
               />
             </el-select>
           </template>
@@ -147,24 +190,32 @@ export default {
   },
   data () {
     return {
-      operatorList
+      operatorList,
+      timingOptions: [
+        { label: '数据初始化时', value: 'dataLoaded' },
+        { label: '点击组件时', value: 'click' }
+      ],
+      options: [
+        { label: '首项', value: 'first' },
+        { label: '末项', value: 'last' }
+      ]
     }
   },
   computed: {
-    configMapConfig: {
-      get () {
-        return this.configMap || {
-          componentKey: '',
-          maps: []
-        }
-      },
-      set () { }
+    configMapConfig () {
+      const config = this.configMap || { componentKey: '', maps: [] }
+      // 在 getter 内部做兼容处理
+      if (config.maps && config.maps.length > 0) {
+        config.maps.forEach(item => {
+          item.timing = item.timing || 'click'
+        })
+      }
+      return config
     },
     choosedTargetFields () {
       return this.configMapConfig.maps.map(item => item.targetField)
     }
   },
-  mounted () { },
   methods: {
     /**
     * @description: 关闭弹窗
@@ -184,6 +235,8 @@ export default {
      */
     addRelatedField () {
       this.configMapConfig.maps.push({
+        timing: 'click',
+        mappingIndex: 'first',
         targetField: '',
         sourceField: '',
         queryRule: '='

@@ -3,10 +3,6 @@
     style="width: 100%; height: 100%"
     class="bs-design-wrap"
   >
-    <!-- <span style="color: aliceblue;font-size: 40px;">
-      {{ columnData }}
-    </span> -->
-    <!-- :border="this.config.customize.border" -->
     <el-table
       :id="config.code"
       ref="table"
@@ -160,6 +156,9 @@ export default {
       return config
     },
     dataFormatting (config, data) {
+      if (!this.isFirstDataLoaded) {
+        this.linkage(data.data, 'dataLoaded')
+      }
       config.option.tableData =
         data?.data && data.data.length > 0 ? data.data : []
       const filteredData = {}

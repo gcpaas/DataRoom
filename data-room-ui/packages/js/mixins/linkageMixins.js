@@ -35,9 +35,10 @@ export default {
     /**
      * 联动数据
      * @param {*} formData
+     * @param type 用于标识是数据初始化时的联动还是点击时的联动
      * */
-    linkage (formData) {
-      EventBus.$emit('dataInit', formData, this.config.linkage.components)
+    linkage (formData, type = 'click') {
+      EventBus.$emit('dataInit', formData, this.config.linkage.components, type)
     },
     /**
      * 绑定数据

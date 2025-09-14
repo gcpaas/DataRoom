@@ -3,7 +3,6 @@
  * @Date: 2023-03-24 17:10:43
  * @Author: xing.heng
  */
-// import _ from 'lodash'
 import { mapMutations, mapState } from 'vuex'
 import { EventBus } from 'data-room-ui/js/utils/eventBus'
 import { getChatInfo, getUpdateChartInfo } from '../api/bigScreenApi'
@@ -14,6 +13,7 @@ import cloneDeep from 'lodash/cloneDeep'
 export default {
   data () {
     return {
+      isFirstDataLoaded: false, // 数据是否是初始化状态
       filterList: [],
       treeParentId: 0,
       dataLoading: false
@@ -273,6 +273,7 @@ export default {
         }).catch(err => {
           console.info(err)
         }).finally(() => {
+          this.isFirstDataLoaded = true
           if (config) {
             config.loading = false
           }
