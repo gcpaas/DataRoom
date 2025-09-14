@@ -84,7 +84,23 @@ public class ScreenTablesChart extends Chart {
         @ApiModelProperty(notes = "表格奇数行背景颜色")
         private String oddRowBackgroundColor;
 
+        @ApiModelProperty(notes = "是否开启告警列")
+        private Boolean alarmEnable;
+
+        @ApiModelProperty(notes = "告警列标题")
+        private String alarmTitle;
+
+        @ApiModelProperty(notes = "告警列图标地址")
+        private String alarmUrl;
+
+        @ApiModelProperty(notes = "告警图标大小")
+        private Integer  alarmSize;
+
+        @ApiModelProperty(notes = "告警列宽")
+        private Integer  alarmLabelWidth;
+
+        @ApiModelProperty(notes = "告警条件")
+        private String  alarmConditions;
+
     }
-
-
 }
