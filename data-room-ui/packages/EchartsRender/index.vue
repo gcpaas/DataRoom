@@ -75,7 +75,7 @@ export default {
     const resizeObserver = new ResizeObserver(entries => {
       if (this.chart) {
         this.chart.resize()
-        if(this.config.name.includes('3D')){
+        if (this.config.name.includes('3D')) {
           let config = this.observeChart(entries)
           config = this.seriesStyle(config)
           config.option && this.chart.setOption(config.option)
@@ -105,6 +105,7 @@ export default {
           config.loading = false
           this.changeChartLoading(config)
           this.newChart(res)
+          this.registerEvent()
         }).catch(() => {
         })
       } else {
@@ -144,15 +145,12 @@ export default {
      * 注册事件
      */
     registerEvent () {
-      // 图表添加事件进行数据联动
-      let formData = {}
       // eslint-disable-next-line no-unused-vars
-      this.chart.on('tooltip:change', (...args) => {
-        formData = {}
-        formData = cloneDeep(args[0].data.items[0].data)
-      })
-      // eslint-disable-next-line no-unused-vars
-      this.chart.on('plot:click', (...args) => {
+      this.chart.on('click', (...args) => {
+        const formData = {
+          [this.config.option.xField]: args[0].name,
+          [this.config.option.yField]: args[0].value
+        }
         this.linkage(formData)
       })
     },
@@ -233,10 +231,11 @@ export default {
       return config
     },
     dataFormatting (config, data) {
-      // config = this.config
-      // 数据返回成功则赋值
       if (data.success) {
         data = data.data
+        if (!this.isFirstDataLoaded) {
+          this.linkage(data, 'dataLoaded')
+        }
         // 获取到后端返回的数据，有则赋值
         const option = config.option
         const setting = config.setting
@@ -259,7 +258,7 @@ export default {
     },
     getxDataAndYData (xField, yField, data) {
       let xData = []
-      let yData = []
+      const yData = []
 
       // 获取所有x轴的分类
       data.forEach(item => {
@@ -426,7 +425,7 @@ export default {
     },
     // 对series里面的样式进行配置
     seriesStyle (config) {
-      if(!config.name.includes('3D')){
+      if (!config.name.includes('3D')) {
         return config
       }
       const _config = CloneDeep(config)

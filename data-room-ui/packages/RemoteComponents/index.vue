@@ -59,17 +59,16 @@ export default {
   methods: {
     changeData (config, filterList) {
       // 调用混入中的方法
-      let promise = this.$options.mixins[1].methods.changeData.call(this, config, filterList)
+      const promise = this.$options.mixins[1].methods.changeData.call(this, config, filterList)
       return promise.then(res => {
         config = res
         // 当前组件的方法调用
-        let remote = this.$refs['remoteComponent'+config.code]
-        if (remote && remote.changeData){
+        const remote = this.$refs['remoteComponent' + config.code]
+        if (remote && remote.changeData) {
           remote.changeData(config, filterList)
         }
         return config
       })
-
     },
     ...mapMutations('bigScreen', ['changeChartConfig']),
     // 尝试渲染远程文件或远程字符串
@@ -199,7 +198,10 @@ export default {
     dataFormatting (config, data) {
       // 数据返回成功则赋值
       if (data.success) {
-        data = data.data
+        data = data.data || []
+        if (!this.isFirstDataLoaded) {
+          this.linkage(data, 'dataLoaded')
+        }
         config = this.transformSettingToOption(config, 'data')
         // 获取到后端返回的数据，有则赋值
         const option = config.option

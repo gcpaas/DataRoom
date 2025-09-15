@@ -26,7 +26,7 @@
       >
         <el-empty />
         <el-table-column
-          v-if="config.type === 'tables'"
+          v-if="['tables','echartsComponent','remoteComponent'].includes(config.type) || config.chartType"
           label="联动时机"
           align="center"
         >
@@ -65,7 +65,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-if="config.type === 'tables'"
+          v-if="['tables','echartsComponent','remoteComponent'].includes(config.type) || config.chartType"
           label="组件数据映射索引"
           align="center"
         >

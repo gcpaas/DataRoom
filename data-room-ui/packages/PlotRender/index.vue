@@ -170,6 +170,9 @@ export default {
       // 数据返回成功则赋值
       if (data.success) {
         data = data.data || []
+        if (!this.isFirstDataLoaded) {
+          this.linkage(data, 'dataLoaded')
+        }
         config = this.transformSettingToOption(config, 'data')
         // 获取到后端返回的数据，有则赋值
         const option = config.option
