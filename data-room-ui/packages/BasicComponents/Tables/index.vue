@@ -18,6 +18,7 @@
     >
       <el-table-column
         v-if="config.customize.alarmEnable && hasAlarm"
+        :label="config.customize.alarmTitle"
         :width="config.customize.alarmLabelWidth"
       >
         <template #default="scope">
