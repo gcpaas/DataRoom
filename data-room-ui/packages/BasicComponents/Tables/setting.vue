@@ -195,6 +195,7 @@
             v-model="config.customize.alarmConditions"
             type="textarea"
             :rows="5"
+            placeholder="例： return data.value > 200"
           />
         </el-form-item>
       </div>
