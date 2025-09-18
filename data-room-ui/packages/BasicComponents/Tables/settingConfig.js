@@ -72,7 +72,9 @@ const customConfig = {
     alarmEnable: false,
     alarmTitle: '',
     // 告警图片配置
+    isDynamicAlarm: false,
     alarmUrl: '',
+    dynamicAlarmUrl: '',
     alarmSize: 14,
     alarmLabelWidth: 80,
     // 告警条件

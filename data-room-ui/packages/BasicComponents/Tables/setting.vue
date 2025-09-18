@@ -126,7 +126,16 @@
           />
         </el-form-item>
         <el-form-item
-          label="告警图标"
+          label="动态告警图标"
+        >
+          <el-switch
+            v-model="config.customize.isDynamicAlarm"
+            class="bs-el-switch"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="!config.customize.isDynamicAlarm"
+          label="静态图标"
         >
           <el-upload
             class="bs-el-upload"
@@ -173,6 +182,17 @@
               clearable
             />
           </el-upload>
+        </el-form-item>
+        <el-form-item
+          v-else
+          label="动态图标"
+        >
+          <el-input
+            v-model="config.customize.dynamicAlarmUrl"
+            type="textarea"
+            :rows="5"
+            placeholder="例： return ''"
+          />
         </el-form-item>
         <el-form-item label="图标大小">
           <el-input-number

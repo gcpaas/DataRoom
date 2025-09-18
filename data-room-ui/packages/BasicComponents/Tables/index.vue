@@ -24,7 +24,7 @@
         <template #default="scope">
           <el-image
             v-if="getAlarmSatisfy(scope)"
-            :src="getCoverPicture(config.customize.alarmUrl)"
+            :src="getAlarmUrl(scope)"
             fit="fill"
             :style="{height: config.customize.alarmSize + 'px',width: config.customize.alarmSize + 'px'}"
             draggable="false"
@@ -140,6 +140,14 @@ export default {
       if (!this.config.customize.alarmConditions) return false
       const fn = new Function('data', this.config.customize.alarmConditions)
       return fn(scope.row)
+    },
+    getAlarmUrl (scope) {
+      if (!this.config.customize.isDynamicAlarm) {
+        return getFileUrl(this.config.customize.alarmUrl)
+      } else {
+        const fn = new Function('data', this.config.customize.dynamicAlarmUrl)
+        return fn(scope.row)
+      }
     },
     cellStyle ({ row, column, rowIndex, columnIndex }) {
       const bodyBackgroundColor = {
