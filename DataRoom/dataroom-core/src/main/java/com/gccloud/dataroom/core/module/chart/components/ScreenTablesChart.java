@@ -90,8 +90,14 @@ public class ScreenTablesChart extends Chart {
         @ApiModelProperty(notes = "告警列标题")
         private String alarmTitle;
 
+        @ApiModelProperty(notes = "是否是动态图片地址")
+        private Boolean isDynamicAlarm;
+
         @ApiModelProperty(notes = "告警列图标地址")
         private String alarmUrl;
+
+        @ApiModelProperty(notes = "动态告警图片处理")
+        private String  dynamicAlarmUrl;
 
         @ApiModelProperty(notes = "告警图标大小")
         private Integer  alarmSize;
