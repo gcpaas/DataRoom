@@ -140,7 +140,7 @@
 ## 联系我们
 <table>
     <tr>
-        <td style="text-align: center;font-weight: bold;"><p>QQ群</p><p><img alt="logo" width="200" src="./doc/images/qq3.png"></p></td>
+        <td style="text-align: center;font-weight: bold;"><p>QQ群</p><p><img alt="logo" width="200" src="./doc/images/qq6.png"></p></td>
 </tr>
 </table>
 
