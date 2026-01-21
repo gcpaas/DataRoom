@@ -98,7 +98,7 @@
 
 ## 快速开始
 
-1️⃣ 如果你想源码启动体验，[请点击这里](https://www.yuque.com/chuinixiongkou/bigscreen/ofy1bqhqgua1fu0f)
+1️⃣ 如果你想源码启动体验，[请点击这里](https://www.yuque.com/chuinixiongkou/bigscreen/xd78cw7t12q7kfbl)
 
 2️⃣ 如果你想使用Docker启动体验 ，[请点击这里](https://www.yuque.com/chuinixiongkou/bigscreen/ahhq3i7zxea46ox2)
 
