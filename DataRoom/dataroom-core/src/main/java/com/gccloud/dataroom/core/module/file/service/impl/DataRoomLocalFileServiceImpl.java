@@ -22,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * 文件管理
@@ -50,15 +53,16 @@ public class DataRoomLocalFileServiceImpl implements IDataRoomOssService {
         String id = IdWorker.getIdStr();
         String newFileName = id + "." + extension;
         // 上传文件保存到的路径，根据实际情况修改，也可能是从配置文件获取到的文件存储路径
-        String basePath = bigScreenConfig.getFile().getBasePath();
-        String destPath = basePath + File.separator + newFileName;
+        String basePath = fileConfig.getBasePath();
         long size = file.getSize();
         try {
-            File dest = new File(destPath);
-            file.transferTo(dest);
+            Path baseDir = Paths.get(basePath).toAbsolutePath().normalize();
+            Files.createDirectories(baseDir);
+            Path targetPath = baseDir.resolve(newFileName);
+            file.transferTo(targetPath.toFile());
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
-            log.error(String.format("文件 %s 存储到 %s 失败", originalFilename, destPath));
+            log.error(String.format("文件 %s 存储到 %s 失败", originalFilename, basePath));
             throw new GlobalException("文件上传失败");
         }
         fileEntity.setOriginalName(originalFilename);
