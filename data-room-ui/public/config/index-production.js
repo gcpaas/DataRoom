@@ -1,8 +1,7 @@
 window.ENV = 'production'
 var productionConfig = {
-  baseURL: 'http://gcpaas.gccloud.com/bigScreenServer',
-  fileUrlPrefix: 'http://gcpaas.gccloud.com/bigScreenServer' + '/static'
+  baseURL: 'http://localhost:8081/bigScreenServer',
+  fileUrlPrefix: 'http://localhost:8081/bigScreenServer' + '/static'
 }
 // 必须的
-window.CONFIG = {}
-window.CONFIG  = configDeepMerge(window.CONFIG , productionConfig)
+window.CONFIG  = configDeepMerge({} , productionConfig)
