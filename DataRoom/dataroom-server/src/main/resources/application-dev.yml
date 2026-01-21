@@ -1,0 +1,49 @@
+spring:
+  servlet:
+    multipart:
+      # 配置上传下载文件的最大值
+      max-file-size: 500MB
+      max-request-size: 500MB
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: org.h2.Driver
+    # 文件模式，保存到当前目录下的db/dataroom.mv.db
+    url: jdbc:h2:file:./db/dataroom # jdbc:h2:mem:test
+    username: root
+    password: 123456
+  sql:
+    init:
+      schema-locations: classpath:init-h2.sql
+      mode: always
+  h2:
+    console:
+      enabled: true
+      path: /dataroom-db
+
+gc:
+  starter:
+    file:
+      # 一个存储文件的绝对路径，需要有写入权限
+      basePath: D:\kdgc\后端静态资源
+      # 启动服务的访问地址
+      urlPrefix: http://127.0.0.1:${server.port}${server.servlet.context-path}/static/
+    captcha:
+      enable: true
+    jwt:
+      # 密钥，每个系统一定要自己修改下
+      secret: vT9~lW1^
+      alg: HS256
+      issuer: gc
+    dataroom:
+      users:
+        - username: admin
+          userId: 1
+          password: kdgc@2025
+          role:
+            - dataRoomWrite
+            - dataRoomRead
+        - username: user
+          userId: 2
+          password: user@2025
+          role:
+            - dataRoomRead
