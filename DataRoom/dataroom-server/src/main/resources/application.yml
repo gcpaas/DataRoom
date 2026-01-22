@@ -18,7 +18,7 @@ spring:
       ACCEPT_SINGLE_VALUE_AS_ARRAY: true
   resources:
     # 自springboot 2.5.5之后，该属性已经被废弃，使用web.resources.static-locations代替
-    static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/META-INF/resources/webjars/,file:${gc.starter.file.basePath}
+    static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/META-INF/resources/webjars/,file:${gc.starter.file.basePath},file:${gc.starter.file.uiPath}
   # 静态资源配置
   mvc:
     throw-exception-if-no-handler-found: true
@@ -28,7 +28,7 @@ spring:
       matching-strategy: ANT_PATH_MATCHER
   web:
     resources:
-      static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/META-INF/resources/webjars/,file:${gc.starter.file.basePath}
+      static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/META-INF/resources/webjars/,file:${gc.starter.file.basePath},file:${gc.starter.file.uiPath}
 
 
 mybatis-plus:
