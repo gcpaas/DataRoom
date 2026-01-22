@@ -5,10 +5,22 @@
       title: 'DataRoom大屏设计器',
       version: 'v2.1.0',
       // 登陆页面描述
-      description: '<h5>大屏设计器</h5><ul><li>基于主流的前后端分离技术开发</li><li>基于Vue+ElementUI+SpringBoot技术栈开发</li><li>由生态平台PBU千行框架小组成员倾力打造</li></ul>',
+      description: '<h5>大屏设计器</h5>' +
+        '<ul>' +
+        '<li>基于Vue+ElementUI+SpringBoot技术栈开发</li>' +
+        '<li>提供100+种组件、可视化拖拉拽</li>' +
+        '<li>支持9种常见数据集接入，包括MySQL、PostgreSQL、Oracle等</li>' +
+        '<li><div style="display: inline-flex; align-items: center; gap: 8px;">' +
+        '使用简单，完全免费，代码开源' +
+        '<img alt="stars" src="https://gitee.com/gcpaas/DataRoom/badge/star.svg?theme=dark">' +
+        '<img alt="forks" src="https://gitee.com/gcpaas/DataRoom/badge/fork.svg?theme=dark">' +
+        '</div></li>' +
+        '<li>商业版与社区版功能对比详情请见 <a href="http://gcpaas.gccloud.com/#/pricing" target="_blank" style="color: #ffffff">方案说明</a>' +
+        '</li>' +
+        '</ul>',
       // 底部html设置
       footer: {
-        copyright: '大屏设计器 V2.1.0 <a href="http://www.kdgcsoft.com/" target="_blank" class="no-decoration">生态平台PBU</a> 2021  |  版权所有 © <a href="http://www.gccloud.com/" target="_blank">科大国创软件股份有限公司</a>',
+        copyright: '大屏设计器 V2.1.0 <a href="http://www.kdgcsoft.com/" target="_blank" class="no-decoration">生态平台PBU</a> 2026  |  版权所有 © <a href="http://www.gccloud.com/" target="_blank">科大国创云网科技有限公司</a>',
       },
       login:{
         // 账号登陆时 验证码间隔

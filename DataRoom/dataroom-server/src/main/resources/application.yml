@@ -2,7 +2,7 @@
 server:
   port: 8081
   servlet:
-    context-path: /bigScreenServer
+    context-path: /dataRoomServer
 
 # spring环境配置
 spring:

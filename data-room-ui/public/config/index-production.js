@@ -1,7 +1,7 @@
 window.ENV = 'production'
 var productionConfig = {
-  baseURL: 'http://localhost:8081/bigScreenServer',
-  fileUrlPrefix: 'http://localhost:8081/bigScreenServer' + '/static'
+  baseURL: 'http://localhost:8081/dataRoomServer',
+  fileUrlPrefix: 'http://localhost:8081/dataRoomServer' + '/static'
 }
 // 必须的
 window.CONFIG  = configDeepMerge({} , productionConfig)

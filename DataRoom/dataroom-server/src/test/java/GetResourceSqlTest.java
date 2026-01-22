@@ -39,7 +39,7 @@ public class GetResourceSqlTest {
     /**
      * 静态资源接口前缀，即配置文件中的gc.file.urlPrefix
      */
-    public static final String FILE_URL_PREFIX = "http://gcpaas.gccloud.com/bigScreenServer/static";
+    public static final String FILE_URL_PREFIX = "http://gcpaas.gccloud.com/dataRoomServer/static";
 
     /**
      * 文件所属分组编码
