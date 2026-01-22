@@ -135,10 +135,7 @@
 
 ## 联系我们
 
-<p>
-    <img alt="logo" width="200" src="./doc/images/qq.png">
-</p>
-
+QQ群7: 462514660
 
 ## 许可证
 
