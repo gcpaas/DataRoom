@@ -90,16 +90,7 @@ export default {
       this.dialogVisible = false
     },
     noLoginConfirm () {
-      this.$confirm(`系统登录超时`, '提示', {
-          confirmButtonText: '现在去登录',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
-        this.$router.push({ path: '/login' })
-      }).catch(() => {
-        this.$router.push({ path: '/notPermission' })
-      })
+      this.$router.push({ path: '/login' })
     },
   }
 }
