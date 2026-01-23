@@ -20,13 +20,20 @@
             class="avatar"
             :src="require('./images/avatar.png')"
           ></img>
-          <el-dropdown class="avatar-container" trigger="click" size="small" @command="handleCommand">
+          <el-dropdown
+            class="avatar-container"
+            trigger="click"
+            size="small"
+            @command="handleCommand"
+          >
             <span class="el-dropdown-link">
-              {{user}}
-            <i class="el-icon-arrow-down el-icon--right"></i>
+              {{ user }}
+              <i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+              <el-dropdown-item command="logout">
+                退出登录
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -52,7 +59,7 @@
 </template>
 <script>
 import Nav from './NavTop.vue'
-import * as tokenCacheService from "data-room-ui/js/utils/tokenCacheService"
+import * as tokenCacheService from 'data-room-ui/js/utils/tokenCacheService'
 
 // import Nav from './Nav.vue'
 export default {
@@ -66,7 +73,7 @@ export default {
       // 和此处路由保持一致，将会激活tab，请按需更改
       giteeHref: '',
       giteeSvg: '',
-      user:''
+      user: ''
     }
   },
   computed: {
@@ -154,21 +161,21 @@ export default {
     getUserInfo () {
       this.$dataRoomAxios.get('/sys/current').then(res => {
         this.user = res.username
-      }).catch(err=>{
+      }).catch(err => {
         console.error(err)
-        this.$message.error('获取用户信息失败')
+        tokenCacheService.remove()
+        this.$router.push({ path: '/login' })
       })
     },
-    handleCommand(){
-      this.$confirm(`确认退出系统?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
+    handleCommand () {
+      this.$confirm('确认退出系统?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
       ).then(() => {
         tokenCacheService.remove()
         this.$router.push({ path: '/login' })
-
       }).catch(() => {})
     },
     changeTab (tab) {
