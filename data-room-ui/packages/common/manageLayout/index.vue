@@ -117,7 +117,8 @@ export default {
         this.user = res.username
       }).catch(err=>{
         console.error(err)
-        this.$message.error('获取用户信息失败')
+        tokenCacheService.remove()
+        this.$router.push({ path: '/login' })
       })
     },
     handleCommand(){

@@ -377,3 +377,4 @@ bigScreen.zip
 
 # Ignore public/config/index-development.js
 public/config/index-development.js
+/package-lock.json
