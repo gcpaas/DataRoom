@@ -17,10 +17,8 @@ import com.gccloud.dataroom.core.utils.IPUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import eu.bitwalker.useragentutils.UserAgent;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
@@ -39,6 +37,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2025/5/6 17:38
  */
 @Service
+@Slf4j
 public class SysLoginServiceImpl implements ISysLoginService {
     Cache<String, String> CAPTCHA_CACHE = Caffeine.newBuilder().expireAfterWrite(7200, TimeUnit.SECONDS).build();
     Cache<String, SysTokenCache> TOKEN_CACHE = Caffeine.newBuilder().expireAfterWrite(7200, TimeUnit.SECONDS).build();
@@ -147,10 +146,16 @@ public class SysLoginServiceImpl implements ISysLoginService {
         if (StringUtils.isBlank(token)) {
             return null;
         }
-        Claims claims = Jwts.parser()
-                .setSigningKey(dataRoomConfig.getJwt().getSecret())
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = null;
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(dataRoomConfig.getJwt().getSecret())
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            log.error("Token校验失败", e);
+            throw new GlobalException("Token校验失败", DataRoomConst.Response.Code.NO_LOGIN);
+        }
         if (claims.getExpiration().before(new Date())) {
             return null;
         }
@@ -171,9 +176,10 @@ public class SysLoginServiceImpl implements ISysLoginService {
         if (userToken == null) {
             return null;
         }
+        Claims claimsFinal = claims;
         userToken.setUpdateDate(new Date());
         return sysUserConfig.getUsers().stream()
-                .filter(u -> u.getUserId().equals(claims.get(DataRoomConst.Jwt.USER_ID)))
+                .filter(u -> u.getUserId().equals(claimsFinal.get(DataRoomConst.Jwt.USER_ID)))
                 .findFirst()
                 .orElseThrow(() -> new GlobalException("用户不存在", DataRoomConst.Response.Code.NO_FOUND));
     }
