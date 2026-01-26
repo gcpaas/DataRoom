@@ -149,7 +149,7 @@ export default {
       // const imgUrl = process.env.VUE_APP_HISTORY === 'y' ? process.env.VUE_APP_BASE + '/static/images/QQ.png':'/static/images/QQ.png' // 先获取图片路径
       this.$alert(`
     <div>
-      <p>请通过 application-dev.yml 配置文件中 gc.starter.dataroom.users 获取演示环境登录账号</p>
+      <p>请通过 application-xxx.yml 配置文件中 gc.starter.dataroom.users 获取登录账号</p>
     </div>
   `, '提示', {
         showConfirmButton: false,
