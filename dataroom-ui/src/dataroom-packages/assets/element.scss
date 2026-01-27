@@ -1,0 +1,8 @@
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      // 动态修改element 主题色
+      'base': #3478f6,
+    ),
+  )
+);

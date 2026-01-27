@@ -1,0 +1,20 @@
+:root {
+  --dr-primary: var(--el-color-primary);
+  --dr-primary1: #3478f610;
+  --dr-primary2: #3478f620;
+  --dr-border: #e8e8e8;
+  --dr-text: #77838f;
+  --dr-text1: #405058;
+  --dr-bg1: #fff;
+  --dr-bg2: #f8f9fb;
+  // 设计器顶部header高度
+  --dr-designer-header-height: 40px;
+  // 设计器左侧工具tab宽度
+  --dr-designer-left-tool-bar-width: 60px;
+  // 设计器左侧工具面板宽度
+  --dr-designer-left-tool-panel-width: 200px;
+  // 设计器左侧工具面板头高度
+  --dr-designer-left-tool-panel-header-height: 40px;
+  // 设计器右侧配置面板宽度
+  --dr-designer-right-panel-width: 330px;
+}

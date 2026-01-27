@@ -1,0 +1,81 @@
+spring:
+  mvc:
+    static-path-pattern: /static/**
+    view:
+      prefix: classpath:/static/
+      suffix: .html
+  web:
+    resources:
+      add-mappings: true
+      static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/META-INF/resources/webjars/,file:${dataroom.resource.basePath},file:${dataroom.resource.uiPath}
+  servlet:
+    # 文件上传大小限制
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+dataroom:
+  resource:
+    # 资源上传存储路径，可以使用绝对路径
+    basePath: ./dataRoomResource
+    # 前端部署包所在目录，可以使用绝对路径
+    uiPath: ./dataroom-ui
+    urlPrefix: http://127.0.0.1:${server.port}${server.servlet.context-path}/static/
+  # 公钥、用于加密
+  publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqXOeu2n/8M2IArSr7aVS1oKR4wAnKMj0CWQdMpd8B54N4ckME8fnmywLYhPOy3vMQDDB0FYiIWRwzT8H1ar0LbyZLgAnbcvD1Pk4MLY/bVTHBCmJ67f/oO6jVMLvk3QNf7b8HVoxQkB/Tf19fQBwCleMfimPXl+1qP0T5Nvk6WVcBOXya/KhFaRJ4heDQ8BCMw0b5i+oefozlYaWLEzPVv4fpHm0iGfd4/j5RRIMweD7E5r/XhmM3oYUhPzATfaRRv70xCZrDlIPcvvOZYMRHR33EziWnf4yejXQ+GggvGDrsw6SxtSzmzZLWW9cwWscoS0rjRceKm3U8FIH53N3AwIDAQAB
+  # 私钥、用于解密、不可泄露
+  privateKey: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCpc567af/wzYgCtKvtpVLWgpHjACcoyPQJZB0yl3wHng3hyQwTx+ebLAtiE87Le8xAMMHQViIhZHDNPwfVqvQtvJkuACdty8PU+Tgwtj9tVMcEKYnrt/+g7qNUwu+TdA1/tvwdWjFCQH9N/X19AHAKV4x+KY9eX7Wo/RPk2+TpZVwE5fJr8qEVpEniF4NDwEIzDRvmL6h5+jOVhpYsTM9W/h+kebSIZ93j+PlFEgzB4PsTmv9eGYzehhSE/MBN9pFG/vTEJmsOUg9y+85lgxEdHfcTOJad/jJ6NdD4aCC8YOuzDpLG1LObNktZb1zBaxyhLSuNFx4qbdTwUgfnc3cDAgMBAAECggEAKdaz4xddi+Hbirt8Ve2DghZ0GeXgRVg0tRrkgKjZhXH3gH+o/TtXCr+5wcodPa2/9Tt0p1GVFMSde3fsIcwXhTFzauG72oa8wBmWz6Q4DfEoQHVXKf3g3qX9awDEsZYufRG7ty2dSvvs0t9bfCE/CLasKDxvu0ALdQGjx1ap8xxdaw61CF/slvON8e8hzu+UE9XohQ/ee1sgGd3xOg6mNIwVdGMU2hoAqxSE8PnTDG+3ZRCeNMKoi0S3M56cizmKtn3Fb36vp8KEtNw+1bSJ148lkvd3XTx4iHuI8s75FsrIVLiC69EZjPyx0VUUMcqWrhC3OYQpAMW39CjexDa8YQKBgQDuhrAZCWs5td8Y0AEUfc9J+TQB2Vh/kTdB2vvRzB8R19+RovGB8fnhOUfvZg79z+OCGJMJZJYR+JPep2eT8SbzNNDv0id2OHorOSyII+DnI8gfsqd36CY0yu9g75hdsMBkvnWOwxkBe9qnwwt1Qgln9iPw/WAezyqhhueXjImDIQKBgQC13YLixegDMUmKPkf0fsY+/hoeWI0oltlWwjzxw8ttYNWTFbfspGK59UpSyb60kwHhmvHjDBzfBQeFafADIQAHf6BhFHN88rqXqAYxPVUP1Dhz2zkMuiI5fK4UPP0rH+Ee1yh/buzF77Pfi/9vgDk8vPRXT8EVMJ1f0mthof7ZowKBgHrzppZhSopG+6cYoVXkvBNPh8VkOcAYJLmnnaK5a1KRSkcSDReEmd/E3RXEL/oZTRbkf/aZiNnenqpo9HVIG2HGWeUlGP5RgngBUrkidW3v/dqJBtZCLl+MM/RtzMaOs726h3J9ksg3BbDwU1mwHpUeRcyVbxSyiTEWDw8JfGDBAoGARnoJ/8F78MjH2+fY0JnUT5L/IiVkxob2wJVTMsmSateszGwNM4pcq/2viLefzLBveTMna7pE8fQr/vqXxU6jiURfLV/UhWY3AxBdHfXLoe+21Mbuq8zx+F8lwrgD0BNxlRcCHagp32bNyOKi4V3KUIxVEATbKVAGnJyZemNhtIsCgYEAtR1L1hGGsBCMwiHR3luuMSKP76S5LXkKnm0cg29DYpHJtifxNa3z6rDxNrnaxX20KBsEo9Sy8WmmhzJAiVDaBqJnvvVR6U/hIPngKmcgf49Lh0PnMbqlEtTpy/y3o96aswKHEZm4OKwI26kS4tCi1mOCCxvl/IuLMqfUi7l93BI=
+  # 用户列表
+  userList:
+    - username: admin
+      # 显示的用户名
+      realName: 管理员
+      # 租户编码
+      tenantCode: default
+      password: AWEqKU@Pn4r
+      # 状态，可选值: normal: 正常，disabled: 禁用
+      state: normal
+      # 角色列表，可选值: manager： 管理员, developer:开发者, sharer:分享者
+      roleCodeList: [ manager,developer,sharer ]
+    - username: developer
+      realName: 开发者
+      tenantCode: default
+      password: h3yhe4B@95O
+      state: normal
+      roleCodeList: [ developer,sharer ]
+    - username: sharer
+      # 用于分享使用、用户名不可改变
+      realName: 分享者
+      tenantCode: default
+      password: UVM8X@yjbEe
+      state: normal
+      roleCodeList: [ sharer ]
+
+# 接口文档配置
+knife4j:
+  # 开启增强配置
+  enable: true
+  basic:
+    # 是否开启认证
+    enable: false
+    # 证用户名
+    username: admin
+    # 认证密码
+    password: dataRoom
+  setting:
+    enable-footer: false
+
+springdoc:
+  # 解决实体本身默认会解析为参数问题 https://doc.xiaominfo.com/docs/faq/v4/knife4j-parameterobject-flat-param
+  default-flat-param-object: true
+  group-configs:
+    # 项目上自定义的包名可以配置多个
+    - group: 'DataRoom'
+      paths-to-match: '/**'
+      # 扫描的包、可以配置多个
+      packages-to-scan:
+        - com.gccloud.gcpaas
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

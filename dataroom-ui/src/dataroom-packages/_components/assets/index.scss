@@ -1,0 +1,42 @@
+// 数据折叠面板样式
+.dr-collapse {
+  border: none;
+
+  :deep(.el-collapse-item) {
+    margin-bottom: 16px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  :deep(.el-collapse-item__header) {
+    background: transparent;
+    border: none;
+    font-weight: 700;
+    color: var(--dr-text1);
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+  }
+
+  :deep(.el-collapse-item__wrap) {
+    border: none;
+    background: transparent;
+  }
+
+  :deep(.el-collapse-item__content) {
+    padding: 12px 4px 0;
+    background: transparent;
+  }
+
+  :deep(.el-form) {
+    .el-form-item {
+      margin-bottom: 16px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

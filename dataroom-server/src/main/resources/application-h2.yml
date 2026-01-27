@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:file:./db/dataroom
+    username: root
+    password: dataRoom@2026
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/dataroom_h2.all.sql
