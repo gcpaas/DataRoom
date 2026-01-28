@@ -5,7 +5,7 @@ db
 dataroom.mv.db
 dataroom.trace.db
 application-kdgc.yml
-dataroom-ui/dist
+data-room-ui/dist
 # Logs
 logs
 *.log
