@@ -8,7 +8,7 @@ spring:
     # 替换为自己的 MySQL 数据库信息
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.p6spy.engine.spy.P6SpyDriver
-    url: jdbc:p6spy:mysql://127.0.0.1:3306/dashboard?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&nullCatalogMeansCurrent=true
+    url: jdbc:p6spy:mysql://127.0.0.1:3306/dataRoom?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&nullCatalogMeansCurrent=true
     username: root
     password: pwd
 
