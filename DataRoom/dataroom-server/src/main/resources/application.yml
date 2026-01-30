@@ -7,7 +7,7 @@ server:
 # spring环境配置
 spring:
   profiles:
-    active: dev
+    active: h2
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
