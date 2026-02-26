@@ -5,6 +5,7 @@
 <p align="center">
     <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/gcpaas/DataRoom?style=social">
     <img alt="GitHub forks" src="https://img.shields.io/github/forks/gcpaas/DataRoom?style=social">
+    <img alt="atomgitStars" src="https://atomgit.com/gcpaas/DataRoom/star/badge.svg">
     <img alt="GitHub license" src="https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg">
     <img alt="npm" src="https://img.shields.io/npm/v/@gcpaas/data-room-ui">
     <img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.gccloud/gc-starter-bigscreen-core">

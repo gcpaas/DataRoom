@@ -5,6 +5,7 @@
 <p align="center">
     <img alt="stars" src="https://gitee.com/gcpaas/DataRoom/badge/star.svg?theme=dark">
     <img alt="forks" src="https://gitee.com/gcpaas/DataRoom/badge/fork.svg?theme=dark">
+    <img alt="atomgitStars" src="https://atomgit.com/gcpaas/DataRoom/star/badge.svg">
     <img alt="GitHub license" src="https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg">
     <img alt="Company" src="https://img.shields.io/badge/公司-科大国创云网科技有限公司-blue.svg">
     <a href="http://gcpaas.gccloud.com"><img src="https://img.shields.io/badge/%E9%A2%84%E8%A7%88-演示环境-yellow" alt="预览"></a>
@@ -119,16 +120,17 @@
 ## 常见问题
 
 ⚠️&nbsp;&nbsp;[使用手册、二次开发、部署手册、常见问题](https://www.yuque.com/chuinixiongkou/bigscreen/index)<br/>
-⚠️&nbsp;&nbsp;[(码云仓库](https://gitee.com/gcpaas/DataRoom)<br/>
+⚠️&nbsp;&nbsp;[码云仓库](https://gitee.com/gcpaas/DataRoom)<br/>
 ⚠️&nbsp;&nbsp;[GitHub仓库](https://github.com/gcpaas/DataRoom)<br/>
+⚠️&nbsp;&nbsp;[AtomGit仓库](https://atomgit.com/gcpaas/DataRoom)<br/>
 
 ## 生态插件
 
 | 组件         | 地址                                                         |
 | ------------ | ------------------------------------------------------------ |
-| 大屏设计器   | [码云](https://gitee.com/gcpaas/DataRoom)、[GitHub](https://github.com/gcpaas/DataRoom) |
-| 仪表盘设计器 | [码云](https://gitee.com/gcpaas/DashBoard)、[GitHub](https://github.com/gcpaas/DashBoard) |
-| 数据集       | [码云](https://gitee.com/gcpaas/dataset)、[GitHub](https://github.com/gcpaas/dataset) |
+| 大屏设计器   | [码云](https://gitee.com/gcpaas/DataRoom)、[GitHub](https://github.com/gcpaas/DataRoom)、[AtomGit](https://atomgit.com/gcpaas/DataRoom) |
+| 仪表盘设计器 | [码云](https://gitee.com/gcpaas/DashBoard)、[GitHub](https://github.com/gcpaas/DashBoard)、[AtomGit](https://atomgit.com/gcpaas/DashBoard) |
+| 数据集       | [码云](https://gitee.com/gcpaas/dataset)、[GitHub](https://github.com/gcpaas/dataset)、[AtomGit](https://atomgit.com/gcpaas/dataset) |
 
 <br/>
 
