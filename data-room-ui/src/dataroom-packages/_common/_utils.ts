@@ -222,7 +222,7 @@ export const getSingleDatasetValueByField = (chart: ChartConfig<unknown>, fieldN
     console.error(`组件 ${chart.id} 数据集字段 ${fieldName} 配置错误,要求至少有一个值`)
     return undefined
   }
-  let finalFieldName: string = fieldValueList[0]!
+  const finalFieldName: string = fieldValueList[0]!
   if (Array.isArray(datasetValue)) {
     if (datasetValue.length === 0) {
       console.error(`组件 ${chart.id} 对应的数据集数据为空`)

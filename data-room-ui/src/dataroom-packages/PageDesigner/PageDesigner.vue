@@ -230,6 +230,18 @@ const onChartClick = (chart: ChartConfig<unknown>) => {
   activeChartById(chart.id)
 }
 
+/**
+ * 画布空白区域点击，切换到画布配置面板
+ */
+const onCanvasClick = (e: MouseEvent) => {
+  const target = e.target as HTMLElement
+  if (target.closest('.vue-grid-item')) {
+    return
+  }
+  activeChart.value = undefined
+  rightControlPanelSetting.value = true
+}
+
 const contextMenuEvent = ref<MouseEvent>()
 const onRightClick = (e: MouseEvent, chart: ChartConfig<unknown>) => {
   e.preventDefault()
@@ -452,7 +464,7 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="canvas">
-        <div class="canvas-main" id="canvas-main" :style="computedCanvasMainContainerStyle">
+        <div class="canvas-main" id="canvas-main" :style="computedCanvasMainContainerStyle" @click="onCanvasClick">
           <el-scrollbar>
             <GridLayout v-model:layout="chartList"
                         :col-num="48"

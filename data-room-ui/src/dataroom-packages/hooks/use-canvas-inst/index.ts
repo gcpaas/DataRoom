@@ -1,6 +1,6 @@
 import {reactive, type Ref} from 'vue'
 import {getChartById} from '@/dataroom-packages/_common/_utils.ts'
-import {type ComponentInternalInstance} from '@vue/runtime-core'
+import {type ComponentInternalInstance} from 'vue'
 import {ElMessage} from "element-plus";
 import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts";
 import type {GlobalVariable} from "@/dataroom-packages/PageDesigner/type/GlobalVariable.ts";

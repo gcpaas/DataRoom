@@ -197,7 +197,7 @@ const toggleBehavior = (behavior: Behavior, enabled: boolean) => {
   if (!chartConfig.value.behaviors) {
     chartConfig.value.behaviors = {}
   }
-  let oriBehavior = chartConfig.value.behaviors[behavior.method]
+  const oriBehavior = chartConfig.value.behaviors[behavior.method]
   if (!oriBehavior) {
     chartConfig.value.behaviors[behavior.method] = {
       disabled: !enabled,

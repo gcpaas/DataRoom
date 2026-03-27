@@ -1,5 +1,5 @@
 import type {Ref} from "vue";
-import type {ComponentInternalInstance} from "@vue/runtime-core";
+import type {ComponentInternalInstance} from "vue";
 import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts";
 import type {ChartAction} from "@/dataroom-packages/components/type/ChartAction.ts";
 

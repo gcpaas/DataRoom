@@ -234,18 +234,12 @@ const onPreview = () => {
       basicConfig: basicConfig.value,
       globalVariableList: globalVariable.value
     }
-  }).then((res) => {
-    ElMessage({
-      message: '保存成功',
-      type: 'success',
+  }).then(() => {
+    const routeData = router.resolve({
+      path: `/dataRoom/visualScreenPreview/preview/${pageStageEntity.value!.pageCode}`
     })
+    window.open(routeData.href, '_blank')
   })
-
-  // 跳转到 /dataRoom/visualScreenPreview 路由
-  const routeData = router.resolve({
-    path: `/dataRoom/visualScreenPreview/preview/${pageStageEntity.value.pageCode}`
-  })
-  window.open(routeData.href, '_blank')
 }
 
 /**
@@ -372,6 +366,7 @@ const onSelectEnd = (e: import('selecto').OnSelectEnd<VanillaSelecto>) => {
   console.log('onSelectEnd', e)
   if (e.selected.length <= 0) {
     activeChart.value = undefined
+    rightControlPanelSetting.value = true
     return
   }
   const target = e.selected[0]
