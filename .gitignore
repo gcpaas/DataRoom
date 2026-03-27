@@ -1,3 +1,5 @@
+.claude
+CLAUDE.md
 RELEASE
 dataRoomFront
 dataRoomResource
@@ -6,6 +8,7 @@ dataroom.mv.db
 dataroom.trace.db
 application-kdgc.yml
 data-room-ui/dist
+package-lock.json
 # Logs
 logs
 *.log

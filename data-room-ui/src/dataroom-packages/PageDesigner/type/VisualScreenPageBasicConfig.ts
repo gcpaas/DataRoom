@@ -1,3 +1,5 @@
+import type {PageTimer} from "@/dataroom-packages/PageDesigner/type/PageTimer.ts";
+
 /**
  * 大屏页面基础配置
  */
@@ -21,6 +23,8 @@ export interface VisualScreenPageBasicConfig {
     // 高度，单位：像素
     height: number
     // 缩放方式
-    zoom: 'auto'
+    zoom: 'fitWidth' | 'fitHeight' | 'cover' | 'contain' | 'none'
   }
+  // 定时器配置列表
+  timers?: PageTimer[]
 }

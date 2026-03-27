@@ -164,6 +164,11 @@ const handleKeyPress = (event: KeyboardEvent) => {
       </div>
     </div>
 
+    <!-- 版权说明 -->
+    <div class="login-footer">
+      <p>Copyright &copy; {{ new Date().getFullYear() }} 由科大国创 GCPAAS 开源</p>
+    </div>
+
     <!-- 背景装饰 -->
     <div class="bg-decoration">
       <div class="circle circle-1"></div>
@@ -296,6 +301,22 @@ const handleKeyPress = (event: KeyboardEvent) => {
           }
         }
       }
+    }
+  }
+
+  .login-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    text-align: center;
+    z-index: 10;
+
+    p {
+      margin: 0;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
     }
   }
 

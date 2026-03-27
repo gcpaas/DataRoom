@@ -4,7 +4,7 @@ import {type Component, computed, type ComputedRef, type CSSProperties, defineAs
 import {debounce} from 'lodash'
 import Moveable, {type OnClick, type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd,} from 'vue3-moveable'
 import {VueSelecto} from 'vue3-selecto'
-import {deleteChartById, extractPositionFromTransform, getChartByElement, getChartById} from '@/dataroom-packages/_common/_utils.ts'
+import {deleteChartById, extractPositionFromTransform, getChartByElement, getChartById, getResourceUrl} from '@/dataroom-packages/_common/_utils.ts'
 import VanillaSelecto from 'selecto'
 import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts";
 import type {LeftToolBar} from "@/dataroom-packages/PageDesigner/type/LeftToolBar.ts";
@@ -15,6 +15,7 @@ import type {PageStageEntity} from "@/dataroom-packages/page/type/PageStageEntit
 import {useCanvasInst} from '@/dataroom-packages/hooks/use-canvas-inst'
 import type {GlobalVariable} from "@/dataroom-packages/PageDesigner/type/GlobalVariable.ts";
 import {DrConst} from "@/dataroom-packages/constant/DrConst.ts";
+import type {VisualScreenPageBasicConfig} from "@/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts";
 
 const router = useRouter()
 const route = useRoute()
@@ -23,6 +24,12 @@ const activeChart = ref<ChartConfig<unknown>>()
 const chartList = ref<ChartConfig<unknown>[]>([])
 const pageStageEntity = ref<PageStageEntity>()
 const globalVariable = ref<GlobalVariable[]>([] as GlobalVariable[])
+const defaultBasicConfig: VisualScreenPageBasicConfig = {
+  background: {fill: 'color', color: '#0d1e42', url: '', opacity: 100, repeat: 'no-repeat'},
+  size: {width: 1920, height: 1080, zoom: 'contain'},
+  timers: []
+}
+const basicConfig = ref<VisualScreenPageBasicConfig>({...defaultBasicConfig})
 // 记录右侧控制面板是否为页面配置
 const rightControlPanelSetting = ref(false)
 // 定义水平和垂直线组合的标尺、便于
@@ -77,6 +84,7 @@ const ComponentLayer = defineAsyncComponent(() => import('@/dataroom-packages/_c
 const GlobalVariable = defineAsyncComponent(() => import('@/dataroom-packages/_components/GlobalVariable.vue'))
 const ResourceLib = defineAsyncComponent(() => import('@/dataroom-packages/_components/ResourceLib.vue'))
 const ControlPanelWrapper = defineAsyncComponent(() => import('@/dataroom-packages/_components/ControlPanel.vue'))
+const VisualScreenControlPanel = defineAsyncComponent(() => import('./ControlPanel.vue'))
 const ContextMenu = defineAsyncComponent(() => import('@/dataroom-packages/PageDesigner/ContextMenu.vue'))
 
 const leftToolBarList: Array<LeftToolBar> = reactive([
@@ -223,6 +231,8 @@ const onPreview = () => {
     pageConfig: {
       ...pageStageEntity.value.pageConfig,
       chartList: chartList.value,
+      basicConfig: basicConfig.value,
+      globalVariableList: globalVariable.value
     }
   }).then((res) => {
     ElMessage({
@@ -254,6 +264,8 @@ const onSave = () => {
     pageConfig: {
       ...pageStageEntity.value.pageConfig,
       chartList: chartList.value,
+      basicConfig: basicConfig.value,
+      globalVariableList: globalVariable.value
     }
   }).then((res) => {
     ElMessage({
@@ -392,6 +404,35 @@ const computedChartStyle = (chart: ChartConfig<unknown>): CSSProperties => {
   }
 }
 
+/**
+ * 画布尺寸和背景动态样式
+ */
+const computedCanvasContentStyle = computed<CSSProperties>(() => {
+  const styles: CSSProperties = {
+    width: `${basicConfig.value.size?.width || 1920}px`,
+    height: `${basicConfig.value.size?.height || 1080}px`,
+  }
+  const background = basicConfig.value.background
+  if (!background) {
+    return styles
+  }
+  if (background.fill === 'color' && background.color) {
+    styles.backgroundColor = background.color
+  } else if (background.fill === 'image' && background.url) {
+    styles.backgroundImage = `url(${getResourceUrl(background.url)})`
+    styles.backgroundRepeat = background.repeat || 'no-repeat'
+    styles.backgroundSize = 'cover'
+    styles.backgroundPosition = 'center'
+    if (background.opacity !== undefined && background.opacity !== 100) {
+      styles.opacity = background.opacity / 100
+    }
+    if (background.color) {
+      styles.backgroundColor = background.color
+    }
+  }
+  return styles
+})
+
 const computedToolAnchorStyle = computed(() => {
   if (rightControlPanelShow.value) {
     return {
@@ -415,6 +456,14 @@ onMounted(() => {
     pageStageEntity.value = res
     chartList.value = res.pageConfig?.chartList || []
     globalVariable.value = res.pageConfig?.globalVariableList || []
+    if (res.pageConfig?.basicConfig) {
+      const loaded = res.pageConfig.basicConfig as Partial<VisualScreenPageBasicConfig>
+      basicConfig.value = {
+        background: {...defaultBasicConfig.background, ...loaded.background},
+        size: {...defaultBasicConfig.size, ...loaded.size},
+        timers: loaded.timers || []
+      }
+    }
   })
 })
 </script>
@@ -462,7 +511,7 @@ onMounted(() => {
       <div class="canvas">
         <div class="canvas-main" id="canvas-main">
           <el-scrollbar>
-            <div class="canvas-content">
+            <div class="canvas-content" :style="computedCanvasContentStyle">
               <div
                 class="chart-wrapper"
                 v-for="item in chartList"
@@ -529,10 +578,7 @@ onMounted(() => {
       <div class="right-panel" :style="rightControlPanelStyle">
         <el-scrollbar>
           <template v-if="rightControlPanelSetting">
-            <!-- TODO: 页面配置面板组件 -->
-            <div style="padding: 16px; color: var(--dr-text);">
-              页面配置面板（待实现）
-            </div>
+            <VisualScreenControlPanel :basicConfig="basicConfig"/>
           </template>
           <template v-else>
             <ControlPanelWrapper v-if="activeChart" :chart="activeChart" :global-variable-list="globalVariable">
@@ -676,8 +722,6 @@ onMounted(() => {
         position: relative;
         min-width: 100%;
         min-height: 100%;
-        width: 3840px;
-        height: 2160px;
       }
     }
 
