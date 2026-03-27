@@ -9,6 +9,7 @@ import type {CanvasInst} from "@/dataroom-packages/PageDesigner/type/CanvasInst.
 import {DrConst} from "@/dataroom-packages/constant/DrConst.ts";
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
+const emit = defineEmits(['close'])
 
 const resourceLibVisible = ref(true)
 const selectedResource = ref<ResourceEntity | null>(null)
@@ -66,7 +67,7 @@ const onCopyUrl = async () => {
 }
 </script>
 <template>
-  <el-dialog v-model="resourceLibVisible" title="素材库" width="80%">
+  <el-dialog v-model="resourceLibVisible" title="素材库" width="80%" @closed="emit('close')">
     <div class="resource-lib-wrapper">
       <ResourceManage :selectable="true" @update:selectedResource="handleSelectedResourceUpdate"/>
     </div>

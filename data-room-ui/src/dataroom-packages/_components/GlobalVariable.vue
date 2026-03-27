@@ -9,6 +9,7 @@ import type {GlobalVariable} from "@/dataroom-packages/PageDesigner/type/GlobalV
 const props = defineProps<{
   globalVariable: GlobalVariable[]
 }>()
+const emit = defineEmits(['close'])
 
 const globalVariableVisible = ref(true)
 const activeGlobalVariable = ref<GlobalVariable>()
@@ -71,7 +72,7 @@ const onDelete = (variable: GlobalVariable) => {
 }
 </script>
 <template>
-  <el-dialog v-model="globalVariableVisible" title="全局变量" width="80%">
+  <el-dialog v-model="globalVariableVisible" title="全局变量" width="80%" @closed="emit('close')">
     <div class="global-variable-wrapper">
       <div class="variable-wrapper">
         <div class="search">

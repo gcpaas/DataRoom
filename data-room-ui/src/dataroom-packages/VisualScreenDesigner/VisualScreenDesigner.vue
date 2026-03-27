@@ -113,28 +113,33 @@ const leftToolBarList: Array<LeftToolBar> = reactive([
     componentName: 'GlobalVariable',
   },
 ])
-// @ts-expect-error ignore
-const activeLeftToolBar = ref<LeftToolBar>(leftToolBarList[1])
-const leftToolPanelShow = ref(true)
+// 图层工具栏引用（左侧面板仅用于图层）
+const layerToolBar = leftToolBarList[0]!
+const leftToolPanelShow = ref(false)
 const rightControlPanelShow = ref(true)
+
+// 弹框显示状态（组件、素材、变量）
+const componentLibDialogVisible = ref(false)
+const resourceLibDialogVisible = ref(false)
+const globalVariableDialogVisible = ref(false)
 
 // 核心：使用计算属性生成main区域的样式对象
 const mainStyle = computed(() => {
   if (leftToolPanelShow.value && rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width)',
+      gridTemplateColumns: 'var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width)',
     }
   } else if (!leftToolPanelShow.value && !rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) auto',
+      gridTemplateColumns: 'auto',
     }
   } else if (!leftToolPanelShow.value && rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) auto var(--dr-designer-right-panel-width)',
+      gridTemplateColumns: 'auto var(--dr-designer-right-panel-width)',
     }
   } else {
     return {
-      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto',
+      gridTemplateColumns: 'var(--dr-designer-left-tool-panel-width) auto',
     }
   }
 })
@@ -269,9 +274,26 @@ const onSave = () => {
   })
 }
 
-const onActiveLeftToolBar = (leftToolBar: LeftToolBar) => {
-  activeLeftToolBar.value = leftToolBar
-  switchLeftToolPanel(true)
+/**
+ * 顶部导航按钮点击处理
+ * 图层：左侧面板显示/隐藏切换
+ * 组件/素材/变量：弹框显示
+ */
+const onHeaderToolClick = (toolBar: LeftToolBar) => {
+  switch (toolBar.componentName) {
+    case 'ComponentLayer':
+      leftToolPanelShow.value = !leftToolPanelShow.value
+      break
+    case 'ComponentLib':
+      componentLibDialogVisible.value = true
+      break
+    case 'ResourceLib':
+      resourceLibDialogVisible.value = true
+      break
+    case 'GlobalVariable':
+      globalVariableDialogVisible.value = true
+      break
+  }
 }
 
 /**
@@ -365,8 +387,6 @@ const onSelectDragStart = (e: import('selecto').OnDragStart<VanillaSelecto>) => 
 const onSelectEnd = (e: import('selecto').OnSelectEnd<VanillaSelecto>) => {
   console.log('onSelectEnd', e)
   if (e.selected.length <= 0) {
-    activeChart.value = undefined
-    rightControlPanelSetting.value = true
     return
   }
   const target = e.selected[0]
@@ -470,6 +490,17 @@ onMounted(() => {
         <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="router.push('/dataRoom/page/index')"/>
         <div class="title">{{ pageStageEntity?.name }}</div>
       </div>
+      <div class="header-center">
+        <el-button
+          v-for="item in leftToolBarList"
+          :key="item.name"
+          :type="item.componentName === 'ComponentLayer' && leftToolPanelShow ? 'primary' : 'default'"
+          size="small"
+          @click="onHeaderToolClick(item)"
+        >
+          {{ item.name }}
+        </el-button>
+      </div>
       <div style="margin-right: 8px">
         <el-button @click="onHistory" size="small">历史</el-button>
         <el-button @click="switchPageControlPanel" size="small">设置</el-button>
@@ -478,20 +509,10 @@ onMounted(() => {
       </div>
     </div>
     <div class="main" :style="mainStyle">
-      <div class="left-tool-bar">
-        <div
-          v-for="item in leftToolBarList"
-          :key="item.name"
-          :class="{ bar: true, active: activeLeftToolBar.componentName === item.componentName }"
-          @click="onActiveLeftToolBar(item)"
-        >
-          {{ item.name }}
-        </div>
-      </div>
       <div class="left-tool-panel" :style="leftToolPanelStyle">
         <div class="panel-header">
           <div style="position: relative">
-            <span class="title">{{ activeLeftToolBar.desc }}</span>
+            <span class="title">{{ layerToolBar.desc }}</span>
             <el-icon class="close" @click="switchLeftToolPanel(false)">
               <Close/>
             </el-icon>
@@ -499,7 +520,7 @@ onMounted(() => {
         </div>
         <div class="panel-body">
           <el-scrollbar>
-            <component :is="activeLeftToolBar.component"></component>
+            <ComponentLayer />
           </el-scrollbar>
         </div>
       </div>
@@ -589,6 +610,19 @@ onMounted(() => {
     </div>
   </div>
   <ContextMenu v-if="contextMenuVisible" ref="contextMenuRef" :style="computedContextMenuStyle" :chart="activeChart" @switch-right-control-panel="switchRightControlPanel" @delete-chart="onChartDeleteClick"></ContextMenu>
+
+  <!-- 组件库弹框 -->
+  <el-dialog v-model="componentLibDialogVisible" title="组件库" width="680px" :append-to-body="true" destroy-on-close>
+    <el-scrollbar max-height="60vh">
+      <ComponentLib />
+    </el-scrollbar>
+  </el-dialog>
+
+  <!-- 素材库（组件自带弹框，用 v-if 控制挂载） -->
+  <ResourceLib v-if="resourceLibDialogVisible" @close="resourceLibDialogVisible = false" />
+
+  <!-- 全局变量（组件自带弹框，用 v-if 控制挂载） -->
+  <GlobalVariable v-if="globalVariableDialogVisible" :global-variable="globalVariable" @close="globalVariableDialogVisible = false" />
 </template>
 
 <style scoped lang="scss">
@@ -609,6 +643,7 @@ onMounted(() => {
       display: flex;
       align-items: center;
       margin-left: 8px;
+      flex-shrink: 0;
 
       & .logo {
         height: 30px;
@@ -620,47 +655,21 @@ onMounted(() => {
       & .title {
         margin-left: 16px;
         font-size: 14px;
+        white-space: nowrap;
       }
+    }
+
+    & .header-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
   }
 
   & .main {
     background-color: var(--dr-bg2);
     display: grid;
-    grid-template-columns: var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width);
-
-    & .left-tool-bar {
-      background-color: #fff;
-      border-right: 1px solid var(--dr-border);
-
-      & .bar {
-        font-size: 12px;
-        text-align: center;
-        margin: 4px auto;
-        padding: 8px 0;
-
-        &:hover {
-          cursor: pointer;
-          background-color: var(--dr-bg2);
-        }
-      }
-
-      & .active {
-        background-color: var(--dr-primary1);
-        color: var(--dr-primary);
-        position: relative;
-
-        &::before {
-          content: '';
-          left: 0;
-          top: 0;
-          bottom: 0;
-          width: 3px;
-          position: absolute;
-          background-color: var(--dr-primary);
-        }
-      }
-    }
+    grid-template-columns: var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width);
 
     & .left-tool-panel {
       background-color: white;
