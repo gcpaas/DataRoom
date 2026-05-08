@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {defineAsyncComponent, onMounted, ref} from 'vue'
+import {computed, defineAsyncComponent, onMounted, ref} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
-import {ArrowDown, Delete, Document, Edit, Folder, MoreFilled, Plus, Refresh, Search} from '@element-plus/icons-vue'
+import {Delete, Document, Edit, Folder, MoreFilled, Plus, Rank, Refresh, Search} from '@element-plus/icons-vue'
 import {datasetApi, type DatasetEntity, type DatasetTreeNode} from './api'
 import {dataSourceApi} from '../dataSource/api'
 
@@ -42,6 +42,62 @@ const editorRef = ref()
 
 // 数据源列表
 const dataSourceList = ref<any[]>([])
+
+// 类型选择对话框
+const typeSelectVisible = ref(false)
+const typeSelectParentNode = ref<DatasetTreeNode | undefined>()
+
+// 新增类型选项
+const addTypeOptions = [
+  {
+    key: 'directory',
+    name: '目录',
+    description: '用于分类管理数据集'
+  },
+  {
+    key: 'json',
+    name: 'JSON数据集',
+    description: '直接编写JSON静态数据'
+  },
+  {
+    key: 'http',
+    name: 'HTTP数据集',
+    description: '通过HTTP接口获取数据'
+  },
+  {
+    key: 'relational',
+    name: '关系型数据集',
+    description: '通过SQL查询关系型数据库'
+  }
+]
+
+// 移动对话框
+const moveDialogVisible = ref(false)
+const moveTargetNode = ref<DatasetTreeNode | null>(null) // 要移动的节点
+const moveTargetParentCode = ref<string>('root') // 移动目标父级code
+
+// 构建移动树数据：只显示目录，并排除选中节点及其子节点
+const moveTreeData = computed(() => {
+  if (!moveTargetNode.value) return []
+  const movingCode = moveTargetNode.value.code
+  // 收集需要排除的节点code（选中节点及其所有子节点）
+  const excludeCodes = new Set<string>()
+  const collectChildCodes = (code: string) => {
+    excludeCodes.add(code)
+    allDatasetList.value
+      .filter(item => item.parentCode === code)
+      .forEach(item => {
+        if (item.code) collectChildCodes(item.code)
+      })
+  }
+  if (movingCode) collectChildCodes(movingCode)
+
+  // 只保留目录类型且不在排除列表中的节点
+  const directories = allDatasetList.value.filter(
+    item => item.datasetType === 'directory' && !excludeCodes.has(item.code!)
+  )
+  return buildTree(directories, 'root')
+})
 
 // 数据集类型映射
 const datasetTypeMap = {
@@ -170,6 +226,26 @@ const handleClearSearch = () => {
 }
 
 /**
+ * 打开类型选择对话框
+ */
+const handleOpenTypeSelect = (node?: DatasetTreeNode) => {
+  typeSelectParentNode.value = node
+  typeSelectVisible.value = true
+}
+
+/**
+ * 选择新增类型
+ */
+const handleTypeSelect = (type: string) => {
+  typeSelectVisible.value = false
+  if (type === 'directory') {
+    handleAddFolder(typeSelectParentNode.value)
+  } else {
+    handleAddDataset(type as 'json' | 'http' | 'relational', typeSelectParentNode.value)
+  }
+}
+
+/**
  * 新增目录
  */
 const handleAddFolder = (node?: DatasetTreeNode) => {
@@ -274,6 +350,41 @@ const handleDeleteNode = (node: DatasetTreeNode) => {
     })
     .catch(() => {
     })
+}
+
+/**
+ * 打开移动对话框
+ */
+const handleMoveNode = (node: DatasetTreeNode) => {
+  moveTargetNode.value = node
+  moveTargetParentCode.value = node.parentCode || 'root'
+  moveDialogVisible.value = true
+}
+
+/**
+ * 移动树节点点击
+ */
+const handleMoveTreeNodeClick = (data: DatasetTreeNode) => {
+  moveTargetParentCode.value = data.code || 'root'
+}
+
+/**
+ * 确认移动
+ */
+const handleConfirmMove = async () => {
+  if (!moveTargetNode.value?.code) return
+  try {
+    const detail = await datasetApi.detail(moveTargetNode.value.code)
+    await datasetApi.update({
+      ...detail,
+      parentCode: moveTargetParentCode.value
+    })
+    ElMessage.success('移动成功')
+    moveDialogVisible.value = false
+    loadTree()
+  } catch (error) {
+    console.error('移动失败:', error)
+  }
 }
 
 /**
@@ -435,43 +546,9 @@ const handleTestAndSave = async () => {
             </el-icon>
           </template>
         </el-input>
-        <el-dropdown trigger="click" @command="
-          (command: string) => {
-            if (command === 'addFolder') handleAddFolder()
-            else if (command === 'addJson') handleAddDataset('json')
-            else if (command === 'addHttp') handleAddDataset('http')
-            else if (command === 'addRelational') handleAddDataset('relational')
-          }
-        ">
-          <el-button type="primary" :icon="Plus">
+        <el-button type="primary" :icon="Plus" @click="handleOpenTypeSelect()">
             新增
-            <el-icon class="el-icon--right">
-              <ArrowDown/>
-            </el-icon>
           </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="addFolder">
-                <el-icon>
-                  <Folder/>
-                </el-icon>
-                <span>新增目录</span>
-              </el-dropdown-item>
-              <el-dropdown-item command="addJson">
-                <span>{{ datasetTypeMap.json.icon }}</span>
-                <span style="margin-left: 8px">新增JSON数据集</span>
-              </el-dropdown-item>
-              <el-dropdown-item command="addHttp">
-                <span>{{ datasetTypeMap.http.icon }}</span>
-                <span style="margin-left: 8px">新增HTTP数据集</span>
-              </el-dropdown-item>
-              <el-dropdown-item command="addRelational">
-                <span>{{ datasetTypeMap.relational.icon }}</span>
-                <span style="margin-left: 8px">新增关系型数据集</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
       </div>
       <el-scrollbar class="tree-content">
         <el-tree
@@ -498,11 +575,9 @@ const handleTestAndSave = async () => {
                 trigger="click"
                 @command="
                   (command: string) => {
-                    if (command === 'addFolder') handleAddFolder(data)
-                    else if (command === 'addJson') handleAddDataset('json', data)
-                    else if (command === 'addHttp') handleAddDataset('http', data)
-                    else if (command === 'addRelational') handleAddDataset('relational', data)
+                    if (command === 'add') handleOpenTypeSelect(data)
                     else if (command === 'edit') handleEditNode(data)
+                    else if (command === 'move') handleMoveNode(data)
                     else if (command === 'delete') handleDeleteNode(data)
                   }
                 "
@@ -512,31 +587,23 @@ const handleTestAndSave = async () => {
                 </el-icon>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <template v-if="data.datasetType === 'directory'">
-                      <el-dropdown-item command="addFolder">
-                        <el-icon>
-                          <Folder/>
-                        </el-icon>
-                        <span>新增目录</span>
-                      </el-dropdown-item>
-                      <el-dropdown-item command="addJson">
-                        <span>{{ datasetTypeMap.json.icon }}</span>
-                        <span style="margin-left: 8px">新增JSON数据集</span>
-                      </el-dropdown-item>
-                      <el-dropdown-item command="addHttp">
-                        <span>{{ datasetTypeMap.http.icon }}</span>
-                        <span style="margin-left: 8px">新增HTTP数据集</span>
-                      </el-dropdown-item>
-                      <el-dropdown-item command="addRelational">
-                        <span>{{ datasetTypeMap.relational.icon }}</span>
-                        <span style="margin-left: 8px">新增关系型数据集</span>
-                      </el-dropdown-item>
-                    </template>
+                    <el-dropdown-item v-if="data.datasetType === 'directory'" command="add">
+                      <el-icon>
+                        <Plus/>
+                      </el-icon>
+                      <span>新增</span>
+                    </el-dropdown-item>
                     <el-dropdown-item command="edit">
                       <el-icon>
                         <Edit/>
                       </el-icon>
                       <span>编辑</span>
+                    </el-dropdown-item>
+                    <el-dropdown-item command="move">
+                      <el-icon>
+                        <Rank/>
+                      </el-icon>
+                      <span>移动至</span>
                     </el-dropdown-item>
                     <el-dropdown-item command="delete" divided>
                       <el-icon>
@@ -559,7 +626,7 @@ const handleTestAndSave = async () => {
           <el-tabs v-model="activeTab" class="dataset-tabs">
             <el-tab-pane label="数据预览" name="preview"/>
             <el-tab-pane v-if="selectedNode.datasetType !== 'json'" label="入参预览" name="inputParams"/>
-            <el-tab-pane label="字段说明" name="outputParams"/>
+            <el-tab-pane label="字段列表" name="outputParams"/>
           </el-tabs>
           <div class="right-actions">
             <el-button link :icon="Edit" @click="handleEdit">编辑</el-button>
@@ -648,6 +715,78 @@ const handleTestAndSave = async () => {
           <el-button @click="handleTest" :loading="testLoading">仅测试</el-button>
           <el-button type="primary" @click="handleTestAndSave" :loading="testAndSaveLoading">测试并保存</el-button>
         </span>
+      </template>
+    </el-dialog>
+
+    <!-- 类型选择对话框 -->
+    <el-dialog
+      v-model="typeSelectVisible"
+      title="选择新增类型"
+      width="560px"
+      :close-on-click-modal="true"
+      destroy-on-close
+    >
+      <div class="type-select-cards">
+        <div
+          v-for="item in addTypeOptions"
+          :key="item.key"
+          class="type-card"
+          @click="handleTypeSelect(item.key)"
+        >
+          <div class="type-card-icon">
+            <el-icon v-if="item.key === 'directory'"><Folder/></el-icon>
+            <el-icon v-else-if="item.key === 'json'"><Document/></el-icon>
+            <el-icon v-else-if="item.key === 'http'"><Document/></el-icon>
+            <el-icon v-else><Document/></el-icon>
+          </div>
+          <div class="type-card-info">
+            <div class="type-card-name">{{ item.name }}</div>
+            <div class="type-card-desc">{{ item.description }}</div>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+
+    <!-- 移动对话框 -->
+    <el-dialog
+      v-model="moveDialogVisible"
+      title="移动至"
+      width="480px"
+      :close-on-click-modal="false"
+      destroy-on-close
+    >
+      <div class="move-dialog-content">
+        <div class="move-hint">请选择目标目录：</div>
+        <div class="move-tree-wrap">
+          <div
+            class="move-tree-root"
+            :class="{ active: moveTargetParentCode === 'root' }"
+            @click="moveTargetParentCode = 'root'"
+          >
+            <el-icon><Folder/></el-icon>
+            <span>根目录</span>
+          </div>
+          <el-tree
+            :data="moveTreeData"
+            node-key="code"
+            :props="{ label: 'label', children: 'children' }"
+            :expand-on-click-node="false"
+            default-expand-all
+            highlight-current
+            @node-click="handleMoveTreeNodeClick"
+          >
+            <template #default="{ data: nodeData }">
+              <div class="move-tree-node">
+                <el-icon><Folder/></el-icon>
+                <span>{{ nodeData.label }}</span>
+              </div>
+            </template>
+          </el-tree>
+        </div>
+      </div>
+      <template #footer>
+        <el-button @click="moveDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleConfirmMove">确定</el-button>
       </template>
     </el-dialog>
   </div>
@@ -814,6 +953,109 @@ const handleTestAndSave = async () => {
   :deep(.el-dialog) {
     .el-scrollbar__bar {
       z-index: 10;
+    }
+  }
+}
+
+// 类型选择卡片样式
+.type-select-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 8px 0;
+
+  .type-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid var(--el-border-color-light);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: var(--el-color-primary);
+      background-color: var(--el-color-primary-light-9);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .type-card-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background-color: var(--el-color-primary-light-9);
+      color: var(--el-color-primary);
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .type-card-info {
+      flex: 1;
+      min-width: 0;
+
+      .type-card-name {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--el-text-color-primary);
+        margin-bottom: 4px;
+      }
+
+      .type-card-desc {
+        font-size: 12px;
+        color: var(--el-text-color-secondary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+// 移动对话框样式
+.move-dialog-content {
+  .move-hint {
+    font-size: 14px;
+    color: var(--el-text-color-regular);
+    margin-bottom: 12px;
+  }
+
+  .move-tree-wrap {
+    border: 1px solid var(--el-border-color-light);
+    border-radius: 4px;
+    padding: 8px;
+    max-height: 360px;
+    overflow-y: auto;
+
+    .move-tree-root {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: var(--el-text-color-primary);
+
+      &:hover {
+        background-color: var(--el-fill-color-light);
+      }
+
+      &.active {
+        background-color: var(--el-color-primary-light-9);
+        color: var(--el-color-primary);
+      }
+    }
+
+    .move-tree-node {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
     }
   }
 }

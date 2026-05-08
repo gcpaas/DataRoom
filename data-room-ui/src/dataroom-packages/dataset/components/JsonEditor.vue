@@ -157,6 +157,61 @@ const testAndSave = async () => {
 }
 
 /**
+ * 解析JSON字段，自动提取字段名和类型
+ */
+const parseFields = () => {
+  if (!formData.dataset || !('json' in formData.dataset) || !formData.dataset.json) {
+    ElMessage.error('请先输入JSON数据')
+    return
+  }
+  let jsonData: unknown
+  try {
+    jsonData = JSON.parse(formData.dataset.json)
+  } catch {
+    ElMessage.error('JSON格式错误，请检查')
+    return
+  }
+  const dataArray = Array.isArray(jsonData) ? jsonData : [jsonData]
+  if (dataArray.length === 0) {
+    ElMessage.warning('JSON数据为空，无法解析字段')
+    return
+  }
+  const firstItem = dataArray[0]
+  if (typeof firstItem !== 'object' || firstItem === null) {
+    ElMessage.warning('JSON数据格式不支持，请提供对象或对象数组')
+    return
+  }
+  const obj = firstItem as Record<string, unknown>
+  const fields = Object.keys(obj)
+  // 保存现有的用户配置（描述等）
+  const existingConfig = new Map(
+    (formData.outputList || []).map(item => [item.name, { type: item.type, desc: item.desc }])
+  )
+  // 根据值推断类型
+  formData.outputList = fields.map(name => {
+    const value = obj[name]
+    let inferredType = 'String'
+    if (Array.isArray(value)) {
+      inferredType = 'Array'
+    } else if (value === null) {
+      inferredType = 'String'
+    } else if (typeof value === 'number') {
+      inferredType = 'Number'
+    } else if (typeof value === 'boolean') {
+      inferredType = 'Boolean'
+    } else if (typeof value === 'object') {
+      inferredType = 'Object'
+    }
+    return {
+      name,
+      type: existingConfig.get(name)?.type || inferredType,
+      desc: existingConfig.get(name)?.desc || ''
+    }
+  })
+  ElMessage.success('字段解析成功')
+}
+
+/**
  * 格式化JSON
  */
 const formatJson = () => {
@@ -199,8 +254,11 @@ defineExpose({
         </div>
       </div>
     </el-form-item>
-    <el-form-item label="字段说明">
+    <el-form-item label="字段列表">
       <div style="width: 100%">
+        <div style="margin-bottom: 8px">
+          <el-button type="primary" size="small" @click="parseFields">字段解析</el-button>
+        </div>
         <el-table :data="formData.outputList" border style="width: 100%">
           <el-table-column prop="name" label="字段名" width="200" />
           <el-table-column label="类型" width="150">
@@ -222,7 +280,7 @@ defineExpose({
         </el-table>
         <el-empty
           v-if="!formData.outputList || formData.outputList.length === 0"
-          description="请点击测试按钮获取字段列表"
+          description="请点击「字段解析」按钮自动解析字段列表"
           :image-size="100"
         />
       </div>

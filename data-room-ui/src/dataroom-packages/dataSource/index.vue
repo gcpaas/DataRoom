@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, defineAsyncComponent } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search, Plus, MoreFilled, Edit, Delete, Connection } from '@element-plus/icons-vue'
+import { Search, Plus, MoreFilled, Edit, Delete } from '@element-plus/icons-vue'
 import { dataSourceApi, type DataSourceEntity } from './api'
 import mysqlImg from './assets/image/MySQL占位符.png'
 import postgresqlImg from './assets/image/PostgreSQL占位符.png'
@@ -12,6 +12,7 @@ const dataSourceList = ref<DataSourceEntity[]>([])
 const loading = ref(false)
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
+const typeSelectDialogVisible = ref(false)
 const currentDataSource = ref<DataSourceEntity>({
   name: '',
   dataSourceType: 'mysql',
@@ -31,18 +32,21 @@ const dataSourceTypeMap = {
     name: 'MySQL',
     icon: '🐬',
     image: mysqlImg,
+    description: '开源关系型数据库，广泛应用',
     component: defineAsyncComponent(() => import('./components/MysqlEditor.vue'))
   },
   postgresql: {
     name: 'PostgreSQL',
     icon: '🐘',
     image: postgresqlImg,
+    description: '功能强大的开源对象关系数据库',
     component: defineAsyncComponent(() => import('./components/PostgresqlEditor.vue'))
   },
   oracle: {
     name: 'Oracle',
     icon: '🔷',
     image: oracleImg,
+    description: '企业级商业关系型数据库',
     component: defineAsyncComponent(() => import('./components/OracleEditor.vue'))
   }
 } as const
@@ -64,6 +68,21 @@ const getDataSourceList = async () => {
   } finally {
     loading.value = false
   }
+}
+
+/**
+ * 打开数据源类型选择对话框
+ */
+const openTypeSelectDialog = () => {
+  typeSelectDialogVisible.value = true
+}
+
+/**
+ * 选择数据源类型并新增
+ */
+const handleSelectType = (dataSourceType: 'mysql' | 'postgresql' | 'oracle') => {
+  typeSelectDialogVisible.value = false
+  handleAdd(dataSourceType)
 }
 
 /**
@@ -166,14 +185,6 @@ const getTypeName = (type: string) => {
 }
 
 /**
- * 获取数据源类型图标
- */
-const getTypeIcon = (type: string) => {
-  const key = type as keyof typeof dataSourceTypeMap
-  return dataSourceTypeMap[key]?.icon || '📦'
-}
-
-/**
  * 获取数据源类型图片
  */
 const getTypeImage = (type: string) => {
@@ -201,27 +212,7 @@ onMounted(() => {
       </div>
       <div class="button-group">
         <el-button :icon="Search" @click="getDataSourceList">查询</el-button>
-        <el-dropdown trigger="click" @command="handleAdd">
-          <el-button type="primary" :icon="Plus">
-            新增<el-icon class="el-icon--right"><arrow-down /></el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="mysql">
-                <span>{{ dataSourceTypeMap.mysql.icon }}</span>
-                <span style="margin-left: 8px">MySQL</span>
-              </el-dropdown-item>
-              <el-dropdown-item command="postgresql">
-                <span>{{ dataSourceTypeMap.postgresql.icon }}</span>
-                <span style="margin-left: 8px">PostgreSQL</span>
-              </el-dropdown-item>
-              <el-dropdown-item command="oracle">
-                <span>{{ dataSourceTypeMap.oracle.icon }}</span>
-                <span style="margin-left: 8px">Oracle</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <el-button type="primary" :icon="Plus" @click="openTypeSelectDialog">新增</el-button>
       </div>
     </div>
 
@@ -270,6 +261,26 @@ onMounted(() => {
         <el-empty :image-size="200" v-if="!loading && dataSourceList.length === 0" description="暂无数据源" />
       </el-scrollbar>
     </div>
+
+    <!-- 数据源类型选择对话框 -->
+    <el-dialog v-model="typeSelectDialogVisible" title="选择数据源类型" width="620px" :close-on-click-modal="true">
+      <div class="type-select-cards">
+        <div
+          v-for="(item, key) in dataSourceTypeMap"
+          :key="key"
+          class="type-card"
+          @click="handleSelectType(key as 'mysql' | 'postgresql' | 'oracle')"
+        >
+          <div class="type-card-image">
+            <img :src="item.image" :alt="item.name" />
+          </div>
+          <div class="type-card-content">
+            <div class="type-card-name">{{ item.name }}</div>
+            <div class="type-card-desc">{{ item.description }}</div>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
 
     <!-- 编辑对话框 -->
     <el-dialog v-model="dialogVisible" :title="dialogTitle" width="600px" :close-on-click-modal="false">
@@ -398,6 +409,61 @@ onMounted(() => {
             }
           }
         }
+      }
+    }
+  }
+}
+
+.type-select-cards {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+
+  .type-card {
+    flex: 1;
+    border: 1px solid var(--el-border-color-light, #e4e7ed);
+    border-radius: 8px;
+    padding: 20px 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    &:hover {
+      border-color: var(--el-color-primary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .type-card-image {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .type-card-content {
+      .type-card-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--el-text-color-primary, #303133);
+        margin-bottom: 8px;
+      }
+
+      .type-card-desc {
+        font-size: 12px;
+        color: var(--el-text-color-secondary, #909399);
+        line-height: 1.4;
       }
     }
   }

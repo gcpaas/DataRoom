@@ -42,6 +42,29 @@ const uploadRef = ref<InstanceType<typeof ElUpload>>()
 const uploadUrl = `${import.meta.env.VITE_API_BASE_URL}/dataRoom/resource/upload`
 const resourceBaseUrl = import.meta.env.VITE_RESOURCE_BASE_URL || ''
 
+// 新增类型选择对话框
+const typeSelectDialogVisible = ref(false)
+const resourceTypeOptions = [
+  {
+    type: 'directory',
+    name: '目录',
+    description: '创建文件夹来归类管理资源',
+    icon: Folder
+  },
+  {
+    type: 'image',
+    name: '图片',
+    description: '上传JPG、PNG等格式图片',
+    icon: Picture
+  },
+  {
+    type: 'video',
+    name: '视频',
+    description: '上传MP4等格式的视频文件',
+    icon: VideoCamera
+  }
+]
+
 // 上传请求头，携带token
 const uploadHeaders = computed(() => {
   const cookieName = getCookieName()
@@ -84,25 +107,20 @@ const getResourceList = () => {
   }
 }
 
-// 上传资源
-const handleUpload = (command?: string) => {
-  if (command === 'directory') {
-    // 对于目录，直接弹出对话框让用户输入名称，不需要上传文件
-    editingResource.value = {
-      name: '',
-      resourceType: ResourceType.DIRECTORY,
-      parentCode: currentParentCode.value
-    }
-    uploadDialogVisible.value = true
-  } else {
-    // 对于图片和视频，需要上传文件
-    editingResource.value = {
-      name: '',
-      resourceType: command === 'video' ? ResourceType.VIDEO : ResourceType.IMAGE,
-      parentCode: currentParentCode.value
-    }
-    uploadDialogVisible.value = true
+// 打开新增类型选择对话框
+const handleAdd = () => {
+  typeSelectDialogVisible.value = true
+}
+
+// 选择资源类型后打开对应的新增表单
+const handleSelectType = (type: string) => {
+  typeSelectDialogVisible.value = false
+  editingResource.value = {
+    name: '',
+    resourceType: type === 'directory' ? ResourceType.DIRECTORY : type === 'video' ? ResourceType.VIDEO : ResourceType.IMAGE,
+    parentCode: currentParentCode.value
   }
+  uploadDialogVisible.value = true
 }
 
 // 编辑资源
@@ -234,23 +252,6 @@ const getTypeName = (resourceType: string) => {
 }
 
 /**
- * 获取类型图标
- * @param resourceType
- */
-const getTypeIcon = (resourceType: string) => {
-  switch (resourceType) {
-    case ResourceType.DIRECTORY:
-      return Folder
-    case ResourceType.IMAGE:
-      return Picture
-    case ResourceType.VIDEO:
-      return VideoCamera
-    default:
-      return null
-  }
-}
-
-/**
  * 获取默认占位图
  * @param resourceType
  */
@@ -330,27 +331,7 @@ onMounted(() => {
       </div>
       <div class="button-group">
         <el-button :icon="Search" @click="getResourceList">查询</el-button>
-        <el-dropdown trigger="click" @command="handleUpload">
-          <el-button type="primary" :icon="Plus">
-            新增<el-icon class="el-icon--right"><arrow-down /></el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="directory">
-                <el-icon><Folder /></el-icon>
-                <span>目录</span>
-              </el-dropdown-item>
-              <el-dropdown-item command="image">
-                <el-icon><Picture /></el-icon>
-                <span>图片</span>
-              </el-dropdown-item>
-              <el-dropdown-item command="video">
-                <el-icon><VideoCamera /></el-icon>
-                <span>视频</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <el-button type="primary" :icon="Plus" @click="handleAdd">新增</el-button>
       </div>
       <div class="breadcrumb-box">
         <el-breadcrumb separator="/">
@@ -458,6 +439,29 @@ onMounted(() => {
         <el-empty :image-size="200" v-if="!loading && resourceList.length === 0" description="暂无资源" />
       </el-scrollbar>
     </div>
+
+    <!-- 新增类型选择对话框 -->
+    <el-dialog
+      title="选择资源类型"
+      v-model="typeSelectDialogVisible"
+      width="560px"
+      :close-on-click-modal="true"
+    >
+      <div class="type-select-cards">
+        <div
+          class="type-card"
+          v-for="item in resourceTypeOptions"
+          :key="item.type"
+          @click="handleSelectType(item.type)"
+        >
+          <div class="type-card-icon">
+            <el-icon :size="32"><component :is="item.icon" /></el-icon>
+          </div>
+          <div class="type-card-name">{{ item.name }}</div>
+          <div class="type-card-desc">{{ item.description }}</div>
+        </div>
+      </div>
+    </el-dialog>
 
     <!-- 上传/编辑对话框 -->
     <el-dialog
@@ -695,6 +699,62 @@ onMounted(() => {
           }
         }
       }
+    }
+  }
+}
+
+.type-select-cards {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  padding: 16px 0;
+
+  .type-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+    border: 1px solid var(--el-border-color-light, #e4e7ed);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      border-color: var(--el-color-primary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .type-card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--el-color-primary-light-9, #ecf5ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      color: var(--el-color-primary);
+    }
+
+    .type-card-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--el-text-color-primary, #303133);
+      margin-bottom: 8px;
+    }
+
+    .type-card-desc {
+      font-size: 12px;
+      color: var(--el-text-color-secondary, #909399);
+      text-align: center;
+      line-height: 1.4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
   }
 }

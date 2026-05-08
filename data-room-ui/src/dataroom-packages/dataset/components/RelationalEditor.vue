@@ -263,7 +263,7 @@ defineExpose({
         </el-table>
       </div>
     </el-form-item>
-    <el-form-item label="字段说明">
+    <el-form-item label="字段列表">
       <div style="width: 100%">
         <el-table :data="formData.outputList" border style="width: 100%">
           <el-table-column prop="name" label="字段名" width="200" />

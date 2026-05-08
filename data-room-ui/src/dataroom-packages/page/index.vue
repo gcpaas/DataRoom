@@ -10,6 +10,31 @@ import directoryPlaceholder from './assets/image/目录占位符.png'
 import {PageType} from "@/dataroom-packages/constant/PageType.ts";
 import {PageStatus} from "@/dataroom-packages/constant/PageStatus.ts";
 
+// 新增类型选择对话框
+const addDialogVisible = ref(false)
+
+interface AddTypeOption {
+  type: string
+  name: string
+  description: string
+  icon: typeof Folder
+}
+
+const addTypeOptions: AddTypeOption[] = [
+  {type: PageType.DIRECTORY, name: '目录', description: '用于分组管理页面和大屏资源', icon: Folder},
+  {type: PageType.VISUAL_SCREEN, name: '大屏', description: '可视化大屏数据展示设计', icon: Monitor},
+  {type: PageType.PAGE, name: '页面', description: '自定义仪表盘页面布局设计', icon: Document}
+]
+
+const handleShowAddDialog = () => {
+  addDialogVisible.value = true
+}
+
+const handleSelectType = (pageType: string) => {
+  addDialogVisible.value = false
+  handleAdd(pageType)
+}
+
 const router = useRouter()
 const searchName = ref('')
 const pageList = ref<PageEntity[]>([])
@@ -329,36 +354,7 @@ onMounted(() => {
       </div>
       <div class="button-group">
         <el-button :icon="Search" @click="getPageList">查询</el-button>
-        <el-dropdown trigger="click" @command="handleAdd">
-          <el-button type="primary" :icon="Plus">
-            新增
-            <el-icon class="el-icon--right">
-              <arrow-down/>
-            </el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="directory">
-                <el-icon>
-                  <Folder/>
-                </el-icon>
-                <span>目录</span>
-              </el-dropdown-item>
-              <el-dropdown-item command="visualScreen">
-                <el-icon>
-                  <Monitor/>
-                </el-icon>
-                <span>大屏</span>
-              </el-dropdown-item>
-              <el-dropdown-item command="page">
-                <el-icon>
-                  <Document/>
-                </el-icon>
-                <span>页面</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <el-button type="primary" :icon="Plus" @click="handleShowAddDialog">新增</el-button>
       </div>
       <div class="breadcrumb-box">
         <el-breadcrumb separator="/">
@@ -471,6 +467,24 @@ onMounted(() => {
         <el-empty :image-size="200" v-if="!loading && pageList.length === 0" description="暂无页面"/>
       </el-scrollbar>
     </div>
+
+    <!-- 新增类型选择对话框 -->
+    <el-dialog v-model="addDialogVisible" title="选择新增类型" width="560px" :close-on-click-modal="true">
+      <div class="add-type-cards">
+        <div
+          v-for="option in addTypeOptions"
+          :key="option.type"
+          class="add-type-card"
+          @click="handleSelectType(option.type)"
+        >
+          <el-icon class="add-type-icon">
+            <component :is="option.icon"/>
+          </el-icon>
+          <div class="add-type-name">{{ option.name }}</div>
+          <div class="add-type-desc">{{ option.description }}</div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -620,6 +634,49 @@ onMounted(() => {
           }
         }
       }
+    }
+  }
+}
+
+.add-type-cards {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+
+  .add-type-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+    border: 1px solid var(--el-border-color-light);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      border-color: var(--el-color-primary);
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .add-type-icon {
+      font-size: 36px;
+      color: var(--el-color-primary);
+      margin-bottom: 12px;
+    }
+
+    .add-type-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--el-text-color-primary);
+      margin-bottom: 8px;
+    }
+
+    .add-type-desc {
+      font-size: 12px;
+      color: var(--el-text-color-secondary);
+      text-align: center;
+      line-height: 1.4;
     }
   }
 }
