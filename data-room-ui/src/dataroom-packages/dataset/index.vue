@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, defineAsyncComponent, onMounted, ref} from 'vue'
+import {computed, defineAsyncComponent, nextTick, onMounted, ref} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {Delete, Document, Edit, Folder, MoreFilled, Plus, Rank, Refresh, Search} from '@element-plus/icons-vue'
 import {datasetApi, type DatasetEntity, type DatasetTreeNode} from './api'
@@ -195,6 +195,8 @@ const handleNodeClick = async (data: DatasetTreeNode, node: any) => {
     node.expanded = !node.expanded
     return
   }
+  // 手动设置高亮（因为 @click.stop 阻止了 el-tree 默认行为）
+  treeRef.value?.setCurrentKey(data.code)
   try {
     const detail = await datasetApi.detail(data.code!)
     selectedNode.value = detail
@@ -493,10 +495,73 @@ const loadDataSourceList = async () => {
   }
 }
 
+/**
+ * 自动展开第一个节点并激活第一个数据集
+ * 深度优先遍历树，展开目录节点，找到第一个非目录数据集后激活
+ */
+const autoActivateFirstDataset = async () => {
+  await nextTick()
+  if (!treeRef.value || treeData.value.length === 0) return
+
+  // 深度优先搜索：在给定节点列表中找到第一个数据集
+  const findFirstDataset = (nodes: DatasetTreeNode[]): DatasetTreeNode | null => {
+    for (const node of nodes) {
+      if (node.datasetType !== 'directory') {
+        return node
+      }
+      if (node.children && node.children.length > 0) {
+        const found = findFirstDataset(node.children)
+        if (found) return found
+      }
+    }
+    return null
+  }
+
+  // 逐个根节点尝试查找
+  for (const rootNode of treeData.value) {
+    let targetDataset: DatasetTreeNode | null = null
+
+    if (rootNode.datasetType !== 'directory') {
+      // 根节点本身就是数据集
+      targetDataset = rootNode
+    } else if (rootNode.children && rootNode.children.length > 0) {
+      // 展开根目录节点
+      const elNode = treeRef.value.getNode(rootNode.code)
+      if (elNode) elNode.expanded = true
+      // 在子节点中查找第一个数据集
+      targetDataset = findFirstDataset(rootNode.children)
+    }
+
+    if (targetDataset) {
+      // 展开所有祖先节点
+      const expandAncestors = (code: string) => {
+        const item = allDatasetList.value.find(d => d.code === code)
+        if (item?.parentCode && item.parentCode !== 'root') {
+          expandAncestors(item.parentCode)
+          const parentElNode = treeRef.value.getNode(item.parentCode)
+          if (parentElNode) parentElNode.expanded = true
+        }
+      }
+      expandAncestors(targetDataset.code!)
+
+      // 设置当前节点高亮
+      treeRef.value.setCurrentKey(targetDataset.code)
+
+      // 模拟点击激活该数据集
+      const elNode = treeRef.value.getNode(targetDataset.code)
+      if (elNode) {
+        handleNodeClick(targetDataset, elNode)
+      }
+      return
+    }
+  }
+}
+
 // 页面加载时初始化
-onMounted(() => {
-  loadTree()
+onMounted(async () => {
+  await loadTree()
   loadDataSourceList()
+  autoActivateFirstDataset()
 })
 
 // 测试按钮loading状态
@@ -557,6 +622,7 @@ const handleTestAndSave = async () => {
           node-key="code"
           :props="{ label: 'label', children: 'children' }"
           :expand-on-click-node="false"
+          highlight-current
           v-loading="loading"
         >
           <template #default="{ node, data }">

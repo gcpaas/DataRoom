@@ -36,7 +36,7 @@ export const dataSourceApi = {
    * 查询列表
    */
   list(params?: { name?: string }) {
-    return request.get<DataSourceEntity[]>('/dataRoom/dataSource/list', { params })
+    return request.get<DataSourceEntity[]>('/dataRoom/dataSource/list', params)
   },
 
   /**
