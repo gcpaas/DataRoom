@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, reactive} from 'vue'
+import {ref, reactive, onMounted} from 'vue'
 import {useRouter} from 'vue-router'
 import {ElMessage} from 'element-plus'
 import {User, Lock} from '@element-plus/icons-vue'
@@ -7,14 +7,20 @@ import {setCookie} from '@/dataroom-packages/_common/_cookie'
 import request from '@/dataroom-packages/_common/_request.ts'
 import {encryptByRsa} from '@/dataroom-packages/_common/_encrypt'
 import logo from '@/dataroom-packages/assets/logo.png'
+import axios from 'axios'
 
 const router = useRouter()
 
 // 表单数据
 const loginForm = reactive({
   username: '',
-  password: ''
+  password: '',
+  captchaCode: ''
 })
+
+// 验证码相关
+const captchaUrl = ref('')
+const captchaKey = ref('')
 
 // 表单验证规则
 const rules = {
@@ -25,11 +31,38 @@ const rules = {
   password: [
     {required: true, message: '请输入密码', trigger: 'blur'},
     {min: 8, max: 50, message: '密码长度在 8 到 50 个字符', trigger: 'blur'}
+  ],
+  captchaCode: [
+    {required: true, message: '请输入验证码', trigger: 'blur'}
   ]
 }
 
 const formRef = ref()
 const loading = ref(false)
+
+// 获取验证码
+const refreshCaptcha = async () => {
+  try {
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || ''
+    const response = await axios.get(`${baseUrl}/dataRoom/captcha/generate`, {
+      responseType: 'blob'
+    })
+    // 从响应头获取 captchaKey
+    captchaKey.value = response.headers['captcha-key'] || ''
+    // 将 blob 转为 URL 用于图片展示
+    if (captchaUrl.value) {
+      URL.revokeObjectURL(captchaUrl.value)
+    }
+    captchaUrl.value = URL.createObjectURL(response.data)
+  } catch (error) {
+    console.error('获取验证码失败:', error)
+  }
+}
+
+// 页面加载时获取验证码
+onMounted(() => {
+  refreshCaptcha()
+})
 
 // 根据时间生成问候语
 const getGreeting = () => {
@@ -69,10 +102,12 @@ const handleLogin = async () => {
           return
         }
 
-        // 调用登录接口
+        // 调用登录接口（携带验证码信息）
         const token = await request.post('/dataRoom/user/login', {
           username: loginForm.username,
-          password: encryptedPassword
+          password: encryptedPassword,
+          captchaKey: captchaKey.value,
+          captchaCode: loginForm.captchaCode
         })
 
         // 保存token到cookie
@@ -86,7 +121,9 @@ const handleLogin = async () => {
         }, 500)
       } catch (error: any) {
         console.error('登录失败:', error)
-        // 错误信息已在axios拦截器中处理
+        // 登录失败时刷新验证码
+        refreshCaptcha()
+        loginForm.captchaCode = ''
       } finally {
         loading.value = false
       }
@@ -147,6 +184,25 @@ const handleKeyPress = (event: KeyboardEvent) => {
               clearable
               :prefix-icon="Lock"
             />
+          </el-form-item>
+
+          <el-form-item prop="captchaCode">
+            <div class="captcha-wrapper">
+              <el-input
+                v-model="loginForm.captchaCode"
+                placeholder="请输入验证码"
+                size="large"
+                clearable
+                class="captcha-input"
+              />
+              <img
+                :src="captchaUrl"
+                alt="验证码"
+                class="captcha-image"
+                title="点击刷新验证码"
+                @click="refreshCaptcha"
+              />
+            </div>
           </el-form-item>
 
           <el-form-item>
@@ -298,6 +354,29 @@ const handleKeyPress = (event: KeyboardEvent) => {
 
           &:active {
             transform: translateY(0);
+          }
+        }
+
+        .captcha-wrapper {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          width: 100%;
+
+          .captcha-input {
+            flex: 1;
+          }
+
+          .captcha-image {
+            height: 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+            transition: opacity 0.3s;
+
+            &:hover {
+              opacity: 0.8;
+            }
           }
         }
       }

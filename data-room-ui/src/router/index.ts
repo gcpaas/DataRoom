@@ -34,6 +34,10 @@ const router = createRouter({
         path: 'dataset/index',
         name: 'dataset',
         component: () => import('@/dataroom-packages/dataset/index.vue'),
+      }, {
+        path: 'profile',
+        name: 'profile',
+        component: () => import('@/dataroom-packages/profile/index.vue'),
       }]
     },
     {

@@ -21,12 +21,16 @@ const isMenuActive = (path: string) => {
   return route.path.includes(path)
 }
 
-// 退出登录
-const handleLogout = () => {
-  // 删除cookie中的token
-  removeCookie()
-  // 跳转到登录页
-  router.push('/login')
+// 下拉菜单命令处理
+const handleCommand = (command: string) => {
+  if (command === 'logout') {
+    // 删除cookie中的token
+    removeCookie()
+    // 跳转到登录页
+    router.push('/login')
+  } else if (command === 'profile') {
+    router.push('/dataRoom/profile')
+  }
 }
 
 onMounted(() => {
@@ -48,7 +52,7 @@ onMounted(() => {
         <div class="item" :class="{active: isMenuActive('/dataRoom/dataset')}" @click="jumpMenu('/dataRoom/dataset/index')">数据集</div>
       </div>
       <div class="user">
-        <el-dropdown @command="handleLogout">
+        <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
             <img :src="userAvatar" class="user-avatar" alt="用户头像">
             {{ username }}
@@ -58,6 +62,7 @@ onMounted(() => {
           </span>
           <template #dropdown>
             <el-dropdown-menu>
+              <el-dropdown-item command="profile">个人信息</el-dropdown-item>
               <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
