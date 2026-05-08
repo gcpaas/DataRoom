@@ -16,11 +16,7 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.gccloud.gcpaas</groupId>
-            <artifactId>dataroom-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
     </dependencies>
 
     <build>
