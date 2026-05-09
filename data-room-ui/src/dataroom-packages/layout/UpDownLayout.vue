@@ -52,6 +52,7 @@ onMounted(() => {
         <div class="item" :class="{active: isMenuActive('/dataRoom/dataset')}" @click="jumpMenu('/dataRoom/dataset/index')">数据集</div>
         <div class="item" :class="{active: isMenuActive('/dataRoom/map')}" @click="jumpMenu('/dataRoom/map/index')">地图</div>
       </div>
+      <a class="help-link" href="https://www.yuque.com/gc-starter/dataroom-plus/start" target="_blank" rel="noopener noreferrer">帮助</a>
       <div class="user">
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
@@ -148,6 +149,23 @@ onMounted(() => {
             border-radius: 2px;
           }
         }
+      }
+    }
+
+    & .help-link {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--dr-text1);
+      text-decoration: none;
+      margin-right: 16px;
+      margin-left: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+      white-space: nowrap;
+      transition: opacity 0.3s ease;
+
+      &:hover {
+        opacity: 0.7;
       }
     }
 
