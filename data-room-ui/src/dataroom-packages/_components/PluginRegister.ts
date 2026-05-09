@@ -10,6 +10,16 @@ import {DrPieChartPlugin} from '@/dataroom-packages/components/DrPieChart/plugin
 import {DrBubbleChartPlugin} from '@/dataroom-packages/components/DrBubbleChart/plugin.ts'
 import {DrHorizontalBarChartPlugin} from '@/dataroom-packages/components/DrHorizontalBarChart/plugin.ts'
 import {DrRadarChartPlugin} from '@/dataroom-packages/components/DrRadarChart/plugin.ts'
+import {DrWordCloudPlugin} from '@/dataroom-packages/components/DrWordCloud/plugin.ts'
+import {DrGaugePlugin} from '@/dataroom-packages/components/DrGauge/plugin.ts'
+import {DrProgressBarPlugin} from '@/dataroom-packages/components/DrProgressBar/plugin.ts'
+import {DrInputPlugin} from '@/dataroom-packages/components/DrInput/plugin.ts'
+import {DrSelectPlugin} from '@/dataroom-packages/components/DrSelect/plugin.ts'
+import {DrRadioPlugin} from '@/dataroom-packages/components/DrRadio/plugin.ts'
+import {DrTabListPlugin} from '@/dataroom-packages/components/DrTabList/plugin.ts'
+import {DrIframePlugin} from '@/dataroom-packages/components/DrIframe/plugin.ts'
+import {DrVideoPlayerPlugin} from '@/dataroom-packages/components/DrVideoPlayer/plugin.ts'
+import {DrFullScreenPlugin} from '@/dataroom-packages/components/DrFullScreen/plugin.ts'
 import type {ComponentLibTagInterface} from "@/dataroom-packages/PageDesigner/type/ComponentLibTagInterface.ts";
 import {ComponentLibTagTypeConst} from "@/dataroom-packages/constant/ComponentLibTagTypeConst.ts";
 
@@ -71,7 +81,17 @@ const pluginList = [
   new DrPieChartPlugin([ComponentLibTagTypeConst.PIE]),
   new DrBubbleChartPlugin([ComponentLibTagTypeConst.SCATTER]),
   new DrHorizontalBarChartPlugin([ComponentLibTagTypeConst.BAR]),
-  new DrRadarChartPlugin([ComponentLibTagTypeConst.RADAR])
+  new DrRadarChartPlugin([ComponentLibTagTypeConst.RADAR]),
+  new DrWordCloudPlugin([ComponentLibTagTypeConst.TEXT]),
+  new DrGaugePlugin([ComponentLibTagTypeConst.GAUGE]),
+  new DrProgressBarPlugin([ComponentLibTagTypeConst.GAUGE]),
+  new DrInputPlugin([ComponentLibTagTypeConst.FORM]),
+  new DrSelectPlugin([ComponentLibTagTypeConst.FORM]),
+  new DrRadioPlugin([ComponentLibTagTypeConst.FORM]),
+  new DrTabListPlugin([ComponentLibTagTypeConst.FORM]),
+  new DrIframePlugin([ComponentLibTagTypeConst.MEDIA]),
+  new DrVideoPlayerPlugin([ComponentLibTagTypeConst.MEDIA]),
+  new DrFullScreenPlugin([ComponentLibTagTypeConst.FORM])
 ]
 
 export { pluginList, componentLibTagList }

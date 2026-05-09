@@ -23,6 +23,7 @@
     "axios": "^1.7.9",
     "codemirror": "^6.0.2",
     "echarts": "^6.0.0",
+    "echarts-wordcloud": "^2.1.0",
     "element-plus": "^2.13.0",
     "jsencrypt": "^3.5.4",
     "lodash": "^4.17.21",

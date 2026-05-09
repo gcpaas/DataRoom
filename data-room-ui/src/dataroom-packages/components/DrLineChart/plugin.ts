@@ -1,7 +1,6 @@
+import thumbnail from './images/line-chart.png'
 import {ChartPlugin} from "@/dataroom-packages/components/type/ChartPlugin.ts"
 import {DrConst} from "@/dataroom-packages/constant/DrConst.ts"
-
-const thumbnail = ''
 
 export class DrLineChartPlugin extends ChartPlugin {
   constructor(tags: string[]) {
