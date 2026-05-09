@@ -35,6 +35,10 @@ const router = createRouter({
         name: 'dataset',
         component: () => import('@/dataroom-packages/dataset/index.vue'),
       }, {
+        path: 'map/index',
+        name: 'map',
+        component: () => import('@/dataroom-packages/map/index.vue'),
+      }, {
         path: 'profile',
         name: 'profile',
         component: () => import('@/dataroom-packages/profile/index.vue'),
@@ -69,6 +73,6 @@ console.log(
   `font-size:18px;color:#666;vertical-align: bottom;margin-left:12px;`,
   config.version,
   `font-size:18px;color:#999;vertical-align: bottom;margin-left:15px;text-decoration: none;`,
-  `https://gitee.com/gcpaas/DataRoom-Plus`
-);
+  `https://gitee.com/gcpaas/DataRoom/tree/refactor.vue3/`,
+)
 export default router

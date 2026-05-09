@@ -50,6 +50,7 @@ onMounted(() => {
         <div class="item" :class="{active: isMenuActive('/dataRoom/resource')}" @click="jumpMenu('/dataRoom/resource/index')">素材库</div>
         <div class="item" :class="{active: isMenuActive('/dataRoom/dataSource')}" @click="jumpMenu('/dataRoom/dataSource/index')">数据源</div>
         <div class="item" :class="{active: isMenuActive('/dataRoom/dataset')}" @click="jumpMenu('/dataRoom/dataset/index')">数据集</div>
+        <div class="item" :class="{active: isMenuActive('/dataRoom/map')}" @click="jumpMenu('/dataRoom/map/index')">地图</div>
       </div>
       <div class="user">
         <el-dropdown @command="handleCommand">
