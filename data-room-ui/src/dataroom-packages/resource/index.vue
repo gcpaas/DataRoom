@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, nextTick } from 'vue'
 import { ElMessage, ElMessageBox, ElUpload } from 'element-plus'
 import { Search, Plus, MoreFilled, Folder, Picture, VideoCamera, Check } from '@element-plus/icons-vue'
 import { resourceApi, type ResourceEntity } from './api'
@@ -65,6 +65,22 @@ const resourceTypeOptions = [
   }
 ]
 
+// 图片详情弹框
+const imageDetailDialogVisible = ref(false)
+const imageDetailResource = ref<ResourceEntity | null>(null)
+const imageNaturalWidth = ref(0)
+const imageNaturalHeight = ref(0)
+const imageReUploadRef = ref<InstanceType<typeof ElUpload>>()
+
+// 视频详情弹框
+const videoDetailDialogVisible = ref(false)
+const videoDetailResource = ref<ResourceEntity | null>(null)
+const videoRef = ref<HTMLVideoElement | null>(null)
+const videoNaturalWidth = ref(0)
+const videoNaturalHeight = ref(0)
+const coverUploadRef = ref<InstanceType<typeof ElUpload>>()
+const capturingCover = ref(false)
+
 // 上传请求头，携带token
 const uploadHeaders = computed(() => {
   const cookieName = getCookieName()
@@ -83,6 +99,13 @@ const getResourceUrl = (url?: string) => {
   }
   // 否则拼接基础路径
   return `${resourceBaseUrl}${url}`
+}
+
+// 格式化文件大小
+const formatFileSize = (sizeInKB?: number) => {
+  if (!sizeInKB) return '未知'
+  if (sizeInKB < 1024) return `${sizeInKB.toFixed(2)} KB`
+  return `${(sizeInKB / 1024).toFixed(2)} MB`
 }
 
 /**
@@ -192,7 +215,7 @@ const handleCardClick = (item: ResourceEntity) => {
       getResourceList()
     }
   } else {
-    // 非选择模式：原有逻辑
+    // 非选择模式
     if (item.resourceType === ResourceType.DIRECTORY) {
       // 如果是目录,进入该目录
       currentParentCode.value = item.id || ''
@@ -201,11 +224,135 @@ const handleCardClick = (item: ResourceEntity) => {
         name: item.name
       })
       getResourceList()
-    } else {
-      // 对于图片或视频，可能需要预览或其他操作
-      // 暂时不做任何操作，或者可以实现预览功能
-      console.log('点击了非目录资源:', item)
+    } else if (item.resourceType === ResourceType.IMAGE) {
+      openImageDetail(item)
+    } else if (item.resourceType === ResourceType.VIDEO) {
+      openVideoDetail(item)
     }
+  }
+}
+
+// 打开图片详情弹框
+const openImageDetail = (item: ResourceEntity) => {
+  imageDetailResource.value = { ...item }
+  imageNaturalWidth.value = 0
+  imageNaturalHeight.value = 0
+  imageDetailDialogVisible.value = true
+  // 获取图片尺寸
+  if (item.url) {
+    const img = new Image()
+    img.onload = () => {
+      imageNaturalWidth.value = img.naturalWidth
+      imageNaturalHeight.value = img.naturalHeight
+    }
+    img.src = getResourceUrl(item.url)
+  }
+}
+
+// 图片重新上传成功
+const handleImageReUploadSuccess = (response: any) => {
+  if (response) {
+    const res = response.data as ResourceEntity
+    imageDetailResource.value = {
+      ...imageDetailResource.value!,
+      originalName: res.originalName,
+      path: res.path,
+      url: res.url,
+      size: res.size
+    }
+    // 更新到数据库
+    resourceApi.update(imageDetailResource.value!).then(() => {
+      ElMessage.success('图片更新成功')
+      getResourceList()
+      // 重新获取图片尺寸
+      if (imageDetailResource.value?.url) {
+        const img = new Image()
+        img.onload = () => {
+          imageNaturalWidth.value = img.naturalWidth
+          imageNaturalHeight.value = img.naturalHeight
+        }
+        img.src = getResourceUrl(imageDetailResource.value.url)
+      }
+    })
+  }
+}
+
+// 打开视频详情弹框
+const openVideoDetail = (item: ResourceEntity) => {
+  videoDetailResource.value = { ...item }
+  videoNaturalWidth.value = 0
+  videoNaturalHeight.value = 0
+  videoDetailDialogVisible.value = true
+  nextTick(() => {
+    if (videoRef.value) {
+      videoRef.value.addEventListener('loadedmetadata', () => {
+        videoNaturalWidth.value = videoRef.value!.videoWidth
+        videoNaturalHeight.value = videoRef.value!.videoHeight
+      })
+    }
+  })
+}
+
+// 视频截图作为封面
+const handleVideoCapturecover = () => {
+  if (!videoRef.value) return
+  capturingCover.value = true
+  const video = videoRef.value
+  const canvas = document.createElement('canvas')
+  canvas.width = video.videoWidth
+  canvas.height = video.videoHeight
+  const ctx = canvas.getContext('2d')!
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+  canvas.toBlob((blob) => {
+    if (!blob) {
+      ElMessage.error('截图失败')
+      capturingCover.value = false
+      return
+    }
+    const formData = new FormData()
+    formData.append('file', blob, `cover_${Date.now()}.png`)
+    // 上传截图
+    const cookieName = getCookieName()
+    const cookieValue = getCookie(cookieName)
+    fetch(uploadUrl, {
+      method: 'POST',
+      headers: { [cookieName]: cookieValue },
+      body: formData
+    })
+      .then(res => res.json())
+      .then(response => {
+        const res = response.data as ResourceEntity
+        videoDetailResource.value = {
+          ...videoDetailResource.value!,
+          thumbnail: res.url
+        }
+        // 更新到数据库
+        resourceApi.update(videoDetailResource.value!).then(() => {
+          ElMessage.success('封面更新成功')
+          capturingCover.value = false
+          getResourceList()
+        })
+      })
+      .catch(() => {
+        ElMessage.error('封面上传失败')
+        capturingCover.value = false
+      })
+  }, 'image/png')
+}
+
+// 手动上传封面成功
+const handleCoverUploadSuccess = (response: any) => {
+  if (response) {
+    const res = response.data as ResourceEntity
+    videoDetailResource.value = {
+      ...videoDetailResource.value!,
+      thumbnail: res.url
+    }
+    // 更新到数据库
+    resourceApi.update(videoDetailResource.value!).then(() => {
+      ElMessage.success('封面更新成功')
+      getResourceList()
+    })
   }
 }
 
@@ -387,10 +534,10 @@ onMounted(() => {
               </el-image>
               <el-image
                 v-else-if="item.resourceType === ResourceType.VIDEO"
-                :src="getDefaultPlaceholder(item.resourceType)"
+                :src="item.thumbnail ? getResourceUrl(item.thumbnail) : getDefaultPlaceholder(item.resourceType)"
                 :lazy="true"
-                fit="contain"
-                class="thumbnail-image video"
+                :fit="item.thumbnail ? 'cover' : 'contain'"
+                :class="['thumbnail-image', item.thumbnail ? '' : 'video']"
               >
                 <template #error>
                   <div class="image-error">
@@ -519,6 +666,131 @@ onMounted(() => {
           确定
         </el-button>
       </template>
+    </el-dialog>
+
+    <!-- 图片详情弹框 -->
+    <el-dialog
+      :title="`${imageDetailResource?.name || ''}–详情`"
+      v-model="imageDetailDialogVisible"
+      width="720px"
+      :close-on-click-modal="true"
+      destroy-on-close
+    >
+      <div class="image-detail-content">
+        <div class="image-detail-preview">
+          <el-image
+            :src="getResourceUrl(imageDetailResource?.url)"
+            fit="contain"
+            class="detail-image"
+          />
+        </div>
+        <div class="image-detail-info">
+          <h3>文件信息</h3>
+          <div class="info-item">
+            <span class="info-label">文件名称：</span>
+            <span class="info-value">{{ imageDetailResource?.name }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">文件大小：</span>
+            <span class="info-value">{{ formatFileSize(imageDetailResource?.size) }}</span>
+          </div>
+          <div class="info-item" v-if="imageNaturalWidth && imageNaturalHeight">
+            <span class="info-label">文件尺寸：</span>
+            <span class="info-value">{{ imageNaturalWidth }} x {{ imageNaturalHeight }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">上传时间：</span>
+            <span class="info-value">{{ imageDetailResource?.createDate || '未知' }}</span>
+          </div>
+          <div class="image-detail-actions">
+            <el-upload
+              ref="imageReUploadRef"
+              :action="uploadUrl"
+              :headers="uploadHeaders"
+              :on-success="handleImageReUploadSuccess"
+              :on-error="handleUploadError"
+              :auto-upload="true"
+              :show-file-list="false"
+              accept="image/*"
+            >
+              <template #trigger>
+                <el-button type="primary">重新上传</el-button>
+              </template>
+            </el-upload>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+
+    <!-- 视频详情弹框 -->
+    <el-dialog
+      :title="`${videoDetailResource?.name || ''}–详情`"
+      v-model="videoDetailDialogVisible"
+      width="800px"
+      :close-on-click-modal="true"
+      destroy-on-close
+    >
+      <div class="video-detail-content">
+        <div class="video-detail-left">
+          <div class="video-detail-player">
+            <video
+              ref="videoRef"
+              :src="getResourceUrl(videoDetailResource?.url)"
+              controls
+              class="detail-video"
+              crossorigin="anonymous"
+            />
+          </div>
+          <div class="video-detail-info">
+            <h3>文件信息</h3>
+            <div class="info-item">
+              <span class="info-label">文件名称：</span>
+              <span class="info-value">{{ videoDetailResource?.name }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">文件大小：</span>
+              <span class="info-value">{{ formatFileSize(videoDetailResource?.size) }}</span>
+            </div>
+            <div class="info-item" v-if="videoNaturalWidth && videoNaturalHeight">
+              <span class="info-label">文件尺寸：</span>
+              <span class="info-value">{{ videoNaturalWidth }} x {{ videoNaturalHeight }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">上传时间：</span>
+              <span class="info-value">{{ videoDetailResource?.createDate || '未知' }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="video-detail-right">
+          <h3>封面</h3>
+          <div class="cover-preview">
+            <el-image
+              v-if="videoDetailResource?.thumbnail"
+              :src="getResourceUrl(videoDetailResource.thumbnail)"
+              fit="contain"
+              class="cover-image"
+            />
+            <div v-else class="cover-empty">暂无封面</div>
+          </div>
+          <div class="cover-actions">
+            <el-button type="primary" :loading="capturingCover" @click="handleVideoCapturecover">截取封面</el-button>
+            <el-upload
+              ref="coverUploadRef"
+              :action="uploadUrl"
+              :headers="uploadHeaders"
+              :on-success="handleCoverUploadSuccess"
+              :on-error="handleUploadError"
+              :auto-upload="true"
+              :show-file-list="false"
+              accept="image/*"
+            >
+              <template #trigger>
+                <el-button>上传封面</el-button>
+              </template>
+            </el-upload>
+          </div>
+        </div>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -755,6 +1027,148 @@ onMounted(() => {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
+    }
+  }
+}
+
+.image-detail-content {
+  display: flex;
+  gap: 24px;
+
+  .image-detail-preview {
+    flex: 1;
+    min-width: 0;
+    background: #f5f7fa;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    min-height: 300px;
+
+    .detail-image {
+      max-width: 100%;
+      max-height: 400px;
+    }
+  }
+
+  .image-detail-info {
+    width: 220px;
+    flex-shrink: 0;
+
+    h3 {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--el-text-color-primary, #303133);
+    }
+
+    .info-item {
+      margin-bottom: 12px;
+      font-size: 14px;
+      line-height: 1.6;
+
+      .info-label {
+        color: var(--el-text-color-secondary, #909399);
+      }
+
+      .info-value {
+        color: var(--el-text-color-primary, #303133);
+      }
+    }
+
+    .image-detail-actions {
+      margin-top: 24px;
+    }
+  }
+}
+
+.video-detail-content {
+  display: flex;
+  gap: 24px;
+
+  .video-detail-left {
+    flex: 1;
+    min-width: 0;
+
+    .video-detail-player {
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+
+      .detail-video {
+        width: 100%;
+        max-height: 320px;
+        display: block;
+      }
+    }
+
+    .video-detail-info {
+      h3 {
+        margin: 0 0 12px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--el-text-color-primary, #303133);
+      }
+
+      .info-item {
+        margin-bottom: 8px;
+        font-size: 14px;
+        line-height: 1.6;
+
+        .info-label {
+          color: var(--el-text-color-secondary, #909399);
+        }
+
+        .info-value {
+          color: var(--el-text-color-primary, #303133);
+        }
+      }
+    }
+  }
+
+  .video-detail-right {
+    width: 200px;
+    flex-shrink: 0;
+
+    h3 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--el-text-color-primary, #303133);
+    }
+
+    .cover-preview {
+      width: 100%;
+      height: 140px;
+      background: #f5f7fa;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+
+      .cover-image {
+        width: 100%;
+        height: 100%;
+      }
+
+      .cover-empty {
+        color: var(--el-text-color-secondary, #909399);
+        font-size: 14px;
+      }
+    }
+
+    .cover-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .el-button {
+        width: 100%;
+      }
     }
   }
 }
