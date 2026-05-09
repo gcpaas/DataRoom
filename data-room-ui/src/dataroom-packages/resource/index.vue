@@ -108,6 +108,15 @@ const formatFileSize = (sizeInKB?: number) => {
   return `${(sizeInKB / 1024).toFixed(2)} MB`
 }
 
+// 格式化日期时间为 yyyy-MM-dd HH:mm:ss
+const formatDateTime = (dateStr?: string) => {
+  if (!dateStr) return '未知'
+  const date = new Date(dateStr)
+  if (isNaN(date.getTime())) return dateStr
+  const pad = (n: number) => n.toString().padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+}
+
 /**
  * 查询
  */
@@ -700,7 +709,7 @@ onMounted(() => {
           </div>
           <div class="info-item">
             <span class="info-label">上传时间：</span>
-            <span class="info-value">{{ imageDetailResource?.createDate || '未知' }}</span>
+            <span class="info-value">{{ formatDateTime(imageDetailResource?.createDate) }}</span>
           </div>
           <div class="image-detail-actions">
             <el-upload
@@ -726,7 +735,7 @@ onMounted(() => {
     <el-dialog
       :title="`${videoDetailResource?.name || ''}–详情`"
       v-model="videoDetailDialogVisible"
-      width="800px"
+      width="860px"
       :close-on-click-modal="true"
       destroy-on-close
     >
@@ -741,6 +750,8 @@ onMounted(() => {
               crossorigin="anonymous"
             />
           </div>
+        </div>
+        <div class="video-detail-right">
           <div class="video-detail-info">
             <h3>文件信息</h3>
             <div class="info-item">
@@ -757,37 +768,37 @@ onMounted(() => {
             </div>
             <div class="info-item">
               <span class="info-label">上传时间：</span>
-              <span class="info-value">{{ videoDetailResource?.createDate || '未知' }}</span>
+              <span class="info-value">{{ formatDateTime(videoDetailResource?.createDate) }}</span>
             </div>
           </div>
-        </div>
-        <div class="video-detail-right">
-          <h3>封面</h3>
-          <div class="cover-preview">
-            <el-image
-              v-if="videoDetailResource?.thumbnail"
-              :src="getResourceUrl(videoDetailResource.thumbnail)"
-              fit="contain"
-              class="cover-image"
-            />
-            <div v-else class="cover-empty">暂无封面</div>
-          </div>
-          <div class="cover-actions">
-            <el-button type="primary" :loading="capturingCover" @click="handleVideoCapturecover">截取封面</el-button>
-            <el-upload
-              ref="coverUploadRef"
-              :action="uploadUrl"
-              :headers="uploadHeaders"
-              :on-success="handleCoverUploadSuccess"
-              :on-error="handleUploadError"
-              :auto-upload="true"
-              :show-file-list="false"
-              accept="image/*"
-            >
-              <template #trigger>
-                <el-button>上传封面</el-button>
-              </template>
-            </el-upload>
+          <div class="video-detail-cover">
+            <h3>封面信息</h3>
+            <div class="cover-preview">
+              <el-image
+                v-if="videoDetailResource?.thumbnail"
+                :src="getResourceUrl(videoDetailResource.thumbnail)"
+                fit="contain"
+                class="cover-image"
+              />
+              <div v-else class="cover-empty">暂无封面</div>
+            </div>
+            <div class="cover-actions">
+              <el-button type="primary" :loading="capturingCover" @click="handleVideoCapturecover">截取封面</el-button>
+              <el-upload
+                ref="coverUploadRef"
+                :action="uploadUrl"
+                :headers="uploadHeaders"
+                :on-success="handleCoverUploadSuccess"
+                :on-error="handleUploadError"
+                :auto-upload="true"
+                :show-file-list="false"
+                accept="image/*"
+              >
+                <template #trigger>
+                  <el-button>上传封面</el-button>
+                </template>
+              </el-upload>
+            </div>
           </div>
         </div>
       </div>
@@ -863,13 +874,16 @@ onMounted(() => {
         .card-thumbnail {
           width: 100%;
           height: 180px;
-          background: var(--dr-bg2);
+          background-color: #f8f9fa;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 4v4M4 6h4' stroke='%23dcdfe6' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+          background-size: 12px 12px;
           display: flex;
           align-items: center;
           justify-content: center;
           padding: 16px;
           overflow: hidden;
           position: relative;
+          box-sizing: border-box;
 
           .selection-overlay {
             position: absolute;
@@ -891,8 +905,8 @@ onMounted(() => {
           }
 
           .thumbnail-image {
-            width: 100%;
-            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
 
             .image-error {
               width: 100%;
@@ -1086,34 +1100,45 @@ onMounted(() => {
 .video-detail-content {
   display: flex;
   gap: 24px;
+  align-items: stretch;
 
   .video-detail-left {
     flex: 1;
     min-width: 0;
 
     .video-detail-player {
+      width: 100%;
+      height: 100%;
       background: #000;
       border-radius: 8px;
       overflow: hidden;
-      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
 
       .detail-video {
         width: 100%;
-        max-height: 320px;
         display: block;
       }
     }
+  }
+
+  .video-detail-right {
+    width: 260px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     .video-detail-info {
       h3 {
-        margin: 0 0 12px 0;
+        margin: 0 0 10px 0;
         font-size: 16px;
         font-weight: 600;
         color: var(--el-text-color-primary, #303133);
       }
 
       .info-item {
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         font-size: 14px;
         line-height: 1.6;
 
@@ -1126,48 +1151,42 @@ onMounted(() => {
         }
       }
     }
-  }
 
-  .video-detail-right {
-    width: 200px;
-    flex-shrink: 0;
-
-    h3 {
-      margin: 0 0 12px 0;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--el-text-color-primary, #303133);
-    }
-
-    .cover-preview {
-      width: 100%;
-      height: 140px;
-      background: #f5f7fa;
-      border-radius: 8px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 12px;
-
-      .cover-image {
-        width: 100%;
-        height: 100%;
+    .video-detail-cover {
+      h3 {
+        margin: 0 0 8px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--el-text-color-primary, #303133);
       }
 
-      .cover-empty {
-        color: var(--el-text-color-secondary, #909399);
-        font-size: 14px;
-      }
-    }
-
-    .cover-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-
-      .el-button {
+      .cover-preview {
         width: 100%;
+        height: 90px;
+        background: #f5f7fa;
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+
+        .cover-image {
+          width: 100%;
+          height: 100%;
+        }
+
+        .cover-empty {
+          color: var(--el-text-color-secondary, #909399);
+          font-size: 14px;
+        }
+      }
+
+      .cover-actions {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
       }
     }
   }

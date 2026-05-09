@@ -356,7 +356,9 @@ onMounted(() => {
         .card-thumbnail {
           height: 180px;
           padding: 16px;
-          background: var(--dr-bg2);
+          background-color: #f8f9fa;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 4v4M4 6h4' stroke='%23dcdfe6' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+          background-size: 12px 12px;
           display: flex;
           align-items: center;
           justify-content: center;
