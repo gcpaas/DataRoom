@@ -41,7 +41,7 @@ const filterPluginList = computed(() => {
         <div class="image">
           <el-image :src="plugin.thumbnail" lazy fit="contain" />
         </div>
-        <div class="desc">{{ plugin.desc }}</div>
+        <div class="desc">{{ plugin.name }}</div>
       </div>
     </div>
   </div>
