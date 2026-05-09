@@ -4,6 +4,12 @@
 import {DrTextPlugin} from '@/dataroom-packages/components/DrText/plugin.ts'
 import {DrImagePlugin} from '@/dataroom-packages/components/DrImage/plugin.ts'
 import {DrBarChartPlugin} from '@/dataroom-packages/components/DrBarChart/plugin.ts'
+import {DrLineChartPlugin} from '@/dataroom-packages/components/DrLineChart/plugin.ts'
+import {DrAreaChartPlugin} from '@/dataroom-packages/components/DrAreaChart/plugin.ts'
+import {DrPieChartPlugin} from '@/dataroom-packages/components/DrPieChart/plugin.ts'
+import {DrBubbleChartPlugin} from '@/dataroom-packages/components/DrBubbleChart/plugin.ts'
+import {DrHorizontalBarChartPlugin} from '@/dataroom-packages/components/DrHorizontalBarChart/plugin.ts'
+import {DrRadarChartPlugin} from '@/dataroom-packages/components/DrRadarChart/plugin.ts'
 import type {ComponentLibTagInterface} from "@/dataroom-packages/PageDesigner/type/ComponentLibTagInterface.ts";
 import {ComponentLibTagTypeConst} from "@/dataroom-packages/constant/ComponentLibTagTypeConst.ts";
 
@@ -59,7 +65,13 @@ const componentLibTagList: ComponentLibTagInterface[] = [
 const pluginList = [
   new DrTextPlugin([ComponentLibTagTypeConst.TEXT]),
   new DrImagePlugin([ComponentLibTagTypeConst.MEDIA]),
-  new DrBarChartPlugin([ComponentLibTagTypeConst.BAR])
+  new DrBarChartPlugin([ComponentLibTagTypeConst.BAR]),
+  new DrLineChartPlugin([ComponentLibTagTypeConst.LINE]),
+  new DrAreaChartPlugin([ComponentLibTagTypeConst.LINE]),
+  new DrPieChartPlugin([ComponentLibTagTypeConst.PIE]),
+  new DrBubbleChartPlugin([ComponentLibTagTypeConst.SCATTER]),
+  new DrHorizontalBarChartPlugin([ComponentLibTagTypeConst.BAR]),
+  new DrRadarChartPlugin([ComponentLibTagTypeConst.RADAR])
 ]
 
 export { pluginList, componentLibTagList }
