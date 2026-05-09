@@ -240,9 +240,10 @@ const handleKeyPress = (event: KeyboardEvent) => {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--dr-primary) 0%, color-mix(in srgb, var(--dr-primary) 80%, #764ba2) 100%);
+  background: #f7f8fa;
   display: flex;
   flex-direction: column;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   .login-header {
     position: absolute;
@@ -259,14 +260,13 @@ const handleKeyPress = (event: KeyboardEvent) => {
 
       .logo {
         height: 32px;
-        filter: brightness(0) invert(1);
       }
 
       .title {
-        font-size: 24px;
+        font-size: 18px;
         font-weight: 600;
-        color: #ffffff;
-        letter-spacing: 0.5px;
+        color: #1d2129;
+        letter-spacing: -0.2px;
       }
     }
   }
@@ -282,34 +282,37 @@ const handleKeyPress = (event: KeyboardEvent) => {
     .login-box {
       width: 100%;
       max-width: 420px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
+      background: #ffffff;
+      border-radius: 8px;
       padding: 48px 40px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      animation: slideUp 0.6s ease-out;
+      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08),
+        0px 4px 8px rgba(0, 0, 0, 0.06),
+        0px 1px 3px rgba(0, 0, 0, 0.04);
+      animation: slideUp 0.4s ease-out;
 
       .login-title {
         text-align: center;
-        margin-bottom: 40px;
+        margin-bottom: 36px;
 
         h2 {
           font-size: 28px;
           font-weight: 600;
-          color: #1a1a1a;
-          margin: 0 0 12px 0;
+          color: #1d2129;
+          margin: 0 0 10px 0;
+          letter-spacing: -0.84px;
         }
 
         p {
           font-size: 14px;
-          color: #666;
+          font-weight: 400;
+          color: #4e5969;
           margin: 0;
         }
       }
 
       .login-form {
         :deep(.el-form-item) {
-          margin-bottom: 24px;
+          margin-bottom: 22px;
 
           &:last-child {
             margin-bottom: 0;
@@ -318,42 +321,50 @@ const handleKeyPress = (event: KeyboardEvent) => {
 
         :deep(.el-input) {
           .el-input__wrapper {
-            padding: 12px 16px;
-            border-radius: 8px;
-            box-shadow: 0 0 0 1px #e0e0e0 inset;
-            transition: all 0.3s;
+            padding: 10px 14px;
+            border-radius: 6px;
+            box-shadow: none;
+            border: 1px solid #e5e6eb;
+            transition: border-color 0.2s, box-shadow 0.2s;
 
             &:hover {
-              box-shadow: 0 0 0 1px var(--dr-primary) inset;
+              border-color: #c9cdd4;
             }
 
             &.is-focus {
-              box-shadow: 0 0 0 1px var(--dr-primary) inset;
+              border-color: #3478f6;
+              box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3478f6;
             }
           }
 
           .el-input__inner {
             font-size: 14px;
+            font-weight: 400;
+            color: #1d2129;
+
+            &::placeholder {
+              color: #86909c;
+            }
           }
         }
 
         .login-button {
           width: 100%;
-          height: 48px;
-          font-size: 16px;
+          height: 44px;
+          font-size: 15px;
           font-weight: 500;
-          border-radius: 8px;
-          background: var(--dr-primary);
+          border-radius: 6px;
+          background: #3478f6;
           border: none;
-          transition: all 0.3s;
+          color: #ffffff;
+          transition: background-color 0.2s;
 
           &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px var(--dr-primary2);
+            background: #2563eb;
           }
 
           &:active {
-            transform: translateY(0);
+            background: #1d4ed8;
           }
         }
 
@@ -371,8 +382,9 @@ const handleKeyPress = (event: KeyboardEvent) => {
             height: 40px;
             border-radius: 6px;
             cursor: pointer;
-            border: 1px solid #e0e0e0;
-            transition: opacity 0.3s;
+            box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+            border: none;
+            transition: opacity 0.2s;
 
             &:hover {
               opacity: 0.8;
@@ -395,58 +407,22 @@ const handleKeyPress = (event: KeyboardEvent) => {
     p {
       margin: 0;
       font-size: 13px;
-      color: rgba(255, 255, 255, 0.6);
+      font-weight: 400;
+      color: #86909c;
     }
   }
 
-  // 背景装饰
+  // Background decoration - hidden per design system (no decorative elements)
   .bg-decoration {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 1;
-
-    .circle {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      animation: float 20s infinite ease-in-out;
-
-      &.circle-1 {
-        width: 300px;
-        height: 300px;
-        top: -100px;
-        right: -100px;
-        animation-delay: 0s;
-      }
-
-      &.circle-2 {
-        width: 200px;
-        height: 200px;
-        bottom: -50px;
-        left: -50px;
-        animation-delay: 3s;
-      }
-
-      &.circle-3 {
-        width: 150px;
-        height: 150px;
-        top: 50%;
-        right: 20%;
-        animation-delay: 6s;
-      }
-    }
+    display: none;
   }
 }
 
-// 动画
+// Animation - subtle slideUp
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -454,16 +430,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
   }
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(180deg);
-  }
-}
-
-// 响应式设计
+// Responsive design
 @media (max-width: 768px) {
   .login-container {
     .login-header {
@@ -471,23 +438,23 @@ const handleKeyPress = (event: KeyboardEvent) => {
 
       .logo-wrapper {
         .logo {
-          height: 32px;
+          height: 28px;
         }
 
         .title {
-          font-size: 20px;
+          font-size: 16px;
         }
       }
     }
 
     .login-content {
       .login-box {
-        padding: 32px 24px;
-        border-radius: 12px;
+        padding: 36px 24px;
 
         .login-title {
           h2 {
             font-size: 24px;
+            letter-spacing: -0.48px;
           }
 
           p {

@@ -547,23 +547,53 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 @use './assets/index.scss';
+
 // 拖拽背景样式
 :deep(.vue-grid-item.vue-grid-placeholder) {
   background: var(--dr-primary);
+  opacity: 0.15;
+  border-radius: var(--radius-md);
+}
+
+// Selected component outline
+:deep(.vue-grid-item.vue-grid-item.resizing),
+:deep(.vue-grid-item.vue-grid-item.vue-draggable-dragging) {
+  outline: 1px solid #3478f6;
+  outline-offset: 0;
+  z-index: 10;
+}
+
+// Hover outline for grid items (not selected)
+:deep(.vue-grid-item:hover:not(.resizing):not(.vue-draggable-dragging)) {
+  outline: 1px dashed #c9cdd4;
+  outline-offset: 0;
+}
+
+// Resize handles (square corners)
+:deep(.vue-grid-item > .vue-resizable-handle) {
+  width: 8px;
+  height: 8px;
+  background: #3478f6;
+  border: none;
+  border-radius: 0;
 }
 
 .dr-page-designer {
   display: grid;
   grid-template-rows: var(--dr-designer-header-height) auto;
-  height: 100vh; // 设置容器高度为视口高度
+  height: 100vh;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
   & .header {
-    background-color: white;
+    background-color: var(--dr-white);
     color: var(--dr-text1);
-    font-weight: 700;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--dr-border);
+    box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.08);
+    position: relative;
+    z-index: 10;
 
     & .header-left {
       display: flex;
@@ -580,7 +610,9 @@ onUnmounted(() => {
       & .title {
         margin-left: 16px;
         font-size: 14px;
+        font-weight: 500;
         cursor: pointer;
+        transition: color 0.2s;
 
         &:hover {
           color: var(--dr-primary);
@@ -590,30 +622,38 @@ onUnmounted(() => {
   }
 
   & .main {
-    background-color: var(--dr-bg2);
+    background-color: #f0f1f3;
     display: grid;
     grid-template-columns: var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width);
 
     & .left-tool-bar {
-      background-color: #fff;
-      border-right: 1px solid var(--dr-border);
+      background-color: var(--dr-white);
+      box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.08);
 
       & .bar {
         font-size: 12px;
+        font-weight: 500;
         text-align: center;
         margin: 4px auto;
         padding: 8px 0;
+        color: var(--dr-gray-500);
+        transition: all 0.2s;
 
         &:hover {
           cursor: pointer;
           background-color: var(--dr-bg2);
+          color: var(--dr-gray-700);
         }
       }
 
       & .active {
-        background-color: var(--dr-primary1);
+        background-color: var(--dr-blue-soft);
         color: var(--dr-primary);
         position: relative;
+
+        &:hover {
+          color: var(--dr-primary);
+        }
 
         &::before {
           content: '';
@@ -623,35 +663,41 @@ onUnmounted(() => {
           width: 3px;
           position: absolute;
           background-color: var(--dr-primary);
+          border-radius: 0 2px 2px 0;
         }
       }
     }
 
     & .left-tool-panel {
-      background-color: white;
+      background-color: var(--dr-white);
       display: grid;
       grid-template-rows: 40px auto;
       height: calc(100vh - var(--dr-designer-left-tool-panel-header-height));
-      border-right: 1px solid var(--dr-border);
+      box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.08);
 
       & .panel-header {
         background-color: var(--dr-bg2);
         box-sizing: border-box;
-        border-bottom: 1px solid var(--dr-border);
+        box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
         font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: var(--dr-gray-500);
         line-height: 40px;
         height: 40px;
         align-self: center;
-        padding-left: 8px;
-        // 关闭按钮
+        padding-left: 12px;
+
         & .close {
           position: absolute;
           height: 40px;
           line-height: 40px;
           right: 16px;
           top: 0px;
+          color: var(--dr-gray-400);
+          transition: color 0.2s;
 
-          & :hover {
+          &:hover {
             cursor: pointer;
             color: var(--dr-primary);
           }
@@ -659,7 +705,7 @@ onUnmounted(() => {
       }
 
       & .panel-body {
-        background-color: white;
+        background-color: var(--dr-white);
         overflow-y: hidden;
         padding: 8px 4px 16px 4px;
       }
@@ -667,26 +713,28 @@ onUnmounted(() => {
 
     & .canvas {
       display: grid;
-      background-color: var(--dr-bg2);
+      background-color: #f0f1f3;
       grid-template-rows: auto;
+      // Grid dots pattern
+      background-image: radial-gradient(circle, #d4d7de 1px, transparent 1px);
+      background-size: 16px 16px;
 
       & .canvas-main {
-        // 减去header 高度
         height: calc(100vh - var(--dr-designer-header-height));
-        // 使用了el-scroll
         overflow: hidden;
 
         & .chart-wrapper {
-          background-color: white;
+          background-color: var(--dr-white);
           height: 100%;
           width: 100%;
+          border-radius: var(--radius-sm);
         }
       }
     }
 
     & .right-panel {
-      background-color: white;
-      border-left: 1px solid var(--dr-border);
+      background-color: var(--dr-white);
+      box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.08);
       height: calc(100vh - var(--dr-designer-header-height));
     }
   }
@@ -699,17 +747,16 @@ onUnmounted(() => {
     transform: translateY(-50%);
     width: 16px;
     height: 50px;
-    background-color: white;
-    color: var(--dr-text);
-    border-radius: 5px 0 0 5px;
-    border-top: 1px solid var(--dr-border);
-    border-left: 1px solid var(--dr-border);
-    border-bottom: 1px solid var(--dr-border);
+    background-color: var(--dr-white);
+    color: var(--dr-gray-400);
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    box-shadow: var(--dr-shadow-sm);
+    transition: all 0.2s;
 
     &:hover {
       cursor: pointer;
       color: var(--dr-primary);
-      background-color: var(--dr-primary1);
+      background-color: var(--dr-blue-soft);
     }
   }
 }

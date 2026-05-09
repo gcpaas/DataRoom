@@ -314,20 +314,69 @@ onMounted(() => {
   display: flex;
   box-sizing: content-box;
   flex-direction: column;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   .page-header {
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
-    gap: 16px;
+    margin-bottom: var(--space-4);
+    gap: var(--space-4);
 
     .search-box {
       width: 300px;
+
+      :deep(.el-input__wrapper) {
+        border-radius: var(--radius-md);
+        box-shadow: none;
+        border: 1px solid var(--dr-gray-200);
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &:hover {
+          border-color: var(--dr-gray-400);
+        }
+
+        &.is-focus {
+          border-color: var(--dr-blue);
+          box-shadow: var(--dr-shadow-focus);
+        }
+      }
     }
 
     .button-group {
       display: flex;
-      gap: 8px;
+      gap: var(--space-2);
+
+      :deep(.el-button) {
+        border-radius: var(--radius-md);
+        font-weight: 500;
+      }
+
+      :deep(.el-button--primary) {
+        background-color: var(--dr-blue);
+        border-color: var(--dr-blue);
+
+        &:hover {
+          background-color: var(--dr-blue-hover);
+          border-color: var(--dr-blue-hover);
+        }
+
+        &:active {
+          background-color: var(--dr-blue-pressed);
+          border-color: var(--dr-blue-pressed);
+        }
+      }
+
+      :deep(.el-button--default) {
+        background: var(--dr-white);
+        box-shadow: var(--dr-shadow-border);
+        border: none;
+
+        &:hover {
+          background: var(--dr-white);
+          box-shadow: var(--dr-shadow-sm);
+          color: var(--dr-blue);
+        }
+      }
     }
   }
 
@@ -338,26 +387,29 @@ onMounted(() => {
     .card-list {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 20px;
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
+      padding: 2px;
 
       .data-source-card {
-        background: #fff;
-        border: 1px solid var(--dr-border);
-        border-radius: 4px;
+        background: var(--dr-white);
+        box-shadow: var(--dr-shadow-border);
+        border: none;
+        border-radius: var(--radius-lg);
         overflow: hidden;
-        transition: all 0.3s;
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
         cursor: pointer;
 
         &:hover {
-          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+          box-shadow: var(--dr-shadow-md);
+          transform: translateY(-1px);
         }
 
         .card-thumbnail {
           height: 180px;
-          padding: 16px;
-          background-color: #f8f9fa;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 4v4M4 6h4' stroke='%23dcdfe6' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+          padding: var(--space-4);
+          background-color: var(--dr-gray-50);
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 4v4M4 6h4' stroke='%23e5e6eb' stroke-width='1' fill='none'/%3E%3C/svg%3E");
           background-size: 12px 12px;
           display: flex;
           align-items: center;
@@ -372,31 +424,32 @@ onMounted(() => {
         }
 
         .card-footer {
-          padding: 12px 16px;
+          padding: var(--space-3) var(--space-4);
           display: flex;
           align-items: center;
           justify-content: space-between;
-          border-top: 1px solid var(--dr-border);
+          box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.06);
 
           .card-info {
             flex: 1;
             display: flex;
             align-items: center;
             overflow: hidden;
-            margin-right: 8px;
+            margin-right: var(--space-2);
 
             .type-label {
               flex-shrink: 0;
               font-size: 14px;
-              color: var(--el-color-primary);
+              color: var(--dr-blue);
               font-weight: 500;
-              margin-right: 16px;
+              margin-right: var(--space-4);
             }
 
             .card-name {
               flex: 1;
               font-size: 14px;
-              color: var(--dr-text);
+              color: var(--dr-gray-700);
+              font-weight: 400;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
@@ -406,17 +459,17 @@ onMounted(() => {
           .card-actions {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: var(--space-4);
             flex-shrink: 0;
 
             .more-icon {
               font-size: 18px;
-              color: var(--dr-text);
+              color: var(--dr-gray-500);
               cursor: pointer;
-              transition: color 0.3s;
+              transition: color 0.2s;
 
               &:hover {
-                color: var(--dr-primary);
+                color: var(--dr-blue);
               }
             }
           }
@@ -428,31 +481,32 @@ onMounted(() => {
 
 .type-select-cards {
   display: flex;
-  gap: 16px;
+  gap: var(--space-4);
   justify-content: center;
+  padding: 2px;
 
   .type-card {
     flex: 1;
-    border: 1px solid var(--el-border-color-light, #e4e7ed);
-    border-radius: 8px;
-    padding: 20px 16px;
+    box-shadow: var(--dr-shadow-border);
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-4);
     cursor: pointer;
-    transition: all 0.3s;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
 
     &:hover {
-      border-color: var(--el-color-primary);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: var(--dr-shadow-md);
       transform: translateY(-2px);
     }
 
     .type-card-image {
       width: 80px;
       height: 80px;
-      margin-bottom: 12px;
+      margin-bottom: var(--space-3);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -468,14 +522,15 @@ onMounted(() => {
       .type-card-name {
         font-size: 16px;
         font-weight: 600;
-        color: var(--el-text-color-primary, #303133);
-        margin-bottom: 8px;
+        color: var(--dr-gray-900);
+        margin-bottom: var(--space-2);
       }
 
       .type-card-desc {
         font-size: 12px;
-        color: var(--el-text-color-secondary, #909399);
-        line-height: 1.4;
+        color: var(--dr-gray-500);
+        line-height: 1.5;
+        font-weight: 400;
       }
     }
   }

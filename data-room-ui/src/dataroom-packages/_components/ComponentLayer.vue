@@ -62,8 +62,49 @@ const onLayerClick = (data: ChartConfig<unknown>) => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .dr-layer-tree {
-  margin-top: 8px;
+  margin-top: var(--space-2);
+  background: var(--dr-gray-50);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  :deep(.el-tree-node__content) {
+    height: 32px;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--dr-gray-100);
+    }
+  }
+
+  :deep(.el-tree-node.is-current > .el-tree-node__content) {
+    background-color: var(--dr-blue-soft);
+    color: var(--dr-blue);
+  }
+
+  :deep(.el-tree-node__label) {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--dr-gray-700);
+  }
+
+  :deep(.el-tree-node.is-current > .el-tree-node__content .el-tree-node__label) {
+    color: var(--dr-blue);
+    font-weight: 500;
+  }
+
+  :deep(.el-tree-node__expand-icon) {
+    color: var(--dr-gray-400);
+    font-size: 12px;
+
+    &:hover {
+      color: var(--dr-gray-700);
+    }
+  }
+
+  :deep(.el-icon) {
+    color: var(--dr-gray-700);
+  }
 }
 </style>

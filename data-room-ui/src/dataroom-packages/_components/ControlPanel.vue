@@ -490,6 +490,9 @@ const triggerAutoRefresh = () => {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: var(--dr-gray-50);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.08);
 
   .control-tabs {
     flex: 1;
@@ -498,28 +501,65 @@ const triggerAutoRefresh = () => {
 
     :deep(.el-tabs__header) {
       margin-bottom: 0;
-      border-bottom: none;
-      padding: 0 16px;
+      border-bottom: 1px solid var(--dr-gray-100);
+      padding: 0 var(--space-4);
     }
 
     :deep(.el-tabs__nav-wrap)::after {
       display: none;
     }
 
+    :deep(.el-tabs__item) {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dr-gray-500);
+      transition: color 0.2s ease;
+
+      &.is-active {
+        color: var(--dr-gray-900);
+      }
+    }
+
+    :deep(.el-tabs__active-bar) {
+      height: 2px;
+      background-color: var(--dr-blue);
+    }
+
     :deep(.el-tabs__content) {
       flex: 1;
       overflow: hidden;
+      padding: 2px;
     }
 
     .tab-content {
-      padding: 16px;
+      padding: var(--space-4);
       height: 100%;
       overflow-y: auto;
 
       .placeholder {
-        color: var(--el-text-color-secondary);
+        color: var(--dr-gray-500);
         text-align: center;
-        padding: 40px 0;
+        padding: var(--space-10) 0;
+      }
+
+      :deep(.el-form-item__label) {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--dr-gray-700);
+        width: 90px;
+      }
+
+      :deep(.el-input__wrapper),
+      :deep(.el-select .el-input__wrapper),
+      :deep(.el-textarea__inner) {
+        border-radius: var(--radius-md);
+        box-shadow: var(--dr-shadow-border);
+        border: none;
+        transition: box-shadow 0.2s ease;
+
+        &:focus-within {
+          box-shadow: var(--dr-shadow-focus);
+        }
       }
     }
 
@@ -528,27 +568,32 @@ const triggerAutoRefresh = () => {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 12px;
-        margin-bottom: 16px;
-        background: var(--dr-bg2);
-        border-radius: 4px;
-        border: 1px solid var(--dr-border);
+        padding: var(--space-3);
+        margin-bottom: var(--space-3);
+        background: var(--dr-white);
+        border-radius: var(--radius-md);
+        box-shadow: var(--dr-shadow-border);
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+        &:hover {
+          box-shadow: var(--dr-shadow-sm);
+        }
 
         .behavior-info {
           flex: 1;
           min-width: 0;
-          margin-right: 12px;
+          margin-right: var(--space-3);
 
           .behavior-name {
             font-size: 14px;
             font-weight: 500;
-            color: var(--dr-text);
-            margin-bottom: 4px;
+            color: var(--dr-gray-900);
+            margin-bottom: var(--space-1);
           }
 
           .behavior-desc {
             font-size: 12px;
-            color: var(--el-text-color-secondary);
+            color: var(--dr-gray-500);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -558,15 +603,15 @@ const triggerAutoRefresh = () => {
         .behavior-controls {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: var(--space-3);
 
           .setting-icon {
-            color: var(--dr-text);
+            color: var(--dr-gray-700);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
 
             &:hover {
-              color: var(--dr-primary);
+              color: var(--dr-blue);
               transform: rotate(90deg);
             }
           }
@@ -588,12 +633,13 @@ const triggerAutoRefresh = () => {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: var(--dr-gray-900);
   }
 
   .option-desc {
     flex-shrink: 0;
-    margin-left: 12px;
-    color: var(--el-text-color-secondary);
+    margin-left: var(--space-3);
+    color: var(--dr-gray-500);
     font-size: 12px;
     text-align: right;
   }
@@ -604,7 +650,6 @@ const triggerAutoRefresh = () => {
   height: calc(70vh - 120px);
   overflow: hidden;
 
-  // 调整数据集组件在对话框中的样式
   :deep(.dr-dataset) {
     height: 100%;
     overflow: hidden;
@@ -645,30 +690,30 @@ const triggerAutoRefresh = () => {
 
 // 参数项样式
 .param-item {
-  padding: 12px;
-  margin-bottom: 16px;
-  background: var(--dr-bg2);
-  border-radius: 4px;
-  border: 1px solid var(--dr-border);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+  background: var(--dr-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--dr-shadow-border);
 
   .param-header {
-    margin-bottom: 12px;
+    margin-bottom: var(--space-3);
     font-weight: 500;
 
     .param-name {
-      color: var(--dr-text);
+      color: var(--dr-gray-900);
       font-size: 14px;
     }
 
     .param-desc {
-      color: var(--el-text-color-secondary);
+      color: var(--dr-gray-500);
       font-size: 12px;
-      margin-left: 4px;
+      margin-left: var(--space-1);
     }
   }
 
   .el-form-item {
-    margin-bottom: 12px;
+    margin-bottom: var(--space-3);
 
     &:last-child {
       margin-bottom: 0;

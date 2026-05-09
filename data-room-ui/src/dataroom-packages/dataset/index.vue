@@ -864,12 +864,14 @@ const handleTestAndSave = async () => {
   height: 100%;
   gap: 16px;
   overflow: hidden;
+  padding: 2px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   .dataset-left {
     width: 300px;
     background: #fff;
-    border: 1px solid var(--dr-border);
-    border-radius: 4px;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -880,14 +882,36 @@ const handleTestAndSave = async () => {
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      padding: 12px 16px;
+      padding: 16px;
       flex-shrink: 0;
+      border-bottom: 1px solid #e5e6eb;
 
       .search-input {
         flex: 1;
 
+        :deep(.el-input__wrapper) {
+          border-radius: 6px;
+          box-shadow: 0 0 0 1px #e5e6eb inset;
+
+          &:focus-within {
+            box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
+          }
+        }
+
         .search-icon {
-          color: var(--el-text-color-secondary);
+          color: #86909c;
+        }
+      }
+
+      :deep(.el-button--primary) {
+        background-color: #3478f6;
+        border-color: #3478f6;
+        border-radius: 6px;
+        font-weight: 500;
+
+        &:hover {
+          background-color: #2563eb;
+          border-color: #2563eb;
         }
       }
     }
@@ -908,15 +932,19 @@ const handleTestAndSave = async () => {
       :deep(.el-tree) {
         .el-tree-node__content {
           height: 36px;
-          border-radius: 4px;
+          border-radius: 6px;
 
           &:hover {
-            background-color: var(--el-fill-color-light);
+            background-color: #f7f8fa;
 
             .more-icon {
               opacity: 1;
             }
           }
+        }
+
+        .el-tree-node.is-current > .el-tree-node__content {
+          background-color: rgba(52, 120, 246, 0.08);
         }
       }
 
@@ -926,6 +954,8 @@ const handleTestAndSave = async () => {
         align-items: center;
         justify-content: space-between;
         font-size: 14px;
+        font-weight: 400;
+        color: #1d2129;
         padding-right: 8px;
 
         .node-content {
@@ -934,6 +964,10 @@ const handleTestAndSave = async () => {
           gap: 8px;
           flex: 1;
           overflow: hidden;
+
+          .el-icon {
+            color: #4e5969;
+          }
 
           .node-label {
             overflow: hidden;
@@ -946,11 +980,11 @@ const handleTestAndSave = async () => {
           font-size: 16px;
           cursor: pointer;
           opacity: 0;
-          transition: opacity 0.3s;
-          color: var(--el-text-color-regular);
+          transition: opacity 0.2s;
+          color: #4e5969;
 
           &:hover {
-            color: var(--el-color-primary);
+            color: #3478f6;
           }
         }
       }
@@ -960,8 +994,8 @@ const handleTestAndSave = async () => {
   .dataset-right {
     flex: 1;
     background: #fff;
-    border: 1px solid var(--dr-border);
-    border-radius: 4px;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -973,6 +1007,7 @@ const handleTestAndSave = async () => {
       justify-content: space-between;
       padding: 0 16px;
       flex-shrink: 0;
+      border-bottom: 1px solid #e5e6eb;
 
       .dataset-tabs {
         flex: 1;
@@ -985,12 +1020,36 @@ const handleTestAndSave = async () => {
         :deep(.el-tabs__nav-wrap)::after {
           display: none;
         }
+
+        :deep(.el-tabs__item) {
+          font-size: 14px;
+          font-weight: 500;
+          color: #86909c;
+
+          &.is-active {
+            color: #1d2129;
+          }
+        }
+
+        :deep(.el-tabs__active-bar) {
+          background-color: #3478f6;
+          height: 2px;
+        }
       }
 
       .right-actions {
         display: flex;
         gap: 8px;
         flex-shrink: 0;
+
+        :deep(.el-button) {
+          font-weight: 500;
+          color: #4e5969;
+
+          &:hover {
+            color: #3478f6;
+          }
+        }
       }
     }
 
@@ -1012,13 +1071,62 @@ const handleTestAndSave = async () => {
       .params-container {
         padding: 16px;
       }
+
+      :deep(.el-table) {
+        font-size: 13px;
+        color: #1d2129;
+        font-feature-settings: 'tnum';
+
+        th {
+          font-weight: 500;
+          color: #4e5969;
+          background-color: #f7f8fa;
+        }
+      }
     }
   }
 
   // 对话框内的滚动条
   :deep(.el-dialog) {
+    border-radius: 8px;
+
+    .el-dialog__header {
+      font-weight: 600;
+      color: #1d2129;
+    }
+
+    .el-dialog__body .el-scrollbar__view {
+      padding: 2px;
+    }
+
     .el-scrollbar__bar {
       z-index: 10;
+    }
+
+    .dialog-footer {
+      .el-button {
+        border-radius: 6px;
+        font-weight: 500;
+      }
+
+      .el-button--primary {
+        background-color: #3478f6;
+        border-color: #3478f6;
+
+        &:hover {
+          background-color: #2563eb;
+          border-color: #2563eb;
+        }
+      }
+
+      .el-button--default {
+        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+        border: none;
+
+        &:hover {
+          box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.04);
+        }
+      }
     }
   }
 }
@@ -1028,22 +1136,22 @@ const handleTestAndSave = async () => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  padding: 8px 0;
+  padding: 8px 2px;
 
   .type-card {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 16px;
-    border: 1px solid var(--el-border-color-light);
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
+    background: #fff;
 
     &:hover {
-      border-color: var(--el-color-primary);
-      background-color: var(--el-color-primary-light-9);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.04);
+      background-color: #f7f8fa;
     }
 
     .type-card-icon {
@@ -1053,8 +1161,8 @@ const handleTestAndSave = async () => {
       width: 40px;
       height: 40px;
       border-radius: 8px;
-      background-color: var(--el-color-primary-light-9);
-      color: var(--el-color-primary);
+      background-color: rgba(52, 120, 246, 0.08);
+      color: #3478f6;
       font-size: 20px;
       flex-shrink: 0;
     }
@@ -1066,13 +1174,13 @@ const handleTestAndSave = async () => {
       .type-card-name {
         font-size: 14px;
         font-weight: 500;
-        color: var(--el-text-color-primary);
+        color: #1d2129;
         margin-bottom: 4px;
       }
 
       .type-card-desc {
         font-size: 12px;
-        color: var(--el-text-color-secondary);
+        color: #86909c;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -1083,15 +1191,18 @@ const handleTestAndSave = async () => {
 
 // 移动对话框样式
 .move-dialog-content {
+  padding: 2px;
+
   .move-hint {
     font-size: 14px;
-    color: var(--el-text-color-regular);
+    font-weight: 400;
+    color: #4e5969;
     margin-bottom: 12px;
   }
 
   .move-tree-wrap {
-    border: 1px solid var(--el-border-color-light);
-    border-radius: 4px;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
     padding: 8px;
     max-height: 360px;
     overflow-y: auto;
@@ -1101,19 +1212,21 @@ const handleTestAndSave = async () => {
       align-items: center;
       gap: 8px;
       padding: 8px 12px;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 14px;
+      font-weight: 400;
       margin-bottom: 4px;
-      color: var(--el-text-color-primary);
+      color: #1d2129;
 
       &:hover {
-        background-color: var(--el-fill-color-light);
+        background-color: #f7f8fa;
       }
 
       &.active {
-        background-color: var(--el-color-primary-light-9);
-        color: var(--el-color-primary);
+        background-color: rgba(52, 120, 246, 0.08);
+        color: #3478f6;
+        font-weight: 500;
       }
     }
 
@@ -1122,6 +1235,7 @@ const handleTestAndSave = async () => {
       align-items: center;
       gap: 8px;
       font-size: 14px;
+      color: #1d2129;
     }
   }
 }

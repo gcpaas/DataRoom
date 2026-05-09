@@ -127,6 +127,49 @@ defineExpose({
 
 <style scoped lang="scss">
 :deep(.el-form) {
-  padding: 20px;
+  padding: var(--space-5) var(--space-6);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  .el-form-item__label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--dr-gray-700);
+  }
+
+  .el-input__wrapper,
+  .el-textarea__inner {
+    border-radius: var(--radius-md);
+    box-shadow: none;
+    border: 1px solid var(--dr-gray-200);
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      border-color: var(--dr-gray-400);
+    }
+
+    &.is-focus,
+    &:focus {
+      border-color: var(--dr-blue);
+      box-shadow: var(--dr-shadow-focus);
+    }
+  }
+
+  .el-textarea__inner {
+    &:focus {
+      border-color: var(--dr-blue);
+      box-shadow: var(--dr-shadow-focus);
+    }
+  }
+
+  .el-input__inner,
+  .el-textarea__inner {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--dr-gray-900);
+
+    &::placeholder {
+      color: var(--dr-gray-500);
+    }
+  }
 }
 </style>

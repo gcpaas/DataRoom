@@ -83,8 +83,8 @@ const onCopyUrl = async () => {
 .resource-lib-wrapper {
   height: 600px;
   overflow: hidden;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-  // 调整资源组件在对话框中的样式
   :deep(.dr-resource) {
     height: 100%;
     overflow: hidden;
@@ -106,6 +106,31 @@ const onCopyUrl = async () => {
 
   :deep(.el-scrollbar__view) {
     height: 100%;
+  }
+
+  // Apply design system styles to resource cards within the dialog
+  :deep(.resource-card),
+  :deep(.file-card) {
+    box-shadow: var(--dr-shadow-border);
+    border: none;
+    border-radius: var(--radius-md);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      box-shadow: var(--dr-shadow-sm);
+      transform: scale(1.02);
+    }
+  }
+
+  :deep(.el-card) {
+    box-shadow: var(--dr-shadow-border);
+    border: none;
+    border-radius: var(--radius-md);
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+      box-shadow: var(--dr-shadow-sm);
+    }
   }
 }
 </style>

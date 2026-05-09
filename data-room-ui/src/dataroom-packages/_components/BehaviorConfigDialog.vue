@@ -218,48 +218,58 @@ const onClose = () => {
 .dr-behavior-config-wrapper {
   display: grid;
   grid-template-columns: 400px auto;
-  background-color: var(--dr-bg2);
+  background-color: var(--dr-gray-50);
   gap: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   .action-list-wrapper {
     height: calc(70vh - 120px);
-    background: white;
-    padding: 16px;
-    margin: 16px;
-    border-radius: 4px 0 0 4px;
+    background: var(--dr-white);
+    padding: var(--space-4);
+    margin: var(--space-4);
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    box-shadow: var(--dr-shadow-border);
+
+    :deep(.el-scrollbar__view) {
+      padding: 2px;
+    }
 
     .list-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: var(--space-4);
 
       .title {
-        font-size: 16px;
-        font-weight: 500;
-        color: var(--dr-text);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--dr-gray-900);
+      }
+
+      :deep(.el-button) {
+        border-radius: var(--radius-md);
       }
     }
 
     .action-item {
-      margin: 8px 0;
-      padding: 12px;
+      margin: var(--space-2) 0;
+      padding: var(--space-3);
       position: relative;
       cursor: move;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-radius: 4px;
-      border: 1px solid var(--dr-border);
-      transition: all 0.3s;
-      gap: 8px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--dr-shadow-border);
+      transition: all 0.2s ease;
+      gap: var(--space-2);
 
       .drag-icon {
-        font-size: 18px;
-        color: #999;
+        font-size: 12px;
+        color: var(--dr-gray-400);
         cursor: move;
         flex-shrink: 0;
-        transition: color 0.3s;
+        transition: color 0.2s ease;
       }
 
       .action-info {
@@ -268,22 +278,22 @@ const onClose = () => {
 
         .action-name {
           font-size: 14px;
-          color: var(--dr-text);
+          color: var(--dr-gray-900);
           font-weight: 500;
-          margin-bottom: 4px;
+          margin-bottom: var(--space-1);
         }
 
         .action-type {
           font-size: 12px;
-          color: #999;
+          color: var(--dr-gray-500);
         }
       }
 
       .delete-icon {
-        font-size: 16px;
-        color: var(--el-color-danger);
+        font-size: 14px;
+        color: var(--dr-danger);
         cursor: pointer;
-        transition: transform 0.3s;
+        transition: transform 0.2s ease;
 
         &:hover {
           transform: scale(1.2);
@@ -291,26 +301,62 @@ const onClose = () => {
       }
 
       &:hover {
-        background: var(--dr-primary1);
+        background: var(--dr-gray-100);
         cursor: pointer;
 
         .drag-icon {
-          color: var(--dr-primary);
+          color: var(--dr-gray-700);
         }
       }
 
       &.active {
-        background: var(--dr-primary1);
-        border-color: var(--dr-primary);
+        background: var(--dr-blue-soft);
+        box-shadow: 0px 0px 0px 1px var(--dr-blue-border);
       }
     }
   }
 
   .action-form-wrapper {
-    background: #fff;
-    padding: 16px;
-    margin: 16px 16px 16px 0;
-    border-radius: 0 4px 4px 0;
+    background: var(--dr-white);
+    padding: var(--space-4);
+    margin: var(--space-4) var(--space-4) var(--space-4) 0;
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    box-shadow: var(--dr-shadow-border);
+
+    :deep(.el-form-item__label) {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dr-gray-700);
+    }
+
+    :deep(.el-input__wrapper),
+    :deep(.el-select .el-input__wrapper) {
+      border-radius: var(--radius-md);
+      box-shadow: 0px 0px 0px 1px var(--dr-gray-200);
+      border: none;
+      transition: box-shadow 0.2s ease;
+
+      &:focus-within {
+        box-shadow: var(--dr-shadow-focus);
+      }
+    }
+
+    :deep(.el-textarea__inner) {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--dr-gray-200);
+      font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
+      font-size: 13px;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+      &:focus {
+        border-color: var(--dr-blue);
+        box-shadow: var(--dr-shadow-focus);
+      }
+    }
+
+    :deep(.el-button) {
+      border-radius: var(--radius-md);
+    }
 
     .empty-action {
       height: calc(70vh - 120px);

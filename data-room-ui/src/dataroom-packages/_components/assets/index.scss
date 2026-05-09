@@ -3,7 +3,7 @@
   border: none;
 
   :deep(.el-collapse-item) {
-    margin-bottom: 16px;
+    margin-bottom: var(--space-3);
 
     &:last-child {
       margin-bottom: 0;
@@ -13,11 +13,13 @@
   :deep(.el-collapse-item__header) {
     background: transparent;
     border: none;
-    font-weight: 700;
-    color: var(--dr-text1);
+    font-weight: 600;
+    color: var(--dr-gray-900);
     height: 20px;
     line-height: 20px;
     font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0;
   }
 
   :deep(.el-collapse-item__wrap) {
@@ -26,16 +28,20 @@
   }
 
   :deep(.el-collapse-item__content) {
-    padding: 12px 4px 0;
+    padding: var(--space-3) var(--space-1) 0;
     background: transparent;
   }
 
   :deep(.el-form) {
     .el-form-item {
-      margin-bottom: 16px;
+      margin-bottom: var(--space-4);
+      border-bottom: 1px solid var(--dr-gray-100);
+      padding-bottom: var(--space-3);
 
       &:last-child {
         margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 0;
       }
     }
   }

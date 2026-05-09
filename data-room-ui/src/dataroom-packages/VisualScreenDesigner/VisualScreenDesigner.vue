@@ -629,15 +629,19 @@ onMounted(() => {
 .dr-vs-editor {
   display: grid;
   grid-template-rows: var(--dr-designer-header-height) auto;
-  height: 100vh; // 设置容器高度为视口高度
+  height: 100vh;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
   & .header {
-    background-color: white;
-    color: var(--dr-text1);
-    font-weight: 700;
+    background-color: var(--dr-white);
+    color: var(--dr-gray-900);
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--dr-border);
+    box-shadow: var(--dr-shadow-border);
+    position: relative;
+    z-index: 10;
 
     & .header-left {
       display: flex;
@@ -655,7 +659,9 @@ onMounted(() => {
       & .title {
         margin-left: 16px;
         font-size: 14px;
+        font-weight: 500;
         white-space: nowrap;
+        color: var(--dr-gray-900);
       }
     }
 
@@ -667,43 +673,52 @@ onMounted(() => {
   }
 
   & .main {
-    background-color: var(--dr-bg2);
     display: grid;
     grid-template-columns: var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width);
 
     & .left-tool-panel {
-      background-color: white;
+      background-color: var(--dr-gray-50);
       display: grid;
       grid-template-rows: 40px auto;
       height: calc(100vh - var(--dr-designer-left-tool-panel-header-height));
-      border-right: 1px solid var(--dr-border);
+      box-shadow: var(--dr-shadow-border);
+      position: relative;
+      z-index: 5;
 
       & .panel-header {
-        background-color: var(--dr-bg2);
+        background-color: var(--dr-gray-50);
         box-sizing: border-box;
-        border-bottom: 1px solid var(--dr-border);
+        box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
         font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: var(--dr-gray-500);
         line-height: 40px;
         height: 40px;
         align-self: center;
-        padding-left: 8px;
-        // 关闭按钮
+        padding-left: 12px;
+
+        & .title {
+          letter-spacing: 0.02em;
+        }
+
         & .close {
           position: absolute;
           height: 40px;
           line-height: 40px;
           right: 16px;
           top: 0px;
+          color: var(--dr-gray-500);
 
           & :hover {
             cursor: pointer;
-            color: var(--dr-primary);
+            color: var(--dr-blue);
           }
         }
       }
 
       & .panel-body {
-        background-color: white;
+        background-color: var(--dr-white);
         overflow-y: hidden;
         padding: 8px 4px 16px 4px;
       }
@@ -711,13 +726,11 @@ onMounted(() => {
 
     & .canvas {
       display: grid;
-      background-color: var(--dr-bg2);
+      background-color: #f0f1f3;
       grid-template-rows: auto;
 
       & .canvas-main {
-        // 减去header 高度
         height: calc(100vh - var(--dr-designer-header-height));
-        // 使用了el-scroll
         overflow: hidden;
         position: relative;
       }
@@ -730,9 +743,11 @@ onMounted(() => {
     }
 
     & .right-panel {
-      background-color: white;
-      border-left: 1px solid var(--dr-border);
+      background-color: var(--dr-gray-50);
+      box-shadow: var(--dr-shadow-border);
       height: calc(100vh - var(--dr-designer-header-height));
+      position: relative;
+      z-index: 5;
     }
   }
 
@@ -744,23 +759,60 @@ onMounted(() => {
     transform: translateY(-50%);
     width: 16px;
     height: 50px;
-    background-color: white;
-    color: var(--dr-text);
-    border-radius: 5px 0 0 5px;
-    border-top: 1px solid var(--dr-border);
-    border-left: 1px solid var(--dr-border);
-    border-bottom: 1px solid var(--dr-border);
+    background-color: var(--dr-white);
+    color: var(--dr-gray-700);
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    box-shadow: var(--dr-shadow-sm);
 
     &:hover {
       cursor: pointer;
-      color: var(--dr-primary);
-      background-color: var(--dr-primary1);
+      color: var(--dr-blue);
+      background-color: var(--dr-blue-soft);
     }
   }
 }
 
-// 修复默认moveable-control-box层级过大导致右击菜单覆盖问题
+// Moveable control-box: selected component styling
 :deep(.moveable-control-box) {
   z-index: 1000 !important;
+
+  // Resize handles: 8px square, white bg, 2px solid #3478f6 border
+  .moveable-control {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 0 !important;
+    background: var(--dr-white) !important;
+    border: 2px solid var(--dr-blue) !important;
+    margin-top: -4px !important;
+    margin-left: -4px !important;
+
+    &:active,
+    &.moveable-origin {
+      background: var(--dr-blue) !important;
+    }
+  }
+
+  // Selected outline: 1px solid #3478f6
+  .moveable-line {
+    background: var(--dr-blue) !important;
+    height: 1px !important;
+    width: 1px !important;
+  }
+
+  // Alignment guides: red #f53f3f, 1px solid
+  .moveable-guideline {
+    background: var(--dr-danger) !important;
+  }
+}
+
+// Selection marquee: 1px dashed #3478f6, fill #3478f6 at 0.06 opacity
+:deep(.selecto-selection) {
+  border: 1px dashed var(--dr-blue) !important;
+  background: rgba(52, 120, 246, 0.06) !important;
+}
+
+// Hover state for non-selected chart wrappers
+.chart-wrapper:hover:not(.moveable-target) {
+  outline: 1px dashed var(--dr-gray-400);
 }
 </style>

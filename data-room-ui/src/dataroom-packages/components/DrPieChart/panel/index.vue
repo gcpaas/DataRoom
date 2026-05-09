@@ -406,33 +406,113 @@ const removeColor = (index: number) => {
 <style scoped>
 .dr-pie-chart-panel {
   padding: 12px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  color: #1d2129;
 }
 
+/* ─── Collapse ─── */
 .dr-pie-chart-panel :deep(.el-collapse) {
   border: none;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .dr-pie-chart-panel :deep(.el-collapse-item__header) {
-  font-weight: bold;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d2129;
   border-bottom: none;
   height: 36px;
   line-height: 36px;
+  background: transparent;
 }
 
 .dr-pie-chart-panel :deep(.el-collapse-item__wrap) {
   border-bottom: none;
+  background: transparent;
 }
 
+.dr-pie-chart-panel :deep(.el-collapse-item__content) {
+  padding-bottom: 4px;
+}
+
+/* ─── Form Items ─── */
+.dr-pie-chart-panel :deep(.el-form-item) {
+  margin-bottom: 4px;
+}
+
+.dr-pie-chart-panel :deep(.el-form-item__label) {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4e5969;
+}
+
+/* ─── Inputs ─── */
+.dr-pie-chart-panel :deep(.el-input__wrapper),
+.dr-pie-chart-panel :deep(.el-input-number),
+.dr-pie-chart-panel :deep(.el-select__wrapper) {
+  border-radius: 6px;
+}
+
+.dr-pie-chart-panel :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px #e5e6eb inset;
+}
+
+.dr-pie-chart-panel :deep(.el-input__wrapper:focus-within),
+.dr-pie-chart-panel :deep(.el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
+}
+
+.dr-pie-chart-panel :deep(.el-select__wrapper) {
+  box-shadow: 0 0 0 1px #e5e6eb inset;
+}
+
+.dr-pie-chart-panel :deep(.el-select__wrapper.is-focused) {
+  box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
+}
+
+.dr-pie-chart-panel :deep(.el-select-dropdown) {
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* ─── Number inputs (tabular nums for pixel values) ─── */
+.dr-pie-chart-panel :deep(.el-input-number .el-input__inner) {
+  font-feature-settings: "tnum";
+}
+
+/* ─── Color Picker ─── */
+.dr-pie-chart-panel :deep(.el-color-picker__trigger) {
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px #e5e6eb;
+  border: none;
+}
+
+/* ─── Slider ─── */
+.dr-pie-chart-panel :deep(.el-slider__runway) {
+  background-color: #e5e6eb;
+}
+
+.dr-pie-chart-panel :deep(.el-slider__bar) {
+  background-color: #3478f6;
+}
+
+.dr-pie-chart-panel :deep(.el-slider__button) {
+  border-color: #3478f6;
+  background-color: #fff;
+}
+
+/* ─── Sub-section Title ─── */
 .sub-title {
   font-size: 12px;
-  color: #909399;
-  font-weight: bold;
-  margin: 12px 0 8px 0;
-  padding-left: 4px;
-  border-left: 3px solid #409eff;
+  color: #4e5969;
+  font-weight: 600;
+  margin: 12px 0 4px 0;
+  padding-top: 12px;
+  border-top: 1px solid #f2f3f5;
 }
 
+/* ─── Color List ─── */
 .color-list {
   padding: 4px 0;
 }
@@ -441,6 +521,6 @@ const removeColor = (index: number) => {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 </style>

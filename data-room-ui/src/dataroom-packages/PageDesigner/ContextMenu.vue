@@ -90,22 +90,24 @@ const onChartHideClick = () => {
 
 <style scoped>
 .dr-context-menu-wrapper {
-  height: 122px;
   width: 200px;
-  background: #fff;
-  padding: 16px 0;
-  border-radius: 4px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  color: var(--dr-text);
+  background: #ffffff;
+  padding: 8px 0;
+  border-radius: 8px;
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 12px 24px -4px rgba(0, 0, 0, 0.08), 0px 4px 8px rgba(0, 0, 0, 0.04);
+  color: #4e5969;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
+  font-weight: 400;
   z-index: 2000;
 
   & .menu {
-    padding: 8px;
+    padding: 8px 16px;
+    transition: all 0.15s;
 
     &:hover {
-      color: var(--dr-primary);
-      background-color: var(--dr-primary1);
+      color: #3478f6;
+      background-color: #eff6ff;
       cursor: pointer;
     }
   }

@@ -1,20 +1,71 @@
 :root {
-  --dr-primary: var(--el-color-primary);
+  // === Brand Colors ===
+  --dr-blue: #3478f6;
+  --dr-blue-hover: #2563eb;
+  --dr-blue-pressed: #1d4ed8;
+  --dr-blue-soft: #eff6ff;
+  --dr-blue-border: #bfdbfe;
+
+  // Legacy alias
+  --dr-primary: #3478f6;
   --dr-primary1: #3478f610;
   --dr-primary2: #3478f620;
-  --dr-border: #e8e8e8;
-  --dr-text: #77838f;
-  --dr-text1: #405058;
-  --dr-bg1: #fff;
-  --dr-bg2: #f8f9fb;
-  // 设计器顶部header高度
-  --dr-designer-header-height: 40px;
-  // 设计器左侧工具tab宽度
+
+  // === Neutral Scale ===
+  --dr-gray-900: #1d2129;
+  --dr-gray-700: #4e5969;
+  --dr-gray-500: #86909c;
+  --dr-gray-400: #c9cdd4;
+  --dr-gray-200: #e5e6eb;
+  --dr-gray-100: #f2f3f5;
+  --dr-gray-50: #f7f8fa;
+  --dr-white: #ffffff;
+
+  // Legacy alias
+  --dr-border: #e5e6eb;
+  --dr-text: #4e5969;
+  --dr-text1: #1d2129;
+  --dr-bg1: #ffffff;
+  --dr-bg2: #f7f8fa;
+
+  // === Semantic Colors ===
+  --dr-success: #00b42a;
+  --dr-success-soft: #e8ffea;
+  --dr-warning: #ff7d00;
+  --dr-warning-soft: #fff7e8;
+  --dr-danger: #f53f3f;
+  --dr-danger-soft: #ffece8;
+
+  // === Shadows & Depth ===
+  --dr-shadow-border: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+  --dr-shadow-sm: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.04);
+  --dr-shadow-md: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 4px 8px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.04);
+  --dr-shadow-lg: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 12px 24px -4px rgba(0, 0, 0, 0.08), 0px 4px 8px rgba(0, 0, 0, 0.04);
+  --dr-shadow-focus: 0 0 0 2px #ffffff, 0 0 0 4px #3478f6;
+
+  // === Spacing ===
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  // === Border Radius ===
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-pill: 9999px;
+
+  // === Designer Layout ===
+  --dr-designer-header-height: 48px;
   --dr-designer-left-tool-bar-width: 60px;
-  // 设计器左侧工具面板宽度
-  --dr-designer-left-tool-panel-width: 200px;
-  // 设计器左侧工具面板头高度
+  --dr-designer-left-tool-panel-width: 240px;
   --dr-designer-left-tool-panel-header-height: 40px;
-  // 设计器右侧配置面板宽度
-  --dr-designer-right-panel-width: 330px;
+  --dr-designer-right-panel-width: 300px;
 }

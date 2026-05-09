@@ -393,6 +393,79 @@ defineExpose({
 
 <style scoped lang="scss">
 :deep(.el-form) {
-  padding: 16px;
+  padding: 20px 24px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  .el-form-item__label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1d2129;
+  }
+
+  .el-input__wrapper {
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px #e5e6eb inset;
+
+    &:focus-within {
+      box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
+    }
+  }
+
+  .el-textarea__inner {
+    border-radius: 6px;
+    border-color: #e5e6eb;
+    font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
+    font-size: 13px;
+
+    &:focus {
+      border-color: #3478f6;
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3478f6;
+    }
+  }
+
+  .el-select {
+    .el-input__wrapper {
+      border-radius: 6px;
+      box-shadow: 0 0 0 1px #e5e6eb inset;
+    }
+  }
+
+  .el-table {
+    font-size: 13px;
+    color: #1d2129;
+    font-feature-settings: 'tnum';
+    border-radius: 6px;
+    overflow: hidden;
+
+    th {
+      font-weight: 500;
+      color: #4e5969;
+      background-color: #f7f8fa;
+    }
+  }
+
+  .el-button--small {
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  .el-button--primary {
+    background-color: #3478f6;
+    border-color: #3478f6;
+
+    &:hover {
+      background-color: #2563eb;
+      border-color: #2563eb;
+    }
+  }
+
+  .el-button--default {
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border: none;
+
+    &:hover {
+      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.04);
+    }
+  }
 }
 </style>

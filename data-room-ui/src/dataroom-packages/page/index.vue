@@ -504,6 +504,16 @@ onMounted(() => {
     .button-group {
       display: flex;
       gap: 8px;
+
+      :deep(.el-button) {
+        border-radius: 6px;
+        font-weight: 500;
+
+        &:focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3478f6;
+        }
+      }
     }
 
     .breadcrumb-box {
@@ -514,7 +524,7 @@ onMounted(() => {
 
       .clickable {
         cursor: pointer;
-        color: var(--el-color-primary);
+        color: #3478f6;
 
         &:hover {
           text-decoration: underline;
@@ -531,26 +541,25 @@ onMounted(() => {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
+      padding: 2px;
       margin-bottom: 20px;
 
       .page-card {
         background: #fff;
-        border: 1px solid var(--dr-border);
-        border-radius: 4px;
+        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
         overflow: hidden;
-        transition: all 0.3s;
+        transition: box-shadow 0.2s ease;
         cursor: pointer;
 
         &:hover {
-          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+          box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.04);
         }
 
         .card-thumbnail {
           width: 100%;
           height: 180px;
-          background-color: #f8f9fa;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 4v4M4 6h4' stroke='%23dcdfe6' stroke-width='1' fill='none'/%3E%3C/svg%3E");
-          background-size: 12px 12px;
+          background-color: #f2f3f5;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -588,7 +597,7 @@ onMounted(() => {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          border-top: 1px solid var(--dr-border);
+          border-top: 1px solid #e5e6eb;
 
           .card-info {
             flex: 1;
@@ -599,16 +608,20 @@ onMounted(() => {
 
             .type-label {
               flex-shrink: 0;
-              font-size: 14px;
-              color: var(--el-color-primary);
+              font-size: 12px;
               font-weight: 500;
-              margin-right: 16px;
+              color: #3478f6;
+              background: #eff6ff;
+              padding: 2px 8px;
+              border-radius: 9999px;
+              margin-right: 12px;
             }
 
             .card-name {
               flex: 1;
               font-size: 14px;
-              color: var(--dr-text);
+              font-weight: 600;
+              color: #1d2129;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
@@ -618,17 +631,35 @@ onMounted(() => {
           .card-actions {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             flex-shrink: 0;
+
+            :deep(.el-tag) {
+              border: none;
+              border-radius: 9999px;
+              font-weight: 500;
+              font-size: 12px;
+              padding: 0 8px;
+
+              &.el-tag--success {
+                background: #e8ffea;
+                color: #00b42a;
+              }
+
+              &.el-tag--info {
+                background: #eff6ff;
+                color: #3478f6;
+              }
+            }
 
             .more-icon {
               font-size: 18px;
-              color: var(--dr-text);
+              color: #4e5969;
               cursor: pointer;
-              transition: color 0.3s;
+              transition: color 0.2s ease;
 
               &:hover {
-                color: var(--dr-primary);
+                color: #3478f6;
               }
             }
           }
@@ -649,32 +680,33 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     padding: 24px 16px;
-    border: 1px solid var(--el-border-color-light);
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
 
     &:hover {
-      border-color: var(--el-color-primary);
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 0px 0px 1px rgba(52, 120, 246, 0.4), 0px 1px 2px rgba(0, 0, 0, 0.04);
+      background-color: #f8fbff;
     }
 
     .add-type-icon {
       font-size: 36px;
-      color: var(--el-color-primary);
+      color: #3478f6;
       margin-bottom: 12px;
     }
 
     .add-type-name {
       font-size: 16px;
-      font-weight: 500;
-      color: var(--el-text-color-primary);
+      font-weight: 600;
+      color: #1d2129;
       margin-bottom: 8px;
     }
 
     .add-type-desc {
       font-size: 12px;
-      color: var(--el-text-color-secondary);
+      font-weight: 400;
+      color: #86909c;
       text-align: center;
       line-height: 1.4;
     }

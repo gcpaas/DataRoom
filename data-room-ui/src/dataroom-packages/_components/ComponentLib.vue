@@ -49,37 +49,59 @@ const filterPluginList = computed(() => {
 
 <style scoped lang="scss">
 .dr-component-lib-wrapper {
-  padding: 8px 8px;
+  padding: var(--space-2);
   box-sizing: border-box;
   overflow-x: hidden;
+  background: var(--dr-gray-50);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   & .search {
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: var(--space-3);
+
+    :deep(.el-input__wrapper) {
+      border-radius: var(--radius-md);
+      box-shadow: var(--dr-shadow-border);
+      border: none;
+      transition: box-shadow 0.2s ease;
+
+      &:focus-within {
+        box-shadow: var(--dr-shadow-focus);
+      }
+    }
   }
 
   & .component-card {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
 
     & .card {
-      background-color: var(--dr-bg2);
-      border: 1px solid var(--dr-border);
+      background-color: var(--dr-white);
+      box-shadow: var(--dr-shadow-border);
+      border-radius: var(--radius-md);
+      border: none;
       overflow: hidden;
+      padding: var(--space-2);
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
 
       &:hover {
         cursor: pointer;
-        border: 1px solid var(--dr-primary);
+        box-shadow: var(--dr-shadow-sm);
+        transform: scale(1.02);
+      }
+
+      &:active {
+        transform: scale(1);
       }
 
       & .image {
         width: 100%;
-        height: 70px;
+        height: 60px;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 8px;
+        padding: var(--space-1);
         box-sizing: border-box;
 
         & .el-image {
@@ -89,12 +111,16 @@ const filterPluginList = computed(() => {
       }
 
       & .desc {
-        padding-left: 16px;
-        background-color: white;
-        height: 30px;
-        line-height: 30px;
+        padding: var(--space-1) var(--space-1) 0;
+        height: 24px;
+        line-height: 24px;
         font-size: 12px;
-        color: var(--dr-text1);
+        font-weight: 500;
+        color: var(--dr-gray-900);
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }

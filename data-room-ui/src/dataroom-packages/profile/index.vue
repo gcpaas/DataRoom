@@ -58,27 +58,55 @@ onMounted(() => {
 .profile-wrapper {
   display: flex;
   justify-content: center;
-  padding-top: 40px;
+  padding-top: 48px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .profile-container {
   width: 500px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow:
+    0px 0px 0px 1px rgba(0, 0, 0, 0.08),
+    0px 4px 12px rgba(0, 0, 0, 0.06);
+  padding: 32px 40px;
 
   .profile-title {
     font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 24px;
-    color: var(--dr-text1);
+    font-weight: 600;
+    margin-bottom: 28px;
+    color: #1d2129;
     text-align: center;
   }
 
   .profile-form {
+    :deep(.el-form-item__label) {
+      font-size: 14px;
+      font-weight: 500;
+      color: #4e5969;
+    }
+
+    :deep(.el-input__wrapper) {
+      border-radius: 6px;
+      box-shadow: 0 0 0 1px #e5e6eb inset;
+    }
+
+    :deep(.el-input.is-disabled .el-input__wrapper) {
+      background-color: #f7f8fa;
+    }
+
     :deep(.el-input.is-disabled .el-input__inner) {
-      color: var(--dr-text1);
+      color: #1d2129;
+      -webkit-text-fill-color: #1d2129;
     }
 
     :deep(.el-checkbox.is-disabled .el-checkbox__label) {
-      color: var(--dr-text1);
+      color: #1d2129;
+    }
+
+    :deep(.el-checkbox.is-disabled.is-checked .el-checkbox__inner) {
+      background-color: #3478f6;
+      border-color: #3478f6;
     }
   }
 }

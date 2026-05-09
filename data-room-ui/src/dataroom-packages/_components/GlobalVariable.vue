@@ -150,64 +150,129 @@ const onDelete = (variable: GlobalVariable) => {
 .global-variable-wrapper {
   display: grid;
   grid-template-columns: 400px auto;
-  background-color: var(--dr-bg2);
+  background-color: var(--dr-gray-50);
   gap: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   & .variable-wrapper {
     height: calc(70vh - 120px);
-    background: white;
-    padding: 16px;
-    margin: 16px;
-    border-radius: 4px 0 0 4px;
+    background: var(--dr-white);
+    padding: var(--space-4);
+    margin: var(--space-4);
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    box-shadow: var(--dr-shadow-border);
 
     & .search {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: var(--space-3);
+
+      :deep(.el-input__wrapper) {
+        border-radius: var(--radius-md);
+        box-shadow: var(--dr-shadow-border);
+        border: none;
+        transition: box-shadow 0.2s ease;
+
+        &:focus-within {
+          box-shadow: var(--dr-shadow-focus);
+        }
+      }
+
+      :deep(.el-button) {
+        border-radius: var(--radius-md);
+      }
     }
 
     & .variable {
-      margin: 8px 0;
-      padding: 8px;
+      margin: var(--space-2) 0;
+      padding: var(--space-3);
       position: relative;
+      border-radius: var(--radius-md);
+      box-shadow: var(--dr-shadow-border);
+      transition: all 0.2s ease;
 
       & .name {
         font-size: 14px;
-        color: var(--dr-text);
-        font-weight: bold;
+        color: var(--dr-gray-900);
+        font-weight: 500;
+        font-variant-numeric: tabular-nums;
       }
 
       & .remark {
-        font-size: 14px;
-        color: #999;
-        margin-top: 8px;
+        font-size: 12px;
+        color: var(--dr-gray-500);
+        margin-top: var(--space-1);
       }
 
       & .delete {
         position: absolute;
-        right: 8px;
-        top: 8px;
+        right: var(--space-2);
+        top: var(--space-2);
         font-size: 12px;
-        color: var(--el-color-danger);
+        color: var(--dr-danger);
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.15s ease;
       }
 
       &:hover {
-        background: var(--dr-primary1);
+        background: var(--dr-gray-100);
         cursor: pointer;
+
+        & .delete {
+          opacity: 1;
+        }
       }
     }
 
     & .active {
-      background: var(--dr-primary1);
+      background: var(--dr-blue-soft);
+      box-shadow: 0px 0px 0px 1px var(--dr-blue-border);
+
+      & .delete {
+        opacity: 1;
+      }
     }
   }
 
   & .variable-form-wrapper {
-    background: #fff;
-    padding: 16px;
-    margin: 16px 16px 16px 0;
-    border-radius: 0 4px 4px 0;
+    background: var(--dr-white);
+    padding: var(--space-4);
+    margin: var(--space-4) var(--space-4) var(--space-4) 0;
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    box-shadow: var(--dr-shadow-border);
+
+    :deep(.el-form-item__label) {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dr-gray-700);
+    }
+
+    :deep(.el-input__wrapper),
+    :deep(.el-select .el-input__wrapper) {
+      border-radius: var(--radius-md);
+      box-shadow: 0px 0px 0px 1px var(--dr-gray-200);
+      border: none;
+      transition: box-shadow 0.2s ease;
+
+      &:focus-within {
+        box-shadow: var(--dr-shadow-focus);
+      }
+    }
+
+    :deep(.el-textarea__inner) {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--dr-gray-200);
+      font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
+      font-size: 13px;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+      &:focus {
+        border-color: var(--dr-blue);
+        box-shadow: var(--dr-shadow-focus);
+      }
+    }
   }
 }
 </style>

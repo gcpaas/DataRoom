@@ -324,6 +324,7 @@ const deleteTimer = (id: string) => {
   height: 100%;
   display: flex;
   flex-direction: column;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   .control-tabs {
     flex: 1;
@@ -334,15 +335,37 @@ const deleteTimer = (id: string) => {
       margin-bottom: 0;
       border-bottom: none;
       padding: 0 16px;
+      box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
     }
 
     :deep(.el-tabs__nav-wrap)::after {
       display: none;
     }
 
+    :deep(.el-tabs__item) {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dr-gray-500);
+      transition: color 0.2s;
+
+      &.is-active {
+        color: var(--dr-gray-900);
+      }
+
+      &:hover:not(.is-active) {
+        color: var(--dr-gray-700);
+      }
+    }
+
+    :deep(.el-tabs__active-bar) {
+      height: 2px;
+      background-color: var(--dr-blue);
+    }
+
     :deep(.el-tabs__content) {
       flex: 1;
       overflow: hidden;
+      padding: 2px;
     }
 
     .tab-content {
@@ -356,13 +379,43 @@ const deleteTimer = (id: string) => {
         .el-divider__text {
           font-size: 12px;
           font-weight: 500;
-          color: var(--dr-text1);
+          text-transform: uppercase;
+          color: var(--dr-gray-500);
+          letter-spacing: 0.02em;
         }
+      }
+
+      :deep(.el-form-item__label) {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--dr-gray-700);
+      }
+
+      :deep(.el-input__wrapper) {
+        border-radius: var(--radius-md);
+        box-shadow: 0 0 0 1px var(--dr-gray-200) inset;
+
+        &:focus-within,
+        &.is-focus {
+          box-shadow: 0 0 0 1px var(--dr-blue) inset, 0 0 0 3px rgba(52, 120, 246, 0.1);
+        }
+      }
+
+      :deep(.el-input-number) {
+        font-feature-settings: "tnum";
+
+        .el-input__inner {
+          font-feature-settings: "tnum";
+        }
+      }
+
+      :deep(.el-select__wrapper) {
+        border-radius: var(--radius-md);
       }
 
       .zoom-desc {
         font-size: 12px;
-        color: var(--el-text-color-secondary);
+        color: var(--dr-gray-500);
         padding: 0 0 12px 80px;
         margin-top: -8px;
       }
@@ -373,11 +426,14 @@ const deleteTimer = (id: string) => {
         justify-content: space-between;
         margin-bottom: 16px;
         padding-bottom: 12px;
+        box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
 
         .timer-title {
-          font-size: 14px;
+          font-size: 12px;
           font-weight: 500;
-          color: var(--dr-text1);
+          text-transform: uppercase;
+          color: var(--dr-gray-500);
+          letter-spacing: 0.02em;
         }
       }
 
@@ -388,11 +444,15 @@ const deleteTimer = (id: string) => {
           justify-content: space-between;
           padding: 12px;
           margin-bottom: 12px;
-          background: var(--dr-bg2);
-          border-radius: 6px;
-          border: 1px solid var(--dr-border);
-          transition: all 0.3s;
+          background: var(--dr-white);
+          border-radius: var(--radius-md);
+          box-shadow: var(--dr-shadow-border);
+          transition: box-shadow 0.2s;
           cursor: pointer;
+
+          &:hover {
+            box-shadow: var(--dr-shadow-sm);
+          }
 
           .timer-info {
             flex: 1;
@@ -402,13 +462,14 @@ const deleteTimer = (id: string) => {
             .timer-name {
               font-size: 14px;
               font-weight: 500;
-              color: var(--dr-text);
+              color: var(--dr-gray-900);
               margin-bottom: 4px;
             }
 
             .timer-desc {
               font-size: 12px;
-              color: var(--dr-text);
+              color: var(--dr-gray-500);
+              font-feature-settings: "tnum";
             }
           }
 
@@ -420,23 +481,22 @@ const deleteTimer = (id: string) => {
             .setting-icon,
             .delete-icon {
               cursor: pointer;
-              transition: all 0.3s;
+              transition: color 0.2s;
             }
 
             .setting-icon {
-              color: var(--dr-text);
+              color: var(--dr-gray-500);
 
               &:hover {
-                color: var(--el-color-primary);
-                transform: rotate(90deg);
+                color: var(--dr-blue);
               }
             }
 
             .delete-icon {
-              color: var(--el-color-danger);
+              color: var(--dr-danger);
 
               &:hover {
-                transform: scale(1.2);
+                opacity: 0.8;
               }
             }
           }
@@ -461,16 +521,16 @@ const deleteTimer = (id: string) => {
         .bg-preview-box {
           width: 100%;
           height: 160px;
-          border: 1px dashed var(--el-border-color);
-          border-radius: 4px;
+          border: 1px dashed var(--dr-gray-400);
+          border-radius: var(--radius-md);
           overflow: hidden;
           position: relative;
-          transition: all 0.3s;
+          transition: border-color 0.2s;
           padding: 16px;
           box-sizing: border-box;
 
           &:hover {
-            border-color: var(--el-color-primary);
+            border-color: var(--dr-blue);
           }
 
           .bg-image {
@@ -486,14 +546,15 @@ const deleteTimer = (id: string) => {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: var(--el-fill-color-light);
-            color: var(--el-text-color-secondary);
-            font-size: 14px;
+            background-color: var(--dr-gray-100);
+            color: var(--dr-gray-500);
+            font-size: 13px;
+            border-radius: var(--radius-sm);
 
             .el-icon {
               font-size: 48px;
               margin-bottom: 8px;
-              color: var(--el-text-color-placeholder);
+              color: var(--dr-gray-400);
             }
           }
         }

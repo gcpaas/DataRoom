@@ -163,6 +163,7 @@ const objectFitOptions = [
 <style scoped>
 .dr-video-player-panel {
   padding: 12px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .dr-video-player-panel :deep(.el-collapse) {
@@ -171,7 +172,9 @@ const objectFitOptions = [
 }
 
 .dr-video-player-panel :deep(.el-collapse-item__header) {
-  font-weight: bold;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d2129;
   border-bottom: none;
   height: 36px;
   line-height: 36px;
@@ -179,5 +182,39 @@ const objectFitOptions = [
 
 .dr-video-player-panel :deep(.el-collapse-item__wrap) {
   border-bottom: none;
+}
+
+.dr-video-player-panel :deep(.el-form-item__label) {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4e5969;
+}
+
+.dr-video-player-panel :deep(.el-form-item) {
+  margin-bottom: 4px;
+}
+
+.dr-video-player-panel :deep(.el-input__wrapper) {
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px #e5e6eb inset;
+}
+
+.dr-video-player-panel :deep(.el-input__wrapper:focus-within) {
+  box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
+}
+
+.dr-video-player-panel :deep(.el-input-number) {
+  font-feature-settings: "tnum";
+}
+
+.dr-video-player-panel :deep(.el-select__wrapper) {
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px #e5e6eb inset;
+}
+
+.dr-video-player-panel :deep(.el-color-picker__trigger) {
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px #e5e6eb inset;
+  border: none;
 }
 </style>

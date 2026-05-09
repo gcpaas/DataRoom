@@ -237,15 +237,18 @@ const removeColor = (index: number) => {
 <style scoped>
 .dr-word-cloud-panel {
   padding: 12px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .dr-word-cloud-panel :deep(.el-collapse) {
   border: none;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .dr-word-cloud-panel :deep(.el-collapse-item__header) {
-  font-weight: bold;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d2129;
   border-bottom: none;
   height: 36px;
   line-height: 36px;
@@ -255,13 +258,47 @@ const removeColor = (index: number) => {
   border-bottom: none;
 }
 
+.dr-word-cloud-panel :deep(.el-form-item__label) {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4e5969;
+}
+
+.dr-word-cloud-panel :deep(.el-form-item) {
+  margin-bottom: 4px;
+}
+
+.dr-word-cloud-panel :deep(.el-input__wrapper) {
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px #e5e6eb inset;
+}
+
+.dr-word-cloud-panel :deep(.el-input__wrapper:focus-within) {
+  box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
+}
+
+.dr-word-cloud-panel :deep(.el-input-number) {
+  font-feature-settings: "tnum";
+}
+
+.dr-word-cloud-panel :deep(.el-select__wrapper) {
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px #e5e6eb inset;
+}
+
+.dr-word-cloud-panel :deep(.el-color-picker__trigger) {
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px #e5e6eb inset;
+  border: none;
+}
+
 .sub-title {
   font-size: 12px;
-  color: #909399;
-  font-weight: bold;
+  color: #86909c;
+  font-weight: 600;
   margin: 12px 0 8px 0;
   padding-left: 4px;
-  border-left: 3px solid #409eff;
+  border-left: 3px solid #3478f6;
 }
 
 .color-list {

@@ -570,6 +570,8 @@ onUnmounted(() => {
   height: 100%;
   gap: 16px;
   overflow: hidden;
+  padding: 2px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   // 左侧地图树面板
   .map-tree-panel {
@@ -577,51 +579,85 @@ onUnmounted(() => {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--el-border-color-light, #e4e7ed);
-    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
     overflow: hidden;
 
     .panel-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 12px;
-      border-bottom: 1px solid var(--el-border-color-light, #e4e7ed);
+      padding: 16px;
+      box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
 
       .el-input {
         flex: 1;
+
+        :deep(.el-input__wrapper) {
+          border-radius: 6px;
+          box-shadow: 0 0 0 1px #e5e6eb inset;
+
+          &:focus-within {
+            box-shadow: 0 0 0 1px #3478f6 inset;
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            ring: 0 0 0 2px #fff, 0 0 0 4px #3478f6;
+          }
+        }
+      }
+
+      :deep(.el-button--primary) {
+        background-color: #3478f6;
+        border-color: #3478f6;
+        border-radius: 6px;
+        font-weight: 500;
+
+        &:hover {
+          background-color: #2563eb;
+          border-color: #2563eb;
+        }
       }
     }
 
     .panel-body {
       flex: 1;
       overflow: hidden;
+      background: #f7f8fa;
 
       .map-list {
         .map-list-item {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 10px 12px;
+          padding: 10px 16px;
           cursor: pointer;
-          transition: background-color 0.2s;
-          border-bottom: 1px solid var(--el-border-color-lighter, #f0f0f0);
+          transition: all 0.2s ease;
+          box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.04);
 
           &:hover {
-            background-color: #f5f7fa;
+            background-color: #fff;
           }
 
           &.active {
-            background-color: #ecf5ff;
-            color: var(--el-color-primary);
+            background-color: #fff;
+            color: #3478f6;
+            box-shadow: inset 3px 0 0 0 #3478f6, 0px 1px 0px 0px rgba(0, 0, 0, 0.04);
           }
 
           .item-name {
             flex: 1;
             font-size: 13px;
+            font-weight: 400;
+            color: #1d2129;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+          }
+
+          &.active .item-name {
+            color: #3478f6;
+            font-weight: 500;
           }
 
           .item-more {
@@ -632,12 +668,12 @@ onUnmounted(() => {
 
             .more-icon {
               font-size: 16px;
-              color: #999;
+              color: #86909c;
               cursor: pointer;
               outline: none;
 
               &:hover {
-                color: var(--el-color-primary);
+                color: #3478f6;
               }
             }
           }
@@ -655,16 +691,17 @@ onUnmounted(() => {
     flex: 1;
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--el-border-color-light, #e4e7ed);
-    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
     overflow: hidden;
 
     .panel-title {
-      padding: 12px 16px;
+      padding: 16px 20px;
       font-size: 14px;
       font-weight: 600;
-      color: var(--el-text-color-primary, #303133);
-      border-bottom: 1px solid var(--el-border-color-light, #e4e7ed);
+      color: #1d2129;
+      box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
     }
 
     .map-chart-container {
@@ -687,22 +724,54 @@ onUnmounted(() => {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--el-border-color-light, #e4e7ed);
-    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
     overflow: hidden;
 
     .panel-title {
-      padding: 12px 16px;
+      padding: 16px 20px;
       font-size: 14px;
       font-weight: 600;
-      color: var(--el-text-color-primary, #303133);
-      border-bottom: 1px solid var(--el-border-color-light, #e4e7ed);
+      color: #1d2129;
+      box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
     }
 
     .region-table-container {
       flex: 1;
       overflow: hidden;
-      padding: 8px;
+      padding: 12px;
+
+      :deep(.el-table) {
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+
+        .el-table__header th {
+          background: #f7f8fa;
+          color: #4e5969;
+          font-weight: 600;
+          font-size: 13px;
+          border-bottom: none;
+        }
+
+        .el-table__body td {
+          font-feature-settings: 'tnum';
+          color: #1d2129;
+          font-size: 13px;
+        }
+
+        .el-table__border-left-patch,
+        &::before,
+        &::after {
+          display: none;
+        }
+
+        th.el-table__cell,
+        td.el-table__cell {
+          border-color: rgba(0, 0, 0, 0.06);
+        }
+      }
     }
   }
 }
@@ -710,11 +779,24 @@ onUnmounted(() => {
 .upload-area {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+
+  :deep(.el-button) {
+    border-radius: 6px;
+    font-weight: 500;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border: none;
+
+    &:hover {
+      color: #3478f6;
+      box-shadow: 0px 0px 0px 1px rgba(52, 120, 246, 0.4);
+    }
+  }
 
   .upload-file-name {
     font-size: 13px;
-    color: var(--el-color-primary);
+    font-weight: 400;
+    color: #3478f6;
     max-width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -723,7 +805,66 @@ onUnmounted(() => {
 
   .upload-tip {
     font-size: 12px;
-    color: #999;
+    color: #86909c;
+  }
+}
+
+// Dialog styles
+:deep(.el-dialog) {
+  border-radius: 8px;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
+
+  .el-dialog__header {
+    padding: 20px 24px 16px;
+
+    .el-dialog__title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1d2129;
+    }
+  }
+
+  .el-dialog__body {
+    padding: 0 24px;
+
+    .el-form-item__label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #4e5969;
+    }
+
+    .el-input__wrapper {
+      border-radius: 6px;
+      box-shadow: 0 0 0 1px #e5e6eb inset;
+
+      &:focus-within {
+        box-shadow: 0 0 0 1px #3478f6 inset;
+      }
+    }
+  }
+
+  .el-dialog__footer {
+    padding: 16px 24px 20px;
+
+    .el-button {
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .el-button--primary {
+      background-color: #3478f6;
+      border-color: #3478f6;
+
+      &:hover {
+        background-color: #2563eb;
+        border-color: #2563eb;
+      }
+    }
+
+    .el-button:not(.el-button--primary) {
+      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+      border: none;
+    }
   }
 }
 </style>

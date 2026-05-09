@@ -79,26 +79,29 @@ onMounted(() => {
 .dr-up-down-layout {
   height: 100vh;
   width: 100%;
-  background-color: var(--dr-bg2);
+  background-color: #f7f8fa;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   & .router-view {
     padding: 16px;
     box-sizing: border-box;
-    background-color: white;
+    background-color: #ffffff;
     margin: 16px;
-    height: calc(100vh - 60px - 32px);
+    border-radius: 8px;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    height: calc(100vh - 48px - 32px);
+    overflow: hidden;
   }
 
-
   & .header {
-    background-color: white;
-    height: 60px;
+    background-color: #ffffff;
+    height: 48px;
     width: 100%;
-    line-height: 60px;
-    border-bottom: 1px solid var(--dr-border);
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, .03);
-    color: var(--dr-text1);
-    font-weight: 700;
+    line-height: 48px;
+    border-bottom: none;
+    box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.08);
+    color: #1d2129;
+    font-weight: 500;
     display: flex;
     align-items: center;
     padding: 0 20px;
@@ -106,47 +109,54 @@ onMounted(() => {
 
     & .logo {
       display: flex;
+      align-items: center;
 
       & img {
-        height: 32px;
+        height: 28px;
       }
     }
 
     & .title {
-      margin-left: 32px;
-      font-size: 18px;
-      font-weight: 700;
+      margin-left: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #1d2129;
+      letter-spacing: -0.2px;
     }
 
     & .menu {
-      width: 50%;
       margin-left: auto;
-      text-align: center;
       display: flex;
+      align-items: center;
+      gap: 4px;
 
       & .item {
         cursor: pointer;
         font-size: 14px;
-        padding: 4px 16px;
-        border-radius: 4px;
-        transition: background-color 0.3s ease;
+        font-weight: 500;
+        color: #1d2129;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: background-color 0.2s ease, color 0.2s ease;
         position: relative;
 
         &:hover {
-          background-color: rgba(0, 0, 0, 0.03);
+          background-color: #f7f8fa;
         }
 
         &.active {
+          color: #3478f6;
+
           &::after {
             content: '';
             position: absolute;
-            bottom: 4px;
+            bottom: -2px;
             left: 50%;
             transform: translateX(-50%);
-            width: 60%;
-            height: 3px;
-            background-color: var(--dr-primary);
-            border-radius: 2px;
+            width: calc(100% - 24px);
+            height: 2px;
+            background-color: #3478f6;
+            border-radius: 1px;
           }
         }
       }
@@ -154,29 +164,32 @@ onMounted(() => {
 
     & .help-link {
       font-size: 14px;
-      font-weight: 400;
-      color: var(--dr-text1);
+      font-weight: 500;
+      color: #4e5969;
       text-decoration: none;
       margin-right: 16px;
       margin-left: 16px;
       cursor: pointer;
       flex-shrink: 0;
       white-space: nowrap;
-      transition: opacity 0.3s ease;
+      transition: color 0.2s ease;
+      border-radius: 6px;
+      padding: 4px 8px;
 
       &:hover {
-        opacity: 0.7;
+        color: #3478f6;
+        background-color: #eff6ff;
       }
     }
 
     & .user {
-      width: 150px;
       font-size: 14px;
-      font-weight: 700;
-      color: var(--dr-text1);
+      font-weight: 500;
+      color: #1d2129;
       display: flex;
       align-items: center;
       justify-content: flex-end;
+      flex-shrink: 0;
 
       .el-dropdown-link {
         cursor: pointer;
@@ -184,28 +197,36 @@ onMounted(() => {
         align-items: center;
         justify-content: flex-end;
         font-size: 14px;
-        transition: opacity 0.3s ease;
+        font-weight: 500;
+        transition: color 0.2s ease;
         line-height: 1;
         outline: none;
+        color: #1d2129;
+        border-radius: 6px;
+        padding: 4px 8px;
 
         &:hover {
-          opacity: 0.8;
+          color: #3478f6;
         }
 
         &:focus {
           outline: none;
+          box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #3478f6;
+          border-radius: 6px;
         }
 
         .user-avatar {
-          width: 32px;
-          height: 32px;
+          width: 28px;
+          height: 28px;
           border-radius: 50%;
-          margin-right: 16px;
+          margin-right: 8px;
           object-fit: cover;
+          box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
         }
 
         .el-icon--right {
           margin-left: 4px;
+          color: #86909c;
         }
       }
     }

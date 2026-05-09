@@ -400,15 +400,22 @@ const removeColorSegment = (index: number) => {
 <style scoped>
 .dr-gauge-panel {
   padding: 12px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  color: #1d2129;
 }
 
+/* Collapse group spacing */
 .dr-gauge-panel :deep(.el-collapse) {
   border: none;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
+/* Section headings: 12px weight 600 color #1d2129 */
 .dr-gauge-panel :deep(.el-collapse-item__header) {
-  font-weight: bold;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d2129;
   border-bottom: none;
   height: 36px;
   line-height: 36px;
@@ -418,13 +425,90 @@ const removeColorSegment = (index: number) => {
   border-bottom: none;
 }
 
+/* Group separator between collapse sections */
+.dr-gauge-panel :deep(.el-collapse-item__wrap .el-collapse-item__content) {
+  padding-bottom: 4px;
+}
+
+/* Form item compact rows: 4px vertical gap */
+.dr-gauge-panel :deep(.el-form-item) {
+  margin-bottom: 4px;
+}
+
+/* Labels: 12px weight 500 color #4e5969 */
+.dr-gauge-panel :deep(.el-form-item__label) {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4e5969;
+}
+
+/* Inputs: border 1px solid #e5e6eb, radius 6px */
+.dr-gauge-panel :deep(.el-input__wrapper),
+.dr-gauge-panel :deep(.el-input-number),
+.dr-gauge-panel :deep(.el-select__wrapper) {
+  border-radius: 6px;
+}
+
+.dr-gauge-panel :deep(.el-input__wrapper) {
+  box-shadow: 0 0 0 1px #e5e6eb inset;
+}
+
+.dr-gauge-panel :deep(.el-input__wrapper:focus-within),
+.dr-gauge-panel :deep(.el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
+}
+
+/* Number inputs: tabular nums for pixel values */
+.dr-gauge-panel :deep(.el-input-number .el-input__inner) {
+  font-feature-settings: "tnum";
+}
+
+/* Select dropdown */
+.dr-gauge-panel :deep(.el-select-dropdown) {
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* Color pickers: radius 6px, shadow-border */
+.dr-gauge-panel :deep(.el-color-picker__trigger) {
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px #e5e6eb;
+  border: none;
+}
+
+/* Slider/range: track #e5e6eb, active #3478f6, thumb white with #3478f6 border */
+.dr-gauge-panel :deep(.el-slider__runway) {
+  background-color: #e5e6eb;
+}
+
+.dr-gauge-panel :deep(.el-slider__bar) {
+  background-color: #3478f6;
+}
+
+.dr-gauge-panel :deep(.el-slider__button) {
+  background-color: #fff;
+  border-color: #3478f6;
+}
+
+/* Sub-section titles */
 .sub-title {
   font-size: 12px;
-  color: #909399;
-  font-weight: bold;
+  color: #4e5969;
+  font-weight: 600;
   margin: 12px 0 8px 0;
-  padding-left: 4px;
-  border-left: 3px solid #409eff;
+  padding-left: 8px;
+  border-left: 3px solid #3478f6;
+  line-height: 1;
+}
+
+/* Group separator line */
+.sub-title::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: #f2f3f5;
+  margin-bottom: 12px;
+  margin-left: -8px;
 }
 
 .color-segment-list {
@@ -435,6 +519,6 @@ const removeColorSegment = (index: number) => {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 </style>

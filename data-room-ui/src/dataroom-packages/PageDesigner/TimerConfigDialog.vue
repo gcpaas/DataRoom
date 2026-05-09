@@ -276,16 +276,24 @@ const onConfirm = () => {
   }
 }
 
+// Dialog/modal styling
+:deep(.el-dialog) {
+  border-radius: 8px;
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 12px 24px -4px rgba(0, 0, 0, 0.08), 0px 4px 8px rgba(0, 0, 0, 0.04);
+}
+
 .dr-timer-config-wrapper {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 4px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   .basic-config-section {
-    background: var(--el-fill-color-light);
+    background: var(--dr-gray-100);
     padding: 16px;
-    border-radius: 6px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--dr-shadow-border);
 
     .inline-form {
       display: flex;
@@ -297,21 +305,27 @@ const onConfirm = () => {
         margin-bottom: 0;
         margin-right: 0;
       }
+
+      :deep(.el-form-item__label) {
+        font-size: 12px;
+        font-weight: 500;
+        color: #4e5969;
+      }
     }
 
     .form-tip {
       font-size: 12px;
-      color: var(--el-text-color-secondary);
+      color: #86909c;
       margin-left: 8px;
     }
 
     .status-text {
       margin-left: 8px;
       font-size: 13px;
-      color: var(--el-text-color-secondary);
+      color: #86909c;
 
       &.enabled {
-        color: var(--el-color-success);
+        color: var(--dr-success);
         font-weight: 500;
       }
     }
@@ -320,16 +334,17 @@ const onConfirm = () => {
   .action-config-section {
     display: grid;
     grid-template-columns: 350px auto;
-    background-color: var(--el-fill-color-lighter);
+    background-color: var(--dr-gray-100);
     gap: 0;
-    border-radius: 6px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
     min-height: 500px;
+    box-shadow: var(--dr-shadow-border);
 
     .action-list-wrapper {
-      background: white;
+      background: #ffffff;
       padding: 16px;
-      border-right: 1px solid var(--dr-border);
+      box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.08);
       display: flex;
       flex-direction: column;
 
@@ -339,13 +354,14 @@ const onConfirm = () => {
         justify-content: space-between;
         margin-bottom: 16px;
         padding-bottom: 12px;
-        border-bottom: 1px solid var(--dr-border);
+        box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
         flex-shrink: 0;
 
         .title {
-          font-size: 15px;
+          font-size: 12px;
           font-weight: 500;
-          color: var(--dr-text);
+          text-transform: uppercase;
+          color: #86909c;
         }
       }
 
@@ -354,19 +370,20 @@ const onConfirm = () => {
         overflow-y: auto;
         overflow-x: hidden;
         min-height: 0;
+        padding: 2px;
       }
 
       .action-item {
-        margin-bottom: 16px;
+        margin-bottom: 12px;
         padding: 12px;
         position: relative;
         cursor: move;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-radius: 4px;
-        border: 1px solid var(--dr-border);
-        transition: all 0.3s;
+        border-radius: var(--radius-md);
+        box-shadow: var(--dr-shadow-border);
+        transition: all 0.2s;
         gap: 8px;
         background: var(--dr-bg2);
 
@@ -375,11 +392,11 @@ const onConfirm = () => {
         }
 
         .drag-icon {
-          font-size: 18px;
-          color: var(--el-text-color-regular);
+          font-size: 12px;
+          color: #c9cdd4;
           cursor: move;
           flex-shrink: 0;
-          transition: color 0.3s;
+          transition: color 0.2s;
         }
 
         .action-info {
@@ -388,7 +405,7 @@ const onConfirm = () => {
 
           .action-name {
             font-size: 14px;
-            color: var(--dr-text);
+            color: #1d2129;
             font-weight: 500;
             margin-bottom: 4px;
             overflow: hidden;
@@ -398,15 +415,15 @@ const onConfirm = () => {
 
           .action-type {
             font-size: 12px;
-            color: var(--el-text-color-secondary);
+            color: #86909c;
           }
         }
 
         .delete-icon {
           font-size: 16px;
-          color: var(--el-color-danger);
+          color: var(--dr-danger);
           cursor: pointer;
-          transition: transform 0.3s;
+          transition: transform 0.2s;
 
           &:hover {
             transform: scale(1.2);
@@ -414,18 +431,21 @@ const onConfirm = () => {
         }
 
         &:hover {
-          background: var(--el-color-primary-light-9);
+          background: var(--dr-blue-soft);
           cursor: pointer;
 
           .drag-icon {
-            color: var(--dr-primary);
+            color: #4e5969;
           }
         }
 
         &.active {
-          background: var(--el-color-primary-light-9);
-          border-color: var(--dr-primary);
-          box-shadow: 0 2px 8px rgba(64, 158, 255, 0.15);
+          background: var(--dr-blue-soft);
+          box-shadow: 0px 0px 0px 1px #3478f6;
+
+          .drag-icon {
+            color: #4e5969;
+          }
         }
       }
 
@@ -436,12 +456,18 @@ const onConfirm = () => {
     }
 
     .action-form-wrapper {
-      background: #fff;
+      background: #ffffff;
       padding: 16px;
       display: flex;
       flex-direction: column;
       overflow-y: auto;
       overflow-x: hidden;
+
+      :deep(.el-form-item__label) {
+        font-size: 12px;
+        font-weight: 500;
+        color: #4e5969;
+      }
 
       .form-content {
         flex: 1;
