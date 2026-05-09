@@ -3,6 +3,7 @@
  */
 import {DrTextPlugin} from '@/dataroom-packages/components/DrText/plugin.ts'
 import {DrImagePlugin} from '@/dataroom-packages/components/DrImage/plugin.ts'
+import {DrBarChartPlugin} from '@/dataroom-packages/components/DrBarChart/plugin.ts'
 import type {ComponentLibTagInterface} from "@/dataroom-packages/PageDesigner/type/ComponentLibTagInterface.ts";
 import {ComponentLibTagTypeConst} from "@/dataroom-packages/constant/ComponentLibTagTypeConst.ts";
 
@@ -57,7 +58,8 @@ const componentLibTagList: ComponentLibTagInterface[] = [
  */
 const pluginList = [
   new DrTextPlugin([ComponentLibTagTypeConst.TEXT]),
-  new DrImagePlugin([ComponentLibTagTypeConst.MEDIA])
+  new DrImagePlugin([ComponentLibTagTypeConst.MEDIA]),
+  new DrBarChartPlugin([ComponentLibTagTypeConst.BAR])
 ]
 
 export { pluginList, componentLibTagList }

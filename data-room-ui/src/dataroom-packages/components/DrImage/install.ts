@@ -10,8 +10,23 @@ const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 
 export interface DrImagePropsInterface {
-  // 地址
+  /** 图片类型: bitmap(位图) | svg(矢量图) */
+  imageType: 'bitmap' | 'svg'
+  /** 图片地址(URL或相对路径) */
   url: string
+  /** 图片重复/填充模式 */
+  repeatMode: 'no-repeat-stretch' | 'no-repeat-contain' | 'no-repeat-center' | 'repeat' | 'repeat-x' | 'repeat-y'
+  /** 圆角(px) */
+  borderRadius: number
+  /** 超链接配置 */
+  hyperlink: {
+    /** 超链接URL */
+    url: string
+    /** 是否新开窗口 */
+    openNewWindow: boolean
+    /** 是否显示手势光标(pointer) */
+    cursorPointer: boolean
+  }
 }
 
 /**
@@ -27,7 +42,15 @@ const getInstance = (): DrImageConfig => {
   return createChartConfig<DrImagePropsInterface>(
     DrConst.THIS_PLUGIN_TYPE,
     {
-      url: '/dataRoom/resource/image/placeholder.png'
+      imageType: 'bitmap',
+      url: '/dataRoom/resource/image/placeholder.png',
+      repeatMode: 'no-repeat-stretch',
+      borderRadius: 0,
+      hyperlink: {
+        url: '',
+        openNewWindow: false,
+        cursorPointer: true,
+      },
     },
     {
       title: '图片',

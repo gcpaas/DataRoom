@@ -1,0 +1,263 @@
+{
+  "componentName": "DrRadarChart",
+  "title": "雷达图",
+  "description": "雷达图通过多轴放射状布局展示多维度数据的均衡性和对比关系。支持多系列叠加对比、多边形/圆形坐标轴、填充区域等功能。适合能力评估、多指标对比等场景。",
+  "defaultSize": {
+    "w": 400,
+    "h": 400
+  },
+  "propsInterface": {
+    "global": {
+      "description": "全局配置",
+      "properties": {
+        "padding": {
+          "type": "[number, number, number, number]",
+          "description": "图表内边距 [上, 右, 下, 左] (px)",
+          "default": [40, 40, 40, 40]
+        }
+      }
+    },
+    "radar": {
+      "description": "雷达坐标轴配置",
+      "properties": {
+        "shape": {
+          "type": "string",
+          "description": "坐标轴形状",
+          "enum": ["polygon", "circle"],
+          "default": "polygon"
+        },
+        "radius": {
+          "type": "string",
+          "description": "雷达半径(百分比)",
+          "default": "65%"
+        },
+        "startAngle": {
+          "type": "number",
+          "description": "起始角度(度)",
+          "default": 90
+        },
+        "splitNumber": {
+          "type": "number",
+          "description": "分割段数",
+          "default": 5
+        },
+        "axisLine": {
+          "type": "object",
+          "description": "轴线（从中心到各顶点的线）",
+          "properties": {
+            "show": { "type": "boolean", "default": true },
+            "color": { "type": "string", "default": "#cccccc" },
+            "width": { "type": "number", "default": 1 },
+            "type": { "type": "string", "enum": ["solid", "dashed", "dotted"], "default": "solid" }
+          }
+        },
+        "splitLine": {
+          "type": "object",
+          "description": "分割线（同心多边形/圆形线）",
+          "properties": {
+            "show": { "type": "boolean", "default": true },
+            "color": { "type": "string", "default": "#dddddd" },
+            "width": { "type": "number", "default": 1 },
+            "type": { "type": "string", "enum": ["solid", "dashed", "dotted"], "default": "solid" }
+          }
+        },
+        "splitArea": {
+          "type": "object",
+          "description": "分割区域（交替着色背景）",
+          "properties": {
+            "show": { "type": "boolean", "default": false },
+            "colors": {
+              "type": "string[]",
+              "description": "交替颜色",
+              "default": ["rgba(200, 200, 200, 0.1)", "rgba(200, 200, 200, 0.05)"]
+            }
+          }
+        },
+        "axisLabel": {
+          "type": "object",
+          "description": "半径轴标签（刻度数值）",
+          "properties": {
+            "show": { "type": "boolean", "default": false },
+            "fontSize": { "type": "number", "default": 11 },
+            "color": { "type": "string", "default": "#999999" }
+          }
+        }
+      }
+    },
+    "indicator": {
+      "description": "指示器配置（各维度轴端点）",
+      "properties": {
+        "nameStyle": {
+          "type": "object",
+          "description": "指示器名称样式",
+          "properties": {
+            "fontSize": { "type": "number", "default": 12 },
+            "color": { "type": "string", "default": "#666666" },
+            "fontWeight": { "type": "string", "default": "normal" },
+            "fontFamily": { "type": "string", "default": "Microsoft YaHei" }
+          }
+        },
+        "nameGap": {
+          "type": "number",
+          "description": "名称与轴端点距离(px)",
+          "default": 15
+        },
+        "max": {
+          "type": "number | null",
+          "description": "统一最大值(null=各轴独立)",
+          "default": null
+        }
+      }
+    },
+    "legend": {
+      "description": "图例配置",
+      "properties": {
+        "show": { "type": "boolean", "default": true },
+        "position": {
+          "type": "string",
+          "enum": ["top", "bottom", "left", "right"],
+          "default": "top"
+        },
+        "textStyle": {
+          "type": "object",
+          "properties": {
+            "fontSize": { "type": "number", "default": 12 },
+            "color": { "type": "string", "default": "#666666" },
+            "fontWeight": { "type": "string", "default": "normal" }
+          }
+        },
+        "itemGap": { "type": "number", "description": "图例间距", "default": 16 }
+      }
+    },
+    "tooltip": {
+      "description": "提示框配置",
+      "properties": {
+        "show": { "type": "boolean", "default": true },
+        "trigger": {
+          "type": "string",
+          "enum": ["item"],
+          "default": "item"
+        },
+        "backgroundColor": { "type": "string", "default": "rgba(50, 50, 50, 0.7)" },
+        "borderColor": { "type": "string", "default": "transparent" },
+        "textStyle": {
+          "type": "object",
+          "properties": {
+            "fontSize": { "type": "number", "default": 12 },
+            "color": { "type": "string", "default": "#ffffff" }
+          }
+        }
+      }
+    },
+    "series": {
+      "description": "系列(雷达区域)配置",
+      "properties": {
+        "colors": {
+          "type": "string[]",
+          "description": "系列颜色列表",
+          "default": ["#5470c6", "#91cc75", "#fac858", "#ee6666", "#73c0de", "#3ba272"]
+        },
+        "lineWidth": {
+          "type": "number",
+          "description": "边界线宽度(px)",
+          "default": 2
+        },
+        "lineStyle": {
+          "type": "string",
+          "description": "边界线类型",
+          "enum": ["solid", "dashed", "dotted"],
+          "default": "solid"
+        },
+        "areaStyle": {
+          "type": "object",
+          "description": "填充区域配置",
+          "properties": {
+            "show": { "type": "boolean", "description": "是否填充区域", "default": true },
+            "opacity": { "type": "number", "description": "填充透明度(0-1)", "default": 0.3 }
+          }
+        },
+        "symbol": {
+          "type": "object",
+          "description": "数据点标记",
+          "properties": {
+            "show": { "type": "boolean", "description": "是否显示数据点", "default": true },
+            "type": {
+              "type": "string",
+              "enum": ["circle", "rect", "triangle", "diamond", "none"],
+              "default": "circle"
+            },
+            "size": { "type": "number", "description": "标记大小(px)", "default": 4 },
+            "borderWidth": { "type": "number", "default": 1 }
+          }
+        },
+        "label": {
+          "type": "object",
+          "description": "数据标签",
+          "properties": {
+            "show": { "type": "boolean", "default": false },
+            "fontSize": { "type": "number", "default": 11 },
+            "color": { "type": "string", "default": "#333333" },
+            "format": {
+              "type": "string",
+              "enum": ["default", "integer", "float1", "float2", "percent", "percent1", "thousand", "thousand1"],
+              "default": "default"
+            }
+          }
+        }
+      }
+    },
+    "animation": {
+      "description": "动画配置",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "duration": { "type": "number", "description": "动画时长(ms)", "default": 1000 },
+        "easing": {
+          "type": "string",
+          "enum": ["linear", "cubicOut", "elasticOut", "bounceOut"],
+          "default": "cubicOut"
+        }
+      }
+    }
+  },
+  "behaviors": [
+    {
+      "name": "区域单击",
+      "desc": "鼠标点击雷达区域时触发",
+      "method": "click",
+      "paramsList": [
+        { "name": "seriesName", "desc": "点击区域的系列名", "type": "string" },
+        { "name": "values", "desc": "该系列的所有维度数值", "type": "number[]" },
+        { "name": "indicators", "desc": "对应的指示器名称列表", "type": "string[]" }
+      ]
+    },
+    {
+      "name": "图例点击",
+      "desc": "点击图例项时触发",
+      "method": "legendClick",
+      "paramsList": [
+        { "name": "name", "desc": "图例名称", "type": "string" },
+        { "name": "selected", "desc": "当前图例选中状态", "type": "boolean" }
+      ]
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "indicatorField",
+      "desc": "维度/指示器名称字段（角度轴类目）",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "valueField",
+      "desc": "数值字段（半径轴数值）",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "seriesField",
+      "desc": "系列分组字段（多组数据对比）",
+      "required": false,
+      "multiple": false
+    }
+  ]
+}

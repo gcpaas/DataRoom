@@ -18,6 +18,7 @@ import com.gccloud.gcpaas.core.page.bean.BasePageConfig;
 import com.gccloud.gcpaas.core.page.bean.PageStageVo;
 import com.gccloud.gcpaas.core.page.dto.PageOfflineDto;
 import com.gccloud.gcpaas.core.page.dto.PagePublishDto;
+import com.gccloud.gcpaas.core.page.dto.PageRenameDto;
 import com.gccloud.gcpaas.core.page.dto.PageStageSearchDto;
 import com.gccloud.gcpaas.core.page.service.PageService;
 import com.gccloud.gcpaas.core.page.service.PageStageService;
@@ -141,6 +142,30 @@ public class PageController {
         pageDesignEntity.setUpdateDate(new Date());
         pageService.updateById(pageDesignEntity);
         return Resp.success(pageDesignEntity.getId());
+    }
+
+    /**
+     * 修改页面名称
+     *
+     * @param pageRenameDto
+     * @return
+     */
+    @PostMapping("/updateName")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "修改页面名称", description = "根据编码修改页面名称")
+    public Resp<Boolean> updateName(@RequestBody PageRenameDto pageRenameDto) {
+        if (StringUtils.isBlank(pageRenameDto.getCode())) {
+            throw new DataRoomException("页面编码不能为空");
+        }
+        if (StringUtils.isBlank(pageRenameDto.getName())) {
+            throw new DataRoomException("页面名称不能为空");
+        }
+        LambdaUpdateWrapper<PageEntity> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(PageEntity::getCode, pageRenameDto.getCode());
+        updateWrapper.set(PageEntity::getName, pageRenameDto.getName());
+        updateWrapper.set(PageEntity::getUpdateDate, new Date());
+        pageService.update(updateWrapper);
+        return Resp.success(true);
     }
 
     /**
