@@ -6,6 +6,7 @@ import { dataSourceApi, type DataSourceEntity } from './api'
 import mysqlImg from './assets/image/MySQL占位符.png'
 import postgresqlImg from './assets/image/PostgreSQL占位符.png'
 import oracleImg from './assets/image/Oracle占位符.png'
+import dorisImg from './assets/image/Doris占位符.png'
 
 const searchName = ref('')
 const dataSourceList = ref<DataSourceEntity[]>([])
@@ -48,6 +49,13 @@ const dataSourceTypeMap = {
     image: oracleImg,
     description: '企业级商业关系型数据库',
     component: defineAsyncComponent(() => import('./components/OracleEditor.vue'))
+  },
+  doris: {
+    name: 'Doris',
+    icon: '🔶',
+    image: dorisImg,
+    description: 'Apache Doris实时分析数据仓库',
+    component: defineAsyncComponent(() => import('./components/DorisEditor.vue'))
   }
 } as const
 
@@ -80,7 +88,7 @@ const openTypeSelectDialog = () => {
 /**
  * 选择数据源类型并新增
  */
-const handleSelectType = (dataSourceType: 'mysql' | 'postgresql' | 'oracle') => {
+const handleSelectType = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris') => {
   typeSelectDialogVisible.value = false
   handleAdd(dataSourceType)
 }
@@ -88,7 +96,7 @@ const handleSelectType = (dataSourceType: 'mysql' | 'postgresql' | 'oracle') => 
 /**
  * 新增数据源
  */
-const handleAdd = (dataSourceType: 'mysql' | 'postgresql' | 'oracle') => {
+const handleAdd = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris') => {
   dialogTitle.value = `新增${dataSourceTypeMap[dataSourceType].name}数据源`
 
   // 根据数据源类型设置默认驱动名称
@@ -99,6 +107,8 @@ const handleAdd = (dataSourceType: 'mysql' | 'postgresql' | 'oracle') => {
     defaultDriverName = 'org.postgresql.Driver'
   } else if (dataSourceType === 'oracle') {
     defaultDriverName = 'oracle.jdbc.driver.OracleDriver'
+  } else if (dataSourceType === 'doris') {
+    defaultDriverName = 'com.mysql.cj.jdbc.Driver'
   }
 
   currentDataSource.value = {
@@ -269,7 +279,7 @@ onMounted(() => {
           v-for="(item, key) in dataSourceTypeMap"
           :key="key"
           class="type-card"
-          @click="handleSelectType(key as 'mysql' | 'postgresql' | 'oracle')"
+          @click="handleSelectType(key as 'mysql' | 'postgresql' | 'oracle' | 'doris')"
         >
           <div class="type-card-image">
             <img :src="item.image" :alt="item.name" />

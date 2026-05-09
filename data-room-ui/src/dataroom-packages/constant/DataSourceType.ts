@@ -4,5 +4,6 @@
 export const DataSourceType = {
   MYSQL: 'mysql',
   POSTGRESQL: 'postgresql',
-  ORACLE: 'oracle'
+  ORACLE: 'oracle',
+  DORIS: 'doris'
 } as const;

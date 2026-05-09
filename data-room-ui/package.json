@@ -16,8 +16,12 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "@babel/runtime": "^7.29.2",
+    "@codemirror/lang-json": "^6.0.2",
     "@element-plus/icons-vue": "^2.3.2",
+    "@uiw/codemirror-theme-eclipse": "^4.25.9",
     "axios": "^1.7.9",
+    "codemirror": "^6.0.2",
     "echarts": "^6.0.0",
     "element-plus": "^2.13.0",
     "jsencrypt": "^3.5.4",
@@ -26,6 +30,7 @@
     "pinia": "^3.0.4",
     "uuid": "^13.0.0",
     "vue": "^3.5.25",
+    "vue-codemirror": "^6.1.1",
     "vue-grid-layout-v3": "^3.1.2",
     "vue-router": "^4.6.3",
     "vue3-moveable": "^0.28.0",
@@ -47,8 +52,8 @@
     "sass-embedded": "^1.97.1",
     "typescript": "~5.9.0",
     "unplugin-auto-import": "^20.3.0",
-    "unplugin-vue-components": "^30.0.0",
     "unplugin-element-plus": "^0.11.2",
+    "unplugin-vue-components": "^30.0.0",
     "vite": "^7.2.4",
     "vite-plugin-vue-devtools": "^8.0.5",
     "vue-tsc": "^3.1.5"

@@ -201,7 +201,12 @@ defineExpose({
           :key="item.code"
           :label="item.name"
           :value="item.code"
-        />
+        >
+          <span class="datasource-option">
+            <span class="datasource-option__name">{{ item.name }}</span>
+            <span class="datasource-option__type">{{ item.dataSourceType }}</span>
+          </span>
+        </el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="SQL语句">
@@ -297,5 +302,26 @@ defineExpose({
 <style scoped lang="scss">
 :deep(.el-form) {
   padding: 16px;
+}
+
+.datasource-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  &__name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__type {
+    flex-shrink: 0;
+    margin-left: 12px;
+    color: var(--el-text-color-secondary);
+    font-size: 12px;
+  }
 }
 </style>

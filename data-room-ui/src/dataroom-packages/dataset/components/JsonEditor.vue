@@ -4,6 +4,9 @@ import type { FormInstance, FormRules } from 'element-plus'
 import type { DatasetEntity } from '../api'
 import { datasetApi } from '../api'
 import { ElMessage } from 'element-plus'
+import { Codemirror } from 'vue-codemirror'
+import { json } from '@codemirror/lang-json'
+import { eclipse } from '@uiw/codemirror-theme-eclipse'
 
 const props = defineProps<{
   modelValue: DatasetEntity
@@ -17,6 +20,9 @@ const emit = defineEmits<{
 }>()
 
 const formRef = ref<FormInstance>()
+
+// CodeMirror 扩展配置：JSON语言 + Eclipse主题
+const cmExtensions = [json(), eclipse]
 
 const formData = reactive<DatasetEntity>({
   name: '',
@@ -241,15 +247,19 @@ defineExpose({
       <el-input v-model="formData.name" placeholder="请输入数据集名称" clearable />
     </el-form-item>
     <el-form-item label="JSON数据">
-      <div style="width: 100%; position: relative">
-        <el-input
+      <div style="width: 100%; position: relative; overflow: hidden">
+        <div
           v-if="formData.dataset && 'json' in formData.dataset"
-          v-model="formData.dataset.json"
-          type="textarea"
-          :rows="15"
-          placeholder='请输入JSON数据，例如：[{"name": "张三", "age": 20}]'
-        />
-        <div style="position: absolute; right: 12px; bottom: 16px">
+          class="codemirror-wrapper"
+        >
+          <Codemirror
+            v-model="formData.dataset.json"
+            :extensions="cmExtensions"
+            placeholder='请输入JSON数据，例如：[{"name": "张三", "age": 20}]'
+            :style="{ height: '360px' }"
+          />
+        </div>
+        <div style="position: absolute; right: 12px; bottom: 16px; z-index: 1">
           <el-button size="small" @click="formatJson">格式化</el-button>
         </div>
       </div>
@@ -291,5 +301,27 @@ defineExpose({
 <style scoped lang="scss">
 :deep(.el-form) {
   padding: 16px;
+}
+
+.codemirror-wrapper {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--el-border-color);
+  border-radius: 4px;
+  overflow: hidden;
+
+  :deep(.cm-editor) {
+    height: 360px;
+    max-width: 100%;
+    font-size: 14px;
+
+    .cm-scroller {
+      overflow: auto;
+    }
+
+    .cm-content {
+      max-width: 100%;
+    }
+  }
 }
 </style>

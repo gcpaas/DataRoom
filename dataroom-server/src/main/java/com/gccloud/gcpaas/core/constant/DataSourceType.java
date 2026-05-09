@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum DataSourceType implements IEnum<String> {
     MYSQL("mysql"),
     POSTGRESQL("postgresql"),
-    ORACLE("oracle");
+    ORACLE("oracle"),
+    DORIS("doris");
 
     public static final String MYSQL_TYPE = "mysql";
     public static final String POSTGRESQL_TYPE = "postgresql";
     public static final String ORACLE_TYPE = "oracle";
+    public static final String DORIS_TYPE = "doris";
 
 
     private String type;
