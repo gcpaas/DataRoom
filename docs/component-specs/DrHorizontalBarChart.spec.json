@@ -1,0 +1,333 @@
+{
+  "componentName": "DrHorizontalBarChart",
+  "title": "条形图",
+  "description": "横向条形图，通过水平方向的柱子展示类目数据对比，适合类目名称较长或类目数量较多的场景。支持堆叠、分组、渐变、贴图等多种展示形式。",
+  "defaultSize": {
+    "w": 400,
+    "h": 300
+  },
+  "propsInterface": {
+    "global": {
+      "description": "全局配置",
+      "properties": {
+        "padding": {
+          "type": "[number, number, number, number]",
+          "description": "图表内边距 [上, 右, 下, 左] (px)",
+          "default": [40, 40, 30, 80]
+        }
+      }
+    },
+    "xAxis": {
+      "description": "X轴配置（数值轴，水平方向）",
+      "properties": {
+        "show": {
+          "type": "boolean",
+          "description": "是否显示X轴",
+          "default": true
+        },
+        "name": {
+          "type": "string",
+          "description": "轴名称",
+          "default": ""
+        },
+        "range": {
+          "type": "object",
+          "description": "显示范围",
+          "properties": {
+            "auto": {
+              "type": "boolean",
+              "description": "是否自动计算范围",
+              "default": true
+            },
+            "min": {
+              "type": "number",
+              "description": "最小值",
+              "default": 0
+            },
+            "max": {
+              "type": "number",
+              "description": "最大值",
+              "default": 100
+            }
+          }
+        },
+        "axisLine": {
+          "type": "object",
+          "description": "轴线",
+          "properties": {
+            "show": { "type": "boolean", "default": true },
+            "color": { "type": "string", "default": "#cccccc" },
+            "width": { "type": "number", "default": 1 }
+          }
+        },
+        "axisLabel": {
+          "type": "object",
+          "description": "轴标签",
+          "properties": {
+            "show": { "type": "boolean", "default": true },
+            "fontSize": { "type": "number", "default": 12 },
+            "color": { "type": "string", "default": "#999999" },
+            "fontWeight": { "type": "string", "default": "normal" },
+            "fontFamily": { "type": "string", "default": "Microsoft YaHei" },
+            "format": {
+              "type": "string",
+              "description": "数值格式",
+              "enum": ["default", "integer", "float1", "float2", "percent", "percent1", "thousand", "thousand1"],
+              "default": "default"
+            }
+          }
+        },
+        "axisTick": {
+          "type": "object",
+          "description": "刻度线",
+          "properties": {
+            "show": { "type": "boolean", "default": true },
+            "length": { "type": "number", "default": 5 },
+            "color": { "type": "string", "default": "#cccccc" }
+          }
+        },
+        "splitLine": {
+          "type": "object",
+          "description": "网格线",
+          "properties": {
+            "show": { "type": "boolean", "default": true },
+            "color": { "type": "string", "default": "#eeeeee" },
+            "width": { "type": "number", "default": 1 },
+            "type": { "type": "string", "enum": ["solid", "dashed", "dotted"], "default": "dashed" }
+          }
+        }
+      }
+    },
+    "yAxis": {
+      "description": "Y轴配置（类目轴，垂直方向）",
+      "properties": {
+        "show": {
+          "type": "boolean",
+          "description": "是否显示Y轴",
+          "default": true
+        },
+        "type": {
+          "type": "string",
+          "description": "数据类型",
+          "enum": ["category", "value", "time"],
+          "default": "category"
+        },
+        "axisLine": {
+          "type": "object",
+          "description": "轴线",
+          "properties": {
+            "show": { "type": "boolean", "default": false },
+            "color": { "type": "string", "default": "#cccccc" },
+            "width": { "type": "number", "default": 1 }
+          }
+        },
+        "axisLabel": {
+          "type": "object",
+          "description": "轴标签",
+          "properties": {
+            "show": { "type": "boolean", "default": true },
+            "fontSize": { "type": "number", "default": 12 },
+            "color": { "type": "string", "default": "#999999" },
+            "fontWeight": { "type": "string", "default": "normal" },
+            "fontFamily": { "type": "string", "default": "Microsoft YaHei" },
+            "maxWidth": { "type": "number", "description": "标签最大宽度(px)", "default": 80 }
+          }
+        },
+        "axisTick": {
+          "type": "object",
+          "description": "刻度线",
+          "properties": {
+            "show": { "type": "boolean", "default": false },
+            "length": { "type": "number", "default": 5 },
+            "color": { "type": "string", "default": "#cccccc" }
+          }
+        },
+        "splitLine": {
+          "type": "object",
+          "description": "网格线",
+          "properties": {
+            "show": { "type": "boolean", "default": false },
+            "color": { "type": "string", "default": "#eeeeee" },
+            "width": { "type": "number", "default": 1 },
+            "type": { "type": "string", "enum": ["solid", "dashed", "dotted"], "default": "dashed" }
+          }
+        }
+      }
+    },
+    "legend": {
+      "description": "图例配置",
+      "properties": {
+        "show": { "type": "boolean", "default": true },
+        "position": {
+          "type": "string",
+          "enum": ["top", "bottom", "left", "right"],
+          "default": "top"
+        },
+        "textStyle": {
+          "type": "object",
+          "properties": {
+            "fontSize": { "type": "number", "default": 12 },
+            "color": { "type": "string", "default": "#666666" },
+            "fontWeight": { "type": "string", "default": "normal" }
+          }
+        },
+        "itemGap": { "type": "number", "description": "图例间距", "default": 16 }
+      }
+    },
+    "tooltip": {
+      "description": "提示框配置",
+      "properties": {
+        "show": { "type": "boolean", "default": true },
+        "trigger": {
+          "type": "string",
+          "enum": ["axis", "item"],
+          "default": "axis"
+        },
+        "backgroundColor": { "type": "string", "default": "rgba(50, 50, 50, 0.7)" },
+        "borderColor": { "type": "string", "default": "transparent" },
+        "textStyle": {
+          "type": "object",
+          "properties": {
+            "fontSize": { "type": "number", "default": 12 },
+            "color": { "type": "string", "default": "#ffffff" }
+          }
+        }
+      }
+    },
+    "series": {
+      "description": "系列(条形)配置",
+      "properties": {
+        "displayMode": {
+          "type": "string",
+          "description": "展示形式",
+          "enum": ["group", "stack"],
+          "default": "group"
+        },
+        "barWidth": {
+          "type": "number | null",
+          "description": "条形宽度(px), null=自适应",
+          "default": null
+        },
+        "barMaxWidth": {
+          "type": "number",
+          "description": "条形最大宽度(px)",
+          "default": 40
+        },
+        "barCategoryGap": {
+          "type": "string",
+          "description": "类目间距",
+          "default": "30%"
+        },
+        "barGap": {
+          "type": "string",
+          "description": "组内间距",
+          "default": "20%"
+        },
+        "borderRadius": {
+          "type": "[number, number, number, number]",
+          "description": "圆角 [左上, 右上, 右下, 左下]",
+          "default": [0, 2, 2, 0]
+        },
+        "colors": {
+          "type": "string[]",
+          "description": "颜色列表",
+          "default": ["#5470c6", "#91cc75", "#fac858", "#ee6666", "#73c0de", "#3ba272"]
+        },
+        "gradient": {
+          "type": "object",
+          "description": "渐变配置",
+          "properties": {
+            "enabled": { "type": "boolean", "default": false },
+            "direction": {
+              "type": "string",
+              "enum": ["vertical", "horizontal"],
+              "default": "horizontal"
+            }
+          }
+        },
+        "label": {
+          "type": "object",
+          "description": "条形标签",
+          "properties": {
+            "show": { "type": "boolean", "default": false },
+            "position": {
+              "type": "string",
+              "enum": ["right", "inside", "left", "top", "bottom"],
+              "default": "right"
+            },
+            "fontSize": { "type": "number", "default": 12 },
+            "color": { "type": "string", "default": "#333333" },
+            "fontWeight": { "type": "string", "default": "normal" },
+            "format": {
+              "type": "string",
+              "description": "数值格式",
+              "enum": ["default", "integer", "float1", "float2", "percent", "percent1", "thousand", "thousand1"],
+              "default": "default"
+            }
+          }
+        },
+        "backgroundBar": {
+          "type": "object",
+          "description": "背景条配置",
+          "properties": {
+            "show": { "type": "boolean", "default": false },
+            "color": { "type": "string", "default": "rgba(180, 180, 180, 0.2)" }
+          }
+        }
+      }
+    },
+    "animation": {
+      "description": "动画配置",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "duration": { "type": "number", "description": "动画时长(ms)", "default": 1000 },
+        "easing": {
+          "type": "string",
+          "enum": ["linear", "cubicOut", "elasticOut", "bounceOut"],
+          "default": "cubicOut"
+        }
+      }
+    }
+  },
+  "behaviors": [
+    {
+      "name": "单击",
+      "desc": "鼠标点击条形时触发",
+      "method": "click",
+      "paramsList": [
+        { "name": "x", "desc": "点击条形的数值", "type": "number" },
+        { "name": "y", "desc": "点击条形的类目值", "type": "string" },
+        { "name": "seriesName", "desc": "点击条形的系列名", "type": "string" }
+      ]
+    },
+    {
+      "name": "图例点击",
+      "desc": "点击图例项时触发",
+      "method": "legendClick",
+      "paramsList": [
+        { "name": "name", "desc": "图例名称", "type": "string" },
+        { "name": "selected", "desc": "当前图例选中状态", "type": "boolean" }
+      ]
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "xField",
+      "desc": "数值字段（指标，对应水平方向）",
+      "required": true,
+      "multiple": true
+    },
+    {
+      "name": "yField",
+      "desc": "类目字段（维度，对应垂直方向）",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "seriesField",
+      "desc": "系列分组字段",
+      "required": false,
+      "multiple": false
+    }
+  ]
+}
