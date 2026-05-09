@@ -391,7 +391,7 @@ onMounted(() => {
               </el-image>
               <el-image
                 v-else-if="item.pageType === PageType.VISUAL_SCREEN"
-                :src="item.thumbnail ? item.thumbnail : 'placeholder'"
+                :src="item.thumbnail || getDefaultPlaceholder(item.pageType)"
                 :lazy="true"
                 fit="contain"
                 class="thumbnail-image"
@@ -404,7 +404,7 @@ onMounted(() => {
               </el-image>
               <el-image
                 v-else-if="item.pageType === PageType.PAGE"
-                :src="item.thumbnail ? item.thumbnail : 'placeholder'"
+                :src="item.thumbnail || getDefaultPlaceholder(item.pageType)"
                 :lazy="true"
                 fit="contain"
                 class="thumbnail-image"
@@ -559,6 +559,7 @@ onMounted(() => {
           justify-content: center;
           padding: 16px;
           overflow: hidden;
+          box-sizing: border-box;
 
           .thumbnail-image {
             width: 100%;
@@ -572,8 +573,8 @@ onMounted(() => {
               justify-content: center;
 
               img {
-                width: 60%;
-                height: 60%;
+                max-width: 100%;
+                max-height: 100%;
                 object-fit: contain;
               }
             }
