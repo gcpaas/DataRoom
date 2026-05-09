@@ -10,10 +10,52 @@ const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 
 interface DrTextPropsInterface {
-  // 文本
+  /** 文本内容 */
   text: string
-  // 字体大小
-  fontSize: number
+  /** 文本样式 */
+  textStyle: {
+    /** 字体大小(px) */
+    fontSize: number
+    /** 字体粗细: 'normal' | 'bold' | '100'~'900' */
+    fontWeight: string
+    /** 字体族 */
+    fontFamily: string
+    /** 字体颜色 */
+    color: string
+  }
+  /** 对齐方式: left | center | right */
+  align: 'left' | 'center' | 'right'
+  /** 垂直对齐: top | center | bottom */
+  verticalAlign: 'top' | 'center' | 'bottom'
+  /** 文字间隔(px) */
+  letterSpacing: number
+  /** 背景样式 */
+  background: {
+    /** 是否启用背景样式 */
+    enabled: boolean
+    /** 背景色 */
+    color: string
+    /** 圆角(px) */
+    borderRadius: number
+    /** 背景边框 */
+    border: {
+      /** 边框宽度(px) */
+      width: number
+      /** 边框样式: solid | dashed | dotted | none */
+      style: 'solid' | 'dashed' | 'dotted' | 'none'
+      /** 边框颜色 */
+      color: string
+    }
+  }
+  /** 文本溢出省略号 */
+  ellipsis: boolean
+  /** 超链接配置 */
+  hyperlink: {
+    /** 超链接URL */
+    url: string
+    /** 是否新开窗口 */
+    openNewWindow: boolean
+  }
 }
 
 /**
@@ -30,7 +72,30 @@ const getInstance = (): DrTextConfig => {
     DrConst.THIS_PLUGIN_TYPE,
     {
       text: '文本占位符',
-      fontSize: 14,
+      textStyle: {
+        fontSize: 14,
+        fontWeight: 'normal',
+        fontFamily: 'Microsoft YaHei',
+        color: '#333333',
+      },
+      align: 'left',
+      verticalAlign: 'top',
+      letterSpacing: 0,
+      background: {
+        enabled: false,
+        color: '#008bff',
+        borderRadius: 10,
+        border: {
+          width: 1,
+          style: 'solid',
+          color: '#ffffff',
+        },
+      },
+      ellipsis: false,
+      hyperlink: {
+        url: '',
+        openNewWindow: false,
+      },
     },
     {
       title: '文本'

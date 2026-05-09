@@ -106,4 +106,12 @@ export const pageApi = {
   updatePageConfig4Preview(data: PageStageEntity) {
     return request.post<boolean>('/dataRoom/page/updatePageConfig4Preview', data)
   },
+  /**
+   * 修改页面名称
+   * @param code 页面编码
+   * @param name 新名称
+   */
+  updateName(code: string, name: string) {
+    return request.post<boolean>('/dataRoom/page/updateName', { code, name })
+  },
 }

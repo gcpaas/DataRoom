@@ -1,6 +1,6 @@
 <!-- 全局变量 -->
 <script setup lang="ts">
-import {ref, watch} from 'vue'
+import {ref, computed, watch} from 'vue'
 import {v4 as uuidv4} from 'uuid'
 import {Search} from '@element-plus/icons-vue'
 import {ElMessageBox} from 'element-plus'
@@ -29,6 +29,32 @@ const onClose = () => {
   globalVariableVisible.value = false
 }
 const searchName = ref('')
+
+/**
+ * 根据搜索名称过滤变量列表
+ */
+const filteredVariables = computed(() => {
+  if (!searchName.value) {
+    return props.globalVariable
+  }
+  const keyword = searchName.value.toLowerCase()
+  return props.globalVariable.filter(
+    (item) => item.name.toLowerCase().includes(keyword) || item.remark?.toLowerCase().includes(keyword)
+  )
+})
+
+/**
+ * 生成变量名称：var_ + 5位随机小写字母和数字
+ */
+const generateVarName = (): string => {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  let suffix = ''
+  for (let i = 0; i < 5; i++) {
+    suffix += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return `var_${suffix}`
+}
+
 /**
  * 新增变量
  */
@@ -36,10 +62,10 @@ const onAdd = () => {
   const inst: GlobalVariable = {
     id: uuidv4(),
     from: 'static',
-    name: 'name' + uuidv4(),
+    name: generateVarName(),
     urlName: '',
-    remark: '变量备注描述' + uuidv4(),
-    defaultValue: '默认值',
+    remark: '',
+    defaultValue: '',
     script: '',
   }
   props.globalVariable.push(inst)
@@ -80,7 +106,7 @@ const onDelete = (variable: GlobalVariable) => {
           <el-button type="primary" @click="onAdd">新增</el-button>
         </div>
         <el-scrollbar>
-          <div :class="{ variable: true, active: item.id === activeGlobalVariable?.id }" v-for="item in globalVariable" :key="item.id" @click="activeGlobalVariable = item">
+          <div :class="{ variable: true, active: item.id === activeGlobalVariable?.id }" v-for="item in filteredVariables" :key="item.id" @click="activeGlobalVariable = item">
             <div class="name">{{ item.name }}</div>
             <div class="remark">{{ item.remark }}</div>
             <span class="delete" @click.stop="onDelete(item)">删除</span>

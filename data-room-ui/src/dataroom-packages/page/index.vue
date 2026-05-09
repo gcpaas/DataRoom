@@ -123,10 +123,7 @@ const handleEdit = (item: PageEntity) => {
     inputValue: item.name
   }).then(async ({value}) => {
     try {
-      pageApi.update({
-        ...item,
-        name: value
-      }).then((res) => {
+      pageApi.updateName(item.code, value).then(() => {
         ElMessage.success('修改成功')
         getPageList()
       })

@@ -326,6 +326,29 @@ const onHistory = () => {
   ElMessage.info('功能开发中...')
 }
 
+// 重命名对话框
+const renameDialogVisible = ref(false)
+const renameInput = ref('')
+const onTitleClick = () => {
+  renameInput.value = pageStageEntity.value?.name || ''
+  renameDialogVisible.value = true
+}
+const onRenameConfirm = () => {
+  const name = renameInput.value.trim()
+  if (!name) {
+    ElMessage.warning('名称不能为空')
+    return
+  }
+  const code = route.params.pageCode as string
+  pageApi.updateName(code, name).then(() => {
+    if (pageStageEntity.value) {
+      pageStageEntity.value.name = name
+    }
+    ElMessage.success('修改成功')
+    renameDialogVisible.value = false
+  })
+}
+
 const computedMainStyle = computed(() => {
   if (leftToolPanelShow.value && rightControlPanelShow.value) {
     return {
@@ -428,7 +451,7 @@ onUnmounted(() => {
     <div class="header" ref="titleRef">
       <div class="header-left">
         <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="router.push('/dataRoom/page/index')"/>
-        <div class="title">{{ pageStageEntity?.name }}</div>
+        <div class="title" @click="onTitleClick">{{ pageStageEntity?.name }}</div>
       </div>
       <div style="margin-right: 8px">
         <el-button @click="onHistory" size="small">历史</el-button>
@@ -513,6 +536,13 @@ onUnmounted(() => {
   <ResourceLib v-if="resourceLibVisible" ref="resourceLibRef"></ResourceLib>
   <GlobalVariableComponent v-if="globalVariableVisible" ref="globalVariableRef" :globalVariable="globalVariable"></GlobalVariableComponent>
   <ContextMenu v-if="contextMenuVisible" ref="contextMenuRef" :style="computedContextMenuStyle" :chart="activeChart" @switch-right-control-panel="switchRightControlPanel" @delete-chart="onChartDeleteClick"></ContextMenu>
+  <el-dialog v-model="renameDialogVisible" title="修改页面名称" width="400px" :close-on-click-modal="false">
+    <el-input v-model="renameInput" placeholder="请输入页面名称" maxlength="50" @keyup.enter="onRenameConfirm"></el-input>
+    <template #footer>
+      <el-button @click="renameDialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="onRenameConfirm">确定</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped lang="scss">
@@ -550,6 +580,11 @@ onUnmounted(() => {
       & .title {
         margin-left: 16px;
         font-size: 14px;
+        cursor: pointer;
+
+        &:hover {
+          color: var(--dr-primary);
+        }
       }
     }
   }
