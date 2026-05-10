@@ -105,7 +105,7 @@ const buildOption = () => {
     },
     xAxis: {
       show: props.xAxis.show,
-      type: props.xAxis.type,
+      type: props.xAxis.type as 'category',
       data: categories,
       boundaryGap: false,
       axisLine: {
