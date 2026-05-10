@@ -88,6 +88,15 @@ export interface ExcelCreateRequest {
 }
 
 /**
+ * Excel创建响应
+ */
+export interface ExcelCreateResponse {
+  id: string
+  code: string
+  tableName: string
+}
+
+/**
  * 数据源API
  */
 export const dataSourceApi = {
@@ -141,7 +150,7 @@ export const dataSourceApi = {
    * Excel: 创建表并导入数据
    */
   excelCreateAndImport(data: ExcelCreateRequest) {
-    return request.post<string>('/dataRoom/dataSource/excel/createAndImport', data)
+    return request.post<ExcelCreateResponse>('/dataRoom/dataSource/excel/createAndImport', data)
   },
 
   /**

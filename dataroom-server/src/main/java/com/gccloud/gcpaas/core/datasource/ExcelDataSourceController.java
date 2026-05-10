@@ -68,7 +68,7 @@ public class ExcelDataSourceController {
     @PostMapping("/createAndImport")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "创建并导入", description = "创建数据库表并导入Excel数据")
-    public Resp<String> createAndImport(@RequestBody ExcelCreateRequest request) {
+    public Resp<ExcelCreateResponse> createAndImport(@RequestBody ExcelCreateRequest request) {
         // 校验表名
         try {
             excelDataSourceService.validateTableName(request.getTableName());
@@ -112,7 +112,11 @@ public class ExcelDataSourceController {
             // 清理上传缓存
             excelDataSourceService.removeUploadCache(request.getUploadId());
 
-            return Resp.success(entity.getId());
+            ExcelCreateResponse response = new ExcelCreateResponse();
+            response.setId(entity.getId());
+            response.setCode(entity.getCode());
+            response.setTableName(request.getTableName());
+            return Resp.success(response);
         } catch (Exception e) {
             return Resp.error("创建失败: " + e.getMessage());
         }
@@ -216,6 +220,13 @@ public class ExcelDataSourceController {
         private String uploadId;
         private List<ExcelColumn> columns;
         private String originalFileName;
+    }
+
+    @Data
+    public static class ExcelCreateResponse {
+        private String id;
+        private String code;
+        private String tableName;
     }
 
     @Data

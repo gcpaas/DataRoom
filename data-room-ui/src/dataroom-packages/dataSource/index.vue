@@ -3,6 +3,7 @@ import { ref, onMounted, defineAsyncComponent } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Plus, MoreFilled, Edit, Delete, View } from '@element-plus/icons-vue'
 import { dataSourceApi, type DataSourceEntity, type ExcelDataSource, type ExcelColumn } from './api'
+import { datasetApi } from '../dataset/api'
 import ExcelViewData from './components/ExcelViewData.vue'
 import mysqlImg from './assets/image/MySQL占位符.png'
 import postgresqlImg from './assets/image/PostgreSQL占位符.png'
@@ -281,7 +282,7 @@ const handleSaveExcel = async () => {
       tableName = 'excel_' + tableName
     }
 
-    await dataSourceApi.excelCreateAndImport({
+    const result = await dataSourceApi.excelCreateAndImport({
       name: editorData.name,
       tableName: tableName,
       uploadId: editorData.uploadId,
@@ -289,6 +290,42 @@ const handleSaveExcel = async () => {
       originalFileName: editorData.originalFileName
     })
     ElMessage.success('创建成功')
+
+    // 自动创建同名数据集
+    try {
+      const dataSourceCode = typeof result === 'object' ? result.code : undefined
+      if (dataSourceCode) {
+        // 将Excel列映射为数据集出参字段列表
+        const outputList = (editorData.columns || []).map((col: ExcelColumn) => {
+          const typeMap: Record<string, string> = {
+            VARCHAR: 'String',
+            INTEGER: 'int',
+            DECIMAL: 'String',
+            DATE: 'Date'
+          }
+          return {
+            name: col.name,
+            type: typeMap[col.type] || 'String',
+            desc: col.originalHeader || col.name
+          }
+        })
+
+        await datasetApi.insert({
+          name: editorData.name,
+          dataSourceCode: dataSourceCode,
+          datasetType: 'relational',
+          dataset: {
+            datasetType: 'relational',
+            sql: `SELECT * FROM ${tableName} LIMIT 100`
+          },
+          outputList
+        })
+        ElMessage.success('已自动创建同名数据集')
+      }
+    } catch (e) {
+      console.error('自动创建数据集失败:', e)
+      ElMessage.warning('数据源创建成功，但自动创建数据集失败')
+    }
   }
 }
 
