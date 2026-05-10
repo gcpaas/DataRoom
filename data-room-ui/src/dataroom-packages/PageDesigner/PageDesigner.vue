@@ -580,8 +580,9 @@ onUnmounted(() => {
 
 .dr-page-designer {
   display: grid;
-  grid-template-rows: var(--dr-designer-header-height) auto;
+  grid-template-rows: var(--dr-designer-header-height) 1fr;
   height: 100vh;
+  overflow: hidden;
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   & .header {
@@ -624,6 +625,7 @@ onUnmounted(() => {
   & .main {
     background-color: #f0f1f3;
     display: grid;
+    min-height: 0;
     grid-template-columns: var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width);
 
     & .left-tool-bar {
