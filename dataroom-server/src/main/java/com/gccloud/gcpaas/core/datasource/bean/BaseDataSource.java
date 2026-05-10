@@ -10,7 +10,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
         @JsonSubTypes.Type(value = MySqlDatasource.class, name = DataSourceType.MYSQL_TYPE),
         @JsonSubTypes.Type(value = PostgreSqlDatasource.class, name = DataSourceType.POSTGRESQL_TYPE),
         @JsonSubTypes.Type(value = OracleDatasource.class, name = DataSourceType.ORACLE_TYPE),
-        @JsonSubTypes.Type(value = DorisDatasource.class, name = DataSourceType.DORIS_TYPE)
+        @JsonSubTypes.Type(value = DorisDatasource.class, name = DataSourceType.DORIS_TYPE),
+        @JsonSubTypes.Type(value = SqlServerDatasource.class, name = DataSourceType.SQLSERVER_TYPE)
 })
 public abstract class BaseDataSource {
 

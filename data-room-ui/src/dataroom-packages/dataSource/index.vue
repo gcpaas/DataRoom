@@ -7,6 +7,7 @@ import mysqlImg from './assets/image/MySQL占位符.png'
 import postgresqlImg from './assets/image/PostgreSQL占位符.png'
 import oracleImg from './assets/image/Oracle占位符.png'
 import dorisImg from './assets/image/Doris占位符.png'
+import sqlserverImg from './assets/image/SqlServer占位符.png'
 
 const searchName = ref('')
 const dataSourceList = ref<DataSourceEntity[]>([])
@@ -56,6 +57,13 @@ const dataSourceTypeMap = {
     image: dorisImg,
     description: 'Apache Doris实时分析数据仓库',
     component: defineAsyncComponent(() => import('./components/DorisEditor.vue'))
+  },
+  sqlserver: {
+    name: 'SqlServer',
+    icon: '🔷',
+    image: sqlserverImg,
+    description: 'Microsoft SQL Server关系型数据库',
+    component: defineAsyncComponent(() => import('./components/SqlServerEditor.vue'))
   }
 } as const
 
@@ -88,7 +96,7 @@ const openTypeSelectDialog = () => {
 /**
  * 选择数据源类型并新增
  */
-const handleSelectType = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris') => {
+const handleSelectType = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'sqlserver') => {
   typeSelectDialogVisible.value = false
   handleAdd(dataSourceType)
 }
@@ -96,7 +104,7 @@ const handleSelectType = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'd
 /**
  * 新增数据源
  */
-const handleAdd = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris') => {
+const handleAdd = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'sqlserver') => {
   dialogTitle.value = `新增${dataSourceTypeMap[dataSourceType].name}数据源`
 
   // 根据数据源类型设置默认驱动名称
@@ -109,6 +117,8 @@ const handleAdd = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris') 
     defaultDriverName = 'oracle.jdbc.driver.OracleDriver'
   } else if (dataSourceType === 'doris') {
     defaultDriverName = 'com.mysql.cj.jdbc.Driver'
+  } else if (dataSourceType === 'sqlserver') {
+    defaultDriverName = 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
   }
 
   currentDataSource.value = {
@@ -273,13 +283,13 @@ onMounted(() => {
     </div>
 
     <!-- 数据源类型选择对话框 -->
-    <el-dialog v-model="typeSelectDialogVisible" title="选择数据源类型" width="620px" :close-on-click-modal="true">
+    <el-dialog v-model="typeSelectDialogVisible" title="选择数据源类型" width="680px" :close-on-click-modal="true">
       <div class="type-select-cards">
         <div
           v-for="(item, key) in dataSourceTypeMap"
           :key="key"
           class="type-card"
-          @click="handleSelectType(key as 'mysql' | 'postgresql' | 'oracle' | 'doris')"
+          @click="handleSelectType(key as 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'sqlserver')"
         >
           <div class="type-card-image">
             <img :src="item.image" :alt="item.name" />
@@ -480,13 +490,12 @@ onMounted(() => {
 }
 
 .type-select-cards {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--space-4);
-  justify-content: center;
   padding: 2px;
 
   .type-card {
-    flex: 1;
     box-shadow: var(--dr-shadow-border);
     border: none;
     border-radius: var(--radius-lg);

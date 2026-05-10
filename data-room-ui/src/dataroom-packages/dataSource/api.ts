@@ -5,7 +5,7 @@ import request from '@/dataroom-packages/_common/_request.ts'
  */
 export interface RelationalDataSource {
   driverName: string
-  dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris'
+  dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'sqlserver'
   username: string
   password: string
   url: string
@@ -18,7 +18,7 @@ export interface DataSourceEntity {
   id?: string
   name: string
   code?: string
-  dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris'
+  dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'sqlserver'
   dataSource: RelationalDataSource
   createDate?: string
   updateDate?: string
