@@ -8,7 +8,9 @@ import com.gccloud.gcpaas.core.dataset.DatasetRunResponse;
 import com.gccloud.gcpaas.core.dataset.bean.DatasetInputParam;
 import com.gccloud.gcpaas.core.dataset.bean.DatasetOutputParam;
 import com.gccloud.gcpaas.core.dataset.bean.RelationalDataset;
-import com.gccloud.gcpaas.core.datasource.bean.MySqlDatasource;
+import com.gccloud.gcpaas.core.datasource.bean.BaseDataSource;
+import com.gccloud.gcpaas.core.datasource.bean.ExcelDatasource;
+import com.gccloud.gcpaas.core.datasource.bean.RelationalDatasource;
 import com.gccloud.gcpaas.core.datasource.service.DatasourceService;
 import com.gccloud.gcpaas.core.entity.DataSourceEntity;
 import com.gccloud.gcpaas.core.entity.DatasetEntity;
@@ -20,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +41,8 @@ public class RelationalDatasetService extends AbstractDatasetService {
     private MyBatisService myBatisService;
     @Resource
     private DataRoomConfig dataRoomConfig;
+    @Resource
+    private DataSource appDataSource;
 
     private static final Pattern PARAM_PATTERN = Pattern.compile("\\#\\{(.*?)\\}");
 
@@ -48,7 +53,7 @@ public class RelationalDatasetService extends AbstractDatasetService {
         try {
             String datasourceCode = datasetEntity.getDataSourceCode();
             DataSourceEntity dataSourceDefinition = dataSourceDefinitionService.getByCode(datasourceCode);
-            MySqlDatasource dataSource = (MySqlDatasource) dataSourceDefinition.getDataSource();
+            BaseDataSource baseDataSource = dataSourceDefinition.getDataSource();
             Map<String, Object> params = new HashMap<>();
             List<DatasetInputParam> inputParamList = datasetEntity.getInputList();
             Map<String, DatasetInputParam> inputParamMap = new HashMap<>();
@@ -74,40 +79,54 @@ public class RelationalDatasetService extends AbstractDatasetService {
             if (!sql.toLowerCase().startsWith("select")) {
                 throw new DataRoomException("仅允许执行select操作");
             }
-            String privateKey = dataRoomConfig.getPrivateKey();
-            String pwd = RsaUtils.decryptByPrivateKey(dataSource.getPassword(), privateKey);
-            Connection connection = DriverManager.getConnection(dataSource.getUrl(), dataSource.getUsername(), pwd);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            ResultSetMetaData metaData = resultSet.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            List<DatasetOutputParam> outputParamList = new ArrayList<>();
-            for (int i = 0; i < columnCount; i++) {
-                DatasetOutputParam outputParam = new DatasetOutputParam();
-                outputParam.setName(metaData.getColumnName(i + 1));
-                String type = metaData.getColumnTypeName(i + 1);
-                if (type.equalsIgnoreCase("varchar") || type.equalsIgnoreCase("char") || type.equalsIgnoreCase("text")) {
-                    outputParam.setType("String");
-                } else if (type.equalsIgnoreCase("datetime")) {
-                    outputParam.setType("Date");
-                } else if (type.equalsIgnoreCase("int")) {
-                    outputParam.setType("int");
-                } else {
-                    outputParam.setType("String");
-                }
-                outputParam.setDesc(outputParam.getName());
-                outputParamList.add(outputParam);
+            // 根据数据源类型获取连接
+            Connection connection;
+            if (baseDataSource instanceof ExcelDatasource) {
+                // Excel数据源的数据存储在应用自身数据库中，使用应用数据源连接
+                connection = appDataSource.getConnection();
+            } else if (baseDataSource instanceof RelationalDatasource relationalDs) {
+                // 关系型数据源使用配置的连接信息
+                String privateKey = dataRoomConfig.getPrivateKey();
+                String pwd = RsaUtils.decryptByPrivateKey(relationalDs.getPassword(), privateKey);
+                connection = DriverManager.getConnection(relationalDs.getUrl(), relationalDs.getUsername(), pwd);
+            } else {
+                throw new DataRoomException("不支持的数据源类型");
             }
-            datasetRunResponse.setOutputList(outputParamList);
-            List<Map<String, Object>> resultList = new ArrayList<>();
-            while (resultSet.next()) {
-                Map<String, Object> row = new HashMap<>(columnCount);
-                for (int i = 1; i <= columnCount; i++) {
-                    row.put(metaData.getColumnName(i), resultSet.getObject(i));
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                ResultSetMetaData metaData = resultSet.getMetaData();
+                int columnCount = metaData.getColumnCount();
+                List<DatasetOutputParam> outputParamList = new ArrayList<>();
+                for (int i = 0; i < columnCount; i++) {
+                    DatasetOutputParam outputParam = new DatasetOutputParam();
+                    outputParam.setName(metaData.getColumnName(i + 1));
+                    String type = metaData.getColumnTypeName(i + 1);
+                    if (type.equalsIgnoreCase("varchar") || type.equalsIgnoreCase("char") || type.equalsIgnoreCase("text")) {
+                        outputParam.setType("String");
+                    } else if (type.equalsIgnoreCase("datetime")) {
+                        outputParam.setType("Date");
+                    } else if (type.equalsIgnoreCase("int")) {
+                        outputParam.setType("int");
+                    } else {
+                        outputParam.setType("String");
+                    }
+                    outputParam.setDesc(outputParam.getName());
+                    outputParamList.add(outputParam);
                 }
-                resultList.add(row);
+                datasetRunResponse.setOutputList(outputParamList);
+                List<Map<String, Object>> resultList = new ArrayList<>();
+                while (resultSet.next()) {
+                    Map<String, Object> row = new HashMap<>(columnCount);
+                    for (int i = 1; i <= columnCount; i++) {
+                        row.put(metaData.getColumnName(i), resultSet.getObject(i));
+                    }
+                    resultList.add(row);
+                }
+                datasetRunResponse.setData(resultList);
+            } finally {
+                connection.close();
             }
-            datasetRunResponse.setData(resultList);
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
             datasetRunResponse.setData(new ArrayList<>());

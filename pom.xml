@@ -155,6 +155,11 @@
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>4.0.3</version>
+        </dependency>
         <!-- JUnit 5 测试依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

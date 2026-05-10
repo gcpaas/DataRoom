@@ -11,13 +11,15 @@ public enum DataSourceType implements IEnum<String> {
     POSTGRESQL("postgresql"),
     ORACLE("oracle"),
     DORIS("doris"),
-    SQLSERVER("sqlserver");
+    SQLSERVER("sqlserver"),
+    EXCEL("excel");
 
     public static final String MYSQL_TYPE = "mysql";
     public static final String POSTGRESQL_TYPE = "postgresql";
     public static final String ORACLE_TYPE = "oracle";
     public static final String DORIS_TYPE = "doris";
     public static final String SQLSERVER_TYPE = "sqlserver";
+    public static final String EXCEL_TYPE = "excel";
 
 
     private String type;

@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted, defineAsyncComponent } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search, Plus, MoreFilled, Edit, Delete } from '@element-plus/icons-vue'
-import { dataSourceApi, type DataSourceEntity } from './api'
+import { Search, Plus, MoreFilled, Edit, Delete, View } from '@element-plus/icons-vue'
+import { dataSourceApi, type DataSourceEntity, type ExcelDataSource, type ExcelColumn } from './api'
+import ExcelViewData from './components/ExcelViewData.vue'
 import mysqlImg from './assets/image/MySQL占位符.png'
 import postgresqlImg from './assets/image/PostgreSQL占位符.png'
 import oracleImg from './assets/image/Oracle占位符.png'
 import dorisImg from './assets/image/Doris占位符.png'
 import sqlserverImg from './assets/image/SqlServer占位符.png'
+import excelImg from './assets/image/Excel占位符.png'
 
 const searchName = ref('')
 const dataSourceList = ref<DataSourceEntity[]>([])
@@ -27,6 +29,12 @@ const currentDataSource = ref<DataSourceEntity>({
   }
 })
 const editorRef = ref()
+
+// Excel查看数据对话框状态
+const viewDataVisible = ref(false)
+const viewDataCode = ref('')
+const viewDataName = ref('')
+const viewDataColumns = ref<ExcelColumn[]>([])
 
 // 数据源类型映射
 const dataSourceTypeMap = {
@@ -64,8 +72,17 @@ const dataSourceTypeMap = {
     image: sqlserverImg,
     description: 'Microsoft SQL Server关系型数据库',
     component: defineAsyncComponent(() => import('./components/SqlServerEditor.vue'))
+  },
+  excel: {
+    name: 'Excel',
+    icon: '📊',
+    image: excelImg,
+    description: '上传Excel文件自动建表导入',
+    component: defineAsyncComponent(() => import('./components/ExcelEditor.vue'))
   }
 } as const
+
+type DataSourceTypeKey = keyof typeof dataSourceTypeMap
 
 /**
  * 查询数据源列表
@@ -96,7 +113,7 @@ const openTypeSelectDialog = () => {
 /**
  * 选择数据源类型并新增
  */
-const handleSelectType = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'sqlserver') => {
+const handleSelectType = (dataSourceType: DataSourceTypeKey) => {
   typeSelectDialogVisible.value = false
   handleAdd(dataSourceType)
 }
@@ -104,32 +121,47 @@ const handleSelectType = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'd
 /**
  * 新增数据源
  */
-const handleAdd = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'sqlserver') => {
+const handleAdd = (dataSourceType: DataSourceTypeKey) => {
   dialogTitle.value = `新增${dataSourceTypeMap[dataSourceType].name}数据源`
 
-  // 根据数据源类型设置默认驱动名称
-  let defaultDriverName = ''
-  if (dataSourceType === 'mysql') {
-    defaultDriverName = 'com.mysql.cj.jdbc.Driver'
-  } else if (dataSourceType === 'postgresql') {
-    defaultDriverName = 'org.postgresql.Driver'
-  } else if (dataSourceType === 'oracle') {
-    defaultDriverName = 'oracle.jdbc.driver.OracleDriver'
-  } else if (dataSourceType === 'doris') {
-    defaultDriverName = 'com.mysql.cj.jdbc.Driver'
-  } else if (dataSourceType === 'sqlserver') {
-    defaultDriverName = 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
-  }
+  if (dataSourceType === 'excel') {
+    currentDataSource.value = {
+      name: '',
+      dataSourceType: 'excel',
+      dataSource: {
+        dataSourceType: 'excel',
+        tableName: '',
+        columns: [],
+        originalFileName: '',
+        rowCount: 0,
+        importMode: 'overwrite'
+      } as ExcelDataSource
+    }
+  } else {
+    // 根据数据源类型设置默认驱动名称
+    let defaultDriverName = ''
+    if (dataSourceType === 'mysql') {
+      defaultDriverName = 'com.mysql.cj.jdbc.Driver'
+    } else if (dataSourceType === 'postgresql') {
+      defaultDriverName = 'org.postgresql.Driver'
+    } else if (dataSourceType === 'oracle') {
+      defaultDriverName = 'oracle.jdbc.driver.OracleDriver'
+    } else if (dataSourceType === 'doris') {
+      defaultDriverName = 'com.mysql.cj.jdbc.Driver'
+    } else if (dataSourceType === 'sqlserver') {
+      defaultDriverName = 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
+    }
 
-  currentDataSource.value = {
-    name: '',
-    dataSourceType,
-    dataSource: {
-      dataSourceType : dataSourceType,
-      driverName: defaultDriverName,
-      username: '',
-      password: '',
-      url: ''
+    currentDataSource.value = {
+      name: '',
+      dataSourceType,
+      dataSource: {
+        dataSourceType: dataSourceType,
+        driverName: defaultDriverName,
+        username: '',
+        password: '',
+        url: ''
+      }
     }
   }
   dialogVisible.value = true
@@ -141,7 +173,7 @@ const handleAdd = (dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' |
 const handleEdit = async (item: DataSourceEntity) => {
   try {
     const res = await dataSourceApi.detail(item.code!)
-    dialogTitle.value = `编辑${dataSourceTypeMap[item.dataSourceType].name}数据源`
+    dialogTitle.value = `编辑${dataSourceTypeMap[item.dataSourceType as DataSourceTypeKey].name}数据源`
     currentDataSource.value = res
     dialogVisible.value = true
   } catch (error) {
@@ -171,28 +203,92 @@ const handleDelete = (item: DataSourceEntity) => {
 }
 
 /**
+ * 查看Excel数据
+ */
+const handleViewData = async (item: DataSourceEntity) => {
+  try {
+    const res = await dataSourceApi.detail(item.code!)
+    const excelDs = res.dataSource as ExcelDataSource
+    viewDataCode.value = item.code!
+    viewDataName.value = item.name
+    viewDataColumns.value = excelDs.columns || []
+    viewDataVisible.value = true
+  } catch (error) {
+    console.error('查询详情失败:', error)
+  }
+}
+
+/**
  * 保存数据源
  */
 const handleSave = async () => {
   try {
     await editorRef.value?.validate()
-    // 获取加密后的数据
-    const encryptedData = editorRef.value?.getEncryptedData()
-    if (!encryptedData) {
-      throw new Error('获取数据失败')
+
+    if (currentDataSource.value.dataSourceType === 'excel') {
+      // Excel类型特殊处理
+      await handleSaveExcel()
+    } else {
+      // 通用关系型数据源保存
+      const encryptedData = editorRef.value?.getEncryptedData()
+      if (!encryptedData) {
+        throw new Error('获取数据失败')
+      }
+
+      if (currentDataSource.value.code) {
+        await dataSourceApi.update(encryptedData)
+        ElMessage.success('更新成功')
+      } else {
+        await dataSourceApi.insert(encryptedData)
+        ElMessage.success('新增成功')
+      }
     }
 
-    if (currentDataSource.value.code) {
-      await dataSourceApi.update(encryptedData)
-      ElMessage.success('更新成功')
-    } else {
-      await dataSourceApi.insert(encryptedData)
-      ElMessage.success('新增成功')
-    }
     dialogVisible.value = false
     getDataSourceList()
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message) {
+      ElMessage.error(error.message)
+    }
     console.error('保存失败:', error)
+  }
+}
+
+/**
+ * 保存Excel数据源
+ */
+const handleSaveExcel = async () => {
+  const editorData = editorRef.value?.getEncryptedData()
+  if (!editorData) {
+    throw new Error('获取数据失败')
+  }
+
+  if (currentDataSource.value.code) {
+    // 编辑模式：如果有新文件上传，执行重新导入
+    if (editorRef.value?.hasNewFile) {
+      const file = editorRef.value.selectedFile
+      const importMode = editorRef.value.importMode
+      await dataSourceApi.excelReimport(currentDataSource.value.code, file, importMode)
+      ElMessage.success('数据导入成功')
+    } else {
+      ElMessage.info('未上传新文件，无需更新')
+    }
+  } else {
+    // 新增模式：创建表并导入
+    // 确保表名有excel_前缀
+    let tableName = editorData.tableName
+    if (!tableName.startsWith('excel_')) {
+      tableName = 'excel_' + tableName
+    }
+
+    await dataSourceApi.excelCreateAndImport({
+      name: editorData.name,
+      tableName: tableName,
+      uploadId: editorData.uploadId,
+      columns: editorData.columns,
+      originalFileName: editorData.originalFileName
+    })
+    ElMessage.success('创建成功')
   }
 }
 
@@ -200,7 +296,7 @@ const handleSave = async () => {
  * 获取数据源类型名称
  */
 const getTypeName = (type: string) => {
-  const key = type as keyof typeof dataSourceTypeMap
+  const key = type as DataSourceTypeKey
   return dataSourceTypeMap[key]?.name || type
 }
 
@@ -208,7 +304,7 @@ const getTypeName = (type: string) => {
  * 获取数据源类型图片
  */
 const getTypeImage = (type: string) => {
-  const key = type as keyof typeof dataSourceTypeMap
+  const key = type as DataSourceTypeKey
   return dataSourceTypeMap[key]?.image || ''
 }
 
@@ -255,6 +351,7 @@ onMounted(() => {
                     (command: string) => {
                       if (command === 'edit') handleEdit(item)
                       else if (command === 'delete') handleDelete(item)
+                      else if (command === 'viewData') handleViewData(item)
                     }
                   "
                 >
@@ -263,6 +360,10 @@ onMounted(() => {
                   </el-icon>
                   <template #dropdown>
                     <el-dropdown-menu>
+                      <el-dropdown-item command="viewData" v-if="item.dataSourceType === 'excel'">
+                        <el-icon><View /></el-icon>
+                        <span style="margin-left: 8px">查看数据</span>
+                      </el-dropdown-item>
                       <el-dropdown-item command="edit">
                         <el-icon><Edit /></el-icon>
                         <span style="margin-left: 8px">编辑</span>
@@ -289,7 +390,7 @@ onMounted(() => {
           v-for="(item, key) in dataSourceTypeMap"
           :key="key"
           class="type-card"
-          @click="handleSelectType(key as 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'sqlserver')"
+          @click="handleSelectType(key as DataSourceTypeKey)"
         >
           <div class="type-card-image">
             <img :src="item.image" :alt="item.name" />
@@ -303,9 +404,14 @@ onMounted(() => {
     </el-dialog>
 
     <!-- 编辑对话框 -->
-    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="600px" :close-on-click-modal="false">
+    <el-dialog
+      v-model="dialogVisible"
+      :title="dialogTitle"
+      :width="currentDataSource.dataSourceType === 'excel' ? '800px' : '600px'"
+      :close-on-click-modal="false"
+    >
       <component
-        :is="dataSourceTypeMap[currentDataSource.dataSourceType as keyof typeof dataSourceTypeMap].component"
+        :is="dataSourceTypeMap[currentDataSource.dataSourceType as DataSourceTypeKey].component"
         v-model="currentDataSource"
         ref="editorRef"
       />
@@ -316,6 +422,14 @@ onMounted(() => {
         </span>
       </template>
     </el-dialog>
+
+    <!-- Excel查看数据对话框 -->
+    <ExcelViewData
+      v-model:visible="viewDataVisible"
+      :data-source-code="viewDataCode"
+      :data-source-name="viewDataName"
+      :columns="viewDataColumns"
+    />
   </div>
 </template>
 
