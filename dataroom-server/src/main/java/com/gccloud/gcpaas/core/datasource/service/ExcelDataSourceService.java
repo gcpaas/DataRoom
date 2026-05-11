@@ -12,8 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,9 +54,31 @@ public class ExcelDataSourceService {
      * 解析Excel文件，返回列定义和预览数据
      */
     public ExcelParseResult parseExcel(InputStream inputStream) {
+        ParsedSheet parsedSheet = parseExcelRows(inputStream);
+        return buildParseResult(parsedSheet, "Excel文件为空或无法解析表头");
+    }
+
+    /**
+     * 解析CSV文件，返回列定义和预览数据
+     */
+    public ExcelParseResult parseCsv(InputStream inputStream) {
+        ParsedSheet parsedSheet = parseCsvRows(inputStream);
+        return buildParseResult(parsedSheet, "CSV文件为空或无法解析表头");
+    }
+
+    /**
+     * 按文件类型解析上传文件。
+     */
+    public ExcelParseResult parseFile(String originalFilename, InputStream inputStream) {
+        if (isCsvFile(originalFilename)) {
+            return parseCsv(inputStream);
+        }
+        return parseExcel(inputStream);
+    }
+
+    private ParsedSheet parseExcelRows(InputStream inputStream) {
         List<Map<Integer, String>> headerList = new ArrayList<>();
         List<List<Object>> allData = new ArrayList<>();
-
         EasyExcel.read(inputStream, new ReadListener<Map<Integer, Object>>() {
             private Map<Integer, String> headers;
             private boolean isFirstRow = true;
@@ -82,23 +108,55 @@ public class ExcelDataSourceService {
             }
         }).headRowNumber(0).sheet(0).doRead();
 
-        if (headerList.isEmpty()) {
-            throw new RuntimeException("Excel文件为空或无法解析表头");
-        }
+        return new ParsedSheet(headerList.isEmpty() ? null : headerList.get(0), allData);
+    }
 
-        Map<Integer, String> headers = headerList.get(0);
+    private ParsedSheet parseCsvRows(InputStream inputStream) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            Map<Integer, String> headers = null;
+            List<List<Object>> allData = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                List<String> fields = parseCsvLine(line);
+                if (headers == null) {
+                    headers = new LinkedHashMap<>();
+                    for (int i = 0; i < fields.size(); i++) {
+                        String header = removeUtf8Bom(fields.get(i)).trim();
+                        headers.put(i, StringUtils.isNotBlank(header) ? header : "column_" + i);
+                    }
+                    continue;
+                }
+                if (fields.stream().allMatch(StringUtils::isBlank)) {
+                    continue;
+                }
+                List<Object> row = new ArrayList<>();
+                for (int i = 0; i < headers.size(); i++) {
+                    row.add(i < fields.size() ? fields.get(i) : null);
+                }
+                allData.add(row);
+            }
+            return new ParsedSheet(headers, allData);
+        } catch (IOException e) {
+            throw new RuntimeException("CSV文件读取失败: " + e.getMessage(), e);
+        }
+    }
+
+    private ExcelParseResult buildParseResult(ParsedSheet parsedSheet, String emptyMessage) {
+        if (parsedSheet.headers() == null || parsedSheet.headers().isEmpty()) {
+            throw new RuntimeException(emptyMessage);
+        }
 
         // 自动检测列类型
         List<ExcelColumn> columns = new ArrayList<>();
-        for (Map.Entry<Integer, String> entry : headers.entrySet()) {
+        for (Map.Entry<Integer, String> entry : parsedSheet.headers().entrySet()) {
             int colIndex = entry.getKey();
             String headerName = entry.getValue();
 
             // 采样数据检测类型
             List<String> sampleValues = new ArrayList<>();
-            int sampleCount = Math.min(allData.size(), SAMPLE_ROWS);
+            int sampleCount = Math.min(parsedSheet.data().size(), SAMPLE_ROWS);
             for (int i = 0; i < sampleCount; i++) {
-                List<Object> row = allData.get(i);
+                List<Object> row = parsedSheet.data().get(i);
                 if (colIndex < row.size() && row.get(colIndex) != null) {
                     sampleValues.add(row.get(colIndex).toString());
                 }
@@ -114,13 +172,13 @@ public class ExcelDataSourceService {
 
         // 生成uploadId并缓存数据
         String uploadId = UUID.randomUUID().toString().replace("-", "");
-        uploadCache.put(uploadId, allData);
+        uploadCache.put(uploadId, parsedSheet.data());
 
         // 预览数据（前10行）
         List<Map<String, Object>> previewData = new ArrayList<>();
-        int previewCount = Math.min(allData.size(), 10);
+        int previewCount = Math.min(parsedSheet.data().size(), 10);
         for (int i = 0; i < previewCount; i++) {
-            List<Object> row = allData.get(i);
+            List<Object> row = parsedSheet.data().get(i);
             Map<String, Object> rowMap = new LinkedHashMap<>();
             for (int j = 0; j < columns.size(); j++) {
                 rowMap.put(columns.get(j).getName(), j < row.size() ? row.get(j) : null);
@@ -132,7 +190,7 @@ public class ExcelDataSourceService {
         result.setUploadId(uploadId);
         result.setColumns(columns);
         result.setPreviewData(previewData);
-        result.setTotalRows(allData.size());
+        result.setTotalRows(parsedSheet.data().size());
         return result;
     }
 
@@ -170,6 +228,29 @@ public class ExcelDataSourceService {
      * 重新导入数据（从新的InputStream解析并导入）
      */
     public int reimportData(String tableName, List<ExcelColumn> columns, InputStream inputStream, String importMode) {
+        return reimportExcelData(tableName, columns, inputStream, importMode);
+    }
+
+    /**
+     * 重新导入数据（根据文件类型解析并导入）
+     */
+    public int reimportData(
+            String tableName,
+            List<ExcelColumn> columns,
+            String originalFilename,
+            InputStream inputStream,
+            String importMode) {
+        if (isCsvFile(originalFilename)) {
+            ParsedSheet parsedSheet = parseCsvRows(inputStream);
+            if (parsedSheet.headers() == null || parsedSheet.headers().isEmpty()) {
+                throw new RuntimeException("CSV文件为空或无法解析表头");
+            }
+            return doImportData(tableName, columns, parsedSheet.data(), importMode);
+        }
+        return reimportExcelData(tableName, columns, inputStream, importMode);
+    }
+
+    private int reimportExcelData(String tableName, List<ExcelColumn> columns, InputStream inputStream, String importMode) {
         // 解析新文件的数据（跳过表头行）
         List<List<Object>> allData = new ArrayList<>();
 
@@ -198,6 +279,41 @@ public class ExcelDataSourceService {
         }).headRowNumber(0).sheet(0).doRead();
 
         return doImportData(tableName, columns, allData, importMode);
+    }
+
+    private boolean isCsvFile(String originalFilename) {
+        return originalFilename != null && originalFilename.toLowerCase().endsWith(".csv");
+    }
+
+    private List<String> parseCsvLine(String line) {
+        List<String> fields = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        boolean inQuotes = false;
+        for (int i = 0; i < line.length(); i++) {
+            char ch = line.charAt(i);
+            if (ch == '"') {
+                if (inQuotes && i + 1 < line.length() && line.charAt(i + 1) == '"') {
+                    current.append('"');
+                    i++;
+                } else {
+                    inQuotes = !inQuotes;
+                }
+            } else if (ch == ',' && !inQuotes) {
+                fields.add(current.toString().trim());
+                current.setLength(0);
+            } else {
+                current.append(ch);
+            }
+        }
+        fields.add(current.toString().trim());
+        return fields;
+    }
+
+    private String removeUtf8Bom(String value) {
+        if (value != null && value.startsWith("\uFEFF")) {
+            return value.substring(1);
+        }
+        return value;
     }
 
     /**
@@ -432,6 +548,9 @@ public class ExcelDataSourceService {
             sanitized = "col_" + sanitized;
         }
         return sanitized;
+    }
+
+    private record ParsedSheet(Map<Integer, String> headers, List<List<Object>> data) {
     }
 
     // ========== 内部结果类 ==========

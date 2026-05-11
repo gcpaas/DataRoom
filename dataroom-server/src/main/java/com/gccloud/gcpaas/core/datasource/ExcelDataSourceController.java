@@ -43,22 +43,22 @@ public class ExcelDataSourceController {
      */
     @PostMapping("/upload")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
-    @Operation(summary = "上传解析", description = "上传Excel文件并解析表头和数据类型")
+    @Operation(summary = "上传解析", description = "上传Excel/CSV文件并解析表头和数据类型")
     public Resp<ExcelDataSourceService.ExcelParseResult> upload(@RequestParam("file") MultipartFile file) {
         if (file == null || file.isEmpty()) {
             return Resp.error("请选择要上传的文件");
         }
         String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || !originalFilename.toLowerCase().endsWith(".xlsx")) {
-            return Resp.error("仅支持xlsx格式的Excel文件");
+        if (!isSupportedFile(originalFilename)) {
+            return Resp.error("仅支持xlsx或csv格式的文件");
         }
         try {
-            ExcelDataSourceService.ExcelParseResult result = excelDataSourceService.parseExcel(file.getInputStream());
+            ExcelDataSourceService.ExcelParseResult result = excelDataSourceService.parseFile(originalFilename, file.getInputStream());
             return Resp.success(result);
         } catch (IOException e) {
             return Resp.error("文件读取失败: " + e.getMessage());
         } catch (Exception e) {
-            return Resp.error("Excel解析失败: " + e.getMessage());
+            return Resp.error("文件解析失败: " + e.getMessage());
         }
     }
 
@@ -136,8 +136,8 @@ public class ExcelDataSourceController {
             return Resp.error("请选择要上传的文件");
         }
         String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || !originalFilename.toLowerCase().endsWith(".xlsx")) {
-            return Resp.error("仅支持xlsx格式的Excel文件");
+        if (!isSupportedFile(originalFilename)) {
+            return Resp.error("仅支持xlsx或csv格式的文件");
         }
         if (!"overwrite".equals(importMode) && !"append".equals(importMode)) {
             return Resp.error("导入模式必须为overwrite或append");
@@ -156,6 +156,7 @@ public class ExcelDataSourceController {
             int rowCount = excelDataSourceService.reimportData(
                     excelDatasource.getTableName(),
                     excelDatasource.getColumns(),
+                    originalFilename,
                     file.getInputStream(),
                     importMode
             );
@@ -209,6 +210,14 @@ public class ExcelDataSourceController {
         } catch (Exception e) {
             return Resp.error("查询数据失败: " + e.getMessage());
         }
+    }
+
+    private boolean isSupportedFile(String originalFilename) {
+        if (originalFilename == null) {
+            return false;
+        }
+        String lowerName = originalFilename.toLowerCase();
+        return lowerName.endsWith(".xlsx") || lowerName.endsWith(".csv");
     }
 
     // ========== 请求/响应类 ==========

@@ -4,6 +4,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Plus, MoreFilled, Edit, Delete, View } from '@element-plus/icons-vue'
 import { dataSourceApi, type DataSourceEntity, type ExcelDataSource, type ExcelColumn } from './api'
 import { datasetApi } from '../dataset/api'
+import { buildExcelUpdatePayload } from './excelSave'
 import ExcelViewData from './components/ExcelViewData.vue'
 import mysqlImg from './assets/image/MySQL占位符.png'
 import postgresqlImg from './assets/image/PostgreSQL占位符.png'
@@ -78,7 +79,7 @@ const dataSourceTypeMap = {
     name: 'Excel',
     icon: '📊',
     image: excelImg,
-    description: '上传Excel文件自动建表导入',
+    description: '支持 xlsx 和 csv 格式文件',
     component: defineAsyncComponent(() => import('./components/ExcelEditor.vue'))
   }
 } as const
@@ -265,14 +266,16 @@ const handleSaveExcel = async () => {
   }
 
   if (currentDataSource.value.code) {
-    // 编辑模式：如果有新文件上传，执行重新导入
+    await dataSourceApi.update(buildExcelUpdatePayload(currentDataSource.value, editorData))
+
+    // 编辑模式：如果有新文件上传，继续执行重新导入
     if (editorRef.value?.hasNewFile) {
       const file = editorRef.value.selectedFile
       const importMode = editorRef.value.importMode
       await dataSourceApi.excelReimport(currentDataSource.value.code, file, importMode)
-      ElMessage.success('数据导入成功')
+      ElMessage.success('更新并导入成功')
     } else {
-      ElMessage.info('未上传新文件，无需更新')
+      ElMessage.success('更新成功')
     }
   } else {
     // 新增模式：创建表并导入

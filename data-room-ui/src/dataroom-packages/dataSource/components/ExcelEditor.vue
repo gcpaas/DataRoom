@@ -82,8 +82,9 @@ const handleFileChange: UploadProps['onChange'] = (uploadFile) => {
   const file = uploadFile.raw
   if (!file) return
 
-  if (!file.name.toLowerCase().endsWith('.xlsx')) {
-    ElMessage.error('仅支持xlsx格式的Excel文件')
+  const lowerName = file.name.toLowerCase()
+  if (!lowerName.endsWith('.xlsx') && !lowerName.endsWith('.csv')) {
+    ElMessage.error('仅支持xlsx或csv格式的文件')
     return
   }
 
@@ -105,7 +106,7 @@ const doUploadParse = async (file: File) => {
     totalRows.value = result.totalRows
     ElMessage.success(`解析成功，共 ${result.totalRows} 行数据`)
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : 'Excel解析失败'
+    const msg = error instanceof Error ? error.message : '文件解析失败'
     ElMessage.error(msg)
     columns.value = []
     previewData.value = []
@@ -204,12 +205,12 @@ defineExpose({
       </el-form-item>
 
       <!-- 文件上传 -->
-      <el-form-item label="Excel文件">
+      <el-form-item label="文件">
         <el-upload
           class="excel-upload"
           :auto-upload="false"
           :show-file-list="false"
-          accept=".xlsx"
+          accept=".xlsx,.csv"
           :on-change="handleFileChange"
           :limit="1"
         >
@@ -217,7 +218,7 @@ defineExpose({
             <div class="upload-area" v-loading="uploading">
               <el-icon class="upload-icon"><UploadFilled /></el-icon>
               <div class="upload-text" v-if="!uploadedFileName">
-                点击选择 .xlsx 文件
+                点击选择 .xlsx 或 .csv 文件
               </div>
               <div class="upload-text uploaded" v-else>
                 {{ uploadedFileName }}

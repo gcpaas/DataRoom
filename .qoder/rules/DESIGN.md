@@ -233,6 +233,16 @@ Typography uses Inter (open-source, variable) with negative letter-spacing at di
 - Spacing: 8px gap, 4px vertical between rows
 - Group separator: 1px `--dr-gray-100` line + 12px vertical spacing
 
+**Property Collapse Panel**
+- Panel/content background: `--dr-white`
+- Outer spacing: no padding or margin between the collapse panel and its parent property panel
+- Section spacing: stacked collapse groups use `0` vertical margin; title bars provide the visual separation
+- Header background: `--dr-gray-50`
+- Header text: 12px weight 600, `--dr-gray-900`
+- Header height: 36px, horizontal padding 12px
+- Header separator: use an inset bottom shadow `inset 0 -1px 0 0 --dr-gray-200`; do not add outer margins
+- Body padding: 12px for form rows; content remains white
+
 **Drag Handle**
 - Color: `--dr-gray-400`
 - Hover: `--dr-gray-700`
