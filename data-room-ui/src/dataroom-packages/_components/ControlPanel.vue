@@ -312,7 +312,14 @@ const triggerAutoRefresh = () => {
 
             <!-- 字段绑定 -->
             <el-collapse-item name="fields" title="组件字段绑定">
-              <el-form ref="dataFormRef" :model="chartConfig.dataset" :rules="dataFormRules" label-width="100px" label-position="left" size="small">
+              <el-form
+                ref="dataFormRef"
+                class="fields-binding-form"
+                :model="chartConfig.dataset"
+                :rules="dataFormRules"
+                label-position="top"
+                size="small"
+              >
                 <el-form-item
                   v-for="field in datasetFields"
                   :key="field.name"
@@ -490,7 +497,7 @@ const triggerAutoRefresh = () => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--dr-gray-50);
+  background: var(--dr-white);
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.08);
 
@@ -498,11 +505,20 @@ const triggerAutoRefresh = () => {
     flex: 1;
     display: flex;
     flex-direction: column;
+    background: var(--dr-white);
 
     :deep(.el-tabs__header) {
       margin-bottom: 0;
       border-bottom: 1px solid var(--dr-gray-100);
       padding: 0 var(--space-4);
+      background: var(--dr-white);
+    }
+
+    :deep(.el-tabs__nav-scroll),
+    :deep(.el-tabs__nav-wrap),
+    :deep(.el-tabs__content),
+    :deep(.el-tab-pane) {
+      background: var(--dr-white);
     }
 
     :deep(.el-tabs__nav-wrap)::after {
@@ -535,6 +551,14 @@ const triggerAutoRefresh = () => {
       padding: var(--space-4);
       height: 100%;
       overflow-y: auto;
+      background: var(--dr-white);
+
+      :deep(.el-collapse),
+      :deep(.el-collapse-item__header),
+      :deep(.el-collapse-item__wrap),
+      :deep(.el-collapse-item__content) {
+        background: var(--dr-white);
+      }
 
       .placeholder {
         color: var(--dr-gray-500);
@@ -559,6 +583,25 @@ const triggerAutoRefresh = () => {
 
         &:focus-within {
           box-shadow: var(--dr-shadow-focus);
+        }
+      }
+
+      .fields-binding-form {
+        :deep(.el-form-item) {
+          display: block;
+        }
+
+        :deep(.el-form-item__label) {
+          width: 100%;
+          height: auto;
+          line-height: 18px;
+          margin-bottom: var(--space-2);
+          justify-content: flex-start;
+        }
+
+        :deep(.el-form-item__content) {
+          margin-left: 0 !important;
+          width: 100%;
         }
       }
     }

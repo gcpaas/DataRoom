@@ -91,7 +91,7 @@ const removeColor = (index: number) => {
 
 <template>
   <div class="dr-bubble-chart-panel">
-    <el-form :model="chartConfig" label-width="90px" size="small" label-position="left">
+    <el-form class="bubble-config-form" :model="chartConfig" label-width="90px" size="small" label-position="left">
 
       <!-- 全局配置 -->
       <el-collapse>
@@ -448,128 +448,161 @@ const removeColor = (index: number) => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .dr-bubble-chart-panel {
-  padding: 12px;
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-weight: 400;
-  color: #1d2129;
-}
+  color: var(--dr-gray-900);
+  background: var(--dr-white);
 
-/* Collapse group spacing */
-.dr-bubble-chart-panel :deep(.el-collapse) {
-  border: none;
-  margin-bottom: 12px;
-}
+  .bubble-config-form {
+    background: var(--dr-white);
+    min-width: 0;
+  }
 
-/* Section headings: 12px weight 600 color #1d2129 */
-.dr-bubble-chart-panel :deep(.el-collapse-item__header) {
-  font-size: 12px;
-  font-weight: 600;
-  color: #1d2129;
-  border-bottom: none;
-  height: 36px;
-  line-height: 36px;
-}
+  :deep(.el-collapse) {
+    border: none;
+    background: var(--dr-white);
+    box-shadow: inset 0 -1px 0 0 var(--dr-gray-100);
 
-.dr-bubble-chart-panel :deep(.el-collapse-item__wrap) {
-  border-bottom: none;
-}
+    &:last-of-type {
+      box-shadow: none;
+    }
+  }
 
-/* Group separator between collapse sections */
-.dr-bubble-chart-panel :deep(.el-collapse-item__wrap .el-collapse-item__content) {
-  padding-bottom: 4px;
-}
+  :deep(.el-collapse-item__header) {
+    height: 36px;
+    padding: 0 var(--space-3);
+    background: var(--dr-white);
+    border-bottom: none;
+    box-shadow: inset 0 -1px 0 0 var(--dr-gray-200);
+    color: var(--dr-gray-900);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 36px;
+  }
 
-/* Form item compact rows: 4px vertical gap */
-.dr-bubble-chart-panel :deep(.el-form-item) {
-  margin-bottom: 4px;
-}
+  :deep(.el-collapse-item__arrow) {
+    color: var(--dr-gray-500);
+  }
 
-/* Labels: 12px weight 500 color #4e5969 */
-.dr-bubble-chart-panel :deep(.el-form-item__label) {
-  font-size: 12px;
-  font-weight: 500;
-  color: #4e5969;
-}
+  :deep(.el-collapse-item__wrap) {
+    background: var(--dr-white);
+    border-bottom: none;
+  }
 
-/* Inputs: border 1px solid #e5e6eb, radius 6px */
-.dr-bubble-chart-panel :deep(.el-input__wrapper),
-.dr-bubble-chart-panel :deep(.el-input-number),
-.dr-bubble-chart-panel :deep(.el-select__wrapper) {
-  border-radius: 6px;
-}
+  :deep(.el-collapse-item__content) {
+    padding: var(--space-3);
+    background: var(--dr-white);
+  }
 
-.dr-bubble-chart-panel :deep(.el-input__wrapper) {
-  box-shadow: 0 0 0 1px #e5e6eb inset;
-}
+  :deep(.el-form-item) {
+    margin-bottom: var(--space-2);
 
-.dr-bubble-chart-panel :deep(.el-input__wrapper:focus-within),
-.dr-bubble-chart-panel :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-}
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 
-/* Number inputs: tabular nums for pixel values */
-.dr-bubble-chart-panel :deep(.el-input-number .el-input__inner) {
-  font-feature-settings: "tnum";
-}
+  :deep(.el-form-item__label) {
+    color: var(--dr-gray-700);
+    font-size: 12px;
+    font-weight: 500;
+  }
 
-/* Select dropdown */
-.dr-bubble-chart-panel :deep(.el-select-dropdown) {
-  border-radius: 6px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-}
+  :deep(.el-form-item__content) {
+    min-width: 0;
+  }
 
-/* Color pickers: radius 6px, shadow-border */
-.dr-bubble-chart-panel :deep(.el-color-picker__trigger) {
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px #e5e6eb;
-  border: none;
-}
+  :deep(.el-input),
+  :deep(.el-select),
+  :deep(.el-input-number),
+  :deep(.el-slider) {
+    width: 100%;
+    min-width: 0;
+  }
 
-/* Slider/range: track #e5e6eb, active #3478f6, thumb white with #3478f6 border */
-.dr-bubble-chart-panel :deep(.el-slider__runway) {
-  background-color: #e5e6eb;
-}
+  :deep(.el-input__wrapper),
+  :deep(.el-select .el-input__wrapper) {
+    min-height: 32px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--dr-white);
+    box-shadow: var(--dr-shadow-border);
+    transition: box-shadow 0.2s ease;
 
-.dr-bubble-chart-panel :deep(.el-slider__bar) {
-  background-color: #3478f6;
-}
+    &:focus-within,
+    &.is-focus {
+      box-shadow: var(--dr-shadow-focus);
+    }
+  }
 
-.dr-bubble-chart-panel :deep(.el-slider__button) {
-  background-color: #fff;
-  border-color: #3478f6;
-}
+  :deep(.el-input-number .el-input__inner) {
+    font-feature-settings: "tnum";
+    text-align: right;
+  }
 
-/* Sub-section titles */
-.sub-title {
-  font-size: 12px;
-  color: #4e5969;
-  font-weight: 600;
-  margin: 12px 0 8px 0;
-  padding-left: 8px;
-  border-left: 3px solid #3478f6;
-  line-height: 1;
-}
+  :deep(.el-color-picker__trigger) {
+    border: none;
+    border-radius: var(--radius-md);
+    box-shadow: var(--dr-shadow-border);
+  }
 
-/* Group separator line */
-.sub-title::before {
-  content: '';
-  display: block;
-  height: 1px;
-  background: #f2f3f5;
-  margin-bottom: 12px;
-  margin-left: -8px;
-}
+  :deep(.el-slider__runway) {
+    background-color: var(--dr-gray-200);
+    min-width: 0;
+  }
 
-.color-list {
-  padding: 4px 0;
-}
+  :deep(.el-slider__runway.show-input) {
+    margin-right: var(--space-2);
+  }
 
-.color-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
+  :deep(.el-slider__input) {
+    width: 88px;
+  }
+
+  :deep(.el-slider__bar) {
+    background-color: var(--dr-blue);
+  }
+
+  :deep(.el-slider__button) {
+    border-color: var(--dr-blue);
+    background-color: var(--dr-white);
+  }
+
+  :deep(.el-button--primary) {
+    border-color: var(--dr-blue);
+    background-color: var(--dr-blue);
+    font-weight: 500;
+  }
+
+  .sub-title {
+    margin: var(--space-4) 0 var(--space-2);
+    padding-top: var(--space-3);
+    box-shadow: inset 0 1px 0 0 var(--dr-gray-100);
+    color: var(--dr-gray-900);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+
+    &:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      box-shadow: none;
+    }
+  }
+
+  .color-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: 0;
+  }
+
+  .color-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
 }
 </style>
