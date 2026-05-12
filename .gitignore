@@ -3,7 +3,6 @@ CLAUDE.md
 RELEASE
 dataRoomFront
 dataRoomResource
-db
 dataroom.mv.db
 dataroom.trace.db
 application-kdgc.yml
