@@ -28,11 +28,10 @@ public class UserService extends ServiceImpl<UserMapper, UserEntity> {
     public PageVo<UserEntity> page(UserQueryDTO queryDTO) {
         Page<UserEntity> page = new Page<>(queryDTO.getCurrent(), queryDTO.getSize());
         LambdaQueryWrapper<UserEntity> queryWrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.isNotBlank(queryDTO.getAccount())) {
-            queryWrapper.like(UserEntity::getAccount, queryDTO.getAccount());
-        }
-        if (StringUtils.isNotBlank(queryDTO.getUsername())) {
-            queryWrapper.like(UserEntity::getUsername, queryDTO.getUsername());
+        // 关键字同时匹配账号和用户名
+        if (StringUtils.isNotBlank(queryDTO.getKeyword())) {
+            queryWrapper.and(w -> w.like(UserEntity::getAccount, queryDTO.getKeyword())
+                    .or().like(UserEntity::getUsername, queryDTO.getKeyword()));
         }
         if (queryDTO.getStatus() != null) {
             queryWrapper.eq(UserEntity::getStatus, queryDTO.getStatus());
@@ -133,5 +132,22 @@ public class UserService extends ServiceImpl<UserMapper, UserEntity> {
         LambdaQueryWrapper<UserEntity> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserEntity::getAccount, account);
         return this.getOne(wrapper, false);
+    }
+
+    /**
+     * 更新当前用户个人信息（仅允许修改用户名和密码）
+     */
+    public void updateProfile(String account, String username, String password) {
+        UserEntity user = getByAccount(account);
+        if (user == null) {
+            throw new DataRoomException("用户不存在");
+        }
+        if (StringUtils.isNotBlank(username)) {
+            user.setUsername(username);
+        }
+        if (StringUtils.isNotBlank(password)) {
+            user.setPassword(password);
+        }
+        this.updateById(user);
     }
 }

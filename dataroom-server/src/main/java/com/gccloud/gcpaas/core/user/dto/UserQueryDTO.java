@@ -11,11 +11,8 @@ import lombok.Data;
 @Schema(description = "用户查询参数")
 public class UserQueryDTO {
 
-    @Schema(description = "账号")
-    private String account;
-
-    @Schema(description = "用户名")
-    private String username;
+    @Schema(description = "关键字（账号或用户名）")
+    private String keyword;
 
     @Schema(description = "状态")
     private UserStatus status;

@@ -7,8 +7,7 @@ import UserEdit from './components/UserEdit.vue'
 
 const loading = ref(false)
 const userList = ref<UserEntity[]>([])
-const searchAccount = ref('')
-const searchUsername = ref('')
+const searchKeyword = ref('')
 const total = ref(0)
 const currentPage = ref(1)
 const pageSize = ref(10)
@@ -44,8 +43,7 @@ const formatDate = (date: string | Date | null | undefined) => {
 const getUserList = () => {
   loading.value = true
   userApi.page({
-    account: searchAccount.value || undefined,
-    username: searchUsername.value || undefined,
+    keyword: searchKeyword.value || undefined,
     current: currentPage.value,
     size: pageSize.value
   }).then((res: any) => {
@@ -65,8 +63,7 @@ const handleSearch = () => {
 }
 
 const handleReset = () => {
-  searchAccount.value = ''
-  searchUsername.value = ''
+  searchKeyword.value = ''
   currentPage.value = 1
   getUserList()
 }
@@ -123,22 +120,13 @@ onMounted(() => {
   <div class="dr-user">
     <!-- 搜索区域 -->
     <div class="search-area">
-      <div class="search-form">
-        <el-input
-          v-model="searchAccount"
-          placeholder="请输入账号"
-          clearable
-          @keyup.enter="handleSearch"
-          style="width: 200px"
-        />
-        <el-input
-          v-model="searchUsername"
-          placeholder="请输入用户名"
-          clearable
-          @keyup.enter="handleSearch"
-          style="width: 200px"
-        />
-      </div>
+      <el-input
+        v-model="searchKeyword"
+        placeholder="请输入账号或用户名"
+        clearable
+        @keyup.enter="handleSearch"
+        style="width: 300px"
+      />
       <div class="button-group">
         <el-button :icon="Search" @click="handleSearch">查询</el-button>
         <el-button @click="handleReset">重置</el-button>
@@ -220,17 +208,12 @@ onMounted(() => {
   .search-area {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 12px;
     margin-bottom: 16px;
     padding: 16px;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-
-    .search-form {
-      display: flex;
-      gap: 12px;
-    }
 
     .button-group {
       display: flex;

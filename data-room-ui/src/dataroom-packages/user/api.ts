@@ -24,8 +24,7 @@ export interface UserEntity {
  * 用户查询参数
  */
 export interface UserQueryDTO {
-  account?: string
-  username?: string
+  keyword?: string
   status?: UserStatus
   current?: number
   size?: number

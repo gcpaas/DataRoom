@@ -29,6 +29,8 @@ const formData = reactive<UserDTO>({
   status: 'NORMAL' as UserStatus
 })
 
+const confirmPassword = ref('')
+
 const isEdit = ref(false)
 
 const statusOptions = [
@@ -54,6 +56,7 @@ watch(
       if (props.userId) {
         // 编辑模式
         isEdit.value = true
+        confirmPassword.value = ''
         loading.value = true
         try {
           const user = await userApi.detail(props.userId)
@@ -87,11 +90,29 @@ const handleClose = () => {
 const handleConfirm = async () => {
   try {
     await formRef.value?.validate()
+
+    // 校验密码
+    if (formData.password) {
+      if (formData.password.length < 6) {
+        ElMessage.error('密码长度不能少于6位')
+        return
+      }
+      if (formData.password !== confirmPassword.value) {
+        ElMessage.error('两次输入的密码不一致')
+        return
+      }
+    }
+
     loading.value = true
     if (isEdit.value) {
       await userApi.update(formData)
       ElMessage.success('更新成功')
     } else {
+      if (!formData.password) {
+        ElMessage.error('密码不能为空')
+        loading.value = false
+        return
+      }
       await userApi.add(formData)
       ElMessage.success('新增成功')
     }
@@ -112,6 +133,7 @@ const resetFields = () => {
   formData.phone = ''
   formData.role = ''
   formData.status = 'NORMAL'
+  confirmPassword.value = ''
   formRef.value?.resetFields()
 }
 
@@ -160,6 +182,14 @@ defineExpose({
         <el-input
           v-model="formData.password"
           :placeholder="isEdit ? '留空则不修改密码' : '请输入密码'"
+          show-password
+          clearable
+        />
+      </el-form-item>
+      <el-form-item label="确认密码" v-if="formData.password || !isEdit">
+        <el-input
+          v-model="confirmPassword"
+          :placeholder="isEdit ? '请再次输入密码' : '请再次输入密码'"
           show-password
           clearable
         />

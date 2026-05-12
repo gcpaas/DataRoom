@@ -7,6 +7,7 @@ import com.gccloud.gcpaas.core.entity.UserEntity;
 import com.gccloud.gcpaas.core.exception.DataRoomException;
 import com.gccloud.gcpaas.core.shiro.LoginUser;
 import com.gccloud.gcpaas.core.user.dto.UserDTO;
+import com.gccloud.gcpaas.core.user.dto.UserProfileDTO;
 import com.gccloud.gcpaas.core.user.dto.UserQueryDTO;
 import com.gccloud.gcpaas.core.user.service.TokenService;
 import com.gccloud.gcpaas.core.user.service.UserService;
@@ -139,5 +140,14 @@ public class UserController {
                 Map.of("code", DataRoomRole.SHARER, "name", "访问者")
         );
         return Resp.success(roles);
+    }
+
+    @PostMapping("/profile/update")
+    @RequiresRoles(value = DataRoomRole.SHARER)
+    @Operation(summary = "更新个人信息", description = "仅允许修改用户名和密码")
+    public Resp<Void> updateProfile(@RequestBody UserProfileDTO dto) {
+        LoginUser currentUser = LoginUserUtils.getCurrentUser();
+        userService.updateProfile(currentUser.getAccount(), dto.getUsername(), dto.getPassword());
+        return Resp.success(null);
     }
 }
