@@ -49,17 +49,25 @@ public class ResourceController {
     @Operation(summary = "列表查询", description = "根据名称查询")
     @Parameters({
             @Parameter(name = "name", description = "资源名称", in = ParameterIn.QUERY),
-            @Parameter(name = "parentCode", description = "目录编码", in = ParameterIn.QUERY)
+            @Parameter(name = "parentCode", description = "目录编码", in = ParameterIn.QUERY),
+            @Parameter(name = "resourceType", description = "资源类型", in = ParameterIn.QUERY)
     })
     public Resp<List<ResourceEntity>> list(
             @RequestParam(name = "name", required = false) String name,
-            @RequestParam(name = "parentCode", required = false) String parentCode) {
+            @RequestParam(name = "parentCode", required = false) String parentCode,
+            @RequestParam(name = "resourceType", required = false) String resourceType) {
         if (StringUtils.isBlank(parentCode)) {
             parentCode = "root";
         }
         LambdaQueryWrapper<ResourceEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(parentCode), ResourceEntity::getParentCode, parentCode);
         queryWrapper.like(StringUtils.isNotBlank(name), ResourceEntity::getName, name);
+        if (StringUtils.isNotBlank(resourceType)) {
+            try {
+                queryWrapper.eq(ResourceEntity::getResourceType, ResourceType.valueOf(resourceType.toUpperCase()));
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
         queryWrapper.orderByDesc(ResourceEntity::getUpdateDate);
         List<ResourceEntity> list = resourceMapper.selectList(queryWrapper);
         return Resp.success(list);
@@ -77,30 +85,73 @@ public class ResourceController {
     @PostMapping("/upload")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "上传", description = "上传素材")
-    public Resp<ResourceEntity> upload(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+    public Resp<ResourceEntity> upload(
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam(value = "cover", required = false) MultipartFile cover,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "resourceType", required = false) String resourceType) throws IOException {
         ResourceBean resource = dataRoomConfig.getResource();
         ResourceEntity resourceEntity = new ResourceEntity();
         String originalFilename = file.getOriginalFilename();
-        resourceEntity.setName(originalFilename);
         resourceEntity.setOriginalName(originalFilename);
+        resourceEntity.setName(StringUtils.isNotBlank(name) ? name : originalFilename);
 
         // 根据文件扩展名设置资源类型
-        String extension = FilenameUtils.getExtension(originalFilename);
+        String extension = FilenameUtils.getExtension(originalFilename).toLowerCase();
+        ResourceType type;
         if (isImageFile(extension)) {
-            resourceEntity.setResourceType(ResourceType.IMAGE);
+            type = ResourceType.IMAGE;
         } else if (isVideoFile(extension)) {
-            resourceEntity.setResourceType(ResourceType.VIDEO);
+            type = ResourceType.VIDEO;
+        } else if (isModelFile(extension)) {
+            type = ResourceType.MODEL;
+            resourceEntity.setModelFormat(extension.toUpperCase());
         } else {
-            // 对于其他类型文件，暂时归类为图片类型，或者可以考虑添加新的资源类型
-            resourceEntity.setResourceType(ResourceType.IMAGE);
+            type = ResourceType.IMAGE;
         }
+        // 如果前端指定了resourceType，优先使用
+        if (StringUtils.isNotBlank(resourceType)) {
+            try {
+                type = ResourceType.valueOf(resourceType.toUpperCase());
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        resourceEntity.setResourceType(type);
         // 设置文件大小（单位：KB）
         resourceEntity.setSize((int) (file.getSize() / 1024));
         String newFileName = UUID.randomUUID().toString().replace("-", "") + "." + extension;
-        resourceEntity.setPath(newFileName);
-        resourceEntity.setUrl("/" + newFileName);
-        FileUtils.copyInputStreamToFile(file.getInputStream(), new File(resource.getBasePath() + File.separator + newFileName));
+        // 根据资源类型存储到不同目录
+        String subDir = getSubDir(type);
+        resourceEntity.setPath(subDir + File.separator + newFileName);
+        resourceEntity.setUrl("/" + subDir + "/" + newFileName);
+        FileUtils.copyInputStreamToFile(file.getInputStream(), new File(resource.getBasePath() + File.separator + subDir + File.separator + newFileName));
+
+        // 处理封面图片
+        if (cover != null && !cover.isEmpty()) {
+            String coverExtension = FilenameUtils.getExtension(cover.getOriginalFilename()).toLowerCase();
+            String coverFileName = UUID.randomUUID().toString().replace("-", "") + "." + coverExtension;
+            String coverPath = subDir + File.separator + coverFileName;
+            FileUtils.copyInputStreamToFile(cover.getInputStream(), new File(resource.getBasePath() + File.separator + coverPath));
+            resourceEntity.setThumbnail("/" + coverPath);
+        }
+
         return Resp.success(resourceEntity);
+    }
+
+    private String getSubDir(ResourceType type) {
+        if (type == null) {
+            return "image";
+        }
+        return switch (type) {
+            case VIDEO -> "video";
+            case MODEL -> "model";
+            default -> "image";
+        };
+    }
+
+    private boolean isModelFile(String extension) {
+        String ext = extension.toLowerCase();
+        return "glb".equals(ext) || "gltf".equals(ext) || "obj".equals(ext) || "stl".equals(ext);
     }
 
     private boolean isImageFile(String extension) {
@@ -140,5 +191,48 @@ public class ResourceController {
     public Resp<Void> delete(@PathVariable("id") String id) {
         resourceMapper.deleteById(id);
         return Resp.success(null);
+    }
+
+    @PostMapping("/updateModelConfig")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "更新模型配置", description = "更新模型的配置和封面")
+    public Resp<Void> updateModelConfig(
+            @RequestParam("id") String id,
+            @RequestParam(value = "config", required = false) String config,
+            @RequestParam(value = "thumbnail", required = false) String thumbnail) {
+        ResourceEntity entity = resourceMapper.selectById(id);
+        if (entity == null) {
+            return Resp.error("资源不存在");
+        }
+        if (StringUtils.isNotBlank(config)) {
+            entity.setConfig(config);
+        }
+        if (StringUtils.isNotBlank(thumbnail)) {
+            entity.setThumbnail(thumbnail);
+        }
+        entity.setUpdateDate(new Date());
+        resourceMapper.updateById(entity);
+        return Resp.success(null);
+    }
+
+    @PostMapping("/uploadModelCover")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "上传模型封面", description = "上传模型封面图片")
+    public Resp<String> uploadModelCover(
+            @RequestParam("id") String id,
+            @RequestParam("file") MultipartFile cover) throws IOException {
+        ResourceEntity entity = resourceMapper.selectById(id);
+        if (entity == null) {
+            return Resp.error("资源不存在");
+        }
+        ResourceBean resource = dataRoomConfig.getResource();
+        String coverExtension = FilenameUtils.getExtension(cover.getOriginalFilename()).toLowerCase();
+        String coverFileName = UUID.randomUUID().toString().replace("-", "") + "." + coverExtension;
+        String coverPath = "model" + File.separator + coverFileName;
+        FileUtils.copyInputStreamToFile(cover.getInputStream(), new File(resource.getBasePath() + File.separator + coverPath));
+        entity.setThumbnail("/" + coverPath);
+        entity.setUpdateDate(new Date());
+        resourceMapper.updateById(entity);
+        return Resp.success(entity.getThumbnail());
     }
 }

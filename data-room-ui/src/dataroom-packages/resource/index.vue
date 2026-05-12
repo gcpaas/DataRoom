@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, nextTick } from 'vue'
 import { ElMessage, ElMessageBox, ElUpload } from 'element-plus'
-import { Search, Plus, MoreFilled, Folder, Picture, VideoCamera, Check } from '@element-plus/icons-vue'
+import { Search, Plus, MoreFilled, Folder, Picture, VideoCamera, Check, Box } from '@element-plus/icons-vue'
 import { resourceApi, type ResourceEntity } from './api'
 import { getCookie, getCookieName } from '@/dataroom-packages/_common/_cookie'
 import directoryPlaceholder from '../page/assets/image/目录占位符.png'
 import imagePlaceholder from './assets/image/图片占位符.png'
 import videoPlaceholder from './assets/image/视频占位符.png'
+import modelPlaceholder from './assets/image/模型占位符.png'
 import {ResourceType} from "@/dataroom-packages/constant/ResourceType.ts";
+import ModelPreview from '@/dataroom-packages/three/ModelPreview.vue'
 
 interface Props {
   selectable?: boolean // 是否可选择模式
@@ -62,6 +64,12 @@ const resourceTypeOptions = [
     name: '视频',
     description: '上传MP4等格式的视频文件',
     icon: VideoCamera
+  },
+  {
+    type: 'model',
+    name: '3D模型',
+    description: '上传GLB、GLTF、OBJ、STL格式3D模型',
+    icon: Box
   }
 ]
 
@@ -80,6 +88,10 @@ const videoNaturalWidth = ref(0)
 const videoNaturalHeight = ref(0)
 const coverUploadRef = ref<InstanceType<typeof ElUpload>>()
 const capturingCover = ref(false)
+
+// 模型详情弹框
+const modelDetailDialogVisible = ref(false)
+const modelDetailResource = ref<ResourceEntity | null>(null)
 
 // 上传请求头，携带token
 const uploadHeaders = computed(() => {
@@ -237,6 +249,8 @@ const handleCardClick = (item: ResourceEntity) => {
       openImageDetail(item)
     } else if (item.resourceType === ResourceType.VIDEO) {
       openVideoDetail(item)
+    } else if (item.resourceType === ResourceType.MODEL) {
+      openModelDetail(item)
     }
   }
 }
@@ -365,6 +379,12 @@ const handleCoverUploadSuccess = (response: any) => {
   }
 }
 
+// 打开模型详情弹框
+const openModelDetail = (item: ResourceEntity) => {
+  modelDetailResource.value = { ...item }
+  modelDetailDialogVisible.value = true
+}
+
 /**
  * 切换资源选中状态(单选模式)
  * @param item
@@ -402,6 +422,8 @@ const getTypeName = (resourceType: string) => {
       return '图片'
     case ResourceType.VIDEO:
       return '视频'
+    case ResourceType.MODEL:
+      return '3D模型'
     default:
       return ''
   }
@@ -419,6 +441,8 @@ const getDefaultPlaceholder = (resourceType: string) => {
       return imagePlaceholder
     case ResourceType.VIDEO:
       return videoPlaceholder
+    case ResourceType.MODEL:
+      return modelPlaceholder
     default:
       return imagePlaceholder
   }
@@ -433,6 +457,18 @@ const handleBreadcrumbClick = (index: number) => {
   currentParentCode.value = item.code
   breadcrumbs.value = breadcrumbs.value.slice(0, index + 1)
   getResourceList()
+}
+
+// 模型封面上传成功回调
+const handleModelCoverUploadSuccess = (response: any) => {
+  if (response) {
+    const res = response.data as ResourceEntity
+    editingResource.value = {
+      ...editingResource.value,
+      thumbnail: res.url
+    }
+    ElMessage.success('封面上传成功')
+  }
 }
 
 // 确认保存
@@ -555,6 +591,19 @@ onMounted(() => {
                 </template>
               </el-image>
               <el-image
+                v-else-if="item.resourceType === ResourceType.MODEL"
+                :src="item.thumbnail ? getResourceUrl(item.thumbnail) : getDefaultPlaceholder(item.resourceType)"
+                :lazy="true"
+                :fit="item.thumbnail ? 'cover' : 'contain'"
+                :class="['thumbnail-image', item.thumbnail ? '' : 'model']"
+              >
+                <template #error>
+                  <div class="image-error">
+                    <img :src="getDefaultPlaceholder(item.resourceType)" alt="模型占位符"/>
+                  </div>
+                </template>
+              </el-image>
+              <el-image
                 v-else
                 :src="getDefaultPlaceholder(ResourceType.IMAGE)"
                 :lazy="true"
@@ -635,6 +684,7 @@ onMounted(() => {
             <el-option :value="ResourceType.DIRECTORY" label="目录" />
             <el-option :value="ResourceType.IMAGE" label="图片" />
             <el-option :value="ResourceType.VIDEO" label="视频" />
+            <el-option :value="ResourceType.MODEL" label="3D模型" />
           </el-select>
         </el-form-item>
         <el-form-item label="上传文件" v-if="editingResource?.resourceType !== ResourceType.DIRECTORY">
@@ -647,6 +697,7 @@ onMounted(() => {
             :auto-upload="true"
             :show-file-list="true"
             :limit="1"
+            :accept="editingResource?.resourceType === ResourceType.MODEL ? '.glb,.gltf,.obj,.stl' : undefined"
           >
             <template #trigger>
               <el-button type="primary">选择文件</el-button>
@@ -654,9 +705,32 @@ onMounted(() => {
             <template #tip>
               <div class="el-upload__tip">
                 {{ editingResource?.id ? '点击选择文件重新上传' : '请选择要上传的文件' }}
+                <span v-if="editingResource?.resourceType === ResourceType.MODEL">（支持 GLB、GLTF、OBJ、STL 格式）</span>
               </div>
             </template>
           </el-upload>
+        </el-form-item>
+        <!-- 模型封面 -->
+        <el-form-item label="模型封面" v-if="editingResource?.resourceType === ResourceType.MODEL">
+          <el-upload
+            :action="uploadUrl"
+            :headers="uploadHeaders"
+            :on-success="handleModelCoverUploadSuccess"
+            :on-error="handleUploadError"
+            :auto-upload="true"
+            :show-file-list="false"
+            accept="image/*"
+          >
+            <template #trigger>
+              <el-button>选择封面图片</el-button>
+            </template>
+            <template #tip>
+              <div class="el-upload__tip">请选择 JPG、PNG 格式的封面图片</div>
+            </template>
+          </el-upload>
+          <div v-if="editingResource?.thumbnail" style="margin-top: 8px;">
+            <el-image :src="getResourceUrl(editingResource.thumbnail)" fit="cover" style="width: 100px; height: 100px; border-radius: 4px;" />
+          </div>
         </el-form-item>
         <el-form-item label="描述">
           <el-input
@@ -803,6 +877,14 @@ onMounted(() => {
         </div>
       </div>
     </el-dialog>
+
+    <!-- 模型详情弹框 -->
+    <ModelPreview
+      :visible="modelDetailDialogVisible"
+      :resource="modelDetailResource"
+      @success="getResourceList"
+      @update:visible="modelDetailDialogVisible = $event"
+    />
   </div>
 </template>
 

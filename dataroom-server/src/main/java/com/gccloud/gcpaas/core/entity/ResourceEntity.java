@@ -57,4 +57,14 @@ public class ResourceEntity extends BaseEntity {
      */
     @Schema(description = "描述")
     private String remark;
+    /**
+     * 模型个性化配置（JSON）
+     */
+    @Schema(description = "模型个性化配置")
+    private String config;
+    /**
+     * 模型格式：GLB、GLTF、OBJ、STL
+     */
+    @Schema(description = "模型格式")
+    private String modelFormat;
 }

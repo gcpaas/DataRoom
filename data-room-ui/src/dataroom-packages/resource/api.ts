@@ -1,6 +1,49 @@
 import request from '@/dataroom-packages/_common/_request'
 
 /**
+ * 模型格式
+ */
+export type ModelFormat = 'GLB' | 'GLTF' | 'OBJ' | 'STL'
+
+/**
+ * 材质配置
+ */
+export interface MaterialConfig {
+  color: string
+  roughness: number
+  metalness: number
+  opacity: number
+  transparent: boolean
+  wireframe: boolean
+}
+
+/**
+ * 光照配置
+ */
+export interface LightingConfig {
+  ambient: { enabled: boolean; color: string; intensity: number }
+  directional: { enabled: boolean; color: string; intensity: number }
+  point: { enabled: boolean; color: string; intensity: number }
+}
+
+/**
+ * 背景配置
+ */
+export interface BackgroundConfig {
+  type: 'color'
+  value: string
+}
+
+/**
+ * 模型完整配置
+ */
+export interface ModelConfig {
+  material: MaterialConfig
+  lighting: LightingConfig
+  background: BackgroundConfig
+}
+
+/**
  * 资源实体接口
  */
 export interface ResourceEntity {
@@ -16,6 +59,8 @@ export interface ResourceEntity {
   remark?: string
   createDate?: string
   updateDate?: string
+  config?: string
+  modelFormat?: string
 }
 
 /**
@@ -25,7 +70,7 @@ export const resourceApi = {
   /**
    * 获取资源列表
    */
-  list(params?: { name?: string; parentCode?: string }) {
+  list(params?: { name?: string; parentCode?: string; resourceType?: string }) {
     return request.get<ResourceEntity[]>('/dataRoom/resource/list', params)
   },
 
@@ -66,5 +111,24 @@ export const resourceApi = {
    */
   delete(id: string) {
     return request.post<void>(`/dataRoom/resource/delete/${id}`)
+  },
+
+  /**
+   * 更新模型配置
+   */
+  updateModelConfig(params: { id: string; config?: string; thumbnail?: string }) {
+    return request.post<void>('/dataRoom/resource/updateModelConfig', null, { params })
+  },
+
+  /**
+   * 上传模型封面
+   */
+  uploadModelCover(id: string, formData: FormData) {
+    return request.post<string>(`/dataRoom/resource/uploadModelCover`, formData, {
+      params: { id },
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
   },
 }

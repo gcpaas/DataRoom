@@ -9,7 +9,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum ResourceType implements IEnum<String> {
     DIRECTORY("directory", "目录或文件夹"),
     IMAGE("image", "图片"),
-    VIDEO("video", "视频");
+    VIDEO("video", "视频"),
+    MODEL("model", "3D模型");
 
     private String type;
     private String desc;
