@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {ElMessage} from 'element-plus'
-import {Plus} from '@element-plus/icons-vue'
 import request from '@/dataroom-packages/_common/_request.ts'
 
 interface UserInfo {
@@ -69,6 +68,12 @@ const handleSave = async () => {
   }
 }
 
+const handleReset = () => {
+  editForm.value.username = userInfo.value.username
+  editForm.value.password = ''
+  editForm.value.confirmPassword = ''
+}
+
 const loadUserInfo = () => {
   request.get<UserInfo>('/dataRoom/user/current').then((res) => {
     userInfo.value = {
@@ -125,7 +130,8 @@ onMounted(() => {
           </el-checkbox-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :icon="Plus" @click="handleSave" :loading="loading">保存</el-button>
+          <el-button @click="handleReset">重置</el-button>
+          <el-button type="primary" @click="handleSave" :loading="loading">保存</el-button>
         </el-form-item>
       </el-form>
     </div>
