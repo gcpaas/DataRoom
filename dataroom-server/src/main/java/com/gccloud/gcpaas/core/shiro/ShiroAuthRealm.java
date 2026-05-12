@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.gccloud.gcpaas.core.config.DataRoomConfig;
 import com.gccloud.gcpaas.core.config.bean.Jwt;
 import com.gccloud.gcpaas.core.config.bean.Sso;
+import com.gccloud.gcpaas.core.constant.UserStatus;
 import com.gccloud.gcpaas.core.entity.UserEntity;
 import com.gccloud.gcpaas.core.exception.DataRoomException;
 import com.gccloud.gcpaas.core.user.service.UserService;
@@ -91,8 +92,8 @@ public class ShiroAuthRealm extends AuthorizingRealm {
                 Claims claims = Jwts.parser().setSigningKey(jwt.getSecret()).build().parseClaimsJws(accessToken).getBody();
                 // 解析token，然后获取用户相关信息
                 String username = claims.get("username", String.class);
-                UserEntity user = userService.getByUsername(username);
-                if (user == null || !"normal".equals(user.getState())) {
+                UserEntity user = userService.getByAccount(username);
+                if (user == null || user.getStatus() == null || user.getStatus() != UserStatus.NORMAL) {
                     throw new DataRoomException("用户不存在或已禁用");
                 }
                 loginUser = new LoginUser();

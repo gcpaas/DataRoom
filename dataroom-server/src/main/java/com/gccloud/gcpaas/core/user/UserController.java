@@ -4,7 +4,10 @@ import com.gccloud.gcpaas.core.bean.Resp;
 import com.gccloud.gcpaas.core.config.DataRoomConfig;
 import com.gccloud.gcpaas.core.constant.DataRoomRole;
 import com.gccloud.gcpaas.core.entity.UserEntity;
+import com.gccloud.gcpaas.core.exception.DataRoomException;
 import com.gccloud.gcpaas.core.shiro.LoginUser;
+import com.gccloud.gcpaas.core.user.dto.UserDTO;
+import com.gccloud.gcpaas.core.user.dto.UserQueryDTO;
 import com.gccloud.gcpaas.core.user.service.TokenService;
 import com.gccloud.gcpaas.core.user.service.UserService;
 import com.gccloud.gcpaas.core.util.LoginUserUtils;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -71,12 +75,69 @@ public class UserController {
         // 验证通过后立即删除，防止重复使用
         captchaCache.invalidate(captchaKey);
 
-        // 解密密码、比较账号密码
+        // 解密密码
         String decryptedPassword = RsaUtils.decryptByPrivateKey(password, dataRoomConfig.getPrivateKey());
         Assert.isTrue(StringUtils.isNotBlank(decryptedPassword), "用户名或密码错误");
-        UserEntity sysUser = userService.getByUsername(username);
-        Assert.isTrue(sysUser != null && sysUser.getPassword().equals(decryptedPassword), "用户名或密码错误");
-        String token = tokenService.createToken(username);
-        return Resp.success(token);
+
+        // 优先从数据库查询用户（使用account字段查询）
+        UserEntity dbUser = userService.getByAccount(username);
+        if (dbUser != null) {
+            // 数据库用户认证
+            String dbPwd = RsaUtils.decryptByPrivateKey(dbUser.getPassword(), dataRoomConfig.getPrivateKey());
+            Assert.isTrue(dbPwd.equals(decryptedPassword), "用户名或密码错误");
+            String token = tokenService.createToken(username);
+            return Resp.success(token);
+        }
+        throw new DataRoomException("用户名或密码错误");
+    }
+
+    @GetMapping("/page")
+    @RequiresRoles(value = DataRoomRole.MANAGER)
+    @Operation(summary = "分页查询用户")
+    public Resp<List<UserEntity>> page(UserQueryDTO queryDTO) {
+        return Resp.success(userService.page(queryDTO).getData());
+    }
+
+    @GetMapping("/detail/{id}")
+    @RequiresRoles(value = DataRoomRole.MANAGER)
+    @Operation(summary = "获取用户详情")
+    public Resp<UserEntity> detail(@PathVariable String id) {
+        return Resp.success(userService.getUserById(id));
+    }
+
+    @PostMapping("/add")
+    @RequiresRoles(value = DataRoomRole.MANAGER)
+    @Operation(summary = "新增用户")
+    public Resp<Void> add(@RequestBody UserDTO dto) {
+        userService.add(dto);
+        return Resp.success(null);
+    }
+
+    @PostMapping("/update")
+    @RequiresRoles(value = DataRoomRole.MANAGER)
+    @Operation(summary = "更新用户")
+    public Resp<Void> update(@RequestBody UserDTO dto) {
+        userService.update(dto);
+        return Resp.success(null);
+    }
+
+    @PostMapping("/delete/{id}")
+    @RequiresRoles(value = DataRoomRole.MANAGER)
+    @Operation(summary = "删除用户")
+    public Resp<Void> delete(@PathVariable String id) {
+        userService.delete(id);
+        return Resp.success(null);
+    }
+
+    @GetMapping("/roles")
+    @RequiresRoles(value = DataRoomRole.MANAGER)
+    @Operation(summary = "获取所有角色")
+    public Resp<List<Map<String, String>>> roles() {
+        List<Map<String, String>> roles = List.of(
+                Map.of("code", DataRoomRole.MANAGER, "name", "管理员"),
+                Map.of("code", DataRoomRole.DEVELOPER, "name", "开发者"),
+                Map.of("code", DataRoomRole.SHARER, "name", "访问者")
+        );
+        return Resp.success(roles);
     }
 }

@@ -42,6 +42,10 @@ const router = createRouter({
         path: 'profile',
         name: 'profile',
         component: () => import('@/dataroom-packages/profile/index.vue'),
+      }, {
+        path: 'user',
+        name: 'user',
+        component: () => import('@/dataroom-packages/user/index.vue'),
       }]
     },
     {

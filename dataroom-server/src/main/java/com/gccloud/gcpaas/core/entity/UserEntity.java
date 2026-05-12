@@ -1,47 +1,77 @@
 package com.gccloud.gcpaas.core.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.gccloud.gcpaas.core.constant.UserStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
- * 用户
+ * 用户实体
  */
 @Data
-public class UserEntity {
+@EqualsAndHashCode(callSuper = true)
+@Schema(description = "用户")
+@TableName(value = "dr_user", autoResultMap = true)
+public class UserEntity extends BaseEntity {
+
     /**
      * 账号
      */
+    @Schema(description = "账号")
+    private String account;
+
+    /**
+     * 用户名
+     */
+    @Schema(description = "用户名")
     private String username;
+
     /**
-     * 登录密码
+     * 密码
      */
+    @Schema(description = "密码")
     private String password;
+
     /**
-     * 姓名
+     * 联系电话
      */
-    private String realName;
-    /**
-     * 手机号
-     */
+    @Schema(description = "联系电话")
     private String phone;
+
     /**
-     * 邮箱
+     * 角色编码，多个用逗号分隔
      */
-    private String email;
+    @Schema(description = "角色编码，多个用逗号分隔")
+    private String role;
+
     /**
      * 状态
      */
-    private String state;
+    @Schema(description = "状态")
+    private UserStatus status;
+
     /**
-     * 租户编码
+     * 获取角色列表（兼容旧版 roleCodeList）
      */
-    private String tenantCode;
-    /**
-     * 角色编码
-     */
-    @TableField(typeHandler = JacksonTypeHandler.class)
+    @Schema(description = "角色编码列表", hidden = true)
+    @TableField(exist = false)
     private List<String> roleCodeList;
+
+    /**
+     * 获取角色列表
+     */
+    public List<String> getRoleCodeList() {
+        if (StringUtils.isBlank(role)) {
+            return Collections.emptyList();
+        }
+        return Arrays.asList(role.split(","));
+    }
+
 }

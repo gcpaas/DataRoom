@@ -30,6 +30,8 @@ const handleCommand = (command: string) => {
     router.push('/login')
   } else if (command === 'profile') {
     router.push('/dataRoom/profile')
+  } else if (command === 'console') {
+    router.push('/dataRoom/user')
   }
 }
 
@@ -64,7 +66,8 @@ onMounted(() => {
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="profile">个人信息</el-dropdown-item>
+              <el-dropdown-item command="console">控制台</el-dropdown-item>
+              <el-dropdown-item command="profile" divided>个人信息</el-dropdown-item>
               <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
