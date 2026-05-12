@@ -3,15 +3,15 @@ import {onMounted, ref} from 'vue'
 import request from '@/dataroom-packages/_common/_request.ts'
 
 interface UserInfo {
+  account: string
   username: string
-  realName: string
-  roleCodeList: string[]
+  role: string
 }
 
 const userInfo = ref<UserInfo>({
+  account: '',
   username: '',
-  realName: '',
-  roleCodeList: []
+  role: ''
 })
 
 const allRoles = [
@@ -20,12 +20,23 @@ const allRoles = [
   {code: 'sharer', name: '访问者'}
 ]
 
+const roleNameMap: Record<string, string> = {
+  'manager': '管理员',
+  'developer': '开发者',
+  'sharer': '访问者'
+}
+
+const getRoles = (roleStr: string) => {
+  if (!roleStr) return []
+  return roleStr.split(',').filter(Boolean)
+}
+
 onMounted(() => {
   request.get<UserInfo>('/dataRoom/user/current').then((res) => {
     userInfo.value = {
+      account: res.account || '',
       username: res.username || '',
-      realName: res.realName || '',
-      roleCodeList: res.roleCodeList || []
+      role: res.role || ''
     }
   })
 })
@@ -36,14 +47,14 @@ onMounted(() => {
     <div class="profile-container">
       <h2 class="profile-title">个人信息</h2>
       <el-form label-width="100px" class="profile-form">
-        <el-form-item label="账号名">
-          <el-input v-model="userInfo.username" disabled/>
+        <el-form-item label="账号">
+          <el-input v-model="userInfo.account" disabled/>
         </el-form-item>
         <el-form-item label="用户名">
-          <el-input v-model="userInfo.realName" disabled/>
+          <el-input v-model="userInfo.username" disabled/>
         </el-form-item>
         <el-form-item label="角色">
-          <el-checkbox-group v-model="userInfo.roleCodeList" disabled>
+          <el-checkbox-group :model-value="getRoles(userInfo.role)" disabled>
             <el-checkbox v-for="role in allRoles" :key="role.code" :label="role.code" :value="role.code">
               {{ role.name }}
             </el-checkbox>

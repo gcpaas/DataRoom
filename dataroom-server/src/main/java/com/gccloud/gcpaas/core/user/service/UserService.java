@@ -38,6 +38,8 @@ public class UserService extends ServiceImpl<UserMapper, UserEntity> {
             queryWrapper.eq(UserEntity::getStatus, queryDTO.getStatus());
         }
         queryWrapper.orderByDesc(UserEntity::getCreateDate);
+        // 不查询 password 字段
+        queryWrapper.select(UserEntity.class, info -> !"password".equals(info.getColumn()));
         Page<UserEntity> result = this.page(page, queryWrapper);
         return PageVo.build(result);
     }
@@ -46,7 +48,11 @@ public class UserService extends ServiceImpl<UserMapper, UserEntity> {
      * 根据ID获取用户详情
      */
     public UserEntity getUserById(String id) {
-        UserEntity user = this.getById(id);
+        LambdaQueryWrapper<UserEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserEntity::getId, id);
+        // 不查询 password 字段
+        queryWrapper.select(UserEntity.class, info -> !"password".equals(info.getColumn()));
+        UserEntity user = this.getOne(queryWrapper, false);
         if (user == null) {
             throw new DataRoomException("用户不存在");
         }

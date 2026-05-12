@@ -23,6 +23,24 @@ const statusMap: Record<UserStatus, { label: string; type: string }> = {
   'PASSWORD_EXPIRED': {label: '密码过期', type: 'warning'}
 }
 
+const roleNameMap: Record<string, string> = {
+  'manager': '管理员',
+  'developer': '开发者',
+  'sharer': '访问者'
+}
+
+const formatDate = (date: string | Date | null | undefined) => {
+  if (!date) return '-'
+  const d = new Date(date)
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  const hours = String(d.getHours()).padStart(2, '0')
+  const minutes = String(d.getMinutes()).padStart(2, '0')
+  const seconds = String(d.getSeconds()).padStart(2, '0')
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
+
 const getUserList = () => {
   loading.value = true
   userApi.page({
@@ -31,8 +49,9 @@ const getUserList = () => {
     current: currentPage.value,
     size: pageSize.value
   }).then((res: any) => {
-    userList.value = res?.data || []
-    total.value = res?.total || 0
+    // 响应拦截器已返回 data，故 res 直接是数组
+    userList.value = Array.isArray(res) ? res : []
+    total.value = res?.total || (Array.isArray(res) ? res.length : 0)
   }).catch((error: any) => {
     console.error('查询用户失败:', error)
   }).finally(() => {
@@ -135,7 +154,14 @@ onMounted(() => {
         <el-table-column prop="phone" label="联系电话" min-width="120"/>
         <el-table-column prop="role" label="角色" min-width="180">
           <template #default="{ row }">
-            <span>{{ row.role || '-' }}</span>
+            <el-tag
+              v-for="r in (row.role ? row.role.split(',') : [])"
+              :key="r"
+              size="small"
+              style="margin-right: 4px; border-radius: 9999px; border: none;"
+            >
+              {{ roleNameMap[r] || r }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" min-width="100">
@@ -149,12 +175,12 @@ onMounted(() => {
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createDate" label="创建时间" min-width="160">
+        <el-table-column prop="updateDate" label="更新时间" min-width="160">
           <template #default="{ row }">
-            <span>{{ row.createDate || '-' }}</span>
+            <span>{{ formatDate(row.updateDate) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="120" fixed="right">
+        <el-table-column label="操作" width="160" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
