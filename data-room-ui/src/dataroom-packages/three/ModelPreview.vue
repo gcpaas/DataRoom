@@ -65,6 +65,7 @@ const defaultBackgroundConfig: BackgroundConfig = {
 const localMaterialConfig = ref<MaterialConfig>({ ...defaultMaterialConfig })
 const localLightingConfig = ref<LightingConfig>({ ...defaultLightingConfig })
 const localBackgroundConfig = ref<BackgroundConfig>({ ...defaultBackgroundConfig })
+const localModelFormat = ref<string>('')
 
 // Three.js viewer ref
 const viewerRef = ref<InstanceType<typeof ThreeModelViewer>>()
@@ -75,6 +76,9 @@ const loadConfig = () => {
   if (props.resource?.config) {
     try {
       const config = JSON.parse(props.resource.config) as ModelConfig
+      if (config.format) {
+        localModelFormat.value = config.format
+      }
       if (config.material) {
         localMaterialConfig.value = { ...defaultMaterialConfig, ...config.material }
       }
@@ -281,7 +285,7 @@ const handleBackgroundChange = (color: string) => {
               </div>
               <div class="info-item">
                 <span class="info-label">文件格式：</span>
-                <span class="info-value">{{ resource?.modelFormat || '未知' }}</span>
+                <span class="info-value">{{ localModelFormat || '未知' }}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">文件大小：</span>

@@ -38,6 +38,7 @@ export interface BackgroundConfig {
  * 模型完整配置
  */
 export interface ModelConfig {
+  format?: string
   material: MaterialConfig
   lighting: LightingConfig
   background: BackgroundConfig
@@ -60,7 +61,6 @@ export interface ResourceEntity {
   createDate?: string
   updateDate?: string
   config?: string
-  modelFormat?: string
 }
 
 /**

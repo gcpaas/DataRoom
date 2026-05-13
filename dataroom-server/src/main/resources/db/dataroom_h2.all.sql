@@ -173,5 +173,5 @@ CREATE INDEX IF NOT EXISTS idx_user_status ON dr_user(status);
 -- ('3', 'sharer', '分享者', 'MQhucQR4QZwvLQHmOEbWeVP5hR+oJMZTBHLKcvksa5xsaGc+X6WAhvc4qctWvXdfKyRt1tUJaC5FArc4Q74+TVPaQhhn8a4K2UWb+Mm+35xPfiO7ZfWVRu9JoEDkxqnO92o0Bw/FDTfYz9OL0xdeYDYD8PN9x9DSlTNDuGE0bpyJqv6ZlgT79vzEG/iTUJN7u6QS71kV/7yJFJ0hm1CgSBvaa9X3q+5N0eD+P7q4UFNaFqTmuytc/5/OnHUDQJq6bvEsM+mV6HIEp+LXF2hqw7GJtoFc+5VZTiKn4PVGG7DBxh9rR7GbdS+Uhdnta6QO9sGbl3rQclUk+ObgiwUTnA==', 'sharer', 'NORMAL', 'default', '0');
 
 
-ALTER TABLE dr_resource ADD COLUMN config JSON COMMENT '模型个性化配置';
-ALTER TABLE dr_resource ADD COLUMN model_format VARCHAR(20) COMMENT '模型格式';
+-- ALTER TABLE dr_resource ADD COLUMN config JSON COMMENT '模型个性化配置';
+-- ALTER TABLE dr_resource DROP COLUMN model_format;

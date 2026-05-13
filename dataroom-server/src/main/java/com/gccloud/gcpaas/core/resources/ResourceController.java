@@ -1,5 +1,7 @@
 package com.gccloud.gcpaas.core.resources;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gccloud.gcpaas.core.bean.Resp;
 import com.gccloud.gcpaas.core.config.DataRoomConfig;
@@ -105,7 +107,10 @@ public class ResourceController {
             type = ResourceType.VIDEO;
         } else if (isModelFile(extension)) {
             type = ResourceType.MODEL;
-            resourceEntity.setModelFormat(extension.toUpperCase());
+            // 将模型格式存入 config
+            JSONObject config = new JSONObject();
+            config.put("format", extension.toUpperCase());
+            resourceEntity.setConfig(config.toJSONString());
         } else {
             type = ResourceType.IMAGE;
         }
