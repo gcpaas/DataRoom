@@ -322,8 +322,26 @@ const loadSTL = (url: string) => {
 
 const applyDefaultMaterial = () => {
   if (!currentModel) return
-  const materialConfig = getEffectiveMaterialConfig()
 
+  // 检查模型是否已有有效材质（GLTF/GLB 模型通常自带材质）
+  let hasValidMaterial = false
+  currentModel.traverse((child) => {
+    if (child instanceof THREE.Mesh && child.material) {
+      const mat = child.material as THREE.MeshStandardMaterial
+      // 如果材质有颜色且不是默认的黑色，则认为有有效材质
+      if (mat.color && !(mat.color.r === 0 && mat.color.g === 0 && mat.color.b === 0)) {
+        hasValidMaterial = true
+      }
+    }
+  })
+
+  // 如果模型已有有效材质，保留原始颜色
+  if (hasValidMaterial) {
+    return
+  }
+
+  // 否则应用默认材质（OBJ、STL 等格式本身不存储材质）
+  const materialConfig = getEffectiveMaterialConfig()
   currentModel.traverse((child) => {
     if (child instanceof THREE.Mesh) {
       const material = new THREE.MeshStandardMaterial({
