@@ -73,11 +73,9 @@ const capturingCover = ref(false)
 
 // Load config from resource
 const loadConfig = () => {
-  console.log('[ModelPreview] loadConfig called, resource config:', props.resource?.config)
   if (props.resource?.config) {
     try {
       const config = JSON.parse(props.resource.config) as ModelConfig
-      console.log('[ModelPreview] Parsed config:', config)
       if (config.format) {
         localModelFormat.value = config.format
       }
@@ -103,7 +101,6 @@ const loadConfig = () => {
 // Watch resource change
 watch(() => props.resource, (newResource) => {
   if (newResource) {
-    console.log('[ModelPreview] Resource changed:', newResource.id, 'config:', newResource.config)
     loadConfig()
   }
 }, { immediate: true })
