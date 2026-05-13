@@ -250,11 +250,14 @@ const loadGLTF = (url: string) => {
       scene.add(currentModel)
       isLoading.value = false
 
+      // 如果 canvas 尺寸为 0，说明容器尚未布局，强制触发 resize
+      if (renderer.domElement.width === 0 || renderer.domElement.height === 0) {
+        handleResize()
+      }
+
       // 立即渲染一帧确保显示
       requestAnimationFrame(() => {
         renderer.render(scene, camera)
-        // 验证 canvas 尺寸
-        console.log('[GLTFLoader] Canvas size:', renderer.domElement.width, renderer.domElement.height, 'container:', containerRef.value?.clientWidth, containerRef.value?.clientHeight)
       })
 
       emit('loadSuccess')
