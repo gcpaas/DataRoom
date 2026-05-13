@@ -249,10 +249,14 @@ const loadGLTF = (url: string) => {
       centerAndScaleModel()
       scene.add(currentModel)
       isLoading.value = false
-      // Force render immediately after model is added
-      if (renderer) {
+
+      // 立即渲染一帧确保显示
+      requestAnimationFrame(() => {
         renderer.render(scene, camera)
-      }
+        // 验证 canvas 尺寸
+        console.log('[GLTFLoader] Canvas size:', renderer.domElement.width, renderer.domElement.height, 'container:', containerRef.value?.clientWidth, containerRef.value?.clientHeight)
+      })
+
       emit('loadSuccess')
     },
     undefined,
@@ -273,6 +277,12 @@ const loadOBJ = (url: string) => {
       centerAndScaleModel()
       scene.add(currentModel)
       isLoading.value = false
+
+      // 立即渲染一帧确保显示
+      requestAnimationFrame(() => {
+        renderer.render(scene, camera)
+      })
+
       emit('loadSuccess')
     },
     undefined,
