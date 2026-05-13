@@ -595,8 +595,8 @@ onMounted(() => {
                 v-else-if="item.resourceType === ResourceType.VIDEO"
                 :src="item.thumbnail ? getResourceUrl(item.thumbnail) : getDefaultPlaceholder(item.resourceType)"
                 :lazy="true"
-                :fit="item.thumbnail ? 'cover' : 'contain'"
-                :class="['thumbnail-image', item.thumbnail ? '' : 'video']"
+                fit="contain"
+                class="thumbnail-image video"
               >
                 <template #error>
                   <div class="image-error">
@@ -608,8 +608,8 @@ onMounted(() => {
                 v-else-if="item.resourceType === ResourceType.MODEL"
                 :src="item.thumbnail ? getResourceUrl(item.thumbnail) : getDefaultPlaceholder(item.resourceType)"
                 :lazy="true"
-                :fit="item.thumbnail ? 'cover' : 'contain'"
-                :class="['thumbnail-image', item.thumbnail ? '' : 'model']"
+                fit="contain"
+                class="thumbnail-image model"
               >
                 <template #error>
                   <div class="image-error">
@@ -1081,9 +1081,10 @@ onMounted(() => {
             height: 100px !important;
           }
 
-          .video {
-            width: 100px !important;
-            height: 100px !important;
+          .video,
+          .model {
+            width: 100% !important;
+            height: 100% !important;
           }
         }
 
