@@ -126,6 +126,7 @@ const initScene = () => {
 
   // Initialize lights
   initLights()
+  console.log('[initScene] After initLights, scene children:', scene.children.map(c => c.type))
 
   // Initialize background
   updateBackground()
@@ -242,19 +243,51 @@ const loadModel = (url: string) => {
 }
 
 const loadGLTF = (url: string) => {
+  console.log('[GLTFLoader] Loading:', url)
   const loader = new GLTFLoader()
   loader.load(
     url,
     (gltf) => {
+      console.log('[GLTFLoader] Loaded successfully, scene:', gltf.scene)
       currentModel = gltf.scene
+      console.log('[GLTFLoader] Before applyDefaultMaterial - children:', gltf.scene.children.length)
+
+      // Debug: count meshes before applyDefaultMaterial
+      let meshCount = 0
+      gltf.scene.traverse(c => { if (c instanceof THREE.Mesh) meshCount++ })
+      console.log('[GLTFLoader] Mesh count before material:', meshCount)
+
       applyDefaultMaterial()
+
+      // Debug: count meshes after applyDefaultMaterial and check materials
+      let meshWithMaterial = 0
+      let blackMaterialCount = 0
+      gltf.scene.traverse(c => {
+        if (c instanceof THREE.Mesh) {
+          meshWithMaterial++
+          if (c.material) {
+            const mat = c.material as THREE.MeshStandardMaterial
+            if (mat.color && mat.color.r === 0 && mat.color.g === 0 && mat.color.b === 0) {
+              blackMaterialCount++
+            }
+            console.log('[GLTFLoader] Mesh material color:', mat.color)
+          }
+        }
+      })
+      console.log('[GLTFLoader] After applyDefaultMaterial - meshes:', meshWithMaterial, 'black materials:', blackMaterialCount)
+
       centerAndScaleModel()
+      console.log('[GLTFLoader] After centerAndScaleModel')
       scene.add(currentModel)
+      console.log('[GLTFLoader] Scene now has', scene.children.length, 'children')
+      console.log('[GLTFLoader] Lights:', scene.children.filter(c => c.type.includes('Light')).map(l => ({ type: l.type, visible: l.visible })))
+      console.log('[GLTFLoader] Camera:', camera.position, 'looking at:', controls.target)
       isLoading.value = false
       emit('loadSuccess')
     },
     undefined,
     (error) => {
+      console.error('[GLTFLoader] Error:', error)
       isLoading.value = false
       emit('loadError', error)
     }
@@ -269,9 +302,12 @@ const loadOBJ = (url: string) => {
     (obj) => {
       console.log('[OBJLoader] Loaded successfully:', obj)
       currentModel = obj
+      console.log('[OBJLoader] Children count:', obj.children.length)
       applyDefaultMaterial()
       centerAndScaleModel()
+      console.log('[OBJLoader] After centerAndScaleModel')
       scene.add(currentModel)
+      console.log('[OBJLoader] Scene now has', scene.children.length, 'children')
       isLoading.value = false
       emit('loadSuccess')
     },
@@ -334,22 +370,37 @@ const centerAndScaleModel = () => {
 
   // Compute bounding box
   const box = new THREE.Box3().setFromObject(currentModel)
+  console.log('[centerAndScaleModel] Bounding box:', box)
   const center = box.getCenter(new THREE.Vector3())
+  console.log('[centerAndScaleModel] Center:', center)
   const size = box.getSize(new THREE.Vector3())
+  console.log('[centerAndScaleModel] Size:', size)
 
   // Center the model
   currentModel.position.sub(center)
+  console.log('[centerAndScaleModel] After position.sub - position:', currentModel.position)
 
   // Scale to fit in view
   const maxDim = Math.max(size.x, size.y, size.z)
+  console.log('[centerAndScaleModel] Max dimension:', maxDim)
   if (maxDim > 2) {
     const scale = 2 / maxDim
+    console.log('[centerAndScaleModel] Applying scale:', scale)
     currentModel.scale.setScalar(scale)
+  } else {
+    console.log('[centerAndScaleModel] No scaling needed (maxDim <= 2)')
   }
 
   // Reset camera
   camera.position.set(0, 0, 5)
-  controls.reset()
+  console.log('[centerAndScaleModel] Camera reset to (0,0,5)')
+  controls.target.set(0, 0, 0)
+  controls.update()
+  console.log('[centerAndScaleModel] Controls updated, camera looking at:', controls.target)
+
+  // Force render
+  renderer.render(scene, camera)
+  console.log('[centerAndScaleModel] Scene children:', scene.children.map(c => c.type))
 }
 
 const handleResize = () => {
