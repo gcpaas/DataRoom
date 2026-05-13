@@ -159,9 +159,23 @@ const handleAdd = () => {
 // 选择资源类型后打开对应的新增表单
 const handleSelectType = (type: string) => {
   typeSelectDialogVisible.value = false
+  let resourceType: ResourceType
+  switch (type) {
+    case 'directory':
+      resourceType = ResourceType.DIRECTORY
+      break
+    case 'video':
+      resourceType = ResourceType.VIDEO
+      break
+    case 'model':
+      resourceType = ResourceType.MODEL
+      break
+    default:
+      resourceType = ResourceType.IMAGE
+  }
   editingResource.value = {
     name: '',
-    resourceType: type === 'directory' ? ResourceType.DIRECTORY : type === 'video' ? ResourceType.VIDEO : ResourceType.IMAGE,
+    resourceType,
     parentCode: currentParentCode.value
   }
   uploadDialogVisible.value = true
