@@ -166,6 +166,12 @@ const handleCoverUpload = (response: any) => {
   }
 }
 
+// Load error handler
+const handleLoadError = (error: any) => {
+  console.error('[ModelPreview] Load error:', error)
+  ElMessage.error('模型加载失败: ' + (error?.message || error))
+}
+
 // Save config
 const handleSaveConfig = async () => {
   if (!props.resource?.id) return
@@ -255,6 +261,7 @@ const handleBackgroundChange = (color: string) => {
             :material-config="localMaterialConfig"
             :lighting-config="localLightingConfig"
             :background-config="localBackgroundConfig"
+            @load-error="handleLoadError"
           />
         </div>
         <div class="model-actions">

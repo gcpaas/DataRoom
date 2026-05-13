@@ -216,6 +216,7 @@ const updateLighting = (config: LightingConfig) => {
 const loadModel = (url: string) => {
   if (!url) return
 
+  console.log('[loadModel] URL:', url)
   isLoading.value = true
   showCover.value = false
 
@@ -226,6 +227,7 @@ const loadModel = (url: string) => {
   }
 
   const extension = url.split('.').pop()?.toLowerCase()
+  console.log('[loadModel] Extension:', extension)
 
   if (extension === 'glb' || extension === 'gltf') {
     loadGLTF(url)
@@ -235,7 +237,7 @@ const loadModel = (url: string) => {
     loadSTL(url)
   } else {
     isLoading.value = false
-    emit('loadError', new Error('Unsupported model format'))
+    emit('loadError', new Error('Unsupported model format: ' + extension))
   }
 }
 
@@ -260,10 +262,12 @@ const loadGLTF = (url: string) => {
 }
 
 const loadOBJ = (url: string) => {
+  console.log('[OBJLoader] Loading:', url)
   const loader = new OBJLoader()
   loader.load(
     url,
     (obj) => {
+      console.log('[OBJLoader] Loaded successfully:', obj)
       currentModel = obj
       applyDefaultMaterial()
       centerAndScaleModel()
@@ -271,8 +275,11 @@ const loadOBJ = (url: string) => {
       isLoading.value = false
       emit('loadSuccess')
     },
-    undefined,
+    (progress) => {
+      console.log('[OBJLoader] Progress:', progress)
+    },
     (error) => {
+      console.error('[OBJLoader] Error:', error)
       isLoading.value = false
       emit('loadError', error)
     }
