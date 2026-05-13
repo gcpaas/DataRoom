@@ -3,6 +3,7 @@ import { ref, onMounted, onBeforeUnmount, watch, shallowRef } from 'vue'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js'
 import { Loading, Box } from '@element-plus/icons-vue'
@@ -65,6 +66,7 @@ let animationId: number
 let ambientLight: THREE.AmbientLight
 let directionalLight: THREE.DirectionalLight
 let pointLight: THREE.PointLight
+let dracoLoader: DRACOLoader | null = null
 
 const defaultMaterialConfig: MaterialConfig = {
   color: '#4a90e2',
@@ -241,6 +243,12 @@ const loadModel = (url: string) => {
 
 const loadGLTF = (url: string) => {
   const loader = new GLTFLoader()
+  // 配置 DRACO 解码器，用于加载带 Draco 压缩的 GLB 模型
+  dracoLoader = new DRACOLoader()
+  dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
+  dracoLoader.setDecoderConfig({ type: 'js' })
+  loader.setDRACOLoader(dracoLoader)
+
   loader.load(
     url,
     (gltf) => {
@@ -477,6 +485,11 @@ onBeforeUnmount(() => {
     if (containerRef.value && renderer.domElement) {
       containerRef.value.removeChild(renderer.domElement)
     }
+  }
+
+  // 清理 DRACO loader
+  if (dracoLoader) {
+    dracoLoader.dispose()
   }
 })
 </script>
