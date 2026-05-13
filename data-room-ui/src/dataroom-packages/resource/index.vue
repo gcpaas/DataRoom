@@ -998,7 +998,7 @@ onMounted(() => {
 
     .card-list {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 16px;
       padding: 2px;
       margin-bottom: 20px;
