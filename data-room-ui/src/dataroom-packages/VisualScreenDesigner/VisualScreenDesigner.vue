@@ -113,13 +113,12 @@ const leftToolBarList: Array<LeftToolBar> = reactive([
     componentName: 'GlobalVariable',
   },
 ])
-// 图层工具栏引用（左侧面板仅用于图层）
-const layerToolBar = leftToolBarList[0]!
+// 激活的左侧工具条项
+const activeLeftToolBar = ref<LeftToolBar>(leftToolBarList[1]!)
 const leftToolPanelShow = ref(false)
 const rightControlPanelShow = ref(true)
 
-// 弹框显示状态（组件、素材、变量）
-const componentLibDialogVisible = ref(false)
+// 弹框显示状态（素材、变量）
 const resourceLibDialogVisible = ref(false)
 const globalVariableDialogVisible = ref(false)
 
@@ -127,19 +126,19 @@ const globalVariableDialogVisible = ref(false)
 const mainStyle = computed(() => {
   if (leftToolPanelShow.value && rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: 'var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width)',
+      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width)',
     }
   } else if (!leftToolPanelShow.value && !rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: 'auto',
+      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) auto',
     }
   } else if (!leftToolPanelShow.value && rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: 'auto var(--dr-designer-right-panel-width)',
+      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) auto var(--dr-designer-right-panel-width)',
     }
   } else {
     return {
-      gridTemplateColumns: 'var(--dr-designer-left-tool-panel-width) auto',
+      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto',
     }
   }
 })
@@ -276,16 +275,11 @@ const onSave = () => {
 
 /**
  * 顶部导航按钮点击处理
- * 图层：左侧面板显示/隐藏切换
  * 组件/素材/变量：弹框显示
  */
 const onHeaderToolClick = (toolBar: LeftToolBar) => {
   switch (toolBar.componentName) {
-    case 'ComponentLayer':
-      leftToolPanelShow.value = !leftToolPanelShow.value
-      break
     case 'ComponentLib':
-      componentLibDialogVisible.value = true
       break
     case 'ResourceLib':
       resourceLibDialogVisible.value = true
@@ -293,6 +287,29 @@ const onHeaderToolClick = (toolBar: LeftToolBar) => {
     case 'GlobalVariable':
       globalVariableDialogVisible.value = true
       break
+  }
+}
+
+/**
+ * 左侧工具条激活
+ * @param leftToolBar
+ */
+const onActiveLeftToolBar = (leftToolBar: LeftToolBar) => {
+  activeLeftToolBar.value = leftToolBar
+  if (leftToolBar.componentName === 'ComponentLayer') {
+    leftToolPanelShow.value = true
+  } else if (leftToolBar.componentName === 'ResourceLib') {
+    resourceLibDialogVisible.value = false
+    nextTick(() => {
+      resourceLibDialogVisible.value = true
+    })
+  } else if (leftToolBar.componentName === 'GlobalVariable') {
+    globalVariableDialogVisible.value = false
+    nextTick(() => {
+      globalVariableDialogVisible.value = true
+    })
+  } else if (leftToolBar.componentName === 'ComponentLib') {
+    leftToolPanelShow.value = true
   }
 }
 
@@ -490,18 +507,7 @@ onMounted(() => {
         <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="router.push('/dataRoom/page/index')"/>
         <div class="title">{{ pageStageEntity?.name }}</div>
       </div>
-      <div class="header-center">
-        <el-button
-          v-for="item in leftToolBarList"
-          :key="item.name"
-          :type="item.componentName === 'ComponentLayer' && leftToolPanelShow ? 'primary' : 'default'"
-          size="small"
-          @click="onHeaderToolClick(item)"
-        >
-          {{ item.name }}
-        </el-button>
-      </div>
-      <div style="margin-right: 8px">
+      <div class="header-right">
         <el-button @click="onHistory" size="small">历史</el-button>
         <el-button @click="switchPageControlPanel" size="small">设置</el-button>
         <el-button @click="onPreview" size="small">预览</el-button>
@@ -509,10 +515,20 @@ onMounted(() => {
       </div>
     </div>
     <div class="main" :style="mainStyle">
+      <div class="left-tool-bar">
+        <div
+          v-for="item in leftToolBarList"
+          :key="item.name"
+          :class="{ bar: true, active: activeLeftToolBar.componentName === item.componentName }"
+          @click="onActiveLeftToolBar(item)"
+        >
+          {{ item.name }}
+        </div>
+      </div>
       <div class="left-tool-panel" :style="leftToolPanelStyle">
         <div class="panel-header">
           <div style="position: relative">
-            <span class="title">{{ layerToolBar.desc }}</span>
+            <span class="title">{{ activeLeftToolBar.desc }}</span>
             <el-icon class="close" @click="switchLeftToolPanel(false)">
               <Close/>
             </el-icon>
@@ -520,7 +536,7 @@ onMounted(() => {
         </div>
         <div class="panel-body">
           <el-scrollbar>
-            <ComponentLayer />
+            <component :is="activeLeftToolBar.component"></component>
           </el-scrollbar>
         </div>
       </div>
@@ -611,13 +627,6 @@ onMounted(() => {
   </div>
   <ContextMenu v-if="contextMenuVisible" ref="contextMenuRef" :style="computedContextMenuStyle" :chart="activeChart" @switch-right-control-panel="switchRightControlPanel" @delete-chart="onChartDeleteClick"></ContextMenu>
 
-  <!-- 组件库弹框 -->
-  <el-dialog v-model="componentLibDialogVisible" title="组件库" width="680px" :append-to-body="true" destroy-on-close>
-    <el-scrollbar max-height="60vh">
-      <ComponentLib />
-    </el-scrollbar>
-  </el-dialog>
-
   <!-- 素材库（组件自带弹框，用 v-if 控制挂载） -->
   <ResourceLib v-if="resourceLibDialogVisible" @close="resourceLibDialogVisible = false" />
 
@@ -628,7 +637,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .dr-vs-editor {
   display: grid;
-  grid-template-rows: var(--dr-designer-header-height) auto;
+  grid-template-rows: var(--dr-designer-header-height) 1fr;
   height: 100vh;
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
@@ -665,28 +674,69 @@ onMounted(() => {
       }
     }
 
-    & .header-center {
+    & .header-right {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 4px;
+      margin-right: 8px;
     }
   }
 
   & .main {
     display: grid;
-    grid-template-columns: var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width);
+    grid-template-columns: var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width);
+
+    & .left-tool-bar {
+      background-color: var(--dr-white);
+      box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.08);
+
+      & .bar {
+        font-size: 12px;
+        font-weight: 500;
+        text-align: center;
+        margin: 4px auto;
+        padding: 8px 0;
+        color: var(--dr-gray-500);
+        transition: all 0.2s;
+
+        &:hover {
+          cursor: pointer;
+          background-color: var(--dr-bg2);
+          color: var(--dr-gray-700);
+        }
+      }
+
+      & .active {
+        background-color: var(--dr-blue-soft);
+        color: var(--dr-primary);
+        position: relative;
+
+        &:hover {
+          color: var(--dr-primary);
+        }
+
+        &::before {
+          content: '';
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 3px;
+          position: absolute;
+          background-color: var(--dr-primary);
+          border-radius: 0 2px 2px 0;
+        }
+      }
+    }
 
     & .left-tool-panel {
-      background-color: var(--dr-gray-50);
+      background-color: var(--dr-white);
       display: grid;
       grid-template-rows: 40px auto;
-      height: calc(100vh - var(--dr-designer-left-tool-panel-header-height));
-      box-shadow: var(--dr-shadow-border);
-      position: relative;
-      z-index: 5;
+      height: 100vh;
+      box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.08);
 
       & .panel-header {
-        background-color: var(--dr-gray-50);
+        background-color: var(--dr-bg2);
         box-sizing: border-box;
         box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
         font-size: 12px;
@@ -728,9 +778,11 @@ onMounted(() => {
       display: grid;
       background-color: #f0f1f3;
       grid-template-rows: auto;
+      background-image: radial-gradient(circle, #d4d7de 1px, transparent 1px);
+      background-size: 16px 16px;
 
       & .canvas-main {
-        height: calc(100vh - var(--dr-designer-header-height));
+        height: 100%;
         overflow: hidden;
         position: relative;
       }
@@ -743,9 +795,9 @@ onMounted(() => {
     }
 
     & .right-panel {
-      background-color: var(--dr-gray-50);
-      box-shadow: var(--dr-shadow-border);
-      height: calc(100vh - var(--dr-designer-header-height));
+      background-color: var(--dr-white);
+      box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.08);
+      height: 100vh;
       position: relative;
       z-index: 5;
     }
@@ -754,7 +806,7 @@ onMounted(() => {
   .right-panel-tool-anchor {
     position: fixed;
     box-sizing: border-box;
-    right: 329px;
+    right: var(--dr-designer-right-panel-width);
     top: 50%;
     transform: translateY(-50%);
     width: 16px;
