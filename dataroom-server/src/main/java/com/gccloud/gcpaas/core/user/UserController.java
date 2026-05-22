@@ -143,7 +143,7 @@ public class UserController {
     }
 
     @PostMapping("/profile/update")
-    @RequiresRoles(value = DataRoomRole.SHARER)
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "更新个人信息", description = "仅允许修改用户名和密码")
     public Resp<Void> updateProfile(@RequestBody UserProfileDTO dto) {
         LoginUser currentUser = LoginUserUtils.getCurrentUser();

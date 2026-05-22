@@ -69,3 +69,14 @@
   --dr-designer-left-tool-panel-header-height: 40px;
   --dr-designer-right-panel-width: 300px;
 }
+
+/* Temporary performance probe: disable Element Plus dialog animations. */
+body .dialog-fade-enter-active,
+body .dialog-fade-leave-active,
+body .dialog-fade-enter-active .el-overlay-dialog,
+body .dialog-fade-leave-active .el-overlay-dialog,
+body .v-modal-enter,
+body .v-modal-leave {
+  animation: none !important;
+  transition: none !important;
+}
