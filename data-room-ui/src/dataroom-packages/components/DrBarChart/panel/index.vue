@@ -9,11 +9,18 @@ export default defineComponent({
 <script setup lang="ts">
 import type {DrBarChartConfig} from '../install.ts'
 import {computed} from 'vue'
+import PaddingBoxEditor from '@/dataroom-packages/_components/PaddingBoxEditor.vue'
 
 const {chart} = defineProps<{
   chart: DrBarChartConfig
 }>()
 const chartConfig = computed(() => chart)
+const globalPadding = computed<[number, number, number, number]>({
+  get: () => chartConfig.value.props.global.padding,
+  set: (value) => {
+    chartConfig.value.props.global.padding = value
+  },
+})
 
 /** 字体粗细预设选项 */
 const fontWeightOptions = [
@@ -79,18 +86,7 @@ const removeColor = (index: number) => {
       <!-- 全局配置 -->
       <el-collapse>
         <el-collapse-item title="全局配置">
-          <el-form-item label="上边距">
-            <el-input-number v-model="chartConfig.props.global.padding[0]" :min="0" :max="200" controls-position="right"/>
-          </el-form-item>
-          <el-form-item label="右边距">
-            <el-input-number v-model="chartConfig.props.global.padding[1]" :min="0" :max="200" controls-position="right"/>
-          </el-form-item>
-          <el-form-item label="下边距">
-            <el-input-number v-model="chartConfig.props.global.padding[2]" :min="0" :max="200" controls-position="right"/>
-          </el-form-item>
-          <el-form-item label="左边距">
-            <el-input-number v-model="chartConfig.props.global.padding[3]" :min="0" :max="200" controls-position="right"/>
-          </el-form-item>
+          <PaddingBoxEditor v-model="globalPadding" :min="0" :max="200" />
         </el-collapse-item>
       </el-collapse>
 

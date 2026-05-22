@@ -1,167 +1,218 @@
 # AGENTS.md
 
-This file provides guidance to Qoder (qoder.com) when working with code in this repository.
+本文件用于指导 Qoder 或其他代码协作代理在本仓库中工作。执行任务前应先阅读本文件，并优先遵循这里记录的项目结构、开发命令和编码约定。
 
-## Project Overview
+## 项目概览
 
-DataRoom-Plus is a visual big screen designer with a Spring Boot 3.5 (JDK 17) backend and Vue 3 frontend. It provides drag-and-drop dashboard design with two modes: grid-based PageDesigner and pixel-perfect VisualScreenDesigner. Supports MySQL, PostgreSQL, H2, Elasticsearch, HTTP, JSON, and Groovy data sources.
+DataRoom-Plus 是一个可视化大屏设计器，后端基于 Spring Boot 3.5 和 JDK 17，前端基于 Vue 3。系统支持拖拽式大屏设计，包含两类设计模式：
 
-**Status:** Under active development, not production-ready.
+- `PageDesigner`：基于网格布局的仪表盘设计器。
+- `VisualScreenDesigner`：像素级自由布局大屏设计器。
 
-## Build & Development Commands
+系统支持 MySQL、PostgreSQL、H2、Elasticsearch、HTTP、JSON、Groovy 等数据源或数据处理方式。
 
-### Backend (Java/Maven)
+当前项目仍处于活跃开发阶段，尚未达到生产可用状态。
+
+## 构建与开发命令
+
+### 后端：Java / Maven
+
+在项目根目录执行：
 
 ```bash
-# Build entire project (from project root)
+# 构建整个项目
 mvn clean package -DskipTests
 
-# Run all tests
+# 运行全部测试
 mvn test
 
-# Run a single test class
+# 运行单个测试类
 mvn test -Dtest=JsonUtilsTest
 
-# Start server (default H2 database, port 8081)
+# 启动服务，默认使用 H2 数据库，端口 8081
 mvn spring-boot:run -pl dataroom-server
 ```
 
-Server runs at `http://localhost:8081/dataRoom`. API docs at `/doc.html` (Knife4j/Swagger).
+服务默认访问地址为 `http://localhost:8081/dataRoom`。接口文档地址为 `/doc.html`，使用 Knife4j / Swagger。
 
-### Frontend (Vue 3/Vite)
+### 前端：Vue 3 / Vite
 
 ```bash
 cd data-room-ui
 
-# Install dependencies
+# 安装依赖
 npm install
 
-# Development server
+# 启动开发服务
 npm run dev
 
-# Production build (outputs to dataRoomFront/)
+# 生产构建，产物输出到 dataRoomFront/
 npm run build
 
-# Lint and fix
+# 运行 lint 并自动修复
 npm run lint
 
-# Format code
+# 格式化代码
 npm run format
 
-# Type check
+# 类型检查
 npm run type-check
 ```
 
-Node.js requirement: `^20.19.0 || >=22.12.0`
+Node.js 版本要求：`^20.19.0 || >=22.12.0`。
 
-## Architecture
+## 项目结构
 
-### Module Layout
-
-```
+```text
 DataRoom/
-├── dataroom-core/       # Placeholder core library module (minimal)
-├── dataroom-server/     # Main Spring Boot application (all backend code here)
+├── dataroom-core/       # 核心库占位模块，目前内容较少
+├── dataroom-server/     # Spring Boot 主应用，后端代码集中在这里
 │   └── src/main/java/com/gccloud/gcpaas/core/
-└── data-room-ui/        # Vue 3 frontend application
+└── data-room-ui/        # Vue 3 前端应用
 ```
 
-All backend code lives in `dataroom-server` under package `com.gccloud.gcpaas.core`.
+后端业务代码主要位于 `dataroom-server/src/main/java/com/gccloud/gcpaas/core/` 包下。
 
-### Backend Architecture
+## 后端架构
 
-**Entry point:** `com.gccloud.gcpaas.server.DataRoomApplication` with `@MapperScan("com.gccloud.gcpaas.**")`
+### 应用入口
 
-**Key packages under `com.gccloud.gcpaas.core`:**
+后端入口类为 `com.gccloud.gcpaas.server.DataRoomApplication`，并通过 `@MapperScan("com.gccloud.gcpaas.**")` 扫描 MyBatis Mapper。
 
-| Package | Purpose |
-|---------|---------|
-| `page/` | Page/dashboard CRUD, publish lifecycle (PageController, PageService, PageStageService) |
-| `dataset/` | Dataset execution layer with Factory pattern (DatasetController, DatasetServiceFactory) |
-| `datasource/` | Data source connection management (DataSourceController, DatasourceService) |
-| `entity/` | MyBatis-Plus entities extending BaseEntity (audit fields, soft delete) |
-| `shiro/` | Shiro + JWT authentication (ShiroAuthRealm, ShiroAuthFilter) |
-| `config/` | Spring config classes (DataRoomConfig, ShiroConfiguration, Knife4jWebMvcConfigurer) |
-| `user/` | User login/auth (UserController, TokenService) |
-| `captcha/` | Login captcha (CaptchaController with Caffeine cache) |
+### 核心包说明
 
-**REST API base paths:**
-- `/dataRoom/page` - Page management
-- `/dataRoom/dataset` - Dataset CRUD and execution
-- `/dataRoom/dataSource` - Data source management
-- `/dataRoom/user` - Authentication
-- `/dataRoom/captcha` - Captcha generation
-- `/dataRoom/resource` - File/resource management
+| 包路径 | 说明 |
+|--------|------|
+| `page/` | 页面和大屏 CRUD、发布生命周期管理，包含 `PageController`、`PageService`、`PageStageService` |
+| `dataset/` | 数据集执行层，使用工厂模式分发不同类型数据集，包含 `DatasetController`、`DatasetServiceFactory` |
+| `datasource/` | 数据源连接管理，包含 `DataSourceController`、`DatasourceService` |
+| `entity/` | MyBatis-Plus 实体类，通常继承 `BaseEntity`，包含审计字段和软删除字段 |
+| `shiro/` | Shiro、JWT 认证与鉴权，包含 `ShiroAuthRealm`、`ShiroAuthFilter` |
+| `config/` | Spring 配置类，包含 `DataRoomConfig`、`ShiroConfiguration`、`Knife4jWebMvcConfigurer` |
+| `user/` | 用户登录与认证，包含 `UserController`、`TokenService` |
+| `captcha/` | 登录验证码，使用 Caffeine 缓存 |
 
-**Database profiles:** `h2` (default for dev), `mysql`, `pg` - set via `spring.profiles.active` in `application.yml`.
+### REST API 基础路径
 
-**Dataset Factory Pattern:** `DatasetServiceFactory` resolves implementations by type:
-- `RelationalDatasetService` - SQL execution with parameter binding
-- `HttpDatasetService` - HTTP requests with JSONPath response parsing
-- `JsonDatasetService` - Static JSON data
-- Bean names follow `{DatasetType.value}DatasetService` convention
+| 路径 | 说明 |
+|------|------|
+| `/dataRoom/page` | 页面管理 |
+| `/dataRoom/dataset` | 数据集 CRUD 与执行 |
+| `/dataRoom/dataSource` | 数据源管理 |
+| `/dataRoom/user` | 用户认证 |
+| `/dataRoom/captcha` | 验证码生成 |
+| `/dataRoom/resource` | 文件和资源管理 |
 
-**Page Lifecycle:** Insert -> Design (PageStageEntity) -> Preview -> Publish. Each stage stores a full config snapshot as JSON in `dr_page_stage`.
+### 数据库配置
 
-**Polymorphic JSON:** `@JsonTypeInfo` + `@JsonSubTypes` used on `BaseDataset`, `BaseDataSource`, and `BasePageConfig` for type-safe deserialization.
+支持 `h2`、`mysql`、`pg` 三类数据库 profile。开发环境默认使用 `h2`，可在 `application.yml` 中通过 `spring.profiles.active` 切换。
 
-### Frontend Architecture
+### 数据集工厂模式
 
-**Source layout under `data-room-ui/src/dataroom-packages/`:**
+`DatasetServiceFactory` 根据数据集类型解析具体实现，Bean 命名约定为 `{DatasetType.value}DatasetService`。
 
-| Directory | Purpose |
-|-----------|---------|
-| `PageDesigner/` | Grid-based dashboard designer (vue-grid-layout-v3, 16 columns) |
-| `VisualScreenDesigner/` | Pixel-perfect designer (vue3-moveable + vue3-selecto, 1920x1080 default) |
-| `components/` | Visual component library with auto-registration |
-| `_components/` | Shared editor UI (ControlPanel, ComponentLib, toolbar, etc.) |
-| `_common/` | Utilities, HTTP client (`_request.ts`), helper functions |
-| `hooks/` | Composition hooks (useCanvasInst, useDrComponent, useTimerManager) |
-| `dataSource/` | Data source management views and API |
-| `dataset/` | Dataset management views and API |
-| `page/` | Page list management views |
+当前主要实现：
 
-**Component Auto-Registration Convention:**
+| 实现类 | 说明 |
+|--------|------|
+| `RelationalDatasetService` | 执行 SQL，支持参数绑定 |
+| `HttpDatasetService` | 发起 HTTP 请求，并通过 JSONPath 解析响应 |
+| `JsonDatasetService` | 使用静态 JSON 数据 |
 
-Each visual component is a directory under `components/` containing `install.ts` that exports:
+### 页面生命周期
+
+页面生命周期为：创建 -> 设计 -> 预览 -> 发布。设计阶段由 `PageStageEntity` 保存，`dr_page_stage` 表中存储完整页面配置快照 JSON。
+
+### 多态 JSON
+
+`BaseDataset`、`BaseDataSource`、`BasePageConfig` 使用 `@JsonTypeInfo` 和 `@JsonSubTypes` 做类型安全反序列化。新增子类型时必须同步维护注解配置，避免接口反序列化失败。
+
+## 前端架构
+
+前端主要源码位于 `data-room-ui/src/dataroom-packages/`。
+
+| 目录 | 说明 |
+|------|------|
+| `PageDesigner/` | 网格化仪表盘设计器，基于 `vue-grid-layout-v3`，默认 16 列 |
+| `VisualScreenDesigner/` | 像素级大屏设计器，基于 `vue3-moveable` 和 `vue3-selecto`，默认画布 1920x1080 |
+| `components/` | 可视化组件库，组件通过约定自动注册 |
+| `_components/` | 设计器共享 UI，例如控制面板、组件库、工具栏 |
+| `_common/` | 通用工具和 HTTP 客户端，核心请求封装为 `_request.ts` |
+| `hooks/` | 组合式 hooks，例如 `useCanvasInst`、`useDrComponent`、`useTimerManager` |
+| `dataSource/` | 数据源管理视图和 API |
+| `dataset/` | 数据集管理视图和 API |
+| `page/` | 页面列表管理视图 |
+
+### 组件自动注册约定
+
+每个可视化组件都是 `components/` 下的独立目录，目录内必须包含 `install.ts`，并导出以下内容：
+
 ```typescript
-export const component       // The Vue component (defineAsyncComponent)
-export const controlPanel    // Configuration panel component
-export const getInstance     // Factory returning ChartConfig<T>
-export const behaviors       // Interaction definitions (click, hover, etc.)
-export const datasetFields   // Dataset field mappings
+export const component       // Vue 组件，通常由 defineAsyncComponent 定义
+export const controlPanel    // 组件配置面板
+export const getInstance     // 创建 ChartConfig<T> 实例的工厂函数
+export const behaviors       // 交互定义，例如 click、hover
+export const datasetFields   // 数据集字段映射定义
 ```
 
-Auto-discovered by `AutoInstall.ts` via `import.meta.glob('./**/install.ts')`. To add a new component, create a directory following this convention - no manual registration needed.
+组件由 `AutoInstall.ts` 通过 `import.meta.glob('./**/install.ts')` 自动发现。新增组件时只需按约定创建目录和文件，不需要手动注册。
 
-**State Management:** Uses `provide/inject` (not a centralized Pinia store) for sharing canvas state. The `useCanvasInst` hook creates the canvas context that is provided to all child components via `provide(DrConst.CANVAS_INST, canvasInst)`.
+### 配置面板规范
 
-**Data Flow in Components:**
-1. Component mounts -> `useDrComponent` hook activates
-2. Hook calls `autoRefreshData()` -> fills dataset params from global vars/fixed values
-3. Calls `datasetApi.run4Chart()` -> backend executes dataset
-4. Response -> `changeData()` callback updates component
+前端组件目录必须包含 `index.vue` 作为主组件，并包含 `panel/index.vue` 作为配置面板。
 
-**Interaction System:** Components define `behaviors` (events) that trigger `actions` (code execution). `canvasInst.triggerChartBehavior()` dispatches events between components.
+图表类组件的配置面板必须遵循 `docs/design/chart-component-config-panel-spec.md`：
 
-**Router:** Hash-based routing (`createWebHashHistory`). Designer routes: `/dataRoom/pageDesigner/:pageCode` and `/dataRoom/visualScreenDesigner/:pageCode`.
+- 可视化配置字段必须先在 `install.ts` 的 `PropsInterface` 和默认值中声明。
+- 面板控件应直接绑定到 `chart.props`，避免复制整份 props 到本地状态。
+- 当前参考实现为 `data-room-ui/src/dataroom-packages/components/DrBarChart/panel/index.vue`。
 
-**Vite Config:** Output to `dataRoomFront/`, base URL `./`, auto-imports for Element Plus and Vue APIs, custom `ReplaceThisPluginType` plugin that injects component type constants.
+### 状态管理
 
-## Key Conventions
+设计器内部主要使用 `provide/inject` 共享画布状态，而不是集中式 Pinia store。`useCanvasInst` 创建画布上下文，并通过 `provide(DrConst.CANVAS_INST, canvasInst)` 提供给子组件。
 
-- Backend uses Lombok, MyBatis-Plus `ServiceImpl`, and Snowflake IDs
-- Soft delete via `delFlag` field on all entities
-- Audit fields auto-filled: `createDate`, `updateDate`, `createUser`, `updateUser`
-- Frontend component directories always contain `index.vue` for main component and `panel/index.vue` for config panel
-- API modules export an object with methods (e.g., `dataSourceApi.list()`, `datasetApi.run()`)
-- HTTP client in `_common/_request.ts` handles auth token injection and error responses
-- Three user roles: `manager`, `developer`, `sharer` - checked via Shiro `@RequiresRoles`
-- Password encrypted with RSA on frontend, decrypted on backend
-- Default users configured in `application-base.yml` (admin/developer/sharer)
+### 组件数据流
 
-## Tech Stack
+1. 组件挂载后，`useDrComponent` hook 生效。
+2. hook 调用 `autoRefreshData()`，将全局变量和固定值填充到数据集参数中。
+3. 前端调用 `datasetApi.run4Chart()`，后端执行数据集。
+4. 请求响应后，通过 `changeData()` 回调更新组件数据。
 
-- **Backend:** Spring Boot 3.5.10, MyBatis-Plus 3.5.12, Shiro 2.0.6 (Jakarta), JWT (jjwt 0.12.6), Knife4j 4.5.0, FastJSON 2, Caffeine
-- **Frontend:** Vue 3.5, TypeScript 5.9, Vite 7, Element Plus, ECharts 6, Pinia 3, vue-grid-layout-v3, vue3-moveable, vue3-selecto
-- **Databases:** H2 (dev), MySQL, PostgreSQL
+### 交互系统
+
+组件通过 `behaviors` 定义可触发事件，并由用户配置的 `actions` 执行动作。运行时通过 `canvasInst.triggerChartBehavior()` 在组件之间派发交互事件。
+
+### 路由与构建
+
+前端使用 Hash 路由，创建方式为 `createWebHashHistory`。
+
+设计器主要路由：
+
+| 路由 | 说明 |
+|------|------|
+| `/dataRoom/pageDesigner/:pageCode` | 网格化页面设计器 |
+| `/dataRoom/visualScreenDesigner/:pageCode` | 像素级大屏设计器 |
+
+Vite 构建输出目录为 `dataRoomFront/`，`base` 为 `./`。项目使用 Element Plus 和 Vue API 自动导入，并包含自定义 `ReplaceThisPluginType` 插件，用于注入组件类型常量。
+
+## 关键开发约定
+
+- 后端使用 Lombok、MyBatis-Plus `ServiceImpl` 和 Snowflake ID。
+- 所有实体通过 `delFlag` 字段实现软删除。
+- 审计字段自动填充，包括 `createDate`、`updateDate`、`createUser`、`updateUser`。
+- 前端 API 模块统一导出对象方法，例如 `dataSourceApi.list()`、`datasetApi.run()`。
+- HTTP 请求统一通过 `_common/_request.ts` 发起，该封装负责注入认证 token 和处理错误响应。
+- 系统内置三类用户角色：`manager`、`developer`、`sharer`，后端通过 Shiro `@RequiresRoles` 校验。
+- 密码在前端使用 RSA 加密传输，后端解密后处理。
+- 默认用户配置位于 `application-base.yml`，包含 `admin`、`developer`、`sharer`。
+- 修改图表配置结构时，要同步检查 `install.ts` 默认值、`index.vue` 渲染逻辑和 `panel/index.vue` 面板控件。
+- 修改前端组件后，至少运行 `npm run type-check`；涉及格式或样式规范时运行 `npm run lint`。
+- 修改后端核心逻辑后，至少运行相关单测；无法运行时需要在交付说明中明确原因。
+
+## 技术栈
+
+| 层级 | 技术 |
+|------|------|
+| 后端 | Spring Boot 3.5.10、MyBatis-Plus 3.5.12、Shiro 2.0.6 Jakarta、JJWT 0.12.6、Knife4j 4.5.0、FastJSON 2、Caffeine |
+| 前端 | Vue 3.5、TypeScript 5.9、Vite 7、Element Plus、ECharts 6、Pinia 3、vue-grid-layout-v3、vue3-moveable、vue3-selecto |
+| 数据库 | H2、MySQL、PostgreSQL |
