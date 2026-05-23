@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts";
+import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 
 export default defineComponent({
   name: DrConst.THIS_PLUGIN_TYPE + 'ControlPanel',
@@ -9,7 +9,7 @@ export default defineComponent({
 <script setup lang="ts">
 import type { DrImageConfig } from '../install.ts'
 import { computed } from 'vue'
-import {getResourceUrl} from "@/dataroom-packages/_common/_utils.ts";
+import { getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
 
 const { chart } = defineProps<{
   chart: DrImageConfig
@@ -26,160 +26,140 @@ const repeatModeOptions = [
 ]
 </script>
 <template>
-  <div class="dr-image-panel">
-    <el-form :model="chartConfig" label-width="100px" label-position="left" size="small">
+  <div class="dr-config-panel dr-image-config-panel">
+    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="60px" label-position="left" size="small">
+      <el-collapse class="dr-config-panel__section">
+        <el-collapse-item title="图片配置" name="image">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>图片来源</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">类型</span>
+                  <el-radio-group v-model="chartConfig.props.imageType">
+                    <el-radio-button value="bitmap">位图</el-radio-button>
+                    <el-radio-button value="svg">矢量图</el-radio-button>
+                  </el-radio-group>
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">地址</span>
+                  <el-input v-model="chartConfig.props.url" class="dr-config-panel__control" placeholder="请输入图片地址">
+                    <template #prefix>
+                      <el-icon><Link /></el-icon>
+                    </template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item v-if="chartConfig.props.url" class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row dr-config-panel__sub-row--start">
+                  <span class="dr-config-panel__sub-label">预览</span>
+                  <div class="dr-image-config-panel__preview">
+                    <el-image :src="getResourceUrl(chartConfig.props.url)" fit="contain" class="dr-image-config-panel__preview-image">
+                      <template #error>
+                        <div class="dr-image-config-panel__preview-error">图片加载失败</div>
+                      </template>
+                    </el-image>
+                  </div>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
 
-      <!-- 图片类型 -->
-      <el-form-item label="图片类型">
-        <el-radio-group v-model="chartConfig.props.imageType">
-          <el-radio-button value="bitmap">位图</el-radio-button>
-          <el-radio-button value="svg">矢量图</el-radio-button>
-        </el-radio-group>
-      </el-form-item>
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>显示方式</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">图片重复</span>
+                  <el-select v-model="chartConfig.props.repeatMode" class="dr-config-panel__control">
+                    <el-option v-for="item in repeatModeOptions" :key="item.value" :label="item.label" :value="item.value" />
+                  </el-select>
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">圆角</span>
+                  <el-input-number v-model="chartConfig.props.borderRadius" class="dr-config-panel__control" :min="0" :max="500" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-collapse-item>
 
-      <!-- 背景图 URL -->
-      <el-form-item label="背景图">
-        <el-input v-model="chartConfig.props.url" placeholder="请输入图片地址">
-          <template #prefix>
-            <el-icon><Link /></el-icon>
-          </template>
-        </el-input>
-      </el-form-item>
-
-      <!-- 图片预览 -->
-      <el-form-item v-if="chartConfig.props.url" label=" ">
-        <div class="image-preview">
-          <el-image :src="getResourceUrl(chartConfig.props.url)" fit="contain">
-            <template #error>
-              <div class="preview-error">图片加载失败</div>
-            </template>
-          </el-image>
-        </div>
-      </el-form-item>
-
-      <!-- 图片重复 -->
-      <el-form-item label="图片重复">
-        <el-select v-model="chartConfig.props.repeatMode">
-          <el-option
-            v-for="item in repeatModeOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-
-      <!-- 圆角 -->
-      <el-form-item label="圆角">
-        <el-input-number
-          v-model="chartConfig.props.borderRadius"
-          :min="0"
-          :max="500"
-          :step="1"
-          controls-position="right"
-        />
-      </el-form-item>
-
-      <!-- 超链接配置 -->
-      <el-collapse>
-        <el-collapse-item title="超链接配置">
-          <el-form-item label="超链接">
-            <el-input v-model="chartConfig.props.hyperlink.url" placeholder="请输入链接地址" />
-          </el-form-item>
-          <el-form-item label="是否新开窗口">
-            <el-switch v-model="chartConfig.props.hyperlink.openNewWindow" />
-          </el-form-item>
-          <el-form-item label="手势光标">
-            <el-switch v-model="chartConfig.props.hyperlink.cursorPointer" />
-          </el-form-item>
+        <el-collapse-item title="超链接" name="hyperlink">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>链接行为</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">地址</span>
+                  <el-input v-model="chartConfig.props.hyperlink.url" class="dr-config-panel__control" placeholder="请输入链接地址" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">新窗口</span>
+                  <el-switch v-model="chartConfig.props.hyperlink.openNewWindow" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">手势</span>
+                  <el-switch v-model="chartConfig.props.hyperlink.cursorPointer" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
         </el-collapse-item>
       </el-collapse>
-
     </el-form>
   </div>
 </template>
 
-<style scoped>
-.dr-image-panel {
-  padding: 12px;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+<style scoped lang="scss">
+@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+
+.dr-image-config-panel {
+  --el-collapse-border-color: var(--el-bg-color);
+
+  padding: 0;
 }
 
-.dr-image-panel :deep(.el-collapse) {
-  border: none;
-  margin-bottom: 12px;
+.dr-image-config-panel .dr-config-panel__section {
+  margin-bottom: 0;
 }
 
-.dr-image-panel :deep(.el-collapse-item__header) {
-  font-size: 12px;
-  font-weight: 600;
-  color: #1d2129;
-  border-bottom: none;
-  height: 36px;
-  line-height: 36px;
-}
-
-.dr-image-panel :deep(.el-collapse-item__wrap) {
-  border-bottom: none;
-}
-
-.dr-image-panel :deep(.el-form-item__label) {
-  font-size: 12px;
-  font-weight: 500;
-  color: #4e5969;
-}
-
-.dr-image-panel :deep(.el-form-item) {
-  margin-bottom: 4px;
-}
-
-.dr-image-panel :deep(.el-input__wrapper) {
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px #e5e6eb inset;
-}
-
-.dr-image-panel :deep(.el-input__wrapper:focus-within) {
-  box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-}
-
-.dr-image-panel :deep(.el-input-number) {
-  font-feature-settings: "tnum";
-}
-
-.dr-image-panel :deep(.el-select__wrapper) {
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px #e5e6eb inset;
-}
-
-.dr-image-panel :deep(.el-color-picker__trigger) {
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px #e5e6eb inset;
-  border: none;
-}
-
-.image-preview {
+.dr-image-config-panel__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 120px;
-  border-radius: 8px;
-  box-shadow: 0 0 0 1px #e5e6eb;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 8px;
 }
 
-.image-preview .el-image {
+.dr-image-config-panel__preview-image {
   width: 100%;
   height: 100%;
 }
 
-.preview-error {
-  width: 100%;
-  height: 100%;
+.dr-image-config-panel__preview-error {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #86909c;
+  width: 100%;
+  height: 100%;
+  color: var(--el-text-color-secondary);
   font-size: 12px;
 }
 </style>

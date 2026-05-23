@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts";
+import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 
 export default defineComponent({
   name: DrConst.THIS_PLUGIN_TYPE + 'ControlPanel',
@@ -15,7 +15,6 @@ const { chart } = defineProps<{
 }>()
 const chartConfig = computed(() => chart)
 
-/** 字体粗细预设选项 */
 const fontWeightOptions = [
   { label: '极细 (100)', value: '100' },
   { label: '细 (200)', value: '200' },
@@ -28,7 +27,6 @@ const fontWeightOptions = [
   { label: '极粗 (900)', value: '900' },
 ]
 
-/** 字体族预设选项 */
 const fontFamilyOptions = [
   { label: '微软雅黑', value: 'Microsoft YaHei' },
   { label: '宋体', value: 'SimSun' },
@@ -40,7 +38,6 @@ const fontFamilyOptions = [
   { label: 'Courier New', value: 'Courier New' },
 ]
 
-/** 边框样式选项 */
 const borderStyleOptions = [
   { label: '实线', value: 'solid' },
   { label: '虚线', value: 'dashed' },
@@ -49,256 +46,198 @@ const borderStyleOptions = [
 ]
 </script>
 <template>
-  <div class="dr-text-panel">
-    <el-form :model="chartConfig" label-width="100px" size="small" label-position="left">
-
-      <!-- 标题名 -->
-      <el-form-item label="标题名">
-        <el-input v-model="chartConfig.props.text" />
-      </el-form-item>
-
-      <!-- 文本样式（可折叠） -->
-      <el-collapse>
-        <el-collapse-item title="文本样式">
-          <el-form-item label="字号">
-            <el-input-number
-              v-model="chartConfig.props.textStyle.fontSize"
-              :min="12"
-              :max="200"
-              :step="1"
-              controls-position="right"
-            />
-          </el-form-item>
-          <el-form-item label="字重">
-            <el-select v-model="chartConfig.props.textStyle.fontWeight" filterable allow-create>
-              <el-option
-                v-for="item in fontWeightOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="字体">
-            <el-select v-model="chartConfig.props.textStyle.fontFamily" filterable allow-create>
-              <el-option
-                v-for="item in fontFamilyOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="字色">
-            <el-color-picker v-model="chartConfig.props.textStyle.color" show-alpha />
-          </el-form-item>
-        </el-collapse-item>
-      </el-collapse>
-
-      <!-- 对齐方式 -->
-      <el-form-item label="对齐方式">
-        <el-select v-model="chartConfig.props.align">
-          <el-option label="左对齐" value="left" />
-          <el-option label="居中" value="center" />
-          <el-option label="右对齐" value="right" />
-        </el-select>
-      </el-form-item>
-
-      <!-- 文字排列方式（垂直对齐） -->
-      <el-form-item label="垂直对齐">
-        <el-select v-model="chartConfig.props.verticalAlign">
-          <el-option label="顶部对齐" value="top" />
-          <el-option label="居中" value="center" />
-          <el-option label="底部对齐" value="bottom" />
-        </el-select>
-      </el-form-item>
-
-      <!-- 文字间隔 -->
-      <el-form-item label="文字间隔">
-        <el-input-number
-          v-model="chartConfig.props.letterSpacing"
-          :min="0"
-          :max="100"
-          :step="1"
-          controls-position="right"
-        >
-          <template #suffix>px</template>
-        </el-input-number>
-      </el-form-item>
-
-      <!-- 背景样式 -->
-      <el-collapse>
-        <el-collapse-item>
-          <template #title>
-            <div class="collapse-title-switch">
-              <span class="collapse-title-text">背景样式</span>
-              <el-switch v-model="chartConfig.props.background.enabled" @click.stop />
+  <div class="dr-config-panel dr-text-config-panel">
+    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="60px" size="small" label-position="left">
+      <el-collapse class="dr-config-panel__section">
+        <el-collapse-item title="基础配置" name="basic">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>文本内容</span>
             </div>
-          </template>
-          <template v-if="chartConfig.props.background.enabled">
-            <el-form-item label="背景色">
-              <el-color-picker v-model="chartConfig.props.background.color" show-alpha />
-            </el-form-item>
-            <el-form-item label="圆角">
-              <el-input-number
-                v-model="chartConfig.props.background.borderRadius"
-                :min="0"
-                :max="100"
-                :step="1"
-                controls-position="right"
-              />
-            </el-form-item>
-            <el-form-item label="背景边框">
-              <div class="border-config">
-                <div class="border-row">
-                  <el-input-number
-                    v-model="chartConfig.props.background.border.width"
-                    :min="0"
-                    :max="20"
-                    :step="1"
-                    controls-position="right"
-                  />
-                  <span class="unit">px</span>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">标题</span>
+                  <el-input v-model="chartConfig.props.text" class="dr-config-panel__control" />
                 </div>
-                <div class="border-label">粗细</div>
-                <div class="border-row">
-                  <el-select v-model="chartConfig.props.background.border.style">
-                    <el-option
-                      v-for="item in borderStyleOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>排版</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">水平</span>
+                  <el-select v-model="chartConfig.props.align" class="dr-config-panel__control">
+                    <el-option label="左对齐" value="left" />
+                    <el-option label="居中" value="center" />
+                    <el-option label="右对齐" value="right" />
                   </el-select>
                 </div>
-                <div class="border-label">样式</div>
-                <div class="border-row">
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">垂直</span>
+                  <el-select v-model="chartConfig.props.verticalAlign" class="dr-config-panel__control">
+                    <el-option label="顶部对齐" value="top" />
+                    <el-option label="居中" value="center" />
+                    <el-option label="底部对齐" value="bottom" />
+                  </el-select>
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字距</span>
+                  <el-input-number v-model="chartConfig.props.letterSpacing" class="dr-config-panel__control" :min="0" :max="100" :step="1" controls-position="right">
+                    <template #suffix>px</template>
+                  </el-input-number>
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">省略号</span>
+                  <el-switch v-model="chartConfig.props.ellipsis" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="文本样式" name="textStyle">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>文字</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字号</span>
+                  <el-input-number v-model="chartConfig.props.textStyle.fontSize" class="dr-config-panel__control" :min="12" :max="200" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字重</span>
+                  <el-select v-model="chartConfig.props.textStyle.fontWeight" class="dr-config-panel__control" filterable allow-create>
+                    <el-option v-for="item in fontWeightOptions" :key="item.value" :label="item.label" :value="item.value" />
+                  </el-select>
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字体</span>
+                  <el-select v-model="chartConfig.props.textStyle.fontFamily" class="dr-config-panel__control" filterable allow-create>
+                    <el-option v-for="item in fontFamilyOptions" :key="item.value" :label="item.label" :value="item.value" />
+                  </el-select>
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字色</span>
+                  <el-color-picker v-model="chartConfig.props.textStyle.color" show-alpha />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="背景样式" name="background">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>启用</span>
+              <el-switch v-model="chartConfig.props.background.enabled" />
+            </div>
+          </div>
+
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>填充</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">背景色</span>
+                  <el-color-picker v-model="chartConfig.props.background.color" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">圆角</span>
+                  <el-input-number v-model="chartConfig.props.background.borderRadius" class="dr-config-panel__control" :min="0" :max="100" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>边框</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">宽度</span>
+                  <el-input-number v-model="chartConfig.props.background.border.width" class="dr-config-panel__control" :min="0" :max="20" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">样式</span>
+                  <el-select v-model="chartConfig.props.background.border.style" class="dr-config-panel__control">
+                    <el-option v-for="item in borderStyleOptions" :key="item.value" :label="item.label" :value="item.value" />
+                  </el-select>
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">颜色</span>
                   <el-color-picker v-model="chartConfig.props.background.border.color" show-alpha />
                 </div>
-                <div class="border-label">颜色</div>
-              </div>
-            </el-form-item>
-          </template>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="超链接" name="hyperlink">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>链接行为</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">地址</span>
+                  <el-input v-model="chartConfig.props.hyperlink.url" class="dr-config-panel__control" placeholder="请输入链接地址" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">新窗口</span>
+                  <el-switch v-model="chartConfig.props.hyperlink.openNewWindow" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
         </el-collapse-item>
       </el-collapse>
-
-      <!-- 省略号 -->
-      <el-form-item label="省略号">
-        <el-switch v-model="chartConfig.props.ellipsis" />
-      </el-form-item>
-
-      <!-- 超链接配置 -->
-      <el-collapse>
-        <el-collapse-item title="超链接配置">
-          <el-form-item label="超链接">
-            <el-input v-model="chartConfig.props.hyperlink.url" placeholder="请输入链接地址" />
-          </el-form-item>
-          <el-form-item label="是否新开窗口">
-            <el-switch v-model="chartConfig.props.hyperlink.openNewWindow" />
-          </el-form-item>
-        </el-collapse-item>
-      </el-collapse>
-
     </el-form>
   </div>
 </template>
 
-<style scoped>
-.dr-text-panel {
-  padding: 12px;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+<style scoped lang="scss">
+@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+
+.dr-text-config-panel {
+  --el-collapse-border-color: var(--el-bg-color);
+
+  padding: 0;
 }
 
-.dr-text-panel :deep(.el-collapse) {
-  border: none;
-  margin-bottom: 12px;
-}
-
-.dr-text-panel :deep(.el-collapse-item__header) {
-  font-size: 12px;
-  font-weight: 600;
-  color: #1d2129;
-  border-bottom: none;
-  height: 36px;
-  line-height: 36px;
-}
-
-.dr-text-panel :deep(.el-collapse-item__wrap) {
-  border-bottom: none;
-}
-
-.dr-text-panel :deep(.el-form-item__label) {
-  font-size: 12px;
-  font-weight: 500;
-  color: #4e5969;
-}
-
-.dr-text-panel :deep(.el-form-item) {
-  margin-bottom: 4px;
-}
-
-.dr-text-panel :deep(.el-input__wrapper) {
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px #e5e6eb inset;
-}
-
-.dr-text-panel :deep(.el-input__wrapper:focus-within) {
-  box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-}
-
-.dr-text-panel :deep(.el-input-number) {
-  font-feature-settings: "tnum";
-}
-
-.dr-text-panel :deep(.el-select__wrapper) {
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px #e5e6eb inset;
-}
-
-.dr-text-panel :deep(.el-color-picker__trigger) {
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px #e5e6eb inset;
-  border: none;
-}
-
-.collapse-title-text {
-  font-size: 12px;
-  font-weight: 600;
-  color: #1d2129;
-}
-
-.collapse-title-switch {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.collapse-title-switch :deep(.el-switch) {
-  margin-left: auto;
-  margin-right: 32px;
-}
-
-.border-config {
-  width: 100%;
-}
-
-.border-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
-}
-
-.border-row .unit {
-  color: #86909c;
-  font-size: 12px;
-  font-feature-settings: "tnum";
-}
-
-.border-label {
-  color: #86909c;
-  font-size: 12px;
-  font-weight: 500;
-  margin-bottom: 8px;
+.dr-text-config-panel .dr-config-panel__section {
+  margin-bottom: 0;
 }
 </style>

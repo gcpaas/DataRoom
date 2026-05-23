@@ -1,286 +1,274 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts"
+import { defineComponent } from 'vue'
+import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 
 export default defineComponent({
   name: DrConst.THIS_PLUGIN_TYPE + 'ControlPanel',
 })
 </script>
 <script setup lang="ts">
-import type {DrTabListConfig} from '../install.ts'
-import {computed} from 'vue'
+import type { DrTabListConfig } from '../install.ts'
+import { computed } from 'vue'
 
-const {chart} = defineProps<{
+const { chart } = defineProps<{
   chart: DrTabListConfig
 }>()
 const chartConfig = computed(() => chart)
 
-/** 添加静态标签 */
 const addStaticTab = () => {
   const tabs = chartConfig.value.props.options.staticTabs
   const index = tabs.length + 1
-  tabs.push({label: `标签${index}`, value: `tab${index}`})
+  tabs.push({ label: `标签${index}`, value: `tab${index}` })
 }
 
-/** 删除静态标签 */
 const removeStaticTab = (index: number) => {
-  chartConfig.value.props.options.staticTabs.splice(index, 1)
+  if (chartConfig.value.props.options.staticTabs.length > 1) {
+    chartConfig.value.props.options.staticTabs.splice(index, 1)
+  }
 }
 </script>
 <template>
-  <div class="dr-tab-list-panel">
-    <el-form :model="chartConfig" label-width="100px" size="small" label-position="left">
-
-      <!-- 基础配置 -->
-      <el-collapse>
-        <el-collapse-item title="基础配置">
-          <el-form-item label="默认选中">
-            <el-input-number
-              v-model="chartConfig.props.basic.defaultIndex"
-              :min="0"
-              :max="chartConfig.props.options.staticTabs.length - 1"
-              :step="1"
-              controls-position="right"
-            />
-          </el-form-item>
-          <el-form-item label="禁用">
-            <el-switch v-model="chartConfig.props.basic.disabled" />
-          </el-form-item>
-        </el-collapse-item>
-      </el-collapse>
-
-      <!-- 布局配置 -->
-      <el-collapse>
-        <el-collapse-item title="布局配置">
-          <el-form-item label="排列方向">
-            <el-select v-model="chartConfig.props.layout.direction">
-              <el-option label="水平" value="horizontal" />
-              <el-option label="垂直" value="vertical" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="对齐方式">
-            <el-select v-model="chartConfig.props.layout.align">
-              <el-option label="起始" value="start" />
-              <el-option label="居中" value="center" />
-              <el-option label="末尾" value="end" />
-              <el-option label="拉伸" value="stretch" />
-            </el-select>
-          </el-form-item>
-        </el-collapse-item>
-      </el-collapse>
-
-      <!-- 标签样式 -->
-      <el-collapse>
-        <el-collapse-item title="标签样式">
-          <el-form-item label="字号">
-            <el-input-number
-              v-model="chartConfig.props.tabStyle.fontSize"
-              :min="12"
-              :max="40"
-              :step="1"
-              controls-position="right"
-            />
-          </el-form-item>
-          <el-form-item label="文本颜色">
-            <el-color-picker v-model="chartConfig.props.tabStyle.color" show-alpha />
-          </el-form-item>
-          <el-form-item label="选中颜色">
-            <el-color-picker v-model="chartConfig.props.tabStyle.activeColor" show-alpha />
-          </el-form-item>
-          <el-form-item label="背景颜色">
-            <el-color-picker v-model="chartConfig.props.tabStyle.backgroundColor" show-alpha />
-          </el-form-item>
-          <el-form-item label="选中背景">
-            <el-color-picker v-model="chartConfig.props.tabStyle.activeBgColor" show-alpha />
-          </el-form-item>
-          <el-form-item label="圆角">
-            <el-input-number
-              v-model="chartConfig.props.tabStyle.borderRadius"
-              :min="0"
-              :max="100"
-              :step="1"
-              controls-position="right"
-            />
-          </el-form-item>
-          <el-form-item label="间距">
-            <el-input-number
-              v-model="chartConfig.props.tabStyle.gap"
-              :min="0"
-              :max="100"
-              :step="1"
-              controls-position="right"
-            />
-          </el-form-item>
-          <el-form-item label="高度">
-            <el-input-number
-              v-model="chartConfig.props.tabStyle.height"
-              :min="0"
-              :max="100"
-              :step="1"
-              controls-position="right"
-            />
-          </el-form-item>
-          <el-form-item label="底部边框">
-            <el-switch v-model="chartConfig.props.tabStyle.borderBottom.show" />
-          </el-form-item>
-          <template v-if="chartConfig.props.tabStyle.borderBottom.show">
-            <el-form-item label="边框颜色">
-              <el-color-picker v-model="chartConfig.props.tabStyle.borderBottom.color" show-alpha />
-            </el-form-item>
-            <el-form-item label="边框宽度">
-              <el-input-number
-                v-model="chartConfig.props.tabStyle.borderBottom.width"
-                :min="1"
-                :max="10"
-                :step="1"
-                controls-position="right"
-              />
-            </el-form-item>
-          </template>
-        </el-collapse-item>
-      </el-collapse>
-
-      <!-- 指示器配置 -->
-      <el-collapse>
-        <el-collapse-item title="指示器配置">
-          <el-form-item label="显示指示器">
-            <el-switch v-model="chartConfig.props.indicator.show" />
-          </el-form-item>
-          <template v-if="chartConfig.props.indicator.show">
-            <el-form-item label="颜色">
-              <el-color-picker v-model="chartConfig.props.indicator.color" show-alpha />
-            </el-form-item>
-            <el-form-item label="粗细">
-              <el-input-number
-                v-model="chartConfig.props.indicator.height"
-                :min="1"
-                :max="10"
-                :step="1"
-                controls-position="right"
-              />
-            </el-form-item>
-            <el-form-item label="圆角">
-              <el-input-number
-                v-model="chartConfig.props.indicator.borderRadius"
-                :min="0"
-                :max="10"
-                :step="1"
-                controls-position="right"
-              />
-            </el-form-item>
-          </template>
-        </el-collapse-item>
-      </el-collapse>
-
-      <!-- 标签配置 -->
-      <el-collapse>
-        <el-collapse-item title="标签配置">
-          <div class="static-tabs-list">
-            <div
-              v-for="(tab, index) in chartConfig.props.options.staticTabs"
-              :key="index"
-              class="static-tab-item"
-            >
-              <el-input v-model="tab.label" placeholder="标签名" class="tab-input" />
-              <el-input v-model="tab.value" placeholder="标签值" class="tab-input" />
-              <el-button
-                type="danger"
-                :icon="'Delete'"
-                circle
-                size="small"
-                @click="removeStaticTab(index)"
-              />
+  <div class="dr-config-panel dr-tab-list-config-panel">
+    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="60px" size="small" label-position="left">
+      <el-collapse class="dr-config-panel__section">
+        <el-collapse-item title="基础配置" name="basic">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>默认状态</span>
             </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">默认项</span>
+                  <el-input-number v-model="chartConfig.props.basic.defaultIndex" class="dr-config-panel__control" :min="0" :max="chartConfig.props.options.staticTabs.length - 1" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">禁用</span>
+                  <el-switch v-model="chartConfig.props.basic.disabled" />
+                </div>
+              </el-form-item>
+            </el-form>
           </div>
-          <el-button type="primary" size="small" @click="addStaticTab" style="margin-top: 8px; width: 100%">
-            添加标签
-          </el-button>
+        </el-collapse-item>
+
+        <el-collapse-item title="布局配置" name="layout">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>排列</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">方向</span>
+                  <el-select v-model="chartConfig.props.layout.direction" class="dr-config-panel__control">
+                    <el-option label="水平" value="horizontal" />
+                    <el-option label="垂直" value="vertical" />
+                  </el-select>
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">对齐</span>
+                  <el-select v-model="chartConfig.props.layout.align" class="dr-config-panel__control">
+                    <el-option label="起始" value="start" />
+                    <el-option label="居中" value="center" />
+                    <el-option label="末尾" value="end" />
+                    <el-option label="拉伸" value="stretch" />
+                  </el-select>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="标签样式" name="tabStyle">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>文本</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字号</span>
+                  <el-input-number v-model="chartConfig.props.tabStyle.fontSize" class="dr-config-panel__control" :min="12" :max="40" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">文本色</span>
+                  <el-color-picker v-model="chartConfig.props.tabStyle.color" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">选中色</span>
+                  <el-color-picker v-model="chartConfig.props.tabStyle.activeColor" show-alpha />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>容器</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">背景色</span>
+                  <el-color-picker v-model="chartConfig.props.tabStyle.backgroundColor" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">选中背景</span>
+                  <el-color-picker v-model="chartConfig.props.tabStyle.activeBgColor" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">圆角</span>
+                  <el-input-number v-model="chartConfig.props.tabStyle.borderRadius" class="dr-config-panel__control" :min="0" :max="100" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">间距</span>
+                  <el-input-number v-model="chartConfig.props.tabStyle.gap" class="dr-config-panel__control" :min="0" :max="100" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">高度</span>
+                  <el-input-number v-model="chartConfig.props.tabStyle.height" class="dr-config-panel__control" :min="0" :max="100" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>底部边框</span>
+              <el-switch v-model="chartConfig.props.tabStyle.borderBottom.show" />
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">颜色</span>
+                  <el-color-picker v-model="chartConfig.props.tabStyle.borderBottom.color" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">宽度</span>
+                  <el-input-number v-model="chartConfig.props.tabStyle.borderBottom.width" class="dr-config-panel__control" :min="1" :max="10" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="指示器" name="indicator">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>启用</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">显示</span>
+                  <el-switch v-model="chartConfig.props.indicator.show" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>样式</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">颜色</span>
+                  <el-color-picker v-model="chartConfig.props.indicator.color" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">粗细</span>
+                  <el-input-number v-model="chartConfig.props.indicator.height" class="dr-config-panel__control" :min="1" :max="10" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">圆角</span>
+                  <el-input-number v-model="chartConfig.props.indicator.borderRadius" class="dr-config-panel__control" :min="0" :max="10" :step="1" controls-position="right" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="标签配置" name="options">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>标签列表</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row dr-config-panel__sub-row--start">
+                  <span class="dr-config-panel__sub-label">标签列表</span>
+                  <div class="dr-config-panel__stack">
+                    <div v-for="(tab, index) in chartConfig.props.options.staticTabs" :key="index" class="dr-config-panel__inline">
+                      <el-input v-model="tab.label" placeholder="标签名" />
+                      <el-input v-model="tab.value" placeholder="标签值" />
+                      <el-button type="danger" :icon="'Delete'" circle size="small" @click="removeStaticTab(index)" />
+                    </div>
+                    <el-button class="dr-tab-list-config-panel__add-button" type="primary" size="small" @click="addStaticTab">添加标签</el-button>
+                  </div>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="全局变量" name="globalVar">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>变量绑定</span>
+            </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">变量名</span>
+                  <el-input v-model="chartConfig.props.globalVar.globalVarName" class="dr-config-panel__control" placeholder="输入全局变量名称" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
         </el-collapse-item>
       </el-collapse>
-
-      <!-- 全局变量配置 -->
-      <el-collapse>
-        <el-collapse-item title="全局变量">
-          <el-form-item label="变量名">
-            <el-input v-model="chartConfig.props.globalVar.globalVarName" placeholder="输入全局变量名称" />
-          </el-form-item>
-        </el-collapse-item>
-      </el-collapse>
-
     </el-form>
   </div>
 </template>
 
-<style scoped>
-.dr-tab-list-panel {
-  padding: 12px;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+<style scoped lang="scss">
+@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+
+.dr-tab-list-config-panel {
+  --el-collapse-border-color: var(--el-bg-color);
+
+  padding: 0;
 }
 
-.dr-tab-list-panel :deep(.el-collapse) {
-  border: none;
-  margin-bottom: 12px;
+.dr-tab-list-config-panel .dr-config-panel__section {
+  margin-bottom: 0;
 }
 
-.dr-tab-list-panel :deep(.el-collapse-item__header) {
-  font-size: 12px;
-  font-weight: 600;
-  color: #1d2129;
-  border-bottom: none;
-  height: 36px;
-  line-height: 36px;
-}
-
-.dr-tab-list-panel :deep(.el-collapse-item__wrap) {
-  border-bottom: none;
-}
-
-.dr-tab-list-panel :deep(.el-form-item__label) {
-  font-size: 12px;
-  font-weight: 500;
-  color: #4e5969;
-}
-
-.dr-tab-list-panel :deep(.el-form-item) {
-  margin-bottom: 4px;
-}
-
-.dr-tab-list-panel :deep(.el-input__wrapper) {
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px #e5e6eb inset;
-}
-
-.dr-tab-list-panel :deep(.el-input__wrapper:focus-within) {
-  box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-}
-
-.dr-tab-list-panel :deep(.el-input-number) {
-  font-feature-settings: "tnum";
-}
-
-.dr-tab-list-panel :deep(.el-select__wrapper) {
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px #e5e6eb inset;
-}
-
-.dr-tab-list-panel :deep(.el-color-picker__trigger) {
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px #e5e6eb inset;
-  border: none;
-}
-
-.static-tabs-list {
+.dr-tab-list-config-panel__add-button {
   width: 100%;
-}
-
-.static-tab-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.tab-input {
-  flex: 1;
+  margin-top: var(--space-2);
 }
 </style>

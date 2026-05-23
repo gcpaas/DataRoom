@@ -60,6 +60,24 @@ const chartConfig = computed(() => chart);
 </div>
 ```
 
+面板样式块必须使用 `scoped lang="scss"`，并在第一行引入共享配置面板样式。只写 `.dr-config-panel__sub-row`、`.dr-config-panel__sub-label` 等类名是不够的；如果没有引入 `chartConfigPanel.scss`，三级配置项会按普通块级元素渲染，出现 label 和输入框上下排列的问题，例如「文本内容 -> 标题」中“标题”和输入框不在同一行。
+
+```vue
+<style scoped lang="scss">
+@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+
+.dr-xxx-chart-config-panel {
+  --el-collapse-border-color: var(--el-bg-color);
+
+  padding: 0;
+}
+
+.dr-xxx-chart-config-panel .dr-config-panel__section {
+  margin-bottom: 0;
+}
+</style>
+```
+
 根表单属性必须与参考实现保持一致：`label-width="60px"`、`size="small"`、`label-position="left"`。不要因为某个图表字段 label 较长而把根表单改成 `90px` 或其他宽度；需要更长 label 时，应优先调整字段文案或放入二级配置下的三级配置行。
 
 轴线、轴标签、刻度线、网格线、系列样式等三级配置应放在所属二级配置容器内部，使用单列表单项组织，label 放在表单组件左侧，详见“面板层级与布局”。
@@ -194,7 +212,7 @@ const chartConfig = computed(() => chart);
 - 三级配置项使用单列布局，一行只放 1 个配置项。
 - 三级配置项放在二级配置容器内部，例如「X 轴 -> 轴标签 -> 字号/颜色/字重」。
 - 三级配置项 label 放在表单组件左侧。配置面板内部的三级字段优先使用 `.dr-config-panel__sub-label`，不要写内联 `style`。
-- `.dr-config-panel__sub-label` 后面的表单组件必须与 label 处于同一行，不允许被换到下一行。
+- `.dr-config-panel__sub-label` 后面的表单组件必须与 label 处于同一行，不允许被换到下一行。该要求依赖共享样式中的 `.dr-config-panel__sub-row { display: flex; flex-wrap: nowrap; }` 生效；每个面板必须引入 `chartConfigPanel.scss`，否则 DOM 层级看似正确但视觉上仍会变成上下两行。
 - 列表型字段也是三级配置项，例如柱子样式中的「颜色列表」；它的 label 仍放在左侧，右侧区域内部再纵向排列颜色项和操作按钮。
 - 二级配置标题是分组标题，三级配置项 label 是字段标题，两者必须有明确包含关系，不能视觉上处在同一层级。
 - 每个二级配置区域可以使用内部 `el-form` 承载三级配置项，但三级字段的 label 不依赖 `el-form-item` 内置 label 区域时，应使用 `.dr-config-panel__sub-form-item` 保持 label 与控件同行。
@@ -253,7 +271,7 @@ const chartConfig = computed(() => chart);
 </div>
 ```
 
-对应 SCSS 应抽取到配置面板共享样式中，例如 `data-room-ui/src/dataroom-packages/assets/styles/chartConfigPanel.scss`：
+对应 SCSS 已抽取到配置面板共享样式中，文件在 `data-room-ui/src/dataroom-packages/assets/styles/chartConfigPanel.scss`。每个使用这些类名的面板都必须通过 `@use` 引入该文件，不能假设其他组件已经全局加载：
 
 ```scss
 .dr-config-panel__sub-section {
@@ -303,6 +321,8 @@ const chartConfig = computed(() => chart);
   min-width: 0;
 }
 ```
+
+面板内不得重新实现 `.dr-config-panel__sub-row` 为 grid、block 或其他布局，也不要在组件专属样式中覆盖 `.dr-config-panel__sub-label` 的宽度、换行或边距。需要保证三级行与柱状图参考实现保持一致：`.dr-config-panel__sub-row` 是单行 flex 容器，`.dr-config-panel__sub-label` 固定 60px，后续控件在同一行右侧展示。
 
 柱状图当前实现还需要在组件专属根类上收敛外层空隙，并让折叠面板边框色融入右侧配置面板背景：
 
@@ -505,7 +525,7 @@ animation: {
 配置面板样式必须同时遵循 `docs/design/DESIGN.md`。图表面板只定义外层布局，不覆盖 Element Plus 默认视觉。
 
 - 面板根节点使用 `.dr-config-panel` + 组件专属类，例如 `.dr-bar-chart-config-panel`。
-- 通用配置面板布局类优先放在 `data-room-ui/src/dataroom-packages/assets/styles/chartConfigPanel.scss`，各图表面板按需引入并使用统一类名。
+- 通用配置面板布局类优先放在 `data-room-ui/src/dataroom-packages/assets/styles/chartConfigPanel.scss`，各图表面板必须在 `<style scoped lang="scss">` 顶部通过 `@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';` 引入并使用统一类名。
 - 允许在业务样式中控制外层容器的 `display`、`grid-template-columns`、`gap`、`padding`、`margin`、`overflow`、`width` 等布局属性。
 - 允许使用 Element Plus CSS 变量设置项目自定义容器、说明文字、分割线和状态文本的颜色。
 - 禁止使用 `:deep(.el-*)`、`::v-deep`、`/deep/`、`>>>`、全局 `.el-*` 选择器或 `!important` 覆盖 Element Plus 内部样式。
@@ -560,6 +580,7 @@ animation: {
 - `install.ts` 中已声明完整 `PropsInterface` 和默认值
 - `panel/index.vue` 的 `chart` prop 类型使用该组件的 `ChartConfig`
 - 面板根类、组件名、表单属性符合规范；根表单固定使用 `label-width="60px"`、`size="small"`、`label-position="left"`
+- 面板样式块使用 `<style scoped lang="scss">`，并在第一行引入 `@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';`
 - 通用分组顺序一致，图表专属分组命名清晰
 - 一级配置项位于同一个 `el-collapse.dr-config-panel__section` 内，`el-collapse-item` 有稳定 `name`
 - 一级基础字段直接放在 `el-collapse-item` 下，例如「显示」「数据类型」「轴名称」，不要放进 `.dr-config-panel__sub-section`
@@ -568,7 +589,7 @@ animation: {
 - 三级配置内部表单必须使用 `.dr-config-panel__sub-form`，并固定 `label-width="72px"`、`size="small"`、`label-position="left"`
 - 三级配置项放在所属二级配置区域内部，采用单列布局，一行只放 1 个配置项
 - 三级配置项使用 `.dr-config-panel__sub-form-item` + `.dr-config-panel__sub-row` + `.dr-config-panel__sub-label`，label 放在表单组件左侧，不写内联样式
-- 三级配置项 label 与后面的表单组件保持同一行，不允许换行
+- 三级配置项 label 与后面的表单组件保持同一行，不允许换行；交付前应目视确认「label + 输入框/选择器/颜色选择器/开关」在同一行，避免出现只写类名但共享样式未加载导致的上下排列
 - 列表型三级配置项使用左侧 label + 右侧列表区域，例如「颜色列表」
 - 布尔开关控制子项显隐，但不清空子项配置
 - 颜色、字体、线型、缓动选项使用统一中文标签

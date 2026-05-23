@@ -8,3 +8,9 @@ DrPieChart
 DrBubbleChart
 DrWordCloud
 DrProgressBar
+DrText
+DrImage
+DrInput
+DrSelect
+DrRadio
+DrTabList
