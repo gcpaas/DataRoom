@@ -20,6 +20,7 @@ import {DrTabListPlugin} from '@/dataroom-packages/components/DrTabList/plugin.t
 import {DrIframePlugin} from '@/dataroom-packages/components/DrIframe/plugin.ts'
 import {DrVideoPlayerPlugin} from '@/dataroom-packages/components/DrVideoPlayer/plugin.ts'
 import {DrFullScreenPlugin} from '@/dataroom-packages/components/DrFullScreen/plugin.ts'
+import {DrMapPlugin} from '@/dataroom-packages/components/DrMap/plugin.ts'
 import type {ComponentLibTagInterface} from "@/dataroom-packages/PageDesigner/type/ComponentLibTagInterface.ts";
 import {ComponentLibTagTypeConst} from "@/dataroom-packages/constant/ComponentLibTagTypeConst.ts";
 
@@ -91,7 +92,8 @@ const pluginList = [
   new DrTabListPlugin([ComponentLibTagTypeConst.FORM]),
   new DrIframePlugin([ComponentLibTagTypeConst.MEDIA]),
   new DrVideoPlayerPlugin([ComponentLibTagTypeConst.MEDIA]),
-  new DrFullScreenPlugin([ComponentLibTagTypeConst.FORM])
+  new DrFullScreenPlugin([ComponentLibTagTypeConst.FORM]),
+  new DrMapPlugin([ComponentLibTagTypeConst.MAP])
 ]
 
 export { pluginList, componentLibTagList }

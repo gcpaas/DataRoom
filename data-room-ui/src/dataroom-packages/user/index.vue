@@ -16,7 +16,10 @@ const pageSize = ref(10)
 const editDialogVisible = ref(false)
 const editUserId = ref<string>('')
 
-const statusMap: Record<UserStatus, { label: string; type: string }> = {
+type StatusTagType = 'primary' | 'success' | 'warning' | 'info' | 'danger'
+type UserPageResponse = UserEntity[] | { data?: UserEntity[]; total?: number }
+
+const statusMap: Record<UserStatus, { label: string; type: StatusTagType }> = {
   'NORMAL': {label: '正常', type: 'success'},
   'DISABLED': {label: '禁用', type: 'danger'},
   'PASSWORD_EXPIRED': {label: '密码过期', type: 'warning'}
@@ -27,6 +30,8 @@ const roleNameMap: Record<string, string> = {
   'developer': '开发者',
   'sharer': '访问者'
 }
+
+const getStatusMeta = (status: UserStatus) => statusMap[status] || { label: status, type: 'info' }
 
 const formatDate = (date: string | Date | null | undefined) => {
   if (!date) return '-'
@@ -46,11 +51,15 @@ const getUserList = () => {
     keyword: searchKeyword.value || undefined,
     current: currentPage.value,
     size: pageSize.value
-  }).then((res: any) => {
-    // 响应拦截器已返回 data，故 res 直接是数组
-    userList.value = Array.isArray(res) ? res : []
-    total.value = res?.total || (Array.isArray(res) ? res.length : 0)
-  }).catch((error: any) => {
+  }).then((res: UserPageResponse) => {
+    if (Array.isArray(res)) {
+      userList.value = res
+      total.value = res.length
+      return
+    }
+    userList.value = res.data || []
+    total.value = res.total || userList.value.length
+  }).catch((error: unknown) => {
     console.error('查询用户失败:', error)
   }).finally(() => {
     loading.value = false
@@ -91,16 +100,17 @@ const handleEdit = (row: UserEntity) => {
 
 const handleDelete = (row: UserEntity) => {
   if (!row.id) return
+  const userId = row.id
   ElMessageBox.confirm(`确定要删除用户「${row.username}」吗？`, '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    return userApi.delete(row.id)
+    return userApi.delete(userId)
   }).then(() => {
     ElMessage.success('删除成功')
     getUserList()
-  }).catch((error: any) => {
+  }).catch((error: unknown) => {
     if (error !== 'cancel') {
       console.error('删除失败:', error)
     }
@@ -155,11 +165,11 @@ onMounted(() => {
         <el-table-column prop="status" label="状态" min-width="100">
           <template #default="{ row }">
             <el-tag
-              :type="statusMap[row.status]?.type || 'info'"
+              :type="getStatusMeta(row.status).type"
               size="small"
               style="border-radius: 9999px; border: none;"
             >
-              {{ statusMap[row.status]?.label || row.status }}
+              {{ getStatusMeta(row.status).label }}
             </el-tag>
           </template>
         </el-table-column>

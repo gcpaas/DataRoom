@@ -15,6 +15,11 @@ interface Props {
   selectable?: boolean // 是否可选择模式
 }
 
+interface UploadResponse {
+  name?: string
+  data?: ResourceEntity
+}
+
 const props = withDefaults(defineProps<Props>(), {
   selectable: false
 })
@@ -159,7 +164,7 @@ const handleAdd = () => {
 // 选择资源类型后打开对应的新增表单
 const handleSelectType = (type: string) => {
   typeSelectDialogVisible.value = false
-  let resourceType: ResourceType
+  let resourceType: (typeof ResourceType)[keyof typeof ResourceType]
   switch (type) {
     case 'directory':
       resourceType = ResourceType.DIRECTORY
@@ -188,20 +193,20 @@ const handleEdit = (item: ResourceEntity) => {
 }
 
 // 文件上传成功回调 - 只更新临时数据，不直接保存
-const handleUploadSuccess = (response: any) => {
-  if (response) {
-    console.log(response)
-    const res = response.data as ResourceEntity
+const handleUploadSuccess = (response: UploadResponse) => {
+  if (response?.data) {
+    const res = response.data
+    if (!editingResource.value) return
     // 将上传返回的数据中的path、url、size、resourceType、originalName更新到editingResource
     // 如果用户没有填写资源名称，则使用原始文件名自动填充
     editingResource.value = {
       ...editingResource.value,
-      name: editingResource.value?.name || res.originalName || response.name,
+      name: editingResource.value.name || res.originalName || response.name || '',
       originalName: res.originalName,
       path: res.path,
       url: res.url,
       size: res.size,
-      resourceType: res.resourceType || editingResource.value?.resourceType!
+      resourceType: res.resourceType || editingResource.value.resourceType || ResourceType.IMAGE
     }
     ElMessage.success('文件上传成功，请点击确定保存')
   }
@@ -214,13 +219,15 @@ const handleUploadError = () => {
 
 // 删除资源
 const handleDelete = (resource: ResourceEntity) => {
+  if (!resource.id) return
+  const resourceId = resource.id
   ElMessageBox.confirm(`确定要删除${resource.name}吗？`, '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(async () => {
     try {
-      resourceApi.delete(resource.id!).then((res) => {
+      resourceApi.delete(resourceId).then(() => {
         ElMessage.success('删除成功')
         getResourceList()
       })
@@ -287,11 +294,12 @@ const openImageDetail = (item: ResourceEntity) => {
 }
 
 // 图片重新上传成功
-const handleImageReUploadSuccess = (response: any) => {
-  if (response) {
-    const res = response.data as ResourceEntity
+const handleImageReUploadSuccess = (response: UploadResponse) => {
+  if (response?.data) {
+    const res = response.data
+    if (!imageDetailResource.value) return
     imageDetailResource.value = {
-      ...imageDetailResource.value!,
+      ...imageDetailResource.value,
       originalName: res.originalName,
       path: res.path,
       url: res.url,
@@ -378,11 +386,12 @@ const handleVideoCapturecover = () => {
 }
 
 // 手动上传封面成功
-const handleCoverUploadSuccess = (response: any) => {
-  if (response) {
-    const res = response.data as ResourceEntity
+const handleCoverUploadSuccess = (response: UploadResponse) => {
+  if (response?.data) {
+    const res = response.data
+    if (!videoDetailResource.value) return
     videoDetailResource.value = {
-      ...videoDetailResource.value!,
+      ...videoDetailResource.value,
       thumbnail: res.url
     }
     // 更新到数据库
@@ -474,9 +483,10 @@ const handleBreadcrumbClick = (index: number) => {
 }
 
 // 模型封面上传成功回调
-const handleModelCoverUploadSuccess = (response: any) => {
-  if (response) {
-    const res = response.data as ResourceEntity
+const handleModelCoverUploadSuccess = (response: UploadResponse) => {
+  if (response?.data) {
+    const res = response.data
+    if (!editingResource.value) return
     editingResource.value = {
       ...editingResource.value,
       thumbnail: res.url
