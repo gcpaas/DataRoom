@@ -47,12 +47,12 @@ const easingOptions = [
 const formatOptions = [
   { label: '默认', value: 'default' },
   { label: '整数', value: 'integer' },
-  { label: '1位小数', value: 'float1' },
-  { label: '2位小数', value: 'float2' },
+  { label: '一位小数', value: 'float1' },
+  { label: '两位小数', value: 'float2' },
   { label: '百分比', value: 'percent' },
-  { label: '百分比(1位)', value: 'percent1' },
+  { label: '百分比（一位）', value: 'percent1' },
   { label: '千分位', value: 'thousand' },
-  { label: '千分位(1位)', value: 'thousand1' },
+  { label: '千分位（一位）', value: 'thousand1' },
 ]
 
 const updateColor = (index: number, color: string) => {

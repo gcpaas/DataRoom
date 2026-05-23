@@ -51,7 +51,7 @@ interface DrProgressBarPropsInterface {
     /** 标签颜色 */
     color: string
     /** 标签字重 */
-    fontWeight: 'normal' | 'bold' | 'bolder'
+    fontWeight: 'normal' | 'bold' | '300' | '500' | '800'
     /** 标签内容格式 */
     format: 'percent' | 'value' | 'custom'
     /** 自定义格式模板 */

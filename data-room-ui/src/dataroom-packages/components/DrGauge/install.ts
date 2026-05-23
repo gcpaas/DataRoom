@@ -129,7 +129,7 @@ export interface DrGaugePropsInterface {
     /** 数值颜色，auto表示跟随轴线颜色 */
     color: string
     /** 数值字重 */
-    fontWeight: 'normal' | 'bold' | 'bolder'
+    fontWeight: 'normal' | 'bold' | 300 | 500 | 800
     /** 数值格式化方式 */
     format: 'value' | 'percent' | 'integer' | 'float1' | 'float2'
     /** 数值纵向偏移(%)，正值向下 */
@@ -150,7 +150,7 @@ export interface DrGaugePropsInterface {
     /** 标题颜色 */
     color: string
     /** 标题字重 */
-    fontWeight: 'normal' | 'bold' | 'bolder'
+    fontWeight: 'normal' | 'bold' | 300 | 500 | 800
     /** 标题纵向偏移(%)，正值向下 */
     offsetY: number
   }

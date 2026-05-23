@@ -21,7 +21,9 @@ const axisLineColors = computed(() => chartConfig.value.props.axisLine.colors)
 const fontWeightOptions = [
   { label: '正常 (400)', value: 'normal' },
   { label: '粗体 (700)', value: 'bold' },
-  { label: '更粗 (800)', value: 'bolder' },
+  { label: '细 (300)', value: 300 },
+  { label: '中等 (500)', value: 500 },
+  { label: '较粗 (800)', value: 800 },
 ]
 
 /** 缓动函数选项 */

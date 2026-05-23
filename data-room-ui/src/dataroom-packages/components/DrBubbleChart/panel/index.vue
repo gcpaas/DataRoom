@@ -54,8 +54,8 @@ const shapeOptions = [
 const labelContentOptions = [
   { label: '名称', value: 'name' },
   { label: '数值', value: 'value' },
-  { label: 'X值', value: 'x' },
-  { label: 'Y值', value: 'y' },
+  { label: 'X 值', value: 'x' },
+  { label: 'Y 值', value: 'y' },
   { label: '大小值', value: 'size' },
 ]
 
