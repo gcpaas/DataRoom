@@ -35,6 +35,11 @@
 ### 数据集页面
 ![数据集页面.png](doc/image/%E6%95%B0%E6%8D%AE%E9%9B%86%E9%A1%B5%E9%9D%A2.png)
 
+### 地图管理
+![地图管理.png](doc/image/%E5%9C%B0%E5%9B%BE%E7%AE%A1%E7%90%86.png)
+
+### 用户管理
+![用户管理.png](doc/image/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png)
 
 
 ## 快速开始
