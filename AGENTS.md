@@ -167,6 +167,20 @@ export const datasetFields   // 数据集字段映射定义
 - 面板控件应直接绑定到 `chart.props`，避免复制整份 props 到本地状态。
 - 当前参考实现为 `data-room-ui/src/dataroom-packages/components/DrBarChart/panel/index.vue`。
 
+### 前端设计规范
+
+所有前端页面、设计器面板、组件库、配置面板和业务组件的样式必须遵循 `docs/design/DESIGN.md`。
+
+执行任何涉及 Vue、SCSS、CSS、Element Plus 组件、页面布局或交互状态的修改前，必须先阅读该规范，并按其中约束实现：
+
+- 颜色、文本、边框、填充、状态色和交互色必须使用 Element Plus CSS 变量。
+- 禁止新增或继续使用 `--dr-*` 私有颜色变量，禁止硬编码十六进制、RGB、HSL 或颜色英文名。
+- Element Plus 表单组件必须使用默认样式，通过 props 表达尺寸、状态和密度。
+- 禁止使用 `:deep(.el-*)`、`::v-deep`、`/deep/`、`>>>`、全局 `.el-*` 选择器或 `!important` 覆盖 Element Plus 内部样式。
+- 业务样式只负责外层布局、间距、滚动区域和项目自定义容器，不重写 Element Plus 的颜色、边框、圆角、字号、行高、高度、内边距、hover、focus、disabled、placeholder 或弹层样式。
+- 所有文本字距保持 `0`，不要使用负字距；非表单数字和指标展示可使用 `font-feature-settings: "tnum"`。
+- 需要修改主题时，不在业务组件中覆盖，应通过后续统一定制 Element Plus 主题完成。
+
 ### 状态管理
 
 设计器内部主要使用 `provide/inject` 共享画布状态，而不是集中式 Pinia store。`useCanvasInst` 创建画布上下文，并通过 `provide(DrConst.CANVAS_INST, canvasInst)` 提供给子组件。
@@ -206,6 +220,7 @@ Vite 构建输出目录为 `dataRoomFront/`，`base` 为 `./`。项目使用 Ele
 - 密码在前端使用 RSA 加密传输，后端解密后处理。
 - 默认用户配置位于 `application-base.yml`，包含 `admin`、`developer`、`sharer`。
 - 修改图表配置结构时，要同步检查 `install.ts` 默认值、`index.vue` 渲染逻辑和 `panel/index.vue` 面板控件。
+- 修改任何前端样式前，必须先阅读并遵循 `docs/design/DESIGN.md`；交付前检查是否存在硬编码颜色、`--dr-*` 颜色变量、Element Plus 内部样式覆盖、`!important`、负字距等违规项。
 - 修改前端组件后，至少运行 `npm run type-check`；涉及格式或样式规范时运行 `npm run lint`。
 - 修改后端核心逻辑后，至少运行相关单测；无法运行时需要在交付说明中明确原因。
 

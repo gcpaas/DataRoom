@@ -490,120 +490,37 @@ const triggerAutoRefresh = () => {
 </template>
 
 <style scoped lang="scss">
-@use "./assets/index.scss";
-
 .dr-control-panel {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--dr-white);
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.08);
+  background: var(--el-bg-color);
+  border-left: 1px solid var(--el-border-color);
 
   .control-tabs {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: var(--dr-white);
-
-    :deep(.el-tabs__header) {
-      margin-bottom: 0;
-      border-bottom: 1px solid var(--dr-gray-100);
-      padding: 0 var(--space-4);
-      background: var(--dr-white);
-    }
-
-    :deep(.el-tabs__nav-scroll),
-    :deep(.el-tabs__nav-wrap),
-    :deep(.el-tabs__content),
-    :deep(.el-tab-pane) {
-      background: var(--dr-white);
-    }
-
-    :deep(.el-tabs__nav-wrap)::after {
-      display: none;
-    }
-
-    :deep(.el-tabs__item) {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--dr-gray-500);
-      transition: color 0.2s ease;
-
-      &.is-active {
-        color: var(--dr-gray-900);
-      }
-    }
-
-    :deep(.el-tabs__active-bar) {
-      height: 2px;
-      background-color: var(--dr-blue);
-    }
-
-    :deep(.el-tabs__content) {
-      flex: 1;
-      overflow: hidden;
-      padding: 2px;
-    }
+    min-height: 0;
 
     .tab-content {
       padding: var(--space-4);
-      height: 100%;
+      height: calc(100vh - 120px);
       overflow-y: auto;
-      background: var(--dr-white);
-
-      :deep(.el-collapse),
-      :deep(.el-collapse-item__header),
-      :deep(.el-collapse-item__wrap),
-      :deep(.el-collapse-item__content) {
-        background: var(--dr-white);
-      }
+      background: var(--el-bg-color);
 
       .placeholder {
-        color: var(--dr-gray-500);
+        color: var(--el-text-color-secondary);
         text-align: center;
         padding: var(--space-10) 0;
       }
 
-      :deep(.el-form-item__label) {
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--dr-gray-700);
-        width: 90px;
-      }
-
-      :deep(.el-input__wrapper),
-      :deep(.el-select .el-input__wrapper),
-      :deep(.el-textarea__inner) {
-        border-radius: var(--radius-md);
-        box-shadow: var(--dr-shadow-border);
-        border: none;
-        transition: box-shadow 0.2s ease;
-
-        &:focus-within {
-          box-shadow: var(--dr-shadow-focus);
-        }
-      }
-
       .fields-binding-form {
-        :deep(.el-form-item) {
-          display: block;
-        }
-
-        :deep(.el-form-item__label) {
-          width: 100%;
-          height: auto;
-          line-height: 18px;
-          margin-bottom: var(--space-2);
-          justify-content: flex-start;
-        }
-
-        :deep(.el-form-item__content) {
-          margin-left: 0 !important;
-          width: 100%;
-        }
+        width: 100%;
       }
+    }
+
+    .dr-collapse {
+      width: 100%;
     }
 
     .behavior-list {
@@ -613,14 +530,9 @@ const triggerAutoRefresh = () => {
         justify-content: space-between;
         padding: var(--space-3);
         margin-bottom: var(--space-3);
-        background: var(--dr-white);
+        background: var(--el-fill-color-blank);
+        border: 1px solid var(--el-border-color);
         border-radius: var(--radius-md);
-        box-shadow: var(--dr-shadow-border);
-        transition: box-shadow 0.2s ease, transform 0.2s ease;
-
-        &:hover {
-          box-shadow: var(--dr-shadow-sm);
-        }
 
         .behavior-info {
           flex: 1;
@@ -630,13 +542,13 @@ const triggerAutoRefresh = () => {
           .behavior-name {
             font-size: 14px;
             font-weight: 500;
-            color: var(--dr-gray-900);
+            color: var(--el-text-color-primary);
             margin-bottom: var(--space-1);
           }
 
           .behavior-desc {
             font-size: 12px;
-            color: var(--dr-gray-500);
+            color: var(--el-text-color-secondary);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -649,13 +561,11 @@ const triggerAutoRefresh = () => {
           gap: var(--space-3);
 
           .setting-icon {
-            color: var(--dr-gray-700);
+            color: var(--el-text-color-regular);
             cursor: pointer;
-            transition: all 0.2s ease;
 
             &:hover {
-              color: var(--dr-blue);
-              transform: rotate(90deg);
+              color: var(--el-color-primary);
             }
           }
         }
@@ -676,13 +586,13 @@ const triggerAutoRefresh = () => {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: var(--dr-gray-900);
+    color: var(--el-text-color-primary);
   }
 
   .option-desc {
     flex-shrink: 0;
     margin-left: var(--space-3);
-    color: var(--dr-gray-500);
+    color: var(--el-text-color-secondary);
     font-size: 12px;
     text-align: right;
   }
@@ -708,26 +618,10 @@ const triggerAutoRefresh = () => {
     overflow: hidden;
   }
 
-  :deep(.dataset-left .tree-content .el-scrollbar__wrap) {
-    overflow-x: hidden;
-  }
-
   :deep(.dataset-right) {
     flex: 1;
     min-width: 0;
     overflow: hidden;
-  }
-
-  :deep(.el-scrollbar) {
-    height: 100%;
-  }
-
-  :deep(.el-scrollbar__view) {
-    height: 100%;
-  }
-
-  :deep(.el-scrollbar__bar) {
-    z-index: 10 !important;
   }
 }
 
@@ -735,32 +629,25 @@ const triggerAutoRefresh = () => {
 .param-item {
   padding: var(--space-3);
   margin-bottom: var(--space-3);
-  background: var(--dr-white);
+  background: var(--el-fill-color-blank);
+  border: 1px solid var(--el-border-color);
   border-radius: var(--radius-md);
-  box-shadow: var(--dr-shadow-border);
 
   .param-header {
     margin-bottom: var(--space-3);
     font-weight: 500;
 
     .param-name {
-      color: var(--dr-gray-900);
+      color: var(--el-text-color-primary);
       font-size: 14px;
     }
 
     .param-desc {
-      color: var(--dr-gray-500);
+      color: var(--el-text-color-secondary);
       font-size: 12px;
       margin-left: var(--space-1);
     }
   }
 
-  .el-form-item {
-    margin-bottom: var(--space-3);
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
 }
 </style>
