@@ -14,3 +14,8 @@ DrInput
 DrSelect
 DrRadio
 DrTabList
+DrFullScreen
+DrIframe
+DrModel3D
+DrVideoPlayer
+Remote
