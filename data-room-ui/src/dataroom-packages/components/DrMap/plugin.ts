@@ -1,4 +1,4 @@
-import thumbnail from './images/map.svg'
+import thumbnail from './images/map.png'
 import { ChartPlugin } from '@/dataroom-packages/components/type/ChartPlugin.ts'
 import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 

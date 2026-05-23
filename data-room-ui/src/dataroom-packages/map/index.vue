@@ -462,7 +462,10 @@ onUnmounted(() => {
 
     <!-- 中间：地图预览 -->
     <div class="map-preview-panel">
-      <div class="panel-title">地图预览</div>
+      <div class="panel-title">
+        <span>地图预览</span>
+        <span v-if="selectedMap?.code" class="map-code">区域编码 {{ selectedMap.code }}</span>
+      </div>
       <div class="map-chart-container">
         <div ref="chartRef" class="map-chart" v-show="selectedMap"></div>
         <el-empty
@@ -697,11 +700,26 @@ onUnmounted(() => {
     overflow: hidden;
 
     .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       padding: 16px 20px;
       font-size: 14px;
       font-weight: 600;
       color: #1d2129;
       box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
+
+      .map-code {
+        min-width: 0;
+        color: var(--el-text-color-secondary);
+        font-size: 13px;
+        font-weight: 400;
+        font-feature-settings: 'tnum';
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
 
     .map-chart-container {
