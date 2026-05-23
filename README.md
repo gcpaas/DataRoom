@@ -22,8 +22,11 @@
 
 ### 页面管理页
 <img src="doc/image/%E9%A1%B5%E9%9D%A2%E7%AE%A1%E7%90%86%E9%A1%B5.png" alt="描述" style="border: 1px solid #eee;" />
+
 ### 仪表盘设计页
-![页面设计页.png](doc/image/%E9%A1%B5%E9%9D%A2%E8%AE%BE%E8%AE%A1%E9%A1%B5.png)
+<div style="outline: 1px solid #eee; padding: 2px; display: inline-block;">
+  <img src="doc/image/%E9%A1%B5%E9%9D%A2%E8%AE%BE%E8%AE%A1%E9%A1%B5.png" alt="示例" />
+</div>
 
 ### 素材库页面
 ![素材库页面.png](doc/image/%E7%B4%A0%E6%9D%90%E5%BA%93%E9%A1%B5%E9%9D%A2.png)
