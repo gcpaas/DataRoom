@@ -81,7 +81,7 @@ const removeColor = (index: number) => {
           <el-form-item label="显示">
             <el-switch v-model="chartConfig.props.xAxis.show" />
           </el-form-item>
-          <template v-if="chartConfig.props.xAxis.show">
+          <template>
             <el-form-item label="数据类型">
               <el-select v-model="chartConfig.props.xAxis.type">
                 <el-option label="类目" value="category" />
@@ -94,7 +94,7 @@ const removeColor = (index: number) => {
                 <span>轴线</span>
                 <el-switch v-model="chartConfig.props.xAxis.axisLine.show" />
               </div>
-              <el-form v-if="chartConfig.props.xAxis.axisLine.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
                 <el-form-item class="dr-config-panel__sub-form-item">
                   <div class="dr-config-panel__sub-row">
                     <span class="dr-config-panel__sub-label">颜色</span>
@@ -115,7 +115,7 @@ const removeColor = (index: number) => {
                 <span>轴标签</span>
                 <el-switch v-model="chartConfig.props.xAxis.axisLabel.show" />
               </div>
-              <el-form v-if="chartConfig.props.xAxis.axisLabel.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
                 <el-form-item class="dr-config-panel__sub-form-item">
                   <div class="dr-config-panel__sub-row">
                     <span class="dr-config-panel__sub-label">字号</span>
@@ -158,7 +158,7 @@ const removeColor = (index: number) => {
                 <span>刻度线</span>
                 <el-switch v-model="chartConfig.props.xAxis.axisTick.show" />
               </div>
-              <el-form v-if="chartConfig.props.xAxis.axisTick.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
                 <el-form-item class="dr-config-panel__sub-form-item">
                   <div class="dr-config-panel__sub-row">
                     <span class="dr-config-panel__sub-label">长度</span>
@@ -179,7 +179,7 @@ const removeColor = (index: number) => {
                 <span>网格线</span>
                 <el-switch v-model="chartConfig.props.xAxis.splitLine.show" />
               </div>
-              <el-form v-if="chartConfig.props.xAxis.splitLine.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
                 <el-form-item class="dr-config-panel__sub-form-item">
                   <div class="dr-config-panel__sub-row">
                     <span class="dr-config-panel__sub-label">颜色</span>
@@ -210,7 +210,7 @@ const removeColor = (index: number) => {
           <el-form-item label="显示">
             <el-switch v-model="chartConfig.props.yAxis.show" />
           </el-form-item>
-          <template v-if="chartConfig.props.yAxis.show">
+          <template>
             <el-form-item label="轴名称">
               <el-input v-model="chartConfig.props.yAxis.name" placeholder="可选" />
             </el-form-item>
@@ -220,7 +220,7 @@ const removeColor = (index: number) => {
                 <span>显示范围</span>
                 <el-switch v-model="chartConfig.props.yAxis.range.auto" />
               </div>
-              <el-form v-if="!chartConfig.props.yAxis.range.auto" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
                 <el-form-item class="dr-config-panel__sub-form-item">
                   <div class="dr-config-panel__sub-row">
                     <span class="dr-config-panel__sub-label">最小值</span>
@@ -241,7 +241,7 @@ const removeColor = (index: number) => {
                 <span>轴线</span>
                 <el-switch v-model="chartConfig.props.yAxis.axisLine.show" />
               </div>
-              <el-form v-if="chartConfig.props.yAxis.axisLine.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
                 <el-form-item class="dr-config-panel__sub-form-item">
                   <div class="dr-config-panel__sub-row">
                     <span class="dr-config-panel__sub-label">颜色</span>
@@ -262,7 +262,7 @@ const removeColor = (index: number) => {
                 <span>轴标签</span>
                 <el-switch v-model="chartConfig.props.yAxis.axisLabel.show" />
               </div>
-              <el-form v-if="chartConfig.props.yAxis.axisLabel.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
                 <el-form-item class="dr-config-panel__sub-form-item">
                   <div class="dr-config-panel__sub-row">
                     <span class="dr-config-panel__sub-label">字号</span>
@@ -299,7 +299,7 @@ const removeColor = (index: number) => {
                 <span>刻度线</span>
                 <el-switch v-model="chartConfig.props.yAxis.axisTick.show" />
               </div>
-              <el-form v-if="chartConfig.props.yAxis.axisTick.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
                 <el-form-item class="dr-config-panel__sub-form-item">
                   <div class="dr-config-panel__sub-row">
                     <span class="dr-config-panel__sub-label">长度</span>
@@ -320,7 +320,7 @@ const removeColor = (index: number) => {
                 <span>网格线</span>
                 <el-switch v-model="chartConfig.props.yAxis.splitLine.show" />
               </div>
-              <el-form v-if="chartConfig.props.yAxis.splitLine.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
                 <el-form-item class="dr-config-panel__sub-form-item">
                   <div class="dr-config-panel__sub-row">
                     <span class="dr-config-panel__sub-label">颜色</span>
@@ -354,7 +354,7 @@ const removeColor = (index: number) => {
               <el-switch v-model="chartConfig.props.legend.show" />
             </div>
           </el-form-item>
-          <template v-if="chartConfig.props.legend.show">
+          <template>
             <el-form-item class="dr-config-panel__sub-form-item">
               <div class="dr-config-panel__sub-row">
                 <span class="dr-config-panel__sub-label">位置</span>
@@ -395,7 +395,7 @@ const removeColor = (index: number) => {
               <el-switch v-model="chartConfig.props.tooltip.show" />
             </div>
           </el-form-item>
-          <template v-if="chartConfig.props.tooltip.show">
+          <template>
             <el-form-item class="dr-config-panel__sub-form-item">
               <div class="dr-config-panel__sub-row">
                 <span class="dr-config-panel__sub-label">触发方式</span>
@@ -514,7 +514,7 @@ const removeColor = (index: number) => {
               <el-switch v-model="chartConfig.props.series.gradient.enabled" />
             </div>
           </el-form-item>
-          <el-form-item v-if="chartConfig.props.series.gradient.enabled" class="dr-config-panel__sub-form-item">
+          <el-form-item class="dr-config-panel__sub-form-item">
             <div class="dr-config-panel__sub-row">
               <span class="dr-config-panel__sub-label">方向</span>
               <el-select v-model="chartConfig.props.series.gradient.direction" class="dr-config-panel__control">
@@ -531,7 +531,7 @@ const removeColor = (index: number) => {
               <el-switch v-model="chartConfig.props.series.label.show" />
             </div>
           </el-form-item>
-          <template v-if="chartConfig.props.series.label.show">
+          <template>
             <el-form-item class="dr-config-panel__sub-form-item">
               <div class="dr-config-panel__sub-row">
                 <span class="dr-config-panel__sub-label">位置</span>
@@ -575,7 +575,7 @@ const removeColor = (index: number) => {
               <el-switch v-model="chartConfig.props.animation.enabled" />
             </div>
           </el-form-item>
-          <template v-if="chartConfig.props.animation.enabled">
+          <template>
             <el-form-item class="dr-config-panel__sub-form-item">
               <div class="dr-config-panel__sub-row">
                 <span class="dr-config-panel__sub-label">时长(ms)</span>

@@ -2,3 +2,6 @@ DrBarChart
 DrLineChart
 DrRadarChart
 DrGauge
+DrAreaChart
+DrHorizontalBarChart
+DrPieChart

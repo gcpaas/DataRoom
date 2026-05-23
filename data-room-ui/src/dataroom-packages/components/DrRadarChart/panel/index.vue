@@ -161,7 +161,7 @@ const removeSplitAreaColor = (index: number) => {
               <span>轴线</span>
               <el-switch v-model="chartConfig.props.radar.axisLine.show" size="small" />
             </div>
-            <el-form v-if="chartConfig.props.radar.axisLine.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">颜色</span>
@@ -190,7 +190,7 @@ const removeSplitAreaColor = (index: number) => {
               <span>分割线</span>
               <el-switch v-model="chartConfig.props.radar.splitLine.show" size="small" />
             </div>
-            <el-form v-if="chartConfig.props.radar.splitLine.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">颜色</span>
@@ -219,7 +219,7 @@ const removeSplitAreaColor = (index: number) => {
               <span>分割区域</span>
               <el-switch v-model="chartConfig.props.radar.splitArea.show" size="small" />
             </div>
-            <el-form v-if="chartConfig.props.radar.splitArea.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row dr-config-panel__sub-row--start">
                   <span class="dr-config-panel__sub-label">颜色列表</span>
@@ -247,7 +247,7 @@ const removeSplitAreaColor = (index: number) => {
               <span>轴标签</span>
               <el-switch v-model="chartConfig.props.radar.axisLabel.show" size="small" />
             </div>
-            <el-form v-if="chartConfig.props.radar.axisLabel.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">字号</span>
@@ -328,7 +328,7 @@ const removeSplitAreaColor = (index: number) => {
               <span>启用</span>
               <el-switch v-model="chartConfig.props.legend.show" size="small" />
             </div>
-            <el-form v-if="chartConfig.props.legend.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">位置</span>
@@ -376,7 +376,7 @@ const removeSplitAreaColor = (index: number) => {
               <span>启用</span>
               <el-switch v-model="chartConfig.props.tooltip.show" size="small" />
             </div>
-            <el-form v-if="chartConfig.props.tooltip.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">背景色</span>
@@ -453,19 +453,11 @@ const removeSplitAreaColor = (index: number) => {
               <span>区域填充</span>
               <el-switch v-model="chartConfig.props.series.areaStyle.show" size="small" />
             </div>
-            <el-form v-if="chartConfig.props.series.areaStyle.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">透明度</span>
-                  <el-slider
-                    v-model="chartConfig.props.series.areaStyle.opacity"
-                    class="dr-config-panel__control"
-                    :min="0"
-                    :max="1"
-                    :step="0.05"
-                    show-input
-                    :show-input-controls="false"
-                  />
+                  <el-input-number v-model="chartConfig.props.series.areaStyle.opacity" class="dr-config-panel__control" :min="0" :max="1" :step="0.05" controls-position="right" />
                 </div>
               </el-form-item>
             </el-form>
@@ -476,7 +468,7 @@ const removeSplitAreaColor = (index: number) => {
               <span>标记点</span>
               <el-switch v-model="chartConfig.props.series.symbol.show" size="small" />
             </div>
-            <el-form v-if="chartConfig.props.series.symbol.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">形状</span>
@@ -505,7 +497,7 @@ const removeSplitAreaColor = (index: number) => {
               <span>数据标签</span>
               <el-switch v-model="chartConfig.props.series.label.show" size="small" />
             </div>
-            <el-form v-if="chartConfig.props.series.label.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">字号</span>
@@ -536,7 +528,7 @@ const removeSplitAreaColor = (index: number) => {
               <span>启用</span>
               <el-switch v-model="chartConfig.props.animation.enabled" size="small" />
             </div>
-            <el-form v-if="chartConfig.props.animation.enabled" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">时长(ms)</span>

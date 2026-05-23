@@ -76,7 +76,7 @@ const chartConfig = computed(() => chart);
 6. 动画
 7. 全局配置
 
-非笛卡尔图表可裁剪或替换轴配置，例如饼图使用「图形布局」「扇区样式」，仪表盘使用「仪表盘」「指针」「进度条」。但通用分组仍应保持稳定位置：图例和提示框居中，动画靠后，全局配置放在最后。
+非笛卡尔图表可裁剪或替换轴配置，例如饼图使用「图形布局」「扇区样式」，仪表盘使用「仪表盘」「指针」「进度配置」。但通用分组仍应保持稳定位置：图例和提示框居中，动画靠后，全局配置放在最后。
 
 所有一级分组放在同一个 `el-collapse.dr-config-panel__section` 中，每个一级分组使用一个带稳定 `name` 的 `el-collapse-item`。不要为每个一级分组创建独立 `el-collapse`，否则会产生重复边框、额外间距和不必要的滚动高度。二级分组使用 `.dr-config-panel__sub-title`，不要把多个视觉层级堆在同一个表单项里。
 
@@ -135,23 +135,21 @@ const chartConfig = computed(() => chart);
   <el-form-item label="显示">
     <el-switch v-model="chartConfig.props.xAxis.show"/>
   </el-form-item>
-  <template v-if="chartConfig.props.xAxis.show">
-    <el-form-item label="数据类型">
-      <el-select v-model="chartConfig.props.xAxis.type">
-        <el-option label="类目" value="category"/>
-        <el-option label="时间" value="time"/>
-      </el-select>
-    </el-form-item>
+  <el-form-item label="数据类型">
+    <el-select v-model="chartConfig.props.xAxis.type">
+      <el-option label="类目" value="category"/>
+      <el-option label="时间" value="time"/>
+    </el-select>
+  </el-form-item>
 
-    <!-- 只有真正二级配置才进入 sub-section -->
-    <div class="dr-config-panel__sub-section">
-      <div class="dr-config-panel__sub-title">
-        <span>轴线</span>
-        <el-switch v-model="chartConfig.props.xAxis.axisLine.show"/>
-      </div>
-      <!-- 轴线下的三级配置项 -->
+  <!-- 只有真正二级配置才进入 sub-section -->
+  <div class="dr-config-panel__sub-section">
+    <div class="dr-config-panel__sub-title">
+      <span>轴线</span>
+      <el-switch v-model="chartConfig.props.xAxis.axisLine.show"/>
     </div>
-  </template>
+    <!-- 轴线下的三级配置项 -->
+  </div>
 </el-collapse-item>
 ```
 
@@ -160,7 +158,7 @@ const chartConfig = computed(() => chart);
 二级配置用于组织一级配置下面的语义子区域。例如「X 轴」是一级配置时，「轴线」「轴标签」「刻度线」「网格线」都是二级配置。
 
 - 二级配置使用项目自定义标题容器，例如 `.dr-config-panel__sub-title`。
-- 二级配置标题行可以放一个开关，开关用于控制该二级配置是否显示或启用。
+- 二级配置标题行可以放一个开关，开关用于控制图表运行时是否显示或启用该配置域。
 - 二级配置标题只表达分组名称和开关状态，不承载具体输入项。
 - 当一级配置标题与二级配置标题名称一致，并且该二级配置标题行只是当前一级配置域的显示或启用开关时，二级标题必须统一写为「启用」。例如一级「图例」下的开关标题写「启用」，不要继续写「图例」；一级「动画」下的开关标题写「启用」，不要继续写「动画」。这样避免一级、二级视觉层级出现重复名称。
 - 二级配置之间通过外层容器间距或分割线形成视觉区隔，不通过修改 `el-collapse` 内部样式实现。
@@ -201,7 +199,7 @@ const chartConfig = computed(() => chart);
 - 二级配置标题是分组标题，三级配置项 label 是字段标题，两者必须有明确包含关系，不能视觉上处在同一层级。
 - 每个二级配置区域可以使用内部 `el-form` 承载三级配置项，但三级字段的 label 不依赖 `el-form-item` 内置 label 区域时，应使用 `.dr-config-panel__sub-form-item` 保持 label 与控件同行。
 - 颜色选择、数字输入、下拉选择、文本输入等控件保持 Element Plus 默认样式；只允许在外层二级容器上控制间距、缩进和分组关系。
-- 二级配置的开关关闭后，隐藏对应三级配置项，但不清空已有配置值。
+- 二级配置的开关只写回 `chart.props`，不控制面板中三级配置项显隐；开关关闭时，相关配置项仍然保持可编辑。
 
 推荐结构：
 
@@ -213,7 +211,6 @@ const chartConfig = computed(() => chart);
   </div>
 
   <el-form
-    v-if="chartConfig.props.xAxis.axisLabel.show"
     class="dr-config-panel__sub-form"
     :model="chartConfig"
     label-width="72px"
@@ -383,7 +380,7 @@ global: {
 | 刻度线   | `axis.axisTick.show/length/color`                                 | switch、数字、颜色                                  |
 | 网格线   | `axis.splitLine.show/color/width/type`                            | switch、颜色、数字、线型下拉                        |
 
-关闭 `axis.show` 后，该轴的子配置不显示；关闭轴线、标签、刻度线、网格线后，只隐藏对应子项，不删除已有配置值。
+关闭 `axis.show` 后仅影响图表运行时轴是否显示，不隐藏该轴在配置面板中的子配置项；关闭轴线、标签、刻度线、网格线后也不隐藏对应子项，便于用户在关闭状态下继续调整配置值。
 
 ### 6.3 图例配置
 
@@ -402,7 +399,7 @@ legend: {
 }
 ```
 
-显示开关关闭后隐藏位置、文字样式、间距等子项。
+显示开关关闭后不隐藏位置、文字样式、间距等子项；开关仅影响图表运行时图例是否显示。
 
 ### 6.4 提示框配置
 
@@ -466,21 +463,24 @@ animation: {
 }
 ```
 
-关闭动画后隐藏时长和缓动配置；默认时长建议 `1000`，缓动建议 `cubicOut`。
+关闭动画后不隐藏时长和缓动配置；默认时长建议 `1000`，缓动建议 `cubicOut`。
 
 ## 7. 控件选择规范
 
-| 数据类型   | 控件                      | 要求                                                                    |
-| ---------- | ------------------------- | ----------------------------------------------------------------------- |
-| 布尔值     | `el-switch`               | 标签统一使用「显示」「启用」「自动」                                    |
-| 枚举值     | `el-select` + `el-option` | 选项数组在 `script setup` 中集中定义                                    |
-| 数值       | `el-input-number`         | 必须设置合理的 `min`、`max`、`step`，并使用 `controls-position="right"` |
-| 颜色       | `el-color-picker`         | 默认开启 `show-alpha`                                                   |
-| 字符串     | `el-input`                | 提供简短 placeholder，例如「可选」「如 30%」                            |
-| 四方向间距 | 4 个 `el-input-number`    | 按上、右、下、左顺序直接绑定四元组索引                                  |
-| 列表       | `v-for` + 操作按钮        | 删除按钮必须有最小数量保护                                              |
+| 数据类型                | 控件                      | 要求                                                                    |
+| ----------------------- | ------------------------- | ----------------------------------------------------------------------- |
+| 布尔值                  | `el-switch`               | 标签统一使用「显示」「启用」「自动」                                    |
+| 枚举值                  | `el-select` + `el-option` | 选项数组在 `script setup` 中集中定义                                    |
+| 数值                    | `el-input-number`         | 必须设置合理的 `min`、`max`、`step`，并使用 `controls-position="right"` |
+| 百分比/透明度/半径/角度 | `el-input-number`         | 仍按数值处理，不使用 `el-slider`、`el-progress` 或其他进度条式控件      |
+| 颜色                    | `el-color-picker`         | 默认开启 `show-alpha`                                                   |
+| 字符串                  | `el-input`                | 提供简短 placeholder，例如「可选」「如 30%」                            |
+| 四方向间距              | 4 个 `el-input-number`    | 按上、右、下、左顺序直接绑定四元组索引                                  |
+| 列表                    | `v-for` + 操作按钮        | 删除按钮必须有最小数量保护                                              |
 
 字体、线型、缓动等常用选项应复用以下中文标签：
+
+图表配置面板不使用进度条式控件作为配置输入。包括半径、透明度、占比、角度、线宽、时长、阈值等连续数值在内，均使用 `el-input-number` 直接录入；只有布尔开关、枚举、颜色、字符串和列表使用对应控件。`el-slider` 和 `el-progress` 容易在窄侧栏中造成布局挤压，也会让配置项与数据展示控件混淆，因此不得用于 `panel/index.vue` 的图表配置项。
 
 | 类型 | 推荐选项                                                 |
 | ---- | -------------------------------------------------------- |
@@ -495,9 +495,7 @@ animation: {
 
 ```vue
 <el-switch v-model="chartConfig.props.legend.show" />
-<template v-if="chartConfig.props.legend.show">
-  <!-- 子配置 -->
-</template>
+<!-- 子配置始终展示，开关只控制图表运行时行为 -->
 ```
 
 只有在组件需要适配复杂 `v-model`、数组元组或派生读写时才使用 computed setter。不要复制整份 props 到 `reactive` 本地对象，避免保存、撤销、预览时状态不一致。
@@ -575,6 +573,7 @@ animation: {
 - 布尔开关控制子项显隐，但不清空子项配置
 - 颜色、字体、线型、缓动选项使用统一中文标签
 - 数字输入设置合理范围和步长
+- 半径、透明度、百分比、角度等连续数值使用 `el-input-number`，不使用 `el-slider` 或 `el-progress`
 - 所有控件都直接写回 `chart.props`
 - 未覆盖 Element Plus 内部样式，未使用硬编码颜色、`--dr-*` 颜色变量、`!important` 或负字距
 - 样式只作用于当前面板根类
