@@ -6,15 +6,17 @@
 
 图表配置面板只负责组件视觉和图表行为配置，数据集绑定、数据处理脚本、交互动作等通用能力继续由设计器通用面板承载，除非该组件确实需要新增图表专属配置项。
 
+本规范是图表配置面板改造的强制约束。以后新增或优化图表配置面板时，必须逐项对照本规范和第 10 节检查清单执行；不能只满足类名存在，还必须保证 DOM 层级、表单属性、缩进来源和字段归属与参考结构一致。交付前必须检查是否存在错误层级，例如把一级基础字段误放入 `.dr-config-panel__sub-section`，或遗漏三级表单的 `label-width="72px"`。
+
 ## 2. 文件与类型约定
 
 每个图表组件目录必须保持以下结构：
 
-| 文件 | 说明 |
-|------|------|
-| `install.ts` | 定义 `PropsInterface`、`ChartConfig` 类型、默认配置、`controlPanel`、`behaviors`、`datasetFields` |
-| `index.vue` | 图表渲染组件，消费 `chart.props` 并生成 ECharts 或自定义渲染配置 |
-| `panel/index.vue` | 图表专属配置面板，直接绑定并修改 `chart.props` |
+| 文件              | 说明                                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------- |
+| `install.ts`      | 定义 `PropsInterface`、`ChartConfig` 类型、默认配置、`controlPanel`、`behaviors`、`datasetFields` |
+| `index.vue`       | 图表渲染组件，消费 `chart.props` 并生成 ECharts 或自定义渲染配置                                  |
+| `panel/index.vue` | 图表专属配置面板，直接绑定并修改 `chart.props`                                                    |
 
 配置项必须先在 `install.ts` 的 `PropsInterface` 和 `getInstance()` 默认值中声明，再在 `panel/index.vue` 中提供编辑控件。不要只在面板中维护本地状态，也不要让面板字段与默认配置脱节。
 
@@ -24,21 +26,21 @@
 
 ```vue
 <script lang="ts">
-import {defineComponent} from 'vue'
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts"
+import { defineComponent } from "vue";
+import { DrConst } from "@/dataroom-packages/constant/DrConst.ts";
 
 export default defineComponent({
-  name: DrConst.THIS_PLUGIN_TYPE + 'ControlPanel',
-})
+  name: DrConst.THIS_PLUGIN_TYPE + "ControlPanel",
+});
 </script>
 <script setup lang="ts">
-import type {DrXxxChartConfig} from '../install.ts'
-import {computed} from 'vue'
+import type { DrXxxChartConfig } from "../install.ts";
+import { computed } from "vue";
 
-const {chart} = defineProps<{
-  chart: DrXxxChartConfig
-}>()
-const chartConfig = computed(() => chart)
+const { chart } = defineProps<{
+  chart: DrXxxChartConfig;
+}>();
+const chartConfig = computed(() => chart);
 </script>
 ```
 
@@ -57,6 +59,8 @@ const chartConfig = computed(() => chart)
   </el-form>
 </div>
 ```
+
+根表单属性必须与参考实现保持一致：`label-width="60px"`、`size="small"`、`label-position="left"`。不要因为某个图表字段 label 较长而把根表单改成 `90px` 或其他宽度；需要更长 label 时，应优先调整字段文案或放入二级配置下的三级配置行。
 
 轴线、轴标签、刻度线、网格线、系列样式等三级配置应放在所属二级配置容器内部，使用单列表单项组织，label 放在表单组件左侧，详见“面板层级与布局”。
 
@@ -120,7 +124,36 @@ const chartConfig = computed(() => chart)
 
 - 一级配置使用 `el-collapse-item` 承载。
 - 一级配置标题必须是用户可识别的图表配置域，例如「X 轴」，不要使用字段名或英文属性名。
-- 一级配置内部可以直接放少量通用配置，也可以继续拆分二级配置。
+- 一级配置内部可以直接放少量一级基础字段，也可以继续拆分二级配置。
+- 一级基础字段是控制整个一级配置域的字段，例如「X 轴 -> 显示」「X 轴 -> 数据类型」「Y 轴 -> 显示」「Y 轴 -> 轴名称」。这类字段必须直接作为 `el-collapse-item` 的子节点，不要包进 `.dr-config-panel__sub-section`，否则会产生多余缩进，与柱状图参考实现不一致。
+- 只有真正的语义子区域才使用 `.dr-config-panel__sub-section`，例如「X 轴 -> 轴线」「X 轴 -> 轴标签」「Y 轴 -> 显示范围」「系列样式 -> 颜色列表」。
+
+一级基础字段推荐结构：
+
+```vue
+<el-collapse-item title="X 轴" name="xAxis">
+  <el-form-item label="显示">
+    <el-switch v-model="chartConfig.props.xAxis.show"/>
+  </el-form-item>
+  <template v-if="chartConfig.props.xAxis.show">
+    <el-form-item label="数据类型">
+      <el-select v-model="chartConfig.props.xAxis.type">
+        <el-option label="类目" value="category"/>
+        <el-option label="时间" value="time"/>
+      </el-select>
+    </el-form-item>
+
+    <!-- 只有真正二级配置才进入 sub-section -->
+    <div class="dr-config-panel__sub-section">
+      <div class="dr-config-panel__sub-title">
+        <span>轴线</span>
+        <el-switch v-model="chartConfig.props.xAxis.axisLine.show"/>
+      </div>
+      <!-- 轴线下的三级配置项 -->
+    </div>
+  </template>
+</el-collapse-item>
+```
 
 ### 5.2 二级配置
 
@@ -129,7 +162,10 @@ const chartConfig = computed(() => chart)
 - 二级配置使用项目自定义标题容器，例如 `.dr-config-panel__sub-title`。
 - 二级配置标题行可以放一个开关，开关用于控制该二级配置是否显示或启用。
 - 二级配置标题只表达分组名称和开关状态，不承载具体输入项。
+- 当一级配置标题与二级配置标题名称一致，并且该二级配置标题行只是当前一级配置域的显示或启用开关时，二级标题必须统一写为「启用」。例如一级「图例」下的开关标题写「启用」，不要继续写「图例」；一级「动画」下的开关标题写「启用」，不要继续写「动画」。这样避免一级、二级视觉层级出现重复名称。
 - 二级配置之间通过外层容器间距或分割线形成视觉区隔，不通过修改 `el-collapse` 内部样式实现。
+- 二级配置必须使用 `.dr-config-panel__sub-section` 作为外层容器。不要只写一个孤立的 `.dr-config-panel__sub-title`，否则后续三级表单无法获得统一缩进和分组间距。
+- 二级配置下承载三级配置项的内部表单必须使用 `class="dr-config-panel__sub-form"`，并保持 `label-width="72px"`、`size="small"`、`label-position="left"`。这与柱状图参考实现保持一致，用于稳定三级配置项缩进。
 
 示例结构：
 
@@ -180,33 +216,41 @@ const chartConfig = computed(() => chart)
     v-if="chartConfig.props.xAxis.axisLabel.show"
     class="dr-config-panel__sub-form"
     :model="chartConfig"
+    label-width="72px"
     size="small"
+    label-position="left"
   >
     <el-form-item class="dr-config-panel__sub-form-item">
-      <span class="dr-config-panel__sub-label">字号</span>
-      <el-input-number
-        v-model="chartConfig.props.xAxis.axisLabel.fontSize"
-        class="dr-config-panel__control"
-        :min="8"
-        :max="64"
-        controls-position="right"
-      />
+      <div class="dr-config-panel__sub-row">
+        <span class="dr-config-panel__sub-label">字号</span>
+        <el-input-number
+          v-model="chartConfig.props.xAxis.axisLabel.fontSize"
+          class="dr-config-panel__control"
+          :min="8"
+          :max="64"
+          controls-position="right"
+        />
+      </div>
     </el-form-item>
 
     <el-form-item class="dr-config-panel__sub-form-item">
-      <span class="dr-config-panel__sub-label">颜色</span>
-      <el-color-picker v-model="chartConfig.props.xAxis.axisLabel.color" show-alpha/>
+      <div class="dr-config-panel__sub-row">
+        <span class="dr-config-panel__sub-label">颜色</span>
+        <el-color-picker v-model="chartConfig.props.xAxis.axisLabel.color" show-alpha/>
+      </div>
     </el-form-item>
 
     <el-form-item class="dr-config-panel__sub-form-item">
-      <span class="dr-config-panel__sub-label">偏移量</span>
-      <el-input-number
-        v-model="chartConfig.props.xAxis.axisLabel.margin"
-        class="dr-config-panel__control"
-        :min="-100"
-        :max="100"
-        controls-position="right"
-      />
+      <div class="dr-config-panel__sub-row">
+        <span class="dr-config-panel__sub-label">偏移量</span>
+        <el-input-number
+          v-model="chartConfig.props.xAxis.axisLabel.margin"
+          class="dr-config-panel__control"
+          :min="-100"
+          :max="100"
+          controls-position="right"
+        />
+      </div>
     </el-form-item>
   </el-form>
 </div>
@@ -287,7 +331,7 @@ const chartConfig = computed(() => chart)
 
 ```ts
 global: {
-  padding: [number, number, number, number]
+  padding: [number, number, number, number];
 }
 ```
 
@@ -295,20 +339,32 @@ global: {
 
 ```vue
 <el-collapse-item title="全局配置" name="global">
-  <div class="dr-config-panel__sub-title">图表边距</div>
-  <el-form-item class="dr-config-panel__sub-form-item">
-    <div class="dr-config-panel__sub-row">
-      <span class="dr-config-panel__sub-label">上边距</span>
-      <el-input-number
-        v-model="chartConfig.props.global.padding[0]"
-        class="dr-config-panel__control"
-        :min="0"
-        :max="200"
-        controls-position="right"
-      />
+  <div class="dr-config-panel__sub-section">
+    <div class="dr-config-panel__sub-title">
+      <span>图表边距</span>
     </div>
-  </el-form-item>
-  <!-- 右边距、下边距、左边距同理绑定 padding[1]、padding[2]、padding[3] -->
+    <el-form
+      class="dr-config-panel__sub-form"
+      :model="chartConfig"
+      label-width="72px"
+      size="small"
+      label-position="left"
+    >
+      <el-form-item class="dr-config-panel__sub-form-item">
+        <div class="dr-config-panel__sub-row">
+          <span class="dr-config-panel__sub-label">上边距</span>
+          <el-input-number
+            v-model="chartConfig.props.global.padding[0]"
+            class="dr-config-panel__control"
+            :min="0"
+            :max="200"
+            controls-position="right"
+          />
+        </div>
+      </el-form-item>
+      <!-- 右边距、下边距、左边距同理绑定 padding[1]、padding[2]、padding[3] -->
+    </el-form>
+  </div>
 </el-collapse-item>
 ```
 
@@ -316,16 +372,16 @@ global: {
 
 坐标轴类图表应复用以下结构：
 
-| 配置 | 字段 | 控件 |
-|------|------|------|
-| 显示 | `axis.show` | `el-switch` |
-| 类型 | `axis.type` | `el-select` |
-| 轴名称 | `axis.name` | `el-input`，仅需要时提供 |
-| 显示范围 | `axis.range.auto/min/max` | `el-switch` + `el-input-number` |
-| 轴线 | `axis.axisLine.show/color/width` | `el-switch` + `el-color-picker` + `el-input-number` |
-| 轴标签 | `axis.axisLabel.show/fontSize/color/fontWeight/fontFamily/rotate` | switch、数字、颜色、下拉 |
-| 刻度线 | `axis.axisTick.show/length/color` | switch、数字、颜色 |
-| 网格线 | `axis.splitLine.show/color/width/type` | switch、颜色、数字、线型下拉 |
+| 配置     | 字段                                                              | 控件                                                |
+| -------- | ----------------------------------------------------------------- | --------------------------------------------------- |
+| 显示     | `axis.show`                                                       | `el-switch`                                         |
+| 类型     | `axis.type`                                                       | `el-select`                                         |
+| 轴名称   | `axis.name`                                                       | `el-input`，仅需要时提供                            |
+| 显示范围 | `axis.range.auto/min/max`                                         | `el-switch` + `el-input-number`                     |
+| 轴线     | `axis.axisLine.show/color/width`                                  | `el-switch` + `el-color-picker` + `el-input-number` |
+| 轴标签   | `axis.axisLabel.show/fontSize/color/fontWeight/fontFamily/rotate` | switch、数字、颜色、下拉                            |
+| 刻度线   | `axis.axisTick.show/length/color`                                 | switch、数字、颜色                                  |
+| 网格线   | `axis.splitLine.show/color/width/type`                            | switch、颜色、数字、线型下拉                        |
 
 关闭 `axis.show` 后，该轴的子配置不显示；关闭轴线、标签、刻度线、网格线后，只隐藏对应子项，不删除已有配置值。
 
@@ -335,14 +391,14 @@ global: {
 
 ```ts
 legend: {
-  show: boolean
-  position: 'top' | 'bottom' | 'left' | 'right'
+  show: boolean;
+  position: "top" | "bottom" | "left" | "right";
   textStyle: {
-    fontSize: number
-    color: string
-    fontWeight: string
+    fontSize: number;
+    color: string;
+    fontWeight: string;
   }
-  itemGap: number
+  itemGap: number;
 }
 ```
 
@@ -354,13 +410,13 @@ legend: {
 
 ```ts
 tooltip: {
-  show: boolean
-  trigger: 'axis' | 'item'
-  backgroundColor: string
-  borderColor: string
+  show: boolean;
+  trigger: "axis" | "item";
+  backgroundColor: string;
+  borderColor: string;
   textStyle: {
-    fontSize: number
-    color: string
+    fontSize: number;
+    color: string;
   }
 }
 ```
@@ -390,11 +446,11 @@ series: {
 
 ```ts
 label: {
-  show: boolean
-  position: string
-  fontSize: number
-  color: string
-  fontWeight: string
+  show: boolean;
+  position: string;
+  fontSize: number;
+  color: string;
+  fontWeight: string;
 }
 ```
 
@@ -404,9 +460,9 @@ label: {
 
 ```ts
 animation: {
-  enabled: boolean
-  duration: number
-  easing: 'linear' | 'cubicOut' | 'elasticOut' | 'bounceOut'
+  enabled: boolean;
+  duration: number;
+  easing: "linear" | "cubicOut" | "elasticOut" | "bounceOut";
 }
 ```
 
@@ -414,31 +470,31 @@ animation: {
 
 ## 7. 控件选择规范
 
-| 数据类型 | 控件 | 要求 |
-|----------|------|------|
-| 布尔值 | `el-switch` | 标签统一使用「显示」「启用」「自动」 |
-| 枚举值 | `el-select` + `el-option` | 选项数组在 `script setup` 中集中定义 |
-| 数值 | `el-input-number` | 必须设置合理的 `min`、`max`、`step`，并使用 `controls-position="right"` |
-| 颜色 | `el-color-picker` | 默认开启 `show-alpha` |
-| 字符串 | `el-input` | 提供简短 placeholder，例如「可选」「如 30%」 |
-| 四方向间距 | 4 个 `el-input-number` | 按上、右、下、左顺序直接绑定四元组索引 |
-| 列表 | `v-for` + 操作按钮 | 删除按钮必须有最小数量保护 |
+| 数据类型   | 控件                      | 要求                                                                    |
+| ---------- | ------------------------- | ----------------------------------------------------------------------- |
+| 布尔值     | `el-switch`               | 标签统一使用「显示」「启用」「自动」                                    |
+| 枚举值     | `el-select` + `el-option` | 选项数组在 `script setup` 中集中定义                                    |
+| 数值       | `el-input-number`         | 必须设置合理的 `min`、`max`、`step`，并使用 `controls-position="right"` |
+| 颜色       | `el-color-picker`         | 默认开启 `show-alpha`                                                   |
+| 字符串     | `el-input`                | 提供简短 placeholder，例如「可选」「如 30%」                            |
+| 四方向间距 | 4 个 `el-input-number`    | 按上、右、下、左顺序直接绑定四元组索引                                  |
+| 列表       | `v-for` + 操作按钮        | 删除按钮必须有最小数量保护                                              |
 
 字体、线型、缓动等常用选项应复用以下中文标签：
 
-| 类型 | 推荐选项 |
-|------|----------|
+| 类型 | 推荐选项                                                 |
+| ---- | -------------------------------------------------------- |
 | 字重 | 正常 (400)、粗体 (700)、细 (300)、中等 (500)、较粗 (800) |
-| 字体 | 微软雅黑、宋体、黑体、Arial、Helvetica |
-| 线型 | 实线、虚线、点线 |
-| 缓动 | 线性、平滑减速、弹性、弹跳 |
+| 字体 | 微软雅黑、宋体、黑体、Arial、Helvetica                   |
+| 线型 | 实线、虚线、点线                                         |
+| 缓动 | 线性、平滑减速、弹性、弹跳                               |
 
 ## 8. 条件显示与状态管理
 
 面板应直接修改传入的 `chart.props`，保持配置变更实时反映到画布：
 
 ```vue
-<el-switch v-model="chartConfig.props.legend.show"/>
+<el-switch v-model="chartConfig.props.legend.show" />
 <template v-if="chartConfig.props.legend.show">
   <!-- 子配置 -->
 </template>
@@ -505,12 +561,15 @@ animation: {
 
 - `install.ts` 中已声明完整 `PropsInterface` 和默认值
 - `panel/index.vue` 的 `chart` prop 类型使用该组件的 `ChartConfig`
-- 面板根类、组件名、表单属性符合规范
+- 面板根类、组件名、表单属性符合规范；根表单固定使用 `label-width="60px"`、`size="small"`、`label-position="left"`
 - 通用分组顺序一致，图表专属分组命名清晰
 - 一级配置项位于同一个 `el-collapse.dr-config-panel__section` 内，`el-collapse-item` 有稳定 `name`
+- 一级基础字段直接放在 `el-collapse-item` 下，例如「显示」「数据类型」「轴名称」，不要放进 `.dr-config-panel__sub-section`
 - 一级配置、二级配置、三级配置项层级清晰，例如「X 轴 -> 轴标签 -> 大小/颜色/偏移量」
+- 二级配置必须使用 `.dr-config-panel__sub-section` 包裹，标题使用 `.dr-config-panel__sub-title`
+- 三级配置内部表单必须使用 `.dr-config-panel__sub-form`，并固定 `label-width="72px"`、`size="small"`、`label-position="left"`
 - 三级配置项放在所属二级配置区域内部，采用单列布局，一行只放 1 个配置项
-- 三级配置项 label 放在表单组件左侧，使用 `.dr-config-panel__sub-label` 时不写内联样式
+- 三级配置项使用 `.dr-config-panel__sub-form-item` + `.dr-config-panel__sub-row` + `.dr-config-panel__sub-label`，label 放在表单组件左侧，不写内联样式
 - 三级配置项 label 与后面的表单组件保持同一行，不允许换行
 - 列表型三级配置项使用左侧 label + 右侧列表区域，例如「颜色列表」
 - 布尔开关控制子项显隐，但不清空子项配置
