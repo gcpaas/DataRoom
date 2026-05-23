@@ -519,7 +519,7 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="right-panel" :style="computedRightControlPanelStyle">
-        <el-scrollbar>
+        <el-scrollbar wrap-style="overflow: hidden;" view-style="max-width: 100%; height: 100%; overflow: hidden;">
           <ControlPanel v-if="rightControlPanelSetting" :basicConfig="pageBasicConfig"></ControlPanel>
           <ControlPanelWrapper v-else :chart="activeChart!" :global-variable-list="globalVariable">
             <component :is="getPanelComponent(activeChart?.type)" :chart="activeChart"></component>
@@ -735,6 +735,9 @@ onUnmounted(() => {
     }
 
     & .right-panel {
+      box-sizing: border-box;
+      min-width: 0;
+      overflow: hidden;
       background-color: var(--dr-white);
       box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.08);
       height: calc(100vh - var(--dr-designer-header-height));

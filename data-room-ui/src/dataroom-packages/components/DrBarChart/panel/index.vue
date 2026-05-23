@@ -9,18 +9,11 @@ export default defineComponent({
 <script setup lang="ts">
 import type { DrBarChartConfig } from '../install.ts'
 import { computed } from 'vue'
-import PaddingBoxEditor from '@/dataroom-packages/_components/PaddingBoxEditor.vue'
 
 const { chart } = defineProps<{
   chart: DrBarChartConfig
 }>()
 const chartConfig = computed(() => chart)
-const globalPadding = computed<[number, number, number, number]>({
-  get: () => chartConfig.value.props.global.padding,
-  set: (value) => {
-    chartConfig.value.props.global.padding = value
-  },
-})
 
 /** 字体粗细预设选项 */
 const fontWeightOptions = [
@@ -80,18 +73,11 @@ const removeColor = (index: number) => {
 </script>
 
 <template>
-  <div class="dr-config-panel">
+  <div class="dr-config-panel dr-bar-chart-config-panel">
     <el-form class="dr-config-panel__form" :model="chartConfig" label-width="60px" size="small" label-position="left">
-      <!-- 全局配置 -->
       <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="全局配置">
-          <PaddingBoxEditor v-model="globalPadding" :min="0" :max="200" />
-        </el-collapse-item>
-      </el-collapse>
-
-      <!-- X 轴配置 -->
-      <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="X 轴">
+        <!-- X 轴配置 -->
+        <el-collapse-item title="X 轴" name="xAxis">
           <el-form-item label="显示">
             <el-switch v-model="chartConfig.props.xAxis.show" />
           </el-form-item>
@@ -111,13 +97,13 @@ const removeColor = (index: number) => {
               <el-form v-if="chartConfig.props.xAxis.axisLine.show" class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
                 <el-form-item class="dr-config-panel__sub-form-item">
                   <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">颜色设置</span>
+                    <span class="dr-config-panel__sub-label">颜色</span>
                     <el-color-picker v-model="chartConfig.props.xAxis.axisLine.color" show-alpha />
                   </div>
                 </el-form-item>
                 <el-form-item class="dr-config-panel__sub-form-item">
                   <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">设置</span>
+                    <span class="dr-config-panel__sub-label">宽度</span>
                     <el-input-number v-model="chartConfig.props.xAxis.axisLine.width" class="dr-config-panel__control" :min="1" :max="10" controls-position="right" />
                   </div>
                 </el-form-item>
@@ -218,11 +204,9 @@ const removeColor = (index: number) => {
             </div>
           </template>
         </el-collapse-item>
-      </el-collapse>
 
-      <!-- Y 轴配置 -->
-      <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="Y 轴">
+        <!-- Y 轴配置 -->
+        <el-collapse-item title="Y 轴" name="yAxis">
           <el-form-item label="显示">
             <el-switch v-model="chartConfig.props.yAxis.show" />
           </el-form-item>
@@ -361,11 +345,9 @@ const removeColor = (index: number) => {
             </div>
           </template>
         </el-collapse-item>
-      </el-collapse>
 
-      <!-- 图例配置 -->
-      <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="图例">
+        <!-- 图例配置 -->
+        <el-collapse-item title="图例" name="legend">
           <el-form-item class="dr-config-panel__sub-form-item">
             <div class="dr-config-panel__sub-row">
               <span class="dr-config-panel__sub-label">显示</span>
@@ -404,11 +386,9 @@ const removeColor = (index: number) => {
             </el-form-item>
           </template>
         </el-collapse-item>
-      </el-collapse>
 
-      <!-- 提示框配置 -->
-      <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="提示框">
+        <!-- 提示框配置 -->
+        <el-collapse-item title="提示框" name="tooltip">
           <el-form-item class="dr-config-panel__sub-form-item">
             <div class="dr-config-panel__sub-row">
               <span class="dr-config-panel__sub-label">显示</span>
@@ -451,11 +431,9 @@ const removeColor = (index: number) => {
             </el-form-item>
           </template>
         </el-collapse-item>
-      </el-collapse>
 
-      <!-- 系列(柱子)配置 -->
-      <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="柱子样式">
+        <!-- 系列(柱子)配置 -->
+        <el-collapse-item title="柱子样式" name="series">
           <el-form-item class="dr-config-panel__sub-form-item">
             <div class="dr-config-panel__sub-row">
               <span class="dr-config-panel__sub-label">展示形式</span>
@@ -588,11 +566,9 @@ const removeColor = (index: number) => {
             </el-form-item>
           </template>
         </el-collapse-item>
-      </el-collapse>
 
-      <!-- 动画配置 -->
-      <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="动画">
+        <!-- 动画配置 -->
+        <el-collapse-item title="动画" name="animation">
           <el-form-item class="dr-config-panel__sub-form-item">
             <div class="dr-config-panel__sub-row">
               <span class="dr-config-panel__sub-label">启用</span>
@@ -616,6 +592,35 @@ const removeColor = (index: number) => {
             </el-form-item>
           </template>
         </el-collapse-item>
+
+        <!-- 全局配置 -->
+        <el-collapse-item title="全局配置" name="global">
+          <div class="dr-config-panel__sub-title">图表边距</div>
+          <el-form-item class="dr-config-panel__sub-form-item">
+            <div class="dr-config-panel__sub-row">
+              <span class="dr-config-panel__sub-label">上边距</span>
+              <el-input-number v-model="chartConfig.props.global.padding[0]" class="dr-config-panel__control" :min="0" :max="200" controls-position="right" />
+            </div>
+          </el-form-item>
+          <el-form-item class="dr-config-panel__sub-form-item">
+            <div class="dr-config-panel__sub-row">
+              <span class="dr-config-panel__sub-label">右边距</span>
+              <el-input-number v-model="chartConfig.props.global.padding[1]" class="dr-config-panel__control" :min="0" :max="200" controls-position="right" />
+            </div>
+          </el-form-item>
+          <el-form-item class="dr-config-panel__sub-form-item">
+            <div class="dr-config-panel__sub-row">
+              <span class="dr-config-panel__sub-label">下边距</span>
+              <el-input-number v-model="chartConfig.props.global.padding[2]" class="dr-config-panel__control" :min="0" :max="200" controls-position="right" />
+            </div>
+          </el-form-item>
+          <el-form-item class="dr-config-panel__sub-form-item">
+            <div class="dr-config-panel__sub-row">
+              <span class="dr-config-panel__sub-label">左边距</span>
+              <el-input-number v-model="chartConfig.props.global.padding[3]" class="dr-config-panel__control" :min="0" :max="200" controls-position="right" />
+            </div>
+          </el-form-item>
+        </el-collapse-item>
       </el-collapse>
     </el-form>
   </div>
@@ -623,4 +628,14 @@ const removeColor = (index: number) => {
 
 <style scoped lang="scss">
 @use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+
+.dr-bar-chart-config-panel {
+  --el-collapse-border-color: var(--el-bg-color);
+
+  padding: 0;
+}
+
+.dr-bar-chart-config-panel .dr-config-panel__section {
+  margin-bottom: 0;
+}
 </style>

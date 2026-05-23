@@ -42,10 +42,20 @@ const chartConfig = computed(() => chart)
 </script>
 ```
 
-根节点类名使用组件短横线命名，例如 `dr-bar-chart-panel`、`dr-line-chart-panel`。少量普通单行配置可以使用 Element Plus 表单 label：
+根节点必须使用共享配置面板类 `.dr-config-panel`，并叠加组件专属短横线类，例如 `.dr-bar-chart-config-panel`、`.dr-line-chart-config-panel`。共享类提供统一配置面板布局，组件专属类只用于当前图表确实需要的局部布局修正。
 
 ```vue
-<el-form :model="chartConfig" label-width="90px" size="small" label-position="left">
+<div class="dr-config-panel dr-bar-chart-config-panel">
+  <el-form
+    class="dr-config-panel__form"
+    :model="chartConfig"
+    label-width="60px"
+    size="small"
+    label-position="left"
+  >
+    <!-- 图表配置 -->
+  </el-form>
+</div>
 ```
 
 轴线、轴标签、刻度线、网格线、系列样式等三级配置应放在所属二级配置容器内部，使用单列表单项组织，label 放在表单组件左侧，详见“面板层级与布局”。
@@ -54,17 +64,51 @@ const chartConfig = computed(() => chart)
 
 常规笛卡尔坐标图表按以下顺序组织折叠面板：
 
-1. 全局配置
-2. X 轴
-3. Y 轴
-4. 图例
-5. 提示框
-6. 系列样式
-7. 动画
+1. X 轴
+2. Y 轴
+3. 图例
+4. 提示框
+5. 系列样式
+6. 动画
+7. 全局配置
 
-非笛卡尔图表可裁剪或替换轴配置，例如饼图使用「图形布局」「扇区样式」，仪表盘使用「仪表盘」「指针」「进度条」。但通用分组仍应放在前后固定位置：全局配置靠前，图例和提示框居中，动画靠后。
+非笛卡尔图表可裁剪或替换轴配置，例如饼图使用「图形布局」「扇区样式」，仪表盘使用「仪表盘」「指针」「进度条」。但通用分组仍应保持稳定位置：图例和提示框居中，动画靠后，全局配置放在最后。
 
-每个一级分组使用独立的 `el-collapse` 和 `el-collapse-item`，二级分组使用 `.dr-config-panel__sub-title`，不要把多个视觉层级堆在同一个表单项里。
+所有一级分组放在同一个 `el-collapse.dr-config-panel__section` 中，每个一级分组使用一个带稳定 `name` 的 `el-collapse-item`。不要为每个一级分组创建独立 `el-collapse`，否则会产生重复边框、额外间距和不必要的滚动高度。二级分组使用 `.dr-config-panel__sub-title`，不要把多个视觉层级堆在同一个表单项里。
+
+推荐结构：
+
+```vue
+<el-collapse class="dr-config-panel__section">
+  <el-collapse-item title="X 轴" name="xAxis">
+    <!-- X 轴配置 -->
+  </el-collapse-item>
+
+  <el-collapse-item title="Y 轴" name="yAxis">
+    <!-- Y 轴配置 -->
+  </el-collapse-item>
+
+  <el-collapse-item title="图例" name="legend">
+    <!-- 图例配置 -->
+  </el-collapse-item>
+
+  <el-collapse-item title="提示框" name="tooltip">
+    <!-- 提示框配置 -->
+  </el-collapse-item>
+
+  <el-collapse-item title="柱子样式" name="series">
+    <!-- 系列配置 -->
+  </el-collapse-item>
+
+  <el-collapse-item title="动画" name="animation">
+    <!-- 动画配置 -->
+  </el-collapse-item>
+
+  <el-collapse-item title="全局配置" name="global">
+    <!-- 图表边距等全局配置 -->
+  </el-collapse-item>
+</el-collapse>
+```
 
 ## 5. 面板层级与布局
 
@@ -91,7 +135,7 @@ const chartConfig = computed(() => chart)
 
 ```vue
 <el-collapse-item title="X 轴" name="xAxis">
-  <div class="dr-config-panel__section">
+  <div class="dr-config-panel__sub-section">
     <div class="dr-config-panel__sub-title">
       <span>轴线</span>
       <el-switch v-model="chartConfig.props.xAxis.axisLine.show" size="small"/>
@@ -99,7 +143,7 @@ const chartConfig = computed(() => chart)
     <!-- 轴线下的三级配置项 -->
   </div>
 
-  <div class="dr-config-panel__section">
+  <div class="dr-config-panel__sub-section">
     <div class="dr-config-panel__sub-title">
       <span>轴标签</span>
       <el-switch v-model="chartConfig.props.xAxis.axisLabel.show" size="small"/>
@@ -219,11 +263,27 @@ const chartConfig = computed(() => chart)
 }
 ```
 
+柱状图当前实现还需要在组件专属根类上收敛外层空隙，并让折叠面板边框色融入右侧配置面板背景：
+
+```scss
+.dr-bar-chart-config-panel {
+  --el-collapse-border-color: var(--el-bg-color);
+
+  padding: 0;
+}
+
+.dr-bar-chart-config-panel .dr-config-panel__section {
+  margin-bottom: 0;
+}
+```
+
+其他图表面板如果采用同一视觉效果，可使用自己的组件专属根类做等价处理；不要在全局样式中覆盖 Element Plus 折叠面板内部选择器。
+
 ## 6. 通用配置项
 
 ### 6.1 全局配置
 
-全局配置至少包含图表内边距：
+全局配置放在折叠面板最后，至少包含图表内边距：
 
 ```ts
 global: {
@@ -231,15 +291,25 @@ global: {
 }
 ```
 
-优先使用 `PaddingBoxEditor` 编辑 `[上, 右, 下, 左]` 四元组，并通过 computed 适配 `v-model`：
+当前柱状图参考实现不使用 `PaddingBoxEditor`，而是参考「柱子样式 -> 圆角」的单列配置方式，将 `[上, 右, 下, 左]` 四元组拆成 4 个三级配置项：
 
-```ts
-const globalPadding = computed<[number, number, number, number]>({
-  get: () => chartConfig.value.props.global.padding,
-  set: (value) => {
-    chartConfig.value.props.global.padding = value
-  },
-})
+```vue
+<el-collapse-item title="全局配置" name="global">
+  <div class="dr-config-panel__sub-title">图表边距</div>
+  <el-form-item class="dr-config-panel__sub-form-item">
+    <div class="dr-config-panel__sub-row">
+      <span class="dr-config-panel__sub-label">上边距</span>
+      <el-input-number
+        v-model="chartConfig.props.global.padding[0]"
+        class="dr-config-panel__control"
+        :min="0"
+        :max="200"
+        controls-position="right"
+      />
+    </div>
+  </el-form-item>
+  <!-- 右边距、下边距、左边距同理绑定 padding[1]、padding[2]、padding[3] -->
+</el-collapse-item>
 ```
 
 ### 6.2 坐标轴配置
@@ -351,7 +421,7 @@ animation: {
 | 数值 | `el-input-number` | 必须设置合理的 `min`、`max`、`step`，并使用 `controls-position="right"` |
 | 颜色 | `el-color-picker` | 默认开启 `show-alpha` |
 | 字符串 | `el-input` | 提供简短 placeholder，例如「可选」「如 30%」 |
-| 四方向间距 | `PaddingBoxEditor` | 用 computed 双向绑定四元组 |
+| 四方向间距 | 4 个 `el-input-number` | 按上、右、下、左顺序直接绑定四元组索引 |
 | 列表 | `v-for` + 操作按钮 | 删除按钮必须有最小数量保护 |
 
 字体、线型、缓动等常用选项应复用以下中文标签：
@@ -380,7 +450,7 @@ animation: {
 
 配置面板样式必须同时遵循 `docs/design/DESIGN.md`。图表面板只定义外层布局，不覆盖 Element Plus 默认视觉。
 
-- 面板根节点使用组件短横线命名，例如 `.dr-bar-chart-panel`。
+- 面板根节点使用 `.dr-config-panel` + 组件专属类，例如 `.dr-bar-chart-config-panel`。
 - 通用配置面板布局类优先放在 `data-room-ui/src/dataroom-packages/assets/styles/chartConfigPanel.scss`，各图表面板按需引入并使用统一类名。
 - 允许在业务样式中控制外层容器的 `display`、`grid-template-columns`、`gap`、`padding`、`margin`、`overflow`、`width` 等布局属性。
 - 允许使用 Element Plus CSS 变量设置项目自定义容器、说明文字、分割线和状态文本的颜色。
@@ -389,12 +459,55 @@ animation: {
 - 禁止写硬编码颜色、`--dr-*` 颜色变量、`box-shadow` 边框替代方案和负字距。
 - 二级标题和三级配置项自定义 label 使用 Element Plus 文本变量，例如 `var(--el-text-color-primary)`、`var(--el-text-color-secondary)`。
 
+### 9.1 右侧公共配置面板约束
+
+图表专属面板渲染在 `data-room-ui/src/dataroom-packages/_components/ControlPanel.vue` 的「样式」Tab 内。公共右侧面板应保持以下行为：
+
+- 「样式」「数据」「交互」三个 Tab 固定在顶部，不随内容滚动。
+- 只有当前 Tab 的 `.tab-content` 允许纵向滚动。
+- 右侧面板、Tabs 容器、Tab 内容区必须使用 `min-width: 0` 和 `overflow-x: hidden` 防止 1px 级横向滚动条。
+- `el-tabs__header` 使用 `var(--el-fill-color-light)` 作为背景，并保留左侧 `var(--space-4)` 偏移，使 Tab 标题从左侧 16px 开始。
+- 公共面板可在自身作用域内隐藏 Element Plus Tabs 的默认 header 分隔线和 active bar，以保持当前右侧面板视觉效果；不要在图表组件里重复处理 Tabs 样式。
+
+当前公共面板关键结构：
+
+```scss
+.dr-control-panel {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.control-tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+.tab-content {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+```
+
 ## 10. 新增图表面板检查清单
 
 - `install.ts` 中已声明完整 `PropsInterface` 和默认值
 - `panel/index.vue` 的 `chart` prop 类型使用该组件的 `ChartConfig`
 - 面板根类、组件名、表单属性符合规范
 - 通用分组顺序一致，图表专属分组命名清晰
+- 一级配置项位于同一个 `el-collapse.dr-config-panel__section` 内，`el-collapse-item` 有稳定 `name`
 - 一级配置、二级配置、三级配置项层级清晰，例如「X 轴 -> 轴标签 -> 大小/颜色/偏移量」
 - 三级配置项放在所属二级配置区域内部，采用单列布局，一行只放 1 个配置项
 - 三级配置项 label 放在表单组件左侧，使用 `.dr-config-panel__sub-label` 时不写内联样式
@@ -406,4 +519,5 @@ animation: {
 - 所有控件都直接写回 `chart.props`
 - 未覆盖 Element Plus 内部样式，未使用硬编码颜色、`--dr-*` 颜色变量、`!important` 或负字距
 - 样式只作用于当前面板根类
+- 面板没有引入横向滚动；长内容只在 Tab 内容区纵向滚动，顶部 Tabs 保持固定
 - 修改后至少运行 `npm run type-check`；涉及样式或交互时再运行 `npm run lint` 并在设计器中目视验证

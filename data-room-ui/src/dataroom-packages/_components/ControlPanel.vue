@@ -491,20 +491,31 @@ const triggerAutoRefresh = () => {
 
 <style scoped lang="scss">
 .dr-control-panel {
+  box-sizing: border-box;
   width: 100%;
+  min-width: 0;
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background: var(--el-bg-color);
   border-left: 1px solid var(--el-border-color);
 
   .control-tabs {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
     flex: 1;
     min-height: 0;
 
     .tab-content {
+      box-sizing: border-box;
       padding: var(--space-4);
-      height: calc(100vh - 120px);
+      height: 100%;
+      min-height: 0;
+      overflow-x: hidden;
       overflow-y: auto;
       background: var(--el-bg-color);
 
@@ -517,6 +528,33 @@ const triggerAutoRefresh = () => {
       .fields-binding-form {
         width: 100%;
       }
+    }
+
+    :deep(> .el-tabs__header .el-tabs__nav-wrap::after) {
+      content: none;
+    }
+
+    :deep(> .el-tabs__header .el-tabs__active-bar) {
+      display: none;
+    }
+
+    :deep(> .el-tabs__header) {
+      flex: 0 0 auto;
+      box-sizing: border-box;
+      padding-left: var(--space-4);
+      background: var(--el-fill-color-light);
+    }
+
+    :deep(> .el-tabs__content) {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    :deep(> .el-tabs__content > .el-tab-pane) {
+      height: 100%;
+      min-width: 0;
+      overflow-x: hidden;
     }
 
     .dr-collapse {

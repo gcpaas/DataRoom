@@ -608,7 +608,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="right-panel" :style="rightControlPanelStyle">
-        <el-scrollbar>
+        <el-scrollbar wrap-style="overflow: hidden;" view-style="max-width: 100%; height: 100%; overflow: hidden;">
           <template v-if="rightControlPanelSetting">
             <VisualScreenControlPanel :basicConfig="basicConfig"/>
           </template>
@@ -795,6 +795,9 @@ onMounted(() => {
     }
 
     & .right-panel {
+      box-sizing: border-box;
+      min-width: 0;
+      overflow: hidden;
       background-color: var(--dr-white);
       box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.08);
       height: 100vh;
