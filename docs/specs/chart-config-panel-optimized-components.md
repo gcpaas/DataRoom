@@ -5,3 +5,6 @@ DrGauge
 DrAreaChart
 DrHorizontalBarChart
 DrPieChart
+DrBubbleChart
+DrWordCloud
+DrProgressBar
