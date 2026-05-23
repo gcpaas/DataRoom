@@ -407,7 +407,7 @@ const buildOption = (): echarts.EChartsOption => {
       }]
     : []
 
-  return {
+  const option: echarts.EChartsOption = {
     tooltip: {
       show: props.tooltip.show,
       trigger: props.tooltip.trigger,
@@ -422,7 +422,7 @@ const buildOption = (): echarts.EChartsOption => {
         if (item.seriesName === '标记点' && Array.isArray(item.value)) {
           return `${item.name}: ${item.value[2]}`
         }
-        return `${item.name || ''}: ${Array.isArray(item.value) ? item.value[2] : item.value ?? '-'}`
+        return item.name || ''
       },
     },
     geo: {
@@ -434,8 +434,12 @@ const buildOption = (): echarts.EChartsOption => {
         borderColor: 'transparent',
       },
     },
-    visualMap: {
-      show: props.visualMap.show,
+    series: [mapSeries, ...markerSeries, ...lineSeries] as never,
+  }
+
+  if (props.visualMap.show) {
+    option.visualMap = {
+      show: true,
       type: 'piecewise',
       orient: props.visualMap.orient,
       left: 12,
@@ -445,9 +449,10 @@ const buildOption = (): echarts.EChartsOption => {
         color: props.visualMap.colors,
       },
       textStyle: props.visualMap.textStyle,
-    },
-    series: [mapSeries, ...markerSeries, ...lineSeries] as never,
+    }
   }
+
+  return option
 }
 
 const updateChart = async () => {

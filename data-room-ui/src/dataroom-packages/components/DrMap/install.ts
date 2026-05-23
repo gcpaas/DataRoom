@@ -170,23 +170,23 @@ const getInstance = (): DrMapConfig => {
         onlineFeatures: ['bg', 'point', 'road', 'building'],
       },
       regionStyle: {
-        areaGradient: ['rgba(147, 235, 248, 0)', 'rgba(147, 235, 248, 0.12)'],
-        borderColor: '#93EBF8',
+        areaGradient: ['#e0ecff', '#e0ecff'],
+        borderColor: '#7babea',
         borderWidth: 1,
-        shadowColor: 'rgba(128, 217, 248, 0.26)',
-        shadowBlur: 10,
-        shadowOffset: [-2, 2],
+        shadowColor: 'transparent',
+        shadowBlur: 0,
+        shadowOffset: [0, 0],
       },
       regionLabel: {
         show: true,
-        fontSize: 12,
-        color: '#FFFFFF',
+        fontSize: 10,
+        color: '#333333',
       },
       emphasis: {
         disabled: false,
-        areaColor: '#389BB7',
+        areaColor: '#4d90e8',
         borderWidth: 1,
-        shadowColor: '#389BB7',
+        shadowColor: 'transparent',
         label: {
           fontSize: 12,
           color: '#FFFFFF',
@@ -222,7 +222,7 @@ const getInstance = (): DrMapConfig => {
           brushType: 'fill',
         },
         label: {
-          show: true,
+          show: false,
           position: 'bottom',
           fontSize: 11,
           color: '#FFFFFF',
@@ -246,11 +246,11 @@ const getInstance = (): DrMapConfig => {
       tooltip: {
         show: true,
         trigger: 'item',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        borderColor: 'rgba(147, 235, 248, 0.8)',
+        backgroundColor: '#FFFFFF',
+        borderColor: '#FFFFFF',
         textStyle: {
           fontSize: 12,
-          color: '#FFFFFF',
+          color: '#333333',
         },
       },
       backControl: {
