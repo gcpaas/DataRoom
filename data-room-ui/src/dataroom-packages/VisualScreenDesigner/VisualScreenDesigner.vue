@@ -2,7 +2,7 @@
 import {getComponent, getComponentInstance, getPanelComponent,} from '@/dataroom-packages/components/AutoInstall.ts'
 import {type Component, computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onMounted, provide, reactive, ref, shallowRef} from 'vue'
 import {debounce} from 'lodash'
-import Moveable, {type OnClick, type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd,} from 'vue3-moveable'
+import Moveable, {type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd,} from 'vue3-moveable'
 import {VueSelecto} from 'vue3-selecto'
 import {deleteChartById, extractPositionFromTransform, getChartByElement, getChartById, getResourceUrl} from '@/dataroom-packages/_common/_utils.ts'
 import VanillaSelecto from 'selecto'
@@ -115,7 +115,7 @@ const leftToolBarList: Array<LeftToolBar> = reactive([
 ])
 // 激活的左侧工具条项
 const activeLeftToolBar = ref<LeftToolBar>(leftToolBarList[1]!)
-const leftToolPanelShow = ref(false)
+const leftToolPanelShow = ref(true)
 const rightControlPanelShow = ref(true)
 
 // 弹框显示状态（素材、变量）
@@ -265,29 +265,12 @@ const onSave = () => {
       basicConfig: basicConfig.value,
       globalVariableList: globalVariable.value
     }
-  }).then((res) => {
+  }).then(() => {
     ElMessage({
       message: '保存成功',
       type: 'success',
     })
   })
-}
-
-/**
- * 顶部导航按钮点击处理
- * 组件/素材/变量：弹框显示
- */
-const onHeaderToolClick = (toolBar: LeftToolBar) => {
-  switch (toolBar.componentName) {
-    case 'ComponentLib':
-      break
-    case 'ResourceLib':
-      resourceLibDialogVisible.value = true
-      break
-    case 'GlobalVariable':
-      globalVariableDialogVisible.value = true
-      break
-  }
 }
 
 /**
