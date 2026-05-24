@@ -23,6 +23,11 @@ import {DrFullScreenPlugin} from '@/dataroom-packages/components/DrFullScreen/pl
 import {DrMapPlugin} from '@/dataroom-packages/components/DrMap/plugin.ts'
 import {DrBorderPlugin} from '@/dataroom-packages/components/DrBorder/plugin.ts'
 import {DrDecorationPlugin} from '@/dataroom-packages/components/DrDecoration/plugin.ts'
+import {DrMetricCardPlugin} from '@/dataroom-packages/components/DrMetricCard/plugin.ts'
+import {DrTrendMetricCardPlugin} from '@/dataroom-packages/components/DrTrendMetricCard/plugin.ts'
+import {DrPeriodCompareCardPlugin} from '@/dataroom-packages/components/DrPeriodCompareCard/plugin.ts'
+import {DrDataTablePlugin} from '@/dataroom-packages/components/DrDataTable/plugin.ts'
+import {DrAnalysisTablePlugin} from '@/dataroom-packages/components/DrAnalysisTable/plugin.ts'
 import type {ComponentLibTagInterface} from "@/dataroom-packages/PageDesigner/type/ComponentLibTagInterface.ts";
 import {ComponentLibTagTypeConst} from "@/dataroom-packages/constant/ComponentLibTagTypeConst.ts";
 
@@ -54,6 +59,14 @@ const componentLibTagList: ComponentLibTagInterface[] = [
   {
     name: '仪表盘',
     tag: ComponentLibTagTypeConst.GAUGE
+  },
+  {
+    name: '指标卡',
+    tag: ComponentLibTagTypeConst.METRIC
+  },
+  {
+    name: '表格',
+    tag: ComponentLibTagTypeConst.TABLE
   },
   {
     name: '文本',
@@ -92,6 +105,11 @@ const pluginList = [
   new DrWordCloudPlugin([ComponentLibTagTypeConst.TEXT]),
   new DrGaugePlugin([ComponentLibTagTypeConst.GAUGE]),
   new DrProgressBarPlugin([ComponentLibTagTypeConst.GAUGE]),
+  new DrMetricCardPlugin([ComponentLibTagTypeConst.METRIC]),
+  new DrTrendMetricCardPlugin([ComponentLibTagTypeConst.METRIC]),
+  new DrPeriodCompareCardPlugin([ComponentLibTagTypeConst.METRIC]),
+  new DrDataTablePlugin([ComponentLibTagTypeConst.TABLE]),
+  new DrAnalysisTablePlugin([ComponentLibTagTypeConst.TABLE]),
   new DrInputPlugin([ComponentLibTagTypeConst.FORM]),
   new DrSelectPlugin([ComponentLibTagTypeConst.FORM]),
   new DrRadioPlugin([ComponentLibTagTypeConst.FORM]),

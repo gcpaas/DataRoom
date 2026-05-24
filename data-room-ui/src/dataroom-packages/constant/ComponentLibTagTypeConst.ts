@@ -31,6 +31,14 @@ export enum ComponentLibTagTypeConst {
    */
   GAUGE = 'gauge',
   /**
+   * 指标卡
+   */
+  METRIC = 'metric',
+  /**
+   * 表格
+   */
+  TABLE = 'table',
+  /**
    * 地图
    */
   MAP = 'map',
