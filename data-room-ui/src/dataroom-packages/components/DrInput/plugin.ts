@@ -1,9 +1,9 @@
 import thumbnail from './images/input.png'
 import {ChartPlugin} from "@/dataroom-packages/components/type/ChartPlugin.ts"
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts"
 
 export class DrInputPlugin extends ChartPlugin {
   constructor(tags: string[]) {
-    super(DrConst.THIS_PLUGIN_TYPE, '输入框', '输入框、input、表单、搜索', thumbnail, tags)
+    // 组件类型需与当前组件目录名保持一致
+    super('DrInput', '输入框', '输入框、input、表单、搜索', thumbnail, tags)
   }
 }

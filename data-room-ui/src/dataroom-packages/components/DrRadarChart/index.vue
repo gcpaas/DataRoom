@@ -1,9 +1,9 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts"
 
 export default defineComponent({
-  name: DrConst.THIS_PLUGIN_TYPE,
+  // 组件类型需与当前组件目录名保持一致
+  name: 'DrRadarChart',
 })
 </script>
 <script setup lang="ts">

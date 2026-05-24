@@ -2,6 +2,7 @@
 import {defineComponent} from 'vue'
 
 export default defineComponent({
+  // 组件类型需与当前组件目录名保持一致
   name: 'DrModel3D',
 })
 </script>

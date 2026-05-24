@@ -1,7 +1,6 @@
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
 import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts"
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts"
 import type {Behavior} from "@/dataroom-packages/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataroom-packages/components/type/ChartDatasetField.ts"
 
@@ -77,7 +76,8 @@ export type DrInputConfig = ChartConfig<DrInputPropsInterface>
  */
 const getInstance = (): DrInputConfig => {
   return createChartConfig<DrInputPropsInterface>(
-    DrConst.THIS_PLUGIN_TYPE,
+    // 组件类型需与当前组件目录名保持一致
+    'DrInput',
     {
       basic: {
         placeholder: '请输入内容',

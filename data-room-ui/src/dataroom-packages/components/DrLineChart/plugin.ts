@@ -1,9 +1,9 @@
 import thumbnail from './images/line-chart.png'
 import {ChartPlugin} from "@/dataroom-packages/components/type/ChartPlugin.ts"
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts"
 
 export class DrLineChartPlugin extends ChartPlugin {
   constructor(tags: string[]) {
-    super(DrConst.THIS_PLUGIN_TYPE, '折线图', '折线图、line、曲线图、趋势图', thumbnail, tags)
+    // 组件类型需与当前组件目录名保持一致
+    super('DrLineChart', '折线图', '折线图、line、曲线图、趋势图', thumbnail, tags)
   }
 }

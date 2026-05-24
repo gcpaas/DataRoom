@@ -1,9 +1,9 @@
 import thumbnail from './images/select.png'
 import {ChartPlugin} from "@/dataroom-packages/components/type/ChartPlugin.ts"
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts"
 
 export class DrSelectPlugin extends ChartPlugin {
   constructor(tags: string[]) {
-    super(DrConst.THIS_PLUGIN_TYPE, '下拉框', '下拉框、select、下拉选择、筛选', thumbnail, tags)
+    // 组件类型需与当前组件目录名保持一致
+    super('DrSelect', '下拉框', '下拉框、select、下拉选择、筛选', thumbnail, tags)
   }
 }
