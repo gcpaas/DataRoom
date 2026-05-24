@@ -22,7 +22,7 @@ export default defineConfigWithVueTs(
     },
   },
 
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', 'src/dataroom-packages/datav/**']),
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
