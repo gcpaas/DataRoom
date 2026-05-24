@@ -20,6 +20,7 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
     AutoImport({
+      imports: ['vue'],
       resolvers: [ElementPlusResolver({importStyle: 'sass'})],
     }),
     Components({
