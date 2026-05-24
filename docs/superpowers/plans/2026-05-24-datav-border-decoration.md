@@ -159,6 +159,56 @@ git commit -m "feat: import datav visual assets"
 
 ---
 
+### Task 2.5: 隔离 DataV 第三方源码类型检查
+
+**文件：**
+- 修改：`data-room-ui/tsconfig.app.json`
+
+- [ ] **步骤 1: 将 DataV 第三方素材目录排除出 vue-tsc 全量扫描**
+
+修改 `data-room-ui/tsconfig.app.json`，让 `exclude` 包含 `src/dataroom-packages/datav/**`：
+
+```json
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "exclude": ["src/**/__tests__/*", "src/dataroom-packages/datav/**"],
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+预期：`datav` 目录作为第三方素材源码保留，不参与 DataRoom 的全量类型检查。后续 `DrBorder` 和 `DrDecoration` 必须通过 `import.meta.glob` 按需加载 DataV 组件，避免显式静态导入把整个第三方源码重新纳入类型检查。
+
+- [ ] **步骤 2: 执行类型检查**
+
+运行：
+
+```bash
+cd data-room-ui
+npm run type-check
+```
+
+预期：命令退出码为 `0`。
+
+- [ ] **步骤 3: 提交类型检查隔离配置**
+
+运行：
+
+```bash
+git add data-room-ui/tsconfig.app.json
+git commit -m "build: exclude datav assets from type checking"
+```
+
+预期：创建一个只包含 `tsconfig.app.json` 的提交。
+
+---
+
 ### Task 3: 创建边框配置元数据
 
 **文件：**
@@ -360,32 +410,26 @@ export default defineComponent({
 </script>
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from 'vue'
-import type { Component } from 'vue'
+import type { AsyncComponentLoader, Component } from 'vue'
 import type { DrBorderConfig } from './install.ts'
-import { buildBorderDatavProps, normalizeBorderType, type DrBorderType } from './options.ts'
+import { buildBorderDatavProps, defaultBorderType, normalizeBorderType, type DrBorderType } from './options.ts'
 
 const { chart } = defineProps<{
   chart: DrBorderConfig
 }>()
 
-const borderComponentMap: Record<DrBorderType, Component> = {
-  BorderBox1: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox1/src/BorderBox1')),
-  BorderBox2: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox2/src/BorderBox2')),
-  BorderBox3: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox3/src/BorderBox3')),
-  BorderBox4: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox4/src/BorderBox4')),
-  BorderBox5: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox5/src/BorderBox5')),
-  BorderBox6: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox6/src/BorderBox6')),
-  BorderBox7: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox7/src/BorderBox7')),
-  BorderBox8: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox8/src/BorderBox8')),
-  BorderBox9: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox9/src/BorderBox9')),
-  BorderBox10: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox10/src/BorderBox10')),
-  BorderBox11: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox11/src/BorderBox11')),
-  BorderBox12: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox12/src/BorderBox12')),
-  BorderBox13: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox13/src/BorderBox13')),
+const borderModules = import.meta.glob<Component>('../../datav/components/BorderBox*/src/BorderBox*.tsx', {
+  import: 'default',
+})
+
+const getBorderLoader = (borderType: DrBorderType): AsyncComponentLoader<Component> => {
+  const path = `../../datav/components/${borderType}/src/${borderType}.tsx`
+  const defaultPath = `../../datav/components/${defaultBorderType}/src/${defaultBorderType}.tsx`
+  return (borderModules[path] || borderModules[defaultPath]) as AsyncComponentLoader<Component>
 }
 
 const currentBorderType = computed(() => normalizeBorderType(chart.props.borderType))
-const currentComponent = computed(() => borderComponentMap[currentBorderType.value])
+const currentComponent = computed(() => defineAsyncComponent(getBorderLoader(currentBorderType.value)))
 const currentDatavProps = computed(() => buildBorderDatavProps(chart.props))
 </script>
 
@@ -808,31 +852,26 @@ export default defineComponent({
 </script>
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from 'vue'
-import type { Component } from 'vue'
+import type { AsyncComponentLoader, Component } from 'vue'
 import type { DrDecorationConfig } from './install.ts'
-import { buildDecorationDatavProps, normalizeDecorationType, type DrDecorationType } from './options.ts'
+import { buildDecorationDatavProps, defaultDecorationType, normalizeDecorationType, type DrDecorationType } from './options.ts'
 
 const { chart } = defineProps<{
   chart: DrDecorationConfig
 }>()
 
-const decorationComponentMap: Record<DrDecorationType, Component> = {
-  Decoration1: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration1/src/index.vue')),
-  Decoration2: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration2/src/index.vue')),
-  Decoration3: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration3/src/index.vue')),
-  Decoration4: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration4/src/index.vue')),
-  Decoration5: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration5/src/index.vue')),
-  Decoration6: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration6/src/index.vue')),
-  Decoration7: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration7/src/index.vue')),
-  Decoration8: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration8/src/index.vue')),
-  Decoration9: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration9/src/index.vue')),
-  Decoration10: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration10/src/index.vue')),
-  Decoration11: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration11/src/index.vue')),
-  Decoration12: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration12/src/index.vue')),
+const decorationModules = import.meta.glob<Component>('../../datav/components/Decoration*/src/index.vue', {
+  import: 'default',
+})
+
+const getDecorationLoader = (decorationType: DrDecorationType): AsyncComponentLoader<Component> => {
+  const path = `../../datav/components/${decorationType}/src/index.vue`
+  const defaultPath = `../../datav/components/${defaultDecorationType}/src/index.vue`
+  return (decorationModules[path] || decorationModules[defaultPath]) as AsyncComponentLoader<Component>
 }
 
 const currentDecorationType = computed(() => normalizeDecorationType(chart.props.decorationType))
-const currentComponent = computed(() => decorationComponentMap[currentDecorationType.value])
+const currentComponent = computed(() => defineAsyncComponent(getDecorationLoader(currentDecorationType.value)))
 const currentDatavProps = computed(() => buildDecorationDatavProps(chart.props))
 </script>
 
