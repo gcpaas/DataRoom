@@ -7,14 +7,10 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 import ElementPlus from 'unplugin-element-plus/vite'
-import {ReplaceThisPluginType} from './ReplaceThisPluginType'
 
 // https://vite.dev/config/
 export default defineConfig({
   base: './',
-  define: {
-    __THIS_PLUGIN_TYPE__: JSON.stringify(process.env.THIS_PLUGIN_TYPE || ''),
-  },
   plugins: [
     vue(),
     vueJsx(),
@@ -27,7 +23,6 @@ export default defineConfig({
       resolvers: [ElementPlusResolver({importStyle: 'sass'})]
     }),
     ElementPlus({useSource: true}),
-    ReplaceThisPluginType(),
   ],
   resolve: {
     alias: {
