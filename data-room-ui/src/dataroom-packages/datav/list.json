@@ -1,0 +1,285 @@
+[
+  {
+    "compType": "Other",
+    "compName": "Button",
+    "compZhName": "按钮",
+    "compDesc": "按钮组件",
+    "compClassName": "button"
+  },
+  {
+    "compType": "Other",
+    "compName": "ConicalColumnChart",
+    "compZhName": "锥形柱图",
+    "compDesc": "锥形柱图",
+    "compClassName": "conical-column-chart"
+  },
+  {
+    "compType": "Other",
+    "compName": "PercentPond",
+    "compZhName": "进度池",
+    "compDesc": "进度池",
+    "compClassName": "percent-pond"
+  },
+  {
+    "compType": "Other",
+    "compName": "WaterLevelPond",
+    "compZhName": "水位图",
+    "compDesc": "水位图",
+    "compClassName": "water-level-pond"
+  },
+  {
+    "compType": "Other",
+    "compName": "Loading",
+    "compZhName": "加载",
+    "compDesc": "加载",
+    "compClassName": "loading"
+  },
+  {
+    "compType": "Other",
+    "compName": "FlylineChartEnhanced",
+    "compZhName": "飞线图增强版",
+    "compDesc": "飞线图增强版",
+    "compClassName": "flyline-chart-enhanced"
+  },
+  {
+    "compType": "Other",
+    "compName": "FlylineChart",
+    "compZhName": "飞线图",
+    "compDesc": "飞线图",
+    "compClassName": "flyline-chart"
+  },
+  {
+    "compType": "Other",
+    "compName": "ScrollRankingBoard",
+    "compZhName": "排名轮播表",
+    "compDesc": "排名轮播表",
+    "compClassName": "scroll-ranking-board"
+  },
+  {
+    "compType": "Other",
+    "compName": "ScrollBoard",
+    "compZhName": "轮播表",
+    "compDesc": "轮播表",
+    "compClassName": "scroll-board"
+  },
+  {
+    "compType": "Other",
+    "compName": "Charts",
+    "compZhName": "图表",
+    "compDesc": "图表",
+    "compClassName": "charts"
+  },
+  {
+    "compType": "Other",
+    "compName": "CapsuleChart",
+    "compZhName": "胶囊柱图",
+    "compDesc": "胶囊柱图",
+    "compClassName": "capsule-chart"
+  },
+  {
+    "compType": "Other",
+    "compName": "ActiveRingChart",
+    "compZhName": "动态环图",
+    "compDesc": "动态环图",
+    "compClassName": "active-ring-chart"
+  },
+  {
+    "compType": "Other",
+    "compName": "DigitalFlop",
+    "compZhName": "数字翻牌器",
+    "compDesc": "数字翻牌器",
+    "compClassName": "digital-flop"
+  },
+  {
+    "compType": "Other",
+    "compName": "FullScreenContainer",
+    "compZhName": "全屏容器",
+    "compDesc": "全屏容器",
+    "compClassName": "full-screen-container"
+  },
+  {
+    "compType": "Decoration",
+    "children": [
+      {
+        "compType": "Decoration",
+        "compName": "Decoration1",
+        "compZhName": "装饰1",
+        "compDesc": "装饰-1",
+        "compClassName": "decoration1"
+      },
+      {
+        "compType": "Decoration",
+        "compName": "Decoration2",
+        "compZhName": "装饰2",
+        "compDesc": "装饰2组件",
+        "compClassName": "decoration2"
+      },
+      {
+        "compType": "Decoration",
+        "compName": "Decoration3",
+        "compZhName": "装饰3",
+        "compDesc": "装饰3",
+        "compClassName": "decoration3"
+      },
+      {
+        "compType": "Decoration",
+        "compName": "Decoration4",
+        "compZhName": "装饰4",
+        "compDesc": "装饰4",
+        "compClassName": "decoration4"
+      },
+      {
+        "compType": "Decoration",
+        "compName": "Decoration5",
+        "compZhName": "装饰5",
+        "compDesc": "装饰5",
+        "compClassName": "decoration5"
+      },
+      {
+        "compType": "Decoration",
+        "compName": "Decoration6",
+        "compZhName": "装饰6",
+        "compDesc": "装饰6",
+        "compClassName": "decoration6"
+      },
+      {
+        "compType": "Decoration",
+        "compName": "Decoration7",
+        "compZhName": "装饰7",
+        "compDesc": "装饰7",
+        "compClassName": "decoration7"
+      },
+      {
+        "compType": "Decoration",
+        "compName": "Decoration8",
+        "compZhName": "装饰8",
+        "compDesc": "装饰8",
+        "compClassName": "decoration8"
+      },
+      {
+        "compType": "Decoration",
+        "compName": "Decoration9",
+        "compZhName": "装饰9",
+        "compDesc": "装饰9",
+        "compClassName": "decoration9"
+      },
+      {
+        "compType": "Decoration",
+        "compName": "Decoration10",
+        "compZhName": "装饰10",
+        "compDesc": "装饰10",
+        "compClassName": "decoration10"
+      },
+      {
+        "compType": "Decoration",
+        "compName": "Decoration11",
+        "compZhName": "装饰11",
+        "compDesc": "装饰11",
+        "compClassName": "decoration11"
+      },
+      {
+        "compType": "Decoration",
+        "compName": "Decoration12",
+        "compZhName": "装饰12",
+        "compDesc": "装饰12",
+        "compClassName": "decoration12"
+      }
+    ]
+  },
+  {
+    "compType": "Border",
+    "children": [
+      {
+        "compType": "Border",
+        "compName": "BorderBox1",
+        "compZhName": "边框1",
+        "compDesc": "边框1",
+        "compClassName": "border-box1"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox2",
+        "compZhName": "边框2",
+        "compDesc": "边框2",
+        "compClassName": "border-box2"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox3",
+        "compZhName": "边框3",
+        "compDesc": "边框3",
+        "compClassName": "border-box3"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox4",
+        "compZhName": "边框4",
+        "compDesc": "边框4",
+        "compClassName": "border-box4"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox5",
+        "compZhName": "边框5",
+        "compDesc": "边框5",
+        "compClassName": "border-box5"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox6",
+        "compZhName": "边框6",
+        "compDesc": "边框6",
+        "compClassName": "border-box6"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox7",
+        "compZhName": "边框7",
+        "compDesc": "边框7",
+        "compClassName": "border-box7"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox8",
+        "compZhName": "边框8",
+        "compDesc": "边框8",
+        "compClassName": "border-box8"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox9",
+        "compZhName": "边框9",
+        "compDesc": "边框9",
+        "compClassName": "border-box9"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox10",
+        "compZhName": "边框10",
+        "compDesc": "边框10",
+        "compClassName": "border-box10"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox11",
+        "compZhName": "边框11",
+        "compDesc": "边框11",
+        "compClassName": "border-box11"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox12",
+        "compZhName": "边框12",
+        "compDesc": "边框12",
+        "compClassName": "border-box12"
+      },
+      {
+        "compType": "Border",
+        "compName": "BorderBox13",
+        "compZhName": "边框13",
+        "compDesc": "边框13",
+        "compClassName": "border-box13"
+      }
+    ]
+  }
+]
