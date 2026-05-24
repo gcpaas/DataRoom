@@ -10,7 +10,7 @@ export function randomExtend(minNum: number, maxNum: number) {
 }
 
 export function debounce<T>(delay: number, callback: (...args: T[]) => void, vm: T) {
-  let lastTime: NodeJS.Timeout
+  let lastTime: ReturnType<typeof setTimeout> | undefined
   return function () {
     clearTimeout(lastTime)
     lastTime = setTimeout(() => {
@@ -28,10 +28,12 @@ export function observerDomResize(dom: HTMLElement, callback: () => void) {
   return observer
 }
 
-export function getPointDistance(pointOne: number[], pointTwo: number[]) {
-  const minusX = Math.abs(pointOne[0] - pointTwo[0])
+export function getPointDistance(pointOne: readonly [number, number], pointTwo: readonly [number, number]) {
+  const [pointOneX, pointOneY] = pointOne
+  const [pointTwoX, pointTwoY] = pointTwo
+  const minusX = Math.abs(pointOneX - pointTwoX)
 
-  const minusY = Math.abs(pointOne[1] - pointTwo[1])
+  const minusY = Math.abs(pointOneY - pointTwoY)
 
   return Math.sqrt(minusX * minusX + minusY * minusY)
 }
@@ -45,7 +47,7 @@ export function getPointDistance(pointOne: number[], pointTwo: number[]) {
  * @return {Array} Postion of point
  */
 
-export function getCircleRadianPoint(x: number, y: number, radius: number, radian: number) {
+export function getCircleRadianPoint(x: number, y: number, radius: number, radian: number): [number, number] {
   return [x + Math.cos(radian) * radius, y + Math.sin(radian) * radius]
 }
 
@@ -69,12 +71,16 @@ function getTwoPointDistance(pointOne: Point, pointTwo: Point) {
 }
 
 export function getPolylineLength(points: Array<Point>) {
-  const lineSegments = Array.from({ length: points.length - 1 }).fill(0).map((foo, i) => {
-    return [points[i], points[i + 1]]
-  })
-  const lengths = lineSegments.map((item) => {
-    return getTwoPointDistance(item[0], item[1])
-  })
+  const lengths: number[] = []
+
+  for (let i = 1; i < points.length; i++) {
+    const pointOne = points[i - 1]
+    const pointTwo = points[i]
+
+    if (pointOne && pointTwo)
+      lengths.push(getTwoPointDistance(pointOne, pointTwo))
+  }
+
   return mulAdd(lengths)
 }
 
