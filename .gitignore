@@ -1,6 +1,7 @@
 .claude
 CLAUDE.md
 RELEASE
+.worktrees/
 dataRoomFront
 dataRoomResource
 dataroom.mv.db
@@ -597,4 +598,3 @@ node_modules/
 dist/
 npm-debug.log
 yarn-error.log
-
