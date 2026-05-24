@@ -18,14 +18,37 @@ export function debounce<T>(delay: number, callback: (...args: T[]) => void, vm:
     }, delay)
   }
 }
-export function observerDomResize(dom: HTMLElement, callback: () => void) {
-  const MutationObserver = window.MutationObserver
+export interface DomResizeObserver {
+  disconnect: () => void
+  takeRecords: () => MutationRecord[]
+}
 
-  const observer = new MutationObserver(callback)
+export function observerDomResize(dom: HTMLElement, callback: () => void): DomResizeObserver {
+  const observers: Array<{
+    disconnect: () => void
+    takeRecords?: () => MutationRecord[]
+  }> = []
 
-  observer.observe(dom, { attributes: true, attributeFilter: ['style'], attributeOldValue: true })
+  if (window.ResizeObserver) {
+    const resizeObserver = new ResizeObserver(callback)
+    resizeObserver.observe(dom)
+    observers.push(resizeObserver)
+  }
 
-  return observer
+  if (window.MutationObserver) {
+    const mutationObserver = new MutationObserver(callback)
+    mutationObserver.observe(dom, { attributes: true, attributeFilter: ['style'], attributeOldValue: true })
+    observers.push(mutationObserver)
+  }
+
+  return {
+    disconnect: () => {
+      observers.forEach(observer => observer.disconnect())
+    },
+    takeRecords: () => {
+      return observers.flatMap(observer => observer.takeRecords?.() || [])
+    },
+  }
 }
 
 export function getPointDistance(pointOne: readonly [number, number], pointTwo: readonly [number, number]) {

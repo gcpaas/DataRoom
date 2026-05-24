@@ -1,15 +1,16 @@
 import type { Ref } from 'vue'
 import { useDebounceFn, useEventListener } from '@vueuse/core'
 import { nextTick, onActivated, onDeactivated, onMounted, onUnmounted, ref } from 'vue'
-import { observerDomResize } from './index'
+import { type DomResizeObserver, observerDomResize } from './index'
 
 function autoResize(dom: Ref<HTMLElement | null>, onResize?: () => void, afterAutoResizeMixinInit?: () => void) {
   const width = ref(0)
   const height = ref(0)
 
   let debounceInitWHFun: () => void
-  let domObserver: MutationObserver | null = null
+  let domObserver: DomResizeObserver | null = null
   let domHtml: HTMLElement | null = null
+  let stopWindowResizeListener: (() => void) | null = null
 
   const initWH = (resize = true) => {
     return new Promise((resolve) => {
@@ -34,17 +35,24 @@ function autoResize(dom: Ref<HTMLElement | null>, onResize?: () => void, afterAu
     debounceInitWHFun = useDebounceFn(initWH, 200)
   }
   const bindDomResizeCallback = () => {
-    domObserver = observerDomResize(domHtml!, debounceInitWHFun)
-
-    useEventListener(window, 'resize', debounceInitWHFun)
-  }
-  const unbindDomResizeCallback = () => {
-    if (!domObserver)
+    if (!domHtml)
       return
 
-    domObserver.disconnect()
-    domObserver.takeRecords()
-    domObserver = null
+    unbindDomResizeCallback()
+    domObserver = observerDomResize(domHtml, debounceInitWHFun)
+    stopWindowResizeListener = useEventListener(window, 'resize', debounceInitWHFun)
+  }
+  const unbindDomResizeCallback = () => {
+    if (domObserver) {
+      domObserver.disconnect()
+      domObserver.takeRecords()
+      domObserver = null
+    }
+
+    if (stopWindowResizeListener) {
+      stopWindowResizeListener()
+      stopWindowResizeListener = null
+    }
   }
 
   const autoResizeMixinInit = async () => {
