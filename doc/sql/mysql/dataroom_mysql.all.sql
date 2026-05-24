@@ -44,8 +44,8 @@ CREATE TABLE `dr_dataset`
     `tenant_code`      VARCHAR(50)  DEFAULT NULL COMMENT '租户编码',
     `del_flag`         VARCHAR(1)   DEFAULT '0' COMMENT '删除标识(0：正常，1：删除)',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_code` (`code`),
-    KEY                `idx_parent_code` (`parent_code`)
+    UNIQUE KEY `uk_dataset_code` (`code`),
+    KEY                `idx_dataset_parent_code` (`parent_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='数据集表';
 
 -- ----------------------------
@@ -68,8 +68,8 @@ CREATE TABLE `dr_map`
     `tenant_code`       VARCHAR(50)  DEFAULT NULL COMMENT '租户编码',
     `del_flag`          VARCHAR(1)   DEFAULT '0' COMMENT '删除标识(0：正常，1：删除)',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_code` (`code`),
-    KEY                 `idx_parent_code` (`parent_code`)
+    UNIQUE KEY `uk_map_code` (`code`),
+    KEY                 `idx_map_parent_code` (`parent_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='地图表';
 
 -- ----------------------------
@@ -93,9 +93,9 @@ CREATE TABLE `dr_page`
     `tenant_code` VARCHAR(50)  DEFAULT NULL COMMENT '租户编码',
     `del_flag`    VARCHAR(1)   DEFAULT '0' COMMENT '删除标识(0：正常，1：删除)',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_code` (`code`),
+    UNIQUE KEY `uk_page_code` (`code`),
     KEY           `idx_page_type` (`page_type`),
-    KEY           `idx_parent_code` (`parent_code`)
+    KEY           `idx_page_parent_code` (`parent_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='页面表';
 
 -- ----------------------------
@@ -117,8 +117,8 @@ CREATE TABLE `dr_page_stage`
     `tenant_code` VARCHAR(50)  DEFAULT NULL COMMENT '租户编码',
     `del_flag`    VARCHAR(1)   DEFAULT '0' COMMENT '删除标识(0：正常，1：删除)',
     PRIMARY KEY (`id`),
-    KEY           `idx_page_code` (`page_code`),
-    KEY           `idx_page_status` (`page_status`)
+    KEY           `idx_page_stage_code` (`page_code`),
+    KEY           `idx_page_stage_status` (`page_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='中转态页面表';
 
 -- ----------------------------
@@ -137,6 +137,7 @@ CREATE TABLE `dr_resource`
     `thumbnail`     VARCHAR(500) DEFAULT NULL COMMENT '缩略图、封面地址',
     `size`          INT          DEFAULT NULL COMMENT '文件大小（单位：KB）',
     `remark`        VARCHAR(500) DEFAULT NULL COMMENT '描述',
+    `config`        LONGTEXT         COMMENT '模型个性化配置',
     `create_date`   DATETIME     DEFAULT NULL COMMENT '创建时间',
     `create_user`   VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
     `update_date`   DATETIME     DEFAULT NULL COMMENT '更新时间',
@@ -144,7 +145,7 @@ CREATE TABLE `dr_resource`
     `tenant_code`   VARCHAR(50)  DEFAULT NULL COMMENT '租户编码',
     `del_flag`      VARCHAR(1)   DEFAULT '0' COMMENT '删除标识(0：正常，1：删除)',
     PRIMARY KEY (`id`),
-    KEY             `idx_parent_code` (`parent_code`)
+    KEY             `idx_resource_parent_code` (`parent_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='资源表';
 
 -- ----------------------------

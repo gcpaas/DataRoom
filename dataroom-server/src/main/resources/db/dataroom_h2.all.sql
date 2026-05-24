@@ -174,4 +174,3 @@ CREATE INDEX IF NOT EXISTS idx_user_status ON dr_user(status);
 
 
 -- ALTER TABLE dr_resource ADD COLUMN config JSON COMMENT '模型个性化配置';
--- ALTER TABLE dr_resource DROP COLUMN model_format;

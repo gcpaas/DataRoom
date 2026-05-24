@@ -74,7 +74,7 @@ Object.entries(installModules).forEach(([path, module]) => {
 })
 
 const getPanelComponent = (name: string | undefined) => {
-  console.log("获取配置面板", name, panelComponents)
+  // console.log("获取配置面板", name, panelComponents)
   if (name) {
     return panelComponents[name]
   }
