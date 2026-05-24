@@ -21,6 +21,8 @@ import {DrIframePlugin} from '@/dataroom-packages/components/DrIframe/plugin.ts'
 import {DrVideoPlayerPlugin} from '@/dataroom-packages/components/DrVideoPlayer/plugin.ts'
 import {DrFullScreenPlugin} from '@/dataroom-packages/components/DrFullScreen/plugin.ts'
 import {DrMapPlugin} from '@/dataroom-packages/components/DrMap/plugin.ts'
+import {DrBorderPlugin} from '@/dataroom-packages/components/DrBorder/plugin.ts'
+import {DrDecorationPlugin} from '@/dataroom-packages/components/DrDecoration/plugin.ts'
 import type {ComponentLibTagInterface} from "@/dataroom-packages/PageDesigner/type/ComponentLibTagInterface.ts";
 import {ComponentLibTagTypeConst} from "@/dataroom-packages/constant/ComponentLibTagTypeConst.ts";
 
@@ -66,6 +68,10 @@ const componentLibTagList: ComponentLibTagInterface[] = [
     tag: ComponentLibTagTypeConst.MEDIA
   },
   {
+    name: '装饰素材',
+    tag: ComponentLibTagTypeConst.DECORATION
+  },
+  {
     name: '表单',
     tag: ComponentLibTagTypeConst.FORM
   }
@@ -92,6 +98,8 @@ const pluginList = [
   new DrTabListPlugin([ComponentLibTagTypeConst.FORM]),
   new DrIframePlugin([ComponentLibTagTypeConst.MEDIA]),
   new DrVideoPlayerPlugin([ComponentLibTagTypeConst.MEDIA]),
+  new DrBorderPlugin([ComponentLibTagTypeConst.DECORATION]),
+  new DrDecorationPlugin([ComponentLibTagTypeConst.DECORATION]),
   new DrFullScreenPlugin([ComponentLibTagTypeConst.FORM]),
   new DrMapPlugin([ComponentLibTagTypeConst.MAP])
 ]

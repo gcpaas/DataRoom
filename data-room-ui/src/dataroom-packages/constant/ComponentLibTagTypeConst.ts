@@ -46,4 +46,8 @@ export enum ComponentLibTagTypeConst {
    * 表单
    */
   FORM = 'form',
+  /**
+   * 装饰素材、边框
+   */
+  DECORATION = 'decoration',
 }
