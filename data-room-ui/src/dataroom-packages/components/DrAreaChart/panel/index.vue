@@ -75,269 +75,265 @@ const removeColor = (index: number) => {
           <el-form-item label="显示">
             <el-switch v-model="chartConfig.props.xAxis.show" />
           </el-form-item>
-          <template>
-            <el-form-item label="数据类型">
-              <el-select v-model="chartConfig.props.xAxis.type">
-                <el-option label="类目" value="category" />
-                <el-option label="时间" value="time" />
-                <el-option label="数值" value="value" />
-              </el-select>
-            </el-form-item>
+          <el-form-item label="数据类型">
+            <el-select v-model="chartConfig.props.xAxis.type">
+              <el-option label="类目" value="category" />
+              <el-option label="时间" value="time" />
+              <el-option label="数值" value="value" />
+            </el-select>
+          </el-form-item>
 
-            <div class="dr-config-panel__sub-section">
-              <div class="dr-config-panel__sub-title">
-                <span>轴线</span>
-                <el-switch v-model="chartConfig.props.xAxis.axisLine.show" size="small" />
-              </div>
-              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">颜色</span>
-                    <el-color-picker v-model="chartConfig.props.xAxis.axisLine.color" show-alpha />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">宽度</span>
-                    <el-input-number v-model="chartConfig.props.xAxis.axisLine.width" class="dr-config-panel__control" :min="1" :max="10" controls-position="right" />
-                  </div>
-                </el-form-item>
-              </el-form>
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>轴线</span>
+              <el-switch v-model="chartConfig.props.xAxis.axisLine.show" size="small" />
             </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">颜色</span>
+                  <el-color-picker v-model="chartConfig.props.xAxis.axisLine.color" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">宽度</span>
+                  <el-input-number v-model="chartConfig.props.xAxis.axisLine.width" class="dr-config-panel__control" :min="1" :max="10" controls-position="right" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
 
-            <div class="dr-config-panel__sub-section">
-              <div class="dr-config-panel__sub-title">
-                <span>轴标签</span>
-                <el-switch v-model="chartConfig.props.xAxis.axisLabel.show" size="small" />
-              </div>
-              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">字号</span>
-                    <el-input-number v-model="chartConfig.props.xAxis.axisLabel.fontSize" class="dr-config-panel__control" :min="10" :max="30" controls-position="right" />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">颜色</span>
-                    <el-color-picker v-model="chartConfig.props.xAxis.axisLabel.color" show-alpha />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">字重</span>
-                    <el-select v-model="chartConfig.props.xAxis.axisLabel.fontWeight" class="dr-config-panel__control">
-                      <el-option v-for="item in fontWeightOptions" :key="item.value" :label="item.label" :value="item.value" />
-                    </el-select>
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">字体</span>
-                    <el-select v-model="chartConfig.props.xAxis.axisLabel.fontFamily" class="dr-config-panel__control" filterable allow-create>
-                      <el-option v-for="item in fontFamilyOptions" :key="item.value" :label="item.label" :value="item.value" />
-                    </el-select>
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">旋转角度</span>
-                    <el-input-number v-model="chartConfig.props.xAxis.axisLabel.rotate" class="dr-config-panel__control" :min="-90" :max="90" controls-position="right" />
-                  </div>
-                </el-form-item>
-              </el-form>
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>轴标签</span>
+              <el-switch v-model="chartConfig.props.xAxis.axisLabel.show" size="small" />
             </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字号</span>
+                  <el-input-number v-model="chartConfig.props.xAxis.axisLabel.fontSize" class="dr-config-panel__control" :min="10" :max="30" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">颜色</span>
+                  <el-color-picker v-model="chartConfig.props.xAxis.axisLabel.color" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字重</span>
+                  <el-select v-model="chartConfig.props.xAxis.axisLabel.fontWeight" class="dr-config-panel__control">
+                    <el-option v-for="item in fontWeightOptions" :key="item.value" :label="item.label" :value="item.value" />
+                  </el-select>
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字体</span>
+                  <el-select v-model="chartConfig.props.xAxis.axisLabel.fontFamily" class="dr-config-panel__control" filterable allow-create>
+                    <el-option v-for="item in fontFamilyOptions" :key="item.value" :label="item.label" :value="item.value" />
+                  </el-select>
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">旋转角度</span>
+                  <el-input-number v-model="chartConfig.props.xAxis.axisLabel.rotate" class="dr-config-panel__control" :min="-90" :max="90" controls-position="right" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
 
-            <div class="dr-config-panel__sub-section">
-              <div class="dr-config-panel__sub-title">
-                <span>刻度线</span>
-                <el-switch v-model="chartConfig.props.xAxis.axisTick.show" size="small" />
-              </div>
-              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">长度</span>
-                    <el-input-number v-model="chartConfig.props.xAxis.axisTick.length" class="dr-config-panel__control" :min="1" :max="20" controls-position="right" />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">颜色</span>
-                    <el-color-picker v-model="chartConfig.props.xAxis.axisTick.color" show-alpha />
-                  </div>
-                </el-form-item>
-              </el-form>
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>刻度线</span>
+              <el-switch v-model="chartConfig.props.xAxis.axisTick.show" size="small" />
             </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">长度</span>
+                  <el-input-number v-model="chartConfig.props.xAxis.axisTick.length" class="dr-config-panel__control" :min="1" :max="20" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">颜色</span>
+                  <el-color-picker v-model="chartConfig.props.xAxis.axisTick.color" show-alpha />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
 
-            <div class="dr-config-panel__sub-section">
-              <div class="dr-config-panel__sub-title">
-                <span>网格线</span>
-                <el-switch v-model="chartConfig.props.xAxis.splitLine.show" size="small" />
-              </div>
-              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">颜色</span>
-                    <el-color-picker v-model="chartConfig.props.xAxis.splitLine.color" show-alpha />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">宽度</span>
-                    <el-input-number v-model="chartConfig.props.xAxis.splitLine.width" class="dr-config-panel__control" :min="1" :max="5" controls-position="right" />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">样式</span>
-                    <el-select v-model="chartConfig.props.xAxis.splitLine.type" class="dr-config-panel__control">
-                      <el-option v-for="item in lineStyleOptions" :key="item.value" :label="item.label" :value="item.value" />
-                    </el-select>
-                  </div>
-                </el-form-item>
-              </el-form>
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>网格线</span>
+              <el-switch v-model="chartConfig.props.xAxis.splitLine.show" size="small" />
             </div>
-          </template>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">颜色</span>
+                  <el-color-picker v-model="chartConfig.props.xAxis.splitLine.color" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">宽度</span>
+                  <el-input-number v-model="chartConfig.props.xAxis.splitLine.width" class="dr-config-panel__control" :min="1" :max="5" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">样式</span>
+                  <el-select v-model="chartConfig.props.xAxis.splitLine.type" class="dr-config-panel__control">
+                    <el-option v-for="item in lineStyleOptions" :key="item.value" :label="item.label" :value="item.value" />
+                  </el-select>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
         </el-collapse-item>
 
         <el-collapse-item title="Y 轴" name="yAxis">
           <el-form-item label="显示">
             <el-switch v-model="chartConfig.props.yAxis.show" />
           </el-form-item>
-          <template>
-            <el-form-item label="轴名称">
-              <el-input v-model="chartConfig.props.yAxis.name" placeholder="可选" />
-            </el-form-item>
+          <el-form-item label="轴名称">
+            <el-input v-model="chartConfig.props.yAxis.name" placeholder="可选" />
+          </el-form-item>
 
-            <div class="dr-config-panel__sub-section">
-              <div class="dr-config-panel__sub-title">
-                <span>显示范围</span>
-                <el-switch v-model="chartConfig.props.yAxis.range.auto" size="small" />
-              </div>
-              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">最小值</span>
-                    <el-input-number v-model="chartConfig.props.yAxis.range.min" class="dr-config-panel__control" controls-position="right" />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">最大值</span>
-                    <el-input-number v-model="chartConfig.props.yAxis.range.max" class="dr-config-panel__control" controls-position="right" />
-                  </div>
-                </el-form-item>
-              </el-form>
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>显示范围</span>
+              <el-switch v-model="chartConfig.props.yAxis.range.auto" size="small" />
             </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">最小值</span>
+                  <el-input-number v-model="chartConfig.props.yAxis.range.min" class="dr-config-panel__control" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">最大值</span>
+                  <el-input-number v-model="chartConfig.props.yAxis.range.max" class="dr-config-panel__control" controls-position="right" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
 
-            <div class="dr-config-panel__sub-section">
-              <div class="dr-config-panel__sub-title">
-                <span>轴线</span>
-                <el-switch v-model="chartConfig.props.yAxis.axisLine.show" size="small" />
-              </div>
-              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">颜色</span>
-                    <el-color-picker v-model="chartConfig.props.yAxis.axisLine.color" show-alpha />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">宽度</span>
-                    <el-input-number v-model="chartConfig.props.yAxis.axisLine.width" class="dr-config-panel__control" :min="1" :max="10" controls-position="right" />
-                  </div>
-                </el-form-item>
-              </el-form>
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>轴线</span>
+              <el-switch v-model="chartConfig.props.yAxis.axisLine.show" size="small" />
             </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">颜色</span>
+                  <el-color-picker v-model="chartConfig.props.yAxis.axisLine.color" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">宽度</span>
+                  <el-input-number v-model="chartConfig.props.yAxis.axisLine.width" class="dr-config-panel__control" :min="1" :max="10" controls-position="right" />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
 
-            <div class="dr-config-panel__sub-section">
-              <div class="dr-config-panel__sub-title">
-                <span>轴标签</span>
-                <el-switch v-model="chartConfig.props.yAxis.axisLabel.show" size="small" />
-              </div>
-              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">字号</span>
-                    <el-input-number v-model="chartConfig.props.yAxis.axisLabel.fontSize" class="dr-config-panel__control" :min="10" :max="30" controls-position="right" />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">颜色</span>
-                    <el-color-picker v-model="chartConfig.props.yAxis.axisLabel.color" show-alpha />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">字重</span>
-                    <el-select v-model="chartConfig.props.yAxis.axisLabel.fontWeight" class="dr-config-panel__control">
-                      <el-option v-for="item in fontWeightOptions" :key="item.value" :label="item.label" :value="item.value" />
-                    </el-select>
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">字体</span>
-                    <el-select v-model="chartConfig.props.yAxis.axisLabel.fontFamily" class="dr-config-panel__control" filterable allow-create>
-                      <el-option v-for="item in fontFamilyOptions" :key="item.value" :label="item.label" :value="item.value" />
-                    </el-select>
-                  </div>
-                </el-form-item>
-              </el-form>
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>轴标签</span>
+              <el-switch v-model="chartConfig.props.yAxis.axisLabel.show" size="small" />
             </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字号</span>
+                  <el-input-number v-model="chartConfig.props.yAxis.axisLabel.fontSize" class="dr-config-panel__control" :min="10" :max="30" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">颜色</span>
+                  <el-color-picker v-model="chartConfig.props.yAxis.axisLabel.color" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字重</span>
+                  <el-select v-model="chartConfig.props.yAxis.axisLabel.fontWeight" class="dr-config-panel__control">
+                    <el-option v-for="item in fontWeightOptions" :key="item.value" :label="item.label" :value="item.value" />
+                  </el-select>
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">字体</span>
+                  <el-select v-model="chartConfig.props.yAxis.axisLabel.fontFamily" class="dr-config-panel__control" filterable allow-create>
+                    <el-option v-for="item in fontFamilyOptions" :key="item.value" :label="item.label" :value="item.value" />
+                  </el-select>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
 
-            <div class="dr-config-panel__sub-section">
-              <div class="dr-config-panel__sub-title">
-                <span>刻度线</span>
-                <el-switch v-model="chartConfig.props.yAxis.axisTick.show" size="small" />
-              </div>
-              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">长度</span>
-                    <el-input-number v-model="chartConfig.props.yAxis.axisTick.length" class="dr-config-panel__control" :min="1" :max="20" controls-position="right" />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">颜色</span>
-                    <el-color-picker v-model="chartConfig.props.yAxis.axisTick.color" show-alpha />
-                  </div>
-                </el-form-item>
-              </el-form>
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>刻度线</span>
+              <el-switch v-model="chartConfig.props.yAxis.axisTick.show" size="small" />
             </div>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">长度</span>
+                  <el-input-number v-model="chartConfig.props.yAxis.axisTick.length" class="dr-config-panel__control" :min="1" :max="20" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">颜色</span>
+                  <el-color-picker v-model="chartConfig.props.yAxis.axisTick.color" show-alpha />
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
 
-            <div class="dr-config-panel__sub-section">
-              <div class="dr-config-panel__sub-title">
-                <span>网格线</span>
-                <el-switch v-model="chartConfig.props.yAxis.splitLine.show" size="small" />
-              </div>
-              <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">颜色</span>
-                    <el-color-picker v-model="chartConfig.props.yAxis.splitLine.color" show-alpha />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">宽度</span>
-                    <el-input-number v-model="chartConfig.props.yAxis.splitLine.width" class="dr-config-panel__control" :min="1" :max="5" controls-position="right" />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">样式</span>
-                    <el-select v-model="chartConfig.props.yAxis.splitLine.type" class="dr-config-panel__control">
-                      <el-option v-for="item in lineStyleOptions" :key="item.value" :label="item.label" :value="item.value" />
-                    </el-select>
-                  </div>
-                </el-form-item>
-              </el-form>
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>网格线</span>
+              <el-switch v-model="chartConfig.props.yAxis.splitLine.show" size="small" />
             </div>
-          </template>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">颜色</span>
+                  <el-color-picker v-model="chartConfig.props.yAxis.splitLine.color" show-alpha />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">宽度</span>
+                  <el-input-number v-model="chartConfig.props.yAxis.splitLine.width" class="dr-config-panel__control" :min="1" :max="5" controls-position="right" />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">样式</span>
+                  <el-select v-model="chartConfig.props.yAxis.splitLine.type" class="dr-config-panel__control">
+                    <el-option v-for="item in lineStyleOptions" :key="item.value" :label="item.label" :value="item.value" />
+                  </el-select>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
         </el-collapse-item>
 
         <el-collapse-item title="图例" name="legend">
@@ -496,34 +492,32 @@ const removeColor = (index: number) => {
                   <el-switch v-model="chartConfig.props.series.areaStyle.gradient.enabled" />
                 </div>
               </el-form-item>
-              <template>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">顶部透明度</span>
-                    <el-input-number
-                      v-model="chartConfig.props.series.areaStyle.gradient.topOpacity"
-                      class="dr-config-panel__control"
-                      :min="0"
-                      :max="1"
-                      :step="0.05"
-                      controls-position="right"
-                    />
-                  </div>
-                </el-form-item>
-                <el-form-item class="dr-config-panel__sub-form-item">
-                  <div class="dr-config-panel__sub-row">
-                    <span class="dr-config-panel__sub-label">底部透明度</span>
-                    <el-input-number
-                      v-model="chartConfig.props.series.areaStyle.gradient.bottomOpacity"
-                      class="dr-config-panel__control"
-                      :min="0"
-                      :max="1"
-                      :step="0.05"
-                      controls-position="right"
-                    />
-                  </div>
-                </el-form-item>
-              </template>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">顶部透明度</span>
+                  <el-input-number
+                    v-model="chartConfig.props.series.areaStyle.gradient.topOpacity"
+                    class="dr-config-panel__control"
+                    :min="0"
+                    :max="1"
+                    :step="0.05"
+                    controls-position="right"
+                  />
+                </div>
+              </el-form-item>
+              <el-form-item class="dr-config-panel__sub-form-item">
+                <div class="dr-config-panel__sub-row">
+                  <span class="dr-config-panel__sub-label">底部透明度</span>
+                  <el-input-number
+                    v-model="chartConfig.props.series.areaStyle.gradient.bottomOpacity"
+                    class="dr-config-panel__control"
+                    :min="0"
+                    :max="1"
+                    :step="0.05"
+                    controls-position="right"
+                  />
+                </div>
+              </el-form-item>
             </el-form>
           </div>
 
