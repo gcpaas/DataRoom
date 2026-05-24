@@ -77,9 +77,9 @@ const addConditionalRule = () => {
   chartConfig.value.props.conditional.rules.push({
     operator: '>=',
     value: 0,
-    valueColor: 'var(--el-color-success)',
-    backgroundColor: 'transparent',
-    borderColor: 'transparent'
+    valueColor: '#67c23a',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    borderColor: 'rgba(0, 0, 0, 0)'
   })
 }
 
@@ -133,13 +133,13 @@ const removeConditionalRule = (index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">背景</span>
-                  <el-input v-model="chartConfig.props.global.backgroundColor" class="dr-config-panel__control" placeholder="transparent" />
+                  <el-color-picker v-model="chartConfig.props.global.backgroundColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">边框色</span>
-                  <el-input v-model="chartConfig.props.global.borderColor" class="dr-config-panel__control" placeholder="transparent" />
+                  <el-color-picker v-model="chartConfig.props.global.borderColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -166,7 +166,7 @@ const removeConditionalRule = (index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-input v-model="chartConfig.props.global.shadow.color" class="dr-config-panel__control" placeholder="var(--el-border-color)" />
+                  <el-color-picker v-model="chartConfig.props.global.shadow.color" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -234,7 +234,7 @@ const removeConditionalRule = (index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-input v-model="chartConfig.props.title.color" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.title.color" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -316,7 +316,7 @@ const removeConditionalRule = (index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-input v-model="chartConfig.props.value.color" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.value.color" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -359,7 +359,7 @@ const removeConditionalRule = (index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-input v-model="chartConfig.props.subtitle.color" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.subtitle.color" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -404,7 +404,7 @@ const removeConditionalRule = (index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-input v-model="chartConfig.props.unit.color" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.unit.color" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -447,19 +447,19 @@ const removeConditionalRule = (index: number) => {
                   <el-form-item class="dr-config-panel__sub-form-item">
                     <div class="dr-config-panel__sub-row">
                       <span class="dr-config-panel__sub-label">数值色</span>
-                      <el-input v-model="rule.valueColor" class="dr-config-panel__control" />
+                      <el-color-picker v-model="rule.valueColor" show-alpha />
                     </div>
                   </el-form-item>
                   <el-form-item class="dr-config-panel__sub-form-item">
                     <div class="dr-config-panel__sub-row">
                       <span class="dr-config-panel__sub-label">背景</span>
-                      <el-input v-model="rule.backgroundColor" class="dr-config-panel__control" />
+                      <el-color-picker v-model="rule.backgroundColor" show-alpha />
                     </div>
                   </el-form-item>
                   <el-form-item class="dr-config-panel__sub-form-item">
                     <div class="dr-config-panel__sub-row">
                       <span class="dr-config-panel__sub-label">边框色</span>
-                      <el-input v-model="rule.borderColor" class="dr-config-panel__control" />
+                      <el-color-picker v-model="rule.borderColor" show-alpha />
                     </div>
                   </el-form-item>
                   <el-button size="small" @click="removeConditionalRule(index)">删除规则</el-button>

@@ -88,13 +88,13 @@ const getInstance = (): DrMetricCardConfig => {
     {
       global: {
         padding: [16, 18, 16, 18],
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        borderColor: 'rgba(0, 0, 0, 0)',
         borderWidth: 0,
         borderRadius: 8,
         shadow: {
           enabled: false,
-          color: 'var(--el-border-color)',
+          color: 'rgba(0, 0, 0, 0.16)',
           blur: 12,
           offsetX: 0,
           offsetY: 4
@@ -110,7 +110,7 @@ const getInstance = (): DrMetricCardConfig => {
         show: true,
         text: '指标名称',
         fontSize: 14,
-        color: 'var(--el-text-color-secondary)',
+        color: '#909399',
         fontWeight: 'normal'
       },
       value: {
@@ -122,7 +122,7 @@ const getInstance = (): DrMetricCardConfig => {
         suffix: '',
         emptyText: '--',
         fontSize: 36,
-        color: 'var(--el-text-color-primary)',
+        color: '#303133',
         fontWeight: 'bold',
         lineHeight: 1
       },
@@ -130,7 +130,7 @@ const getInstance = (): DrMetricCardConfig => {
         show: true,
         text: '实时统计',
         fontSize: 12,
-        color: 'var(--el-text-color-secondary)',
+        color: '#909399',
         fontWeight: 'normal'
       },
       unit: {
@@ -138,7 +138,7 @@ const getInstance = (): DrMetricCardConfig => {
         text: '',
         position: 'suffix',
         fontSize: 14,
-        color: 'var(--el-text-color-secondary)',
+        color: '#909399',
         gap: 4
       },
       conditional: {
@@ -147,9 +147,9 @@ const getInstance = (): DrMetricCardConfig => {
           {
             operator: '>=',
             value: 1000,
-            valueColor: 'var(--el-color-success)',
-            backgroundColor: 'transparent',
-            borderColor: 'transparent'
+            valueColor: '#67c23a',
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            borderColor: 'rgba(0, 0, 0, 0)'
           }
         ]
       },

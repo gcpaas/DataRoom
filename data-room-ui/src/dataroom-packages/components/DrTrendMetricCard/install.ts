@@ -92,8 +92,8 @@ const getInstance = (): DrTrendMetricCardConfig => {
     {
       global: {
         padding: [16, 18, 14, 18],
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        borderColor: 'rgba(0, 0, 0, 0)',
         borderWidth: 0,
         borderRadius: 8,
       },
@@ -108,7 +108,7 @@ const getInstance = (): DrTrendMetricCardConfig => {
         show: true,
         text: '趋势指标',
         fontSize: 14,
-        color: 'var(--el-text-color-secondary)',
+        color: '#909399',
         fontWeight: 'normal',
       },
       value: {
@@ -118,7 +118,7 @@ const getInstance = (): DrTrendMetricCardConfig => {
         prefix: '',
         suffix: '',
         fontSize: 34,
-        color: 'var(--el-text-color-primary)',
+        color: '#303133',
         fontWeight: 'bold',
       },
       timestamp: {
@@ -126,14 +126,14 @@ const getInstance = (): DrTrendMetricCardConfig => {
         format: 'YYYY-MM-DD HH:mm',
         prefix: '更新时间 ',
         fontSize: 12,
-        color: 'var(--el-text-color-secondary)',
+        color: '#909399',
       },
       compare: {
         show: true,
         mode: 'rate',
-        positiveColor: 'var(--el-color-success)',
-        negativeColor: 'var(--el-color-danger)',
-        neutralColor: 'var(--el-text-color-secondary)',
+        positiveColor: '#67c23a',
+        negativeColor: '#f56c6c',
+        neutralColor: '#909399',
         fontSize: 12,
       },
       trend: {
@@ -141,8 +141,8 @@ const getInstance = (): DrTrendMetricCardConfig => {
         chartType: 'line',
         smooth: true,
         lineWidth: 2,
-        lineColor: 'var(--el-color-primary)',
-        areaColor: 'var(--el-color-primary-light-9)',
+        lineColor: '#409eff',
+        areaColor: '#ecf5ff',
         areaOpacity: 0.35,
         showSymbol: false,
         symbolSize: 4,
@@ -152,7 +152,7 @@ const getInstance = (): DrTrendMetricCardConfig => {
         showXAxis: false,
         showYAxis: false,
         showMinMaxLabel: false,
-        labelColor: 'var(--el-text-color-secondary)',
+        labelColor: '#909399',
         labelFontSize: 10,
       },
       tooltip: {

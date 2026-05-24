@@ -162,8 +162,8 @@ const addConditionalRule = () => {
     operator: '>=',
     value: 0,
     target: 'cell',
-    textColor: 'var(--el-color-success)',
-    backgroundColor: 'transparent',
+    textColor: '#67c23a',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
   })
 }
 
@@ -192,10 +192,10 @@ const columnConfig = computed<TableColumnConfig[]>(() => chartConfig.value.props
             <el-input-number v-model="chartConfig.props.global.padding[3]" :min="0" :max="80" controls-position="right" />
           </el-form-item>
           <el-form-item label="背景">
-            <el-input v-model="chartConfig.props.global.backgroundColor" />
+            <el-color-picker v-model="chartConfig.props.global.backgroundColor" show-alpha />
           </el-form-item>
           <el-form-item label="边框色">
-            <el-input v-model="chartConfig.props.global.borderColor" />
+            <el-color-picker v-model="chartConfig.props.global.borderColor" show-alpha />
           </el-form-item>
           <el-form-item label="边框">
             <el-input-number v-model="chartConfig.props.global.borderWidth" :min="0" :max="20" controls-position="right" />
@@ -455,10 +455,10 @@ const columnConfig = computed<TableColumnConfig[]>(() => chartConfig.value.props
             <el-switch v-model="chartConfig.props.cellBars.alignPositiveNegative" />
           </el-form-item>
           <el-form-item label="正值色">
-            <el-input v-model="chartConfig.props.cellBars.positiveColor" />
+            <el-color-picker v-model="chartConfig.props.cellBars.positiveColor" show-alpha />
           </el-form-item>
           <el-form-item label="负值色">
-            <el-input v-model="chartConfig.props.cellBars.negativeColor" />
+            <el-color-picker v-model="chartConfig.props.cellBars.negativeColor" show-alpha />
           </el-form-item>
           <el-form-item label="高度">
             <el-input-number v-model="chartConfig.props.cellBars.barHeight" :min="10" :max="100" controls-position="right" />
@@ -495,8 +495,8 @@ const columnConfig = computed<TableColumnConfig[]>(() => chartConfig.value.props
                 <el-option label="单元格" value="cell" />
                 <el-option label="整行" value="row" />
               </el-select>
-              <el-input v-model="rule.textColor" placeholder="文字色" />
-              <el-input v-model="rule.backgroundColor" placeholder="背景色" />
+              <el-color-picker v-model="rule.textColor" show-alpha />
+              <el-color-picker v-model="rule.backgroundColor" show-alpha />
               <el-button text type="danger" @click="removeConditionalRule(index)">删除</el-button>
             </div>
           </div>
@@ -507,10 +507,10 @@ const columnConfig = computed<TableColumnConfig[]>(() => chartConfig.value.props
             <el-input-number v-model="chartConfig.props.headerStyle.height" :min="0" :max="120" controls-position="right" />
           </el-form-item>
           <el-form-item label="背景">
-            <el-input v-model="chartConfig.props.headerStyle.backgroundColor" />
+            <el-color-picker v-model="chartConfig.props.headerStyle.backgroundColor" show-alpha />
           </el-form-item>
           <el-form-item label="文字色">
-            <el-input v-model="chartConfig.props.headerStyle.color" />
+            <el-color-picker v-model="chartConfig.props.headerStyle.color" show-alpha />
           </el-form-item>
           <el-form-item label="字号">
             <el-input-number v-model="chartConfig.props.headerStyle.fontSize" :min="10" :max="36" controls-position="right" />
@@ -529,22 +529,22 @@ const columnConfig = computed<TableColumnConfig[]>(() => chartConfig.value.props
             <el-input-number v-model="chartConfig.props.rowStyle.height" :min="0" :max="120" controls-position="right" />
           </el-form-item>
           <el-form-item label="背景">
-            <el-input v-model="chartConfig.props.rowStyle.backgroundColor" />
+            <el-color-picker v-model="chartConfig.props.rowStyle.backgroundColor" show-alpha />
           </el-form-item>
           <el-form-item label="斑马纹">
-            <el-input v-model="chartConfig.props.rowStyle.stripeBackgroundColor" />
+            <el-color-picker v-model="chartConfig.props.rowStyle.stripeBackgroundColor" show-alpha />
           </el-form-item>
           <el-form-item label="悬停">
-            <el-input v-model="chartConfig.props.rowStyle.hoverBackgroundColor" />
+            <el-color-picker v-model="chartConfig.props.rowStyle.hoverBackgroundColor" show-alpha />
           </el-form-item>
           <el-form-item label="选中">
-            <el-input v-model="chartConfig.props.rowStyle.selectedBackgroundColor" />
+            <el-color-picker v-model="chartConfig.props.rowStyle.selectedBackgroundColor" show-alpha />
           </el-form-item>
         </el-collapse-item>
 
         <el-collapse-item title="单元格样式" name="cellStyle">
           <el-form-item label="文字色">
-            <el-input v-model="chartConfig.props.cellStyle.color" />
+            <el-color-picker v-model="chartConfig.props.cellStyle.color" show-alpha />
           </el-form-item>
           <el-form-item label="字号">
             <el-input-number v-model="chartConfig.props.cellStyle.fontSize" :min="10" :max="36" controls-position="right" />

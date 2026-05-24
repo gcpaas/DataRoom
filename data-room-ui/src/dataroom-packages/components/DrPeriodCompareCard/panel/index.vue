@@ -132,13 +132,13 @@ const easingOptions = [
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">背景色</span>
-                  <el-input v-model="chartConfig.props.global.backgroundColor" class="dr-config-panel__control" placeholder="CSS 变量或 transparent" />
+                  <el-color-picker v-model="chartConfig.props.global.backgroundColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">边框色</span>
-                  <el-input v-model="chartConfig.props.global.borderColor" class="dr-config-panel__control" placeholder="CSS 变量或 transparent" />
+                  <el-color-picker v-model="chartConfig.props.global.borderColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -199,7 +199,7 @@ const easingOptions = [
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-input v-model="chartConfig.props.title.color" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.title.color" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -252,7 +252,7 @@ const easingOptions = [
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-input v-model="chartConfig.props.current.color" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.current.color" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -331,19 +331,19 @@ const easingOptions = [
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">正向色</span>
-                  <el-input v-model="chartConfig.props.indicator.positiveColor" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.indicator.positiveColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">负向色</span>
-                  <el-input v-model="chartConfig.props.indicator.negativeColor" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.indicator.negativeColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">中性色</span>
-                  <el-input v-model="chartConfig.props.indicator.neutralColor" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.indicator.neutralColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -380,7 +380,7 @@ const easingOptions = [
             <el-input-number v-model="chartConfig.props.textStyle.labelFontSize" class="dr-config-panel__control" :min="10" :max="36" controls-position="right" />
           </el-form-item>
           <el-form-item label="标签颜色">
-            <el-input v-model="chartConfig.props.textStyle.labelColor" />
+            <el-color-picker v-model="chartConfig.props.textStyle.labelColor" show-alpha />
           </el-form-item>
           <el-form-item label="数值字号">
             <el-input-number v-model="chartConfig.props.textStyle.compareFontSize" class="dr-config-panel__control" :min="10" :max="48" controls-position="right" />

@@ -145,13 +145,13 @@ const columnTitle = (column: TableColumnConfig, index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">背景色</span>
-                  <el-input v-model="chartConfig.props.global.backgroundColor" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.global.backgroundColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">边框色</span>
-                  <el-input v-model="chartConfig.props.global.borderColor" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.global.borderColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -320,13 +320,13 @@ const columnTitle = (column: TableColumnConfig, index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">背景</span>
-                  <el-input v-model="chartConfig.props.headerStyle.backgroundColor" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.headerStyle.backgroundColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-input v-model="chartConfig.props.headerStyle.color" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.headerStyle.color" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -359,25 +359,25 @@ const columnTitle = (column: TableColumnConfig, index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">普通行</span>
-                  <el-input v-model="chartConfig.props.rowStyle.backgroundColor" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.rowStyle.backgroundColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">斑马纹</span>
-                  <el-input v-model="chartConfig.props.rowStyle.stripeBackgroundColor" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.rowStyle.stripeBackgroundColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">悬停</span>
-                  <el-input v-model="chartConfig.props.rowStyle.hoverBackgroundColor" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.rowStyle.hoverBackgroundColor" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">分割线</span>
-                  <el-input v-model="chartConfig.props.rowStyle.borderColor" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.rowStyle.borderColor" show-alpha />
                 </div>
               </el-form-item>
             </el-form>
@@ -401,7 +401,7 @@ const columnTitle = (column: TableColumnConfig, index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-input v-model="chartConfig.props.cellStyle.color" class="dr-config-panel__control" />
+                  <el-color-picker v-model="chartConfig.props.cellStyle.color" show-alpha />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">

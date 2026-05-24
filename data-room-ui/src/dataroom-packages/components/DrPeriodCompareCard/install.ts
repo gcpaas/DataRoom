@@ -83,8 +83,8 @@ const getInstance = (): DrPeriodCompareCardConfig => {
     {
       global: {
         padding: [16, 18, 16, 18],
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        borderColor: 'rgba(0, 0, 0, 0)',
         borderWidth: 0,
         borderRadius: 8,
       },
@@ -98,7 +98,7 @@ const getInstance = (): DrPeriodCompareCardConfig => {
         show: true,
         text: '周期对比',
         fontSize: 14,
-        color: 'var(--el-text-color-secondary)',
+        color: '#909399',
         fontWeight: 'normal',
       },
       current: {
@@ -108,7 +108,7 @@ const getInstance = (): DrPeriodCompareCardConfig => {
         prefix: '',
         suffix: '',
         fontSize: 34,
-        color: 'var(--el-text-color-primary)',
+        color: '#303133',
         fontWeight: 'bold',
       },
       comparison: {
@@ -124,9 +124,9 @@ const getInstance = (): DrPeriodCompareCardConfig => {
         show: true,
         type: 'arrow',
         positiveDirection: 'increaseGood',
-        positiveColor: 'var(--el-color-success)',
-        negativeColor: 'var(--el-color-danger)',
-        neutralColor: 'var(--el-text-color-secondary)',
+        positiveColor: '#67c23a',
+        negativeColor: '#f56c6c',
+        neutralColor: '#909399',
         iconSize: 14,
       },
       layout: {
@@ -137,7 +137,7 @@ const getInstance = (): DrPeriodCompareCardConfig => {
       },
       textStyle: {
         labelFontSize: 12,
-        labelColor: 'var(--el-text-color-secondary)',
+        labelColor: '#909399',
         compareFontSize: 14,
         compareFontWeight: 'normal',
       },
