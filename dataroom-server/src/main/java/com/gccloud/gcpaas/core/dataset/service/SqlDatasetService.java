@@ -27,13 +27,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
-@Service(value = DatasetType.RELATIONAL_TYPE + DataRoomConstant.Dataset.SERVICE_NAME)
-public class RelationalDatasetService extends AbstractDatasetService {
+@Service(value = DatasetType.SQL_TYPE + DataRoomConstant.Dataset.SERVICE_NAME)
+public class SqlDatasetService extends AbstractDatasetService {
 
     @Resource
     private DatasourceService dataSourceDefinitionService;
@@ -102,16 +103,10 @@ public class RelationalDatasetService extends AbstractDatasetService {
                 for (int i = 0; i < columnCount; i++) {
                     DatasetOutputParam outputParam = new DatasetOutputParam();
                     outputParam.setName(metaData.getColumnName(i + 1));
-                    String type = metaData.getColumnTypeName(i + 1);
-                    if (type.equalsIgnoreCase("varchar") || type.equalsIgnoreCase("char") || type.equalsIgnoreCase("text")) {
-                        outputParam.setType("String");
-                    } else if (type.equalsIgnoreCase("datetime")) {
-                        outputParam.setType("Date");
-                    } else if (type.equalsIgnoreCase("int")) {
-                        outputParam.setType("int");
-                    } else {
-                        outputParam.setType("String");
-                    }
+                    outputParam.setType(resolveOutputType(
+                            metaData.getColumnType(i + 1),
+                            metaData.getColumnTypeName(i + 1)
+                    ));
                     outputParam.setDesc(outputParam.getName());
                     outputParamList.add(outputParam);
                 }
@@ -133,6 +128,75 @@ public class RelationalDatasetService extends AbstractDatasetService {
             datasetRunResponse.setData(new ArrayList<>());
         }
         return datasetRunResponse;
+    }
+
+    static String resolveOutputType(int jdbcType, String typeName) {
+        return switch (jdbcType) {
+            case Types.DATE, Types.TIME, Types.TIME_WITH_TIMEZONE,
+                 Types.TIMESTAMP, Types.TIMESTAMP_WITH_TIMEZONE -> "Date";
+            case Types.TINYINT, Types.SMALLINT, Types.INTEGER, Types.BIGINT,
+                 Types.REAL, Types.FLOAT, Types.DOUBLE, Types.NUMERIC, Types.DECIMAL -> "int";
+            case Types.CHAR, Types.VARCHAR, Types.LONGVARCHAR,
+                 Types.NCHAR, Types.NVARCHAR, Types.LONGNVARCHAR,
+                 Types.CLOB, Types.NCLOB -> "String";
+            default -> resolveOutputTypeByName(typeName);
+        };
+    }
+
+    private static String resolveOutputTypeByName(String typeName) {
+        if (typeName == null) {
+            return "String";
+        }
+        String normalizedTypeName = typeName
+                .trim()
+                .toLowerCase(Locale.ROOT)
+                .replaceAll("\\s*\\(.*\\)", "")
+                .trim();
+        if (normalizedTypeName.isEmpty()) {
+            return "String";
+        }
+        if (isDateTypeName(normalizedTypeName)) {
+            return "Date";
+        }
+        if (isNumberTypeName(normalizedTypeName)) {
+            return "int";
+        }
+        return "String";
+    }
+
+    private static boolean isDateTypeName(String typeName) {
+        return typeName.contains("date")
+                || typeName.contains("time")
+                || "year".equals(typeName);
+    }
+
+    private static boolean isNumberTypeName(String typeName) {
+        String baseTypeName = typeName.split("\\s+")[0];
+        return "int".equals(baseTypeName)
+                || "integer".equals(baseTypeName)
+                || "tinyint".equals(baseTypeName)
+                || "smallint".equals(baseTypeName)
+                || "mediumint".equals(baseTypeName)
+                || "bigint".equals(baseTypeName)
+                || "int2".equals(baseTypeName)
+                || "int4".equals(baseTypeName)
+                || "int8".equals(baseTypeName)
+                || "serial".equals(baseTypeName)
+                || "smallserial".equals(baseTypeName)
+                || "bigserial".equals(baseTypeName)
+                || "number".equals(baseTypeName)
+                || "numeric".equals(baseTypeName)
+                || "decimal".equals(baseTypeName)
+                || "dec".equals(baseTypeName)
+                || "float".equals(baseTypeName)
+                || "float4".equals(baseTypeName)
+                || "float8".equals(baseTypeName)
+                || "double".equals(baseTypeName)
+                || "real".equals(baseTypeName)
+                || "money".equals(baseTypeName)
+                || "smallmoney".equals(baseTypeName)
+                || "binary_float".equals(baseTypeName)
+                || "binary_double".equals(baseTypeName);
     }
 
 

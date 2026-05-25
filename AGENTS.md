@@ -115,7 +115,7 @@ DataRoom/
 
 | 实现类 | 说明 |
 |--------|------|
-| `RelationalDatasetService` | 执行 SQL，支持参数绑定 |
+| `SqlDatasetService` | 执行 SQL，支持参数绑定 |
 | `HttpDatasetService` | 发起 HTTP 请求，并通过 JSONPath 解析响应 |
 | `JsonDatasetService` | 使用静态 JSON 数据 |
 

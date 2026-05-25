@@ -25,7 +25,7 @@ export interface DatasetOutputParam {
  * 基础数据集配置
  */
 export interface BaseDataset {
-  datasetType: 'json' | 'http' | 'relational'
+  datasetType: 'json' | 'http' | 'sql'
 }
 
 /**
@@ -49,10 +49,10 @@ export interface HttpDataset extends BaseDataset {
 }
 
 /**
- * 关系型数据集
+ * SQL数据集
  */
-export interface RelationalDataset extends BaseDataset {
-  datasetType: 'relational'
+export interface SqlDataset extends BaseDataset {
+  datasetType: 'sql'
   sql: string
 }
 
@@ -64,9 +64,9 @@ export interface DatasetEntity {
   name: string
   code?: string
   dataSourceCode?: string
-  datasetType: 'directory' | 'json' | 'http' | 'relational'
+  datasetType: 'directory' | 'json' | 'http' | 'sql'
   parentCode?: string
-  dataset?: JsonDataset | HttpDataset | RelationalDataset
+  dataset?: JsonDataset | HttpDataset | SqlDataset
   inputList?: DatasetInputParam[]
   outputList?: DatasetOutputParam[]
   createDate?: string
@@ -90,7 +90,7 @@ export interface DatasetTreeNode {
   id?: string
   label: string
   code?: string
-  datasetType: 'directory' | 'json' | 'http' | 'relational'
+  datasetType: 'directory' | 'json' | 'http' | 'sql'
   children?: DatasetTreeNode[]
   parentCode?: string
 }

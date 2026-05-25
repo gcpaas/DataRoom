@@ -27,11 +27,11 @@ const formRef = ref<FormInstance>()
 
 const formData = reactive<DatasetEntity>({
   name: '',
-  datasetType: 'relational',
+  datasetType: 'sql',
   parentCode: 'root',
   dataSourceCode: '',
   dataset: {
-    datasetType: 'relational',
+    datasetType: 'sql',
     sql: ''
   },
   inputList: [],
@@ -46,7 +46,7 @@ watch(
       Object.assign(formData, newVal)
       if (!formData.dataset) {
         formData.dataset = {
-          datasetType: 'relational',
+          datasetType: 'sql',
           sql: ''
         }
       }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch, shallowRef } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
@@ -28,9 +28,16 @@ interface BackgroundConfig {
   value: string
 }
 
+interface ConfigChangePayload {
+  material?: MaterialConfig
+  lighting?: LightingConfig
+  background?: BackgroundConfig
+}
+
 const props = withDefaults(defineProps<{
   modelUrl?: string
   coverImage?: string
+  errorPlaceholderImage?: string
   autoRotate?: boolean
   backgroundColor?: string
   materialConfig?: MaterialConfig
@@ -46,13 +53,14 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{
   captureCover: [data: string]
   loadSuccess: []
-  loadError: [error: any]
-  configChange: [config: any]
+  loadError: [error: unknown]
+  configChange: [config: ConfigChangePayload]
 }>()
 
 const containerRef = ref<HTMLDivElement>()
 const isLoading = ref(false)
 const showCover = ref(true)
+const loadFailed = ref(false)
 
 // Three.js objects - use shallowRef to avoid deep reactivity
 let scene: THREE.Scene
@@ -220,6 +228,7 @@ const loadModel = (url: string) => {
 
   isLoading.value = true
   showCover.value = false
+  loadFailed.value = false
 
   // Remove existing model
   if (currentModel) {
@@ -236,9 +245,21 @@ const loadModel = (url: string) => {
   } else if (extension === 'stl') {
     loadSTL(url)
   } else {
-    isLoading.value = false
-    emit('loadError', new Error('Unsupported model format: ' + extension))
+    handleModelLoadFailure(new Error('Unsupported model format: ' + extension))
   }
+}
+
+const handleModelLoadSuccess = () => {
+  isLoading.value = false
+  loadFailed.value = false
+  emit('loadSuccess')
+}
+
+const handleModelLoadFailure = (error: unknown) => {
+  isLoading.value = false
+  showCover.value = false
+  loadFailed.value = true
+  emit('loadError', error)
 }
 
 const loadGLTF = (url: string) => {
@@ -256,7 +277,7 @@ const loadGLTF = (url: string) => {
       applyDefaultMaterial()
       centerAndScaleModel()
       scene.add(currentModel)
-      isLoading.value = false
+      handleModelLoadSuccess()
 
       // 如果 canvas 尺寸为 0，说明容器尚未布局，强制触发 resize
       if (renderer.domElement.width === 0 || renderer.domElement.height === 0) {
@@ -268,12 +289,10 @@ const loadGLTF = (url: string) => {
         renderer.render(scene, camera)
       })
 
-      emit('loadSuccess')
     },
     undefined,
     (error) => {
-      isLoading.value = false
-      emit('loadError', error)
+      handleModelLoadFailure(error)
     }
   )
 }
@@ -287,19 +306,16 @@ const loadOBJ = (url: string) => {
       applyDefaultMaterial()
       centerAndScaleModel()
       scene.add(currentModel)
-      isLoading.value = false
+      handleModelLoadSuccess()
 
       // 立即渲染一帧确保显示
       requestAnimationFrame(() => {
         renderer.render(scene, camera)
       })
-
-      emit('loadSuccess')
     },
     undefined,
     (error) => {
-      isLoading.value = false
-      emit('loadError', error)
+      handleModelLoadFailure(error)
     }
   )
 }
@@ -317,13 +333,11 @@ const loadSTL = (url: string) => {
       currentModel = new THREE.Mesh(geometry, material)
       centerAndScaleModel()
       scene.add(currentModel)
-      isLoading.value = false
-      emit('loadSuccess')
+      handleModelLoadSuccess()
     },
     undefined,
     (error) => {
-      isLoading.value = false
-      emit('loadError', error)
+      handleModelLoadFailure(error)
     }
   )
 }
@@ -500,10 +514,20 @@ onBeforeUnmount(() => {
       <el-icon class="loading-icon"><Loading /></el-icon>
       <span>加载中...</span>
     </div>
-    <div v-if="showCover && coverImage && !currentModel" class="cover-image">
+    <div v-if="loadFailed" class="model-load-error">
+      <img
+        v-if="errorPlaceholderImage"
+        :src="errorPlaceholderImage"
+        alt="模型加载失败占位图"
+        class="model-load-error__image"
+      />
+      <el-icon v-else :size="48"><Box /></el-icon>
+      <span class="model-load-error__text">模型加载失败</span>
+    </div>
+    <div v-else-if="showCover && coverImage && !currentModel" class="cover-image">
       <img :src="coverImage" alt="cover" />
     </div>
-    <div v-if="!coverImage && !currentModel && !isLoading" class="placeholder">
+    <div v-if="!coverImage && !currentModel && !isLoading && !loadFailed" class="placeholder">
       <el-icon :size="48"><Box /></el-icon>
       <span>暂无模型</span>
     </div>
@@ -559,6 +583,32 @@ onBeforeUnmount(() => {
       max-height: 100%;
       object-fit: contain;
     }
+  }
+
+  .model-load-error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: var(--el-fill-color-extra-light);
+  }
+
+  .model-load-error__image {
+    width: 112px;
+    height: 112px;
+    object-fit: contain;
+  }
+
+  .model-load-error__text {
+    color: var(--el-text-color-secondary);
+    font-size: 14px;
+    font-weight: 400;
   }
 
   .placeholder {

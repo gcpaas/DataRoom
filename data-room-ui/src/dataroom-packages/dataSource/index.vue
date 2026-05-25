@@ -358,9 +358,9 @@ const handleSaveExcel = async () => {
         await datasetApi.insert({
           name: editorData.name,
           dataSourceCode: dataSourceCode,
-          datasetType: 'relational',
+          datasetType: 'sql',
           dataset: {
-            datasetType: 'relational',
+            datasetType: 'sql',
             sql: `SELECT * FROM ${tableName} LIMIT 100`,
           },
           outputList,

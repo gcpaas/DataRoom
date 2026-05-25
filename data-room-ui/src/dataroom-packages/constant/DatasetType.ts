@@ -6,5 +6,5 @@ export const DatasetType = {
   DIRECTORY: 'directory',
   JSON: 'json',
   HTTP: 'http',
-  RELATIONAL: 'relational'
+  SQL: 'sql'
 } as const;

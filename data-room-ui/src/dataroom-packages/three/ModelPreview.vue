@@ -3,10 +3,15 @@ import { ref, computed, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { resourceApi, type ResourceEntity, type MaterialConfig, type LightingConfig, type BackgroundConfig, type ModelConfig } from '@/dataroom-packages/resource/api'
 import ThreeModelViewer from './ThreeModelViewer.vue'
+import modelLoadFailedPlaceholder from '@/dataroom-packages/resource/assets/image/模型加载失败占位符.svg'
 
 interface Props {
   visible: boolean
   resource: ResourceEntity | null
+}
+
+interface UploadResponse {
+  data?: ResourceEntity
 }
 
 const props = defineProps<Props>()
@@ -158,18 +163,24 @@ const handleCaptureCover = () => {
 }
 
 // Upload cover
-const handleCoverUpload = (response: any) => {
+const handleCoverUpload = (response: UploadResponse) => {
   if (response && response.data && props.resource) {
-    const res = response.data as ResourceEntity
     emit('success')
     ElMessage.success('封面上传成功')
   }
 }
 
 // Load error handler
-const handleLoadError = (error: any) => {
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error) {
+    return error.message
+  }
+  return String(error)
+}
+
+const handleLoadError = (error: unknown) => {
   console.error('[ModelPreview] Load error:', error)
-  ElMessage.error('模型加载失败: ' + (error?.message || error))
+  ElMessage.error('模型加载失败: ' + getErrorMessage(error))
 }
 
 // Save config
@@ -189,7 +200,7 @@ const handleSaveConfig = async () => {
     })
     ElMessage.success('配置保存成功')
     emit('success')
-  } catch (error) {
+  } catch {
     ElMessage.error('配置保存失败')
   }
 }
@@ -199,11 +210,6 @@ const handleResetConfig = () => {
   localMaterialConfig.value = { ...defaultMaterialConfig }
   localLightingConfig.value = { ...defaultLightingConfig }
   localBackgroundConfig.value = { ...defaultBackgroundConfig }
-}
-
-// Close dialog
-const handleClose = () => {
-  emit('update:visible', false)
 }
 
 // Download model
@@ -258,6 +264,7 @@ const handleBackgroundChange = (color: string) => {
             ref="viewerRef"
             :model-url="modelUrl"
             :cover-image="coverImage"
+            :error-placeholder-image="modelLoadFailedPlaceholder"
             :material-config="localMaterialConfig"
             :lighting-config="localLightingConfig"
             :background-config="localBackgroundConfig"

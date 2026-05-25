@@ -73,9 +73,9 @@ const addTypeOptions = [
     description: '通过HTTP接口获取数据'
   },
   {
-    key: 'relational',
-    name: '关系型数据集',
-    description: '通过SQL查询关系型数据库'
+    key: 'sql',
+    name: 'SQL数据集',
+    description: '通过SQL查询数据库'
   }
 ]
 
@@ -119,10 +119,10 @@ const datasetTypeMap = {
     icon: '🌐',
     component: defineAsyncComponent(() => import('./components/HttpEditor.vue'))
   },
-  relational: {
-    name: '关系型数据库',
+  sql: {
+    name: 'SQL',
     icon: '🗄️',
-    component: defineAsyncComponent(() => import('./components/RelationalEditor.vue'))
+    component: defineAsyncComponent(() => import('./components/SqlEditor.vue'))
   }
 } as const
 
@@ -251,7 +251,7 @@ const handleTypeSelect = (type: string) => {
   if (type === 'directory') {
     handleAddFolder(typeSelectParentNode.value)
   } else {
-    handleAddDataset(type as 'json' | 'http' | 'relational', typeSelectParentNode.value)
+    handleAddDataset(type as 'json' | 'http' | 'sql', typeSelectParentNode.value)
   }
 }
 
@@ -285,7 +285,7 @@ const handleAddFolder = (node?: DatasetTreeNode) => {
 /**
  * 新增数据集
  */
-const handleAddDataset = (datasetType: 'json' | 'http' | 'relational', node?: DatasetTreeNode) => {
+const handleAddDataset = (datasetType: 'json' | 'http' | 'sql', node?: DatasetTreeNode) => {
   dialogTitle.value = `新增${datasetTypeMap[datasetType].name}数据集`
   currentDataset.value = {
     name: '',
@@ -298,7 +298,7 @@ const handleAddDataset = (datasetType: 'json' | 'http' | 'relational', node?: Da
         ? {datasetType: 'json', json: ''}
         : datasetType === 'http'
           ? {datasetType: 'http', url: '', method: 'GET', headerList: [], body: '', respJsonPath: ''}
-          : {datasetType: 'relational', sql: ''}
+          : {datasetType: 'sql', sql: ''}
   }
   dialogVisible.value = true
 }

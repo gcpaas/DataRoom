@@ -7,7 +7,7 @@ import { getCookie, getCookieName } from '@/dataroom-packages/_common/_cookie'
 import directoryPlaceholder from '../page/assets/image/目录占位符.png'
 import imagePlaceholder from './assets/image/图片占位符.png'
 import videoPlaceholder from './assets/image/视频占位符.png'
-import modelPlaceholder from './assets/image/模型占位符.png'
+import modelLoadFailedPlaceholder from './assets/image/模型加载失败占位符.svg'
 import { ResourceType } from '@/dataroom-packages/constant/ResourceType.ts'
 import ModelPreview from '@/dataroom-packages/three/ModelPreview.vue'
 
@@ -463,7 +463,7 @@ const getDefaultPlaceholder = (resourceType: string) => {
     case ResourceType.VIDEO:
       return videoPlaceholder
     case ResourceType.MODEL:
-      return modelPlaceholder
+      return modelLoadFailedPlaceholder
     default:
       return imagePlaceholder
   }
