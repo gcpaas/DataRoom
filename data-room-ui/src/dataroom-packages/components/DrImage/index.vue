@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   // 组件类型需与当前组件目录名保持一致
@@ -7,13 +7,13 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import type {DrImageConfig} from './install.ts'
-import {getResourceUrl, getSingleDatasetValueByField} from "@/dataroom-packages/_common/_utils.ts";
-import {useDrComponent} from "@/dataroom-packages/hooks/use-dr-component";
-import type {ComponentExpose} from "@/dataroom-packages/components/type/ComponentExpose.ts";
-import {computed, ref} from "vue";
+import type { DrImageConfig } from './install.ts'
+import { getResourceUrl, getSingleDatasetValueByField } from '@/dataroom-packages/_common/_utils.ts'
+import { useDrComponent } from '@/dataroom-packages/hooks/use-dr-component'
+import type { ComponentExpose } from '@/dataroom-packages/components/type/ComponentExpose.ts'
+import { computed, ref } from 'vue'
 
-const {chart} = defineProps<{
+const { chart } = defineProps<{
   chart: DrImageConfig
 }>()
 
@@ -85,13 +85,13 @@ const changeData = (datasetValue: any) => {
   }
 }
 
-const {canvasInst, expose} = useDrComponent({
+const { canvasInst, expose } = useDrComponent({
   chart: chart,
-  changeData: changeData
+  changeData: changeData,
 })
 
 const onImageClick = () => {
-  canvasInst.triggerChartBehavior(chart.id, 'click', {url: imageUrl.value})
+  canvasInst.triggerChartBehavior(chart.id, 'click', { url: imageUrl.value })
   if (chart.props.hyperlink?.url) {
     if (chart.props.hyperlink.openNewWindow) {
       window.open(chart.props.hyperlink.url, '_blank')
@@ -104,7 +104,6 @@ const onImageClick = () => {
 defineExpose<ComponentExpose>({
   ...expose,
 })
-
 </script>
 
 <template>
@@ -112,16 +111,12 @@ defineExpose<ComponentExpose>({
     <div v-if="chart.props.imageType === 'svg'" class="dr-image__svg">
       <el-image :src="getResourceUrl(imageUrl)" :style="{ borderRadius: `${chart.props.borderRadius}px` }">
         <template #error>
-          <div class="image-error-slot">
-            图片加载失败
-          </div>
+          <div class="image-error-slot">图片加载失败</div>
         </template>
       </el-image>
     </div>
     <div v-else class="dr-image__bitmap" :style="backgroundStyle">
-      <div v-if="!imageUrl" class="image-error-slot">
-        图片加载失败
-      </div>
+      <div v-if="!imageUrl" class="image-error-slot">图片加载失败</div>
     </div>
   </div>
 </template>
@@ -153,7 +148,7 @@ defineExpose<ComponentExpose>({
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--dr-text);
+    color: var(--el-text-color-regular);
   }
 }
 </style>

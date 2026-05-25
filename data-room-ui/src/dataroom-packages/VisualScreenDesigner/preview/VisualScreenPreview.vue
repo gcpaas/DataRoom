@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import {getComponent} from '@/dataroom-packages/components/AutoInstall.ts'
-import {computed, type CSSProperties, type Ref, nextTick, onMounted, onUnmounted, provide, ref} from 'vue'
-import {pageApi} from "@/dataroom-packages/page/api.ts"
-import {useRoute} from "vue-router"
-import {getResourceUrl} from "@/dataroom-packages/_common/_utils.ts"
-import {useCanvasInst} from '@/dataroom-packages/hooks/use-canvas-inst'
-import type {PageStageEntity} from "@/dataroom-packages/page/type/PageStageEntity.ts"
-import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts"
-import type {PageBasicConfig} from "@/dataroom-packages/PageDesigner/type/PageBasicConfig.ts"
-import type {VisualScreenPageBasicConfig} from "@/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts"
-import type {GlobalVariable} from "@/dataroom-packages/PageDesigner/type/GlobalVariable.ts"
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts"
-import {useTimerManager} from "@/dataroom-packages/hooks/use-timer-manager"
+import { getComponent } from '@/dataroom-packages/components/AutoInstall.ts'
+import { computed, type CSSProperties, type Ref, nextTick, onMounted, onUnmounted, provide, ref } from 'vue'
+import { pageApi } from '@/dataroom-packages/page/api.ts'
+import { useRoute } from 'vue-router'
+import { getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
+import { useCanvasInst } from '@/dataroom-packages/hooks/use-canvas-inst'
+import type { PageStageEntity } from '@/dataroom-packages/page/type/PageStageEntity.ts'
+import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
+import type { PageBasicConfig } from '@/dataroom-packages/PageDesigner/type/PageBasicConfig.ts'
+import type { VisualScreenPageBasicConfig } from '@/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts'
+import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/GlobalVariable.ts'
+import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import { useTimerManager } from '@/dataroom-packages/hooks/use-timer-manager'
 
 const pageStageEntity = ref<PageStageEntity>()
 const chartList = ref<ChartConfig<unknown>[]>([])
 const defaultBasicConfig: VisualScreenPageBasicConfig = {
-  background: {fill: 'color', color: '#0d1e42', url: '', opacity: 100, repeat: 'no-repeat'},
-  size: {width: 1920, height: 1080, zoom: 'contain'},
-  timers: []
+  background: { fill: 'color', color: '#0d1e42', url: '', opacity: 100, repeat: 'no-repeat' },
+  size: { width: 1920, height: 1080, zoom: 'contain' },
+  timers: [],
 }
-const basicConfig = ref<VisualScreenPageBasicConfig>({...defaultBasicConfig})
+const basicConfig = ref<VisualScreenPageBasicConfig>({ ...defaultBasicConfig })
 const globalVariable = ref<GlobalVariable[]>([] as GlobalVariable[])
 const route = useRoute()
 
@@ -31,14 +31,14 @@ const viewportHeight = ref(window.innerHeight)
 /**
  * 创建画布实例供子组件使用
  */
-const {canvasInst} = useCanvasInst({
+const { canvasInst } = useCanvasInst({
   chartList,
-  globalVariable
+  globalVariable,
 })
 provide(DrConst.CANVAS_INST, canvasInst)
 
 // 定时器管理器
-const {timerManager} = useTimerManager({
+const { timerManager } = useTimerManager({
   canvasInst,
   basicConfig: basicConfig as unknown as Ref<PageBasicConfig>,
 })
@@ -55,9 +55,9 @@ onMounted(() => {
     if (res.pageConfig?.basicConfig) {
       const loaded = res.pageConfig.basicConfig as Partial<VisualScreenPageBasicConfig>
       basicConfig.value = {
-        background: {...defaultBasicConfig.background, ...loaded.background},
-        size: {...defaultBasicConfig.size, ...loaded.size},
-        timers: loaded.timers || []
+        background: { ...defaultBasicConfig.background, ...loaded.background },
+        size: { ...defaultBasicConfig.size, ...loaded.size },
+        timers: loaded.timers || [],
       }
     }
     nextTick(() => {
@@ -182,14 +182,7 @@ const computedScalerStyle = computed<CSSProperties>(() => {
   <div class="vs-preview-viewport">
     <div class="vs-preview-scaler" :style="computedScalerStyle">
       <div class="canvas-content" :style="computedCanvasContentStyle">
-        <div
-          class="chart-wrapper"
-          v-for="item in chartList"
-          :key="item.id"
-          :id="item.id"
-          :data-dr-id="item.id"
-          :style="computedChartStyle(item)"
-        >
+        <div class="chart-wrapper" v-for="item in chartList" :key="item.id" :id="item.id" :data-dr-id="item.id" :style="computedChartStyle(item)">
           <component :is="getComponent(item.type)" :chart="item"></component>
         </div>
       </div>
@@ -202,7 +195,7 @@ const computedScalerStyle = computed<CSSProperties>(() => {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background-color: #000000;
+  background-color: var(--el-text-color-primary);
   position: relative;
   margin: 0;
   padding: 0;

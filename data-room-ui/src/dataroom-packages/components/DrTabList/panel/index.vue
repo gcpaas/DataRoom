@@ -40,7 +40,14 @@ const removeStaticTab = (index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">默认项</span>
-                  <el-input-number v-model="chartConfig.props.basic.defaultIndex" class="dr-config-panel__control" :min="0" :max="chartConfig.props.options.staticTabs.length - 1" :step="1" controls-position="right" />
+                  <el-input-number
+                    v-model="chartConfig.props.basic.defaultIndex"
+                    class="dr-config-panel__control"
+                    :min="0"
+                    :max="chartConfig.props.options.staticTabs.length - 1"
+                    :step="1"
+                    controls-position="right"
+                  />
                 </div>
               </el-form-item>
               <el-form-item class="dr-config-panel__sub-form-item">
@@ -163,7 +170,14 @@ const removeStaticTab = (index: number) => {
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">宽度</span>
-                  <el-input-number v-model="chartConfig.props.tabStyle.borderBottom.width" class="dr-config-panel__control" :min="1" :max="10" :step="1" controls-position="right" />
+                  <el-input-number
+                    v-model="chartConfig.props.tabStyle.borderBottom.width"
+                    class="dr-config-panel__control"
+                    :min="1"
+                    :max="10"
+                    :step="1"
+                    controls-position="right"
+                  />
                 </div>
               </el-form-item>
             </el-form>
@@ -269,6 +283,6 @@ const removeStaticTab = (index: number) => {
 
 .dr-tab-list-config-panel__add-button {
   width: 100%;
-  margin-top: var(--space-2);
+  margin-top: 8px;
 }
 </style>

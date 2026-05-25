@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   // 组件类型需与当前组件目录名保持一致
@@ -7,12 +7,12 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import type {DrInputConfig} from './install.ts'
-import {ref, computed, watch, onMounted} from "vue"
-import {useDrComponent} from "@/dataroom-packages/hooks/use-dr-component"
-import type {ComponentExpose} from "@/dataroom-packages/components/type/ComponentExpose.ts"
+import type { DrInputConfig } from './install.ts'
+import { ref, computed, watch, onMounted } from 'vue'
+import { useDrComponent } from '@/dataroom-packages/hooks/use-dr-component'
+import type { ComponentExpose } from '@/dataroom-packages/components/type/ComponentExpose.ts'
 
-const {chart} = defineProps<{
+const { chart } = defineProps<{
   chart: DrInputConfig
 }>()
 
@@ -23,9 +23,9 @@ const changeData = (_datasetValue: any) => {
   // 输入框组件不消费数据集
 }
 
-const {canvasInst, expose} = useDrComponent({
+const { canvasInst, expose } = useDrComponent({
   chart: chart,
-  changeData: changeData
+  changeData: changeData,
 })
 
 /** 当前输入值 */
@@ -46,10 +46,13 @@ onMounted(() => {
 /**
  * 监听 defaultValue 变化，同步更新
  */
-watch(() => chart.props.basic.defaultValue, (newVal) => {
-  inputValue.value = newVal
-  syncGlobalVariable(newVal)
-})
+watch(
+  () => chart.props.basic.defaultValue,
+  (newVal) => {
+    inputValue.value = newVal
+    syncGlobalVariable(newVal)
+  },
+)
 
 /**
  * 同步值到全局变量
@@ -66,7 +69,7 @@ const syncGlobalVariable = (value: string) => {
  */
 const emitValueChange = (value: string) => {
   syncGlobalVariable(value)
-  canvasInst.triggerChartBehavior(chart.id, 'valueChange', {value})
+  canvasInst.triggerChartBehavior(chart.id, 'valueChange', { value })
 }
 
 /**
@@ -87,7 +90,7 @@ const onKeydownEnter = () => {
   if (!chart.props.globalVar.triggerOnInput) {
     emitValueChange(inputValue.value)
   }
-  canvasInst.triggerChartBehavior(chart.id, 'enterPress', {value: inputValue.value})
+  canvasInst.triggerChartBehavior(chart.id, 'enterPress', { value: inputValue.value })
 }
 
 /**
@@ -106,7 +109,7 @@ const onBlur = () => {
   if (!chart.props.globalVar.triggerOnInput) {
     emitValueChange(inputValue.value)
   }
-  canvasInst.triggerChartBehavior(chart.id, 'blur', {value: inputValue.value})
+  canvasInst.triggerChartBehavior(chart.id, 'blur', { value: inputValue.value })
 }
 
 /**
@@ -179,7 +182,7 @@ const inputStyle = computed(() => {
  */
 const cssVars = computed(() => {
   return {
-    '--dr-input-placeholder-color': chart.props.style.placeholderColor
+    '--component-input-placeholder-color': chart.props.style.placeholderColor,
   }
 })
 
@@ -205,14 +208,11 @@ defineExpose<ComponentExpose>({
         @focus="onFocus"
         @blur="onBlur"
       />
-      <span
-        v-if="showClearBtn"
-        class="dr-input__clear"
-        @mousedown.prevent
-        @click="onClear"
-      >
+      <span v-if="showClearBtn" class="dr-input__clear" @mousedown.prevent @click="onClear">
         <svg viewBox="0 0 1024 1024" width="14" height="14" fill="currentColor">
-          <path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359c-1.2-1.5-1.9-3.3-1.9-5.2 0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z"/>
+          <path
+            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359c-1.2-1.5-1.9-3.3-1.9-5.2 0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z"
+          />
         </svg>
       </span>
     </div>
@@ -236,7 +236,7 @@ defineExpose<ComponentExpose>({
 }
 
 .dr-input__inner::placeholder {
-  color: var(--dr-input-placeholder-color, #999999);
+  color: var(--component-input-placeholder-color, var(--el-text-color-placeholder));
 }
 
 .dr-input__clear {
@@ -245,13 +245,13 @@ defineExpose<ComponentExpose>({
   justify-content: center;
   width: 20px;
   height: 20px;
-  color: #999999;
+  color: var(--el-text-color-placeholder);
   cursor: pointer;
   flex-shrink: 0;
   transition: color 0.2s;
 }
 
 .dr-input__clear:hover {
-  color: #ffffff;
+  color: var(--el-fill-color-blank);
 }
 </style>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {onMounted, onUnmounted, ref} from 'vue'
-import {ElMessage, ElMessageBox} from 'element-plus'
-import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts";
+import { onMounted, onUnmounted, ref } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
 
 const props = defineProps<{
   chart?: ChartConfig<unknown>
@@ -47,21 +47,19 @@ const onChartConfigClick = () => {
  * 删除组件
  */
 const onChartDeleteClick = () => {
-  ElMessageBox.confirm(
-    '确定要删除这个组件吗？',
-    '提示',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  ).then(() => {
-    emit('switchRightControlPanel', false)
-    emit('deleteChart', chart.id)
-    contextMenuVisible.value = false
-  }).catch(() => {
-    // 用户取消删除
+  ElMessageBox.confirm('确定要删除这个组件吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
   })
+    .then(() => {
+      emit('switchRightControlPanel', false)
+      emit('deleteChart', chart.id)
+      contextMenuVisible.value = false
+    })
+    .catch(() => {
+      // 用户取消删除
+    })
 }
 /**
  * 复制组件
@@ -91,12 +89,18 @@ const onChartHideClick = () => {
 <style scoped>
 .dr-context-menu-wrapper {
   width: 200px;
-  background: #ffffff;
+  background: var(--el-fill-color-blank);
   padding: 8px 0;
   border-radius: 8px;
-  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 12px 24px -4px rgba(0, 0, 0, 0.08), 0px 4px 8px rgba(0, 0, 0, 0.04);
-  color: #4e5969;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border: 1px solid var(--el-border-color);
+  color: var(--el-text-color-regular);
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   font-size: 14px;
   font-weight: 400;
   z-index: 2000;
@@ -106,8 +110,8 @@ const onChartHideClick = () => {
     transition: all 0.15s;
 
     &:hover {
-      color: #3478f6;
-      background-color: #eff6ff;
+      color: var(--el-color-primary);
+      background-color: var(--el-color-primary-light-9);
       cursor: pointer;
     }
   }

@@ -1,10 +1,10 @@
 <!-- 全局变量 -->
 <script setup lang="ts">
-import {ref, computed, watch} from 'vue'
-import {v4 as uuidv4} from 'uuid'
-import {Search} from '@element-plus/icons-vue'
-import {ElMessageBox} from 'element-plus'
-import type {GlobalVariable} from "@/dataroom-packages/PageDesigner/type/GlobalVariable.ts";
+import { ref, computed, watch } from 'vue'
+import { v4 as uuidv4 } from 'uuid'
+import { Search } from '@element-plus/icons-vue'
+import { ElMessageBox } from 'element-plus'
+import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/GlobalVariable.ts'
 
 const props = defineProps<{
   globalVariable: GlobalVariable[]
@@ -23,7 +23,8 @@ watch(
     if (newVal && newVal.length > 0 && !activeGlobalVariable.value) {
       activeGlobalVariable.value = newVal[0]
     }
-  }, {immediate: true}
+  },
+  { immediate: true },
 )
 const onClose = () => {
   globalVariableVisible.value = false
@@ -38,9 +39,7 @@ const filteredVariables = computed(() => {
     return props.globalVariable
   }
   const keyword = searchName.value.toLowerCase()
-  return props.globalVariable.filter(
-    (item) => item.name.toLowerCase().includes(keyword) || item.remark?.toLowerCase().includes(keyword)
-  )
+  return props.globalVariable.filter((item) => item.name.toLowerCase().includes(keyword) || item.remark?.toLowerCase().includes(keyword))
 })
 
 /**
@@ -150,74 +149,68 @@ const onDelete = (variable: GlobalVariable) => {
 .global-variable-wrapper {
   display: grid;
   grid-template-columns: 400px auto;
-  background-color: var(--dr-gray-50);
+  background-color: var(--el-fill-color-light);
   gap: 0;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
   & .variable-wrapper {
     height: calc(70vh - 120px);
-    background: var(--dr-white);
-    padding: var(--space-4);
-    margin: var(--space-4);
-    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-    box-shadow: var(--dr-shadow-border);
+    background: var(--el-fill-color-blank);
+    padding: 16px;
+    margin: 16px;
+    border-radius: 8px 0 0 8px;
+    border: 1px solid var(--el-border-color);
 
     & .search {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: var(--space-3);
-
-      :deep(.el-input__wrapper) {
-        border-radius: var(--radius-md);
-        box-shadow: var(--dr-shadow-border);
-        border: none;
-        transition: box-shadow 0.2s ease;
-
-        &:focus-within {
-          box-shadow: var(--dr-shadow-focus);
-        }
-      }
-
-      :deep(.el-button) {
-        border-radius: var(--radius-md);
-      }
+      gap: 12px;
     }
 
     & .variable {
-      margin: var(--space-2) 0;
-      padding: var(--space-3);
+      margin: 8px 0;
+      padding: 12px;
       position: relative;
-      border-radius: var(--radius-md);
-      box-shadow: var(--dr-shadow-border);
-      transition: all 0.2s ease;
+      border-radius: 6px;
+      border: 1px solid var(--el-border-color);
+      transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
 
       & .name {
         font-size: 14px;
-        color: var(--dr-gray-900);
+        color: var(--el-text-color-primary);
         font-weight: 500;
         font-variant-numeric: tabular-nums;
       }
 
       & .remark {
         font-size: 12px;
-        color: var(--dr-gray-500);
-        margin-top: var(--space-1);
+        color: var(--el-text-color-secondary);
+        margin-top: 4px;
       }
 
       & .delete {
         position: absolute;
-        right: var(--space-2);
-        top: var(--space-2);
+        right: 8px;
+        top: 8px;
         font-size: 12px;
-        color: var(--dr-danger);
+        color: var(--el-color-danger);
         cursor: pointer;
         opacity: 0;
         transition: opacity 0.15s ease;
       }
 
       &:hover {
-        background: var(--dr-gray-100);
+        background: var(--el-fill-color-lighter);
+        border-color: var(--el-border-color-darker);
         cursor: pointer;
 
         & .delete {
@@ -227,8 +220,8 @@ const onDelete = (variable: GlobalVariable) => {
     }
 
     & .active {
-      background: var(--dr-blue-soft);
-      box-shadow: 0px 0px 0px 1px var(--dr-blue-border);
+      background: var(--el-color-primary-light-9);
+      border-color: var(--el-color-primary-light-8);
 
       & .delete {
         opacity: 1;
@@ -237,42 +230,11 @@ const onDelete = (variable: GlobalVariable) => {
   }
 
   & .variable-form-wrapper {
-    background: var(--dr-white);
-    padding: var(--space-4);
-    margin: var(--space-4) var(--space-4) var(--space-4) 0;
-    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-    box-shadow: var(--dr-shadow-border);
-
-    :deep(.el-form-item__label) {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--dr-gray-700);
-    }
-
-    :deep(.el-input__wrapper),
-    :deep(.el-select .el-input__wrapper) {
-      border-radius: var(--radius-md);
-      box-shadow: 0px 0px 0px 1px var(--dr-gray-200);
-      border: none;
-      transition: box-shadow 0.2s ease;
-
-      &:focus-within {
-        box-shadow: var(--dr-shadow-focus);
-      }
-    }
-
-    :deep(.el-textarea__inner) {
-      border-radius: var(--radius-md);
-      border: 1px solid var(--dr-gray-200);
-      font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
-      font-size: 13px;
-      transition: box-shadow 0.2s ease, border-color 0.2s ease;
-
-      &:focus {
-        border-color: var(--dr-blue);
-        box-shadow: var(--dr-shadow-focus);
-      }
-    }
+    background: var(--el-fill-color-blank);
+    padding: 16px;
+    margin: 16px 16px 16px 0;
+    border-radius: 0 8px 8px 0;
+    border: 1px solid var(--el-border-color);
   }
 }
 </style>

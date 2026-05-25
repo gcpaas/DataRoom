@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed} from 'vue'
+import { computed } from 'vue'
 
 type SpacingObject = {
   top?: number
@@ -10,45 +10,38 @@ type SpacingObject = {
 
 type SpacingValue = number[] | SpacingObject
 
-const props = withDefaults(defineProps<{
-  modelValue: SpacingValue
-  ariaLabel?: string
-  min?: number
-  max?: number
-  step?: number
-}>(), {
-  ariaLabel: '边距配置',
-  min: 0,
-  max: 200,
-  step: 1,
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue: SpacingValue
+    ariaLabel?: string
+    min?: number
+    max?: number
+    step?: number
+  }>(),
+  {
+    ariaLabel: '边距配置',
+    min: 0,
+    max: 200,
+    step: 1,
+  },
+)
 
 const emit = defineEmits<{
   'update:modelValue': [value: SpacingValue]
 }>()
 
 const sides = [
-  {key: 'top', index: 0, className: 'top', label: '上边距'},
-  {key: 'right', index: 1, className: 'right', label: '右边距'},
-  {key: 'bottom', index: 2, className: 'bottom', label: '下边距'},
-  {key: 'left', index: 3, className: 'left', label: '左边距'},
+  { key: 'top', index: 0, className: 'top', label: '上边距' },
+  { key: 'right', index: 1, className: 'right', label: '右边距' },
+  { key: 'bottom', index: 2, className: 'bottom', label: '下边距' },
+  { key: 'left', index: 3, className: 'left', label: '左边距' },
 ] as const
 
 const normalizedValue = computed<[number, number, number, number]>(() => {
   if (Array.isArray(props.modelValue)) {
-    return [
-      Number(props.modelValue[0] ?? 0),
-      Number(props.modelValue[1] ?? 0),
-      Number(props.modelValue[2] ?? 0),
-      Number(props.modelValue[3] ?? 0),
-    ]
+    return [Number(props.modelValue[0] ?? 0), Number(props.modelValue[1] ?? 0), Number(props.modelValue[2] ?? 0), Number(props.modelValue[3] ?? 0)]
   }
-  return [
-    Number(props.modelValue.top ?? 0),
-    Number(props.modelValue.right ?? 0),
-    Number(props.modelValue.bottom ?? 0),
-    Number(props.modelValue.left ?? 0),
-  ]
+  return [Number(props.modelValue.top ?? 0), Number(props.modelValue.right ?? 0), Number(props.modelValue.bottom ?? 0), Number(props.modelValue.left ?? 0)]
 })
 
 const formatValue = (value: number) => {
@@ -89,13 +82,7 @@ const updateValue = (index: number, key: keyof SpacingObject, rawValue: string) 
       <div class="padding-band padding-band-left"></div>
       <div class="padding-content"></div>
 
-      <label
-        v-for="side in sides"
-        :key="side.key"
-        class="padding-value"
-        :class="`is-${side.className}`"
-        :title="side.label"
-      >
+      <label v-for="side in sides" :key="side.key" class="padding-value" :class="`is-${side.className}`" :title="side.label">
         <span class="sr-only">{{ side.label }}</span>
         <input
           type="number"
@@ -116,10 +103,10 @@ const updateValue = (index: number, key: keyof SpacingObject, rawValue: string) 
 }
 
 .padding-box {
-  --padding-fill: var(--dr-blue-soft);
-  --padding-content-bg: var(--dr-white);
-  --padding-text: var(--dr-gray-700);
-  --padding-text-hover: var(--dr-gray-900);
+  --padding-fill: var(--el-color-primary-light-9);
+  --padding-content-bg: var(--el-fill-color-blank);
+  --padding-text: var(--el-text-color-regular);
+  --padding-text-hover: var(--el-text-color-primary);
   --padding-x: 38px;
   --padding-y: 30px;
 
@@ -128,9 +115,9 @@ const updateValue = (index: number, key: keyof SpacingObject, rawValue: string) 
   min-width: 180px;
   height: 128px;
   overflow: hidden;
-  background: var(--dr-white);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--dr-shadow-border);
+  background: var(--el-fill-color-blank);
+  border-radius: 8px;
+  border: 1px solid var(--el-border-color);
   isolation: isolate;
 }
 
@@ -184,7 +171,7 @@ const updateValue = (index: number, key: keyof SpacingObject, rawValue: string) 
   left: var(--padding-x);
   z-index: 2;
   background: var(--padding-content-bg);
-  box-shadow: var(--dr-shadow-border);
+  border: 1px solid var(--el-border-color-light);
 }
 
 .padding-value {
@@ -202,28 +189,37 @@ const updateValue = (index: number, key: keyof SpacingObject, rawValue: string) 
   padding: 0;
   outline: none;
   border: 0;
-  border-radius: var(--radius-sm);
-  background: transparent;
+  border-radius: 4px;
+  background: inherit;
   color: var(--padding-text);
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 22px;
   text-align: center;
   font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
-  transition: color 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease;
+  font-feature-settings: 'tnum';
+  transition:
+    color 0.16s ease,
+    background-color 0.16s ease,
+    box-shadow 0.16s ease;
 }
 
 .padding-value input:hover {
   color: var(--padding-text-hover);
-  background: rgba(255, 255, 255, 0.72);
+  background: var(--el-fill-color-blank);
 }
 
 .padding-value input:focus-visible {
-  color: var(--dr-gray-900);
-  background: var(--dr-white);
-  box-shadow: var(--dr-shadow-focus);
+  color: var(--el-text-color-primary);
+  background: var(--el-fill-color-blank);
+  box-shadow: 0 0 0 1px var(--el-color-primary);
 }
 
 .padding-value input::-webkit-outer-spin-button,

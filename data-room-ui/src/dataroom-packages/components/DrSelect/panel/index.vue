@@ -299,6 +299,6 @@ const removeStaticOption = (index: number) => {
 
 .dr-select-config-panel__add-button {
   width: 100%;
-  margin-top: var(--space-2);
+  margin-top: 8px;
 }
 </style>

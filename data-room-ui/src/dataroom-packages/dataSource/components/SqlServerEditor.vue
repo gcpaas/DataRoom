@@ -22,8 +22,8 @@ const formData = reactive<DataSourceEntity>({
     driverName: 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
     username: '',
     password: '',
-    url: ''
-  }
+    url: '',
+  },
 })
 
 // 监听外部传入的值变化
@@ -37,7 +37,7 @@ watch(
       }
     }
   },
-  { immediate: true, deep: true }
+  { immediate: true, deep: true },
 )
 
 // 监听内部值变化，触发更新
@@ -46,7 +46,7 @@ watch(
   (newVal) => {
     emit('update:modelValue', newVal)
   },
-  { deep: true }
+  { deep: true },
 )
 
 const rules = reactive<FormRules<DataSourceEntity>>({
@@ -54,7 +54,7 @@ const rules = reactive<FormRules<DataSourceEntity>>({
   'dataSource.driverName': [{ required: true, message: '请输入驱动名称', trigger: 'blur' }],
   'dataSource.username': [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   'dataSource.password': [{ required: true, message: '请输入密码', trigger: 'blur' }],
-  'dataSource.url': [{ required: true, message: '请输入连接地址', trigger: 'blur' }]
+  'dataSource.url': [{ required: true, message: '请输入连接地址', trigger: 'blur' }],
 })
 
 /**
@@ -80,7 +80,7 @@ const getEncryptedData = (): DataSourceEntity => {
   if (data.dataSource?.password) {
     data.dataSource = {
       ...data.dataSource,
-      password: encryptByRsa(data.dataSource.password)
+      password: encryptByRsa(data.dataSource.password),
     }
   }
   return data
@@ -89,7 +89,7 @@ const getEncryptedData = (): DataSourceEntity => {
 defineExpose({
   validate,
   resetFields,
-  getEncryptedData
+  getEncryptedData,
 })
 </script>
 
@@ -105,13 +105,7 @@ defineExpose({
       <el-input v-model="formData.dataSource.username" placeholder="请输入用户名" clearable />
     </el-form-item>
     <el-form-item label="密码" prop="dataSource.password">
-      <el-input
-        v-model="formData.dataSource.password"
-        type="password"
-        placeholder="请输入密码"
-        show-password
-        clearable
-      />
+      <el-input v-model="formData.dataSource.password" type="password" placeholder="请输入密码" show-password clearable />
     </el-form-item>
     <el-form-item label="连接地址" prop="dataSource.url">
       <el-input
@@ -127,6 +121,6 @@ defineExpose({
 
 <style scoped lang="scss">
 .data-source-editor-form {
-  padding: var(--space-5) var(--space-6);
+  padding: 20px 24px;
 }
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   // 组件类型需与当前组件目录名保持一致
@@ -8,11 +8,11 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import {computed} from 'vue'
-import type {DrDecorationConfig} from '../install.ts'
-import {decorationTypeOptions, isDecorationPropSupported, normalizeDecorationType} from '../options.ts'
+import { computed } from 'vue'
+import type { DrDecorationConfig } from '../install.ts'
+import { decorationTypeOptions, isDecorationPropSupported, normalizeDecorationType } from '../options.ts'
 
-const {chart} = defineProps<{
+const { chart } = defineProps<{
   chart: DrDecorationConfig
 }>()
 
@@ -82,48 +82,27 @@ const clearColors = () => {
               <el-form-item v-if="isDecorationPropSupported(currentDecorationType, 'dur')" class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">时长</span>
-                  <el-input-number
-                    v-model="chartConfig.props.dur"
-                    class="dr-config-panel__control"
-                    :min="0.1"
-                    :max="60"
-                    :step="0.1"
-                    controls-position="right"
-                  />
+                  <el-input-number v-model="chartConfig.props.dur" class="dr-config-panel__control" :min="0.1" :max="60" :step="0.1" controls-position="right" />
                 </div>
               </el-form-item>
               <el-form-item v-if="isDecorationPropSupported(currentDecorationType, 'scanDur')" class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">扫描时长</span>
-                  <el-input-number
-                    v-model="chartConfig.props.scanDur"
-                    class="dr-config-panel__control"
-                    :min="0.1"
-                    :max="60"
-                    :step="0.1"
-                    controls-position="right"
-                  />
+                  <el-input-number v-model="chartConfig.props.scanDur" class="dr-config-panel__control" :min="0.1" :max="60" :step="0.1" controls-position="right" />
                 </div>
               </el-form-item>
               <el-form-item v-if="isDecorationPropSupported(currentDecorationType, 'haloDur')" class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">光晕时长</span>
-                  <el-input-number
-                    v-model="chartConfig.props.haloDur"
-                    class="dr-config-panel__control"
-                    :min="0.1"
-                    :max="60"
-                    :step="0.1"
-                    controls-position="right"
-                  />
+                  <el-input-number v-model="chartConfig.props.haloDur" class="dr-config-panel__control" :min="0.1" :max="60" :step="0.1" controls-position="right" />
                 </div>
               </el-form-item>
               <el-empty
                 v-if="
-                  !isDecorationPropSupported(currentDecorationType, 'reverse')
-                    && !isDecorationPropSupported(currentDecorationType, 'dur')
-                    && !isDecorationPropSupported(currentDecorationType, 'scanDur')
-                    && !isDecorationPropSupported(currentDecorationType, 'haloDur')
+                  !isDecorationPropSupported(currentDecorationType, 'reverse') &&
+                  !isDecorationPropSupported(currentDecorationType, 'dur') &&
+                  !isDecorationPropSupported(currentDecorationType, 'scanDur') &&
+                  !isDecorationPropSupported(currentDecorationType, 'haloDur')
                 "
                 description="当前类型无专属配置"
                 :image-size="48"
@@ -150,12 +129,12 @@ const clearColors = () => {
 .dr-decoration-config-panel__colors {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 8px;
 }
 
 .dr-decoration-config-panel__color-row {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 8px;
 }
 </style>

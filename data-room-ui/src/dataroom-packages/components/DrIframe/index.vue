@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   // 组件类型需与当前组件目录名保持一致
@@ -7,13 +7,13 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import type {DrIframeConfig} from './install.ts'
-import {getSingleDatasetValueByField} from "@/dataroom-packages/_common/_utils.ts";
-import {useDrComponent} from "@/dataroom-packages/hooks/use-dr-component";
-import type {ComponentExpose} from "@/dataroom-packages/components/type/ComponentExpose.ts";
-import {computed, ref, watch, onBeforeUnmount} from "vue";
+import type { DrIframeConfig } from './install.ts'
+import { getSingleDatasetValueByField } from '@/dataroom-packages/_common/_utils.ts'
+import { useDrComponent } from '@/dataroom-packages/hooks/use-dr-component'
+import type { ComponentExpose } from '@/dataroom-packages/components/type/ComponentExpose.ts'
+import { computed, ref, watch, onBeforeUnmount } from 'vue'
 
-const {chart} = defineProps<{
+const { chart } = defineProps<{
   chart: DrIframeConfig
 }>()
 
@@ -71,22 +71,22 @@ const changeData = (datasetValue: any) => {
     const oldUrl = currentUrl.value
     datasetUrl.value = url
     if (oldUrl !== url) {
-      canvasInst.triggerChartBehavior(chart.id, 'urlChange', {url: url})
+      canvasInst.triggerChartBehavior(chart.id, 'urlChange', { url: url })
     }
   }
 }
 
-const {canvasInst, expose} = useDrComponent({
+const { canvasInst, expose } = useDrComponent({
   chart: chart,
-  changeData: changeData
+  changeData: changeData,
 })
 
 const onIframeLoad = () => {
-  canvasInst.triggerChartBehavior(chart.id, 'loaded', {url: currentUrl.value})
+  canvasInst.triggerChartBehavior(chart.id, 'loaded', { url: currentUrl.value })
 }
 
 const onIframeClick = () => {
-  canvasInst.triggerChartBehavior(chart.id, 'click', {url: currentUrl.value})
+  canvasInst.triggerChartBehavior(chart.id, 'click', { url: currentUrl.value })
 }
 
 /**
@@ -124,7 +124,7 @@ watch(
   () => {
     setupAutoRefresh()
   },
-  {immediate: true}
+  { immediate: true },
 )
 
 onBeforeUnmount(() => {
@@ -134,7 +134,6 @@ onBeforeUnmount(() => {
 defineExpose<ComponentExpose>({
   ...expose,
 })
-
 </script>
 
 <template>
@@ -176,9 +175,9 @@ defineExpose<ComponentExpose>({
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--dr-text);
+    color: var(--el-text-color-regular);
     font-size: 14px;
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--el-fill-color-extra-light);
   }
 }
 </style>

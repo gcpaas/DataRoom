@@ -32,7 +32,7 @@ const showColumnConfig = computed(() => columns.value.length > 0)
 const formData = reactive({
   name: '',
   tableName: '',
-  importMode: 'overwrite' as 'overwrite' | 'append'
+  importMode: 'overwrite' as 'overwrite' | 'append',
 })
 
 // 监听外部传入的值
@@ -53,7 +53,7 @@ watch(
       }
     }
   },
-  { immediate: true, deep: true }
+  { immediate: true, deep: true },
 )
 
 const rules = reactive<FormRules>({
@@ -70,9 +70,9 @@ const rules = reactive<FormRules>({
           callback()
         }
       },
-      trigger: 'blur'
-    }
-  ]
+      trigger: 'blur',
+    },
+  ],
 })
 
 /**
@@ -122,7 +122,7 @@ const columnTypeOptions = [
   { label: 'VARCHAR (文本)', value: 'VARCHAR' },
   { label: 'INTEGER (整数)', value: 'INTEGER' },
   { label: 'DECIMAL (小数)', value: 'DECIMAL' },
-  { label: 'DATE (日期)', value: 'DATE' }
+  { label: 'DATE (日期)', value: 'DATE' },
 ]
 
 /**
@@ -157,7 +157,7 @@ const getEncryptedData = () => {
     uploadId: uploadId.value,
     columns: columns.value,
     originalFileName: uploadedFileName.value,
-    importMode: formData.importMode
+    importMode: formData.importMode,
   }
 }
 
@@ -172,7 +172,7 @@ defineExpose({
   isEditMode,
   hasNewFile,
   selectedFile,
-  importMode: computed(() => formData.importMode)
+  importMode: computed(() => formData.importMode),
 })
 </script>
 
@@ -185,12 +185,7 @@ defineExpose({
       </el-form-item>
 
       <el-form-item label="表名称" prop="tableName">
-        <el-input
-          v-model="formData.tableName"
-          placeholder="excel_your_table_name"
-          clearable
-          :disabled="isEditMode"
-        >
+        <el-input v-model="formData.tableName" placeholder="excel_your_table_name" clearable :disabled="isEditMode">
           <template #prepend v-if="!isEditMode">excel_</template>
         </el-input>
         <div class="form-tip" v-if="!isEditMode">仅支持字母、数字、下划线，系统自动添加excel_前缀</div>
@@ -206,20 +201,11 @@ defineExpose({
 
       <!-- 文件上传 -->
       <el-form-item label="文件">
-        <el-upload
-          class="excel-upload"
-          :auto-upload="false"
-          :show-file-list="false"
-          accept=".xlsx,.csv"
-          :on-change="handleFileChange"
-          :limit="1"
-        >
+        <el-upload class="excel-upload" :auto-upload="false" :show-file-list="false" accept=".xlsx,.csv" :on-change="handleFileChange" :limit="1">
           <template #trigger>
             <div class="upload-area" v-loading="uploading">
               <el-icon class="upload-icon"><UploadFilled /></el-icon>
-              <div class="upload-text" v-if="!uploadedFileName">
-                点击选择 .xlsx 或 .csv 文件
-              </div>
+              <div class="upload-text" v-if="!uploadedFileName">点击选择 .xlsx 或 .csv 文件</div>
               <div class="upload-text uploaded" v-else>
                 {{ uploadedFileName }}
                 <span class="row-count" v-if="totalRows > 0">（{{ totalRows }} 行数据）</span>
@@ -243,22 +229,13 @@ defineExpose({
         <el-table-column label="类型" width="160">
           <template #default="{ row }">
             <el-select v-model="row.type" size="small" placeholder="类型">
-              <el-option
-                v-for="opt in columnTypeOptions"
-                :key="opt.value"
-                :label="opt.label"
-                :value="opt.value"
-              />
+              <el-option v-for="opt in columnTypeOptions" :key="opt.value" :label="opt.label" :value="opt.value" />
             </el-select>
           </template>
         </el-table-column>
         <el-table-column label="主键" width="70" align="center">
           <template #default="{ $index }">
-            <el-radio
-              :model-value="columns[$index]?.primaryKey"
-              :value="true"
-              @change="handlePrimaryKeyChange($index)"
-            />
+            <el-radio :model-value="columns[$index]?.primaryKey" :value="true" @change="handlePrimaryKeyChange($index)" />
           </template>
         </el-table-column>
       </el-table>
@@ -266,14 +243,7 @@ defineExpose({
       <!-- 预览数据 -->
       <div class="section-title section-title--preview">数据预览（前10行）</div>
       <el-table :data="previewData" border size="small" max-height="250">
-        <el-table-column
-          v-for="col in columns"
-          :key="col.name"
-          :prop="col.name"
-          :label="col.originalHeader"
-          min-width="120"
-          show-overflow-tooltip
-        />
+        <el-table-column v-for="col in columns" :key="col.name" :prop="col.name" :label="col.originalHeader" min-width="120" show-overflow-tooltip />
       </el-table>
     </div>
   </div>
@@ -282,7 +252,7 @@ defineExpose({
 <style scoped lang="scss">
 .excel-editor {
   .excel-editor-form {
-    padding: var(--space-5) var(--space-6);
+    padding: 20px 24px;
   }
 
   .form-tip {
@@ -305,7 +275,9 @@ defineExpose({
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
 
     &:hover {
       border-color: var(--el-color-primary);

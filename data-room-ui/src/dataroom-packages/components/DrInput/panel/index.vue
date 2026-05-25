@@ -225,7 +225,7 @@ const inputTypeOptions = [
 
 .dr-input-config-panel__hint {
   display: block;
-  margin-top: var(--space-1);
+  margin-top: 4px;
   color: var(--el-text-color-secondary);
   font-size: 12px;
   line-height: 1.4;

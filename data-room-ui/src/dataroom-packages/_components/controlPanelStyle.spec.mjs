@@ -12,10 +12,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const controlPanelPath = resolve(__dirname, 'ControlPanel.vue')
 const source = readFileSync(controlPanelPath, 'utf8')
 
-const collapseContentPaddingRule =
-  /:deep\(\.el-collapse-item__content\)\s*\{[^}]*padding:\s*var\(--space-3\)/s
+const groupedConfigPaddingRule = /\.param-item\s*\{[^}]*padding:\s*12px/s
 
-assert(
-  collapseContentPaddingRule.test(source),
-  'component config collapse content should reserve top/bottom padding so shadow borders are not clipped'
-)
+assert(groupedConfigPaddingRule.test(source), 'component config grouped items should reserve padding so borders are not clipped')

@@ -2,9 +2,9 @@
 <script setup lang="ts">
 import { computed, type ComputedRef, inject, type Ref, ref, watch } from 'vue'
 import type { TreeInstance } from 'element-plus'
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts";
-import type {CanvasInst} from "@/dataroom-packages/PageDesigner/type/CanvasInst.ts";
-import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts";
+import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import type { CanvasInst } from '@/dataroom-packages/PageDesigner/type/CanvasInst.ts'
+import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
 const layerTreeProps = {
@@ -43,7 +43,7 @@ const onLayerClick = (data: ChartConfig<unknown>) => {
 </script>
 
 <template>
-  <div>
+  <div class="component-layer-wrapper">
     <el-input v-model="layerName" size="small" placeholder="请输入组件标题" />
     <el-tree
       class="dr-layer-tree"
@@ -63,48 +63,18 @@ const onLayerClick = (data: ChartConfig<unknown>) => {
 </template>
 
 <style scoped lang="scss">
+.component-layer-wrapper {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
 .dr-layer-tree {
-  margin-top: var(--space-2);
-  background: var(--dr-gray-50);
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-
-  :deep(.el-tree-node__content) {
-    height: 32px;
-    border-radius: var(--radius-sm);
-    transition: background-color 0.15s ease;
-
-    &:hover {
-      background-color: var(--dr-gray-100);
-    }
-  }
-
-  :deep(.el-tree-node.is-current > .el-tree-node__content) {
-    background-color: var(--dr-blue-soft);
-    color: var(--dr-blue);
-  }
-
-  :deep(.el-tree-node__label) {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--dr-gray-700);
-  }
-
-  :deep(.el-tree-node.is-current > .el-tree-node__content .el-tree-node__label) {
-    color: var(--dr-blue);
-    font-weight: 500;
-  }
-
-  :deep(.el-tree-node__expand-icon) {
-    color: var(--dr-gray-400);
-    font-size: 12px;
-
-    &:hover {
-      color: var(--dr-gray-700);
-    }
-  }
-
-  :deep(.el-icon) {
-    color: var(--dr-gray-700);
-  }
+  margin-top: 8px;
+  background: var(--el-fill-color-light);
 }
 </style>

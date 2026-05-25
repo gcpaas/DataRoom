@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   // 组件类型需与当前组件目录名保持一致
@@ -8,11 +8,11 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import {computed} from 'vue'
-import type {DrBorderConfig} from '../install.ts'
-import {borderTypeOptions, isBorderPropSupported, normalizeBorderType} from '../options.ts'
+import { computed } from 'vue'
+import type { DrBorderConfig } from '../install.ts'
+import { borderTypeOptions, isBorderPropSupported, normalizeBorderType } from '../options.ts'
 
-const {chart} = defineProps<{
+const { chart } = defineProps<{
   chart: DrBorderConfig
 }>()
 
@@ -98,14 +98,7 @@ const clearColors = () => {
               <el-form-item v-if="isBorderPropSupported(currentBorderType, 'dur')" class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">时长</span>
-                  <el-input-number
-                    v-model="chartConfig.props.dur"
-                    class="dr-config-panel__control"
-                    :min="0.1"
-                    :max="60"
-                    :step="0.1"
-                    controls-position="right"
-                  />
+                  <el-input-number v-model="chartConfig.props.dur" class="dr-config-panel__control" :min="0.1" :max="60" :step="0.1" controls-position="right" />
                 </div>
               </el-form-item>
               <el-form-item v-if="isBorderPropSupported(currentBorderType, 'title')" class="dr-config-panel__sub-form-item">
@@ -117,14 +110,7 @@ const clearColors = () => {
               <el-form-item v-if="isBorderPropSupported(currentBorderType, 'titleWidth')" class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">标题宽度</span>
-                  <el-input-number
-                    v-model="chartConfig.props.titleWidth"
-                    class="dr-config-panel__control"
-                    :min="80"
-                    :max="800"
-                    :step="10"
-                    controls-position="right"
-                  />
+                  <el-input-number v-model="chartConfig.props.titleWidth" class="dr-config-panel__control" :min="80" :max="800" :step="10" controls-position="right" />
                 </div>
               </el-form-item>
               <el-form-item v-if="isBorderPropSupported(currentBorderType, 'animate')" class="dr-config-panel__sub-form-item">
@@ -135,11 +121,11 @@ const clearColors = () => {
               </el-form-item>
               <el-empty
                 v-if="
-                  !isBorderPropSupported(currentBorderType, 'reverse')
-                    && !isBorderPropSupported(currentBorderType, 'dur')
-                    && !isBorderPropSupported(currentBorderType, 'title')
-                    && !isBorderPropSupported(currentBorderType, 'titleWidth')
-                    && !isBorderPropSupported(currentBorderType, 'animate')
+                  !isBorderPropSupported(currentBorderType, 'reverse') &&
+                  !isBorderPropSupported(currentBorderType, 'dur') &&
+                  !isBorderPropSupported(currentBorderType, 'title') &&
+                  !isBorderPropSupported(currentBorderType, 'titleWidth') &&
+                  !isBorderPropSupported(currentBorderType, 'animate')
                 "
                 description="当前类型无专属配置"
                 :image-size="48"
@@ -166,12 +152,12 @@ const clearColors = () => {
 .dr-border-config-panel__colors {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 8px;
 }
 
 .dr-border-config-panel__color-row {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 8px;
 }
 </style>

@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import {getComponent, getComponentInstance, getPanelComponent} from '@/dataroom-packages/components/AutoInstall.ts'
-import {type Component, computed, type CSSProperties, defineAsyncComponent, nextTick, onMounted, onUnmounted, provide, reactive, ref, shallowRef, watch} from 'vue'
-import {GridItem, GridLayout} from 'vue-grid-layout-v3'
-import {v4 as uuidv4} from 'uuid'
-import {getChartById, getResourceUrl,deleteChartById} from '@/dataroom-packages/_common/_utils.ts'
-import {useRoute, useRouter} from 'vue-router'
-import {ElMessage} from 'element-plus'
-import {pageApi} from "@/dataroom-packages/page/api.ts";
-import {useCanvasInst} from '@/dataroom-packages/hooks/use-canvas-inst'
-import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts";
-import type {PageStageEntity} from "@/dataroom-packages/page/type/PageStageEntity.ts";
-import type {PageBasicConfig} from "@/dataroom-packages/PageDesigner/type/PageBasicConfig.ts";
-import type {GlobalVariable} from "@/dataroom-packages/PageDesigner/type/GlobalVariable.ts";
-import type {LeftToolBar} from "@/dataroom-packages/PageDesigner/type/LeftToolBar.ts";
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts";
-import {useTimerManager} from "@/dataroom-packages/hooks/use-timer-manager";
+import { getComponent, getComponentInstance, getPanelComponent } from '@/dataroom-packages/components/AutoInstall.ts'
+import { type Component, computed, type CSSProperties, defineAsyncComponent, nextTick, onMounted, onUnmounted, provide, reactive, ref, shallowRef, watch } from 'vue'
+import { GridItem, GridLayout } from 'vue-grid-layout-v3'
+import { v4 as uuidv4 } from 'uuid'
+import { getChartById, getResourceUrl, deleteChartById } from '@/dataroom-packages/_common/_utils.ts'
+import { useRoute, useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { pageApi } from '@/dataroom-packages/page/api.ts'
+import { useCanvasInst } from '@/dataroom-packages/hooks/use-canvas-inst'
+import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
+import type { PageStageEntity } from '@/dataroom-packages/page/type/PageStageEntity.ts'
+import type { PageBasicConfig } from '@/dataroom-packages/PageDesigner/type/PageBasicConfig.ts'
+import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/GlobalVariable.ts'
+import type { LeftToolBar } from '@/dataroom-packages/PageDesigner/type/LeftToolBar.ts'
+import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import { useTimerManager } from '@/dataroom-packages/hooks/use-timer-manager'
 
 const router = useRouter()
 const route = useRoute()
@@ -103,20 +103,19 @@ const addChart = (type: string) => {
   return chartInst
 }
 
-const {canvasInst} = useCanvasInst({
+const { canvasInst } = useCanvasInst({
   chartList,
   globalVariable,
   addChart,
-  activeChartById
+  activeChartById,
 })
 
-const {timerManager} = useTimerManager({
+const { timerManager } = useTimerManager({
   canvasInst,
   basicConfig: pageBasicConfig,
 })
 
 provide(DrConst.CANVAS_INST, canvasInst)
-
 
 /**
  * 左侧工具面版样式
@@ -202,10 +201,8 @@ const computedToolAnchorStyle = computed(() => {
  * @param i
  * @param newH
  * @param newW
- * @param newHPx
- * @param newWPx
  */
-const onResized = (i: string, newH: number, newW: number, newHPx: string, newWPx: string) => {
+const onResized = (i: string, newH: number, newW: number) => {
   const chart: ChartConfig<unknown> = getChartById(i, chartList.value)
   chart.w = newW
   chart.h = newH
@@ -257,7 +254,7 @@ const onRightClick = (e: MouseEvent, chart: ChartConfig<unknown>) => {
  * @param chartId
  */
 const onChartDeleteClick = (chartId: string) => {
-  deleteChartById(chartId,chartList.value)
+  deleteChartById(chartId, chartList.value)
 }
 /**
  * 右击菜单样式
@@ -281,19 +278,21 @@ const onPreview = () => {
     })
     return
   }
-  pageApi.updatePageConfig4Preview({
-    ...pageStageEntity.value,
-    pageConfig: {
-      ...pageStageEntity.value.pageConfig,
-      chartList: chartList.value,
-      basicConfig: pageBasicConfig.value
-    }
-  }).then((res) => {
-    const routeData = router.resolve({
-      path: `/dataRoom/pagePreviewer/preview/${pageStageEntity.value?.pageCode}`
+  pageApi
+    .updatePageConfig4Preview({
+      ...pageStageEntity.value,
+      pageConfig: {
+        ...pageStageEntity.value.pageConfig,
+        chartList: chartList.value,
+        basicConfig: pageBasicConfig.value,
+      },
     })
-    window.open(routeData.href, '_blank')
-  })
+    .then(() => {
+      const routeData = router.resolve({
+        path: `/dataRoom/pagePreviewer/preview/${pageStageEntity.value?.pageCode}`,
+      })
+      window.open(routeData.href, '_blank')
+    })
 }
 /**
  * 保存
@@ -306,21 +305,22 @@ const onSave = () => {
     })
     return
   }
-  pageApi.updatePageConfig({
-    ...pageStageEntity.value,
-    pageConfig: {
-      ...pageStageEntity.value.pageConfig,
-      chartList: chartList.value,
-      basicConfig: pageBasicConfig.value
-    }
-  }).then((res) => {
-    ElMessage({
-      message: '保存成功',
-      type: 'success',
+  pageApi
+    .updatePageConfig({
+      ...pageStageEntity.value,
+      pageConfig: {
+        ...pageStageEntity.value.pageConfig,
+        chartList: chartList.value,
+        basicConfig: pageBasicConfig.value,
+      },
     })
-  })
+    .then(() => {
+      ElMessage({
+        message: '保存成功',
+        type: 'success',
+      })
+    })
 }
-
 
 const onHistory = () => {
   ElMessage.info('功能开发中...')
@@ -413,14 +413,14 @@ watch(
     // 重新加载所有定时器
     timerManager.reloadAllTimers()
   },
-  {deep: true}
+  { deep: true },
 )
 
 onMounted(() => {
   // 获取路由中code 参数
   const code: string = route.params.pageCode as string
   // 根据编码获取页面详情
-  pageApi.getPageConfig(code, "design").then((res) => {
+  pageApi.getPageConfig(code, 'design').then((res) => {
     pageStageEntity.value = res
     chartList.value = res.pageConfig?.chartList || []
     pageBasicConfig.value = res.pageConfig?.basicConfig || {}
@@ -443,17 +443,16 @@ onUnmounted(() => {
     timerManager.clearAllTimers()
   }
 })
-
 </script>
 
 <template>
   <div class="dr-page-designer">
     <div class="header" ref="titleRef">
       <div class="header-left">
-        <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="router.push('/dataRoom/page/index')"/>
+        <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="router.push('/dataRoom/page/index')" />
         <div class="title" @click="onTitleClick">{{ pageStageEntity?.name }}</div>
       </div>
-      <div style="margin-right: 8px">
+      <div class="header-right">
         <el-button @click="onHistory" size="small">历史</el-button>
         <el-button @click="switchPageControlPanel" size="small">设置</el-button>
         <el-button @click="onPreview" size="small">预览</el-button>
@@ -473,10 +472,10 @@ onUnmounted(() => {
       </div>
       <div class="left-tool-panel" :style="computedLeftToolPanelStyle">
         <div class="panel-header">
-          <div style="position: relative">
+          <div class="panel-header-inner">
             <span class="title">{{ activeLeftToolBar.desc }}</span>
             <el-icon class="close" @click="switchLeftToolPanel(false)">
-              <Close/>
+              <Close />
             </el-icon>
           </div>
         </div>
@@ -489,13 +488,7 @@ onUnmounted(() => {
       <div class="canvas">
         <div class="canvas-main" id="canvas-main" :style="computedCanvasMainContainerStyle" @click="onCanvasClick">
           <el-scrollbar>
-            <GridLayout v-model:layout="chartList"
-                        :col-num="48"
-                        :row-height="16"
-                        :is-draggable="true"
-                        :is-resizable="true"
-                        :vertical-compact="true"
-                        :use-css-transforms="true">
+            <GridLayout v-model:layout="chartList" :col-num="48" :row-height="16" :is-draggable="true" :is-resizable="true" :vertical-compact="true" :use-css-transforms="true">
               <GridItem
                 v-for="item in chartList"
                 :key="item.id"
@@ -519,23 +512,32 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="right-panel" :style="computedRightControlPanelStyle">
-        <el-scrollbar wrap-style="overflow: hidden;" view-style="max-width: 100%; height: 100%; overflow: hidden;">
-          <ControlPanel v-if="rightControlPanelSetting" :basicConfig="pageBasicConfig"></ControlPanel>
-          <ControlPanelWrapper v-else :chart="activeChart!" :global-variable-list="globalVariable">
-            <component :is="getPanelComponent(activeChart?.type)" :chart="activeChart"></component>
-          </ControlPanelWrapper>
+        <el-scrollbar class="right-panel-scrollbar" height="100%">
+          <div class="right-panel-scroll-content">
+            <ControlPanel v-if="rightControlPanelSetting" :basicConfig="pageBasicConfig"></ControlPanel>
+            <ControlPanelWrapper v-else :chart="activeChart!" :global-variable-list="globalVariable">
+              <component :is="getPanelComponent(activeChart?.type)" :chart="activeChart"></component>
+            </ControlPanelWrapper>
+          </div>
         </el-scrollbar>
       </div>
       <el-icon class="right-panel-tool-anchor" @click="switchRightControlPanel(!rightControlPanelShow)" :style="computedToolAnchorStyle">
-        <ArrowRight v-if="rightControlPanelShow"/>
-        <ArrowLeft v-else/>
+        <ArrowRight v-if="rightControlPanelShow" />
+        <ArrowLeft v-else />
       </el-icon>
     </div>
   </div>
   <ComponentLib v-if="componentLibVisible" ref="componentLibRef"></ComponentLib>
   <ResourceLib v-if="resourceLibVisible" ref="resourceLibRef"></ResourceLib>
   <GlobalVariableComponent v-if="globalVariableVisible" ref="globalVariableRef" :globalVariable="globalVariable"></GlobalVariableComponent>
-  <ContextMenu v-if="contextMenuVisible" ref="contextMenuRef" :style="computedContextMenuStyle" :chart="activeChart" @switch-right-control-panel="switchRightControlPanel" @delete-chart="onChartDeleteClick"></ContextMenu>
+  <ContextMenu
+    v-if="contextMenuVisible"
+    ref="contextMenuRef"
+    :style="computedContextMenuStyle"
+    :chart="activeChart"
+    @switch-right-control-panel="switchRightControlPanel"
+    @delete-chart="onChartDeleteClick"
+  ></ContextMenu>
   <el-dialog v-model="renameDialogVisible" title="修改页面名称" width="400px" :close-on-click-modal="false">
     <el-input v-model="renameInput" placeholder="请输入页面名称" maxlength="50" @keyup.enter="onRenameConfirm"></el-input>
     <template #footer>
@@ -548,51 +550,53 @@ onUnmounted(() => {
 <style scoped lang="scss">
 @use './assets/index.scss';
 
-// 拖拽背景样式
 :deep(.vue-grid-item.vue-grid-placeholder) {
-  background: var(--dr-primary);
+  background: var(--el-color-primary-light-9);
   opacity: 0.15;
-  border-radius: var(--radius-md);
+  border-radius: 6px;
 }
 
-// Selected component outline
 :deep(.vue-grid-item.vue-grid-item.resizing),
 :deep(.vue-grid-item.vue-grid-item.vue-draggable-dragging) {
-  outline: 1px solid #3478f6;
+  outline: 1px solid var(--el-color-primary);
   outline-offset: 0;
   z-index: 10;
 }
 
-// Hover outline for grid items (not selected)
 :deep(.vue-grid-item:hover:not(.resizing):not(.vue-draggable-dragging)) {
-  outline: 1px dashed #c9cdd4;
+  outline: 1px dashed var(--el-border-color);
   outline-offset: 0;
 }
 
-// Resize handles (square corners)
 :deep(.vue-grid-item > .vue-resizable-handle) {
   width: 8px;
   height: 8px;
-  background: #3478f6;
+  background: var(--el-color-primary);
   border: none;
   border-radius: 0;
 }
 
 .dr-page-designer {
   display: grid;
-  grid-template-rows: var(--dr-designer-header-height) 1fr;
+  grid-template-rows: 48px 1fr;
   height: 100vh;
   overflow: hidden;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
   & .header {
-    background-color: var(--dr-white);
-    color: var(--dr-text1);
+    background-color: var(--el-bg-color);
+    color: var(--el-text-color-primary);
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid var(--el-border-color);
     position: relative;
     z-index: 10;
 
@@ -616,21 +620,25 @@ onUnmounted(() => {
         transition: color 0.2s;
 
         &:hover {
-          color: var(--dr-primary);
+          color: var(--el-color-primary);
         }
       }
+    }
+
+    & .header-right {
+      margin-right: 8px;
     }
   }
 
   & .main {
-    background-color: #f0f1f3;
+    background-color: var(--el-bg-color-page);
     display: grid;
     min-height: 0;
-    grid-template-columns: var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width);
+    grid-template-columns: 60px 200px auto 330px;
 
     & .left-tool-bar {
-      background-color: var(--dr-white);
-      box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.08);
+      background-color: var(--el-bg-color);
+      box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
 
       & .bar {
         font-size: 12px;
@@ -638,23 +646,23 @@ onUnmounted(() => {
         text-align: center;
         margin: 4px auto;
         padding: 8px 0;
-        color: var(--dr-gray-500);
+        color: var(--el-text-color-secondary);
         transition: all 0.2s;
 
         &:hover {
           cursor: pointer;
-          background-color: var(--dr-bg2);
-          color: var(--dr-gray-700);
+          background-color: var(--el-fill-color-lighter);
+          color: var(--el-text-color-regular);
         }
       }
 
       & .active {
-        background-color: var(--dr-blue-soft);
-        color: var(--dr-primary);
+        background-color: var(--el-color-primary-light-9);
+        color: var(--el-color-primary);
         position: relative;
 
         &:hover {
-          color: var(--dr-primary);
+          color: var(--el-color-primary);
         }
 
         &::before {
@@ -664,31 +672,39 @@ onUnmounted(() => {
           bottom: 0;
           width: 3px;
           position: absolute;
-          background-color: var(--dr-primary);
+          background-color: var(--el-color-primary);
           border-radius: 0 2px 2px 0;
         }
       }
     }
 
     & .left-tool-panel {
-      background-color: var(--dr-white);
+      background-color: var(--el-bg-color);
       display: grid;
       grid-template-rows: 40px auto;
-      height: calc(100vh - var(--dr-designer-left-tool-panel-header-height));
-      box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.08);
+      height: calc(100vh - 40px);
+      box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
 
       & .panel-header {
-        background-color: var(--dr-bg2);
+        background-color: var(--el-fill-color-light);
         box-sizing: border-box;
-        box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
+        box-shadow: inset 0 -1px 0 0 var(--el-border-color-light);
         font-size: 12px;
         font-weight: 500;
         text-transform: uppercase;
-        color: var(--dr-gray-500);
+        color: var(--el-text-color-secondary);
         line-height: 40px;
         height: 40px;
         align-self: center;
         padding-left: 12px;
+
+        & .panel-header-inner {
+          position: relative;
+        }
+
+        & .title {
+          letter-spacing: 0;
+        }
 
         & .close {
           position: absolute;
@@ -696,18 +712,18 @@ onUnmounted(() => {
           line-height: 40px;
           right: 16px;
           top: 0px;
-          color: var(--dr-gray-400);
+          color: var(--el-text-color-secondary);
           transition: color 0.2s;
 
           &:hover {
             cursor: pointer;
-            color: var(--dr-primary);
+            color: var(--el-color-primary);
           }
         }
       }
 
       & .panel-body {
-        background-color: var(--dr-white);
+        background-color: var(--el-bg-color);
         overflow-y: hidden;
         padding: 8px 4px 16px 4px;
       }
@@ -715,21 +731,20 @@ onUnmounted(() => {
 
     & .canvas {
       display: grid;
-      background-color: #f0f1f3;
+      background-color: var(--el-bg-color-page);
       grid-template-rows: auto;
-      // Grid dots pattern
-      background-image: radial-gradient(circle, #d4d7de 1px, transparent 1px);
+      background-image: radial-gradient(circle, var(--el-border-color) 1px, var(--el-bg-color-page) 1px);
       background-size: 16px 16px;
 
       & .canvas-main {
-        height: calc(100vh - var(--dr-designer-header-height));
+        height: calc(100vh - 48px);
         overflow: hidden;
 
         & .chart-wrapper {
-          background-color: var(--dr-white);
+          background-color: var(--el-fill-color-blank);
           height: 100%;
           width: 100%;
-          border-radius: var(--radius-sm);
+          border-radius: 4px;
         }
       }
     }
@@ -738,9 +753,17 @@ onUnmounted(() => {
       box-sizing: border-box;
       min-width: 0;
       overflow: hidden;
-      background-color: var(--dr-white);
-      box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.08);
-      height: calc(100vh - var(--dr-designer-header-height));
+      background-color: var(--el-bg-color);
+      box-shadow: inset 1px 0 0 0 var(--el-border-color-light);
+      height: calc(100vh - 48px);
+
+      & .right-panel-scrollbar,
+      & .right-panel-scroll-content {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        overflow: hidden;
+      }
     }
   }
 
@@ -752,16 +775,16 @@ onUnmounted(() => {
     transform: translateY(-50%);
     width: 16px;
     height: 50px;
-    background-color: var(--dr-white);
-    color: var(--dr-gray-400);
-    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-    box-shadow: var(--dr-shadow-sm);
+    background-color: var(--el-bg-color);
+    color: var(--el-text-color-secondary);
+    border-radius: 4px 0 0 4px;
+    border: 1px solid var(--el-border-color-light);
     transition: all 0.2s;
 
     &:hover {
       cursor: pointer;
-      color: var(--dr-primary);
-      background-color: var(--dr-blue-soft);
+      color: var(--el-color-primary);
+      background-color: var(--el-color-primary-light-9);
     }
   }
 }

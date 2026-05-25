@@ -1,12 +1,12 @@
 <!-- 素材库 -->
 <script setup lang="ts">
-import {inject, ref} from 'vue'
-import {ElMessage} from 'element-plus'
+import { inject, ref } from 'vue'
+import { ElMessage } from 'element-plus'
 import ResourceManage from '@/dataroom-packages/resource/index.vue'
-import type {ResourceEntity} from '@/dataroom-packages/resource/api'
-import type {DrImageConfig} from "@/dataroom-packages/components/DrImage/install.ts";
-import type {CanvasInst} from "@/dataroom-packages/PageDesigner/type/CanvasInst.ts";
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts";
+import type { ResourceEntity } from '@/dataroom-packages/resource/api'
+import type { DrImageConfig } from '@/dataroom-packages/components/DrImage/install.ts'
+import type { CanvasInst } from '@/dataroom-packages/PageDesigner/type/CanvasInst.ts'
+import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
 const emit = defineEmits(['close'])
@@ -69,7 +69,7 @@ const onCopyUrl = async () => {
 <template>
   <el-dialog v-model="resourceLibVisible" title="素材库" width="80%" @closed="emit('close')">
     <div class="resource-lib-wrapper">
-      <ResourceManage :selectable="true" @update:selectedResource="handleSelectedResourceUpdate"/>
+      <ResourceManage :selectable="true" @update:selectedResource="handleSelectedResourceUpdate" />
     </div>
     <template #footer>
       <el-button @click="onClose">取消</el-button>
@@ -83,7 +83,13 @@ const onCopyUrl = async () => {
 .resource-lib-wrapper {
   height: 600px;
   overflow: hidden;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
   :deep(.dr-resource) {
     height: 100%;
@@ -100,36 +106,17 @@ const onCopyUrl = async () => {
     overflow: hidden;
   }
 
-  :deep(.el-scrollbar) {
-    height: 100%;
-  }
-
-  :deep(.el-scrollbar__view) {
-    height: 100%;
-  }
-
-  // Apply design system styles to resource cards within the dialog
   :deep(.resource-card),
   :deep(.file-card) {
-    box-shadow: var(--dr-shadow-border);
-    border: none;
-    border-radius: var(--radius-md);
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    border: 1px solid var(--el-border-color);
+    border-radius: 6px;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
 
     &:hover {
-      box-shadow: var(--dr-shadow-sm);
+      border-color: var(--el-border-color-darker);
       transform: scale(1.02);
-    }
-  }
-
-  :deep(.el-card) {
-    box-shadow: var(--dr-shadow-border);
-    border: none;
-    border-radius: var(--radius-md);
-    transition: box-shadow 0.2s ease;
-
-    &:hover {
-      box-shadow: var(--dr-shadow-sm);
     }
   }
 }

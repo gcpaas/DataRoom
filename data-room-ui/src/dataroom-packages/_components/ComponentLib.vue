@@ -1,10 +1,10 @@
 <!-- 组件库 -->
 <script setup lang="ts">
-import {computed, inject, ref} from 'vue'
-import {pluginList} from '@/dataroom-packages/_components/PluginRegister.ts'
-import {Search} from '@element-plus/icons-vue'
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts";
-import type {CanvasInst} from "@/dataroom-packages/PageDesigner/type/CanvasInst.ts";
+import { computed, inject, ref } from 'vue'
+import { pluginList } from '@/dataroom-packages/_components/PluginRegister.ts'
+import { Search } from '@element-plus/icons-vue'
+import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import type { CanvasInst } from '@/dataroom-packages/PageDesigner/type/CanvasInst.ts'
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
 
@@ -49,45 +49,41 @@ const filterPluginList = computed(() => {
 
 <style scoped lang="scss">
 .dr-component-lib-wrapper {
-  padding: var(--space-2);
+  padding: 8px;
   box-sizing: border-box;
   overflow-x: hidden;
-  background: var(--dr-gray-50);
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--el-fill-color-light);
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
   & .search {
     width: 100%;
-    margin-bottom: var(--space-3);
-
-    :deep(.el-input__wrapper) {
-      border-radius: var(--radius-md);
-      box-shadow: var(--dr-shadow-border);
-      border: none;
-      transition: box-shadow 0.2s ease;
-
-      &:focus-within {
-        box-shadow: var(--dr-shadow-focus);
-      }
-    }
+    margin-bottom: 12px;
   }
 
   & .component-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-2);
+    gap: 8px;
 
     & .card {
-      background-color: var(--dr-white);
-      box-shadow: var(--dr-shadow-border);
-      border-radius: var(--radius-md);
-      border: none;
+      background-color: var(--el-fill-color-blank);
+      border: 1px solid var(--el-border-color);
+      border-radius: 6px;
       overflow: hidden;
-      padding: var(--space-2);
-      transition: box-shadow 0.2s ease, transform 0.2s ease;
+      padding: 8px;
+      transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
 
       &:hover {
         cursor: pointer;
-        box-shadow: var(--dr-shadow-sm);
+        border-color: var(--el-border-color-darker);
         transform: scale(1.02);
       }
 
@@ -101,7 +97,7 @@ const filterPluginList = computed(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: var(--space-1);
+        padding: 4px;
         box-sizing: border-box;
 
         & .el-image {
@@ -111,12 +107,12 @@ const filterPluginList = computed(() => {
       }
 
       & .desc {
-        padding: var(--space-1) var(--space-1) 0;
+        padding: 4px 4px 0;
         height: 24px;
         line-height: 24px;
         font-size: 12px;
         font-weight: 500;
-        color: var(--dr-gray-900);
+        color: var(--el-text-color-primary);
         text-align: center;
         overflow: hidden;
         text-overflow: ellipsis;

@@ -1,10 +1,10 @@
 <!-- 定时器配置对话框 -->
 <script setup lang="ts">
-import {computed, ref, watch} from 'vue'
-import {ElMessage, ElMessageBox} from 'element-plus'
-import {Delete, Plus, Rank} from '@element-plus/icons-vue'
-import type {PageTimer} from "@/dataroom-packages/PageDesigner/type/PageTimer.ts";
-import type {ChartAction} from "@/dataroom-packages/components/type/ChartAction.ts";
+import { computed, ref, watch } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Delete, Plus, Rank } from '@element-plus/icons-vue'
+import type { PageTimer } from '@/dataroom-packages/PageDesigner/type/PageTimer.ts'
+import type { ChartAction } from '@/dataroom-packages/components/type/ChartAction.ts'
 
 const props = defineProps<{
   modelValue: boolean
@@ -17,7 +17,7 @@ const emit = defineEmits<{
 
 const dialogVisible = computed({
   get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
+  set: (val) => emit('update:modelValue', val),
 })
 
 // 当前选中的action索引
@@ -44,7 +44,7 @@ const addAction = () => {
   const newAction: ChartAction = {
     name: `动作${actionCount}`,
     type: 'code',
-    code: '// 请输入JS代码\n// 可以在这里执行定时任务，例如：\nconsole.log("定时器动作执行");\n'
+    code: '// 请输入JS代码\n// 可以在这里执行定时任务，例如：\nconsole.log("定时器动作执行");\n',
   }
   props.timer.actions.push(newAction)
   activeActionIndex.value = props.timer.actions.length - 1
@@ -55,23 +55,21 @@ const addAction = () => {
  * @param index
  */
 const deleteAction = (index: number) => {
-  ElMessageBox.confirm(
-    '确定要删除这个动作吗？',
-    '提示',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  ).then(() => {
-    props.timer.actions.splice(index, 1)
-    // 调整选中索引
-    if (activeActionIndex.value >= props.timer.actions.length) {
-      activeActionIndex.value = Math.max(0, props.timer.actions.length - 1)
-    }
-  }).catch(() => {
-    // 用户取消删除
+  ElMessageBox.confirm('确定要删除这个动作吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
   })
+    .then(() => {
+      props.timer.actions.splice(index, 1)
+      // 调整选中索引
+      if (activeActionIndex.value >= props.timer.actions.length) {
+        activeActionIndex.value = Math.max(0, props.timer.actions.length - 1)
+      }
+    })
+    .catch(() => {
+      // 用户取消删除
+    })
 }
 
 // 拖拽排序
@@ -108,9 +106,13 @@ const handleDrop = (e: DragEvent, dropIndex: number) => {
 }
 
 // 监听timer变化，重置选中索引
-watch(() => props.timer, () => {
-  activeActionIndex.value = 0
-}, {immediate: true})
+watch(
+  () => props.timer,
+  () => {
+    activeActionIndex.value = 0
+  },
+  { immediate: true },
+)
 
 // 关闭对话框
 const onClose = () => {
@@ -135,38 +137,21 @@ const onConfirm = () => {
 </script>
 
 <template>
-  <el-dialog
-    v-model="dialogVisible"
-    :title="`定时器配置 - ${timer.name}`"
-    width="80%"
-    :close-on-click-modal="false"
-  >
+  <el-dialog v-model="dialogVisible" :title="`定时器配置 - ${timer.name}`" width="80%" :close-on-click-modal="false">
     <el-scrollbar class="dialog-scrollbar">
       <div class="dr-timer-config-wrapper">
         <!-- 基本配置区域 -->
         <div class="basic-config-section">
           <el-form label-position="left" size="default" inline class="inline-form">
             <el-form-item label="名称">
-              <el-input
-                v-model="timer.name"
-                placeholder="请输入定时器名称"
-                clearable
-                style="width: 200px"
-              ></el-input>
+              <el-input v-model="timer.name" placeholder="请输入定时器名称" clearable class="timer-name-input"></el-input>
             </el-form-item>
             <el-form-item label="执行间隔">
-              <el-input-number
-                v-model="timer.interval"
-                :min="100"
-                :max="3600000"
-                :step="1000"
-                controls-position="right"
-                style="width: 150px"
-              />
+              <el-input-number v-model="timer.interval" :min="100" :max="3600000" :step="1000" controls-position="right" class="timer-interval-input" />
               <span class="form-tip">单位：毫秒</span>
             </el-form-item>
             <el-form-item label="启用状态">
-              <el-switch v-model="timer.enabled"/>
+              <el-switch v-model="timer.enabled" />
             </el-form-item>
           </el-form>
         </div>
@@ -178,7 +163,7 @@ const onConfirm = () => {
               <span class="title">动作列表</span>
               <el-button type="primary" size="small" @click="addAction">
                 <el-icon>
-                  <Plus/>
+                  <Plus />
                 </el-icon>
                 添加
               </el-button>
@@ -195,18 +180,18 @@ const onConfirm = () => {
                 @click="activeActionIndex = index"
               >
                 <el-icon class="drag-icon">
-                  <Rank/>
+                  <Rank />
                 </el-icon>
                 <div class="action-info">
                   <div class="action-name">{{ action.name || `动作${index + 1}` }}</div>
                   <div class="action-type">{{ action.type === 'code' ? '代码' : action.type }}</div>
                 </div>
                 <el-icon class="delete-icon" @click.stop="deleteAction(index)">
-                  <Delete/>
+                  <Delete />
                 </el-icon>
               </div>
               <div v-if="actions.length === 0" class="empty-action-list">
-                <el-empty description="暂无动作，请点击上方按钮添加" :image-size="60"/>
+                <el-empty description="暂无动作，请点击上方按钮添加" :image-size="60" />
               </div>
             </div>
           </div>
@@ -214,11 +199,7 @@ const onConfirm = () => {
             <div v-if="currentAction" class="form-content">
               <el-form label-width="100px" label-position="left" size="default">
                 <el-form-item label="动作名称">
-                  <el-input
-                    v-model="currentAction.name"
-                    placeholder="请输入动作名称"
-                    clearable
-                  ></el-input>
+                  <el-input v-model="currentAction.name" placeholder="请输入动作名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="动作类型">
                   <el-select v-model="currentAction.type" disabled>
@@ -226,17 +207,12 @@ const onConfirm = () => {
                   </el-select>
                 </el-form-item>
                 <el-form-item label="JS代码">
-                  <el-input
-                    v-model="currentAction.code"
-                    type="textarea"
-                    :rows="15"
-                    placeholder="请输入JavaScript代码"
-                  ></el-input>
+                  <el-input v-model="currentAction.code" type="textarea" :rows="15" placeholder="请输入JavaScript代码"></el-input>
                 </el-form-item>
                 <el-form-item label="说明">
                   <el-alert type="info" :closable="false">
                     <template #default>
-                      <div style="line-height: 1.6;">
+                      <div class="timer-help-content">
                         <div><strong>定时器说明：</strong></div>
                         <div>• 定时器会按照设定的间隔时间重复执行动作列表中的所有动作</div>
                         <div>• 动作按照列表顺序依次执行</div>
@@ -249,7 +225,7 @@ const onConfirm = () => {
               </el-form>
             </div>
             <div v-else class="empty-action">
-              <el-empty description="请选择或添加动作"/>
+              <el-empty description="请选择或添加动作" />
             </div>
           </div>
         </div>
@@ -266,20 +242,6 @@ const onConfirm = () => {
 .dialog-scrollbar {
   height: calc(70vh - 60px);
   padding: 0 4px;
-
-  :deep(.el-scrollbar__wrap) {
-    overflow-x: hidden;
-  }
-
-  :deep(.el-scrollbar__bar) {
-    z-index: 10 !important;
-  }
-}
-
-// Dialog/modal styling
-:deep(.el-dialog) {
-  border-radius: 8px;
-  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 12px 24px -4px rgba(0, 0, 0, 0.08), 0px 4px 8px rgba(0, 0, 0, 0.04);
 }
 
 .dr-timer-config-wrapper {
@@ -287,45 +249,48 @@ const onConfirm = () => {
   flex-direction: column;
   gap: 16px;
   padding: 4px;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
   .basic-config-section {
-    background: var(--dr-gray-100);
+    background: var(--el-fill-color-light);
     padding: 16px;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--dr-shadow-border);
+    border-radius: 8px;
+    border: 1px solid var(--el-border-color);
 
     .inline-form {
       display: flex;
       align-items: center;
       flex-wrap: nowrap;
       gap: 16px;
+    }
 
-      :deep(.el-form-item) {
-        margin-bottom: 0;
-        margin-right: 0;
-      }
+    .timer-name-input {
+      width: 200px;
+    }
 
-      :deep(.el-form-item__label) {
-        font-size: 12px;
-        font-weight: 500;
-        color: #4e5969;
-      }
+    .timer-interval-input {
+      width: 150px;
     }
 
     .form-tip {
       font-size: 12px;
-      color: #86909c;
+      color: var(--el-text-color-secondary);
       margin-left: 8px;
     }
 
     .status-text {
       margin-left: 8px;
       font-size: 13px;
-      color: #86909c;
+      color: var(--el-text-color-secondary);
 
       &.enabled {
-        color: var(--dr-success);
+        color: var(--el-color-success);
         font-weight: 500;
       }
     }
@@ -334,17 +299,17 @@ const onConfirm = () => {
   .action-config-section {
     display: grid;
     grid-template-columns: 350px auto;
-    background-color: var(--dr-gray-100);
+    background-color: var(--el-fill-color-light);
     gap: 0;
-    border-radius: var(--radius-lg);
+    border-radius: 8px;
     overflow: hidden;
     min-height: 500px;
-    box-shadow: var(--dr-shadow-border);
+    border: 1px solid var(--el-border-color);
 
     .action-list-wrapper {
-      background: #ffffff;
+      background: var(--el-fill-color-blank);
       padding: 16px;
-      box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.08);
+      box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
       display: flex;
       flex-direction: column;
 
@@ -354,14 +319,14 @@ const onConfirm = () => {
         justify-content: space-between;
         margin-bottom: 16px;
         padding-bottom: 12px;
-        box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
+        border-bottom: 1px solid var(--el-border-color-light);
         flex-shrink: 0;
 
         .title {
           font-size: 12px;
           font-weight: 500;
           text-transform: uppercase;
-          color: #86909c;
+          color: var(--el-text-color-secondary);
         }
       }
 
@@ -381,11 +346,13 @@ const onConfirm = () => {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-radius: var(--radius-md);
-        box-shadow: var(--dr-shadow-border);
-        transition: all 0.2s;
+        border-radius: 6px;
+        border: 1px solid var(--el-border-color);
+        transition:
+          background-color 0.2s,
+          border-color 0.2s;
         gap: 8px;
-        background: var(--dr-bg2);
+        background: var(--el-fill-color-extra-light);
 
         &:last-child {
           margin-bottom: 0;
@@ -393,7 +360,7 @@ const onConfirm = () => {
 
         .drag-icon {
           font-size: 12px;
-          color: #c9cdd4;
+          color: var(--el-text-color-disabled);
           cursor: move;
           flex-shrink: 0;
           transition: color 0.2s;
@@ -405,7 +372,7 @@ const onConfirm = () => {
 
           .action-name {
             font-size: 14px;
-            color: #1d2129;
+            color: var(--el-text-color-primary);
             font-weight: 500;
             margin-bottom: 4px;
             overflow: hidden;
@@ -415,13 +382,13 @@ const onConfirm = () => {
 
           .action-type {
             font-size: 12px;
-            color: #86909c;
+            color: var(--el-text-color-secondary);
           }
         }
 
         .delete-icon {
           font-size: 16px;
-          color: var(--dr-danger);
+          color: var(--el-color-danger);
           cursor: pointer;
           transition: transform 0.2s;
 
@@ -431,20 +398,21 @@ const onConfirm = () => {
         }
 
         &:hover {
-          background: var(--dr-blue-soft);
+          background: var(--el-color-primary-light-9);
+          border-color: var(--el-color-primary-light-8);
           cursor: pointer;
 
           .drag-icon {
-            color: #4e5969;
+            color: var(--el-text-color-regular);
           }
         }
 
         &.active {
-          background: var(--dr-blue-soft);
-          box-shadow: 0px 0px 0px 1px #3478f6;
+          background: var(--el-color-primary-light-9);
+          border-color: var(--el-color-primary);
 
           .drag-icon {
-            color: #4e5969;
+            color: var(--el-text-color-regular);
           }
         }
       }
@@ -456,21 +424,19 @@ const onConfirm = () => {
     }
 
     .action-form-wrapper {
-      background: #ffffff;
+      background: var(--el-fill-color-blank);
       padding: 16px;
       display: flex;
       flex-direction: column;
       overflow-y: auto;
       overflow-x: hidden;
 
-      :deep(.el-form-item__label) {
-        font-size: 12px;
-        font-weight: 500;
-        color: #4e5969;
-      }
-
       .form-content {
         flex: 1;
+
+        .timer-help-content {
+          line-height: 1.6;
+        }
       }
 
       .empty-action {

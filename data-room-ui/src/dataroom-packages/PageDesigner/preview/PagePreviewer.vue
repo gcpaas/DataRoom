@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import {getComponent} from '@/dataroom-packages/components/AutoInstall.ts'
-import {computed, type CSSProperties, nextTick, onMounted, onUnmounted, provide, ref} from 'vue'
-import {GridItem, GridLayout} from 'vue-grid-layout-v3'
-import {pageApi} from "@/dataroom-packages/page/api.ts";
-import {useRoute} from "vue-router";
-import {getResourceUrl} from "@/dataroom-packages/_common/_utils.ts";
-import {useCanvasInst} from '@/dataroom-packages/hooks/use-canvas-inst'
-import type {PageStageEntity} from "@/dataroom-packages/page/type/PageStageEntity.ts";
-import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts";
-import type {PageBasicConfig} from "@/dataroom-packages/PageDesigner/type/PageBasicConfig.ts";
-import type {GlobalVariable} from "@/dataroom-packages/PageDesigner/type/GlobalVariable.ts";
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts";
-import {useTimerManager} from "@/dataroom-packages/hooks/use-timer-manager";
+import { getComponent } from '@/dataroom-packages/components/AutoInstall.ts'
+import { computed, type CSSProperties, nextTick, onMounted, onUnmounted, provide, ref } from 'vue'
+import { GridItem, GridLayout } from 'vue-grid-layout-v3'
+import { pageApi } from '@/dataroom-packages/page/api.ts'
+import { useRoute } from 'vue-router'
+import { getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
+import { useCanvasInst } from '@/dataroom-packages/hooks/use-canvas-inst'
+import type { PageStageEntity } from '@/dataroom-packages/page/type/PageStageEntity.ts'
+import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
+import type { PageBasicConfig } from '@/dataroom-packages/PageDesigner/type/PageBasicConfig.ts'
+import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/GlobalVariable.ts'
+import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import { useTimerManager } from '@/dataroom-packages/hooks/use-timer-manager'
 
 const pageStageEntity = ref<PageStageEntity>()
 const chartList = ref<ChartConfig<unknown>[]>([])
@@ -22,14 +22,14 @@ const route = useRoute()
 /**
  * 创建画布实例供子组件使用
  */
-const {canvasInst} = useCanvasInst({
+const { canvasInst } = useCanvasInst({
   chartList,
-  globalVariable
+  globalVariable,
 })
 provide(DrConst.CANVAS_INST, canvasInst)
 
 // 定时器管理器
-const {timerManager} = useTimerManager({
+const { timerManager } = useTimerManager({
   canvasInst,
   basicConfig,
 })
@@ -90,25 +90,8 @@ const computedCanvasMainContainerStyle = computed(() => {
 
 <template>
   <div class="dr-page-preview" :style="computedCanvasMainContainerStyle">
-    <GridLayout
-      v-model:layout="chartList"
-      :col-num="48"
-      :row-height="16"
-      :is-draggable="false"
-      :is-resizable="false"
-      :vertical-compact="true"
-      :use-css-transforms="true"
-    >
-      <GridItem
-        v-for="(item, index) in chartList"
-        :key="index"
-        :static="false"
-        :x="item.x"
-        :y="item.y"
-        :w="item.w"
-        :h="item.h"
-        :i="item.id"
-      >
+    <GridLayout v-model:layout="chartList" :col-num="48" :row-height="16" :is-draggable="false" :is-resizable="false" :vertical-compact="true" :use-css-transforms="true">
+      <GridItem v-for="(item, index) in chartList" :key="index" :static="false" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.id">
         <div class="chart-wrapper" :key="item.id" :id="item.id" :data-dr-id="item.id">
           <component :is="getComponent(item.type)" :chart="item"></component>
         </div>
@@ -121,10 +104,10 @@ const computedCanvasMainContainerStyle = computed(() => {
 .dr-page-preview {
   width: 100%;
   height: calc(100vh);
-  background-color: #f5f7fa;
+  background-color: var(--el-bg-color-page);
 
   & .chart-wrapper {
-    background-color: white;
+    background-color: var(--el-fill-color-blank);
     height: 100%;
     width: 100%;
   }

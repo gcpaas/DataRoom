@@ -1,76 +1,76 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'DrMetricCardControlPanel',
 })
 </script>
 <script setup lang="ts">
-import type {DrMetricCardConfig} from '../install.ts'
-import {computed} from 'vue'
+import type { DrMetricCardConfig } from '../install.ts'
+import { computed } from 'vue'
 
-const {chart} = defineProps<{
+const { chart } = defineProps<{
   chart: DrMetricCardConfig
 }>()
 const chartConfig = computed(() => chart)
 
 const directionOptions = [
-  {label: '纵向', value: 'vertical'},
-  {label: '横向', value: 'horizontal'},
+  { label: '纵向', value: 'vertical' },
+  { label: '横向', value: 'horizontal' },
 ]
 
 const horizontalAlignOptions = [
-  {label: '左对齐', value: 'left'},
-  {label: '居中', value: 'center'},
-  {label: '右对齐', value: 'right'},
+  { label: '左对齐', value: 'left' },
+  { label: '居中', value: 'center' },
+  { label: '右对齐', value: 'right' },
 ]
 
 const verticalAlignOptions = [
-  {label: '顶部', value: 'top'},
-  {label: '居中', value: 'center'},
-  {label: '底部', value: 'bottom'},
+  { label: '顶部', value: 'top' },
+  { label: '居中', value: 'center' },
+  { label: '底部', value: 'bottom' },
 ]
 
 const fontWeightOptions = [
-  {label: '正常', value: 'normal'},
-  {label: '粗体', value: 'bold'},
-  {label: '更粗', value: 'bolder'},
+  { label: '正常', value: 'normal' },
+  { label: '粗体', value: 'bold' },
+  { label: '更粗', value: 'bolder' },
 ]
 
 const valueFormatOptions = [
-  {label: '原始值', value: 'value'},
-  {label: '整数', value: 'integer'},
-  {label: '一位小数', value: 'float1'},
-  {label: '两位小数', value: 'float2'},
-  {label: '百分比', value: 'percent'},
-  {label: '千分位', value: 'thousand'},
-  {label: '货币', value: 'currency'},
+  { label: '原始值', value: 'value' },
+  { label: '整数', value: 'integer' },
+  { label: '一位小数', value: 'float1' },
+  { label: '两位小数', value: 'float2' },
+  { label: '百分比', value: 'percent' },
+  { label: '千分位', value: 'thousand' },
+  { label: '货币', value: 'currency' },
 ]
 
 const unitPositionOptions = [
-  {label: '前缀', value: 'prefix'},
-  {label: '后缀', value: 'suffix'},
-  {label: '上方', value: 'top'},
-  {label: '下方', value: 'bottom'},
+  { label: '前缀', value: 'prefix' },
+  { label: '后缀', value: 'suffix' },
+  { label: '上方', value: 'top' },
+  { label: '下方', value: 'bottom' },
 ]
 
 const operatorOptions = [
-  {label: '大于', value: '>'},
-  {label: '大于等于', value: '>='},
-  {label: '小于', value: '<'},
-  {label: '小于等于', value: '<='},
-  {label: '等于', value: '='},
-  {label: '不等于', value: '!='},
-  {label: '包含', value: 'contains'},
-  {label: '为空', value: 'empty'},
-  {label: '非空', value: 'notEmpty'},
+  { label: '大于', value: '>' },
+  { label: '大于等于', value: '>=' },
+  { label: '小于', value: '<' },
+  { label: '小于等于', value: '<=' },
+  { label: '等于', value: '=' },
+  { label: '不等于', value: '!=' },
+  { label: '包含', value: 'contains' },
+  { label: '为空', value: 'empty' },
+  { label: '非空', value: 'notEmpty' },
 ]
 
 const easingOptions = [
-  {label: '线性', value: 'linear'},
-  {label: '缓出', value: 'cubicOut'},
-  {label: '弹性', value: 'elasticOut'},
-  {label: '回弹', value: 'bounceOut'},
+  { label: '线性', value: 'linear' },
+  { label: '缓出', value: 'cubicOut' },
+  { label: '弹性', value: 'elasticOut' },
+  { label: '回弹', value: 'bounceOut' },
 ]
 
 const addConditionalRule = () => {
@@ -79,7 +79,7 @@ const addConditionalRule = () => {
     value: 0,
     valueColor: '#67c23a',
     backgroundColor: 'rgba(0, 0, 0, 0)',
-    borderColor: 'rgba(0, 0, 0, 0)'
+    borderColor: 'rgba(0, 0, 0, 0)',
   })
 }
 
@@ -424,11 +424,7 @@ const removeConditionalRule = (index: number) => {
               <el-switch v-model="chartConfig.props.conditional.enabled" size="small" />
             </div>
             <div class="dr-config-panel__stack">
-              <div
-                v-for="(rule, index) in chartConfig.props.conditional.rules"
-                :key="index"
-                class="dr-metric-card-config-panel__rule"
-              >
+              <div v-for="(rule, index) in chartConfig.props.conditional.rules" :key="index" class="dr-metric-card-config-panel__rule">
                 <el-form class="dr-config-panel__sub-form" :model="rule" label-width="72px" size="small" label-position="left">
                   <el-form-item class="dr-config-panel__sub-form-item">
                     <div class="dr-config-panel__sub-row">
@@ -511,7 +507,7 @@ const removeConditionalRule = (index: number) => {
 }
 
 .dr-metric-card-config-panel__rule {
-  padding-bottom: var(--space-2);
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--el-border-color-lighter);
 }
 </style>

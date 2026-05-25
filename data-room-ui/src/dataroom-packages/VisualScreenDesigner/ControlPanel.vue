@@ -1,17 +1,17 @@
 <!-- 大屏设计器配置面板 -->
 <script setup lang="ts">
-import {computed, defineAsyncComponent, reactive, ref, watch} from 'vue'
-import {ElMessage, ElMessageBox} from 'element-plus'
-import {getCookie, getCookieName} from '@/dataroom-packages/_common/_cookie'
-import {Delete, Picture, Setting} from '@element-plus/icons-vue'
-import type {VisualScreenPageBasicConfig} from "@/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts"
-import type {PageTimer} from "@/dataroom-packages/PageDesigner/type/PageTimer.ts"
-import {getResourceUrl} from "@/dataroom-packages/_common/_utils.ts"
-import {v4 as uuidv4} from 'uuid'
+import { computed, defineAsyncComponent, reactive, ref, watch } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { getCookie, getCookieName } from '@/dataroom-packages/_common/_cookie'
+import { Delete, Picture, Setting } from '@element-plus/icons-vue'
+import type { VisualScreenPageBasicConfig } from '@/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts'
+import type { PageTimer } from '@/dataroom-packages/PageDesigner/type/PageTimer.ts'
+import { getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
+import { v4 as uuidv4 } from 'uuid'
 
 const TimerConfigDialog = defineAsyncComponent(() => import('../PageDesigner/TimerConfigDialog.vue'))
 
-const {basicConfig} = defineProps<{
+const { basicConfig } = defineProps<{
   basicConfig: VisualScreenPageBasicConfig
 }>()
 
@@ -25,27 +25,27 @@ interface ResolutionPreset {
 }
 
 const RESOLUTION_PRESETS: ResolutionPreset[] = [
-  {label: '1920×1080 (Full HD)', value: '1920x1080', width: 1920, height: 1080},
-  {label: '2560×1440 (2K QHD)', value: '2560x1440', width: 2560, height: 1440},
-  {label: '3840×2160 (4K UHD)', value: '3840x2160', width: 3840, height: 2160},
-  {label: '1280×720 (HD)', value: '1280x720', width: 1280, height: 720},
-  {label: '1366×768', value: '1366x768', width: 1366, height: 768},
-  {label: '自定义', value: 'custom', width: 0, height: 0},
+  { label: '1920×1080 (Full HD)', value: '1920x1080', width: 1920, height: 1080 },
+  { label: '2560×1440 (2K QHD)', value: '2560x1440', width: 2560, height: 1440 },
+  { label: '3840×2160 (4K UHD)', value: '3840x2160', width: 3840, height: 2160 },
+  { label: '1280×720 (HD)', value: '1280x720', width: 1280, height: 720 },
+  { label: '1366×768', value: '1366x768', width: 1366, height: 768 },
+  { label: '自定义', value: 'custom', width: 0, height: 0 },
 ]
 
 const ZOOM_MODES = [
-  {label: '宽度铺满', value: 'fitWidth', desc: '宽度铺满视口，高度按比例缩放'},
-  {label: '高度铺满', value: 'fitHeight', desc: '高度铺满视口，宽度按比例缩放'},
-  {label: '全屏铺满', value: 'cover', desc: '完全铺满视口，可能变形'},
-  {label: '等比缩放', value: 'contain', desc: '保持比例居中显示，可能留黑边'},
-  {label: '不缩放', value: 'none', desc: '原始大小居中显示'},
+  { label: '宽度铺满', value: 'fitWidth', desc: '宽度铺满视口，高度按比例缩放' },
+  { label: '高度铺满', value: 'fitHeight', desc: '高度铺满视口，宽度按比例缩放' },
+  { label: '全屏铺满', value: 'cover', desc: '完全铺满视口，可能变形' },
+  { label: '等比缩放', value: 'contain', desc: '保持比例居中显示，可能留黑边' },
+  { label: '不缩放', value: 'none', desc: '原始大小居中显示' },
 ]
 
 /**
  * 根据当前宽高匹配预设
  */
 const matchPreset = (width: number, height: number): string => {
-  const matched = RESOLUTION_PRESETS.find(p => p.value !== 'custom' && p.width === width && p.height === height)
+  const matched = RESOLUTION_PRESETS.find((p) => p.value !== 'custom' && p.width === width && p.height === height)
   return matched ? matched.value : 'custom'
 }
 
@@ -54,7 +54,7 @@ let isPresetChanging = false
 
 watch(selectedPreset, (val) => {
   if (val === 'custom') return
-  const preset = RESOLUTION_PRESETS.find(p => p.value === val)
+  const preset = RESOLUTION_PRESETS.find((p) => p.value === val)
   if (preset) {
     isPresetChanging = true
     basicConfig.size.width = preset.width
@@ -62,18 +62,15 @@ watch(selectedPreset, (val) => {
   }
 })
 
-watch(
-  [() => basicConfig.size?.width, () => basicConfig.size?.height],
-  ([w, h]) => {
-    if (isPresetChanging) {
-      isPresetChanging = false
-      return
-    }
-    if (w && h) {
-      selectedPreset.value = matchPreset(w, h)
-    }
+watch([() => basicConfig.size?.width, () => basicConfig.size?.height], ([w, h]) => {
+  if (isPresetChanging) {
+    isPresetChanging = false
+    return
   }
-)
+  if (w && h) {
+    selectedPreset.value = matchPreset(w, h)
+  }
+})
 
 // ==================== 定时器 ====================
 
@@ -96,7 +93,7 @@ const uploadUrl = `${apiBaseUrl}/dataRoom/resource/upload`
 const cookieName = getCookieName()
 const cookieValue = getCookie(cookieName)
 const uploadHeaders = reactive({
-  [cookieName]: cookieValue
+  [cookieName]: cookieValue,
 })
 
 /**
@@ -125,7 +122,7 @@ const addTimer = () => {
     name: `定时器${timerCount}`,
     enabled: false,
     interval: 5000,
-    actions: []
+    actions: [],
   }
   timers.value.push(newTimer)
 }
@@ -141,180 +138,171 @@ const openTimerConfig = (timer: PageTimer) => {
 }
 
 const deleteTimer = (id: string) => {
-  ElMessageBox.confirm(
-    '确定要删除这个定时器吗？',
-    '提示',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  ).then(() => {
-    const index = timers.value.findIndex((item) => item.id === id)
-    timers.value.splice(index, 1)
-    ElMessage.success('定时器已删除')
-  }).catch(() => {
-    // 用户取消删除
+  ElMessageBox.confirm('确定要删除这个定时器吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
   })
+    .then(() => {
+      const index = timers.value.findIndex((item) => item.id === id)
+      timers.value.splice(index, 1)
+      ElMessage.success('定时器已删除')
+    })
+    .catch(() => {
+      // 用户取消删除
+    })
 }
 </script>
 
 <template>
   <div class="control-panel">
-    <el-tabs v-model="activeTab" class="control-tabs">
-      <el-tab-pane label="配置" name="config">
-        <div class="tab-content">
-          <el-form label-width="80px" label-position="left" size="small">
-            <!-- 大屏尺寸配置 -->
-            <el-divider content-position="left">大屏尺寸</el-divider>
+    <div class="control-tabs">
+      <div class="control-tabs-header" role="tablist" aria-label="大屏配置">
+        <button type="button" class="control-tab" :class="{ active: activeTab === 'config' }" role="tab" :aria-selected="activeTab === 'config'" @click="activeTab = 'config'">
+          配置
+        </button>
+        <button
+          type="button"
+          class="control-tab"
+          :class="{ active: activeTab === 'interaction' }"
+          role="tab"
+          :aria-selected="activeTab === 'interaction'"
+          @click="activeTab = 'interaction'"
+        >
+          交互
+        </button>
+      </div>
+      <div class="control-tabs-content">
+        <section v-show="activeTab === 'config'" class="control-tab-pane" role="tabpanel">
+          <div class="tab-content">
+            <el-form label-width="80px" label-position="left" size="small">
+              <!-- 大屏尺寸配置 -->
+              <el-divider content-position="left">大屏尺寸</el-divider>
 
-            <el-form-item label="分辨率">
-              <el-select v-model="selectedPreset" placeholder="请选择分辨率">
-                <el-option
-                  v-for="preset in RESOLUTION_PRESETS"
-                  :key="preset.value"
-                  :label="preset.label"
-                  :value="preset.value"
-                />
-              </el-select>
-            </el-form-item>
-
-            <el-form-item label="宽度">
-              <el-input-number v-model="basicConfig.size.width" :min="320" :step="10" controls-position="right" style="width: 100%"/>
-            </el-form-item>
-
-            <el-form-item label="高度">
-              <el-input-number v-model="basicConfig.size.height" :min="320" :step="10" controls-position="right" style="width: 100%"/>
-            </el-form-item>
-
-            <!-- 背景配置 -->
-            <el-divider content-position="left">背景设置</el-divider>
-
-            <el-form-item label="背景填充">
-              <el-radio-group v-model="basicConfig.background.fill">
-                <el-radio value="color">颜色</el-radio>
-                <el-radio value="image">图片</el-radio>
-              </el-radio-group>
-            </el-form-item>
-
-            <el-form-item label="背景颜色" v-if="basicConfig.background.fill === 'color'">
-              <el-color-picker v-model="basicConfig.background.color" show-alpha></el-color-picker>
-            </el-form-item>
-
-            <template v-if="basicConfig.background.fill === 'image'">
-              <el-form-item label="背景图片">
-                <div class="bg-upload-section">
-                  <el-upload
-                    :action="uploadUrl"
-                    :headers="uploadHeaders"
-                    :on-success="handleBgUploadSuccess"
-                    :on-error="handleUploadError"
-                    :show-file-list="false"
-                    accept="image/*"
-                    class="bg-uploader"
-                  >
-                    <div class="bg-preview-box">
-                      <el-image
-                        v-if="basicConfig.background.url"
-                        :src="getResourceUrl(basicConfig.background.url)"
-                        fit="contain"
-                        class="bg-image"
-                        lazy
-                      >
-                        <template #error>
-                          <div class="bg-placeholder">
-                            <el-icon>
-                              <Picture/>
-                            </el-icon>
-                            <span>加载失败</span>
-                          </div>
-                        </template>
-                      </el-image>
-                      <div v-else class="bg-placeholder">
-                        <el-icon>
-                          <Picture/>
-                        </el-icon>
-                        <span>点击上传背景图</span>
-                      </div>
-                    </div>
-                  </el-upload>
-                </div>
-              </el-form-item>
-
-              <el-form-item label="透明度">
-                <el-input-number v-model="basicConfig.background.opacity" :min="0" :max="100" :step="1" controls-position="right" style="width: 100%"/>
-              </el-form-item>
-
-              <el-form-item label="填充方式">
-                <el-select v-model="basicConfig.background.repeat" placeholder="请选择填充方式">
-                  <el-option label="不重复" value="no-repeat"></el-option>
-                  <el-option label="重复" value="repeat"></el-option>
-                  <el-option label="水平重复" value="repeat-x"></el-option>
-                  <el-option label="垂直重复" value="repeat-y"></el-option>
+              <el-form-item label="分辨率">
+                <el-select v-model="selectedPreset" placeholder="请选择分辨率">
+                  <el-option v-for="preset in RESOLUTION_PRESETS" :key="preset.value" :label="preset.label" :value="preset.value" />
                 </el-select>
               </el-form-item>
-            </template>
 
-            <!-- 缩放模式配置 -->
-            <el-divider content-position="left">缩放模式</el-divider>
+              <el-form-item label="宽度">
+                <el-input-number v-model="basicConfig.size.width" :min="320" :step="10" controls-position="right" class="field-full" />
+              </el-form-item>
 
-            <el-form-item label="预览缩放">
-              <el-select v-model="basicConfig.size.zoom" placeholder="请选择缩放模式">
-                <el-option
-                  v-for="mode in ZOOM_MODES"
-                  :key="mode.value"
-                  :label="mode.label"
-                  :value="mode.value"
-                />
-              </el-select>
-            </el-form-item>
+              <el-form-item label="高度">
+                <el-input-number v-model="basicConfig.size.height" :min="320" :step="10" controls-position="right" class="field-full" />
+              </el-form-item>
 
-            <div class="zoom-desc" v-if="basicConfig.size.zoom">
-              {{ ZOOM_MODES.find(m => m.value === basicConfig.size.zoom)?.desc }}
-            </div>
-          </el-form>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="交互" name="interaction">
-        <div class="tab-content">
-          <div class="timer-header">
-            <span class="timer-title">定时器</span>
-            <el-button type="primary" size="small" plain @click="addTimer">添加定时器</el-button>
-          </div>
-          <div class="timer-list">
-            <div class="timer-item" v-for="timer in timers" :key="timer.id">
-              <div class="timer-info">
-                <div class="timer-name">{{ timer.name }}</div>
-                <div class="timer-desc">{{ timer.interval }} 毫秒1次</div>
+              <!-- 背景配置 -->
+              <el-divider content-position="left">背景设置</el-divider>
+
+              <el-form-item label="背景填充">
+                <el-radio-group v-model="basicConfig.background.fill">
+                  <el-radio value="color">颜色</el-radio>
+                  <el-radio value="image">图片</el-radio>
+                </el-radio-group>
+              </el-form-item>
+
+              <el-form-item label="背景颜色" v-if="basicConfig.background.fill === 'color'">
+                <el-color-picker v-model="basicConfig.background.color" show-alpha></el-color-picker>
+              </el-form-item>
+
+              <template v-if="basicConfig.background.fill === 'image'">
+                <el-form-item label="背景图片">
+                  <div class="bg-upload-section">
+                    <el-upload
+                      :action="uploadUrl"
+                      :headers="uploadHeaders"
+                      :on-success="handleBgUploadSuccess"
+                      :on-error="handleUploadError"
+                      :show-file-list="false"
+                      accept="image/*"
+                      class="bg-uploader"
+                    >
+                      <div class="bg-preview-box">
+                        <el-image v-if="basicConfig.background.url" :src="getResourceUrl(basicConfig.background.url)" fit="contain" class="bg-image" lazy>
+                          <template #error>
+                            <div class="bg-placeholder">
+                              <el-icon>
+                                <Picture />
+                              </el-icon>
+                              <span>加载失败</span>
+                            </div>
+                          </template>
+                        </el-image>
+                        <div v-else class="bg-placeholder">
+                          <el-icon>
+                            <Picture />
+                          </el-icon>
+                          <span>点击上传背景图</span>
+                        </div>
+                      </div>
+                    </el-upload>
+                  </div>
+                </el-form-item>
+
+                <el-form-item label="透明度">
+                  <el-input-number v-model="basicConfig.background.opacity" :min="0" :max="100" :step="1" controls-position="right" class="field-full" />
+                </el-form-item>
+
+                <el-form-item label="填充方式">
+                  <el-select v-model="basicConfig.background.repeat" placeholder="请选择填充方式">
+                    <el-option label="不重复" value="no-repeat"></el-option>
+                    <el-option label="重复" value="repeat"></el-option>
+                    <el-option label="水平重复" value="repeat-x"></el-option>
+                    <el-option label="垂直重复" value="repeat-y"></el-option>
+                  </el-select>
+                </el-form-item>
+              </template>
+
+              <!-- 缩放模式配置 -->
+              <el-divider content-position="left">缩放模式</el-divider>
+
+              <el-form-item label="预览缩放">
+                <el-select v-model="basicConfig.size.zoom" placeholder="请选择缩放模式">
+                  <el-option v-for="mode in ZOOM_MODES" :key="mode.value" :label="mode.label" :value="mode.value" />
+                </el-select>
+              </el-form-item>
+
+              <div class="zoom-desc" v-if="basicConfig.size.zoom">
+                {{ ZOOM_MODES.find((m) => m.value === basicConfig.size.zoom)?.desc }}
               </div>
-              <div class="timer-controls">
-                <el-switch
-                  v-model="timer.enabled"
-                  size="small"
-                  @change="(val: boolean) => toggleTimer(timer, val)"
-                />
-                <el-icon class="setting-icon" @click="openTimerConfig(timer)">
-                  <Setting/>
-                </el-icon>
-                <el-icon class="delete-icon" @click="deleteTimer(timer.id)">
-                  <Delete/>
-                </el-icon>
+            </el-form>
+          </div>
+        </section>
+        <section v-show="activeTab === 'interaction'" class="control-tab-pane" role="tabpanel">
+          <div class="tab-content">
+            <div class="timer-header">
+              <span class="timer-title">定时器</span>
+              <el-button type="primary" size="small" plain @click="addTimer">添加定时器</el-button>
+            </div>
+            <div class="timer-list">
+              <div class="timer-item" v-for="timer in timers" :key="timer.id">
+                <div class="timer-info">
+                  <div class="timer-name">{{ timer.name }}</div>
+                  <div class="timer-desc">{{ timer.interval }} 毫秒1次</div>
+                </div>
+                <div class="timer-controls">
+                  <el-switch v-model="timer.enabled" size="small" @change="(val: boolean) => toggleTimer(timer, val)" />
+                  <el-icon class="setting-icon" @click="openTimerConfig(timer)">
+                    <Setting />
+                  </el-icon>
+                  <el-icon class="delete-icon" @click="deleteTimer(timer.id)">
+                    <Delete />
+                  </el-icon>
+                </div>
+              </div>
+              <div v-if="timers.length === 0" class="empty-timer">
+                <el-empty description="暂无定时器，请点击上方按钮添加" :image-size="80" />
               </div>
             </div>
-            <div v-if="timers.length === 0" class="empty-timer">
-              <el-empty description="暂无定时器，请点击上方按钮添加" :image-size="80"/>
-            </div>
           </div>
-        </div>
-      </el-tab-pane>
-    </el-tabs>
+        </section>
+      </div>
+    </div>
 
     <!-- 定时器配置对话框 -->
-    <TimerConfigDialog
-      v-if="timerConfigDialogVisible && currentTimer"
-      v-model="timerConfigDialogVisible"
-      :timer="currentTimer"
-    />
+    <TimerConfigDialog v-if="timerConfigDialogVisible && currentTimer" v-model="timerConfigDialogVisible" :timer="currentTimer" />
   </div>
 </template>
 
@@ -324,98 +312,86 @@ const deleteTimer = (id: string) => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
   .control-tabs {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0;
 
-    :deep(.el-tabs__header) {
-      margin-bottom: 0;
-      border-bottom: none;
+    .control-tabs-header {
+      display: flex;
+      flex: 0 0 auto;
+      gap: 4px;
       padding: 0 16px;
-      box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
+      border-bottom: 1px solid var(--el-border-color-light);
     }
 
-    :deep(.el-tabs__nav-wrap)::after {
-      display: none;
-    }
-
-    :deep(.el-tabs__item) {
+    .control-tab {
+      position: relative;
+      min-width: 56px;
+      height: 40px;
+      padding: 0 12px;
+      border: 0;
+      background: var(--el-bg-color);
+      color: var(--el-text-color-secondary);
+      font-family: inherit;
       font-size: 14px;
       font-weight: 500;
-      color: var(--dr-gray-500);
-      transition: color 0.2s;
-
-      &.is-active {
-        color: var(--dr-gray-900);
-      }
-
-      &:hover:not(.is-active) {
-        color: var(--dr-gray-700);
-      }
+      letter-spacing: 0;
+      cursor: pointer;
+      transition: color 0.2s ease;
     }
 
-    :deep(.el-tabs__active-bar) {
+    .control-tab:hover {
+      color: var(--el-text-color-regular);
+    }
+
+    .control-tab.active {
+      color: var(--el-text-color-primary);
+    }
+
+    .control-tab.active::after {
+      content: '';
+      position: absolute;
+      right: 12px;
+      bottom: 0;
+      left: 12px;
       height: 2px;
-      background-color: var(--dr-blue);
+      background-color: var(--el-color-primary);
     }
 
-    :deep(.el-tabs__content) {
+    .control-tabs-content {
       flex: 1;
+      min-height: 0;
       overflow: hidden;
-      padding: 2px;
+    }
+
+    .control-tab-pane {
+      height: 100%;
+      min-height: 0;
     }
 
     .tab-content {
       padding: 16px;
       height: 100%;
+      box-sizing: border-box;
       overflow-y: auto;
 
-      :deep(.el-divider) {
-        margin: 16px 0 12px;
-
-        .el-divider__text {
-          font-size: 12px;
-          font-weight: 500;
-          text-transform: uppercase;
-          color: var(--dr-gray-500);
-          letter-spacing: 0.02em;
-        }
-      }
-
-      :deep(.el-form-item__label) {
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--dr-gray-700);
-      }
-
-      :deep(.el-input__wrapper) {
-        border-radius: var(--radius-md);
-        box-shadow: 0 0 0 1px var(--dr-gray-200) inset;
-
-        &:focus-within,
-        &.is-focus {
-          box-shadow: 0 0 0 1px var(--dr-blue) inset, 0 0 0 3px rgba(52, 120, 246, 0.1);
-        }
-      }
-
-      :deep(.el-input-number) {
-        font-feature-settings: "tnum";
-
-        .el-input__inner {
-          font-feature-settings: "tnum";
-        }
-      }
-
-      :deep(.el-select__wrapper) {
-        border-radius: var(--radius-md);
+      .field-full {
+        width: 100%;
       }
 
       .zoom-desc {
         font-size: 12px;
-        color: var(--dr-gray-500);
+        color: var(--el-text-color-secondary);
         padding: 0 0 12px 80px;
         margin-top: -8px;
       }
@@ -426,14 +402,14 @@ const deleteTimer = (id: string) => {
         justify-content: space-between;
         margin-bottom: 16px;
         padding-bottom: 12px;
-        box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
+        border-bottom: 1px solid var(--el-border-color-light);
 
         .timer-title {
           font-size: 12px;
           font-weight: 500;
           text-transform: uppercase;
-          color: var(--dr-gray-500);
-          letter-spacing: 0.02em;
+          color: var(--el-text-color-secondary);
+          letter-spacing: 0;
         }
       }
 
@@ -444,14 +420,14 @@ const deleteTimer = (id: string) => {
           justify-content: space-between;
           padding: 12px;
           margin-bottom: 12px;
-          background: var(--dr-white);
-          border-radius: var(--radius-md);
-          box-shadow: var(--dr-shadow-border);
-          transition: box-shadow 0.2s;
+          background: var(--el-fill-color-blank);
+          border: 1px solid var(--el-border-color);
+          border-radius: 6px;
+          transition: border-color 0.2s;
           cursor: pointer;
 
           &:hover {
-            box-shadow: var(--dr-shadow-sm);
+            border-color: var(--el-border-color-darker);
           }
 
           .timer-info {
@@ -462,14 +438,14 @@ const deleteTimer = (id: string) => {
             .timer-name {
               font-size: 14px;
               font-weight: 500;
-              color: var(--dr-gray-900);
+              color: var(--el-text-color-primary);
               margin-bottom: 4px;
             }
 
             .timer-desc {
               font-size: 12px;
-              color: var(--dr-gray-500);
-              font-feature-settings: "tnum";
+              color: var(--el-text-color-secondary);
+              font-feature-settings: 'tnum';
             }
           }
 
@@ -485,15 +461,15 @@ const deleteTimer = (id: string) => {
             }
 
             .setting-icon {
-              color: var(--dr-gray-500);
+              color: var(--el-text-color-secondary);
 
               &:hover {
-                color: var(--dr-blue);
+                color: var(--el-color-primary);
               }
             }
 
             .delete-icon {
-              color: var(--dr-danger);
+              color: var(--el-color-danger);
 
               &:hover {
                 opacity: 0.8;
@@ -511,18 +487,16 @@ const deleteTimer = (id: string) => {
         width: 100%;
 
         .bg-uploader {
-          :deep(.el-upload) {
-            width: 100%;
-            display: block;
-            cursor: pointer;
-          }
+          width: 100%;
+          display: block;
+          cursor: pointer;
         }
 
         .bg-preview-box {
           width: 100%;
           height: 160px;
-          border: 1px dashed var(--dr-gray-400);
-          border-radius: var(--radius-md);
+          border: 1px dashed var(--el-border-color);
+          border-radius: 6px;
           overflow: hidden;
           position: relative;
           transition: border-color 0.2s;
@@ -530,7 +504,7 @@ const deleteTimer = (id: string) => {
           box-sizing: border-box;
 
           &:hover {
-            border-color: var(--dr-blue);
+            border-color: var(--el-color-primary);
           }
 
           .bg-image {
@@ -546,15 +520,15 @@ const deleteTimer = (id: string) => {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: var(--dr-gray-100);
-            color: var(--dr-gray-500);
+            background-color: var(--el-fill-color-extra-light);
+            color: var(--el-text-color-secondary);
             font-size: 13px;
-            border-radius: var(--radius-sm);
+            border-radius: 4px;
 
             .el-icon {
               font-size: 48px;
               margin-bottom: 8px;
-              color: var(--dr-gray-400);
+              color: var(--el-text-color-disabled);
             }
           }
         }

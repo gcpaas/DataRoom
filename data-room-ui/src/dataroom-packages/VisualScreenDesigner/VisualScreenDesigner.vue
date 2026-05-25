@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import {getComponent, getComponentInstance, getPanelComponent,} from '@/dataroom-packages/components/AutoInstall.ts'
-import {type Component, computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onMounted, provide, reactive, ref, shallowRef} from 'vue'
-import {debounce} from 'lodash'
-import Moveable, {type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd,} from 'vue3-moveable'
-import {VueSelecto} from 'vue3-selecto'
-import {deleteChartById, extractPositionFromTransform, getChartByElement, getChartById, getResourceUrl} from '@/dataroom-packages/_common/_utils.ts'
+import { getComponent, getComponentInstance, getPanelComponent } from '@/dataroom-packages/components/AutoInstall.ts'
+import { type Component, computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onMounted, provide, reactive, ref, shallowRef } from 'vue'
+import { debounce } from 'lodash'
+import Moveable, { type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd } from 'vue3-moveable'
+import { VueSelecto } from 'vue3-selecto'
+import { deleteChartById, extractPositionFromTransform, getChartByElement, getChartById, getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
 import VanillaSelecto from 'selecto'
-import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts";
-import type {LeftToolBar} from "@/dataroom-packages/PageDesigner/type/LeftToolBar.ts";
-import {useRoute, useRouter} from 'vue-router'
-import {ElMessage} from 'element-plus'
-import {pageApi} from "@/dataroom-packages/page/api.ts";
-import type {PageStageEntity} from "@/dataroom-packages/page/type/PageStageEntity.ts";
-import {useCanvasInst} from '@/dataroom-packages/hooks/use-canvas-inst'
-import type {GlobalVariable} from "@/dataroom-packages/PageDesigner/type/GlobalVariable.ts";
-import {DrConst} from "@/dataroom-packages/constant/DrConst.ts";
-import type {VisualScreenPageBasicConfig} from "@/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts";
+import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
+import type { LeftToolBar } from '@/dataroom-packages/PageDesigner/type/LeftToolBar.ts'
+import { useRoute, useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { pageApi } from '@/dataroom-packages/page/api.ts'
+import type { PageStageEntity } from '@/dataroom-packages/page/type/PageStageEntity.ts'
+import { useCanvasInst } from '@/dataroom-packages/hooks/use-canvas-inst'
+import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/GlobalVariable.ts'
+import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import type { VisualScreenPageBasicConfig } from '@/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts'
 
 const router = useRouter()
 const route = useRoute()
@@ -25,11 +25,11 @@ const chartList = ref<ChartConfig<unknown>[]>([])
 const pageStageEntity = ref<PageStageEntity>()
 const globalVariable = ref<GlobalVariable[]>([] as GlobalVariable[])
 const defaultBasicConfig: VisualScreenPageBasicConfig = {
-  background: {fill: 'color', color: '#0d1e42', url: '', opacity: 100, repeat: 'no-repeat'},
-  size: {width: 1920, height: 1080, zoom: 'contain'},
-  timers: []
+  background: { fill: 'color', color: '#0d1e42', url: '', opacity: 100, repeat: 'no-repeat' },
+  size: { width: 1920, height: 1080, zoom: 'contain' },
+  timers: [],
 }
-const basicConfig = ref<VisualScreenPageBasicConfig>({...defaultBasicConfig})
+const basicConfig = ref<VisualScreenPageBasicConfig>({ ...defaultBasicConfig })
 // 记录右侧控制面板是否为页面配置
 const rightControlPanelSetting = ref(false)
 // 定义水平和垂直线组合的标尺、便于
@@ -71,11 +71,11 @@ const activeChartById = (id: string) => {
 /**
  * 子组件注入使用
  */
-const {canvasInst} = useCanvasInst({
+const { canvasInst } = useCanvasInst({
   chartList,
   globalVariable,
   addChart,
-  activeChartById
+  activeChartById,
 })
 provide(DrConst.CANVAS_INST, canvasInst)
 
@@ -126,19 +126,19 @@ const globalVariableDialogVisible = ref(false)
 const mainStyle = computed(() => {
   if (leftToolPanelShow.value && rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width)',
+      gridTemplateColumns: '60px 240px auto 300px',
     }
   } else if (!leftToolPanelShow.value && !rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) auto',
+      gridTemplateColumns: '60px auto',
     }
   } else if (!leftToolPanelShow.value && rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) auto var(--dr-designer-right-panel-width)',
+      gridTemplateColumns: '60px auto 300px',
     }
   } else {
     return {
-      gridTemplateColumns: 'var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto',
+      gridTemplateColumns: '60px 240px auto',
     }
   }
 })
@@ -230,20 +230,22 @@ const onPreview = () => {
     })
     return
   }
-  pageApi.updatePageConfig4Preview({
-    ...pageStageEntity.value,
-    pageConfig: {
-      ...pageStageEntity.value.pageConfig,
-      chartList: chartList.value,
-      basicConfig: basicConfig.value,
-      globalVariableList: globalVariable.value
-    }
-  }).then(() => {
-    const routeData = router.resolve({
-      path: `/dataRoom/visualScreenPreview/preview/${pageStageEntity.value!.pageCode}`
+  pageApi
+    .updatePageConfig4Preview({
+      ...pageStageEntity.value,
+      pageConfig: {
+        ...pageStageEntity.value.pageConfig,
+        chartList: chartList.value,
+        basicConfig: basicConfig.value,
+        globalVariableList: globalVariable.value,
+      },
     })
-    window.open(routeData.href, '_blank')
-  })
+    .then(() => {
+      const routeData = router.resolve({
+        path: `/dataRoom/visualScreenPreview/preview/${pageStageEntity.value!.pageCode}`,
+      })
+      window.open(routeData.href, '_blank')
+    })
 }
 
 /**
@@ -257,20 +259,22 @@ const onSave = () => {
     })
     return
   }
-  pageApi.updatePageConfig({
-    ...pageStageEntity.value,
-    pageConfig: {
-      ...pageStageEntity.value.pageConfig,
-      chartList: chartList.value,
-      basicConfig: basicConfig.value,
-      globalVariableList: globalVariable.value
-    }
-  }).then(() => {
-    ElMessage({
-      message: '保存成功',
-      type: 'success',
+  pageApi
+    .updatePageConfig({
+      ...pageStageEntity.value,
+      pageConfig: {
+        ...pageStageEntity.value.pageConfig,
+        chartList: chartList.value,
+        basicConfig: basicConfig.value,
+        globalVariableList: globalVariable.value,
+      },
     })
-  })
+    .then(() => {
+      ElMessage({
+        message: '保存成功',
+        type: 'success',
+      })
+    })
 }
 
 /**
@@ -324,7 +328,7 @@ const onDragEnd = (e: OnDragEnd) => {
 const _updateTransform = (e: OnEvent, transform: string, width: number, height: number) => {
   console.log('updateTransform', width)
   const chart: ChartConfig<unknown> = getChartByElement(e.target, chartList.value)
-  const {x, y, rotateX, rotateY, rotateZ} = extractPositionFromTransform(transform)
+  const { x, y, rotateX, rotateY, rotateZ } = extractPositionFromTransform(transform)
   chart.x = x
   chart.y = y
   chart.w = width
@@ -452,7 +456,7 @@ const computedToolAnchorStyle = computed(() => {
   if (rightControlPanelShow.value) {
     return {
       position: 'fixed',
-      right: 'var(--dr-designer-right-panel-width)',
+      right: '300px',
     }
   }
   return {
@@ -467,16 +471,16 @@ onMounted(() => {
   // 设置 canvas 容器引用
   canvasContainer.value = document.querySelector('.canvas-content')
   // 根据编码获取页面详情
-  pageApi.getPageConfig(code, "design").then((res) => {
+  pageApi.getPageConfig(code, 'design').then((res) => {
     pageStageEntity.value = res
     chartList.value = res.pageConfig?.chartList || []
     globalVariable.value = res.pageConfig?.globalVariableList || []
     if (res.pageConfig?.basicConfig) {
       const loaded = res.pageConfig.basicConfig as Partial<VisualScreenPageBasicConfig>
       basicConfig.value = {
-        background: {...defaultBasicConfig.background, ...loaded.background},
-        size: {...defaultBasicConfig.size, ...loaded.size},
-        timers: loaded.timers || []
+        background: { ...defaultBasicConfig.background, ...loaded.background },
+        size: { ...defaultBasicConfig.size, ...loaded.size },
+        timers: loaded.timers || [],
       }
     }
   })
@@ -487,7 +491,7 @@ onMounted(() => {
   <div class="dr-vs-editor">
     <div class="header" ref="titleRef">
       <div class="header-left">
-        <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="router.push('/dataRoom/page/index')"/>
+        <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="router.push('/dataRoom/page/index')" />
         <div class="title">{{ pageStageEntity?.name }}</div>
       </div>
       <div class="header-right">
@@ -510,10 +514,10 @@ onMounted(() => {
       </div>
       <div class="left-tool-panel" :style="leftToolPanelStyle">
         <div class="panel-header">
-          <div style="position: relative">
+          <div class="panel-header-inner">
             <span class="title">{{ activeLeftToolBar.desc }}</span>
             <el-icon class="close" @click="switchLeftToolPanel(false)">
-              <Close/>
+              <Close />
             </el-icon>
           </div>
         </div>
@@ -591,24 +595,33 @@ onMounted(() => {
         </div>
       </div>
       <div class="right-panel" :style="rightControlPanelStyle">
-        <el-scrollbar wrap-style="overflow: hidden;" view-style="max-width: 100%; height: 100%; overflow: hidden;">
-          <template v-if="rightControlPanelSetting">
-            <VisualScreenControlPanel :basicConfig="basicConfig"/>
-          </template>
-          <template v-else>
-            <ControlPanelWrapper v-if="activeChart" :chart="activeChart" :global-variable-list="globalVariable">
-              <component :is="getPanelComponent(activeChart?.type)" :chart="activeChart"></component>
-            </ControlPanelWrapper>
-          </template>
+        <el-scrollbar class="right-panel-scrollbar" height="100%">
+          <div class="right-panel-scroll-content">
+            <template v-if="rightControlPanelSetting">
+              <VisualScreenControlPanel :basicConfig="basicConfig" />
+            </template>
+            <template v-else>
+              <ControlPanelWrapper v-if="activeChart" :chart="activeChart" :global-variable-list="globalVariable">
+                <component :is="getPanelComponent(activeChart?.type)" :chart="activeChart"></component>
+              </ControlPanelWrapper>
+            </template>
+          </div>
         </el-scrollbar>
       </div>
       <el-icon class="right-panel-tool-anchor" @click="switchRightControlPanel(!rightControlPanelShow)" :style="computedToolAnchorStyle">
-        <ArrowRight v-if="rightControlPanelShow"/>
-        <ArrowLeft v-else/>
+        <ArrowRight v-if="rightControlPanelShow" />
+        <ArrowLeft v-else />
       </el-icon>
     </div>
   </div>
-  <ContextMenu v-if="contextMenuVisible" ref="contextMenuRef" :style="computedContextMenuStyle" :chart="activeChart" @switch-right-control-panel="switchRightControlPanel" @delete-chart="onChartDeleteClick"></ContextMenu>
+  <ContextMenu
+    v-if="contextMenuVisible"
+    ref="contextMenuRef"
+    :style="computedContextMenuStyle"
+    :chart="activeChart"
+    @switch-right-control-panel="switchRightControlPanel"
+    @delete-chart="onChartDeleteClick"
+  ></ContextMenu>
 
   <!-- 素材库（组件自带弹框，用 v-if 控制挂载） -->
   <ResourceLib v-if="resourceLibDialogVisible" @close="resourceLibDialogVisible = false" />
@@ -620,18 +633,24 @@ onMounted(() => {
 <style scoped lang="scss">
 .dr-vs-editor {
   display: grid;
-  grid-template-rows: var(--dr-designer-header-height) 1fr;
+  grid-template-rows: 48px 1fr;
   height: 100vh;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
   & .header {
-    background-color: var(--dr-white);
-    color: var(--dr-gray-900);
+    background-color: var(--el-bg-color);
+    color: var(--el-text-color-primary);
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: var(--dr-shadow-border);
+    border-bottom: 1px solid var(--el-border-color);
     position: relative;
     z-index: 10;
 
@@ -653,7 +672,7 @@ onMounted(() => {
         font-size: 14px;
         font-weight: 500;
         white-space: nowrap;
-        color: var(--dr-gray-900);
+        color: var(--el-text-color-primary);
       }
     }
 
@@ -667,11 +686,11 @@ onMounted(() => {
 
   & .main {
     display: grid;
-    grid-template-columns: var(--dr-designer-left-tool-bar-width) var(--dr-designer-left-tool-panel-width) auto var(--dr-designer-right-panel-width);
+    grid-template-columns: 60px 240px auto 300px;
 
     & .left-tool-bar {
-      background-color: var(--dr-white);
-      box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.08);
+      background-color: var(--el-bg-color);
+      box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
 
       & .bar {
         font-size: 12px;
@@ -679,23 +698,23 @@ onMounted(() => {
         text-align: center;
         margin: 4px auto;
         padding: 8px 0;
-        color: var(--dr-gray-500);
+        color: var(--el-text-color-secondary);
         transition: all 0.2s;
 
         &:hover {
           cursor: pointer;
-          background-color: var(--dr-bg2);
-          color: var(--dr-gray-700);
+          background-color: var(--el-fill-color-lighter);
+          color: var(--el-text-color-regular);
         }
       }
 
       & .active {
-        background-color: var(--dr-blue-soft);
-        color: var(--dr-primary);
+        background-color: var(--el-color-primary-light-9);
+        color: var(--el-color-primary);
         position: relative;
 
         &:hover {
-          color: var(--dr-primary);
+          color: var(--el-color-primary);
         }
 
         &::before {
@@ -705,34 +724,38 @@ onMounted(() => {
           bottom: 0;
           width: 3px;
           position: absolute;
-          background-color: var(--dr-primary);
+          background-color: var(--el-color-primary);
           border-radius: 0 2px 2px 0;
         }
       }
     }
 
     & .left-tool-panel {
-      background-color: var(--dr-white);
+      background-color: var(--el-bg-color);
       display: grid;
       grid-template-rows: 40px auto;
       height: 100vh;
-      box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.08);
+      box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
 
       & .panel-header {
-        background-color: var(--dr-bg2);
+        background-color: var(--el-fill-color-light);
         box-sizing: border-box;
-        box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.08);
+        box-shadow: inset 0 -1px 0 0 var(--el-border-color-light);
         font-size: 12px;
         font-weight: 500;
         text-transform: uppercase;
-        color: var(--dr-gray-500);
+        color: var(--el-text-color-secondary);
         line-height: 40px;
         height: 40px;
         align-self: center;
         padding-left: 12px;
 
+        & .panel-header-inner {
+          position: relative;
+        }
+
         & .title {
-          letter-spacing: 0.02em;
+          letter-spacing: 0;
         }
 
         & .close {
@@ -741,17 +764,17 @@ onMounted(() => {
           line-height: 40px;
           right: 16px;
           top: 0px;
-          color: var(--dr-gray-500);
+          color: var(--el-text-color-secondary);
 
-          & :hover {
+          &:hover {
             cursor: pointer;
-            color: var(--dr-blue);
+            color: var(--el-color-primary);
           }
         }
       }
 
       & .panel-body {
-        background-color: var(--dr-white);
+        background-color: var(--el-bg-color);
         overflow-y: hidden;
         padding: 8px 4px 16px 4px;
       }
@@ -759,9 +782,9 @@ onMounted(() => {
 
     & .canvas {
       display: grid;
-      background-color: #f0f1f3;
+      background-color: var(--el-bg-color-page);
       grid-template-rows: auto;
-      background-image: radial-gradient(circle, #d4d7de 1px, transparent 1px);
+      background-image: radial-gradient(circle, var(--el-border-color) 1px, var(--el-bg-color-page) 1px);
       background-size: 16px 16px;
 
       & .canvas-main {
@@ -781,76 +804,78 @@ onMounted(() => {
       box-sizing: border-box;
       min-width: 0;
       overflow: hidden;
-      background-color: var(--dr-white);
-      box-shadow: inset 1px 0 0 0 rgba(0, 0, 0, 0.08);
+      background-color: var(--el-bg-color);
+      box-shadow: inset 1px 0 0 0 var(--el-border-color-light);
       height: 100vh;
       position: relative;
       z-index: 5;
+
+      & .right-panel-scrollbar,
+      & .right-panel-scroll-content {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        overflow: hidden;
+      }
     }
   }
 
   .right-panel-tool-anchor {
     position: fixed;
     box-sizing: border-box;
-    right: var(--dr-designer-right-panel-width);
+    right: 300px;
     top: 50%;
     transform: translateY(-50%);
     width: 16px;
     height: 50px;
-    background-color: var(--dr-white);
-    color: var(--dr-gray-700);
-    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-    box-shadow: var(--dr-shadow-sm);
+    background-color: var(--el-bg-color);
+    color: var(--el-text-color-regular);
+    border-radius: 4px 0 0 4px;
+    border: 1px solid var(--el-border-color-light);
 
     &:hover {
       cursor: pointer;
-      color: var(--dr-blue);
-      background-color: var(--dr-blue-soft);
+      color: var(--el-color-primary);
+      background-color: var(--el-color-primary-light-9);
     }
   }
 }
 
-// Moveable control-box: selected component styling
 :deep(.moveable-control-box) {
-  z-index: 1000 !important;
+  z-index: 1000;
 
-  // Resize handles: 8px square, white bg, 2px solid #3478f6 border
   .moveable-control {
-    width: 8px !important;
-    height: 8px !important;
-    border-radius: 0 !important;
-    background: var(--dr-white) !important;
-    border: 2px solid var(--dr-blue) !important;
-    margin-top: -4px !important;
-    margin-left: -4px !important;
+    width: 8px;
+    height: 8px;
+    border-radius: 0;
+    background: var(--el-fill-color-blank);
+    border: 2px solid var(--el-color-primary);
+    margin-top: -4px;
+    margin-left: -4px;
 
     &:active,
     &.moveable-origin {
-      background: var(--dr-blue) !important;
+      background: var(--el-color-primary);
     }
   }
 
-  // Selected outline: 1px solid #3478f6
   .moveable-line {
-    background: var(--dr-blue) !important;
-    height: 1px !important;
-    width: 1px !important;
+    background: var(--el-color-primary);
+    height: 1px;
+    width: 1px;
   }
 
-  // Alignment guides: red #f53f3f, 1px solid
   .moveable-guideline {
-    background: var(--dr-danger) !important;
+    background: var(--el-color-danger);
   }
 }
 
-// Selection marquee: 1px dashed #3478f6, fill #3478f6 at 0.06 opacity
 :deep(.selecto-selection) {
-  border: 1px dashed var(--dr-blue) !important;
-  background: rgba(52, 120, 246, 0.06) !important;
+  border: 1px dashed var(--el-color-primary);
+  background: var(--el-color-primary-light-9);
 }
 
-// Hover state for non-selected chart wrappers
 .chart-wrapper:hover:not(.moveable-target) {
-  outline: 1px dashed var(--dr-gray-400);
+  outline: 1px dashed var(--el-border-color);
 }
 </style>

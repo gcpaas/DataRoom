@@ -1,11 +1,11 @@
 <!-- 交互行为配置对话框 -->
 <script setup lang="ts">
-import {computed, ref, watch} from 'vue'
-import {ElMessage} from 'element-plus'
-import {Delete, Plus, Rank} from '@element-plus/icons-vue'
-import type {Behavior} from "@/dataroom-packages/components/type/Behavior.ts";
-import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts";
-import type {ChartAction} from "@/dataroom-packages/components/type/ChartAction.ts";
+import { computed, ref, watch } from 'vue'
+import { ElMessage } from 'element-plus'
+import { Delete, Plus, Rank } from '@element-plus/icons-vue'
+import type { Behavior } from '@/dataroom-packages/components/type/Behavior.ts'
+import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
+import type { ChartAction } from '@/dataroom-packages/components/type/ChartAction.ts'
 
 const props = defineProps<{
   modelValue: boolean
@@ -19,7 +19,7 @@ const emit = defineEmits<{
 
 const dialogVisible = computed({
   get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
+  set: (val) => emit('update:modelValue', val),
 })
 
 // 当前选中的action索引
@@ -33,7 +33,7 @@ const getBehaviorConfig = () => {
   if (!props.chart.behaviors[props.behavior.method]) {
     props.chart.behaviors[props.behavior.method] = {
       disabled: false,
-      actions: []
+      actions: [],
     }
   }
   return props.chart.behaviors[props.behavior.method]
@@ -64,7 +64,7 @@ const addAction = () => {
   const newAction: ChartAction = {
     name: `动作${actionCount}`,
     type: 'code',
-    code: '// 请输入JS代码\n'
+    code: '// 请输入JS代码\n',
   }
   config.actions.push(newAction)
   activeActionIndex.value = config.actions.length - 1
@@ -105,7 +105,7 @@ const handleDrop = (e: DragEvent, dropIndex: number) => {
     }
     const dragItem = config.actions[dragStartIndex.value]
     if (!dragItem) {
-      return;
+      return
     }
     config.actions.splice(dragStartIndex.value, 1)
     config.actions.splice(dropIndex, 0, dragItem)
@@ -123,9 +123,13 @@ const handleDrop = (e: DragEvent, dropIndex: number) => {
 }
 
 // 监听behavior变化，重置选中索引
-watch(() => props.behavior, () => {
-  activeActionIndex.value = 0
-}, {immediate: true})
+watch(
+  () => props.behavior,
+  () => {
+    activeActionIndex.value = 0
+  },
+  { immediate: true },
+)
 
 // 关闭对话框
 const onClose = () => {
@@ -171,11 +175,7 @@ const onClose = () => {
       <div class="action-form-wrapper">
         <el-form v-if="currentAction" label-width="100px" label-position="left" size="default">
           <el-form-item label="动作名称">
-            <el-input
-              v-model="currentAction.name"
-              placeholder="请输入动作名称"
-              clearable
-            ></el-input>
+            <el-input v-model="currentAction.name" placeholder="请输入动作名称" clearable></el-input>
           </el-form-item>
           <el-form-item label="动作类型">
             <el-select v-model="currentAction.type" disabled>
@@ -183,21 +183,16 @@ const onClose = () => {
             </el-select>
           </el-form-item>
           <el-form-item label="JS代码">
-            <el-input
-              v-model="currentAction.code"
-              type="textarea"
-              :rows="12"
-              placeholder="请输入JavaScript代码"
-            ></el-input>
+            <el-input v-model="currentAction.code" type="textarea" :rows="12" placeholder="请输入JavaScript代码"></el-input>
           </el-form-item>
           <el-form-item label="说明">
             <el-alert type="info" :closable="false">
               <template #default>
-                <div style="font-weight: bold">bep.params对象属性说明</div>
-                <div v-for="param in behavior.paramsList" :key="param.name" style="margin-top: 4px;">
+                <div class="param-help-title">bep.params对象属性说明</div>
+                <div v-for="param in behavior.paramsList" :key="param.name" class="param-help-row">
                   <strong>{{ param.name }}</strong> ({{ param.type }}): {{ param.desc }}
                 </div>
-                <div v-if="behavior.paramsList.length === 0" style="color: #999;">无参数</div>
+                <div v-if="behavior.paramsList.length === 0" class="param-help-empty">无参数</div>
               </template>
             </el-alert>
           </el-form-item>
@@ -218,55 +213,55 @@ const onClose = () => {
 .dr-behavior-config-wrapper {
   display: grid;
   grid-template-columns: 400px auto;
-  background-color: var(--dr-gray-50);
+  background-color: var(--el-fill-color-light);
   gap: 0;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
   .action-list-wrapper {
     height: calc(70vh - 120px);
-    background: var(--dr-white);
-    padding: var(--space-4);
-    margin: var(--space-4);
-    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-    box-shadow: var(--dr-shadow-border);
-
-    :deep(.el-scrollbar__view) {
-      padding: 2px;
-    }
+    background: var(--el-fill-color-blank);
+    padding: 16px;
+    margin: 16px;
+    border-radius: 8px 0 0 8px;
+    border: 1px solid var(--el-border-color);
 
     .list-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: var(--space-4);
+      margin-bottom: 16px;
 
       .title {
         font-size: 14px;
         font-weight: 600;
-        color: var(--dr-gray-900);
-      }
-
-      :deep(.el-button) {
-        border-radius: var(--radius-md);
+        color: var(--el-text-color-primary);
       }
     }
 
     .action-item {
-      margin: var(--space-2) 0;
-      padding: var(--space-3);
+      margin: 8px 0;
+      padding: 12px;
       position: relative;
       cursor: move;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-radius: var(--radius-md);
-      box-shadow: var(--dr-shadow-border);
-      transition: all 0.2s ease;
-      gap: var(--space-2);
+      border-radius: 6px;
+      border: 1px solid var(--el-border-color);
+      transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+      gap: 8px;
 
       .drag-icon {
         font-size: 12px;
-        color: var(--dr-gray-400);
+        color: var(--el-text-color-disabled);
         cursor: move;
         flex-shrink: 0;
         transition: color 0.2s ease;
@@ -278,20 +273,20 @@ const onClose = () => {
 
         .action-name {
           font-size: 14px;
-          color: var(--dr-gray-900);
+          color: var(--el-text-color-primary);
           font-weight: 500;
-          margin-bottom: var(--space-1);
+          margin-bottom: 4px;
         }
 
         .action-type {
           font-size: 12px;
-          color: var(--dr-gray-500);
+          color: var(--el-text-color-secondary);
         }
       }
 
       .delete-icon {
         font-size: 14px;
-        color: var(--dr-danger);
+        color: var(--el-color-danger);
         cursor: pointer;
         transition: transform 0.2s ease;
 
@@ -301,68 +296,46 @@ const onClose = () => {
       }
 
       &:hover {
-        background: var(--dr-gray-100);
+        background: var(--el-fill-color-lighter);
+        border-color: var(--el-border-color-darker);
         cursor: pointer;
 
         .drag-icon {
-          color: var(--dr-gray-700);
+          color: var(--el-text-color-regular);
         }
       }
 
       &.active {
-        background: var(--dr-blue-soft);
-        box-shadow: 0px 0px 0px 1px var(--dr-blue-border);
+        background: var(--el-color-primary-light-9);
+        border-color: var(--el-color-primary-light-8);
       }
     }
   }
 
   .action-form-wrapper {
-    background: var(--dr-white);
-    padding: var(--space-4);
-    margin: var(--space-4) var(--space-4) var(--space-4) 0;
-    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-    box-shadow: var(--dr-shadow-border);
-
-    :deep(.el-form-item__label) {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--dr-gray-700);
-    }
-
-    :deep(.el-input__wrapper),
-    :deep(.el-select .el-input__wrapper) {
-      border-radius: var(--radius-md);
-      box-shadow: 0px 0px 0px 1px var(--dr-gray-200);
-      border: none;
-      transition: box-shadow 0.2s ease;
-
-      &:focus-within {
-        box-shadow: var(--dr-shadow-focus);
-      }
-    }
-
-    :deep(.el-textarea__inner) {
-      border-radius: var(--radius-md);
-      border: 1px solid var(--dr-gray-200);
-      font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
-      font-size: 13px;
-      transition: box-shadow 0.2s ease, border-color 0.2s ease;
-
-      &:focus {
-        border-color: var(--dr-blue);
-        box-shadow: var(--dr-shadow-focus);
-      }
-    }
-
-    :deep(.el-button) {
-      border-radius: var(--radius-md);
-    }
+    background: var(--el-fill-color-blank);
+    padding: 16px;
+    margin: 16px 16px 16px 0;
+    border-radius: 0 8px 8px 0;
+    border: 1px solid var(--el-border-color);
 
     .empty-action {
       height: calc(70vh - 120px);
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .param-help-title {
+      font-weight: 600;
+    }
+
+    .param-help-row {
+      margin-top: 4px;
+    }
+
+    .param-help-empty {
+      color: var(--el-text-color-secondary);
     }
   }
 }

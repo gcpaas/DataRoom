@@ -210,6 +210,6 @@ const removeOption = (index: number) => {
 
 .dr-radio-config-panel__add-button {
   width: 100%;
-  margin-top: var(--space-2);
+  margin-top: 8px;
 }
 </style>
