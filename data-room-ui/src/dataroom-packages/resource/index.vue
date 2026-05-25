@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, nextTick } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox, ElUpload } from 'element-plus'
-import { Search, Plus, MoreFilled, Folder, Picture, VideoCamera, Check, Box } from '@element-plus/icons-vue'
+import { Box, Check, Folder, MoreFilled, Picture, Plus, Search, VideoCamera } from '@element-plus/icons-vue'
 import { resourceApi, type ResourceEntity } from './api'
 import { getCookie, getCookieName } from '@/dataroom-packages/_common/_cookie'
 import directoryPlaceholder from '../page/assets/image/目录占位符.png'
 import imagePlaceholder from './assets/image/图片占位符.png'
 import videoPlaceholder from './assets/image/视频占位符.png'
 import modelPlaceholder from './assets/image/模型占位符.png'
-import {ResourceType} from "@/dataroom-packages/constant/ResourceType.ts";
+import { ResourceType } from '@/dataroom-packages/constant/ResourceType.ts'
 import ModelPreview from '@/dataroom-packages/three/ModelPreview.vue'
 
 interface Props {
@@ -21,9 +21,8 @@ interface UploadResponse {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  selectable: false
+  selectable: false,
 })
-
 
 const emit = defineEmits<{
   'update:selectedResource': [resource: ResourceEntity | null]
@@ -53,29 +52,29 @@ const resourceBaseUrl = import.meta.env.VITE_RESOURCE_BASE_URL || ''
 const typeSelectDialogVisible = ref(false)
 const resourceTypeOptions = [
   {
-    type: 'directory',
+    type: ResourceType.DIRECTORY,
     name: '目录',
     description: '创建文件夹来归类管理资源',
-    icon: Folder
+    icon: Folder,
   },
   {
-    type: 'image',
+    type: ResourceType.IMAGE,
     name: '图片',
     description: '上传JPG、PNG等格式图片',
-    icon: Picture
+    icon: Picture,
   },
   {
-    type: 'video',
+    type: ResourceType.VIDEO,
     name: '视频',
     description: '上传MP4等格式的视频文件',
-    icon: VideoCamera
+    icon: VideoCamera,
   },
   {
-    type: 'model',
+    type: ResourceType.MODEL,
     name: '3D模型',
     description: '上传GLB、GLTF、OBJ、STL格式3D模型',
-    icon: Box
-  }
+    icon: Box,
+  },
 ]
 
 // 图片详情弹框
@@ -103,7 +102,7 @@ const uploadHeaders = computed(() => {
   const cookieName = getCookieName()
   const cookieValue = getCookie(cookieName)
   return {
-    [cookieName]: cookieValue
+    [cookieName]: cookieValue,
   }
 })
 
@@ -137,18 +136,17 @@ const formatDateTime = (dateStr?: string) => {
 /**
  * 查询
  */
-const getResourceList = () => {
+const getResourceList = async () => {
   loading.value = true
   try {
     const params: { name?: string; parentCode?: string } = {
-      parentCode: currentParentCode.value
+      parentCode: currentParentCode.value,
     }
-    if (searchName.value) {
-      params.name = searchName.value
+    const keyword = searchName.value.trim()
+    if (keyword) {
+      params.name = keyword
     }
-    resourceApi.list(params).then((res) => {
-      resourceList.value = res || []
-    })
+    resourceList.value = (await resourceApi.list(params)) || []
   } catch (error) {
     console.error('查询失败:', error)
   } finally {
@@ -166,13 +164,13 @@ const handleSelectType = (type: string) => {
   typeSelectDialogVisible.value = false
   let resourceType: (typeof ResourceType)[keyof typeof ResourceType]
   switch (type) {
-    case 'directory':
+    case ResourceType.DIRECTORY:
       resourceType = ResourceType.DIRECTORY
       break
-    case 'video':
+    case ResourceType.VIDEO:
       resourceType = ResourceType.VIDEO
       break
-    case 'model':
+    case ResourceType.MODEL:
       resourceType = ResourceType.MODEL
       break
     default:
@@ -181,7 +179,7 @@ const handleSelectType = (type: string) => {
   editingResource.value = {
     name: '',
     resourceType,
-    parentCode: currentParentCode.value
+    parentCode: currentParentCode.value,
   }
   uploadDialogVisible.value = true
 }
@@ -206,7 +204,7 @@ const handleUploadSuccess = (response: UploadResponse) => {
       path: res.path,
       url: res.url,
       size: res.size,
-      resourceType: res.resourceType || editingResource.value.resourceType || ResourceType.IMAGE
+      resourceType: res.resourceType || editingResource.value.resourceType || ResourceType.IMAGE,
     }
     ElMessage.success('文件上传成功，请点击确定保存')
   }
@@ -217,26 +215,39 @@ const handleUploadError = () => {
   ElMessage.error('上传失败')
 }
 
+const isMessageBoxCancel = (error: unknown) => ['cancel', 'close'].includes(String(error))
+
 // 删除资源
-const handleDelete = (resource: ResourceEntity) => {
+const handleDelete = async (resource: ResourceEntity) => {
   if (!resource.id) return
-  const resourceId = resource.id
-  ElMessageBox.confirm(`确定要删除${resource.name}吗？`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(async () => {
-    try {
-      resourceApi.delete(resourceId).then(() => {
-        ElMessage.success('删除成功')
-        getResourceList()
-      })
-    } catch (error) {
+  try {
+    await ElMessageBox.confirm(`确定要删除${resource.name}吗？`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+    await resourceApi.delete(resource.id)
+    ElMessage.success('删除成功')
+    await getResourceList()
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
       console.error('删除失败:', error)
     }
-  }).catch(() => {
-  })
+  }
 }
+
+const openDirectory = (item: ResourceEntity) => {
+  currentParentCode.value = item.id || ''
+  breadcrumbs.value.push({
+    code: item.id || '',
+    name: item.name,
+  })
+  void getResourceList()
+}
+
+const isDirectoryResource = (resourceType?: string) => resourceType === ResourceType.DIRECTORY
+
+const isSelectableResource = (item: ResourceEntity) => !isDirectoryResource(item.resourceType)
 
 /**
  * 点击卡片
@@ -244,35 +255,22 @@ const handleDelete = (resource: ResourceEntity) => {
  */
 const handleCardClick = (item: ResourceEntity) => {
   if (props.selectable) {
-    // 选择模式：只能选择非目录的资源
-    if (item.resourceType !== ResourceType.DIRECTORY) {
+    if (isSelectableResource(item)) {
       toggleResourceSelection(item)
     } else {
-      // 如果是目录,进入该目录
-      currentParentCode.value = item.id || ''
-      breadcrumbs.value.push({
-        code: item.id || '',
-        name: item.name
-      })
-      getResourceList()
+      openDirectory(item)
     }
-  } else {
-    // 非选择模式
-    if (item.resourceType === ResourceType.DIRECTORY) {
-      // 如果是目录,进入该目录
-      currentParentCode.value = item.id || ''
-      breadcrumbs.value.push({
-        code: item.id || '',
-        name: item.name
-      })
-      getResourceList()
-    } else if (item.resourceType === ResourceType.IMAGE) {
-      openImageDetail(item)
-    } else if (item.resourceType === ResourceType.VIDEO) {
-      openVideoDetail(item)
-    } else if (item.resourceType === ResourceType.MODEL) {
-      openModelDetail(item)
-    }
+    return
+  }
+
+  if (isDirectoryResource(item.resourceType)) {
+    openDirectory(item)
+  } else if (item.resourceType === ResourceType.IMAGE) {
+    openImageDetail(item)
+  } else if (item.resourceType === ResourceType.VIDEO) {
+    openVideoDetail(item)
+  } else if (item.resourceType === ResourceType.MODEL) {
+    openModelDetail(item)
   }
 }
 
@@ -303,12 +301,12 @@ const handleImageReUploadSuccess = (response: UploadResponse) => {
       originalName: res.originalName,
       path: res.path,
       url: res.url,
-      size: res.size
+      size: res.size,
     }
     // 更新到数据库
     resourceApi.update(imageDetailResource.value!).then(() => {
       ElMessage.success('图片更新成功')
-      getResourceList()
+      void getResourceList()
       // 重新获取图片尺寸
       if (imageDetailResource.value?.url) {
         const img = new Image()
@@ -362,20 +360,20 @@ const handleVideoCapturecover = () => {
     fetch(uploadUrl, {
       method: 'POST',
       headers: { [cookieName]: cookieValue },
-      body: formData
+      body: formData,
     })
-      .then(res => res.json())
-      .then(response => {
+      .then((res) => res.json())
+      .then((response) => {
         const res = response.data as ResourceEntity
         videoDetailResource.value = {
           ...videoDetailResource.value!,
-          thumbnail: res.url
+          thumbnail: res.url,
         }
         // 更新到数据库
         resourceApi.update(videoDetailResource.value!).then(() => {
           ElMessage.success('封面更新成功')
           capturingCover.value = false
-          getResourceList()
+          void getResourceList()
         })
       })
       .catch(() => {
@@ -392,12 +390,12 @@ const handleCoverUploadSuccess = (response: UploadResponse) => {
     if (!videoDetailResource.value) return
     videoDetailResource.value = {
       ...videoDetailResource.value,
-      thumbnail: res.url
+      thumbnail: res.url,
     }
     // 更新到数据库
     resourceApi.update(videoDetailResource.value!).then(() => {
       ElMessage.success('封面更新成功')
-      getResourceList()
+      void getResourceList()
     })
   }
 }
@@ -479,7 +477,7 @@ const handleBreadcrumbClick = (index: number) => {
   const item = breadcrumbs.value[index]!
   currentParentCode.value = item.code
   breadcrumbs.value = breadcrumbs.value.slice(0, index + 1)
-  getResourceList()
+  void getResourceList()
 }
 
 // 模型封面上传成功回调
@@ -489,7 +487,7 @@ const handleModelCoverUploadSuccess = (response: UploadResponse) => {
     if (!editingResource.value) return
     editingResource.value = {
       ...editingResource.value,
-      thumbnail: res.url
+      thumbnail: res.url,
     }
     ElMessage.success('封面上传成功')
   }
@@ -515,21 +513,49 @@ const handleEditConfirm = () => {
     resourceApi.update(editingResource.value).then(() => {
       ElMessage.success('更新成功')
       uploadDialogVisible.value = false
-      getResourceList()
+      void getResourceList()
     })
   } else {
     // 新增资源
     resourceApi.insert(editingResource.value).then(() => {
       ElMessage.success('创建成功')
       uploadDialogVisible.value = false
-      getResourceList()
+      void getResourceList()
     })
+  }
+}
+
+const getResourceThumbnailSrc = (item: ResourceEntity) => {
+  if (item.resourceType === ResourceType.IMAGE && item.url) {
+    return getResourceUrl(item.url)
+  }
+  if ((item.resourceType === ResourceType.VIDEO || item.resourceType === ResourceType.MODEL) && item.thumbnail) {
+    return getResourceUrl(item.thumbnail)
+  }
+  return getDefaultPlaceholder(item.resourceType)
+}
+
+const getResourceThumbnailClass = (item: ResourceEntity) => ({
+  'thumbnail-image--directory': item.resourceType === ResourceType.DIRECTORY,
+  'thumbnail-image--media': item.resourceType === ResourceType.VIDEO || item.resourceType === ResourceType.MODEL,
+})
+
+const getPlaceholderAlt = (resourceType?: string) => `${getTypeName(resourceType || '') || '默认'}占位图`
+
+const handleCardCommand = (command: string, item: ResourceEntity) => {
+  switch (command) {
+    case 'edit':
+      handleEdit(item)
+      break
+    case 'delete':
+      void handleDelete(item)
+      break
   }
 }
 
 // 页面加载时获取列表
 onMounted(() => {
-  getResourceList()
+  void getResourceList()
 })
 </script>
 
@@ -566,77 +592,28 @@ onMounted(() => {
     <div class="resource-content" v-loading="loading">
       <el-scrollbar>
         <div class="card-list">
-          <div class="resource-card" v-for="item in resourceList" :key="item.id" :class="{ selected: props.selectable && isResourceSelected(item) }">
+          <div
+            class="resource-card"
+            v-for="item in resourceList"
+            :key="item.id"
+            :class="{ selected: props.selectable && isResourceSelected(item) }"
+          >
             <div class="card-thumbnail" @click="handleCardClick(item)">
-              <!-- 选中标记 -->
-              <div class="selection-overlay" v-if="props.selectable && item.resourceType !== ResourceType.DIRECTORY">
+              <div class="selection-overlay" v-if="props.selectable && isSelectableResource(item)">
                 <el-icon class="selection-icon" v-if="isResourceSelected(item)">
                   <Check />
                 </el-icon>
               </div>
-              <!-- 缩略图 -->
               <el-image
-                v-if="item.resourceType === ResourceType.DIRECTORY"
-                :src="getDefaultPlaceholder(item.resourceType)"
-                :lazy="true"
-                fit="contain"
-                class="thumbnail-image directory"
-              >
-                <template #error>
-                  <div class="image-error">
-                    <img :src="getDefaultPlaceholder(item.resourceType)" alt="目录占位图"/>
-                  </div>
-                </template>
-              </el-image>
-              <el-image
-                v-else-if="item.resourceType === ResourceType.IMAGE"
-                :src="item.url ? getResourceUrl(item.url) : getDefaultPlaceholder(item.resourceType)"
+                :src="getResourceThumbnailSrc(item)"
                 :lazy="true"
                 fit="contain"
                 class="thumbnail-image"
+                :class="getResourceThumbnailClass(item)"
               >
                 <template #error>
                   <div class="image-error">
-                    <img :src="getDefaultPlaceholder(item.resourceType)" alt="图片占位符"/>
-                  </div>
-                </template>
-              </el-image>
-              <el-image
-                v-else-if="item.resourceType === ResourceType.VIDEO"
-                :src="item.thumbnail ? getResourceUrl(item.thumbnail) : getDefaultPlaceholder(item.resourceType)"
-                :lazy="true"
-                fit="contain"
-                class="thumbnail-image video"
-              >
-                <template #error>
-                  <div class="image-error">
-                    <img :src="getDefaultPlaceholder(item.resourceType)" alt="视频占位符"/>
-                  </div>
-                </template>
-              </el-image>
-              <el-image
-                v-else-if="item.resourceType === ResourceType.MODEL"
-                :src="item.thumbnail ? getResourceUrl(item.thumbnail) : getDefaultPlaceholder(item.resourceType)"
-                :lazy="true"
-                fit="contain"
-                class="thumbnail-image model"
-              >
-                <template #error>
-                  <div class="image-error">
-                    <img :src="getDefaultPlaceholder(item.resourceType)" alt="模型占位符"/>
-                  </div>
-                </template>
-              </el-image>
-              <el-image
-                v-else
-                :src="getDefaultPlaceholder(ResourceType.IMAGE)"
-                :lazy="true"
-                fit="contain"
-                class="thumbnail-image"
-              >
-                <template #error>
-                  <div class="image-error">
-                    <img :src="getDefaultPlaceholder(ResourceType.IMAGE)" alt="默认占位图"/>
+                    <img :src="getDefaultPlaceholder(item.resourceType)" :alt="getPlaceholderAlt(item.resourceType)" />
                   </div>
                 </template>
               </el-image>
@@ -647,10 +624,7 @@ onMounted(() => {
                 <span class="card-name" :title="item.name">{{ item.name }}</span>
               </div>
               <div class="card-actions" v-if="!props.selectable">
-                <el-dropdown trigger="click" @command="(command: string) => {
-                  if (command === 'edit') handleEdit(item)
-                  else if (command === 'delete') handleDelete(item)
-                }">
+                <el-dropdown trigger="click" @command="(command: string) => handleCardCommand(command, item)">
                   <el-icon class="more-icon">
                     <MoreFilled />
                   </el-icon>
@@ -752,8 +726,8 @@ onMounted(() => {
               <div class="el-upload__tip">请选择 JPG、PNG 格式的封面图片</div>
             </template>
           </el-upload>
-          <div v-if="editingResource?.thumbnail" style="margin-top: 8px;">
-            <el-image :src="getResourceUrl(editingResource.thumbnail)" fit="cover" style="width: 100px; height: 100px; border-radius: 4px;" />
+          <div v-if="editingResource?.thumbnail" class="model-cover-preview">
+            <el-image :src="getResourceUrl(editingResource.thumbnail)" fit="cover" class="model-cover-image" />
           </div>
         </el-form-item>
         <el-form-item label="描述">
@@ -917,7 +891,6 @@ onMounted(() => {
   display: flex;
   box-sizing: content-box;
   flex-direction: column;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   .resource-header {
     display: flex;
@@ -927,62 +900,11 @@ onMounted(() => {
 
     .search-box {
       width: 300px;
-
-      :deep(.el-input__wrapper) {
-        border-radius: 6px;
-        box-shadow: 0 0 0 1px #e5e6eb inset;
-
-        &:hover {
-          box-shadow: 0 0 0 1px #c9cdd4 inset;
-        }
-
-        &.is-focus {
-          box-shadow: 0 0 0 1px #3478f6 inset;
-          outline: none;
-
-          &::after {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 8px;
-            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-            pointer-events: none;
-          }
-        }
-      }
     }
 
     .button-group {
       display: flex;
       gap: 8px;
-
-      :deep(.el-button) {
-        border-radius: 6px;
-        font-weight: 500;
-        border: none;
-        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-        background: #ffffff;
-        color: #4e5969;
-
-        &:hover {
-          background: #f7f8fa;
-          box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08),
-            0px 1px 2px rgba(0, 0, 0, 0.04);
-          color: #1d2129;
-        }
-      }
-
-      :deep(.el-button--primary) {
-        background: #3478f6;
-        color: #ffffff;
-        box-shadow: none;
-
-        &:hover {
-          background: #2563eb;
-          box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-          color: #ffffff;
-        }
-      }
     }
 
     .breadcrumb-box {
@@ -993,7 +915,8 @@ onMounted(() => {
 
       .clickable {
         cursor: pointer;
-        color: #3478f6;
+        color: var(--el-color-primary);
+        transition: color 0.2s ease;
 
         &:hover {
           text-decoration: underline;
@@ -1014,30 +937,27 @@ onMounted(() => {
       margin-bottom: 20px;
 
       .resource-card {
-        background: #ffffff;
-        border: none;
+        background: var(--el-fill-color-blank);
+        border: 1px solid var(--el-border-color-light);
         border-radius: 8px;
         overflow: hidden;
-        transition: box-shadow 0.2s ease, transform 0.2s ease;
+        transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
         cursor: pointer;
-        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
 
         &:hover {
-          box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08),
-            0px 1px 2px rgba(0, 0, 0, 0.04);
+          border-color: var(--el-border-color);
           transform: scale(1.02);
         }
 
         &.selected {
-          border: none;
-          background: #eff6ff;
-          box-shadow: 0 0 0 2px #3478f6;
+          background: var(--el-color-primary-light-9);
+          border-color: var(--el-color-primary);
         }
 
         .card-thumbnail {
           width: 100%;
           height: 180px;
-          background-color: #f7f8fa;
+          background-color: var(--el-fill-color-extra-light);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1053,9 +973,8 @@ onMounted(() => {
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08),
-              0px 1px 2px rgba(0, 0, 0, 0.04);
+            background: var(--el-fill-color-blank);
+            border: 1px solid var(--el-border-color-light);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1063,13 +982,23 @@ onMounted(() => {
 
             .selection-icon {
               font-size: 18px;
-              color: #3478f6;
+              color: var(--el-color-primary);
             }
           }
 
           .thumbnail-image {
             max-width: 100%;
             max-height: 100%;
+
+            &.thumbnail-image--directory {
+              width: 100px;
+              height: 100px;
+            }
+
+            &.thumbnail-image--media {
+              width: 100%;
+              height: 100%;
+            }
 
             .image-error {
               width: 100%;
@@ -1085,17 +1014,6 @@ onMounted(() => {
               }
             }
           }
-
-          .directory {
-            width: 100px !important;
-            height: 100px !important;
-          }
-
-          .video,
-          .model {
-            width: 100% !important;
-            height: 100% !important;
-          }
         }
 
         .card-footer {
@@ -1103,7 +1021,7 @@ onMounted(() => {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.06);
+          border-top: 1px solid var(--el-border-color-lighter);
 
           .card-info {
             flex: 1;
@@ -1116,8 +1034,9 @@ onMounted(() => {
               flex-shrink: 0;
               font-size: 12px;
               font-weight: 500;
-              color: #3478f6;
-              background: #eff6ff;
+              line-height: 1.33;
+              color: var(--el-color-primary);
+              background: var(--el-color-primary-light-9);
               padding: 2px 8px;
               border-radius: 9999px;
               margin-right: 12px;
@@ -1127,7 +1046,7 @@ onMounted(() => {
               flex: 1;
               font-size: 14px;
               font-weight: 400;
-              color: #1d2129;
+              color: var(--el-text-color-primary);
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
@@ -1142,14 +1061,14 @@ onMounted(() => {
 
             .more-icon {
               font-size: 18px;
-              color: #86909c;
+              color: var(--el-text-color-secondary);
               cursor: pointer;
-              transition: color 0.2s;
+              transition: color 0.2s ease;
               border-radius: 4px;
               padding: 2px;
 
               &:hover {
-                color: #3478f6;
+                color: var(--el-color-primary);
               }
             }
           }
@@ -1159,7 +1078,6 @@ onMounted(() => {
   }
 }
 
-// Type selection dialog cards
 .type-select-cards {
   display: flex;
   gap: 16px;
@@ -1172,16 +1090,15 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     padding: 24px 16px;
-    border: none;
+    background: var(--el-fill-color-blank);
+    border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     cursor: pointer;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-    background: #ffffff;
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 
     &:hover {
-      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08),
-        0px 1px 2px rgba(0, 0, 0, 0.04);
+      border-color: var(--el-color-primary);
+      background: var(--el-color-primary-light-9);
       transform: scale(1.02);
     }
 
@@ -1189,25 +1106,25 @@ onMounted(() => {
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      background: #eff6ff;
+      background: var(--el-color-primary-light-9);
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 12px;
-      color: #3478f6;
+      color: var(--el-color-primary);
     }
 
     .type-card-name {
       font-size: 16px;
       font-weight: 500;
-      color: #1d2129;
+      color: var(--el-text-color-primary);
       margin-bottom: 8px;
     }
 
     .type-card-desc {
       font-size: 12px;
       font-weight: 400;
-      color: #86909c;
+      color: var(--el-text-color-secondary);
       text-align: center;
       line-height: 1.5;
       overflow: hidden;
@@ -1219,7 +1136,16 @@ onMounted(() => {
   }
 }
 
-// Image detail dialog
+.model-cover-preview {
+  margin-top: 8px;
+}
+
+.model-cover-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 4px;
+}
+
 .image-detail-content {
   display: flex;
   gap: 24px;
@@ -1227,14 +1153,14 @@ onMounted(() => {
   .image-detail-preview {
     flex: 1;
     min-width: 0;
-    background: #f7f8fa;
+    background: var(--el-fill-color-extra-light);
+    border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 16px;
     min-height: 300px;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
 
     .detail-image {
       max-width: 100%;
@@ -1250,9 +1176,9 @@ onMounted(() => {
       margin: 0 0 16px 0;
       font-size: 12px;
       font-weight: 500;
-      color: #86909c;
+      color: var(--el-text-color-secondary);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0;
     }
 
     .info-item {
@@ -1261,12 +1187,12 @@ onMounted(() => {
       line-height: 1.57;
 
       .info-label {
-        color: #86909c;
+        color: var(--el-text-color-secondary);
         font-weight: 400;
       }
 
       .info-value {
-        color: #1d2129;
+        color: var(--el-text-color-primary);
         font-weight: 400;
         font-feature-settings: "tnum";
       }
@@ -1274,25 +1200,10 @@ onMounted(() => {
 
     .image-detail-actions {
       margin-top: 24px;
-
-      :deep(.el-button) {
-        border-radius: 6px;
-        font-weight: 500;
-        border: none;
-      }
-
-      :deep(.el-button--primary) {
-        background: #3478f6;
-
-        &:hover {
-          background: #2563eb;
-        }
-      }
     }
   }
 }
 
-// Video detail dialog
 .video-detail-content {
   display: flex;
   gap: 24px;
@@ -1305,7 +1216,7 @@ onMounted(() => {
     .video-detail-player {
       width: 100%;
       height: 100%;
-      background: #1d2129;
+      background: var(--el-text-color-primary);
       border-radius: 8px;
       overflow: hidden;
       display: flex;
@@ -1325,14 +1236,15 @@ onMounted(() => {
     flex-direction: column;
     justify-content: space-between;
 
-    .video-detail-info {
+    .video-detail-info,
+    .video-detail-cover {
       h3 {
         margin: 0 0 10px 0;
         font-size: 12px;
         font-weight: 500;
-        color: #86909c;
+        color: var(--el-text-color-secondary);
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0;
       }
 
       .info-item {
@@ -1341,12 +1253,12 @@ onMounted(() => {
         line-height: 1.57;
 
         .info-label {
-          color: #86909c;
+          color: var(--el-text-color-secondary);
           font-weight: 400;
         }
 
         .info-value {
-          color: #1d2129;
+          color: var(--el-text-color-primary);
           font-weight: 400;
           font-feature-settings: "tnum";
         }
@@ -1354,26 +1266,17 @@ onMounted(() => {
     }
 
     .video-detail-cover {
-      h3 {
-        margin: 0 0 8px 0;
-        font-size: 12px;
-        font-weight: 500;
-        color: #86909c;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
       .cover-preview {
         width: 100%;
         height: 90px;
-        background: #f7f8fa;
+        background: var(--el-fill-color-extra-light);
+        border: 1px solid var(--el-border-color-light);
         border-radius: 8px;
         overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 10px;
-        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
 
         .cover-image {
           width: 100%;
@@ -1381,7 +1284,7 @@ onMounted(() => {
         }
 
         .cover-empty {
-          color: #86909c;
+          color: var(--el-text-color-secondary);
           font-size: 14px;
           font-weight: 400;
         }
@@ -1392,160 +1295,11 @@ onMounted(() => {
         flex-direction: row;
         gap: 8px;
         align-items: center;
-
-        :deep(.el-button) {
-          border-radius: 6px;
-          font-weight: 500;
-          border: none;
-          box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-          background: #ffffff;
-          color: #4e5969;
-
-          &:hover {
-            background: #f7f8fa;
-            box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08),
-              0px 1px 2px rgba(0, 0, 0, 0.04);
-            color: #1d2129;
-          }
-        }
-
-        :deep(.el-button--primary) {
-          background: #3478f6;
-          color: #ffffff;
-          box-shadow: none;
-
-          &:hover {
-            background: #2563eb;
-            box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-            color: #ffffff;
-          }
-        }
       }
     }
   }
 }
 
-// Element Plus dialog overrides
-:deep(.el-dialog) {
-  border-radius: 8px;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12),
-    0px 2px 8px rgba(0, 0, 0, 0.08);
-
-  .el-dialog__header {
-    font-weight: 600;
-    color: #1d2129;
-  }
-
-  .el-dialog__footer {
-    .el-button {
-      border-radius: 6px;
-      font-weight: 500;
-      border: none;
-      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-      background: #ffffff;
-      color: #4e5969;
-
-      &:hover {
-        background: #f7f8fa;
-        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08),
-          0px 1px 2px rgba(0, 0, 0, 0.04);
-        color: #1d2129;
-      }
-
-      &--primary {
-        background: #3478f6;
-        color: #ffffff;
-        box-shadow: none;
-
-        &:hover {
-          background: #2563eb;
-          box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-          color: #ffffff;
-        }
-      }
-    }
-  }
-}
-
-// Element Plus form input overrides
-:deep(.el-form) {
-  .el-input__wrapper,
-  .el-textarea__inner {
-    border-radius: 6px;
-    box-shadow: 0 0 0 1px #e5e6eb inset;
-
-    &:hover {
-      box-shadow: 0 0 0 1px #c9cdd4 inset;
-    }
-
-    &.is-focus {
-      box-shadow: 0 0 0 1px #3478f6 inset;
-    }
-  }
-
-  .el-textarea__inner {
-    &:focus {
-      box-shadow: 0 0 0 1px #3478f6 inset;
-    }
-  }
-
-  .el-select .el-select__wrapper {
-    border-radius: 6px;
-    box-shadow: 0 0 0 1px #e5e6eb inset;
-
-    &:hover {
-      box-shadow: 0 0 0 1px #c9cdd4 inset;
-    }
-
-    &.is-focus {
-      box-shadow: 0 0 0 1px #3478f6 inset;
-    }
-  }
-
-  .el-form-item__label {
-    color: #4e5969;
-    font-weight: 500;
-    font-size: 14px;
-  }
-}
-
-// Element Plus upload area override
-:deep(.el-upload) {
-  .el-upload-dragger {
-    border: 1px dashed #e5e6eb;
-    border-radius: 8px;
-    background: #ffffff;
-    transition: border-color 0.2s ease;
-
-    &:hover {
-      border-color: #3478f6;
-    }
-  }
-
-  .el-button {
-    border-radius: 6px;
-    font-weight: 500;
-    border: none;
-
-    &--primary {
-      background: #3478f6;
-
-      &:hover {
-        background: #2563eb;
-      }
-    }
-  }
-}
-
-// Element Plus dropdown shadow override
-:deep(.el-dropdown-menu) {
-  border: none;
-  border-radius: 8px;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12),
-    0px 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-// Utility: tabular figures for numeric values
 .tnum {
   font-feature-settings: "tnum";
 }

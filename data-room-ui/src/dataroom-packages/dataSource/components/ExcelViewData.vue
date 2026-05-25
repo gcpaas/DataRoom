@@ -84,7 +84,7 @@ const handleClose = () => {
     :close-on-click-modal="false"
   >
     <div class="view-data-content" v-loading="loading">
-      <el-table :data="tableData" border size="small" max-height="500" style="width: 100%">
+      <el-table class="view-data-table" :data="tableData" border size="small" max-height="500">
         <el-table-column
           v-for="col in columns"
           :key="col.name"
@@ -112,6 +112,10 @@ const handleClose = () => {
 
 <style scoped lang="scss">
 .view-data-content {
+  .view-data-table {
+    width: 100%;
+  }
+
   .pagination-wrapper {
     margin-top: 16px;
     display: flex;

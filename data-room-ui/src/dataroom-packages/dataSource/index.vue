@@ -38,6 +38,8 @@ const viewDataCode = ref('')
 const viewDataName = ref('')
 const viewDataColumns = ref<ExcelColumn[]>([])
 
+const isMessageBoxCancel = (error: unknown) => ['cancel', 'close'].includes(String(error))
+
 // 数据源类型映射
 const dataSourceTypeMap = {
   mysql: {
@@ -93,8 +95,9 @@ const getDataSourceList = async () => {
   loading.value = true
   try {
     const params: { name?: string } = {}
-    if (searchName.value) {
-      params.name = searchName.value
+    const keyword = searchName.value.trim()
+    if (keyword) {
+      params.name = keyword
     }
     const res = await dataSourceApi.list(params)
     dataSourceList.value = res || []
@@ -186,22 +189,21 @@ const handleEdit = async (item: DataSourceEntity) => {
 /**
  * 删除数据源
  */
-const handleDelete = (item: DataSourceEntity) => {
-  ElMessageBox.confirm(`确定要删除${item.name}吗？`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  })
-    .then(async () => {
-      try {
-        await dataSourceApi.delete(item.code!)
-        ElMessage.success('删除成功')
-        getDataSourceList()
-      } catch (error) {
-        console.error('删除失败:', error)
-      }
+const handleDelete = async (item: DataSourceEntity) => {
+  try {
+    await ElMessageBox.confirm(`确定要删除${item.name}吗？`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
     })
-    .catch(() => {})
+    await dataSourceApi.delete(item.code!)
+    ElMessage.success('删除成功')
+    await getDataSourceList()
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('删除失败:', error)
+    }
+  }
 }
 
 /**
@@ -247,7 +249,7 @@ const handleSave = async () => {
     }
 
     dialogVisible.value = false
-    getDataSourceList()
+    await getDataSourceList()
   } catch (error: unknown) {
     if (error instanceof Error && error.message) {
       ElMessage.error(error.message)
@@ -348,9 +350,23 @@ const getTypeImage = (type: string) => {
   return dataSourceTypeMap[key]?.image || ''
 }
 
+const handleCardCommand = (command: string, item: DataSourceEntity) => {
+  switch (command) {
+    case 'viewData':
+      void handleViewData(item)
+      break
+    case 'edit':
+      void handleEdit(item)
+      break
+    case 'delete':
+      void handleDelete(item)
+      break
+  }
+}
+
 // 页面加载时获取列表
 onMounted(() => {
-  getDataSourceList()
+  void getDataSourceList()
 })
 </script>
 
@@ -385,16 +401,7 @@ onMounted(() => {
                 <span class="card-name" :title="item.name">{{ item.name }}</span>
               </div>
               <div class="card-actions">
-                <el-dropdown
-                  trigger="click"
-                  @command="
-                    (command: string) => {
-                      if (command === 'edit') handleEdit(item)
-                      else if (command === 'delete') handleDelete(item)
-                      else if (command === 'viewData') handleViewData(item)
-                    }
-                  "
-                >
+                <el-dropdown trigger="click" @command="(command: string) => handleCardCommand(command, item)">
                   <el-icon class="more-icon">
                     <MoreFilled />
                   </el-icon>
@@ -402,15 +409,15 @@ onMounted(() => {
                     <el-dropdown-menu>
                       <el-dropdown-item command="viewData" v-if="item.dataSourceType === 'excel'">
                         <el-icon><View /></el-icon>
-                        <span style="margin-left: 8px">查看数据</span>
+                        <span class="dropdown-item-label">查看数据</span>
                       </el-dropdown-item>
                       <el-dropdown-item command="edit">
                         <el-icon><Edit /></el-icon>
-                        <span style="margin-left: 8px">编辑</span>
+                        <span class="dropdown-item-label">编辑</span>
                       </el-dropdown-item>
                       <el-dropdown-item command="delete" divided>
                         <el-icon><Delete /></el-icon>
-                        <span style="margin-left: 8px">删除</span>
+                        <span class="dropdown-item-label">删除</span>
                       </el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
@@ -478,69 +485,20 @@ onMounted(() => {
   display: flex;
   box-sizing: content-box;
   flex-direction: column;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   .page-header {
     display: flex;
     align-items: center;
-    margin-bottom: var(--space-4);
-    gap: var(--space-4);
+    margin-bottom: 16px;
+    gap: 16px;
 
     .search-box {
       width: 300px;
-
-      :deep(.el-input__wrapper) {
-        border-radius: var(--radius-md);
-        box-shadow: none;
-        border: 1px solid var(--dr-gray-200);
-        transition: border-color 0.2s, box-shadow 0.2s;
-
-        &:hover {
-          border-color: var(--dr-gray-400);
-        }
-
-        &.is-focus {
-          border-color: var(--dr-blue);
-          box-shadow: var(--dr-shadow-focus);
-        }
-      }
     }
 
     .button-group {
       display: flex;
-      gap: var(--space-2);
-
-      :deep(.el-button) {
-        border-radius: var(--radius-md);
-        font-weight: 500;
-      }
-
-      :deep(.el-button--primary) {
-        background-color: var(--dr-blue);
-        border-color: var(--dr-blue);
-
-        &:hover {
-          background-color: var(--dr-blue-hover);
-          border-color: var(--dr-blue-hover);
-        }
-
-        &:active {
-          background-color: var(--dr-blue-pressed);
-          border-color: var(--dr-blue-pressed);
-        }
-      }
-
-      :deep(.el-button--default) {
-        background: var(--dr-white);
-        box-shadow: var(--dr-shadow-border);
-        border: none;
-
-        &:hover {
-          background: var(--dr-white);
-          box-shadow: var(--dr-shadow-sm);
-          color: var(--dr-blue);
-        }
-      }
+      gap: 8px;
     }
   }
 
@@ -551,30 +509,26 @@ onMounted(() => {
     .card-list {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: var(--space-4);
-      margin-bottom: var(--space-5);
+      gap: 16px;
+      margin-bottom: 20px;
       padding: 2px;
 
       .data-source-card {
-        background: var(--dr-white);
-        box-shadow: var(--dr-shadow-border);
-        border: none;
-        border-radius: var(--radius-lg);
+        background: var(--el-fill-color-blank);
+        border: 1px solid var(--el-border-color-light);
+        border-radius: 8px;
         overflow: hidden;
-        transition: box-shadow 0.2s ease, transform 0.2s ease;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
         cursor: pointer;
 
         &:hover {
-          box-shadow: var(--dr-shadow-md);
-          transform: translateY(-1px);
+          border-color: var(--el-border-color);
         }
 
         .card-thumbnail {
           height: 180px;
-          padding: var(--space-4);
-          background-color: var(--dr-gray-50);
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M6 4v4M4 6h4' stroke='%23e5e6eb' stroke-width='1' fill='none'/%3E%3C/svg%3E");
-          background-size: 12px 12px;
+          padding: 16px;
+          background-color: var(--el-fill-color-extra-light);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -588,31 +542,31 @@ onMounted(() => {
         }
 
         .card-footer {
-          padding: var(--space-3) var(--space-4);
+          padding: 12px 16px;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.06);
+          border-top: 1px solid var(--el-border-color-lighter);
 
           .card-info {
             flex: 1;
             display: flex;
             align-items: center;
             overflow: hidden;
-            margin-right: var(--space-2);
+            margin-right: 8px;
 
             .type-label {
               flex-shrink: 0;
               font-size: 14px;
-              color: var(--dr-blue);
+              color: var(--el-color-primary);
               font-weight: 500;
-              margin-right: var(--space-4);
+              margin-right: 16px;
             }
 
             .card-name {
               flex: 1;
               font-size: 14px;
-              color: var(--dr-gray-700);
+              color: var(--el-text-color-primary);
               font-weight: 400;
               overflow: hidden;
               text-overflow: ellipsis;
@@ -623,17 +577,17 @@ onMounted(() => {
           .card-actions {
             display: flex;
             align-items: center;
-            gap: var(--space-4);
+            gap: 16px;
             flex-shrink: 0;
 
             .more-icon {
               font-size: 18px;
-              color: var(--dr-gray-500);
+              color: var(--el-text-color-secondary);
               cursor: pointer;
               transition: color 0.2s;
 
               &:hover {
-                color: var(--dr-blue);
+                color: var(--el-color-primary);
               }
             }
           }
@@ -646,30 +600,30 @@ onMounted(() => {
 .type-select-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-4);
+  gap: 16px;
   padding: 2px;
 
   .type-card {
-    box-shadow: var(--dr-shadow-border);
-    border: none;
-    border-radius: var(--radius-lg);
-    padding: var(--space-5) var(--space-4);
+    background: var(--el-fill-color-blank);
+    border: 1px solid var(--el-border-color-light);
+    border-radius: 8px;
+    padding: 20px 16px;
     cursor: pointer;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
 
     &:hover {
-      box-shadow: var(--dr-shadow-md);
-      transform: translateY(-2px);
+      border-color: var(--el-color-primary);
+      background-color: var(--el-color-primary-light-9);
     }
 
     .type-card-image {
       width: 80px;
       height: 80px;
-      margin-bottom: var(--space-3);
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -685,17 +639,21 @@ onMounted(() => {
       .type-card-name {
         font-size: 16px;
         font-weight: 600;
-        color: var(--dr-gray-900);
-        margin-bottom: var(--space-2);
+        color: var(--el-text-color-primary);
+        margin-bottom: 8px;
       }
 
       .type-card-desc {
         font-size: 12px;
-        color: var(--dr-gray-500);
+        color: var(--el-text-color-secondary);
         line-height: 1.5;
         font-weight: 400;
       }
     }
   }
+}
+
+.dropdown-item-label {
+  margin-left: 8px;
 }
 </style>

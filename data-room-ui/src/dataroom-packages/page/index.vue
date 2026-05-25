@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import {ref, onMounted} from 'vue'
-import {ElMessage, ElMessageBox} from 'element-plus'
-import {Search, Plus, MoreFilled, Folder, Monitor, Document} from '@element-plus/icons-vue'
-import {useRouter} from 'vue-router'
-import {pageApi, type PageEntity} from './api'
+import { onMounted, ref } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Document, Folder, Monitor, MoreFilled, Plus, Search } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+import { pageApi, type PageEntity } from './api'
 import visualScreenPlaceholder from './assets/image/大屏占位符.png'
 import pagePlaceholder from './assets/image/仪表盘占位符.png'
 import directoryPlaceholder from './assets/image/目录占位符.png'
-import {PageType} from "@/dataroom-packages/constant/PageType.ts";
-import {PageStatus} from "@/dataroom-packages/constant/PageStatus.ts";
-
-// 新增类型选择对话框
-const addDialogVisible = ref(false)
+import { PageStatus } from '@/dataroom-packages/constant/PageStatus.ts'
+import { PageType } from '@/dataroom-packages/constant/PageType.ts'
 
 interface AddTypeOption {
   type: string
@@ -20,247 +17,38 @@ interface AddTypeOption {
   icon: typeof Folder
 }
 
-const addTypeOptions: AddTypeOption[] = [
-  {type: PageType.DIRECTORY, name: '目录', description: '用于分组管理页面和大屏资源', icon: Folder},
-  {type: PageType.VISUAL_SCREEN, name: '大屏', description: '可视化大屏数据展示设计', icon: Monitor},
-  {type: PageType.PAGE, name: '页面', description: '自定义仪表盘页面布局设计', icon: Document}
-]
-
-const handleShowAddDialog = () => {
-  addDialogVisible.value = true
-}
-
-const handleSelectType = (pageType: string) => {
-  addDialogVisible.value = false
-  handleAdd(pageType)
-}
-
-const router = useRouter()
-const searchName = ref('')
-const pageList = ref<PageEntity[]>([])
-const loading = ref(false)
-
-// 面包屑导航
 interface BreadcrumbItem {
   code: string
   name: string
 }
 
-const breadcrumbs = ref<BreadcrumbItem[]>([{code: 'root', name: '全部'}])
+const addTypeOptions: AddTypeOption[] = [
+  { type: PageType.DIRECTORY, name: '目录', description: '用于分组管理页面和大屏资源', icon: Folder },
+  { type: PageType.VISUAL_SCREEN, name: '大屏', description: '可视化大屏数据展示设计', icon: Monitor },
+  { type: PageType.PAGE, name: '页面', description: '自定义仪表盘页面布局设计', icon: Document },
+]
+
+const router = useRouter()
+const searchName = ref('')
+const pageList = ref<PageEntity[]>([])
+const loading = ref(false)
+const addDialogVisible = ref(false)
+const breadcrumbs = ref<BreadcrumbItem[]>([{ code: 'root', name: '全部' }])
 const currentParentCode = ref('root')
 
-/**
- * 查询
- */
-const getPageList = () => {
-  loading.value = true
-  try {
-    const params: { name?: string; parentCode?: string } = {
-      parentCode: currentParentCode.value
-    }
-    if (searchName.value) {
-      params.name = searchName.value
-    }
-    pageApi.list(params).then((res) => {
-      pageList.value = res || []
-    })
-  } catch (error) {
-    console.error('查询失败:', error)
-  } finally {
-    loading.value = false
-  }
-}
+const isDirectoryPage = (pageType?: string) => pageType === PageType.DIRECTORY
 
-// 新增页面/目录/大屏
-const handleAdd = (pageType: string) => {
-  let title = '新增页面'
-  if (pageType === PageType.DIRECTORY) {
-    title = '新增目录'
-  } else if (pageType === PageType.VISUAL_SCREEN) {
-    title = '新增大屏'
-  }
+const isPublishedStatus = (status?: string) => status?.toLowerCase() === PageStatus.PUBLISHED
 
-  ElMessageBox.prompt('请输入名称', title, {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    inputPattern: /\S+/,
-    inputErrorMessage: '名称不能为空'
-  }).then(async ({value}) => {
-    try {
-      pageApi.insert({
-        name: value,
-        code: '',
-        pageType: pageType,
-        parentCode: currentParentCode.value
-      }).then((res) => {
-        ElMessage.success('新增成功')
-        getPageList()
-      })
-    } catch (error) {
-      console.error('新增失败:', error)
-    }
-  }).catch(() => {
-  })
-}
+const isMessageBoxCancel = (error: unknown) => ['cancel', 'close'].includes(String(error))
 
-/**
- * 编辑名称
- * @param item
- */
-const handleEdit = (item: PageEntity) => {
-  let title = '编辑页面'
-  if (item.pageType === PageType.DIRECTORY) {
-    title = '编辑目录'
-  } else if (item.pageType === PageType.VISUAL_SCREEN) {
-    title = '编辑大屏'
-  }
+const canOperatePage = (item: PageEntity) => !isDirectoryPage(item.pageType)
 
-  ElMessageBox.prompt('请输入名称', title, {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    inputPattern: /\S+/,
-    inputErrorMessage: '名称不能为空',
-    inputValue: item.name
-  }).then(async ({value}) => {
-    try {
-      pageApi.updateName(item.code, value).then(() => {
-        ElMessage.success('修改成功')
-        getPageList()
-      })
-    } catch (error) {
-      console.error('修改失败:', error)
-    }
-  }).catch(() => {
-  })
-}
+const canPublishPage = (item: PageEntity) => canOperatePage(item) && !isPublishedStatus(item.pageStatus)
 
-/**
- * 进入设计器
- * @param item
- */
-const handleDesign = (item: PageEntity) => {
-  if (item.pageType === PageType.VISUAL_SCREEN) {
-    router.push({
-      path: `/dataRoom/visualScreenDesigner/${item.code}`
-    })
-    return
-  } else if (item.pageType === PageType.PAGE) {
-    router.push({
-      path: `/dataRoom/pageDesigner/${item.code}`
-    })
-    return
-  }
-}
+const canOfflinePage = (item: PageEntity) => canOperatePage(item) && isPublishedStatus(item.pageStatus)
 
-/**
- * 发布
- * @param item
- */
-const handlePublish = async (item: PageEntity) => {
-  ElMessageBox.confirm(`确定要发布${item.name}吗？`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(async () => {
-    try {
-      await pageApi.publish({
-        pageCode: item.code,
-        remark: '发布'
-      })
-      ElMessage.success('发布成功')
-      getPageList()
-    } catch (error) {
-      console.error('发布失败:', error)
-    }
-  }).catch(() => {
-  })
-}
-
-/**
- * 取消发布
- * @param item
- */
-const handleOffline = async (item: PageEntity) => {
-  ElMessageBox.confirm(`确定要取消发布${item.name}吗？`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(async () => {
-    try {
-      await pageApi.offline({
-        code: item.code,
-        remark: '取消发布'
-      })
-      ElMessage.success('取消发布成功')
-      getPageList()
-    } catch (error) {
-      console.error('取消发布失败:', error)
-    }
-  }).catch(() => {
-  })
-}
-
-/**
- * 删除
- * @param page
- */
-const handleDelete = (page: PageEntity) => {
-  ElMessageBox.confirm(`确定要删除${page.name}吗？`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(async () => {
-    try {
-      pageApi.delete(page.code).then((res) => {
-        ElMessage.success('删除成功')
-        getPageList()
-      })
-    } catch (error) {
-      console.error('删除失败:', error)
-    }
-  }).catch(() => {
-  })
-}
-
-/**
- * 预览
- * @param page
- */
-const handlePreview = (page: PageEntity) => {
-  let path = '/dataRoom/pagePreviewer'
-  if (page.pageType === 'visualScreen') {
-    path = '/dataRoom/visualScreenPreview'
-  }
-  router.push({
-    path: path,
-    query: {code: page.code}
-  })
-}
-
-/**
- * 点击卡片
- * @param item
- */
-const handleCardClick = (item: PageEntity) => {
-  if (item.pageType === PageType.DIRECTORY) {
-    // 如果是目录,进入该目录
-    currentParentCode.value = item.code
-    breadcrumbs.value.push({
-      code: item.code,
-      name: item.name
-    })
-    getPageList()
-  } else {
-    // 如果是页面或大屏,进入设计器
-    handleDesign(item)
-  }
-}
-
-/**
- * 获取类型名称
- * @param pageType
- */
-const getTypeName = (pageType: string) => {
+const getTypeName = (pageType?: string) => {
   switch (pageType) {
     case PageType.DIRECTORY:
       return '目录'
@@ -273,67 +61,231 @@ const getTypeName = (pageType: string) => {
   }
 }
 
-/**
- * 获取状态名称
- * @param status
- */
-const getStatusName = (status?: string) => {
-  switch (status?.toLowerCase()) {
-    case PageStatus.PUBLISHED:
-      return '已发布'
-    case PageStatus.DESIGN:
-      return '设计态'
-    default:
-      return '设计态'
+const getDialogTitle = (action: string, pageType: string) => `${action}${getTypeName(pageType) || '页面'}`
+
+const getPageList = async () => {
+  loading.value = true
+  try {
+    const params: { name?: string; parentCode?: string } = {
+      parentCode: currentParentCode.value,
+    }
+    const keyword = searchName.value.trim()
+    if (keyword) {
+      params.name = keyword
+    }
+    pageList.value = (await pageApi.list(params)) || []
+  } catch (error) {
+    console.error('查询失败:', error)
+  } finally {
+    loading.value = false
   }
 }
 
-/**
- * 获取状态类型
- * @param status
- */
-const getStatusType = (status?: string) => {
-  switch (status?.toLowerCase()) {
-    case PageStatus.PUBLISHED:
-      return 'success'
-    case PageStatus.DESIGN:
-    default:
-      return 'info'
+const handleShowAddDialog = () => {
+  addDialogVisible.value = true
+}
+
+const handleSelectType = (pageType: string) => {
+  addDialogVisible.value = false
+  void handleAdd(pageType)
+}
+
+const handleAdd = async (pageType: string) => {
+  try {
+    const { value } = await ElMessageBox.prompt('请输入名称', getDialogTitle('新增', pageType), {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      inputPattern: /\S+/,
+      inputErrorMessage: '名称不能为空',
+    })
+
+    await pageApi.insert({
+      name: value,
+      code: '',
+      pageType,
+      parentCode: currentParentCode.value,
+    })
+    ElMessage.success('新增成功')
+    await getPageList()
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('新增失败:', error)
+    }
   }
 }
 
-/**
- * 面包屑点击
- * @param index
- */
+const handleEdit = async (item: PageEntity) => {
+  try {
+    const { value } = await ElMessageBox.prompt('请输入名称', getDialogTitle('编辑', item.pageType), {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      inputPattern: /\S+/,
+      inputErrorMessage: '名称不能为空',
+      inputValue: item.name,
+    })
+
+    await pageApi.updateName(item.code, value)
+    ElMessage.success('修改成功')
+    await getPageList()
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('修改失败:', error)
+    }
+  }
+}
+
+const handleDesign = (item: PageEntity) => {
+  if (item.pageType === PageType.VISUAL_SCREEN) {
+    router.push({
+      path: `/dataRoom/visualScreenDesigner/${item.code}`,
+    })
+    return
+  }
+  if (item.pageType === PageType.PAGE) {
+    router.push({
+      path: `/dataRoom/pageDesigner/${item.code}`,
+    })
+  }
+}
+
+const handlePublish = async (item: PageEntity) => {
+  try {
+    await ElMessageBox.confirm(`确定要发布${item.name}吗？`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+    await pageApi.publish({
+      pageCode: item.code,
+      remark: '发布',
+    })
+    ElMessage.success('发布成功')
+    await getPageList()
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('发布失败:', error)
+    }
+  }
+}
+
+const handleOffline = async (item: PageEntity) => {
+  try {
+    await ElMessageBox.confirm(`确定要取消发布${item.name}吗？`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+    await pageApi.offline({
+      code: item.code,
+      remark: '取消发布',
+    })
+    ElMessage.success('取消发布成功')
+    await getPageList()
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('取消发布失败:', error)
+    }
+  }
+}
+
+const handleDelete = async (page: PageEntity) => {
+  try {
+    await ElMessageBox.confirm(`确定要删除${page.name}吗？`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+    await pageApi.delete(page.code)
+    ElMessage.success('删除成功')
+    await getPageList()
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('删除失败:', error)
+    }
+  }
+}
+
+const handlePreview = (page: PageEntity) => {
+  const path =
+    page.pageType === PageType.VISUAL_SCREEN
+      ? `/dataRoom/visualScreenPreview/${PageStatus.PREVIEW}/${page.code}`
+      : `/dataRoom/pagePreviewer/${PageStatus.PREVIEW}/${page.code}`
+
+  router.push({ path })
+}
+
+const handleCardClick = (item: PageEntity) => {
+  if (isDirectoryPage(item.pageType)) {
+    currentParentCode.value = item.code
+    breadcrumbs.value.push({
+      code: item.code,
+      name: item.name,
+    })
+    void getPageList()
+    return
+  }
+
+  handleDesign(item)
+}
+
+const handleCardCommand = (command: string, item: PageEntity) => {
+  switch (command) {
+    case 'edit':
+      void handleEdit(item)
+      break
+    case 'design':
+      handleDesign(item)
+      break
+    case 'publish':
+      void handlePublish(item)
+      break
+    case 'offline':
+      void handleOffline(item)
+      break
+    case 'delete':
+      void handleDelete(item)
+      break
+    case 'preview':
+      handlePreview(item)
+      break
+  }
+}
+
+const getStatusName = (status?: string) => (isPublishedStatus(status) ? '已发布' : '设计态')
+
+const getStatusType = (status?: string) => (isPublishedStatus(status) ? 'success' : 'info')
+
 const handleBreadcrumbClick = (index: number) => {
   const item = breadcrumbs.value[index]
   if (!item) return
   currentParentCode.value = item.code
   breadcrumbs.value = breadcrumbs.value.slice(0, index + 1)
-  getPageList()
+  void getPageList()
 }
 
-/**
- * 获取默认占位图
- * @param pageType
- */
-const getDefaultPlaceholder = (pageType: string) => {
+const getDefaultPlaceholder = (pageType?: string) => {
   switch (pageType) {
     case PageType.DIRECTORY:
       return directoryPlaceholder
     case PageType.VISUAL_SCREEN:
       return visualScreenPlaceholder
     case PageType.PAGE:
-      return pagePlaceholder
     default:
-      return ''
+      return pagePlaceholder
   }
 }
 
-// 页面加载时获取列表
+const getThumbnailSrc = (item: PageEntity) => {
+  if (isDirectoryPage(item.pageType)) {
+    return getDefaultPlaceholder(item.pageType)
+  }
+  return item.thumbnail || getDefaultPlaceholder(item.pageType)
+}
+
+const getPlaceholderAlt = (pageType?: string) => `${getTypeName(pageType) || '默认'}占位图`
+
 onMounted(() => {
-  getPageList()
+  void getPageList()
 })
 </script>
 
@@ -370,58 +322,18 @@ onMounted(() => {
     <div class="page-content" v-loading="loading">
       <el-scrollbar>
         <div class="card-list">
-          <div class="page-card" v-for="item in pageList" :key="item.id">
+          <div class="page-card" v-for="item in pageList" :key="item.code">
             <div class="card-thumbnail" @click="handleCardClick(item)">
-              <!-- 缩略图 -->
               <el-image
-                v-if="item.pageType === PageType.DIRECTORY"
-                :src="getDefaultPlaceholder(item.pageType)"
-                :lazy="true"
-                fit="contain"
-                class="thumbnail-image directory"
-              >
-                <template #error>
-                  <div class="image-error">
-                    <img :src="getDefaultPlaceholder(item.pageType)" alt="目录占位图"/>
-                  </div>
-                </template>
-              </el-image>
-              <el-image
-                v-else-if="item.pageType === PageType.VISUAL_SCREEN"
-                :src="item.thumbnail || getDefaultPlaceholder(item.pageType)"
+                :src="getThumbnailSrc(item)"
                 :lazy="true"
                 fit="contain"
                 class="thumbnail-image"
+                :class="{ 'thumbnail-image--directory': isDirectoryPage(item.pageType) }"
               >
                 <template #error>
                   <div class="image-error">
-                    <img :src="getDefaultPlaceholder(item.pageType)" alt="大屏占位图"/>
-                  </div>
-                </template>
-              </el-image>
-              <el-image
-                v-else-if="item.pageType === PageType.PAGE"
-                :src="item.thumbnail || getDefaultPlaceholder(item.pageType)"
-                :lazy="true"
-                fit="contain"
-                class="thumbnail-image"
-              >
-                <template #error>
-                  <div class="image-error">
-                    <img :src="getDefaultPlaceholder(item.pageType)" alt="页面占位图"/>
-                  </div>
-                </template>
-              </el-image>
-              <el-image
-                v-else
-                :src="getDefaultPlaceholder(PageType.PAGE)"
-                :lazy="true"
-                fit="contain"
-                class="thumbnail-image"
-              >
-                <template #error>
-                  <div class="image-error">
-                    <img :src="getDefaultPlaceholder(PageType.PAGE)" alt="默认占位图"/>
+                    <img :src="getDefaultPlaceholder(item.pageType)" :alt="getPlaceholderAlt(item.pageType)"/>
                   </div>
                 </template>
               </el-image>
@@ -435,24 +347,17 @@ onMounted(() => {
                 <el-tag :type="getStatusType(item.pageStatus)" size="small" v-if="item.pageType !== PageType.DIRECTORY">
                   {{ getStatusName(item.pageStatus) }}
                 </el-tag>
-                <el-dropdown trigger="click" @command="(command:string) => {
-                  if (command === 'edit') handleEdit(item)
-                  else if (command === 'design') handleDesign(item)
-                  else if (command === 'publish') handlePublish(item)
-                  else if (command === 'offline') handleOffline(item)
-                  else if (command === 'delete') handleDelete(item)
-                  else if (command === 'preview') handlePreview(item)
-                }">
+                <el-dropdown trigger="click" @command="(command:string) => handleCardCommand(command, item)">
                   <el-icon class="more-icon">
                     <MoreFilled/>
                   </el-icon>
                   <template #dropdown>
                     <el-dropdown-menu>
                       <el-dropdown-item command="edit">编辑</el-dropdown-item>
-                      <el-dropdown-item command="design" v-if="item.pageType !== PageType.DIRECTORY">设计</el-dropdown-item>
-                      <el-dropdown-item command="publish" v-if="item.pageStatus?.toLowerCase() !== PageStatus.PUBLISHED && item.pageType !== PageType.DIRECTORY">发布</el-dropdown-item>
-                      <el-dropdown-item command="offline" v-if="item.pageStatus?.toLowerCase() === PageStatus.PUBLISHED && item.pageType !== PageType.DIRECTORY">取消发布</el-dropdown-item>
-                      <el-dropdown-item command="preview" v-if="item.pageType !== PageType.DIRECTORY">预览</el-dropdown-item>
+                      <el-dropdown-item command="design" v-if="canOperatePage(item)">设计</el-dropdown-item>
+                      <el-dropdown-item command="publish" v-if="canPublishPage(item)">发布</el-dropdown-item>
+                      <el-dropdown-item command="offline" v-if="canOfflinePage(item)">取消发布</el-dropdown-item>
+                      <el-dropdown-item command="preview" v-if="canOperatePage(item)">预览</el-dropdown-item>
                       <el-dropdown-item command="delete" divided>删除</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
@@ -504,16 +409,6 @@ onMounted(() => {
     .button-group {
       display: flex;
       gap: 8px;
-
-      :deep(.el-button) {
-        border-radius: 6px;
-        font-weight: 500;
-
-        &:focus-visible {
-          outline: none;
-          box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-        }
-      }
     }
 
     .breadcrumb-box {
@@ -524,7 +419,8 @@ onMounted(() => {
 
       .clickable {
         cursor: pointer;
-        color: #3478f6;
+        color: var(--el-color-primary);
+        transition: color 0.2s ease;
 
         &:hover {
           text-decoration: underline;
@@ -545,21 +441,21 @@ onMounted(() => {
       margin-bottom: 20px;
 
       .page-card {
-        background: #fff;
-        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+        background: var(--el-fill-color-blank);
+        border: 1px solid var(--el-border-color-light);
         border-radius: 8px;
         overflow: hidden;
-        transition: box-shadow 0.2s ease;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
         cursor: pointer;
 
         &:hover {
-          box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.04);
+          border-color: var(--el-border-color);
         }
 
         .card-thumbnail {
           width: 100%;
           height: 180px;
-          background-color: #f2f3f5;
+          background-color: var(--el-fill-color-extra-light);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -570,6 +466,11 @@ onMounted(() => {
           .thumbnail-image {
             width: 100%;
             height: 100%;
+
+            &.thumbnail-image--directory {
+              width: 100px;
+              height: 100px;
+            }
 
             .image-error {
               width: 100%;
@@ -585,11 +486,6 @@ onMounted(() => {
               }
             }
           }
-
-          .directory {
-            width: 100px !important;
-            height: 100px !important;
-          }
         }
 
         .card-footer {
@@ -597,7 +493,7 @@ onMounted(() => {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          border-top: 1px solid #e5e6eb;
+          border-top: 1px solid var(--el-border-color-lighter);
 
           .card-info {
             flex: 1;
@@ -610,8 +506,9 @@ onMounted(() => {
               flex-shrink: 0;
               font-size: 12px;
               font-weight: 500;
-              color: #3478f6;
-              background: #eff6ff;
+              line-height: 1.33;
+              color: var(--el-color-primary);
+              background: var(--el-color-primary-light-9);
               padding: 2px 8px;
               border-radius: 9999px;
               margin-right: 12px;
@@ -621,7 +518,7 @@ onMounted(() => {
               flex: 1;
               font-size: 14px;
               font-weight: 600;
-              color: #1d2129;
+              color: var(--el-text-color-primary);
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
@@ -634,32 +531,14 @@ onMounted(() => {
             gap: 12px;
             flex-shrink: 0;
 
-            :deep(.el-tag) {
-              border: none;
-              border-radius: 9999px;
-              font-weight: 500;
-              font-size: 12px;
-              padding: 0 8px;
-
-              &.el-tag--success {
-                background: #e8ffea;
-                color: #00b42a;
-              }
-
-              &.el-tag--info {
-                background: #eff6ff;
-                color: #3478f6;
-              }
-            }
-
             .more-icon {
               font-size: 18px;
-              color: #4e5969;
+              color: var(--el-text-color-secondary);
               cursor: pointer;
               transition: color 0.2s ease;
 
               &:hover {
-                color: #3478f6;
+                color: var(--el-color-primary);
               }
             }
           }
@@ -680,33 +559,34 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     padding: 24px 16px;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    background: var(--el-fill-color-blank);
+    border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     cursor: pointer;
-    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 
     &:hover {
-      box-shadow: 0px 0px 0px 1px rgba(52, 120, 246, 0.4), 0px 1px 2px rgba(0, 0, 0, 0.04);
-      background-color: #f8fbff;
+      border-color: var(--el-color-primary);
+      background-color: var(--el-color-primary-light-9);
     }
 
     .add-type-icon {
       font-size: 36px;
-      color: #3478f6;
+      color: var(--el-color-primary);
       margin-bottom: 12px;
     }
 
     .add-type-name {
       font-size: 16px;
       font-weight: 600;
-      color: #1d2129;
+      color: var(--el-text-color-primary);
       margin-bottom: 8px;
     }
 
     .add-type-desc {
       font-size: 12px;
       font-weight: 400;
-      color: #86909c;
+      color: var(--el-text-color-secondary);
       text-align: center;
       line-height: 1.4;
     }

@@ -178,7 +178,7 @@ defineExpose({
 
 <template>
   <div class="excel-editor">
-    <el-form ref="formRef" :model="formData" :rules="rules" label-width="100px">
+    <el-form class="excel-editor-form" ref="formRef" :model="formData" :rules="rules" label-width="100px">
       <!-- 基本信息 -->
       <el-form-item label="数据源名称" prop="name">
         <el-input v-model="formData.name" placeholder="请输入数据源名称" clearable />
@@ -264,7 +264,7 @@ defineExpose({
       </el-table>
 
       <!-- 预览数据 -->
-      <div class="section-title" style="margin-top: 16px">数据预览（前10行）</div>
+      <div class="section-title section-title--preview">数据预览（前10行）</div>
       <el-table :data="previewData" border size="small" max-height="250">
         <el-table-column
           v-for="col in columns"
@@ -281,48 +281,13 @@ defineExpose({
 
 <style scoped lang="scss">
 .excel-editor {
-  :deep(.el-form) {
+  .excel-editor-form {
     padding: var(--space-5) var(--space-6);
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-
-    .el-form-item__label {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--dr-gray-700);
-    }
-
-    .el-input__wrapper,
-    .el-textarea__inner {
-      border-radius: var(--radius-md);
-      box-shadow: none;
-      border: 1px solid var(--dr-gray-200);
-      transition: border-color 0.2s, box-shadow 0.2s;
-
-      &:hover {
-        border-color: var(--dr-gray-400);
-      }
-
-      &.is-focus,
-      &:focus {
-        border-color: var(--dr-blue);
-        box-shadow: var(--dr-shadow-focus);
-      }
-    }
-
-    .el-input__inner {
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--dr-gray-900);
-
-      &::placeholder {
-        color: var(--dr-gray-500);
-      }
-    }
   }
 
   .form-tip {
     font-size: 12px;
-    color: var(--dr-gray-500);
+    color: var(--el-text-color-secondary);
     margin-top: 4px;
     line-height: 1.4;
   }
@@ -334,35 +299,36 @@ defineExpose({
   .upload-area {
     width: 100%;
     padding: 20px;
-    border: 1px dashed var(--dr-gray-300);
-    border-radius: var(--radius-md);
+    border: 1px dashed var(--el-border-color);
+    border-radius: 6px;
     display: flex;
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 
     &:hover {
-      border-color: var(--dr-blue);
+      border-color: var(--el-color-primary);
+      background-color: var(--el-color-primary-light-9);
     }
 
     .upload-icon {
       font-size: 32px;
-      color: var(--dr-gray-400);
+      color: var(--el-text-color-secondary);
       margin-bottom: 8px;
     }
 
     .upload-text {
       font-size: 13px;
-      color: var(--dr-gray-500);
+      color: var(--el-text-color-secondary);
 
       &.uploaded {
-        color: var(--dr-gray-700);
+        color: var(--el-text-color-primary);
         font-weight: 500;
       }
 
       .row-count {
-        color: var(--dr-blue);
+        color: var(--el-color-primary);
         font-weight: 400;
       }
     }
@@ -374,10 +340,14 @@ defineExpose({
     .section-title {
       font-size: 14px;
       font-weight: 600;
-      color: var(--dr-gray-700);
+      color: var(--el-text-color-primary);
       margin-bottom: 10px;
       padding-left: 8px;
-      border-left: 3px solid var(--dr-blue);
+      border-left: 3px solid var(--el-color-primary);
+    }
+
+    .section-title--preview {
+      margin-top: 16px;
     }
   }
 }
