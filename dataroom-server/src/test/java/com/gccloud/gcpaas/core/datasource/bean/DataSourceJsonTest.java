@@ -46,7 +46,11 @@ class DataSourceJsonTest {
                 Arguments.of("mongodb", "com.mongodb.jdbc.MongoDriver", "mongo", "jdbc:mongodb://localhost:27017/?database=test"),
                 Arguments.of("kingbase", "com.kingbase8.Driver", "system", "jdbc:kingbase8://localhost:54321/test"),
                 Arguments.of("clickhouse", "com.clickhouse.jdbc.ClickHouseDriver", "default", "jdbc:clickhouse://localhost:8123/default"),
-                Arguments.of("mariadb", "org.mariadb.jdbc.Driver", "root", "jdbc:mariadb://localhost:3306/test")
+                Arguments.of("mariadb", "org.mariadb.jdbc.Driver", "root", "jdbc:mariadb://localhost:3306/test"),
+                Arguments.of("oceanbase", "com.oceanbase.jdbc.Driver", "root", "jdbc:oceanbase://localhost:2881/test"),
+                Arguments.of("hive", "org.apache.hive.jdbc.HiveDriver", "hive", "jdbc:hive2://localhost:10000/default"),
+                Arguments.of("tdengine", "com.taosdata.jdbc.ws.WebSocketDriver", "root", "jdbc:TAOS-WS://localhost:6041/test?varcharAsString=true"),
+                Arguments.of("druid", "org.apache.calcite.avatica.remote.Driver", "druid", "jdbc:avatica:remote:url=http://localhost:8888/druid/v2/sql/avatica/;transparent_reconnection=true")
         );
     }
 

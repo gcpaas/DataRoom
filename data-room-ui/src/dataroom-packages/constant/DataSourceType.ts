@@ -15,6 +15,10 @@ export const DataSourceType = {
   KINGBASE: 'kingbase',
   CLICKHOUSE: 'clickhouse',
   MARIADB: 'mariadb',
+  OCEANBASE: 'oceanbase',
+  HIVE: 'hive',
+  TDENGINE: 'tdengine',
+  DRUID: 'druid',
   ES: 'es',
   EXCEL: 'excel',
 } as const

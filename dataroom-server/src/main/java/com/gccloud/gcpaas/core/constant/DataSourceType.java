@@ -20,6 +20,10 @@ public enum DataSourceType implements IEnum<String> {
     KINGBASE("kingbase"),
     CLICKHOUSE("clickhouse"),
     MARIADB("mariadb"),
+    OCEANBASE("oceanbase"),
+    HIVE("hive"),
+    TDENGINE("tdengine"),
+    DRUID("druid"),
     ES("es"),
     EXCEL("excel");
 
@@ -36,6 +40,10 @@ public enum DataSourceType implements IEnum<String> {
     public static final String KINGBASE_TYPE = "kingbase";
     public static final String CLICKHOUSE_TYPE = "clickhouse";
     public static final String MARIADB_TYPE = "mariadb";
+    public static final String OCEANBASE_TYPE = "oceanbase";
+    public static final String HIVE_TYPE = "hive";
+    public static final String TDENGINE_TYPE = "tdengine";
+    public static final String DRUID_TYPE = "druid";
     public static final String ES_TYPE = "es";
     public static final String EXCEL_TYPE = "excel";
 

@@ -10,13 +10,14 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;
 
 @Slf4j
-@SpringBootApplication(scanBasePackages = "com.gccloud.gcpaas")
+@SpringBootApplication(scanBasePackages = "com.gccloud.gcpaas", exclude = MongoAutoConfiguration.class)
 @MapperScan("com.gccloud.gcpaas.**")
 public class DataRoomApplication {
     @Resource

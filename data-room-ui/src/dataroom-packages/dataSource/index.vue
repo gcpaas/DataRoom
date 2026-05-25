@@ -19,6 +19,10 @@ import mongodbImg from './assets/image/MongoDB.svg'
 import kingbaseImg from './assets/image/Kingbase.svg'
 import clickhouseImg from './assets/image/ClickHouse.svg'
 import mariadbImg from './assets/image/MariaDB.svg'
+import oceanbaseImg from './assets/image/OceanBase.svg'
+import hiveImg from './assets/image/Hive.svg'
+import tdengineImg from './assets/image/TDengine.svg'
+import druidImg from './assets/image/Druid.svg'
 import elasticsearchImg from './assets/image/Elasticsearch.svg'
 import excelImg from './assets/image/Excel占位符.png'
 
@@ -142,6 +146,34 @@ const dataSourceTypeMap = {
     description: '兼容 MySQL 协议的开源数据库',
     component: defineAsyncComponent(() => import('./components/MariaDbEditor.vue')),
   },
+  oceanbase: {
+    name: 'OceanBase',
+    icon: 'OB',
+    image: oceanbaseImg,
+    description: '分布式关系型数据库',
+    component: defineAsyncComponent(() => import('./components/OceanBaseEditor.vue')),
+  },
+  hive: {
+    name: 'Hive',
+    icon: 'HV',
+    image: hiveImg,
+    description: '基于 HiveServer2 的数据仓库',
+    component: defineAsyncComponent(() => import('./components/HiveEditor.vue')),
+  },
+  tdengine: {
+    name: 'TDengine',
+    icon: 'TD',
+    image: tdengineImg,
+    description: '面向时序数据的数据库',
+    component: defineAsyncComponent(() => import('./components/TDengineEditor.vue')),
+  },
+  druid: {
+    name: 'Druid',
+    icon: 'DR',
+    image: druidImg,
+    description: 'Apache Druid 实时分析数据库',
+    component: defineAsyncComponent(() => import('./components/DruidEditor.vue')),
+  },
   es: {
     name: 'Elasticsearch',
     icon: 'ES',
@@ -257,6 +289,14 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
       defaultDriverName = 'com.clickhouse.jdbc.ClickHouseDriver'
     } else if (dataSourceType === 'mariadb') {
       defaultDriverName = 'org.mariadb.jdbc.Driver'
+    } else if (dataSourceType === 'oceanbase') {
+      defaultDriverName = 'com.oceanbase.jdbc.Driver'
+    } else if (dataSourceType === 'hive') {
+      defaultDriverName = 'org.apache.hive.jdbc.HiveDriver'
+    } else if (dataSourceType === 'tdengine') {
+      defaultDriverName = 'com.taosdata.jdbc.ws.WebSocketDriver'
+    } else if (dataSourceType === 'druid') {
+      defaultDriverName = 'org.apache.calcite.avatica.remote.Driver'
     }
 
     currentDataSource.value = {

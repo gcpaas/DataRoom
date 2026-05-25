@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { computed, ref, reactive, watch } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { DatasetEntity } from '../api'
 import { datasetApi } from '../api'
@@ -32,6 +32,27 @@ const previewData = ref<unknown>([])
 
 // CodeMirror 扩展配置：SQL语言 + Eclipse主题，与JSON数据集保持一致
 const cmExtensions = [sql(), eclipse]
+const sqlDataSourceTypes = new Set([
+  'mysql',
+  'postgresql',
+  'oracle',
+  'doris',
+  'dameng',
+  'db2',
+  'gbase',
+  'goldendb',
+  'sqlserver',
+  'mongodb',
+  'kingbase',
+  'clickhouse',
+  'mariadb',
+  'oceanbase',
+  'hive',
+  'tdengine',
+  'druid',
+  'excel'
+])
+const sqlDataSourceList = computed(() => (props.dataSourceList || []).filter(item => item.dataSourceType && sqlDataSourceTypes.has(item.dataSourceType)))
 
 const formData = reactive<DatasetEntity>({
   name: '',
@@ -74,7 +95,7 @@ watch(
 
 const rules = reactive<FormRules<DatasetEntity>>({
   name: [{ required: true, message: '请输入数据集名称', trigger: 'blur' }],
-  dataSourceCode: [{ required: true, message: '请选择数据源', trigger: 'change' }]
+  dataSourceCode: [{ required: true, message: '请选择SQL数据源', trigger: 'change' }]
 })
 
 /**
@@ -236,7 +257,7 @@ defineExpose({
       <el-form-item label="数据源" prop="dataSourceCode">
         <el-select v-model="formData.dataSourceCode" placeholder="请选择数据源" clearable>
           <el-option
-            v-for="item in dataSourceList"
+            v-for="item in sqlDataSourceList"
             :key="item.code"
             :label="item.name"
             :value="item.code"

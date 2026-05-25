@@ -5,7 +5,24 @@ import request from '@/dataroom-packages/_common/_request.ts'
  */
 export interface RelationalDataSource {
   driverName: string
-  dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'dameng' | 'db2' | 'gbase' | 'goldendb' | 'sqlserver' | 'mongodb' | 'kingbase' | 'clickhouse' | 'mariadb'
+  dataSourceType:
+    | 'mysql'
+    | 'postgresql'
+    | 'oracle'
+    | 'doris'
+    | 'dameng'
+    | 'db2'
+    | 'gbase'
+    | 'goldendb'
+    | 'sqlserver'
+    | 'mongodb'
+    | 'kingbase'
+    | 'clickhouse'
+    | 'mariadb'
+    | 'oceanbase'
+    | 'hive'
+    | 'tdengine'
+    | 'druid'
   username: string
   password: string
   url: string
@@ -49,7 +66,7 @@ export interface EsDataSource {
 /**
  * 数据源实体
  * dataSource 字段根据 dataSourceType 不同而具有不同的结构:
- * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/sqlserver/mongodb/kingbase/clickhouse/mariadb): RelationalDataSource
+ * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/sqlserver/mongodb/kingbase/clickhouse/mariadb/oceanbase/hive/tdengine/druid): RelationalDataSource
  * - excel: ExcelDataSource
  * - es: EsDataSource
  */
@@ -71,6 +88,10 @@ export interface DataSourceEntity {
     | 'kingbase'
     | 'clickhouse'
     | 'mariadb'
+    | 'oceanbase'
+    | 'hive'
+    | 'tdengine'
+    | 'druid'
     | 'es'
     | 'excel'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

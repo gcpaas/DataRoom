@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.10</version>
+        <version>3.5.14</version>
     </parent>
 
     <groupId>com.gccloud.gcpaas</groupId>
@@ -21,12 +21,12 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mybatis.plus.version>3.5.12</mybatis.plus.version>
+        <mybatis.plus.version>3.5.16</mybatis.plus.version>
         <guava.version>33.4.0-jre</guava.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <commons-io.version>2.21.0</commons-io.version>
-        <jackson.core.version>2.19.4</jackson.core.version>
-        <shiro.version>2.0.6</shiro.version>
+        <jackson.core.version>2.21.2</jackson.core.version>
+        <shiro.version>2.1.0</shiro.version>
         <jjwt.version>0.12.6</jjwt.version>
         <dameng.jdbc.version>8.1.5.45</dameng.jdbc.version>
         <db2.jdbc.version>12.1.4.0</db2.jdbc.version>
@@ -35,7 +35,38 @@
         <kingbase.jdbc.version>9.0.1.jre7</kingbase.jdbc.version>
         <clickhouse.jdbc.version>0.9.8</clickhouse.jdbc.version>
         <mariadb.jdbc.version>3.5.8</mariadb.jdbc.version>
+        <oceanbase.jdbc.version>2.4.12</oceanbase.jdbc.version>
+        <hive.jdbc.version>4.2.0</hive.jdbc.version>
+        <tdengine.jdbc.version>3.8.3</tdengine.jdbc.version>
+        <avatica.version>1.28.0</avatica.version>
+        <poi.version>5.5.1</poi.version>
+        <xmlbeans.version>5.3.0</xmlbeans.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml-lite</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlbeans</groupId>
+                <artifactId>xmlbeans</artifactId>
+                <version>${xmlbeans.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -84,7 +115,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.core.version}</version>
+            <version>2.21</version>
         </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>
@@ -135,7 +166,7 @@
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <version>12.8.1.jre11</version>
+            <version>13.5.0.jre11-preview</version>
         </dependency>
         <dependency>
             <groupId>com.dameng</groupId>
@@ -171,6 +202,32 @@
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <version>${mariadb.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oceanbase</groupId>
+            <artifactId>oceanbase-client</artifactId>
+            <version>${oceanbase.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive-jdbc</artifactId>
+            <version>${hive.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.taosdata.jdbc</groupId>
+            <artifactId>taos-jdbcdriver</artifactId>
+            <version>${tdengine.jdbc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.calcite.avatica</groupId>
+            <artifactId>avatica-core</artifactId>
+            <version>${avatica.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
