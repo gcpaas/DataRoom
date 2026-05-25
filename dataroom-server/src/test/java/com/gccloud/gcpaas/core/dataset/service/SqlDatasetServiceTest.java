@@ -31,4 +31,16 @@ class SqlDatasetServiceTest {
         assertEquals("String", SqlDatasetService.resolveOutputType(Types.OTHER, "JSONB"));
         assertEquals("String", SqlDatasetService.resolveOutputType(Types.OTHER, null));
     }
+
+    @Test
+    void resolveOutputTypeSupportsNewDatasourceTypeNames() {
+        assertEquals("int", SqlDatasetService.resolveOutputType(Types.OTHER, "UInt64"));
+        assertEquals("int", SqlDatasetService.resolveOutputType(Types.OTHER, "Int256"));
+        assertEquals("int", SqlDatasetService.resolveOutputType(Types.OTHER, "Float32"));
+        assertEquals("int", SqlDatasetService.resolveOutputType(Types.OTHER, "Decimal256(76, 18)"));
+        assertEquals("Date", SqlDatasetService.resolveOutputType(Types.OTHER, "DateTime64(3)"));
+        assertEquals("Date", SqlDatasetService.resolveOutputType(Types.OTHER, "Date32"));
+        assertEquals("int", SqlDatasetService.resolveOutputType(Types.OTHER, "money"));
+        assertEquals("String", SqlDatasetService.resolveOutputType(Types.OTHER, "ObjectId"));
+    }
 }

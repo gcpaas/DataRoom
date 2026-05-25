@@ -3,11 +3,51 @@ package com.gccloud.gcpaas.core.datasource.bean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gccloud.gcpaas.core.entity.DataSourceEntity;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class DataSourceJsonTest {
+
+    @ParameterizedTest
+    @MethodSource("newRelationalDatasourceCases")
+    void deserializeNewDatasourceTypesAsRelationalDatasource(String dataSourceType, String driverName, String username, String url) throws Exception {
+        String json = """
+                {
+                  "name": "新增数据源",
+                  "dataSourceType": "%s",
+                  "dataSource": {
+                    "dataSourceType": "%s",
+                    "driverName": "%s",
+                    "username": "%s",
+                    "password": "encrypted",
+                    "url": "%s"
+                  }
+                }
+                """.formatted(dataSourceType, dataSourceType, driverName, username, url);
+
+        DataSourceEntity entity = new ObjectMapper().readValue(json, DataSourceEntity.class);
+
+        assertEquals(dataSourceType, entity.getDataSourceType().getValue());
+        RelationalDatasource datasource = assertInstanceOf(RelationalDatasource.class, entity.getDataSource());
+        assertEquals(driverName, datasource.getDriverName());
+        assertEquals(url, datasource.getUrl());
+        assertEquals(username, datasource.getUsername());
+    }
+
+    static Stream<Arguments> newRelationalDatasourceCases() {
+        return Stream.of(
+                Arguments.of("mongodb", "com.mongodb.jdbc.MongoDriver", "mongo", "jdbc:mongodb://localhost:27017/?database=test"),
+                Arguments.of("kingbase", "com.kingbase8.Driver", "system", "jdbc:kingbase8://localhost:54321/test"),
+                Arguments.of("clickhouse", "com.clickhouse.jdbc.ClickHouseDriver", "default", "jdbc:clickhouse://localhost:8123/default"),
+                Arguments.of("mariadb", "org.mariadb.jdbc.Driver", "root", "jdbc:mariadb://localhost:3306/test")
+        );
+    }
 
     @Test
     void deserializeDamengDatasourceAsRelationalDatasource() throws Exception {

@@ -31,6 +31,10 @@
         <dameng.jdbc.version>8.1.5.45</dameng.jdbc.version>
         <db2.jdbc.version>12.1.4.0</db2.jdbc.version>
         <gbase.jdbc.version>3.6.3.34_nobson</gbase.jdbc.version>
+        <mongodb.jdbc.version>3.0.6</mongodb.jdbc.version>
+        <kingbase.jdbc.version>9.0.1.jre7</kingbase.jdbc.version>
+        <clickhouse.jdbc.version>0.9.8</clickhouse.jdbc.version>
+        <mariadb.jdbc.version>3.5.8</mariadb.jdbc.version>
     </properties>
 
     <dependencies>
@@ -147,6 +151,26 @@
             <groupId>com.gbasedbt</groupId>
             <artifactId>jdbc</artifactId>
             <version>${gbase.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-jdbc</artifactId>
+            <version>${mongodb.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.com.kingbase</groupId>
+            <artifactId>kingbase8</artifactId>
+            <version>${kingbase.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.clickhouse</groupId>
+            <artifactId>clickhouse-jdbc</artifactId>
+            <version>${clickhouse.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>${mariadb.jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

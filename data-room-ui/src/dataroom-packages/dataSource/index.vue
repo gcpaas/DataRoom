@@ -15,6 +15,10 @@ import db2Img from './assets/image/DB2占位符.svg'
 import gbaseImg from './assets/image/GBase占位符.svg'
 import goldendbImg from './assets/image/GoldenDB占位符.svg'
 import sqlserverImg from './assets/image/SqlServer占位符.png'
+import mongodbImg from './assets/image/MongoDB.svg'
+import kingbaseImg from './assets/image/Kingbase.svg'
+import clickhouseImg from './assets/image/ClickHouse.svg'
+import mariadbImg from './assets/image/MariaDB.svg'
 import excelImg from './assets/image/Excel占位符.png'
 
 const searchName = ref('')
@@ -109,6 +113,34 @@ const dataSourceTypeMap = {
     description: 'Microsoft SQL Server关系型数据库',
     component: defineAsyncComponent(() => import('./components/SqlServerEditor.vue')),
   },
+  mongodb: {
+    name: 'MongoDB',
+    icon: 'MDB',
+    image: mongodbImg,
+    description: 'MongoDB JDBC SQL数据源',
+    component: defineAsyncComponent(() => import('./components/MongoDbEditor.vue')),
+  },
+  kingbase: {
+    name: '人大金仓',
+    icon: 'KB',
+    image: kingbaseImg,
+    description: '人大金仓 KingbaseES 数据库',
+    component: defineAsyncComponent(() => import('./components/KingbaseEditor.vue')),
+  },
+  clickhouse: {
+    name: 'ClickHouse',
+    icon: 'CH',
+    image: clickhouseImg,
+    description: '列式实时分析数据库',
+    component: defineAsyncComponent(() => import('./components/ClickHouseEditor.vue')),
+  },
+  mariadb: {
+    name: 'MariaDB',
+    icon: 'MDB',
+    image: mariadbImg,
+    description: '兼容 MySQL 协议的开源数据库',
+    component: defineAsyncComponent(() => import('./components/MariaDbEditor.vue')),
+  },
   excel: {
     name: 'Excel',
     icon: '📊',
@@ -195,6 +227,14 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
       defaultDriverName = 'com.mysql.cj.jdbc.Driver'
     } else if (dataSourceType === 'sqlserver') {
       defaultDriverName = 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
+    } else if (dataSourceType === 'mongodb') {
+      defaultDriverName = 'com.mongodb.jdbc.MongoDriver'
+    } else if (dataSourceType === 'kingbase') {
+      defaultDriverName = 'com.kingbase8.Driver'
+    } else if (dataSourceType === 'clickhouse') {
+      defaultDriverName = 'com.clickhouse.jdbc.ClickHouseDriver'
+    } else if (dataSourceType === 'mariadb') {
+      defaultDriverName = 'org.mariadb.jdbc.Driver'
     }
 
     currentDataSource.value = {
@@ -465,7 +505,7 @@ onMounted(() => {
     </div>
 
     <!-- 数据源类型选择对话框 -->
-    <el-dialog v-model="typeSelectDialogVisible" title="选择数据源类型" width="680px" :close-on-click-modal="true">
+    <el-dialog v-model="typeSelectDialogVisible" title="选择数据源类型" width="800px" :close-on-click-modal="true">
       <div class="type-select-cards">
         <div v-for="(item, key) in dataSourceTypeMap" :key="key" class="type-card" @click="handleSelectType(key as DataSourceTypeKey)">
           <div class="type-card-image">

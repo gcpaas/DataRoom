@@ -16,6 +16,10 @@ public enum DataSourceType implements IEnum<String> {
     GBASE("gbase"),
     GOLDENDB("goldendb"),
     SQLSERVER("sqlserver"),
+    MONGODB("mongodb"),
+    KINGBASE("kingbase"),
+    CLICKHOUSE("clickhouse"),
+    MARIADB("mariadb"),
     EXCEL("excel");
 
     public static final String MYSQL_TYPE = "mysql";
@@ -27,6 +31,10 @@ public enum DataSourceType implements IEnum<String> {
     public static final String GBASE_TYPE = "gbase";
     public static final String GOLDENDB_TYPE = "goldendb";
     public static final String SQLSERVER_TYPE = "sqlserver";
+    public static final String MONGODB_TYPE = "mongodb";
+    public static final String KINGBASE_TYPE = "kingbase";
+    public static final String CLICKHOUSE_TYPE = "clickhouse";
+    public static final String MARIADB_TYPE = "mariadb";
     public static final String EXCEL_TYPE = "excel";
 
 

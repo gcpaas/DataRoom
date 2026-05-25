@@ -16,6 +16,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
         @JsonSubTypes.Type(value = GbaseDatasource.class, name = DataSourceType.GBASE_TYPE),
         @JsonSubTypes.Type(value = GoldenDbDatasource.class, name = DataSourceType.GOLDENDB_TYPE),
         @JsonSubTypes.Type(value = SqlServerDatasource.class, name = DataSourceType.SQLSERVER_TYPE),
+        @JsonSubTypes.Type(value = MongoDbDatasource.class, name = DataSourceType.MONGODB_TYPE),
+        @JsonSubTypes.Type(value = KingbaseDatasource.class, name = DataSourceType.KINGBASE_TYPE),
+        @JsonSubTypes.Type(value = ClickHouseDatasource.class, name = DataSourceType.CLICKHOUSE_TYPE),
+        @JsonSubTypes.Type(value = MariaDbDatasource.class, name = DataSourceType.MARIADB_TYPE),
         @JsonSubTypes.Type(value = ExcelDatasource.class, name = DataSourceType.EXCEL_TYPE)
 })
 public abstract class BaseDataSource {
