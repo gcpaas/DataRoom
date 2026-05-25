@@ -545,7 +545,9 @@ onMounted(() => {
 
     <!-- 编辑对话框 -->
     <el-dialog v-model="dialogVisible" :title="dialogTitle" :width="currentDataSource.dataSourceType === 'excel' ? '800px' : '600px'" :close-on-click-modal="false">
-      <component :is="dataSourceTypeMap[currentDataSource.dataSourceType as DataSourceTypeKey].component" v-model="currentDataSource" ref="editorRef" />
+      <el-scrollbar class="data-source-editor-scrollbar" max-height="65vh">
+        <component :is="dataSourceTypeMap[currentDataSource.dataSourceType as DataSourceTypeKey].component" v-model="currentDataSource" ref="editorRef" />
+      </el-scrollbar>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取消</el-button>
@@ -738,5 +740,9 @@ onMounted(() => {
 
 .dropdown-item-label {
   margin-left: 8px;
+}
+
+.data-source-editor-scrollbar {
+  padding: 0 4px;
 }
 </style>

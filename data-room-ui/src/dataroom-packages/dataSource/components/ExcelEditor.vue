@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, reactive, watch, computed } from 'vue'
-import type { FormInstance, FormRules, UploadProps } from 'element-plus'
-import { ElMessage } from 'element-plus'
+import type { FormInstance, FormRules, UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+import { ElMessage, genFileId } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
 import { dataSourceApi, type ExcelColumn, type ExcelDataSource } from '../api'
+import { preservePrimaryKeySelection } from '../excelColumns'
 
 const props = defineProps<{
   modelValue: { name: string; code?: string; dataSourceType: string; dataSource: ExcelDataSource | Record<string, unknown> }
@@ -14,6 +15,7 @@ defineEmits<{
 }>()
 
 const formRef = ref<FormInstance>()
+const uploadRef = ref<UploadInstance>()
 const uploading = ref(false)
 const uploadId = ref('')
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -93,6 +95,16 @@ const handleFileChange: UploadProps['onChange'] = (uploadFile) => {
   doUploadParse(file)
 }
 
+const handleFileExceed: UploadProps['onExceed'] = (files) => {
+  uploadRef.value?.clearFiles()
+  const file = files[0] as UploadRawFile | undefined
+  if (!file) {
+    return
+  }
+  file.uid = genFileId()
+  uploadRef.value?.handleStart(file)
+}
+
 /**
  * 执行上传解析
  */
@@ -101,7 +113,7 @@ const doUploadParse = async (file: File) => {
   try {
     const result = await dataSourceApi.excelUpload(file)
     uploadId.value = result.uploadId
-    columns.value = result.columns
+    columns.value = isEditMode.value ? preservePrimaryKeySelection(result.columns, columns.value) : result.columns
     previewData.value = result.previewData
     totalRows.value = result.totalRows
     ElMessage.success(`解析成功，共 ${result.totalRows} 行数据`)
@@ -185,7 +197,7 @@ defineExpose({
       </el-form-item>
 
       <el-form-item label="表名称" prop="tableName">
-        <el-input v-model="formData.tableName" placeholder="excel_your_table_name" clearable :disabled="isEditMode">
+        <el-input v-model="formData.tableName" placeholder="custom_table_name" clearable :disabled="isEditMode">
           <template #prepend v-if="!isEditMode">excel_</template>
         </el-input>
         <div class="form-tip" v-if="!isEditMode">仅支持字母、数字、下划线，系统自动添加excel_前缀</div>
@@ -201,7 +213,16 @@ defineExpose({
 
       <!-- 文件上传 -->
       <el-form-item label="文件">
-        <el-upload class="excel-upload" :auto-upload="false" :show-file-list="false" accept=".xlsx,.csv" :on-change="handleFileChange" :limit="1">
+        <el-upload
+          ref="uploadRef"
+          class="excel-upload"
+          :auto-upload="false"
+          :show-file-list="false"
+          accept=".xlsx,.csv"
+          :on-change="handleFileChange"
+          :on-exceed="handleFileExceed"
+          :limit="1"
+        >
           <template #trigger>
             <div class="upload-area" v-loading="uploading">
               <el-icon class="upload-icon"><UploadFilled /></el-icon>
@@ -220,13 +241,13 @@ defineExpose({
     <div class="column-config" v-if="showColumnConfig">
       <div class="section-title">列配置</div>
       <el-table :data="columns" border size="small" max-height="300">
-        <el-table-column label="原始表头" prop="originalHeader" width="120" />
-        <el-table-column label="列名" width="150">
+        <el-table-column label="原始表头" prop="originalHeader" min-width="140" show-overflow-tooltip />
+        <el-table-column label="列名" min-width="180">
           <template #default="{ row }">
             <el-input v-model="row.name" size="small" placeholder="列名" />
           </template>
         </el-table-column>
-        <el-table-column label="类型" width="160">
+        <el-table-column label="类型" min-width="180">
           <template #default="{ row }">
             <el-select v-model="row.type" size="small" placeholder="类型">
               <el-option v-for="opt in columnTypeOptions" :key="opt.value" :label="opt.label" :value="opt.value" />

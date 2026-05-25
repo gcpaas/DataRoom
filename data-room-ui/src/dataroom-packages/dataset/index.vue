@@ -47,6 +47,12 @@ const currentDataset = ref<DatasetEntity>({
   parentCode: 'root'
 })
 const editorRef = ref()
+const wideEditorDatasetTypes = ['json', 'http', 'sql', 'es'] as const
+const datasetDialogWidth = computed(() =>
+  wideEditorDatasetTypes.includes(currentDataset.value.datasetType as typeof wideEditorDatasetTypes[number])
+    ? '90%'
+    : '800px'
+)
 
 // 数据源列表
 const dataSourceList = ref<DataSourceEntity[]>([])
@@ -797,7 +803,7 @@ const handleTestAndSave = async () => {
     <el-dialog
       v-model="dialogVisible"
       :title="dialogTitle"
-      width="800px"
+      :width="datasetDialogWidth"
       :close-on-click-modal="false"
       destroy-on-close
     >

@@ -7,6 +7,7 @@ import { ElMessage } from 'element-plus'
 import { Codemirror } from 'vue-codemirror'
 import { json } from '@codemirror/lang-json'
 import { eclipse } from '@uiw/codemirror-theme-eclipse'
+import DatasetEditorLayout from './DatasetEditorLayout.vue'
 
 const props = defineProps<{
   modelValue: DatasetEntity
@@ -20,6 +21,7 @@ const emit = defineEmits<{
 }>()
 
 const formRef = ref<FormInstance>()
+const previewData = ref<unknown>([])
 
 // CodeMirror 扩展配置：JSON语言 + Eclipse主题
 const cmExtensions = [json(), eclipse]
@@ -106,6 +108,7 @@ const test = async () => {
     
     // 调用测试接口
     const res = await datasetApi.test({ dataset: formData })
+    previewData.value = res.data
     if (res.outputList && res.outputList.length > 0) {
       // 保存现有的用户配置
       const existingConfig = new Map(
@@ -242,64 +245,66 @@ defineExpose({
 </script>
 
 <template>
-  <el-form class="dataset-editor-form" ref="formRef" :model="formData" :rules="rules" label-width="100px">
-    <el-form-item label="数据集名称" prop="name">
-      <el-input v-model="formData.name" placeholder="请输入数据集名称" clearable />
-    </el-form-item>
-    <el-form-item label="JSON数据">
-      <div class="json-editor-shell">
-        <div
-          v-if="formData.dataset && 'json' in formData.dataset"
-          class="codemirror-wrapper"
-        >
-          <Codemirror
-            v-model="formData.dataset.json"
-            :extensions="cmExtensions"
-            placeholder='请输入JSON数据，例如：[{"name": "张三", "age": 20}]'
+  <DatasetEditorLayout :preview-data="previewData">
+    <el-form class="dataset-editor-form" ref="formRef" :model="formData" :rules="rules" label-width="100px">
+      <el-form-item label="数据集名称" prop="name">
+        <el-input v-model="formData.name" placeholder="请输入数据集名称" clearable />
+      </el-form-item>
+      <el-form-item label="JSON数据">
+        <div class="json-editor-shell">
+          <div
+            v-if="formData.dataset && 'json' in formData.dataset"
+            class="codemirror-wrapper"
+          >
+            <Codemirror
+              v-model="formData.dataset.json"
+              :extensions="cmExtensions"
+              placeholder='请输入JSON数据，例如：[{"name": "张三", "age": 20}]'
+            />
+          </div>
+          <div class="json-format-action">
+            <el-button size="small" @click="formatJson">格式化</el-button>
+          </div>
+        </div>
+      </el-form-item>
+      <el-form-item label="字段列表">
+        <div class="dataset-form-section">
+          <div class="dataset-form-toolbar">
+            <el-button type="primary" size="small" @click="parseFields">字段解析</el-button>
+          </div>
+          <el-table class="dataset-form-table" :data="formData.outputList" border>
+            <el-table-column prop="name" label="字段名" width="200" />
+            <el-table-column label="类型" width="150">
+              <template #default="{ row }">
+                <el-select v-model="row.type" size="small" placeholder="类型">
+                  <el-option label="String" value="String" />
+                  <el-option label="Number" value="Number" />
+                  <el-option label="Boolean" value="Boolean" />
+                  <el-option label="Object" value="Object" />
+                  <el-option label="Array" value="Array" />
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column label="描述">
+              <template #default="{ row }">
+                <el-input v-model="row.desc" size="small" placeholder="描述" />
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-empty
+            v-if="!formData.outputList || formData.outputList.length === 0"
+            description="请点击「字段解析」按钮自动解析字段列表"
+            :image-size="100"
           />
         </div>
-        <div class="json-format-action">
-          <el-button size="small" @click="formatJson">格式化</el-button>
-        </div>
-      </div>
-    </el-form-item>
-    <el-form-item label="字段列表">
-      <div class="dataset-form-section">
-        <div class="dataset-form-toolbar">
-          <el-button type="primary" size="small" @click="parseFields">字段解析</el-button>
-        </div>
-        <el-table class="dataset-form-table" :data="formData.outputList" border>
-          <el-table-column prop="name" label="字段名" width="200" />
-          <el-table-column label="类型" width="150">
-            <template #default="{ row }">
-              <el-select v-model="row.type" size="small" placeholder="类型">
-                <el-option label="String" value="String" />
-                <el-option label="Number" value="Number" />
-                <el-option label="Boolean" value="Boolean" />
-                <el-option label="Object" value="Object" />
-                <el-option label="Array" value="Array" />
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column label="描述">
-            <template #default="{ row }">
-              <el-input v-model="row.desc" size="small" placeholder="描述" />
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-empty
-          v-if="!formData.outputList || formData.outputList.length === 0"
-          description="请点击「字段解析」按钮自动解析字段列表"
-          :image-size="100"
-        />
-      </div>
-    </el-form-item>
-  </el-form>
+      </el-form-item>
+    </el-form>
+  </DatasetEditorLayout>
 </template>
 
 <style scoped lang="scss">
 .dataset-editor-form {
-  padding: 20px 24px;
+  min-width: 0;
 }
 
 .json-editor-shell {
