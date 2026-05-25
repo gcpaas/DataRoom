@@ -12,6 +12,8 @@ import oracleImg from './assets/image/Oracle占位符.png'
 import dorisImg from './assets/image/Doris占位符.png'
 import damengImg from './assets/image/Dameng占位符.svg'
 import db2Img from './assets/image/DB2占位符.svg'
+import gbaseImg from './assets/image/GBase占位符.svg'
+import goldendbImg from './assets/image/GoldenDB占位符.svg'
 import sqlserverImg from './assets/image/SqlServer占位符.png'
 import excelImg from './assets/image/Excel占位符.png'
 
@@ -85,6 +87,20 @@ const dataSourceTypeMap = {
     image: db2Img,
     description: 'IBM企业级关系型数据库',
     component: defineAsyncComponent(() => import('./components/Db2Editor.vue')),
+  },
+  gbase: {
+    name: 'GBase',
+    icon: 'GB',
+    image: gbaseImg,
+    description: '南大通用关系型数据库',
+    component: defineAsyncComponent(() => import('./components/GbaseEditor.vue')),
+  },
+  goldendb: {
+    name: 'GoldenDB',
+    icon: 'GDB',
+    image: goldendbImg,
+    description: '中兴分布式关系型数据库',
+    component: defineAsyncComponent(() => import('./components/GoldenDbEditor.vue')),
   },
   sqlserver: {
     name: 'SqlServer',
@@ -173,6 +189,10 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
       defaultDriverName = 'dm.jdbc.driver.DmDriver'
     } else if (dataSourceType === 'db2') {
       defaultDriverName = 'com.ibm.db2.jcc.DB2Driver'
+    } else if (dataSourceType === 'gbase') {
+      defaultDriverName = 'com.gbasedbt.jdbc.Driver'
+    } else if (dataSourceType === 'goldendb') {
+      defaultDriverName = 'com.mysql.cj.jdbc.Driver'
     } else if (dataSourceType === 'sqlserver') {
       defaultDriverName = 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
     }

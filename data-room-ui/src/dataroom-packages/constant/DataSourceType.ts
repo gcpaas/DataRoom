@@ -8,4 +8,6 @@ export const DataSourceType = {
   DORIS: 'doris',
   DAMENG: 'dameng',
   DB2: 'db2',
+  GBASE: 'gbase',
+  GOLDENDB: 'goldendb',
 } as const

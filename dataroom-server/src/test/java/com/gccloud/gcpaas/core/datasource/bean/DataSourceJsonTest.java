@@ -58,4 +58,54 @@ class DataSourceJsonTest {
         assertEquals("jdbc:db2://localhost:50000/sample", datasource.getUrl());
         assertEquals("db2inst1", datasource.getUsername());
     }
+
+    @Test
+    void deserializeGbaseDatasourceAsRelationalDatasource() throws Exception {
+        String json = """
+                {
+                  "name": "GBase数据源",
+                  "dataSourceType": "gbase",
+                  "dataSource": {
+                    "dataSourceType": "gbase",
+                    "driverName": "com.gbasedbt.jdbc.Driver",
+                    "username": "gbasedbt",
+                    "password": "encrypted",
+                    "url": "jdbc:gbasedbt-sqli://localhost:9088/test:GBASEDBTSERVER=gbase01;"
+                  }
+                }
+                """;
+
+        DataSourceEntity entity = new ObjectMapper().readValue(json, DataSourceEntity.class);
+
+        assertEquals("gbase", entity.getDataSourceType().getValue());
+        RelationalDatasource datasource = assertInstanceOf(RelationalDatasource.class, entity.getDataSource());
+        assertEquals("com.gbasedbt.jdbc.Driver", datasource.getDriverName());
+        assertEquals("jdbc:gbasedbt-sqli://localhost:9088/test:GBASEDBTSERVER=gbase01;", datasource.getUrl());
+        assertEquals("gbasedbt", datasource.getUsername());
+    }
+
+    @Test
+    void deserializeGoldenDbDatasourceAsRelationalDatasource() throws Exception {
+        String json = """
+                {
+                  "name": "GoldenDB数据源",
+                  "dataSourceType": "goldendb",
+                  "dataSource": {
+                    "dataSourceType": "goldendb",
+                    "driverName": "com.mysql.cj.jdbc.Driver",
+                    "username": "goldendb",
+                    "password": "encrypted",
+                    "url": "jdbc:mysql://localhost:3306/test"
+                  }
+                }
+                """;
+
+        DataSourceEntity entity = new ObjectMapper().readValue(json, DataSourceEntity.class);
+
+        assertEquals("goldendb", entity.getDataSourceType().getValue());
+        RelationalDatasource datasource = assertInstanceOf(RelationalDatasource.class, entity.getDataSource());
+        assertEquals("com.mysql.cj.jdbc.Driver", datasource.getDriverName());
+        assertEquals("jdbc:mysql://localhost:3306/test", datasource.getUrl());
+        assertEquals("goldendb", datasource.getUsername());
+    }
 }

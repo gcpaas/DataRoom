@@ -5,7 +5,7 @@ import request from '@/dataroom-packages/_common/_request.ts'
  */
 export interface RelationalDataSource {
   driverName: string
-  dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'dameng' | 'db2' | 'sqlserver'
+  dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'dameng' | 'db2' | 'gbase' | 'goldendb' | 'sqlserver'
   username: string
   password: string
   url: string
@@ -36,14 +36,14 @@ export interface ExcelDataSource {
 /**
  * 数据源实体
  * dataSource 字段根据 dataSourceType 不同而具有不同的结构:
- * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/sqlserver): RelationalDataSource
+ * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/sqlserver): RelationalDataSource
  * - excel: ExcelDataSource
  */
 export interface DataSourceEntity {
   id?: string
   name: string
   code?: string
-  dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'dameng' | 'db2' | 'sqlserver' | 'excel'
+  dataSourceType: 'mysql' | 'postgresql' | 'oracle' | 'doris' | 'dameng' | 'db2' | 'gbase' | 'goldendb' | 'sqlserver' | 'excel'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dataSource: any
   createDate?: string

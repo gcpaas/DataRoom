@@ -30,6 +30,7 @@
         <jjwt.version>0.12.6</jjwt.version>
         <dameng.jdbc.version>8.1.5.45</dameng.jdbc.version>
         <db2.jdbc.version>12.1.4.0</db2.jdbc.version>
+        <gbase.jdbc.version>3.6.3.34_nobson</gbase.jdbc.version>
     </properties>
 
     <dependencies>
@@ -141,6 +142,11 @@
             <groupId>com.ibm.db2</groupId>
             <artifactId>jcc</artifactId>
             <version>${db2.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gbasedbt</groupId>
+            <artifactId>jdbc</artifactId>
+            <version>${gbase.jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
