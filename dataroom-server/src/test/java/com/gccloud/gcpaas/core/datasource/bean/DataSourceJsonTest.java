@@ -33,4 +33,29 @@ class DataSourceJsonTest {
         assertEquals("jdbc:dm://localhost:5236", datasource.getUrl());
         assertEquals("SYSDBA", datasource.getUsername());
     }
+
+    @Test
+    void deserializeDb2DatasourceAsRelationalDatasource() throws Exception {
+        String json = """
+                {
+                  "name": "DB2数据源",
+                  "dataSourceType": "db2",
+                  "dataSource": {
+                    "dataSourceType": "db2",
+                    "driverName": "com.ibm.db2.jcc.DB2Driver",
+                    "username": "db2inst1",
+                    "password": "encrypted",
+                    "url": "jdbc:db2://localhost:50000/sample"
+                  }
+                }
+                """;
+
+        DataSourceEntity entity = new ObjectMapper().readValue(json, DataSourceEntity.class);
+
+        assertEquals("db2", entity.getDataSourceType().getValue());
+        RelationalDatasource datasource = assertInstanceOf(RelationalDatasource.class, entity.getDataSource());
+        assertEquals("com.ibm.db2.jcc.DB2Driver", datasource.getDriverName());
+        assertEquals("jdbc:db2://localhost:50000/sample", datasource.getUrl());
+        assertEquals("db2inst1", datasource.getUsername());
+    }
 }

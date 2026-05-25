@@ -7,4 +7,5 @@ export const DataSourceType = {
   ORACLE: 'oracle',
   DORIS: 'doris',
   DAMENG: 'dameng',
+  DB2: 'db2',
 } as const

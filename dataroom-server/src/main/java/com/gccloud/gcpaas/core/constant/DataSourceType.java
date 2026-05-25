@@ -12,6 +12,7 @@ public enum DataSourceType implements IEnum<String> {
     ORACLE("oracle"),
     DORIS("doris"),
     DAMENG("dameng"),
+    DB2("db2"),
     SQLSERVER("sqlserver"),
     EXCEL("excel");
 
@@ -20,6 +21,7 @@ public enum DataSourceType implements IEnum<String> {
     public static final String ORACLE_TYPE = "oracle";
     public static final String DORIS_TYPE = "doris";
     public static final String DAMENG_TYPE = "dameng";
+    public static final String DB2_TYPE = "db2";
     public static final String SQLSERVER_TYPE = "sqlserver";
     public static final String EXCEL_TYPE = "excel";
 

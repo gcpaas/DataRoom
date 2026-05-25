@@ -29,6 +29,7 @@
         <shiro.version>2.0.6</shiro.version>
         <jjwt.version>0.12.6</jjwt.version>
         <dameng.jdbc.version>8.1.5.45</dameng.jdbc.version>
+        <db2.jdbc.version>12.1.4.0</db2.jdbc.version>
     </properties>
 
     <dependencies>
@@ -135,6 +136,11 @@
             <groupId>com.dameng</groupId>
             <artifactId>DmJdbcDriver8</artifactId>
             <version>${dameng.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.db2</groupId>
+            <artifactId>jcc</artifactId>
+            <version>${db2.jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

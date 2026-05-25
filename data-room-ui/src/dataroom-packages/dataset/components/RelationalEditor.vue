@@ -345,9 +345,6 @@ defineExpose({
     color: var(--el-text-color-secondary);
     font-size: 12px;
     font-weight: 400;
-    background-color: var(--el-fill-color-extra-light);
-    padding: 2px 8px;
-    border-radius: 9999px;
   }
 }
 </style>

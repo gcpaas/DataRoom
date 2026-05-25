@@ -11,6 +11,7 @@ import postgresqlImg from './assets/image/PostgreSQL占位符.png'
 import oracleImg from './assets/image/Oracle占位符.png'
 import dorisImg from './assets/image/Doris占位符.png'
 import damengImg from './assets/image/Dameng占位符.svg'
+import db2Img from './assets/image/DB2占位符.svg'
 import sqlserverImg from './assets/image/SqlServer占位符.png'
 import excelImg from './assets/image/Excel占位符.png'
 
@@ -77,6 +78,13 @@ const dataSourceTypeMap = {
     image: damengImg,
     description: '国产商业关系型数据库',
     component: defineAsyncComponent(() => import('./components/DamengEditor.vue')),
+  },
+  db2: {
+    name: 'DB2',
+    icon: 'DB2',
+    image: db2Img,
+    description: 'IBM企业级关系型数据库',
+    component: defineAsyncComponent(() => import('./components/Db2Editor.vue')),
   },
   sqlserver: {
     name: 'SqlServer',
@@ -163,6 +171,8 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
       defaultDriverName = 'com.mysql.cj.jdbc.Driver'
     } else if (dataSourceType === 'dameng') {
       defaultDriverName = 'dm.jdbc.driver.DmDriver'
+    } else if (dataSourceType === 'db2') {
+      defaultDriverName = 'com.ibm.db2.jcc.DB2Driver'
     } else if (dataSourceType === 'sqlserver') {
       defaultDriverName = 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
     }
