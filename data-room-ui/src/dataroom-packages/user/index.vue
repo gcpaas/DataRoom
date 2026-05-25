@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {ref, onMounted} from 'vue'
-import {ElMessage, ElMessageBox} from 'element-plus'
-import {Search, Plus} from '@element-plus/icons-vue'
-import {userApi, type UserEntity, type UserStatus} from './api'
+import { ref, onMounted } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Search, Plus } from '@element-plus/icons-vue'
+import { userApi, type UserEntity, type UserStatus } from './api'
 import UserEdit from './components/UserEdit.vue'
 
 const loading = ref(false)
@@ -20,15 +20,15 @@ type StatusTagType = 'primary' | 'success' | 'warning' | 'info' | 'danger'
 type UserPageResponse = UserEntity[] | { data?: UserEntity[]; total?: number }
 
 const statusMap: Record<UserStatus, { label: string; type: StatusTagType }> = {
-  'NORMAL': {label: '正常', type: 'success'},
-  'DISABLED': {label: '禁用', type: 'danger'},
-  'PASSWORD_EXPIRED': {label: '密码过期', type: 'warning'}
+  NORMAL: { label: '正常', type: 'success' },
+  DISABLED: { label: '禁用', type: 'danger' },
+  PASSWORD_EXPIRED: { label: '密码过期', type: 'warning' },
 }
 
 const roleNameMap: Record<string, string> = {
-  'manager': '管理员',
-  'developer': '开发者',
-  'sharer': '访问者'
+  manager: '管理员',
+  developer: '开发者',
+  sharer: '访问者',
 }
 
 const getStatusMeta = (status: UserStatus) => statusMap[status] || { label: status, type: 'info' }
@@ -47,23 +47,27 @@ const formatDate = (date: string | Date | null | undefined) => {
 
 const getUserList = () => {
   loading.value = true
-  userApi.page({
-    keyword: searchKeyword.value || undefined,
-    current: currentPage.value,
-    size: pageSize.value
-  }).then((res: UserPageResponse) => {
-    if (Array.isArray(res)) {
-      userList.value = res
-      total.value = res.length
-      return
-    }
-    userList.value = res.data || []
-    total.value = res.total || userList.value.length
-  }).catch((error: unknown) => {
-    console.error('查询用户失败:', error)
-  }).finally(() => {
-    loading.value = false
-  })
+  userApi
+    .page({
+      keyword: searchKeyword.value || undefined,
+      current: currentPage.value,
+      size: pageSize.value,
+    })
+    .then((res: UserPageResponse) => {
+      if (Array.isArray(res)) {
+        userList.value = res
+        total.value = res.length
+        return
+      }
+      userList.value = res.data || []
+      total.value = res.total || userList.value.length
+    })
+    .catch((error: unknown) => {
+      console.error('查询用户失败:', error)
+    })
+    .finally(() => {
+      loading.value = false
+    })
 }
 
 const handleSearch = () => {
@@ -104,17 +108,20 @@ const handleDelete = (row: UserEntity) => {
   ElMessageBox.confirm(`确定要删除用户「${row.username}」吗？`, '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    return userApi.delete(userId)
-  }).then(() => {
-    ElMessage.success('删除成功')
-    getUserList()
-  }).catch((error: unknown) => {
-    if (error !== 'cancel') {
-      console.error('删除失败:', error)
-    }
+    type: 'warning',
   })
+    .then(() => {
+      return userApi.delete(userId)
+    })
+    .then(() => {
+      ElMessage.success('删除成功')
+      getUserList()
+    })
+    .catch((error: unknown) => {
+      if (error !== 'cancel') {
+        console.error('删除失败:', error)
+      }
+    })
 }
 
 const handleEditSuccess = () => {
@@ -130,13 +137,7 @@ onMounted(() => {
   <div class="dr-user">
     <!-- 搜索区域 -->
     <div class="search-area">
-      <el-input
-        v-model="searchKeyword"
-        placeholder="请输入账号或用户名"
-        clearable
-        @keyup.enter="handleSearch"
-        style="width: 300px"
-      />
+      <el-input v-model="searchKeyword" class="search-input" placeholder="请输入账号或用户名" clearable @keyup.enter="handleSearch" />
       <div class="button-group">
         <el-button :icon="Search" @click="handleSearch">查询</el-button>
         <el-button @click="handleReset">重置</el-button>
@@ -146,29 +147,20 @@ onMounted(() => {
 
     <!-- 表格区域 -->
     <div class="table-area" v-loading="loading">
-      <el-table :data="userList" border style="width: 100%">
-        <el-table-column prop="account" label="账号" min-width="120"/>
-        <el-table-column prop="username" label="用户名" min-width="120"/>
-        <el-table-column prop="phone" label="联系电话" min-width="120"/>
+      <el-table :data="userList" border class="user-table">
+        <el-table-column prop="account" label="账号" min-width="120" />
+        <el-table-column prop="username" label="用户名" min-width="120" />
+        <el-table-column prop="phone" label="联系电话" min-width="120" />
         <el-table-column prop="role" label="角色" min-width="180">
           <template #default="{ row }">
-            <el-tag
-              v-for="r in (row.role ? row.role.split(',') : [])"
-              :key="r"
-              size="small"
-              style="margin-right: 4px; border-radius: 9999px; border: none;"
-            >
+            <el-tag v-for="r in row.role ? row.role.split(',') : []" :key="r" size="small" class="role-tag">
               {{ roleNameMap[r] || r }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" min-width="100">
           <template #default="{ row }">
-            <el-tag
-              :type="getStatusMeta(row.status).type"
-              size="small"
-              style="border-radius: 9999px; border: none;"
-            >
+            <el-tag :type="getStatusMeta(row.status).type" size="small" class="status-tag">
               {{ getStatusMeta(row.status).label }}
             </el-tag>
           </template>
@@ -201,11 +193,7 @@ onMounted(() => {
     </div>
 
     <!-- 编辑弹窗 -->
-    <UserEdit
-      v-model="editDialogVisible"
-      :user-id="editUserId"
-      @success="handleEditSuccess"
-    />
+    <UserEdit v-model="editDialogVisible" :user-id="editUserId" @success="handleEditSuccess" />
   </div>
 </template>
 
@@ -221,100 +209,51 @@ onMounted(() => {
     gap: 12px;
     margin-bottom: 16px;
     padding: 16px;
-    background: #fff;
+    background: var(--el-fill-color-blank);
     border-radius: 8px;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--el-border-color);
+    box-sizing: border-box;
+
+    .search-input {
+      width: 300px;
+    }
 
     .button-group {
       display: flex;
       gap: 8px;
-
-      :deep(.el-button) {
-        border-radius: 6px;
-        font-weight: 500;
-
-        &:focus-visible {
-          outline: none;
-          box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-        }
-      }
-
-      :deep(.el-button--primary) {
-        background-color: #3478f6;
-        border-color: #3478f6;
-
-        &:hover {
-          background-color: #2563eb;
-          border-color: #2563eb;
-        }
-      }
     }
   }
 
   .table-area {
     flex: 1;
-    background: #fff;
+    background: var(--el-fill-color-blank);
     border-radius: 8px;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--el-border-color);
     padding: 16px;
+    box-sizing: border-box;
     overflow: auto;
 
-    :deep(.el-table) {
-      font-size: 14px;
-      color: #1d2129;
-      border-radius: 6px;
-      overflow: hidden;
+    .user-table {
+      width: 100%;
+    }
 
-      th {
-        font-weight: 500;
-        color: #4e5969;
-        background-color: #f7f8fa;
-      }
+    .role-tag {
+      margin-right: 4px;
+      border-radius: 9999px;
+    }
 
-      td {
-        padding: 12px 0;
-      }
+    .role-tag:last-child {
+      margin-right: 0;
+    }
 
-      .el-button {
-        font-weight: 500;
-        padding: 4px 8px;
-      }
-
-      .el-button--primary {
-        color: #3478f6;
-      }
-
-      .el-button--danger {
-        color: #f53f3f;
-      }
+    .status-tag {
+      border-radius: 9999px;
     }
 
     .pagination {
       display: flex;
       justify-content: flex-end;
       margin-top: 16px;
-
-      :deep(.el-pagination) {
-        .el-pagination__total {
-          font-size: 14px;
-          color: #4e5969;
-        }
-
-        .el-pager li {
-          border-radius: 6px;
-          font-weight: 500;
-
-          &.is-active {
-            background-color: #3478f6;
-            color: #fff;
-          }
-        }
-
-        .el-pagination__jump {
-          font-size: 14px;
-          color: #4e5969;
-        }
-      }
     }
   }
 }

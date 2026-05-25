@@ -1,19 +1,24 @@
 <script setup lang="ts">
-import logo from '@/dataroom-packages/assets/logo.png';
-import userAvatar from '@/dataroom-packages/layout/assets/image/user.png';
-import {useRoute, useRouter} from "vue-router";
-import request from "@/dataroom-packages/_common/_request.ts";
-import {removeCookie} from "@/dataroom-packages/_common/_cookie";
-import {onMounted, ref} from "vue";
-import {ArrowDown} from '@element-plus/icons-vue';
+import logo from '@/dataroom-packages/assets/logo.png'
+import userAvatar from '@/dataroom-packages/layout/assets/image/user.png'
+import { useRoute, useRouter } from 'vue-router'
+import request from '@/dataroom-packages/_common/_request.ts'
+import { removeCookie } from '@/dataroom-packages/_common/_cookie'
+import { onMounted, ref } from 'vue'
+import { ArrowDown } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
+interface CurrentUser {
+  realName?: string
+  username?: string
+}
+
 const jumpMenu = (path: string) => {
   router.push({
-    path: path
+    path: path,
   })
-};
+}
 const username = ref('')
 
 // 判断菜单是否激活
@@ -36,8 +41,8 @@ const handleCommand = (command: string) => {
 }
 
 onMounted(() => {
-  request.get<any>(`/dataRoom/user/current`).then((res) => {
-    username.value = res.realName || res.username
+  request.get<CurrentUser>(`/dataRoom/user/current`).then((res) => {
+    username.value = res.realName || res.username || ''
   })
 })
 </script>
@@ -45,23 +50,23 @@ onMounted(() => {
 <template>
   <div class="dr-up-down-layout">
     <div class="header">
-      <div class="logo"><img :src="logo"></div>
+      <div class="logo" @click="jumpMenu('/')"><img :src="logo" /></div>
       <div class="title">DataRoom设计器</div>
       <div class="menu">
-        <div class="item" :class="{active: isMenuActive('/dataRoom/page')}" @click="jumpMenu('/dataRoom/page/index')">页面设计</div>
-        <div class="item" :class="{active: isMenuActive('/dataRoom/resource')}" @click="jumpMenu('/dataRoom/resource/index')">素材库</div>
-        <div class="item" :class="{active: isMenuActive('/dataRoom/dataSource')}" @click="jumpMenu('/dataRoom/dataSource/index')">数据源</div>
-        <div class="item" :class="{active: isMenuActive('/dataRoom/dataset')}" @click="jumpMenu('/dataRoom/dataset/index')">数据集</div>
-        <div class="item" :class="{active: isMenuActive('/dataRoom/map')}" @click="jumpMenu('/dataRoom/map/index')">地图</div>
+        <div class="item" :class="{ active: isMenuActive('/dataRoom/page') }" @click="jumpMenu('/dataRoom/page/index')">页面设计</div>
+        <div class="item" :class="{ active: isMenuActive('/dataRoom/resource') }" @click="jumpMenu('/dataRoom/resource/index')">素材库</div>
+        <div class="item" :class="{ active: isMenuActive('/dataRoom/dataSource') }" @click="jumpMenu('/dataRoom/dataSource/index')">数据源</div>
+        <div class="item" :class="{ active: isMenuActive('/dataRoom/dataset') }" @click="jumpMenu('/dataRoom/dataset/index')">数据集</div>
+        <div class="item" :class="{ active: isMenuActive('/dataRoom/map') }" @click="jumpMenu('/dataRoom/map/index')">地图</div>
       </div>
       <a class="help-link" href="https://www.yuque.com/gc-starter/dataroom-plus/start" target="_blank" rel="noopener noreferrer">帮助</a>
       <div class="user">
         <el-dropdown @command="handleCommand">
-          <span class="el-dropdown-link">
-            <img :src="userAvatar" class="user-avatar" alt="用户头像">
+          <span class="user-dropdown-trigger">
+            <img :src="userAvatar" class="user-avatar" alt="用户头像" />
             {{ username }}
-            <el-icon class="el-icon--right">
-              <arrow-down/>
+            <el-icon class="user-dropdown-icon">
+              <arrow-down />
             </el-icon>
           </span>
           <template #dropdown>
@@ -74,7 +79,7 @@ onMounted(() => {
         </el-dropdown>
       </div>
     </div>
-    <RouterView class="router-view"/>
+    <RouterView class="router-view" />
   </div>
 </template>
 
@@ -82,28 +87,33 @@ onMounted(() => {
 .dr-up-down-layout {
   height: 100vh;
   width: 100%;
-  background-color: #f7f8fa;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--el-bg-color-page);
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
   & .router-view {
     padding: 16px;
     box-sizing: border-box;
-    background-color: #ffffff;
+    background-color: var(--el-fill-color-blank);
     margin: 16px;
     border-radius: 8px;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--el-border-color);
     height: calc(100vh - 48px - 32px);
     overflow: hidden;
   }
 
   & .header {
-    background-color: #ffffff;
+    background-color: var(--el-bg-color);
     height: 48px;
     width: 100%;
     line-height: 48px;
-    border-bottom: none;
-    box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.08);
-    color: #1d2129;
+    border-bottom: 1px solid var(--el-border-color);
+    color: var(--el-text-color-primary);
     font-weight: 500;
     display: flex;
     align-items: center;
@@ -113,6 +123,7 @@ onMounted(() => {
     & .logo {
       display: flex;
       align-items: center;
+      cursor: pointer;
 
       & img {
         height: 28px;
@@ -123,8 +134,8 @@ onMounted(() => {
       margin-left: 16px;
       font-size: 16px;
       font-weight: 600;
-      color: #1d2129;
-      letter-spacing: -0.2px;
+      color: var(--el-text-color-primary);
+      letter-spacing: 0;
     }
 
     & .menu {
@@ -132,33 +143,41 @@ onMounted(() => {
       display: flex;
       align-items: center;
       gap: 4px;
+      height: 100%;
 
       & .item {
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        box-sizing: border-box;
         font-size: 14px;
         font-weight: 500;
-        color: #1d2129;
-        padding: 8px 12px;
+        line-height: 1;
+        color: var(--el-text-color-primary);
+        padding: 0 12px;
         border-radius: 6px;
-        transition: background-color 0.2s ease, color 0.2s ease;
+        transition:
+          background-color 0.2s ease,
+          color 0.2s ease;
         position: relative;
 
         &:hover {
-          background-color: #f7f8fa;
+          background-color: var(--el-fill-color-lighter);
         }
 
         &.active {
-          color: #3478f6;
+          color: var(--el-color-primary);
 
           &::after {
             content: '';
             position: absolute;
-            bottom: -2px;
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             width: calc(100% - 24px);
             height: 2px;
-            background-color: #3478f6;
+            background-color: var(--el-color-primary);
             border-radius: 1px;
           }
         }
@@ -168,7 +187,7 @@ onMounted(() => {
     & .help-link {
       font-size: 14px;
       font-weight: 500;
-      color: #4e5969;
+      color: var(--el-text-color-regular);
       text-decoration: none;
       margin-right: 16px;
       margin-left: 16px;
@@ -180,21 +199,21 @@ onMounted(() => {
       padding: 4px 8px;
 
       &:hover {
-        color: #3478f6;
-        background-color: #eff6ff;
+        color: var(--el-color-primary);
+        background-color: var(--el-color-primary-light-9);
       }
     }
 
     & .user {
       font-size: 14px;
       font-weight: 500;
-      color: #1d2129;
+      color: var(--el-text-color-primary);
       display: flex;
       align-items: center;
       justify-content: flex-end;
       flex-shrink: 0;
 
-      .el-dropdown-link {
+      .user-dropdown-trigger {
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -204,18 +223,16 @@ onMounted(() => {
         transition: color 0.2s ease;
         line-height: 1;
         outline: none;
-        color: #1d2129;
+        color: var(--el-text-color-primary);
         border-radius: 6px;
         padding: 4px 8px;
 
         &:hover {
-          color: #3478f6;
+          color: var(--el-color-primary);
         }
 
         &:focus {
           outline: none;
-          box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #3478f6;
-          border-radius: 6px;
         }
 
         .user-avatar {
@@ -224,12 +241,12 @@ onMounted(() => {
           border-radius: 50%;
           margin-right: 8px;
           object-fit: cover;
-          box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+          border: 1px solid var(--el-border-color-light);
         }
 
-        .el-icon--right {
+        .user-dropdown-icon {
           margin-left: 4px;
-          color: #86909c;
+          color: var(--el-text-color-secondary);
         }
       }
     }

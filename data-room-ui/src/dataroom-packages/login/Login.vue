@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import {ref, reactive, onMounted} from 'vue'
-import {useRouter} from 'vue-router'
-import {ElMessage} from 'element-plus'
-import {User, Lock} from '@element-plus/icons-vue'
-import {setCookie} from '@/dataroom-packages/_common/_cookie'
+import { ref, reactive, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { User, Lock } from '@element-plus/icons-vue'
+import { setCookie } from '@/dataroom-packages/_common/_cookie'
 import request from '@/dataroom-packages/_common/_request.ts'
-import {encryptByRsa} from '@/dataroom-packages/_common/_encrypt'
+import { encryptByRsa } from '@/dataroom-packages/_common/_encrypt'
 import logo from '@/dataroom-packages/assets/logo.png'
 import axios from 'axios'
+
+defineOptions({
+  name: 'DataRoomLogin',
+})
 
 const router = useRouter()
 
@@ -15,7 +19,7 @@ const router = useRouter()
 const loginForm = reactive({
   username: '',
   password: '',
-  captchaCode: ''
+  captchaCode: '',
 })
 
 // 验证码相关
@@ -25,16 +29,14 @@ const captchaKey = ref('')
 // 表单验证规则
 const rules = {
   username: [
-    {required: true, message: '请输入用户名', trigger: 'blur'},
-    {min: 5, max: 50, message: '用户名长度在 5 到 50 个字符', trigger: 'blur'}
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 5, max: 50, message: '用户名长度在 5 到 50 个字符', trigger: 'blur' },
   ],
   password: [
-    {required: true, message: '请输入密码', trigger: 'blur'},
-    {min: 8, max: 50, message: '密码长度在 8 到 50 个字符', trigger: 'blur'}
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 8, max: 50, message: '密码长度在 8 到 50 个字符', trigger: 'blur' },
   ],
-  captchaCode: [
-    {required: true, message: '请输入验证码', trigger: 'blur'}
-  ]
+  captchaCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
 }
 
 const formRef = ref()
@@ -45,7 +47,7 @@ const refreshCaptcha = async () => {
   try {
     const baseUrl = import.meta.env.VITE_API_BASE_URL || ''
     const response = await axios.get(`${baseUrl}/dataRoom/captcha/generate`, {
-      responseType: 'blob'
+      responseType: 'blob',
     })
     // 从响应头获取 captchaKey
     captchaKey.value = response.headers['captcha-key'] || ''
@@ -107,7 +109,7 @@ const handleLogin = async () => {
           username: loginForm.username,
           password: encryptedPassword,
           captchaKey: captchaKey.value,
-          captchaCode: loginForm.captchaCode
+          captchaCode: loginForm.captchaCode,
         })
 
         // 保存token到cookie
@@ -119,7 +121,7 @@ const handleLogin = async () => {
         setTimeout(() => {
           router.push('/')
         }, 500)
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('登录失败:', error)
         // 登录失败时刷新验证码
         refreshCaptcha()
@@ -144,7 +146,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
     <!-- 左上角Logo和标题 -->
     <div class="login-header">
       <div class="logo-wrapper">
-        <img :src="logo" alt="Logo" class="logo"/>
+        <img :src="logo" alt="Logo" class="logo" />
         <span class="title">DataRoom设计器</span>
       </div>
     </div>
@@ -157,62 +159,24 @@ const handleKeyPress = (event: KeyboardEvent) => {
           <p>DataRoom 数据可视化平台</p>
         </div>
 
-        <el-form
-          ref="formRef"
-          :model="loginForm"
-          :rules="rules"
-          class="login-form"
-          @keypress="handleKeyPress"
-        >
-          <el-form-item prop="username">
-            <el-input
-              v-model="loginForm.username"
-              placeholder="请输入用户名"
-              size="large"
-              clearable
-              :prefix-icon="User"
-            />
+        <el-form ref="formRef" :model="loginForm" :rules="rules" class="login-form" @keypress="handleKeyPress">
+          <el-form-item prop="username" class="login-form-item">
+            <el-input v-model="loginForm.username" placeholder="请输入用户名" size="large" clearable :prefix-icon="User" />
           </el-form-item>
 
-          <el-form-item prop="password">
-            <el-input
-              v-model="loginForm.password"
-              type="password"
-              placeholder="请输入密码"
-              size="large"
-              show-password
-              clearable
-              :prefix-icon="Lock"
-            />
+          <el-form-item prop="password" class="login-form-item">
+            <el-input v-model="loginForm.password" type="password" placeholder="请输入密码" size="large" show-password clearable :prefix-icon="Lock" />
           </el-form-item>
 
-          <el-form-item prop="captchaCode">
+          <el-form-item prop="captchaCode" class="login-form-item">
             <div class="captcha-wrapper">
-              <el-input
-                v-model="loginForm.captchaCode"
-                placeholder="请输入验证码"
-                size="large"
-                clearable
-                class="captcha-input"
-              />
-              <img
-                :src="captchaUrl"
-                alt="验证码"
-                class="captcha-image"
-                title="点击刷新验证码"
-                @click="refreshCaptcha"
-              />
+              <el-input v-model="loginForm.captchaCode" placeholder="请输入验证码" size="large" clearable class="captcha-input" />
+              <img :src="captchaUrl" alt="验证码" class="captcha-image" title="点击刷新验证码" @click="refreshCaptcha" />
             </div>
           </el-form-item>
 
-          <el-form-item>
-            <el-button
-              type="primary"
-              size="large"
-              :loading="loading"
-              class="login-button"
-              @click="handleLogin"
-            >
+          <el-form-item class="login-form-item">
+            <el-button type="primary" size="large" :loading="loading" class="login-button" @click="handleLogin">
               {{ loading ? '登录中...' : '登录' }}
             </el-button>
           </el-form-item>
@@ -240,10 +204,16 @@ const handleKeyPress = (event: KeyboardEvent) => {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: #f7f8fa;
+  background: var(--el-bg-color-page);
   display: flex;
   flex-direction: column;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
 
   .login-header {
     position: absolute;
@@ -265,8 +235,8 @@ const handleKeyPress = (event: KeyboardEvent) => {
       .title {
         font-size: 18px;
         font-weight: 600;
-        color: #1d2129;
-        letter-spacing: -0.2px;
+        color: var(--el-text-color-primary);
+        letter-spacing: 0;
       }
     }
   }
@@ -282,12 +252,11 @@ const handleKeyPress = (event: KeyboardEvent) => {
     .login-box {
       width: 100%;
       max-width: 420px;
-      background: #ffffff;
+      background: var(--el-fill-color-blank);
       border-radius: 8px;
+      border: 1px solid var(--el-border-color);
+      box-sizing: border-box;
       padding: 48px 40px;
-      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08),
-        0px 4px 8px rgba(0, 0, 0, 0.06),
-        0px 1px 3px rgba(0, 0, 0, 0.04);
       animation: slideUp 0.4s ease-out;
 
       .login-title {
@@ -297,21 +266,21 @@ const handleKeyPress = (event: KeyboardEvent) => {
         h2 {
           font-size: 28px;
           font-weight: 600;
-          color: #1d2129;
+          color: var(--el-text-color-primary);
           margin: 0 0 10px 0;
-          letter-spacing: -0.84px;
+          letter-spacing: 0;
         }
 
         p {
           font-size: 14px;
           font-weight: 400;
-          color: #4e5969;
+          color: var(--el-text-color-regular);
           margin: 0;
         }
       }
 
       .login-form {
-        :deep(.el-form-item) {
+        .login-form-item {
           margin-bottom: 22px;
 
           &:last-child {
@@ -319,53 +288,8 @@ const handleKeyPress = (event: KeyboardEvent) => {
           }
         }
 
-        :deep(.el-input) {
-          .el-input__wrapper {
-            padding: 10px 14px;
-            border-radius: 6px;
-            box-shadow: none;
-            border: 1px solid #e5e6eb;
-            transition: border-color 0.2s, box-shadow 0.2s;
-
-            &:hover {
-              border-color: #c9cdd4;
-            }
-
-            &.is-focus {
-              border-color: #3478f6;
-              box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-            }
-          }
-
-          .el-input__inner {
-            font-size: 14px;
-            font-weight: 400;
-            color: #1d2129;
-
-            &::placeholder {
-              color: #86909c;
-            }
-          }
-        }
-
         .login-button {
           width: 100%;
-          height: 44px;
-          font-size: 15px;
-          font-weight: 500;
-          border-radius: 6px;
-          background: #3478f6;
-          border: none;
-          color: #ffffff;
-          transition: background-color 0.2s;
-
-          &:hover {
-            background: #2563eb;
-          }
-
-          &:active {
-            background: #1d4ed8;
-          }
         }
 
         .captcha-wrapper {
@@ -382,8 +306,8 @@ const handleKeyPress = (event: KeyboardEvent) => {
             height: 40px;
             border-radius: 6px;
             cursor: pointer;
-            box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-            border: none;
+            border: 1px solid var(--el-border-color);
+            box-sizing: border-box;
             transition: opacity 0.2s;
 
             &:hover {
@@ -408,7 +332,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
       margin: 0;
       font-size: 13px;
       font-weight: 400;
-      color: #86909c;
+      color: var(--el-text-color-secondary);
     }
   }
 
@@ -454,7 +378,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
         .login-title {
           h2 {
             font-size: 24px;
-            letter-spacing: -0.48px;
+            letter-spacing: 0;
           }
 
           p {

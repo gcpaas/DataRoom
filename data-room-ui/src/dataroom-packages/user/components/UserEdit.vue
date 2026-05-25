@@ -12,7 +12,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
-  'success': []
+  success: []
 }>()
 
 const formRef = ref<FormInstance>()
@@ -26,7 +26,7 @@ const formData = reactive<UserDTO>({
   password: '',
   phone: '',
   role: '',
-  status: 'NORMAL' as UserStatus
+  status: 'NORMAL' as UserStatus,
 })
 
 const confirmPassword = ref('')
@@ -36,7 +36,7 @@ const isEdit = ref(false)
 const statusOptions = [
   { value: 'NORMAL', label: '正常' },
   { value: 'DISABLED', label: '禁用' },
-  { value: 'PASSWORD_EXPIRED', label: '密码过期' }
+  { value: 'PASSWORD_EXPIRED', label: '密码过期' },
 ]
 
 // 监听弹窗打开/关闭
@@ -74,13 +74,13 @@ watch(
         resetFields()
       }
     }
-  }
+  },
 )
 
 const rules = reactive<FormRules<UserDTO>>({
   account: [{ required: true, message: '请输入账号', trigger: 'blur' }],
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  status: [{ required: true, message: '请选择状态', trigger: 'change' }]
+  status: [{ required: true, message: '请选择状态', trigger: 'change' }],
 })
 
 const handleClose = () => {
@@ -148,78 +148,38 @@ const handleRoleChange = (values: string[]) => {
 }
 
 defineExpose({
-  resetFields
+  resetFields,
 })
 </script>
 
 <template>
-  <el-dialog
-    :model-value="modelValue"
-    :title="isEdit ? '编辑用户' : '新增用户'"
-    width="500px"
-    :close-on-click-modal="false"
-    @close="handleClose"
-  >
-    <el-form
-      ref="formRef"
-      :model="formData"
-      :rules="rules"
-      label-width="100px"
-      v-loading="loading"
-    >
+  <el-dialog :model-value="modelValue" :title="isEdit ? '编辑用户' : '新增用户'" width="500px" :close-on-click-modal="false" @close="handleClose">
+    <el-form ref="formRef" :model="formData" :rules="rules" label-width="100px" class="user-edit-form" v-loading="loading">
       <el-form-item label="账号" prop="account">
-        <el-input
-          v-model="formData.account"
-          placeholder="请输入账号"
-          :disabled="isEdit"
-          clearable
-        />
+        <el-input v-model="formData.account" placeholder="请输入账号" :disabled="isEdit" clearable />
       </el-form-item>
       <el-form-item label="用户名" prop="username">
         <el-input v-model="formData.username" placeholder="请输入用户名" clearable />
       </el-form-item>
       <el-form-item label="密码" :prop="isEdit ? '' : 'password'">
-        <el-input
-          v-model="formData.password"
-          :placeholder="isEdit ? '留空则不修改密码' : '请输入密码'"
-          show-password
-          clearable
-        />
+        <el-input v-model="formData.password" :placeholder="isEdit ? '留空则不修改密码' : '请输入密码'" show-password clearable />
       </el-form-item>
       <el-form-item label="确认密码" v-if="formData.password || !isEdit">
-        <el-input
-          v-model="confirmPassword"
-          :placeholder="isEdit ? '请再次输入密码' : '请再次输入密码'"
-          show-password
-          clearable
-        />
+        <el-input v-model="confirmPassword" :placeholder="isEdit ? '请再次输入密码' : '请再次输入密码'" show-password clearable />
       </el-form-item>
       <el-form-item label="联系电话">
         <el-input v-model="formData.phone" placeholder="请输入联系电话" clearable />
       </el-form-item>
       <el-form-item label="角色">
-        <el-checkbox-group
-          :model-value="getSelectedRoles()"
-          @update:model-value="handleRoleChange"
-        >
-          <el-checkbox
-            v-for="role in roles"
-            :key="role.code"
-            :value="role.code"
-            :disabled="role.code === 'sharer'"
-          >
+        <el-checkbox-group :model-value="getSelectedRoles()" class="role-checkbox-group" @update:model-value="handleRoleChange">
+          <el-checkbox v-for="role in roles" :key="role.code" :value="role.code" :disabled="role.code === 'sharer'">
             {{ role.name }}
           </el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select v-model="formData.status" placeholder="请选择状态">
-          <el-option
-            v-for="item in statusOptions"
-            :key="item.value"
-            :value="item.value"
-            :label="item.label"
-          />
+        <el-select v-model="formData.status" placeholder="请选择状态" class="status-select">
+          <el-option v-for="item in statusOptions" :key="item.value" :value="item.value" :label="item.label" />
         </el-select>
       </el-form-item>
     </el-form>
@@ -233,107 +193,15 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
-.el-dialog {
-  border-radius: 8px;
-
-  :deep(.el-dialog__header) {
-    padding: 20px 24px 16px;
-    border-bottom: 1px solid #e5e6eb;
-    margin-right: 0;
-
-    .el-dialog__title {
-      font-size: 18px;
-      font-weight: 600;
-      color: #1d2129;
-    }
-  }
-
-  :deep(.el-dialog__body) {
-    padding: 24px;
-  }
-
-  :deep(.el-dialog__footer) {
-    padding: 16px 24px;
-    border-top: 1px solid #e5e6eb;
-  }
-}
-
-.el-form {
-  :deep(.el-form-item__label) {
-    font-size: 14px;
-    font-weight: 500;
-    color: #4e5969;
-  }
-
-  :deep(.el-input__wrapper) {
-    border-radius: 6px;
-    box-shadow: 0 0 0 1px #e5e6eb inset;
-
-    &:focus-within {
-      box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-    }
-  }
-
-  :deep(.el-input.is-disabled .el-input__wrapper) {
-    background-color: #f7f8fa;
-    box-shadow: none;
-  }
-
-  :deep(.el-select) {
-    width: 100%;
-
-    .el-input__wrapper {
-      border-radius: 6px;
-      box-shadow: 0 0 0 1px #e5e6eb inset;
-
-      &:focus-within {
-        box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-      }
-    }
-  }
-
-  :deep(.el-checkbox-group) {
+.user-edit-form {
+  .role-checkbox-group {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-
-    .el-checkbox {
-      margin-right: 0;
-
-      .el-checkbox__label {
-        font-size: 14px;
-        color: #1d2129;
-      }
-    }
-  }
-}
-
-.el-button {
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-.el-button--primary {
-  background-color: #3478f6;
-  border-color: #3478f6;
-
-  &:hover {
-    background-color: #2563eb;
-    border-color: #2563eb;
   }
 
-  &:focus {
-    background-color: #2563eb;
-    border-color: #2563eb;
-  }
-}
-
-.el-button--default {
-  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-  border: none;
-
-  &:hover {
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.04);
+  .status-select {
+    width: 100%;
   }
 }
 </style>
