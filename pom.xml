@@ -28,6 +28,7 @@
         <jackson.core.version>2.19.4</jackson.core.version>
         <shiro.version>2.0.6</shiro.version>
         <jjwt.version>0.12.6</jjwt.version>
+        <dameng.jdbc.version>8.1.5.45</dameng.jdbc.version>
     </properties>
 
     <dependencies>
@@ -129,6 +130,11 @@
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
             <version>12.8.1.jre11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dameng</groupId>
+            <artifactId>DmJdbcDriver8</artifactId>
+            <version>${dameng.jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

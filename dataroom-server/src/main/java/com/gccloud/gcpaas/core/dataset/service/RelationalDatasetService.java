@@ -88,6 +88,7 @@ public class RelationalDatasetService extends AbstractDatasetService {
                 // 关系型数据源使用配置的连接信息
                 String privateKey = dataRoomConfig.getPrivateKey();
                 String pwd = RsaUtils.decryptByPrivateKey(relationalDs.getPassword(), privateKey);
+                Class.forName(relationalDs.getDriverName());
                 connection = DriverManager.getConnection(relationalDs.getUrl(), relationalDs.getUsername(), pwd);
             } else {
                 throw new DataRoomException("不支持的数据源类型");

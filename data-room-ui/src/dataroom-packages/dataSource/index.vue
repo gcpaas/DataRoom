@@ -10,6 +10,7 @@ import mysqlImg from './assets/image/MySQL占位符.png'
 import postgresqlImg from './assets/image/PostgreSQL占位符.png'
 import oracleImg from './assets/image/Oracle占位符.png'
 import dorisImg from './assets/image/Doris占位符.png'
+import damengImg from './assets/image/Dameng占位符.svg'
 import sqlserverImg from './assets/image/SqlServer占位符.png'
 import excelImg from './assets/image/Excel占位符.png'
 
@@ -27,8 +28,8 @@ const currentDataSource = ref<DataSourceEntity>({
     driverName: 'com.mysql.cj.jdbc.Driver',
     username: '',
     password: '',
-    url: ''
-  }
+    url: '',
+  },
 })
 const editorRef = ref()
 
@@ -47,43 +48,50 @@ const dataSourceTypeMap = {
     icon: '🐬',
     image: mysqlImg,
     description: '开源关系型数据库，广泛应用',
-    component: defineAsyncComponent(() => import('./components/MysqlEditor.vue'))
+    component: defineAsyncComponent(() => import('./components/MysqlEditor.vue')),
   },
   postgresql: {
     name: 'PostgreSQL',
     icon: '🐘',
     image: postgresqlImg,
     description: '功能强大的开源对象关系数据库',
-    component: defineAsyncComponent(() => import('./components/PostgresqlEditor.vue'))
+    component: defineAsyncComponent(() => import('./components/PostgresqlEditor.vue')),
   },
   oracle: {
     name: 'Oracle',
     icon: '🔷',
     image: oracleImg,
     description: '企业级商业关系型数据库',
-    component: defineAsyncComponent(() => import('./components/OracleEditor.vue'))
+    component: defineAsyncComponent(() => import('./components/OracleEditor.vue')),
   },
   doris: {
     name: 'Doris',
     icon: '🔶',
     image: dorisImg,
     description: 'Apache Doris实时分析数据仓库',
-    component: defineAsyncComponent(() => import('./components/DorisEditor.vue'))
+    component: defineAsyncComponent(() => import('./components/DorisEditor.vue')),
+  },
+  dameng: {
+    name: '达梦',
+    icon: 'DM',
+    image: damengImg,
+    description: '国产商业关系型数据库',
+    component: defineAsyncComponent(() => import('./components/DamengEditor.vue')),
   },
   sqlserver: {
     name: 'SqlServer',
     icon: '🔷',
     image: sqlserverImg,
     description: 'Microsoft SQL Server关系型数据库',
-    component: defineAsyncComponent(() => import('./components/SqlServerEditor.vue'))
+    component: defineAsyncComponent(() => import('./components/SqlServerEditor.vue')),
   },
   excel: {
     name: 'Excel',
     icon: '📊',
     image: excelImg,
     description: '支持 xlsx 和 csv 格式文件',
-    component: defineAsyncComponent(() => import('./components/ExcelEditor.vue'))
-  }
+    component: defineAsyncComponent(() => import('./components/ExcelEditor.vue')),
+  },
 } as const
 
 type DataSourceTypeKey = keyof typeof dataSourceTypeMap
@@ -139,8 +147,8 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
         columns: [],
         originalFileName: '',
         rowCount: 0,
-        importMode: 'overwrite'
-      } as ExcelDataSource
+        importMode: 'overwrite',
+      } as ExcelDataSource,
     }
   } else {
     // 根据数据源类型设置默认驱动名称
@@ -153,6 +161,8 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
       defaultDriverName = 'oracle.jdbc.driver.OracleDriver'
     } else if (dataSourceType === 'doris') {
       defaultDriverName = 'com.mysql.cj.jdbc.Driver'
+    } else if (dataSourceType === 'dameng') {
+      defaultDriverName = 'dm.jdbc.driver.DmDriver'
     } else if (dataSourceType === 'sqlserver') {
       defaultDriverName = 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
     }
@@ -165,8 +175,8 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
         driverName: defaultDriverName,
         username: '',
         password: '',
-        url: ''
-      }
+        url: '',
+      },
     }
   }
   dialogVisible.value = true
@@ -194,7 +204,7 @@ const handleDelete = async (item: DataSourceEntity) => {
     await ElMessageBox.confirm(`确定要删除${item.name}吗？`, '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
-      type: 'warning'
+      type: 'warning',
     })
     await dataSourceApi.delete(item.code!)
     ElMessage.success('删除成功')
@@ -292,7 +302,7 @@ const handleSaveExcel = async () => {
       tableName: tableName,
       uploadId: editorData.uploadId,
       columns: editorData.columns,
-      originalFileName: editorData.originalFileName
+      originalFileName: editorData.originalFileName,
     })
     ElMessage.success('创建成功')
 
@@ -306,12 +316,12 @@ const handleSaveExcel = async () => {
             VARCHAR: 'String',
             INTEGER: 'int',
             DECIMAL: 'String',
-            DATE: 'Date'
+            DATE: 'Date',
           }
           return {
             name: col.name,
             type: typeMap[col.type] || 'String',
-            desc: col.originalHeader || col.name
+            desc: col.originalHeader || col.name,
           }
         })
 
@@ -321,9 +331,9 @@ const handleSaveExcel = async () => {
           datasetType: 'relational',
           dataset: {
             datasetType: 'relational',
-            sql: `SELECT * FROM ${tableName} LIMIT 100`
+            sql: `SELECT * FROM ${tableName} LIMIT 100`,
           },
-          outputList
+          outputList,
         })
         ElMessage.success('已自动创建同名数据集')
       }
@@ -374,13 +384,7 @@ onMounted(() => {
   <div class="dr-data-source">
     <div class="page-header">
       <div class="search-box">
-        <el-input
-          v-model="searchName"
-          placeholder="请输入数据源名称"
-          :prefix-icon="Search"
-          clearable
-          @keyup.enter="getDataSourceList"
-        />
+        <el-input v-model="searchName" placeholder="请输入数据源名称" :prefix-icon="Search" clearable @keyup.enter="getDataSourceList" />
       </div>
       <div class="button-group">
         <el-button :icon="Search" @click="getDataSourceList">查询</el-button>
@@ -433,12 +437,7 @@ onMounted(() => {
     <!-- 数据源类型选择对话框 -->
     <el-dialog v-model="typeSelectDialogVisible" title="选择数据源类型" width="680px" :close-on-click-modal="true">
       <div class="type-select-cards">
-        <div
-          v-for="(item, key) in dataSourceTypeMap"
-          :key="key"
-          class="type-card"
-          @click="handleSelectType(key as DataSourceTypeKey)"
-        >
+        <div v-for="(item, key) in dataSourceTypeMap" :key="key" class="type-card" @click="handleSelectType(key as DataSourceTypeKey)">
           <div class="type-card-image">
             <img :src="item.image" :alt="item.name" />
           </div>
@@ -451,17 +450,8 @@ onMounted(() => {
     </el-dialog>
 
     <!-- 编辑对话框 -->
-    <el-dialog
-      v-model="dialogVisible"
-      :title="dialogTitle"
-      :width="currentDataSource.dataSourceType === 'excel' ? '800px' : '600px'"
-      :close-on-click-modal="false"
-    >
-      <component
-        :is="dataSourceTypeMap[currentDataSource.dataSourceType as DataSourceTypeKey].component"
-        v-model="currentDataSource"
-        ref="editorRef"
-      />
+    <el-dialog v-model="dialogVisible" :title="dialogTitle" :width="currentDataSource.dataSourceType === 'excel' ? '800px' : '600px'" :close-on-click-modal="false">
+      <component :is="dataSourceTypeMap[currentDataSource.dataSourceType as DataSourceTypeKey].component" v-model="currentDataSource" ref="editorRef" />
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取消</el-button>
@@ -471,12 +461,7 @@ onMounted(() => {
     </el-dialog>
 
     <!-- Excel查看数据对话框 -->
-    <ExcelViewData
-      v-model:visible="viewDataVisible"
-      :data-source-code="viewDataCode"
-      :data-source-name="viewDataName"
-      :columns="viewDataColumns"
-    />
+    <ExcelViewData v-model:visible="viewDataVisible" :data-source-code="viewDataCode" :data-source-name="viewDataName" :columns="viewDataColumns" />
   </div>
 </template>
 
@@ -518,7 +503,9 @@ onMounted(() => {
         border: 1px solid var(--el-border-color-light);
         border-radius: 8px;
         overflow: hidden;
-        transition: border-color 0.2s ease, background-color 0.2s ease;
+        transition:
+          border-color 0.2s ease,
+          background-color 0.2s ease;
         cursor: pointer;
 
         &:hover {
@@ -609,7 +596,9 @@ onMounted(() => {
     border-radius: 8px;
     padding: 20px 16px;
     cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
