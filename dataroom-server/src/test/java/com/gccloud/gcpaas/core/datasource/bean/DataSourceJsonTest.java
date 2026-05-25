@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class DataSourceJsonTest {
 
@@ -47,6 +48,76 @@ class DataSourceJsonTest {
                 Arguments.of("clickhouse", "com.clickhouse.jdbc.ClickHouseDriver", "default", "jdbc:clickhouse://localhost:8123/default"),
                 Arguments.of("mariadb", "org.mariadb.jdbc.Driver", "root", "jdbc:mariadb://localhost:3306/test")
         );
+    }
+
+    @Test
+    void deserializeEsDatasourceAsApiDatasourceAndDesensitizesSecrets() throws Exception {
+        String json = """
+                {
+                  "name": "ES数据源",
+                  "dataSourceType": "es",
+                  "dataSource": {
+                    "dataSourceType": "es",
+                    "baseUrl": "http://localhost:9200",
+                    "authType": "basic",
+                    "username": "elastic",
+                    "password": "encryptedPassword",
+                    "bearerToken": "encryptedBearer",
+                    "apiKey": "encryptedApiKey"
+                  }
+                }
+                """;
+
+        DataSourceEntity entity = new ObjectMapper().readValue(json, DataSourceEntity.class);
+
+        assertEquals("es", entity.getDataSourceType().getValue());
+        BaseDataSource datasource = entity.getDataSource();
+        assertEquals("EsDatasource", datasource.getClass().getSimpleName());
+        assertEquals("http://localhost:9200", fieldValue(datasource, "baseUrl"));
+        assertEquals("basic", fieldValue(datasource, "authType"));
+        assertEquals("elastic", fieldValue(datasource, "username"));
+        assertEquals("encryptedPassword", fieldValue(datasource, "password"));
+        assertEquals("encryptedBearer", fieldValue(datasource, "bearerToken"));
+        assertEquals("encryptedApiKey", fieldValue(datasource, "apiKey"));
+
+        datasource.desensitize();
+
+        assertNull(fieldValue(datasource, "password"));
+        assertNull(fieldValue(datasource, "bearerToken"));
+        assertNull(fieldValue(datasource, "apiKey"));
+    }
+
+    @Test
+    void esDatasourcePreservesExistingSecretsWhenUpdatePayloadLeavesThemBlank() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        BaseDataSource dbDatasource = objectMapper.readValue("""
+                {
+                  "dataSourceType": "es",
+                  "baseUrl": "http://localhost:9200",
+                  "authType": "apiKey",
+                  "username": "elastic",
+                  "password": "oldPassword",
+                  "bearerToken": "oldBearer",
+                  "apiKey": "oldApiKey"
+                }
+                """, BaseDataSource.class);
+        BaseDataSource updateDatasource = objectMapper.readValue("""
+                {
+                  "dataSourceType": "es",
+                  "baseUrl": "http://localhost:9201",
+                  "authType": "apiKey",
+                  "username": "elastic",
+                  "password": "",
+                  "bearerToken": "",
+                  "apiKey": ""
+                }
+                """, BaseDataSource.class);
+
+        updateDatasource.updatedSensitive(dbDatasource);
+
+        assertEquals("oldPassword", fieldValue(updateDatasource, "password"));
+        assertEquals("oldBearer", fieldValue(updateDatasource, "bearerToken"));
+        assertEquals("oldApiKey", fieldValue(updateDatasource, "apiKey"));
     }
 
     @Test
@@ -147,5 +218,19 @@ class DataSourceJsonTest {
         assertEquals("com.mysql.cj.jdbc.Driver", datasource.getDriverName());
         assertEquals("jdbc:mysql://localhost:3306/test", datasource.getUrl());
         assertEquals("goldendb", datasource.getUsername());
+    }
+
+    private static Object fieldValue(Object target, String fieldName) throws Exception {
+        Class<?> clazz = target.getClass();
+        while (clazz != null && clazz != Object.class) {
+            try {
+                java.lang.reflect.Field field = clazz.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                return field.get(target);
+            } catch (NoSuchFieldException ignored) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+        throw new NoSuchFieldException(fieldName);
     }
 }

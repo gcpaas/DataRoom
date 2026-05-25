@@ -1,5 +1,6 @@
 package com.gccloud.gcpaas.core.dataset;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -21,5 +22,6 @@ public class DatasetRunRequest {
     /**
      * 入参列表
      */
+    @JsonAlias("paramMap")
     private Map<String, Object> inputParam = new HashMap<>();
 }

@@ -19,6 +19,7 @@ import mongodbImg from './assets/image/MongoDB.svg'
 import kingbaseImg from './assets/image/Kingbase.svg'
 import clickhouseImg from './assets/image/ClickHouse.svg'
 import mariadbImg from './assets/image/MariaDB.svg'
+import elasticsearchImg from './assets/image/Elasticsearch.svg'
 import excelImg from './assets/image/Excel占位符.png'
 
 const searchName = ref('')
@@ -141,6 +142,13 @@ const dataSourceTypeMap = {
     description: '兼容 MySQL 协议的开源数据库',
     component: defineAsyncComponent(() => import('./components/MariaDbEditor.vue')),
   },
+  es: {
+    name: 'Elasticsearch',
+    icon: 'ES',
+    image: elasticsearchImg,
+    description: '通过HTTP API连接Elasticsearch',
+    component: defineAsyncComponent(() => import('./components/EsEditor.vue')),
+  },
   excel: {
     name: 'Excel',
     icon: '📊',
@@ -205,6 +213,20 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
         rowCount: 0,
         importMode: 'overwrite',
       } as ExcelDataSource,
+    }
+  } else if (dataSourceType === 'es') {
+    currentDataSource.value = {
+      name: '',
+      dataSourceType: 'es',
+      dataSource: {
+        dataSourceType: 'es',
+        baseUrl: '',
+        authType: 'none',
+        username: '',
+        password: '',
+        bearerToken: '',
+        apiKey: '',
+      },
     }
   } else {
     // 根据数据源类型设置默认驱动名称
@@ -506,17 +528,19 @@ onMounted(() => {
 
     <!-- 数据源类型选择对话框 -->
     <el-dialog v-model="typeSelectDialogVisible" title="选择数据源类型" width="800px" :close-on-click-modal="true">
-      <div class="type-select-cards">
-        <div v-for="(item, key) in dataSourceTypeMap" :key="key" class="type-card" @click="handleSelectType(key as DataSourceTypeKey)">
-          <div class="type-card-image">
-            <img :src="item.image" :alt="item.name" />
-          </div>
-          <div class="type-card-content">
-            <div class="type-card-name">{{ item.name }}</div>
-            <div class="type-card-desc">{{ item.description }}</div>
+      <el-scrollbar class="type-select-scrollbar" max-height="60vh">
+        <div class="type-select-cards">
+          <div v-for="(item, key) in dataSourceTypeMap" :key="key" class="type-card" @click="handleSelectType(key as DataSourceTypeKey)">
+            <div class="type-card-image">
+              <img :src="item.image" :alt="item.name" />
+            </div>
+            <div class="type-card-content">
+              <div class="type-card-name">{{ item.name }}</div>
+              <div class="type-card-desc">{{ item.description }}</div>
+            </div>
           </div>
         </div>
-      </div>
+      </el-scrollbar>
     </el-dialog>
 
     <!-- 编辑对话框 -->

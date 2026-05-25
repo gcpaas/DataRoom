@@ -1,6 +1,7 @@
 package com.gccloud.gcpaas.core.constant;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gccloud.gcpaas.core.dataset.DatasetRunRequest;
 import com.gccloud.gcpaas.core.dataset.bean.RelationalDataset;
 import com.gccloud.gcpaas.core.entity.DatasetEntity;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,16 @@ class DatasetTypeSqlTest {
     }
 
     @Test
+    void esDatasetServiceBeanUsesEsTypeName() throws Exception {
+        Class<?> serviceClass = Class.forName("com.gccloud.gcpaas.core.dataset.service.EsDatasetService");
+
+        Service service = serviceClass.getAnnotation(Service.class);
+
+        assertNotNull(service);
+        assertEquals("es" + DataRoomConstant.Dataset.SERVICE_NAME, service.value());
+    }
+
+    @Test
     void deserializeSqlDatasetEntity() throws Exception {
         String json = """
                 {
@@ -48,5 +59,64 @@ class DatasetTypeSqlTest {
         assertEquals(DatasetType.SQL, entity.getDatasetType());
         RelationalDataset dataset = assertInstanceOf(RelationalDataset.class, entity.getDataset());
         assertEquals("select * from sales", dataset.getSql());
+    }
+
+    @Test
+    void datasetRunRequestAcceptsParamMapAlias() throws Exception {
+        String json = """
+                {
+                  "datasetCode": "dataset_1",
+                  "paramMap": {
+                    "keyword": "order"
+                  }
+                }
+                """;
+
+        DatasetRunRequest request = new ObjectMapper().readValue(json, DatasetRunRequest.class);
+
+        assertEquals("dataset_1", request.getDatasetCode());
+        assertEquals("order", request.getInputParam().get("keyword"));
+    }
+
+    @Test
+    void deserializeEsDatasetEntity() throws Exception {
+        String json = """
+                {
+                  "name": "ES订单查询",
+                  "dataSourceCode": "ds_es",
+                  "datasetType": "es",
+                  "dataset": {
+                    "datasetType": "es",
+                    "path": "/orders/_search",
+                    "method": "POST",
+                    "body": "{\\"query\\":{\\"match_all\\":{}}}",
+                    "respJsonPath": "$.hits.hits"
+                  }
+                }
+                """;
+
+        DatasetEntity entity = new ObjectMapper().readValue(json, DatasetEntity.class);
+
+        assertEquals("es", entity.getDatasetType().getValue());
+        Object dataset = entity.getDataset();
+        assertEquals("EsDataset", dataset.getClass().getSimpleName());
+        assertEquals("/orders/_search", fieldValue(dataset, "path"));
+        assertEquals("POST", fieldValue(dataset, "method"));
+        assertEquals("{\"query\":{\"match_all\":{}}}", fieldValue(dataset, "body"));
+        assertEquals("$.hits.hits", fieldValue(dataset, "respJsonPath"));
+    }
+
+    private static Object fieldValue(Object target, String fieldName) throws Exception {
+        Class<?> clazz = target.getClass();
+        while (clazz != null && clazz != Object.class) {
+            try {
+                java.lang.reflect.Field field = clazz.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                return field.get(target);
+            } catch (NoSuchFieldException ignored) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+        throw new NoSuchFieldException(fieldName);
     }
 }

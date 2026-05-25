@@ -76,6 +76,11 @@ const addTypeOptions = [
     key: 'sql',
     name: 'SQL数据集',
     description: '通过SQL查询数据库'
+  },
+  {
+    key: 'es',
+    name: 'ES数据集',
+    description: '通过ES查询报文获取数据'
   }
 ]
 
@@ -123,6 +128,11 @@ const datasetTypeMap = {
     name: 'SQL',
     icon: '🗄️',
     component: defineAsyncComponent(() => import('./components/SqlEditor.vue'))
+  },
+  es: {
+    name: 'ES',
+    icon: 'ES',
+    component: defineAsyncComponent(() => import('./components/EsEditor.vue'))
   }
 } as const
 
@@ -251,7 +261,7 @@ const handleTypeSelect = (type: string) => {
   if (type === 'directory') {
     handleAddFolder(typeSelectParentNode.value)
   } else {
-    handleAddDataset(type as 'json' | 'http' | 'sql', typeSelectParentNode.value)
+    handleAddDataset(type as 'json' | 'http' | 'sql' | 'es', typeSelectParentNode.value)
   }
 }
 
@@ -285,12 +295,13 @@ const handleAddFolder = (node?: DatasetTreeNode) => {
 /**
  * 新增数据集
  */
-const handleAddDataset = (datasetType: 'json' | 'http' | 'sql', node?: DatasetTreeNode) => {
+const handleAddDataset = (datasetType: 'json' | 'http' | 'sql' | 'es', node?: DatasetTreeNode) => {
   dialogTitle.value = `新增${datasetTypeMap[datasetType].name}数据集`
   currentDataset.value = {
     name: '',
     datasetType,
     parentCode: node?.code || 'root',
+    dataSourceCode: datasetType === 'sql' || datasetType === 'es' ? '' : undefined,
     inputList: [],
     outputList: [],
     dataset:
@@ -298,7 +309,9 @@ const handleAddDataset = (datasetType: 'json' | 'http' | 'sql', node?: DatasetTr
         ? {datasetType: 'json', json: ''}
         : datasetType === 'http'
           ? {datasetType: 'http', url: '', method: 'GET', headerList: [], body: '', respJsonPath: ''}
-          : {datasetType: 'sql', sql: ''}
+          : datasetType === 'sql'
+            ? {datasetType: 'sql', sql: ''}
+            : {datasetType: 'es', path: '', method: 'POST', body: '', respJsonPath: ''}
   }
   dialogVisible.value = true
 }
@@ -733,6 +746,7 @@ const handleTestAndSave = async () => {
                   :prop="col"
                   :label="col"
                   min-width="120"
+                  show-overflow-tooltip
                 />
               </el-table>
               <el-empty v-if="!previewLoading && previewData.length === 0" description="暂无数据"/>
@@ -826,6 +840,7 @@ const handleTestAndSave = async () => {
             <el-icon v-if="item.key === 'directory'"><Folder/></el-icon>
             <el-icon v-else-if="item.key === 'json'"><Document/></el-icon>
             <el-icon v-else-if="item.key === 'http'"><Document/></el-icon>
+            <el-icon v-else-if="item.key === 'es'"><Search/></el-icon>
             <el-icon v-else><Document/></el-icon>
           </div>
           <div class="type-card-info">

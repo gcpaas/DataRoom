@@ -34,10 +34,24 @@ export interface ExcelDataSource {
 }
 
 /**
+ * Elasticsearch API数据源配置
+ */
+export interface EsDataSource {
+  dataSourceType: 'es'
+  baseUrl: string
+  authType: 'none' | 'basic' | 'bearer' | 'apiKey'
+  username?: string
+  password?: string
+  bearerToken?: string
+  apiKey?: string
+}
+
+/**
  * 数据源实体
  * dataSource 字段根据 dataSourceType 不同而具有不同的结构:
  * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/sqlserver/mongodb/kingbase/clickhouse/mariadb): RelationalDataSource
  * - excel: ExcelDataSource
+ * - es: EsDataSource
  */
 export interface DataSourceEntity {
   id?: string
@@ -57,6 +71,7 @@ export interface DataSourceEntity {
     | 'kingbase'
     | 'clickhouse'
     | 'mariadb'
+    | 'es'
     | 'excel'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dataSource: any

@@ -8,8 +8,8 @@ export interface DatasetInputParam {
   desc?: string
   type: string
   required?: boolean
-  defaultVal?: any
-  testVal?: any
+  defaultVal?: unknown
+  testVal?: unknown
 }
 
 /**
@@ -25,7 +25,7 @@ export interface DatasetOutputParam {
  * 基础数据集配置
  */
 export interface BaseDataset {
-  datasetType: 'json' | 'http' | 'sql'
+  datasetType: 'json' | 'http' | 'sql' | 'es'
 }
 
 /**
@@ -57,6 +57,17 @@ export interface SqlDataset extends BaseDataset {
 }
 
 /**
+ * ES数据集
+ */
+export interface EsDataset extends BaseDataset {
+  datasetType: 'es'
+  path: string
+  method: string
+  body?: string
+  respJsonPath?: string
+}
+
+/**
  * 数据集实体
  */
 export interface DatasetEntity {
@@ -64,9 +75,9 @@ export interface DatasetEntity {
   name: string
   code?: string
   dataSourceCode?: string
-  datasetType: 'directory' | 'json' | 'http' | 'sql'
+  datasetType: 'directory' | 'json' | 'http' | 'sql' | 'es'
   parentCode?: string
-  dataset?: JsonDataset | HttpDataset | SqlDataset
+  dataset?: JsonDataset | HttpDataset | SqlDataset | EsDataset
   inputList?: DatasetInputParam[]
   outputList?: DatasetOutputParam[]
   createDate?: string
@@ -90,7 +101,7 @@ export interface DatasetTreeNode {
   id?: string
   label: string
   code?: string
-  datasetType: 'directory' | 'json' | 'http' | 'sql'
+  datasetType: 'directory' | 'json' | 'http' | 'sql' | 'es'
   children?: DatasetTreeNode[]
   parentCode?: string
 }
@@ -100,7 +111,7 @@ export interface DatasetTreeNode {
  */
 export interface DatasetRunRequest {
   datasetCode: string
-  paramMap?: Record<string, any>
+  paramMap?: Record<string, unknown>
 }
 
 /**
@@ -108,7 +119,7 @@ export interface DatasetRunRequest {
  */
 export interface DatasetRun4ChartRequest {
   datasetCode: string
-  paramMap?: Record<string, any>
+  paramMap?: Record<string, unknown>
 }
 
 
@@ -117,14 +128,14 @@ export interface DatasetRun4ChartRequest {
  */
 export interface DatasetTestRequest {
   dataset: DatasetEntity
-  inputParam?: Record<string, any>
+  inputParam?: Record<string, unknown>
 }
 
 /**
  * 数据集执行响应
  */
 export interface DatasetRunResponse {
-  data?: any
+  data?: unknown
   outputList?: DatasetOutputParam[]
 }
 

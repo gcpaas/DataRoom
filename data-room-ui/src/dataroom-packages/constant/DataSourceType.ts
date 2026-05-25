@@ -15,5 +15,6 @@ export const DataSourceType = {
   KINGBASE: 'kingbase',
   CLICKHOUSE: 'clickhouse',
   MARIADB: 'mariadb',
+  ES: 'es',
   EXCEL: 'excel',
 } as const
