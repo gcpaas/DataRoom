@@ -1,3 +1,4 @@
+*.spec.mjs
 .claude
 CLAUDE.md
 RELEASE

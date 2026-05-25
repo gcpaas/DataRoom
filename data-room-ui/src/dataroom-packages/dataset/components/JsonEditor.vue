@@ -359,6 +359,11 @@ defineExpose({
       max-width: 100%;
     }
 
+    .cm-cursor,
+    .cm-dropCursor {
+      border-left-color: var(--el-text-color-primary);
+    }
+
     .cm-gutters {
       background-color: var(--el-fill-color-extra-light);
       border-right: 1px solid var(--el-border-color-lighter);

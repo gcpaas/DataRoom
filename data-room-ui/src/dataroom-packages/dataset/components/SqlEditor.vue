@@ -5,6 +5,9 @@ import type { DatasetEntity } from '../api'
 import { datasetApi } from '../api'
 import { ElMessage } from 'element-plus'
 import { parseParams } from '@/dataroom-packages/_common/_utils'
+import { Codemirror } from 'vue-codemirror'
+import { sql } from '@codemirror/lang-sql'
+import { eclipse } from '@uiw/codemirror-theme-eclipse'
 import DatasetEditorLayout from './DatasetEditorLayout.vue'
 
 interface DataSourceOption {
@@ -26,6 +29,9 @@ const emit = defineEmits<{
 
 const formRef = ref<FormInstance>()
 const previewData = ref<unknown>([])
+
+// CodeMirror 扩展配置：SQL语言 + Eclipse主题，与JSON数据集保持一致
+const cmExtensions = [sql(), eclipse]
 
 const formData = reactive<DatasetEntity>({
   name: '',
@@ -170,6 +176,29 @@ const parseInputParams = () => {
 }
 
 /**
+ * 格式化SQL
+ */
+const formatSql = async () => {
+  try {
+    if (formData.dataset && 'sql' in formData.dataset && formData.dataset.sql) {
+      const { format: formatSqlText } = await import('sql-formatter')
+      formData.dataset.sql = formatSqlText(formData.dataset.sql, {
+        language: 'sql',
+        tabWidth: 2,
+        linesBetweenQueries: 1,
+        paramTypes: {
+          custom: [{ regex: '#\\{[\\w.]+\\}' }]
+        }
+      })
+      ElMessage.success('格式化成功')
+    }
+  } catch (error) {
+    console.error('格式化SQL失败:', error)
+    ElMessage.error('SQL格式错误，无法格式化')
+  }
+}
+
+/**
  * 测试并保存
  */
 const testAndSave = async () => {
@@ -220,13 +249,21 @@ defineExpose({
         </el-select>
       </el-form-item>
       <el-form-item label="SQL语句">
-        <el-input
-          v-if="formData.dataset && 'sql' in formData.dataset"
-          v-model="formData.dataset.sql"
-          type="textarea"
-          :rows="10"
-          placeholder="请输入SQL语句"
-        />
+        <div class="sql-editor-shell">
+          <div
+            v-if="formData.dataset && 'sql' in formData.dataset"
+            class="codemirror-wrapper"
+          >
+            <Codemirror
+              v-model="formData.dataset.sql"
+              :extensions="cmExtensions"
+              placeholder="请输入SQL语句，例如：SELECT * FROM table WHERE id = #{id}"
+            />
+          </div>
+          <div class="sql-format-action">
+            <el-button size="small" @click="formatSql">格式化</el-button>
+          </div>
+        </div>
       </el-form-item>
       <el-form-item label="入参配置">
         <div class="dataset-form-section">
@@ -326,6 +363,62 @@ defineExpose({
 
 .dataset-form-table--spaced {
   margin-top: 8px;
+}
+
+.sql-editor-shell {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sql-format-action {
+  position: absolute;
+  right: 12px;
+  bottom: 16px;
+  z-index: 1;
+}
+
+.codemirror-wrapper {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+
+  &:focus-within {
+    border-color: var(--el-color-primary);
+  }
+
+  :deep(.cm-editor) {
+    height: 360px;
+    max-width: 100%;
+    font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
+    font-size: 13px;
+
+    .cm-scroller {
+      overflow: auto;
+    }
+
+    .cm-content {
+      max-width: 100%;
+    }
+
+    .cm-cursor,
+    .cm-dropCursor {
+      border-left-color: var(--el-text-color-primary);
+    }
+
+    .cm-gutters {
+      background-color: var(--el-fill-color-extra-light);
+      border-right: 1px solid var(--el-border-color-lighter);
+      color: var(--el-text-color-secondary);
+    }
+
+    .cm-activeLineGutter {
+      color: var(--el-text-color-primary);
+    }
+  }
 }
 
 .datasource-option {
