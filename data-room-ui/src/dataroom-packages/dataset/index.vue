@@ -3,7 +3,7 @@ import {computed, defineAsyncComponent, nextTick, onMounted, ref} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {Delete, Document, Edit, Folder, MoreFilled, Plus, Rank, Refresh, Search} from '@element-plus/icons-vue'
 import {datasetApi, type DatasetEntity, type DatasetTreeNode} from './api'
-import {dataSourceApi} from '../dataSource/api'
+import {dataSourceApi, type DataSourceEntity} from '../dataSource/api'
 
 // 定义 props
 const props = defineProps<{
@@ -15,18 +15,26 @@ const emit = defineEmits<{
   'update:selectedDataset': [dataset: DatasetEntity]
 }>()
 
+interface DatasetTreeViewNode {
+  expanded: boolean
+}
+
+interface DatasetTreeViewRef {
+  setCurrentKey: (key?: string) => void
+  getNode: (key?: string) => DatasetTreeViewNode | undefined
+}
+
 const loading = ref(false)
-const treeRef = ref()
+const treeRef = ref<DatasetTreeViewRef>()
 const treeData = ref<DatasetTreeNode[]>([])
 const allDatasetList = ref<DatasetEntity[]>([])
 const searchKeyword = ref('')
 const selectedNode = ref<DatasetEntity | null>(null)
 const activeTab = ref('preview')
-const paramsTab = ref('input')
 
 // 数据预览相关
 const previewLoading = ref(false)
-const previewData = ref<any[]>([])
+const previewData = ref<Record<string, unknown>[]>([])
 const previewColumns = ref<string[]>([])
 
 // 编辑对话框
@@ -41,7 +49,7 @@ const currentDataset = ref<DatasetEntity>({
 const editorRef = ref()
 
 // 数据源列表
-const dataSourceList = ref<any[]>([])
+const dataSourceList = ref<DataSourceEntity[]>([])
 
 // 类型选择对话框
 const typeSelectVisible = ref(false)
@@ -189,7 +197,7 @@ const buildTree = (list: DatasetEntity[], parentCode: string): DatasetTreeNode[]
 /**
  * 树节点点击
  */
-const handleNodeClick = async (data: DatasetTreeNode, node: any) => {
+const handleNodeClick = async (data: DatasetTreeNode, node: DatasetTreeViewNode) => {
   if (data.datasetType === 'directory') {
     // 目录节点：切换展开/折叠状态
     node.expanded = !node.expanded
@@ -458,23 +466,9 @@ const handleRefresh = async () => {
     })
     // 处理返回的数据
     const data = res.data
-    if (Array.isArray(data)) {
-      previewData.value = data
-      // 从数据中提取列名
-      if (previewData.value.length > 0) {
-        previewColumns.value = Object.keys(previewData.value[0])
-      } else {
-        previewColumns.value = []
-      }
-    } else {
-      // 如果不是数组，尝试转换为数组
-      previewData.value = data ? [data] : []
-      if (previewData.value.length > 0) {
-        previewColumns.value = Object.keys(previewData.value[0])
-      } else {
-        previewColumns.value = []
-      }
-    }
+    previewData.value = Array.isArray(data) ? data : data ? [data] : []
+    const firstRow = previewData.value[0]
+    previewColumns.value = firstRow ? Object.keys(firstRow) : []
   } catch (error) {
     console.error('执行数据集失败:', error)
     ElMessage.error('执行数据集失败')
@@ -502,6 +496,7 @@ const loadDataSourceList = async () => {
 const autoActivateFirstDataset = async () => {
   await nextTick()
   if (!treeRef.value || treeData.value.length === 0) return
+  const tree = treeRef.value
 
   // 深度优先搜索：在给定节点列表中找到第一个数据集
   const findFirstDataset = (nodes: DatasetTreeNode[]): DatasetTreeNode | null => {
@@ -526,7 +521,7 @@ const autoActivateFirstDataset = async () => {
       targetDataset = rootNode
     } else if (rootNode.children && rootNode.children.length > 0) {
       // 展开根目录节点
-      const elNode = treeRef.value.getNode(rootNode.code)
+      const elNode = tree.getNode(rootNode.code)
       if (elNode) elNode.expanded = true
       // 在子节点中查找第一个数据集
       targetDataset = findFirstDataset(rootNode.children)
@@ -538,17 +533,17 @@ const autoActivateFirstDataset = async () => {
         const item = allDatasetList.value.find(d => d.code === code)
         if (item?.parentCode && item.parentCode !== 'root') {
           expandAncestors(item.parentCode)
-          const parentElNode = treeRef.value.getNode(item.parentCode)
+          const parentElNode = tree.getNode(item.parentCode)
           if (parentElNode) parentElNode.expanded = true
         }
       }
       expandAncestors(targetDataset.code!)
 
       // 设置当前节点高亮
-      treeRef.value.setCurrentKey(targetDataset.code)
+      tree.setCurrentKey(targetDataset.code)
 
       // 模拟点击激活该数据集
-      const elNode = treeRef.value.getNode(targetDataset.code)
+      const elNode = tree.getNode(targetDataset.code)
       if (elNode) {
         handleNodeClick(targetDataset, elNode)
       }
@@ -629,10 +624,10 @@ const handleTestAndSave = async () => {
             <div class="custom-tree-node" @click.stop="handleNodeClick(data, node)">
 
               <div class="node-content">
-                <el-icon v-if="data.datasetType === 'directory'">
+                <el-icon v-if="data.datasetType === 'directory'" class="node-icon">
                   <Folder/>
                 </el-icon>
-                <el-icon v-else>
+                <el-icon v-else class="node-icon">
                   <Document/>
                 </el-icon>
                 <span class="node-label">{{ node.label }}</span>
@@ -689,21 +684,49 @@ const handleTestAndSave = async () => {
     <div class="dataset-right">
       <template v-if="selectedNode">
         <div class="right-header">
-          <el-tabs v-model="activeTab" class="dataset-tabs">
-            <el-tab-pane label="数据预览" name="preview"/>
-            <el-tab-pane v-if="selectedNode.datasetType !== 'json'" label="入参预览" name="inputParams"/>
-            <el-tab-pane label="字段列表" name="outputParams"/>
-          </el-tabs>
+          <div class="dataset-tabs" role="tablist" aria-label="数据集详情">
+            <button
+              class="dataset-tab"
+              :class="{ active: activeTab === 'preview' }"
+              type="button"
+              role="tab"
+              :aria-selected="activeTab === 'preview'"
+              @click="activeTab = 'preview'"
+            >
+              数据预览
+            </button>
+            <button
+              v-if="selectedNode.datasetType !== 'json'"
+              class="dataset-tab"
+              :class="{ active: activeTab === 'inputParams' }"
+              type="button"
+              role="tab"
+              :aria-selected="activeTab === 'inputParams'"
+              @click="activeTab = 'inputParams'"
+            >
+              入参预览
+            </button>
+            <button
+              class="dataset-tab"
+              :class="{ active: activeTab === 'outputParams' }"
+              type="button"
+              role="tab"
+              :aria-selected="activeTab === 'outputParams'"
+              @click="activeTab = 'outputParams'"
+            >
+              字段列表
+            </button>
+          </div>
           <div class="right-actions">
             <el-button link :icon="Edit" @click="handleEdit">编辑</el-button>
             <el-button link :icon="Refresh" @click="handleRefresh">刷新</el-button>
           </div>
         </div>
         <div class="right-content">
-          <el-scrollbar>
+          <el-scrollbar class="right-scrollbar">
             <!-- 数据预览 -->
             <div v-show="activeTab === 'preview'" class="preview-container" v-loading="previewLoading">
-              <el-table :data="previewData" border style="width: 100%">
+              <el-table class="dataset-table" :data="previewData" border>
                 <el-table-column
                   v-for="col in previewColumns"
                   :key="col"
@@ -717,7 +740,7 @@ const handleTestAndSave = async () => {
 
             <!-- 入参预览 -->
             <div v-show="activeTab === 'inputParams'" class="params-container">
-              <el-table :data="selectedNode.inputList || []" border style="width: 100%">
+              <el-table class="dataset-table" :data="selectedNode.inputList || []" border>
                 <el-table-column prop="name" label="参数名" min-width="120"/>
                 <el-table-column prop="type" label="类型" min-width="100"/>
                 <el-table-column prop="required" label="必填" width="80">
@@ -739,7 +762,7 @@ const handleTestAndSave = async () => {
 
             <!-- 出参预览 -->
             <div v-show="activeTab === 'outputParams'" class="params-container">
-              <el-table :data="selectedNode.outputList || []" border style="width: 100%">
+              <el-table class="dataset-table" :data="selectedNode.outputList || []" border>
                 <el-table-column prop="name" label="参数名" min-width="120"/>
                 <el-table-column prop="type" label="类型" min-width="100"/>
                 <el-table-column prop="desc" label="描述" min-width="150"/>
@@ -865,12 +888,11 @@ const handleTestAndSave = async () => {
   gap: 16px;
   overflow: hidden;
   padding: 2px;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   .dataset-left {
     width: 300px;
-    background: #fff;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    background: var(--el-fill-color-blank);
+    border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -884,34 +906,13 @@ const handleTestAndSave = async () => {
       gap: 8px;
       padding: 16px;
       flex-shrink: 0;
-      border-bottom: 1px solid #e5e6eb;
+      border-bottom: 1px solid var(--el-border-color-lighter);
 
       .search-input {
         flex: 1;
 
-        :deep(.el-input__wrapper) {
-          border-radius: 6px;
-          box-shadow: 0 0 0 1px #e5e6eb inset;
-
-          &:focus-within {
-            box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-          }
-        }
-
         .search-icon {
-          color: #86909c;
-        }
-      }
-
-      :deep(.el-button--primary) {
-        background-color: #3478f6;
-        border-color: #3478f6;
-        border-radius: 6px;
-        font-weight: 500;
-
-        &:hover {
-          background-color: #2563eb;
-          border-color: #2563eb;
+          color: var(--el-text-color-secondary);
         }
       }
     }
@@ -921,33 +922,6 @@ const handleTestAndSave = async () => {
       padding: 8px;
       overflow: hidden;
 
-      :deep(.el-scrollbar__wrap) {
-        max-height: 100%;
-      }
-
-      :deep(.el-scrollbar__bar) {
-        z-index: 10 !important;
-      }
-
-      :deep(.el-tree) {
-        .el-tree-node__content {
-          height: 36px;
-          border-radius: 6px;
-
-          &:hover {
-            background-color: #f7f8fa;
-
-            .more-icon {
-              opacity: 1;
-            }
-          }
-        }
-
-        .el-tree-node.is-current > .el-tree-node__content {
-          background-color: rgba(52, 120, 246, 0.08);
-        }
-      }
-
       .custom-tree-node {
         flex: 1;
         display: flex;
@@ -955,7 +929,7 @@ const handleTestAndSave = async () => {
         justify-content: space-between;
         font-size: 14px;
         font-weight: 400;
-        color: #1d2129;
+        color: var(--el-text-color-primary);
         padding-right: 8px;
 
         .node-content {
@@ -965,8 +939,8 @@ const handleTestAndSave = async () => {
           flex: 1;
           overflow: hidden;
 
-          .el-icon {
-            color: #4e5969;
+          .node-icon {
+            color: var(--el-text-color-regular);
           }
 
           .node-label {
@@ -981,10 +955,16 @@ const handleTestAndSave = async () => {
           cursor: pointer;
           opacity: 0;
           transition: opacity 0.2s;
-          color: #4e5969;
+          color: var(--el-text-color-regular);
 
           &:hover {
-            color: #3478f6;
+            color: var(--el-color-primary);
+          }
+        }
+
+        &:hover {
+          .more-icon {
+            opacity: 1;
           }
         }
       }
@@ -993,8 +973,8 @@ const handleTestAndSave = async () => {
 
   .dataset-right {
     flex: 1;
-    background: #fff;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    background: var(--el-fill-color-blank);
+    border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -1007,33 +987,38 @@ const handleTestAndSave = async () => {
       justify-content: space-between;
       padding: 0 16px;
       flex-shrink: 0;
-      border-bottom: 1px solid #e5e6eb;
+      border-bottom: 1px solid var(--el-border-color-lighter);
 
       .dataset-tabs {
         flex: 1;
+        display: flex;
+        align-items: center;
+        min-height: 40px;
+        gap: 4px;
+      }
 
-        :deep(.el-tabs__header) {
-          margin-bottom: 0;
-          border-bottom: none;
+      .dataset-tab {
+        height: 40px;
+        padding: 0 20px;
+        border: 0;
+        background: transparent;
+        color: var(--el-text-color-secondary);
+        cursor: pointer;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0;
+        transition: color 0.2s ease, background-color 0.2s ease;
+
+        &:hover,
+        &:focus-visible,
+        &.active {
+          color: var(--el-text-color-primary);
         }
 
-        :deep(.el-tabs__nav-wrap)::after {
-          display: none;
-        }
-
-        :deep(.el-tabs__item) {
-          font-size: 14px;
-          font-weight: 500;
-          color: #86909c;
-
-          &.is-active {
-            color: #1d2129;
-          }
-        }
-
-        :deep(.el-tabs__active-bar) {
-          background-color: #3478f6;
-          height: 2px;
+        &:focus-visible {
+          outline: 2px solid var(--el-color-primary);
+          outline-offset: -2px;
         }
       }
 
@@ -1041,15 +1026,6 @@ const handleTestAndSave = async () => {
         display: flex;
         gap: 8px;
         flex-shrink: 0;
-
-        :deep(.el-button) {
-          font-weight: 500;
-          color: #4e5969;
-
-          &:hover {
-            color: #3478f6;
-          }
-        }
       }
     }
 
@@ -1059,12 +1035,8 @@ const handleTestAndSave = async () => {
       display: flex;
       flex-direction: column;
 
-      :deep(.el-scrollbar) {
+      .right-scrollbar {
         height: 100%;
-      }
-
-      :deep(.el-scrollbar__bar) {
-        z-index: 10;
       }
 
       .preview-container,
@@ -1072,66 +1044,14 @@ const handleTestAndSave = async () => {
         padding: 16px;
       }
 
-      :deep(.el-table) {
-        font-size: 13px;
-        color: #1d2129;
+      .dataset-table {
+        width: 100%;
         font-feature-settings: 'tnum';
-
-        th {
-          font-weight: 500;
-          color: #4e5969;
-          background-color: #f7f8fa;
-        }
-      }
-    }
-  }
-
-  // 对话框内的滚动条
-  :deep(.el-dialog) {
-    border-radius: 8px;
-
-    .el-dialog__header {
-      font-weight: 600;
-      color: #1d2129;
-    }
-
-    .el-dialog__body .el-scrollbar__view {
-      padding: 2px;
-    }
-
-    .el-scrollbar__bar {
-      z-index: 10;
-    }
-
-    .dialog-footer {
-      .el-button {
-        border-radius: 6px;
-        font-weight: 500;
-      }
-
-      .el-button--primary {
-        background-color: #3478f6;
-        border-color: #3478f6;
-
-        &:hover {
-          background-color: #2563eb;
-          border-color: #2563eb;
-        }
-      }
-
-      .el-button--default {
-        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-        border: none;
-
-        &:hover {
-          box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.04);
-        }
       }
     }
   }
 }
 
-// 类型选择卡片样式
 .type-select-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1143,15 +1063,15 @@ const handleTestAndSave = async () => {
     align-items: center;
     gap: 12px;
     padding: 16px;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    background: var(--el-fill-color-blank);
+    border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    background: #fff;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 
     &:hover {
-      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.04);
-      background-color: #f7f8fa;
+      border-color: var(--el-color-primary);
+      background-color: var(--el-color-primary-light-9);
     }
 
     .type-card-icon {
@@ -1161,8 +1081,8 @@ const handleTestAndSave = async () => {
       width: 40px;
       height: 40px;
       border-radius: 8px;
-      background-color: rgba(52, 120, 246, 0.08);
-      color: #3478f6;
+      background-color: var(--el-color-primary-light-9);
+      color: var(--el-color-primary);
       font-size: 20px;
       flex-shrink: 0;
     }
@@ -1174,13 +1094,13 @@ const handleTestAndSave = async () => {
       .type-card-name {
         font-size: 14px;
         font-weight: 500;
-        color: #1d2129;
+        color: var(--el-text-color-primary);
         margin-bottom: 4px;
       }
 
       .type-card-desc {
         font-size: 12px;
-        color: #86909c;
+        color: var(--el-text-color-secondary);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -1189,19 +1109,18 @@ const handleTestAndSave = async () => {
   }
 }
 
-// 移动对话框样式
 .move-dialog-content {
   padding: 2px;
 
   .move-hint {
     font-size: 14px;
     font-weight: 400;
-    color: #4e5969;
+    color: var(--el-text-color-regular);
     margin-bottom: 12px;
   }
 
   .move-tree-wrap {
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     padding: 8px;
     max-height: 360px;
@@ -1217,15 +1136,16 @@ const handleTestAndSave = async () => {
       font-size: 14px;
       font-weight: 400;
       margin-bottom: 4px;
-      color: #1d2129;
+      color: var(--el-text-color-primary);
+      transition: color 0.2s ease, background-color 0.2s ease;
 
       &:hover {
-        background-color: #f7f8fa;
+        background-color: var(--el-fill-color-lighter);
       }
 
       &.active {
-        background-color: rgba(52, 120, 246, 0.08);
-        color: #3478f6;
+        background-color: var(--el-color-primary-light-9);
+        color: var(--el-color-primary);
         font-weight: 500;
       }
     }
@@ -1235,7 +1155,7 @@ const handleTestAndSave = async () => {
       align-items: center;
       gap: 8px;
       font-size: 14px;
-      color: #1d2129;
+      color: var(--el-text-color-primary);
     }
   }
 }

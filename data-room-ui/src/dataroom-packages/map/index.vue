@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, computed } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Delete, Upload, Edit, MoreFilled } from '@element-plus/icons-vue'
 import { mapApi, type MapEntity, type RegionInfo } from './api'
@@ -12,6 +12,10 @@ const selectedMap = ref<MapEntity | null>(null)
 const regionList = ref<RegionInfo[]>([])
 const chartRef = ref<HTMLDivElement>()
 let chartInstance: echarts.ECharts | null = null
+
+const getThemeColor = (name: string) => {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+}
 
 // 新增对话框
 const addDialogVisible = ref(false)
@@ -131,6 +135,11 @@ const renderMap = (mapName: string, geoData: GeoJsonData) => {
     const registerName = `custom_${mapName}`
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     echarts.registerMap(registerName, geoData as any)
+    const textPrimary = getThemeColor('--el-text-color-primary')
+    const bgColor = getThemeColor('--el-bg-color')
+    const primary = getThemeColor('--el-color-primary')
+    const primaryLight8 = getThemeColor('--el-color-primary-light-8')
+    const primaryLight9 = getThemeColor('--el-color-primary-light-9')
 
     const option: echarts.EChartsOption = {
       tooltip: {
@@ -148,28 +157,28 @@ const renderMap = (mapName: string, geoData: GeoJsonData) => {
           label: {
             show: true,
             fontSize: 10,
-            color: '#333',
+            color: textPrimary,
           },
           itemStyle: {
-            areaColor: '#e0ecff',
-            borderColor: '#7babea',
+            areaColor: primaryLight9,
+            borderColor: primaryLight8,
             borderWidth: 1,
           },
           emphasis: {
             label: {
-              color: '#fff',
+              color: bgColor,
               fontSize: 12,
             },
             itemStyle: {
-              areaColor: '#4d90e8',
+              areaColor: primary,
             },
           },
           select: {
             label: {
-              color: '#fff',
+              color: bgColor,
             },
             itemStyle: {
-              areaColor: '#3478f6',
+              areaColor: primary,
             },
           },
         },
@@ -394,7 +403,6 @@ onMounted(() => {
 })
 
 // 组件卸载时清理
-import { onUnmounted } from 'vue'
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
   chartInstance?.dispose()
@@ -408,6 +416,7 @@ onUnmounted(() => {
     <div class="map-tree-panel">
       <div class="panel-header">
         <el-input
+          class="map-search-input"
           v-model="searchName"
           placeholder="请输入地图名称"
           clearable
@@ -440,11 +449,11 @@ onUnmounted(() => {
                   <el-dropdown-menu>
                     <el-dropdown-item command="edit">
                       <el-icon><Edit /></el-icon>
-                      <span style="margin-left: 8px">编辑</span>
+                      <span class="dropdown-item-label">编辑</span>
                     </el-dropdown-item>
                     <el-dropdown-item command="delete">
                       <el-icon><Delete /></el-icon>
-                      <span style="margin-left: 8px">删除</span>
+                      <span class="dropdown-item-label">删除</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
@@ -481,16 +490,11 @@ onUnmounted(() => {
       <div class="panel-title">区域列表</div>
       <div class="region-table-container">
         <el-table
+          class="region-table"
           :data="regionList"
           border
           size="small"
           height="100%"
-          :header-cell-style="{
-            background: '#f5f7fa',
-            color: '#606266',
-            fontWeight: 600,
-            fontSize: '13px',
-          }"
         >
           <el-table-column prop="name" label="区域名" min-width="100" show-overflow-tooltip />
           <el-table-column prop="longitude" label="经度" min-width="100">
@@ -519,7 +523,7 @@ onUnmounted(() => {
               ref="fileInputRef"
               type="file"
               accept=".json,.geojson"
-              style="display: none"
+              class="file-input"
               @change="onFileInputChange"
             />
             <el-button :icon="Upload" @click="triggerFileInput">
@@ -548,7 +552,7 @@ onUnmounted(() => {
               ref="editFileInputRef"
               type="file"
               accept=".json,.geojson"
-              style="display: none"
+              class="file-input"
               @change="onEditFileInputChange"
             />
             <el-button :icon="Upload" @click="triggerEditFileInput">
@@ -574,16 +578,14 @@ onUnmounted(() => {
   gap: 16px;
   overflow: hidden;
   padding: 2px;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-  // 左侧地图树面板
   .map-tree-panel {
     width: 260px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    background: #fff;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    background: var(--el-fill-color-blank);
+    border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     overflow: hidden;
 
@@ -592,41 +594,17 @@ onUnmounted(() => {
       align-items: center;
       gap: 8px;
       padding: 16px;
-      box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
+      border-bottom: 1px solid var(--el-border-color-lighter);
 
-      .el-input {
+      .map-search-input {
         flex: 1;
-
-        :deep(.el-input__wrapper) {
-          border-radius: 6px;
-          box-shadow: 0 0 0 1px #e5e6eb inset;
-
-          &:focus-within {
-            box-shadow: 0 0 0 1px #3478f6 inset;
-            outline: 2px solid transparent;
-            outline-offset: 2px;
-            ring: 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-          }
-        }
-      }
-
-      :deep(.el-button--primary) {
-        background-color: #3478f6;
-        border-color: #3478f6;
-        border-radius: 6px;
-        font-weight: 500;
-
-        &:hover {
-          background-color: #2563eb;
-          border-color: #2563eb;
-        }
       }
     }
 
     .panel-body {
       flex: 1;
       overflow: hidden;
-      background: #f7f8fa;
+      background: var(--el-fill-color-extra-light);
 
       .map-list {
         .map-list-item {
@@ -635,31 +613,32 @@ onUnmounted(() => {
           justify-content: space-between;
           padding: 10px 16px;
           cursor: pointer;
-          transition: all 0.2s ease;
-          box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.04);
+          border-left: 3px solid transparent;
+          border-bottom: 1px solid var(--el-border-color-lighter);
+          transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 
           &:hover {
-            background-color: #fff;
+            background-color: var(--el-fill-color-blank);
           }
 
           &.active {
-            background-color: #fff;
-            color: #3478f6;
-            box-shadow: inset 3px 0 0 0 #3478f6, 0px 1px 0px 0px rgba(0, 0, 0, 0.04);
+            background-color: var(--el-fill-color-blank);
+            color: var(--el-color-primary);
+            border-left-color: var(--el-color-primary);
           }
 
           .item-name {
             flex: 1;
             font-size: 13px;
             font-weight: 400;
-            color: #1d2129;
+            color: var(--el-text-color-primary);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
           }
 
           &.active .item-name {
-            color: #3478f6;
+            color: var(--el-color-primary);
             font-weight: 500;
           }
 
@@ -671,12 +650,12 @@ onUnmounted(() => {
 
             .more-icon {
               font-size: 16px;
-              color: #86909c;
+              color: var(--el-text-color-secondary);
               cursor: pointer;
               outline: none;
 
               &:hover {
-                color: #3478f6;
+                color: var(--el-color-primary);
               }
             }
           }
@@ -689,13 +668,12 @@ onUnmounted(() => {
     }
   }
 
-  // 中间地图预览面板
   .map-preview-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: #fff;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    background: var(--el-fill-color-blank);
+    border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     overflow: hidden;
 
@@ -707,8 +685,8 @@ onUnmounted(() => {
       padding: 16px 20px;
       font-size: 14px;
       font-weight: 600;
-      color: #1d2129;
-      box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
+      color: var(--el-text-color-primary);
+      border-bottom: 1px solid var(--el-border-color-lighter);
 
       .map-code {
         min-width: 0;
@@ -736,14 +714,13 @@ onUnmounted(() => {
     }
   }
 
-  // 右侧区域列表面板
   .region-list-panel {
     width: 340px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    background: #fff;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    background: var(--el-fill-color-blank);
+    border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     overflow: hidden;
 
@@ -751,8 +728,8 @@ onUnmounted(() => {
       padding: 16px 20px;
       font-size: 14px;
       font-weight: 600;
-      color: #1d2129;
-      box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
+      color: var(--el-text-color-primary);
+      border-bottom: 1px solid var(--el-border-color-lighter);
     }
 
     .region-table-container {
@@ -760,35 +737,9 @@ onUnmounted(() => {
       overflow: hidden;
       padding: 12px;
 
-      :deep(.el-table) {
-        border-radius: 6px;
-        overflow: hidden;
-        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-
-        .el-table__header th {
-          background: #f7f8fa;
-          color: #4e5969;
-          font-weight: 600;
-          font-size: 13px;
-          border-bottom: none;
-        }
-
-        .el-table__body td {
-          font-feature-settings: 'tnum';
-          color: #1d2129;
-          font-size: 13px;
-        }
-
-        .el-table__border-left-patch,
-        &::before,
-        &::after {
-          display: none;
-        }
-
-        th.el-table__cell,
-        td.el-table__cell {
-          border-color: rgba(0, 0, 0, 0.06);
-        }
+      .region-table {
+        width: 100%;
+        font-feature-settings: 'tnum';
       }
     }
   }
@@ -799,22 +750,10 @@ onUnmounted(() => {
   align-items: center;
   gap: 12px;
 
-  :deep(.el-button) {
-    border-radius: 6px;
-    font-weight: 500;
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-    border: none;
-
-    &:hover {
-      color: #3478f6;
-      box-shadow: 0px 0px 0px 1px rgba(52, 120, 246, 0.4);
-    }
-  }
-
   .upload-file-name {
     font-size: 13px;
     font-weight: 400;
-    color: #3478f6;
+    color: var(--el-color-primary);
     max-width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -823,66 +762,15 @@ onUnmounted(() => {
 
   .upload-tip {
     font-size: 12px;
-    color: #86909c;
+    color: var(--el-text-color-secondary);
   }
 }
 
-// Dialog styles
-:deep(.el-dialog) {
-  border-radius: 8px;
-  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
+.file-input {
+  display: none;
+}
 
-  .el-dialog__header {
-    padding: 20px 24px 16px;
-
-    .el-dialog__title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #1d2129;
-    }
-  }
-
-  .el-dialog__body {
-    padding: 0 24px;
-
-    .el-form-item__label {
-      font-size: 14px;
-      font-weight: 500;
-      color: #4e5969;
-    }
-
-    .el-input__wrapper {
-      border-radius: 6px;
-      box-shadow: 0 0 0 1px #e5e6eb inset;
-
-      &:focus-within {
-        box-shadow: 0 0 0 1px #3478f6 inset;
-      }
-    }
-  }
-
-  .el-dialog__footer {
-    padding: 16px 24px 20px;
-
-    .el-button {
-      border-radius: 6px;
-      font-weight: 500;
-    }
-
-    .el-button--primary {
-      background-color: #3478f6;
-      border-color: #3478f6;
-
-      &:hover {
-        background-color: #2563eb;
-        border-color: #2563eb;
-      }
-    }
-
-    .el-button:not(.el-button--primary) {
-      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-      border: none;
-    }
-  }
+.dropdown-item-label {
+  margin-left: 8px;
 }
 </style>

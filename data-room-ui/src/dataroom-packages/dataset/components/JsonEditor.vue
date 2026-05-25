@@ -10,7 +10,7 @@ import { eclipse } from '@uiw/codemirror-theme-eclipse'
 
 const props = defineProps<{
   modelValue: DatasetEntity
-  dataSourceList?: any[]
+  dataSourceList?: unknown[]
   onSave?: () => Promise<void>
   onClose?: () => void
 }>()
@@ -99,7 +99,7 @@ const test = async () => {
     // 验证JSON格式
     try {
       JSON.parse(formData.dataset.json)
-    } catch (e) {
+    } catch {
       ElMessage.error('JSON格式错误，请检查')
       return
     }
@@ -227,7 +227,7 @@ const formatJson = () => {
       formData.dataset.json = JSON.stringify(parsed, null, 2)
       ElMessage.success('格式化成功')
     }
-  } catch (error) {
+  } catch {
     ElMessage.error('JSON格式错误，无法格式化')
   }
 }
@@ -242,12 +242,12 @@ defineExpose({
 </script>
 
 <template>
-  <el-form ref="formRef" :model="formData" :rules="rules" label-width="100px">
+  <el-form class="dataset-editor-form" ref="formRef" :model="formData" :rules="rules" label-width="100px">
     <el-form-item label="数据集名称" prop="name">
       <el-input v-model="formData.name" placeholder="请输入数据集名称" clearable />
     </el-form-item>
     <el-form-item label="JSON数据">
-      <div style="width: 100%; position: relative; overflow: hidden">
+      <div class="json-editor-shell">
         <div
           v-if="formData.dataset && 'json' in formData.dataset"
           class="codemirror-wrapper"
@@ -256,20 +256,19 @@ defineExpose({
             v-model="formData.dataset.json"
             :extensions="cmExtensions"
             placeholder='请输入JSON数据，例如：[{"name": "张三", "age": 20}]'
-            :style="{ height: '360px' }"
           />
         </div>
-        <div style="position: absolute; right: 12px; bottom: 16px; z-index: 1">
+        <div class="json-format-action">
           <el-button size="small" @click="formatJson">格式化</el-button>
         </div>
       </div>
     </el-form-item>
     <el-form-item label="字段列表">
-      <div style="width: 100%">
-        <div style="margin-bottom: 8px">
+      <div class="dataset-form-section">
+        <div class="dataset-form-toolbar">
           <el-button type="primary" size="small" @click="parseFields">字段解析</el-button>
         </div>
-        <el-table :data="formData.outputList" border style="width: 100%">
+        <el-table class="dataset-form-table" :data="formData.outputList" border>
           <el-table-column prop="name" label="字段名" width="200" />
           <el-table-column label="类型" width="150">
             <template #default="{ row }">
@@ -299,74 +298,46 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
-:deep(.el-form) {
+.dataset-editor-form {
   padding: 20px 24px;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
 
-  .el-form-item__label {
-    font-size: 14px;
-    font-weight: 500;
-    color: #1d2129;
-  }
+.json-editor-shell {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
 
-  .el-input__wrapper {
-    border-radius: 6px;
-    box-shadow: 0 0 0 1px #e5e6eb inset;
+.json-format-action {
+  position: absolute;
+  right: 12px;
+  bottom: 16px;
+  z-index: 1;
+}
 
-    &:focus-within {
-      box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-    }
-  }
+.dataset-form-section {
+  width: 100%;
+}
 
-  .el-table {
-    font-size: 13px;
-    color: #1d2129;
-    font-feature-settings: 'tnum';
-    border-radius: 6px;
-    overflow: hidden;
+.dataset-form-toolbar {
+  margin-bottom: 8px;
+}
 
-    th {
-      font-weight: 500;
-      color: #4e5969;
-      background-color: #f7f8fa;
-    }
-  }
-
-  .el-button--small {
-    border-radius: 6px;
-    font-weight: 500;
-  }
-
-  .el-button--primary {
-    background-color: #3478f6;
-    border-color: #3478f6;
-
-    &:hover {
-      background-color: #2563eb;
-      border-color: #2563eb;
-    }
-  }
-
-  .el-button--default {
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-    border: none;
-
-    &:hover {
-      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.04);
-    }
-  }
+.dataset-form-table {
+  width: 100%;
+  font-feature-settings: 'tnum';
 }
 
 .codemirror-wrapper {
   width: 100%;
   min-width: 0;
-  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--el-border-color-light);
   border-radius: 8px;
   overflow: hidden;
-  transition: box-shadow 0.2s ease;
+  transition: border-color 0.2s ease;
 
   &:focus-within {
-    box-shadow: 0 0 0 1px #3478f6, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
+    border-color: var(--el-color-primary);
   }
 
   :deep(.cm-editor) {
@@ -384,13 +355,13 @@ defineExpose({
     }
 
     .cm-gutters {
-      background-color: #f7f8fa;
-      border-right: 1px solid #e5e6eb;
-      color: #86909c;
+      background-color: var(--el-fill-color-extra-light);
+      border-right: 1px solid var(--el-border-color-lighter);
+      color: var(--el-text-color-secondary);
     }
 
     .cm-activeLineGutter {
-      color: #1d2129;
+      color: var(--el-text-color-primary);
     }
   }
 }

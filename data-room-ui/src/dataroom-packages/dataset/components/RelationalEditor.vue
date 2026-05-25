@@ -6,9 +6,15 @@ import { datasetApi } from '../api'
 import { ElMessage } from 'element-plus'
 import { parseParams } from '@/dataroom-packages/_common/_utils'
 
+interface DataSourceOption {
+  code?: string
+  name?: string
+  dataSourceType?: string
+}
+
 const props = defineProps<{
   modelValue: DatasetEntity
-  dataSourceList?: any[]
+  dataSourceList?: DataSourceOption[]
   onSave?: () => Promise<void>
   onClose?: () => void
 }>()
@@ -190,7 +196,7 @@ defineExpose({
 </script>
 
 <template>
-  <el-form ref="formRef" :model="formData" :rules="rules" label-width="100px">
+  <el-form class="dataset-editor-form" ref="formRef" :model="formData" :rules="rules" label-width="100px">
     <el-form-item label="数据集名称" prop="name">
       <el-input v-model="formData.name" placeholder="请输入数据集名称" clearable />
     </el-form-item>
@@ -219,11 +225,11 @@ defineExpose({
       />
     </el-form-item>
     <el-form-item label="入参配置">
-      <div style="width: 100%">
+      <div class="dataset-form-section">
         <el-button size="small" @click="parseInputParams">
           入参解析
         </el-button>
-        <el-table :data="formData.inputList" border style="width: 100%; margin-top: 8px">
+        <el-table class="dataset-form-table dataset-form-table--spaced" :data="formData.inputList" border>
           <el-table-column label="参数名" width="120">
             <template #default="{ row }">
               <span>{{ row.name }}</span>
@@ -269,8 +275,8 @@ defineExpose({
       </div>
     </el-form-item>
     <el-form-item label="字段列表">
-      <div style="width: 100%">
-        <el-table :data="formData.outputList" border style="width: 100%">
+      <div class="dataset-form-section">
+        <el-table class="dataset-form-table" :data="formData.outputList" border>
           <el-table-column prop="name" label="字段名" width="200" />
           <el-table-column label="类型" width="150">
             <template #default="{ row }">
@@ -300,81 +306,21 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
-:deep(.el-form) {
+.dataset-editor-form {
   padding: 20px 24px;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
 
-  .el-form-item__label {
-    font-size: 14px;
-    font-weight: 500;
-    color: #1d2129;
-  }
+.dataset-form-section {
+  width: 100%;
+}
 
-  .el-input__wrapper {
-    border-radius: 6px;
-    box-shadow: 0 0 0 1px #e5e6eb inset;
+.dataset-form-table {
+  width: 100%;
+  font-feature-settings: 'tnum';
+}
 
-    &:focus-within {
-      box-shadow: 0 0 0 1px #3478f6 inset, 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-    }
-  }
-
-  .el-textarea__inner {
-    border-radius: 6px;
-    border-color: #e5e6eb;
-    font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
-    font-size: 13px;
-
-    &:focus {
-      border-color: #3478f6;
-      box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3478f6;
-    }
-  }
-
-  .el-select {
-    .el-input__wrapper {
-      border-radius: 6px;
-      box-shadow: 0 0 0 1px #e5e6eb inset;
-    }
-  }
-
-  .el-table {
-    font-size: 13px;
-    color: #1d2129;
-    font-feature-settings: 'tnum';
-    border-radius: 6px;
-    overflow: hidden;
-
-    th {
-      font-weight: 500;
-      color: #4e5969;
-      background-color: #f7f8fa;
-    }
-  }
-
-  .el-button--small {
-    border-radius: 6px;
-    font-weight: 500;
-  }
-
-  .el-button--primary {
-    background-color: #3478f6;
-    border-color: #3478f6;
-
-    &:hover {
-      background-color: #2563eb;
-      border-color: #2563eb;
-    }
-  }
-
-  .el-button--default {
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
-    border: none;
-
-    &:hover {
-      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.04);
-    }
-  }
+.dataset-form-table--spaced {
+  margin-top: 8px;
 }
 
 .datasource-option {
@@ -390,16 +336,16 @@ defineExpose({
     white-space: nowrap;
     font-size: 14px;
     font-weight: 400;
-    color: #1d2129;
+    color: var(--el-text-color-primary);
   }
 
   &__type {
     flex-shrink: 0;
     margin-left: 12px;
-    color: #86909c;
+    color: var(--el-text-color-secondary);
     font-size: 12px;
     font-weight: 400;
-    background-color: #f7f8fa;
+    background-color: var(--el-fill-color-extra-light);
     padding: 2px 8px;
     border-radius: 9999px;
   }
