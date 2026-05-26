@@ -125,6 +125,32 @@ class DataSourceJsonTest {
     }
 
     @Test
+    void relationalDatasourceDesensitizesPasswordAndPreservesItWhenUpdatePayloadLeavesItBlank() {
+        RelationalDatasource dbDatasource = new RelationalDatasource();
+        dbDatasource.setPassword("oldEncryptedPassword");
+        RelationalDatasource updateDatasource = new RelationalDatasource();
+        updateDatasource.setPassword("");
+
+        updateDatasource.updatedSensitive(dbDatasource);
+        assertEquals("oldEncryptedPassword", updateDatasource.getPassword());
+
+        updateDatasource.desensitize();
+        assertNull(updateDatasource.getPassword());
+    }
+
+    @Test
+    void relationalDatasourceUsesSubmittedPasswordWhenUpdatePayloadProvidesIt() {
+        RelationalDatasource dbDatasource = new RelationalDatasource();
+        dbDatasource.setPassword("oldEncryptedPassword");
+        RelationalDatasource updateDatasource = new RelationalDatasource();
+        updateDatasource.setPassword("newEncryptedPassword");
+
+        updateDatasource.updatedSensitive(dbDatasource);
+
+        assertEquals("newEncryptedPassword", updateDatasource.getPassword());
+    }
+
+    @Test
     void deserializeDamengDatasourceAsRelationalDatasource() throws Exception {
         String json = """
                 {

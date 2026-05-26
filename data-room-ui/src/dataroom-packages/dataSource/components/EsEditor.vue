@@ -59,9 +59,6 @@ const rules = reactive<FormRules<DataSourceEntity>>({
   'dataSource.baseUrl': [{ required: true, message: '请输入基础地址', trigger: 'blur' }],
   'dataSource.authType': [{ required: true, message: '请选择认证方式', trigger: 'change' }],
   'dataSource.username': [{ validator: requireWhenAuthType('basic', '请输入用户名'), trigger: 'blur' }],
-  'dataSource.password': [{ validator: requireWhenAuthType('basic', '请输入密码'), trigger: 'blur' }],
-  'dataSource.bearerToken': [{ validator: requireWhenAuthType('bearer', '请输入Bearer Token'), trigger: 'blur' }],
-  'dataSource.apiKey': [{ validator: requireWhenAuthType('apiKey', '请输入API Key'), trigger: 'blur' }],
 })
 
 const validate = () => {

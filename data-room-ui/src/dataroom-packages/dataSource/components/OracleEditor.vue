@@ -53,7 +53,6 @@ const rules = reactive<FormRules<DataSourceEntity>>({
   name: [{ required: true, message: '请输入数据源名称', trigger: 'blur' }],
   'dataSource.driverName': [{ required: true, message: '请输入驱动名称', trigger: 'blur' }],
   'dataSource.username': [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  'dataSource.password': [{ required: true, message: '请输入密码', trigger: 'blur' }],
   'dataSource.url': [{ required: true, message: '请输入连接地址', trigger: 'blur' }],
 })
 
