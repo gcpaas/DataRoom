@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { getComponent, getComponentInstance, getPanelComponent } from '@/dataroom-packages/components/AutoInstall.ts'
-import { type Component, computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onMounted, provide, reactive, ref, shallowRef } from 'vue'
+import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onMounted, provide, ref } from 'vue'
 import { debounce } from 'lodash'
 import Moveable, { type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd } from 'vue3-moveable'
 import { VueSelecto } from 'vue3-selecto'
 import { deleteChartById, extractPositionFromTransform, getChartByElement, getChartById, getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
 import VanillaSelecto from 'selecto'
 import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
-import type { LeftToolBar } from '@/dataroom-packages/PageDesigner/type/LeftToolBar.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { ArrowDown } from '@element-plus/icons-vue'
 import { pageApi } from '@/dataroom-packages/page/api.ts'
 import type { PageStageEntity } from '@/dataroom-packages/page/type/PageStageEntity.ts'
 import { useCanvasInst } from '@/dataroom-packages/hooks/use-canvas-inst'
@@ -87,38 +87,13 @@ const ControlPanelWrapper = defineAsyncComponent(() => import('@/dataroom-packag
 const VisualScreenControlPanel = defineAsyncComponent(() => import('./ControlPanel.vue'))
 const ContextMenu = defineAsyncComponent(() => import('@/dataroom-packages/PageDesigner/ContextMenu.vue'))
 
-const leftToolBarList: Array<LeftToolBar> = reactive([
-  {
-    name: '图层',
-    desc: '图层',
-    component: shallowRef<Component>(ComponentLayer),
-    componentName: 'ComponentLayer',
-  },
-  {
-    name: '组件',
-    desc: '组件库',
-    component: shallowRef<Component>(ComponentLib),
-    componentName: 'ComponentLib',
-  },
-  {
-    name: '素材',
-    desc: '素材库',
-    component: shallowRef<Component>(ResourceLib),
-    componentName: 'ResourceLib',
-  },
-  {
-    name: '变量',
-    desc: '全局变量',
-    component: shallowRef<Component>(GlobalVariable),
-    componentName: 'GlobalVariable',
-  },
-])
-// 激活的左侧工具条项
-const activeLeftToolBar = ref<LeftToolBar>(leftToolBarList[1]!)
-const leftToolPanelShow = ref(true)
+type InsertCommand = 'component' | 'resource'
+
+const leftToolPanelShow = ref(false)
 const rightControlPanelShow = ref(true)
 
-// 弹框显示状态（素材、变量）
+// 弹框显示状态（组件、素材、变量）
+const componentLibDialogVisible = ref(false)
 const resourceLibDialogVisible = ref(false)
 const globalVariableDialogVisible = ref(false)
 
@@ -126,19 +101,19 @@ const globalVariableDialogVisible = ref(false)
 const mainStyle = computed(() => {
   if (leftToolPanelShow.value && rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: '60px 240px auto 300px',
+      gridTemplateColumns: '240px auto 300px',
     }
   } else if (!leftToolPanelShow.value && !rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: '60px auto',
+      gridTemplateColumns: 'auto',
     }
   } else if (!leftToolPanelShow.value && rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: '60px auto 300px',
+      gridTemplateColumns: 'auto 300px',
     }
   } else {
     return {
-      gridTemplateColumns: '60px 240px auto',
+      gridTemplateColumns: '240px auto',
     }
   }
 })
@@ -278,26 +253,49 @@ const onSave = () => {
 }
 
 /**
- * 左侧工具条激活
- * @param leftToolBar
+ * 打开组件库弹框
  */
-const onActiveLeftToolBar = (leftToolBar: LeftToolBar) => {
-  activeLeftToolBar.value = leftToolBar
-  if (leftToolBar.componentName === 'ComponentLayer') {
-    leftToolPanelShow.value = true
-  } else if (leftToolBar.componentName === 'ResourceLib') {
-    resourceLibDialogVisible.value = false
-    nextTick(() => {
-      resourceLibDialogVisible.value = true
-    })
-  } else if (leftToolBar.componentName === 'GlobalVariable') {
-    globalVariableDialogVisible.value = false
-    nextTick(() => {
-      globalVariableDialogVisible.value = true
-    })
-  } else if (leftToolBar.componentName === 'ComponentLib') {
-    leftToolPanelShow.value = true
+const openComponentLib = () => {
+  componentLibDialogVisible.value = true
+}
+
+/**
+ * 打开素材库弹框
+ */
+const openResourceLib = () => {
+  resourceLibDialogVisible.value = false
+  nextTick(() => {
+    resourceLibDialogVisible.value = true
+  })
+}
+
+/**
+ * 打开全局变量弹框
+ */
+const openGlobalVariable = () => {
+  globalVariableDialogVisible.value = false
+  nextTick(() => {
+    globalVariableDialogVisible.value = true
+  })
+}
+
+/**
+ * 打开左侧图层面板
+ */
+const openLayerPanel = () => {
+  leftToolPanelShow.value = true
+}
+
+/**
+ * 顶部插入菜单命令
+ * @param command
+ */
+const onInsertCommand = (command: InsertCommand) => {
+  if (command === 'component') {
+    openComponentLib()
+    return
   }
+  openResourceLib()
 }
 
 /**
@@ -495,6 +493,22 @@ onMounted(() => {
         <div class="title">{{ pageStageEntity?.name }}</div>
       </div>
       <div class="header-right">
+        <el-dropdown trigger="click" @command="onInsertCommand">
+          <el-button size="small">
+            插入
+            <el-icon class="el-icon--right">
+              <ArrowDown />
+            </el-icon>
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="component">组件</el-dropdown-item>
+              <el-dropdown-item command="resource">素材</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        <el-button @click="openGlobalVariable" size="small">变量</el-button>
+        <el-button @click="openLayerPanel" size="small">图层</el-button>
         <el-button @click="onHistory" size="small">历史</el-button>
         <el-button @click="switchPageControlPanel" size="small">设置</el-button>
         <el-button @click="onPreview" size="small">预览</el-button>
@@ -502,20 +516,10 @@ onMounted(() => {
       </div>
     </div>
     <div class="main" :style="mainStyle">
-      <div class="left-tool-bar">
-        <div
-          v-for="item in leftToolBarList"
-          :key="item.name"
-          :class="{ bar: true, active: activeLeftToolBar.componentName === item.componentName }"
-          @click="onActiveLeftToolBar(item)"
-        >
-          {{ item.name }}
-        </div>
-      </div>
       <div class="left-tool-panel" :style="leftToolPanelStyle">
         <div class="panel-header">
           <div class="panel-header-inner">
-            <span class="title">{{ activeLeftToolBar.desc }}</span>
+            <span class="title">图层</span>
             <el-icon class="close" @click="switchLeftToolPanel(false)">
               <Close />
             </el-icon>
@@ -523,7 +527,7 @@ onMounted(() => {
         </div>
         <div class="panel-body">
           <el-scrollbar>
-            <component :is="activeLeftToolBar.component"></component>
+            <ComponentLayer />
           </el-scrollbar>
         </div>
       </div>
@@ -623,6 +627,11 @@ onMounted(() => {
     @delete-chart="onChartDeleteClick"
   ></ContextMenu>
 
+  <!-- 组件库 -->
+  <el-dialog v-model="componentLibDialogVisible" title="组件库" width="760px" :close-on-click-modal="false">
+    <ComponentLib mode="dialog"></ComponentLib>
+  </el-dialog>
+
   <!-- 素材库（组件自带弹框，用 v-if 控制挂载） -->
   <ResourceLib v-if="resourceLibDialogVisible" @close="resourceLibDialogVisible = false" />
 
@@ -686,55 +695,13 @@ onMounted(() => {
 
   & .main {
     display: grid;
-    grid-template-columns: 60px 240px auto 300px;
-
-    & .left-tool-bar {
-      background-color: var(--el-bg-color);
-      box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
-
-      & .bar {
-        font-size: 12px;
-        font-weight: 500;
-        text-align: center;
-        margin: 4px auto;
-        padding: 8px 0;
-        color: var(--el-text-color-secondary);
-        transition: all 0.2s;
-
-        &:hover {
-          cursor: pointer;
-          background-color: var(--el-fill-color-lighter);
-          color: var(--el-text-color-regular);
-        }
-      }
-
-      & .active {
-        background-color: var(--el-color-primary-light-9);
-        color: var(--el-color-primary);
-        position: relative;
-
-        &:hover {
-          color: var(--el-color-primary);
-        }
-
-        &::before {
-          content: '';
-          left: 0;
-          top: 0;
-          bottom: 0;
-          width: 3px;
-          position: absolute;
-          background-color: var(--el-color-primary);
-          border-radius: 0 2px 2px 0;
-        }
-      }
-    }
+    grid-template-columns: 240px auto 300px;
 
     & .left-tool-panel {
       background-color: var(--el-bg-color);
       display: grid;
       grid-template-rows: 40px auto;
-      height: 100vh;
+      height: calc(100vh - 48px);
       box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
 
       & .panel-header {
@@ -806,7 +773,7 @@ onMounted(() => {
       overflow: hidden;
       background-color: var(--el-bg-color);
       box-shadow: inset 1px 0 0 0 var(--el-border-color-light);
-      height: 100vh;
+      height: calc(100vh - 48px);
       position: relative;
       z-index: 5;
 

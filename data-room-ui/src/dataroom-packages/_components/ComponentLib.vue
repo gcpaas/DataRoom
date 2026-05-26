@@ -7,6 +7,15 @@ import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 import type { CanvasInst } from '@/dataroom-packages/PageDesigner/type/CanvasInst.ts'
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
+const props = withDefaults(
+  defineProps<{
+    mode?: 'panel' | 'dialog'
+  }>(),
+  {
+    mode: 'panel',
+  },
+)
+const emit = defineEmits(['add'])
 
 const searchName = ref('')
 /**
@@ -15,6 +24,7 @@ const searchName = ref('')
  */
 const addChart = (type: string) => {
   canvasInst.addChart(type)
+  emit('add', type)
 }
 
 /**
@@ -32,11 +42,11 @@ const filterPluginList = computed(() => {
 })
 </script>
 <template>
-  <div class="dr-component-lib-wrapper">
-    <div class="search">
+  <div :class="['dr-component-lib-wrapper', { 'dr-component-lib-wrapper--dialog': props.mode === 'dialog', 'dr-component-lib-wrapper--panel': props.mode === 'panel' }]">
+    <div :class="['search', { 'search--dialog': props.mode === 'dialog' }]">
       <el-input v-model="searchName" :suffix-icon="Search" placeholder="搜索" clearable></el-input>
     </div>
-    <div class="component-card">
+    <div :class="['component-card', { 'component-card--dialog': props.mode === 'dialog', 'component-card--panel': props.mode === 'panel' }]">
       <div class="card" v-for="plugin in filterPluginList" :key="plugin.name" @click="addChart(plugin.type)">
         <div class="image">
           <el-image :src="plugin.thumbnail" lazy fit="contain" />
@@ -64,12 +74,30 @@ const filterPluginList = computed(() => {
   & .search {
     width: 100%;
     margin-bottom: 12px;
+
+    &--dialog {
+      width: 50%;
+      margin: 0 auto 16px;
+    }
+  }
+
+  &--dialog {
+    height: 60vh;
+    padding: 0;
+    background: var(--el-bg-color);
+    overflow-y: auto;
   }
 
   & .component-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
+
+    &--dialog {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      padding-right: 4px;
+    }
 
     & .card {
       background-color: var(--el-fill-color-blank);
@@ -118,6 +146,7 @@ const filterPluginList = computed(() => {
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+
     }
   }
 }

@@ -1,30 +1,29 @@
 <script setup lang="ts">
 import { getComponent, getComponentInstance, getPanelComponent } from '@/dataroom-packages/components/AutoInstall.ts'
-import { type Component, computed, type CSSProperties, defineAsyncComponent, nextTick, onMounted, onUnmounted, provide, reactive, ref, shallowRef, watch } from 'vue'
+import { computed, type CSSProperties, defineAsyncComponent, nextTick, onMounted, onUnmounted, provide, ref, watch } from 'vue'
 import { GridItem, GridLayout } from 'vue-grid-layout-v3'
 import { v4 as uuidv4 } from 'uuid'
 import { getChartById, getResourceUrl, deleteChartById } from '@/dataroom-packages/_common/_utils.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { ArrowDown } from '@element-plus/icons-vue'
 import { pageApi } from '@/dataroom-packages/page/api.ts'
 import { useCanvasInst } from '@/dataroom-packages/hooks/use-canvas-inst'
 import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
 import type { PageStageEntity } from '@/dataroom-packages/page/type/PageStageEntity.ts'
 import type { PageBasicConfig } from '@/dataroom-packages/PageDesigner/type/PageBasicConfig.ts'
 import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/GlobalVariable.ts'
-import type { LeftToolBar } from '@/dataroom-packages/PageDesigner/type/LeftToolBar.ts'
 import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 import { useTimerManager } from '@/dataroom-packages/hooks/use-timer-manager'
 
 const router = useRouter()
 const route = useRoute()
 const activeChart = ref<ChartConfig<unknown>>()
-const componentLibRef = ref(null)
 const pageStageEntity = ref<PageStageEntity>()
 const chartList = ref<ChartConfig<unknown>[]>([])
 const pageBasicConfig = ref<PageBasicConfig>({} as PageBasicConfig)
 const globalVariable = ref<GlobalVariable[]>([] as GlobalVariable[])
-const leftToolPanelShow = ref(true)
+const leftToolPanelShow = ref(false)
 const rightControlPanelShow = ref(true)
 // 记录右侧控制面板是否为页面配置
 const rightControlPanelSetting = ref(true)
@@ -36,33 +35,7 @@ const ComponentLayer = defineAsyncComponent(() => import('@/dataroom-packages/_c
 const GlobalVariableComponent = defineAsyncComponent(() => import('@/dataroom-packages/_components/GlobalVariable.vue'))
 const ResourceLib = defineAsyncComponent(() => import('@/dataroom-packages/_components/ResourceLib.vue'))
 
-const leftToolBarList: Array<LeftToolBar> = reactive([
-  {
-    name: '图层',
-    desc: '图层',
-    component: shallowRef<Component>(ComponentLayer),
-    componentName: 'ComponentLayer',
-  },
-  {
-    name: '组件',
-    desc: '组件库',
-    component: shallowRef<Component>(ComponentLib),
-    componentName: 'ComponentLib',
-  },
-  {
-    name: '素材',
-    desc: '素材库',
-    component: shallowRef<Component>(ResourceLib),
-    componentName: 'ResourceLib',
-  },
-  {
-    name: '变量',
-    desc: '全局变量',
-    component: shallowRef<Component>(GlobalVariableComponent),
-    componentName: 'GlobalVariable',
-  },
-])
-const activeLeftToolBar = ref<LeftToolBar>(leftToolBarList[1]!)
+type InsertCommand = 'component' | 'resource'
 /**
  * 激活组件
  * @param id
@@ -148,30 +121,54 @@ const switchLeftToolPanel = (open: boolean = true) => {
   leftToolPanelShow.value = open
 }
 
-const componentLibVisible = ref(false)
+const componentLibDialogVisible = ref(false)
 const resourceLibVisible = ref(false)
 const globalVariableVisible = ref(false)
 const contextMenuVisible = ref(false)
 /**
- * 左侧工具面版激活
- * @param leftToolBar
+ * 打开组件库弹框
  */
-const onActiveLeftToolBar = (leftToolBar: LeftToolBar) => {
-  if (leftToolBar.componentName == 'ResourceLib') {
-    resourceLibVisible.value = false
-    nextTick(() => {
-      resourceLibVisible.value = true
-    })
-    return
-  } else if (leftToolBar.componentName == 'GlobalVariable') {
-    globalVariableVisible.value = false
-    nextTick(() => {
-      globalVariableVisible.value = true
-    })
+const openComponentLib = () => {
+  componentLibDialogVisible.value = true
+}
+
+/**
+ * 打开素材库弹框
+ */
+const openResourceLib = () => {
+  resourceLibVisible.value = false
+  nextTick(() => {
+    resourceLibVisible.value = true
+  })
+}
+
+/**
+ * 打开全局变量弹框
+ */
+const openGlobalVariable = () => {
+  globalVariableVisible.value = false
+  nextTick(() => {
+    globalVariableVisible.value = true
+  })
+}
+
+/**
+ * 打开左侧图层面板
+ */
+const openLayerPanel = () => {
+  switchLeftToolPanel(true)
+}
+
+/**
+ * 顶部插入菜单命令
+ * @param command
+ */
+const onInsertCommand = (command: InsertCommand) => {
+  if (command === 'component') {
+    openComponentLib()
     return
   }
-  activeLeftToolBar.value = leftToolBar
-  switchLeftToolPanel(true)
+  openResourceLib()
 }
 /**
  * 计算组件坐标样式
@@ -352,19 +349,19 @@ const onRenameConfirm = () => {
 const computedMainStyle = computed(() => {
   if (leftToolPanelShow.value && rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: '60px 200px auto 330px',
+      gridTemplateColumns: '240px auto 330px',
     }
   } else if (!leftToolPanelShow.value && !rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: '60px  auto ',
+      gridTemplateColumns: 'auto',
     }
   } else if (!leftToolPanelShow.value && rightControlPanelShow.value) {
     return {
-      gridTemplateColumns: '60px auto 330px',
+      gridTemplateColumns: 'auto 330px',
     }
   } else {
     return {
-      gridTemplateColumns: '60px 200px auto',
+      gridTemplateColumns: '240px auto',
     }
   }
 })
@@ -453,6 +450,22 @@ onUnmounted(() => {
         <div class="title" @click="onTitleClick">{{ pageStageEntity?.name }}</div>
       </div>
       <div class="header-right">
+        <el-dropdown trigger="click" @command="onInsertCommand">
+          <el-button size="small">
+            插入
+            <el-icon class="el-icon--right">
+              <ArrowDown />
+            </el-icon>
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="component">组件</el-dropdown-item>
+              <el-dropdown-item command="resource">素材</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        <el-button @click="openGlobalVariable" size="small">变量</el-button>
+        <el-button @click="openLayerPanel" size="small">图层</el-button>
         <el-button @click="onHistory" size="small">历史</el-button>
         <el-button @click="switchPageControlPanel" size="small">设置</el-button>
         <el-button @click="onPreview" size="small">预览</el-button>
@@ -460,20 +473,10 @@ onUnmounted(() => {
       </div>
     </div>
     <div class="main" :style="computedMainStyle">
-      <div class="left-tool-bar">
-        <div
-          v-for="item in leftToolBarList"
-          :key="item.name"
-          :class="{ bar: true, active: activeLeftToolBar.componentName === item.componentName }"
-          @click="onActiveLeftToolBar(item)"
-        >
-          {{ item.name }}
-        </div>
-      </div>
       <div class="left-tool-panel" :style="computedLeftToolPanelStyle">
         <div class="panel-header">
           <div class="panel-header-inner">
-            <span class="title">{{ activeLeftToolBar.desc }}</span>
+            <span class="title">图层</span>
             <el-icon class="close" @click="switchLeftToolPanel(false)">
               <Close />
             </el-icon>
@@ -481,7 +484,7 @@ onUnmounted(() => {
         </div>
         <div class="panel-body">
           <el-scrollbar>
-            <component :is="activeLeftToolBar.component"></component>
+            <ComponentLayer />
           </el-scrollbar>
         </div>
       </div>
@@ -527,7 +530,9 @@ onUnmounted(() => {
       </el-icon>
     </div>
   </div>
-  <ComponentLib v-if="componentLibVisible" ref="componentLibRef"></ComponentLib>
+  <el-dialog v-model="componentLibDialogVisible" title="组件库" width="760px" :close-on-click-modal="false">
+    <ComponentLib mode="dialog"></ComponentLib>
+  </el-dialog>
   <ResourceLib v-if="resourceLibVisible" ref="resourceLibRef"></ResourceLib>
   <GlobalVariableComponent v-if="globalVariableVisible" ref="globalVariableRef" :globalVariable="globalVariable"></GlobalVariableComponent>
   <ContextMenu
@@ -626,6 +631,9 @@ onUnmounted(() => {
     }
 
     & .header-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
       margin-right: 8px;
     }
   }
@@ -634,55 +642,13 @@ onUnmounted(() => {
     background-color: var(--el-bg-color-page);
     display: grid;
     min-height: 0;
-    grid-template-columns: 60px 200px auto 330px;
-
-    & .left-tool-bar {
-      background-color: var(--el-bg-color);
-      box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
-
-      & .bar {
-        font-size: 12px;
-        font-weight: 500;
-        text-align: center;
-        margin: 4px auto;
-        padding: 8px 0;
-        color: var(--el-text-color-secondary);
-        transition: all 0.2s;
-
-        &:hover {
-          cursor: pointer;
-          background-color: var(--el-fill-color-lighter);
-          color: var(--el-text-color-regular);
-        }
-      }
-
-      & .active {
-        background-color: var(--el-color-primary-light-9);
-        color: var(--el-color-primary);
-        position: relative;
-
-        &:hover {
-          color: var(--el-color-primary);
-        }
-
-        &::before {
-          content: '';
-          left: 0;
-          top: 0;
-          bottom: 0;
-          width: 3px;
-          position: absolute;
-          background-color: var(--el-color-primary);
-          border-radius: 0 2px 2px 0;
-        }
-      }
-    }
+    grid-template-columns: 240px auto 330px;
 
     & .left-tool-panel {
       background-color: var(--el-bg-color);
       display: grid;
       grid-template-rows: 40px auto;
-      height: calc(100vh - 40px);
+      height: calc(100vh - 48px);
       box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
 
       & .panel-header {
