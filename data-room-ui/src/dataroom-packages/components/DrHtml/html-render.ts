@@ -34,6 +34,9 @@ export const substitutePlaceholders = (
   const missingPaths = new Set<string>()
   const substituted = html.replace(/#\{([^}]+)\}/g, (_match, rawPath: string) => {
     const path = rawPath.trim()
+    if (!path) {
+      return ''
+    }
     const value = getFieldValue(context, path)
     if (value === undefined || value === null) {
       missingPaths.add(path)
@@ -48,8 +51,10 @@ export const substitutePlaceholders = (
 }
 
 const isJavaScriptUrl = (value: string): boolean => {
-  return value.trim().toLowerCase().startsWith('javascript:')
+  return value.replace(/[\u0000-\u0020\u007F]/g, '').toLowerCase().startsWith('javascript:')
 }
+
+const URL_ATTRIBUTES = new Set(['href', 'src', 'xlink:href', 'formaction', 'data'])
 
 export const sanitizeHtmlFragment = (html: string): string => {
   const template = document.createElement('template')
@@ -66,7 +71,11 @@ export const sanitizeHtmlFragment = (html: string): string => {
         element.removeAttribute(attr.name)
         continue
       }
-      if ((attrName === 'href' || attrName === 'src' || attrName === 'xlink:href') && isJavaScriptUrl(attrValue)) {
+      if (attrName === 'srcdoc') {
+        element.removeAttribute(attr.name)
+        continue
+      }
+      if (URL_ATTRIBUTES.has(attrName) && isJavaScriptUrl(attrValue)) {
         element.removeAttribute(attr.name)
       }
     }
