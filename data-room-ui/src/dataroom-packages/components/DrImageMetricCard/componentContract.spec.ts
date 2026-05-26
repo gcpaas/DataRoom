@@ -29,6 +29,15 @@ assert(!installSource.includes("name: 'url'"), 'image url must not bind dataset 
 assert(installSource.includes("method: 'click'"), 'behaviors must define click method')
 assert(installSource.includes("name: 'formattedValue'"), 'click payload definition must include formattedValue')
 
+const indexSource = readFileSync(new URL('./index.vue', componentDir), 'utf-8')
+assert(indexSource.includes('useDrComponent'), 'index.vue must use common component data flow hook')
+assert(indexSource.includes('triggerChartBehavior'), 'index.vue must trigger click behavior')
+assert(indexSource.includes('resolveImageMetricValue'), 'index.vue must use runtime value fallback helper')
+assert(indexSource.includes('getImageMetricBackgroundStyle'), 'index.vue must use runtime image background helper')
+assert(indexSource.includes('getImageMetricTextShadow'), 'index.vue must use runtime text glow helper')
+assert(indexSource.includes('letter-spacing: 0'), 'index.vue must keep text letter spacing at 0')
+assert(indexSource.includes('font-feature-settings: "tnum"'), 'index.vue must use tabular numbers for metric value')
+
 const pluginSource = readFileSync(new URL('./plugin.ts', componentDir), 'utf-8')
 assert(pluginSource.includes('DrImageMetricCardPlugin'), 'plugin.ts must export DrImageMetricCardPlugin')
 assert(pluginSource.includes("'图片指标卡'"), 'plugin name must be 图片指标卡')
