@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getComponent, getComponentInstance, getPanelComponent } from '@/dataroom-packages/components/AutoInstall.ts'
-import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onMounted, provide, ref } from 'vue'
+import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onMounted, provide, ref, watch } from 'vue'
 import { debounce } from 'lodash'
 import Moveable, { type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd } from 'vue3-moveable'
 import { VueSelecto } from 'vue3-selecto'
@@ -9,21 +9,41 @@ import VanillaSelecto from 'selecto'
 import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown, Minus, Plus } from '@element-plus/icons-vue'
 import { pageApi } from '@/dataroom-packages/page/api.ts'
 import type { PageStageEntity } from '@/dataroom-packages/page/type/PageStageEntity.ts'
 import { useCanvasInst } from '@/dataroom-packages/hooks/use-canvas-inst'
 import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/GlobalVariable.ts'
 import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 import type { VisualScreenPageBasicConfig } from '@/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts'
+import {
+  clampDesignerZoomPercent,
+  getDesignerZoomCenteredScrollPosition,
+  getDesignerZoomByStep,
+  getDesignerZoomControlRightOffset,
+  getDesignerZoomFromWheel,
+  getDesignerZoomScale,
+  ZOOM_DEFAULT_PERCENT,
+  ZOOM_MAX_PERCENT,
+  ZOOM_MIN_PERCENT,
+  ZOOM_STEP_PERCENT,
+} from './zoom'
 
 const router = useRouter()
 const route = useRoute()
 const canvasContainer = ref<HTMLElement | null>(null)
+const moveableRef = ref<{ updateRect: () => void } | null>(null)
+const canvasScrollbarRef = ref<{
+  wrapRef?: HTMLDivElement | { value?: HTMLDivElement }
+  setScrollLeft?: (value: number) => void
+  setScrollTop?: (value: number) => void
+  update?: () => void
+} | null>(null)
 const activeChart = ref<ChartConfig<unknown>>()
 const chartList = ref<ChartConfig<unknown>[]>([])
 const pageStageEntity = ref<PageStageEntity>()
 const globalVariable = ref<GlobalVariable[]>([] as GlobalVariable[])
+const designerZoomPercent = ref(ZOOM_DEFAULT_PERCENT)
 const defaultBasicConfig: VisualScreenPageBasicConfig = {
   background: { fill: 'color', color: '#0d1e42', url: '', opacity: 100, repeat: 'no-repeat' },
   size: { width: 1920, height: 1080, zoom: 'contain' },
@@ -421,13 +441,109 @@ const computedChartStyle = (chart: ChartConfig<unknown>): CSSProperties => {
   }
 }
 
+const canvasWidth = computed(() => basicConfig.value.size?.width || 1920)
+const canvasHeight = computed(() => basicConfig.value.size?.height || 1080)
+const designerZoomScale = computed(() => getDesignerZoomScale(designerZoomPercent.value))
+
+const updateMoveableRect = () => {
+  nextTick(() => {
+    moveableRef.value?.updateRect()
+  })
+}
+
+const getCanvasScrollbarWrap = () => {
+  const wrapRef = canvasScrollbarRef.value?.wrapRef
+  if (!wrapRef) {
+    return undefined
+  }
+  if (wrapRef instanceof HTMLDivElement) {
+    return wrapRef
+  }
+  return wrapRef.value
+}
+
+const preserveCanvasViewportCenter = (nextPercent: number) => {
+  const nextZoomPercent = clampDesignerZoomPercent(nextPercent)
+  const previousScale = designerZoomScale.value
+  const wrap = getCanvasScrollbarWrap()
+  const viewport = wrap
+    ? {
+        scrollLeft: wrap.scrollLeft,
+        scrollTop: wrap.scrollTop,
+        clientWidth: wrap.clientWidth,
+        clientHeight: wrap.clientHeight,
+      }
+    : undefined
+
+  designerZoomPercent.value = nextZoomPercent
+
+  nextTick(() => {
+    if (viewport) {
+      const nextScrollPosition = getDesignerZoomCenteredScrollPosition(viewport, previousScale, getDesignerZoomScale(nextZoomPercent))
+      canvasScrollbarRef.value?.setScrollLeft?.(nextScrollPosition.scrollLeft)
+      canvasScrollbarRef.value?.setScrollTop?.(nextScrollPosition.scrollTop)
+      canvasScrollbarRef.value?.update?.()
+    }
+    moveableRef.value?.updateRect()
+  })
+}
+
+const setDesignerZoomPercent = (value: number) => {
+  preserveCanvasViewportCenter(value)
+}
+
+const decreaseDesignerZoom = () => {
+  setDesignerZoomPercent(getDesignerZoomByStep(designerZoomPercent.value, 'out'))
+}
+
+const increaseDesignerZoom = () => {
+  setDesignerZoomPercent(getDesignerZoomByStep(designerZoomPercent.value, 'in'))
+}
+
+const onCanvasWheel = (event: WheelEvent) => {
+  if (!event.ctrlKey) {
+    return
+  }
+  event.preventDefault()
+  setDesignerZoomPercent(getDesignerZoomFromWheel(designerZoomPercent.value, event.deltaY))
+}
+
+const computedCanvasScalerStyle = computed<CSSProperties>(() => {
+  const scale = designerZoomScale.value
+  return {
+    width: `${canvasWidth.value * scale}px`,
+    height: `${canvasHeight.value * scale}px`,
+  }
+})
+
+const computedZoomControlStyle = computed<CSSProperties>(() => {
+  return {
+    bottom: '16px',
+    right: `${getDesignerZoomControlRightOffset(rightControlPanelShow.value)}px`,
+  }
+})
+
+const computedZoomRangeStyle = computed<CSSProperties>(() => {
+  const progress = `${(designerZoomPercent.value / ZOOM_MAX_PERCENT) * 100}%`
+  return {
+    background: `linear-gradient(to right, var(--el-color-primary) 0%, var(--el-color-primary) ${progress}, var(--el-border-color) ${progress}, var(--el-border-color) 100%)`,
+  }
+})
+
+const onDesignerZoomRangeInput = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  setDesignerZoomPercent(Number(target.value))
+}
+
 /**
  * 画布尺寸和背景动态样式
  */
 const computedCanvasContentStyle = computed<CSSProperties>(() => {
   const styles: CSSProperties = {
-    width: `${basicConfig.value.size?.width || 1920}px`,
-    height: `${basicConfig.value.size?.height || 1080}px`,
+    width: `${canvasWidth.value}px`,
+    height: `${canvasHeight.value}px`,
+    transform: `scale(${designerZoomScale.value})`,
+    transformOrigin: 'left top',
   }
   const background = basicConfig.value.background
   if (!background) {
@@ -448,6 +564,10 @@ const computedCanvasContentStyle = computed<CSSProperties>(() => {
     }
   }
   return styles
+})
+
+watch(designerZoomPercent, () => {
+  updateMoveableRect()
 })
 
 const computedToolAnchorStyle = computed(() => {
@@ -532,70 +652,95 @@ onMounted(() => {
         </div>
       </div>
       <div class="canvas">
-        <div class="canvas-main" id="canvas-main">
-          <el-scrollbar>
-            <div class="canvas-content" :style="computedCanvasContentStyle">
-              <div
-                class="chart-wrapper"
-                v-for="item in chartList"
-                :key="item.id"
-                :id="item.id"
-                :data-dr-id="item.id"
-                :style="computedChartStyle(item)"
-                @contextmenu="(e: MouseEvent) => onRightClick(e, item)"
-              >
-                <component :is="getComponent(item.type)" :chart="item"></component>
+        <div class="canvas-main" id="canvas-main" @wheel="onCanvasWheel">
+          <el-scrollbar ref="canvasScrollbarRef" class="canvas-scrollbar" height="100%">
+            <div class="canvas-scroll-content">
+              <div class="canvas-scaler" :style="computedCanvasScalerStyle">
+                <div class="canvas-content" :style="computedCanvasContentStyle">
+                  <div
+                    class="chart-wrapper"
+                    v-for="item in chartList"
+                    :key="item.id"
+                    :id="item.id"
+                    :data-dr-id="item.id"
+                    :style="computedChartStyle(item)"
+                    @contextmenu="(e: MouseEvent) => onRightClick(e, item)"
+                  >
+                    <component :is="getComponent(item.type)" :chart="item"></component>
+                  </div>
+                  <Moveable
+                    ref="moveableRef"
+                    :draggable="true"
+                    :rotatable="true"
+                    :resizable="true"
+                    :target="moveableTargets"
+                    :zoom="designerZoomScale"
+                    :bounds="{ left: 0, top: 0, right: 0, bottom: 0, position: 'css' }"
+                    :snappable="true"
+                    :snap-directions="{
+                      top: true,
+                      left: true,
+                      bottom: true,
+                      right: true,
+                      center: true,
+                      middle: true,
+                    }"
+                    :verticalGuidelines="verticalGuidelines"
+                    :horizontalGuidelines="horizontalGuidelines"
+                    :max-snap-element-guideline-distance="70"
+                    :element-snap-directions="{
+                      top: true,
+                      left: true,
+                      bottom: true,
+                      right: true,
+                      center: true,
+                      middle: true,
+                    }"
+                    :render-directions="['nw', 'ne', 'sw', 'se', 'n', 's', 'e', 'w']"
+                    @drag="onDrag"
+                    @resize="onResize"
+                    @rotate="onRotate"
+                    @dragStart="onDragStart"
+                    @dragEnd="onDragEnd"
+                    @resizeEnd="onResizeEnd"
+                    @rotateEnd="onRotateEnd"
+                  />
+                  <VueSelecto
+                    :container="canvasContainer"
+                    :selectableTargets="['.chart-wrapper']"
+                    :selectByClick="true"
+                    :selectFromInside="false"
+                    :continueSelect="false"
+                    :toggleContinueSelect="'shift'"
+                    :hitRate="100"
+                    :ratio="0"
+                    @dragStart="onSelectDragStart"
+                    @selectEnd="onSelectEnd"
+                  />
+                </div>
               </div>
-              <Moveable
-                ref="moveableRef"
-                :draggable="true"
-                :rotatable="true"
-                :resizable="true"
-                :target="moveableTargets"
-                :bounds="{ left: 0, top: 0, right: 0, bottom: 0, position: 'css' }"
-                :snappable="true"
-                :snap-directions="{
-                  top: true,
-                  left: true,
-                  bottom: true,
-                  right: true,
-                  center: true,
-                  middle: true,
-                }"
-                :verticalGuidelines="verticalGuidelines"
-                :horizontalGuidelines="horizontalGuidelines"
-                :max-snap-element-guideline-distance="70"
-                :element-snap-directions="{
-                  top: true,
-                  left: true,
-                  bottom: true,
-                  right: true,
-                  center: true,
-                  middle: true,
-                }"
-                :render-directions="['nw', 'ne', 'sw', 'se', 'n', 's', 'e', 'w']"
-                @drag="onDrag"
-                @resize="onResize"
-                @rotate="onRotate"
-                @dragStart="onDragStart"
-                @dragEnd="onDragEnd"
-                @resizeEnd="onResizeEnd"
-                @rotateEnd="onRotateEnd"
-              />
-              <VueSelecto
-                :container="canvasContainer"
-                :selectableTargets="['.chart-wrapper']"
-                :selectByClick="true"
-                :selectFromInside="false"
-                :continueSelect="false"
-                :toggleContinueSelect="'shift'"
-                :hitRate="100"
-                :ratio="0"
-                @dragStart="onSelectDragStart"
-                @selectEnd="onSelectEnd"
-              />
             </div>
           </el-scrollbar>
+          <div class="canvas-zoom-control" :style="computedZoomControlStyle" role="group" aria-label="画布缩放">
+            <button class="zoom-step-button" type="button" aria-label="缩小画布" title="缩小画布" @click="decreaseDesignerZoom">
+              <el-icon><Minus /></el-icon>
+            </button>
+            <input
+              class="zoom-range"
+              type="range"
+              :value="designerZoomPercent"
+              :min="ZOOM_MIN_PERCENT"
+              :max="ZOOM_MAX_PERCENT"
+              :step="ZOOM_STEP_PERCENT"
+              :style="computedZoomRangeStyle"
+              aria-label="画布缩放比例"
+              @input="onDesignerZoomRangeInput"
+            />
+            <button class="zoom-step-button" type="button" aria-label="放大画布" title="放大画布" @click="increaseDesignerZoom">
+              <el-icon><Plus /></el-icon>
+            </button>
+            <span class="zoom-value">{{ designerZoomPercent }}%</span>
+          </div>
         </div>
       </div>
       <div class="right-panel" :style="rightControlPanelStyle">
@@ -644,6 +789,7 @@ onMounted(() => {
   display: grid;
   grid-template-rows: 48px 1fr;
   height: 100vh;
+  overflow: hidden;
   font-family:
     Inter,
     -apple-system,
@@ -696,6 +842,9 @@ onMounted(() => {
   & .main {
     display: grid;
     grid-template-columns: 240px auto 300px;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
 
     & .left-tool-panel {
       background-color: var(--el-bg-color);
@@ -753,17 +902,125 @@ onMounted(() => {
       grid-template-rows: auto;
       background-image: radial-gradient(circle, var(--el-border-color) 1px, var(--el-bg-color-page) 1px);
       background-size: 16px 16px;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
 
       & .canvas-main {
         height: 100%;
+        min-width: 0;
+        min-height: 0;
         overflow: hidden;
         position: relative;
       }
 
-      & .canvas-content {
-        position: relative;
+      & .canvas-scrollbar {
+        width: 100%;
+        height: 100%;
+      }
+
+      & .canvas-scroll-content {
         min-width: 100%;
         min-height: 100%;
+        position: relative;
+      }
+
+      & .canvas-scaler {
+        position: relative;
+      }
+
+      & .canvas-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      & .canvas-zoom-control {
+        position: fixed;
+        z-index: 9;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-sizing: border-box;
+        width: 280px;
+        padding: 8px 12px;
+        border: 1px solid var(--el-border-color);
+        border-radius: 8px;
+        background-color: var(--el-fill-color-blank);
+        box-shadow: var(--el-box-shadow-light);
+
+        & .zoom-step-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex: 0 0 24px;
+          width: 24px;
+          height: 24px;
+          padding: 0;
+          border: 0;
+          border-radius: 4px;
+          background-color: var(--el-fill-color-blank);
+          color: var(--el-text-color-regular);
+          cursor: pointer;
+
+          &:hover,
+          &:focus-visible {
+            background-color: var(--el-fill-color-lighter);
+            color: var(--el-color-primary);
+            outline: none;
+          }
+        }
+
+        & .zoom-range {
+          appearance: none;
+          flex: 1;
+          min-width: 0;
+          height: 2px;
+          margin: 0;
+          border-radius: 9999px;
+          cursor: pointer;
+
+          &::-webkit-slider-runnable-track {
+            height: 2px;
+            border-radius: 9999px;
+            background: inherit;
+          }
+
+          &::-webkit-slider-thumb {
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            margin-top: -4px;
+            border: 1px solid var(--el-color-primary);
+            border-radius: 9999px;
+            background-color: var(--el-fill-color-blank);
+          }
+
+          &::-moz-range-track {
+            height: 2px;
+            border-radius: 9999px;
+            background: inherit;
+          }
+
+          &::-moz-range-thumb {
+            width: 10px;
+            height: 10px;
+            border: 1px solid var(--el-color-primary);
+            border-radius: 9999px;
+            background-color: var(--el-fill-color-blank);
+          }
+        }
+
+        & .zoom-value {
+          min-width: 40px;
+          color: var(--el-text-color-secondary);
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 1;
+          text-align: right;
+          letter-spacing: 0;
+          font-feature-settings: 'tnum';
+        }
       }
     }
 
