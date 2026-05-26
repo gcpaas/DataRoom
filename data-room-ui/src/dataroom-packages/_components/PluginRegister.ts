@@ -27,6 +27,8 @@ import {DrMetricCardPlugin} from '@/dataroom-packages/components/DrMetricCard/pl
 import {DrTrendMetricCardPlugin} from '@/dataroom-packages/components/DrTrendMetricCard/plugin.ts'
 import {DrPeriodCompareCardPlugin} from '@/dataroom-packages/components/DrPeriodCompareCard/plugin.ts'
 import {DrDataTablePlugin} from '@/dataroom-packages/components/DrDataTable/plugin.ts'
+import {DrDateTimePlugin} from '@/dataroom-packages/components/DrDateTime/plugin.ts'
+import {DrHtmlPlugin} from '@/dataroom-packages/components/DrHtml/plugin.ts'
 import {DrAnalysisTablePlugin} from '@/dataroom-packages/components/DrAnalysisTable/plugin.ts'
 import type {ComponentLibTagInterface} from "@/dataroom-packages/PageDesigner/type/ComponentLibTagInterface.ts";
 import {ComponentLibTagTypeConst} from "@/dataroom-packages/constant/ComponentLibTagTypeConst.ts";
@@ -94,6 +96,7 @@ const componentLibTagList: ComponentLibTagInterface[] = [
  */
 const pluginList = [
   new DrTextPlugin([ComponentLibTagTypeConst.TEXT]),
+  new DrDateTimePlugin([ComponentLibTagTypeConst.TEXT]),
   new DrImagePlugin([ComponentLibTagTypeConst.MEDIA]),
   new DrBarChartPlugin([ComponentLibTagTypeConst.BAR]),
   new DrLineChartPlugin([ComponentLibTagTypeConst.LINE]),
@@ -114,6 +117,7 @@ const pluginList = [
   new DrSelectPlugin([ComponentLibTagTypeConst.FORM]),
   new DrRadioPlugin([ComponentLibTagTypeConst.FORM]),
   new DrTabListPlugin([ComponentLibTagTypeConst.FORM]),
+  new DrHtmlPlugin([ComponentLibTagTypeConst.MEDIA]),
   new DrIframePlugin([ComponentLibTagTypeConst.MEDIA]),
   new DrVideoPlayerPlugin([ComponentLibTagTypeConst.MEDIA]),
   new DrBorderPlugin([ComponentLibTagTypeConst.DECORATION]),
