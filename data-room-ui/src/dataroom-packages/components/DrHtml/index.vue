@@ -11,6 +11,7 @@ import type { DrHtmlConfig } from './install.ts'
 import { useDrComponent } from '@/dataroom-packages/hooks/use-dr-component'
 import type { ComponentExpose } from '@/dataroom-packages/components/type/ComponentExpose.ts'
 import { buildHtmlSrcdoc, getPlaceholderPaths } from './html-render.ts'
+import { getFieldValue, normalizeRows } from '@/dataroom-packages/components/_shared/metric-table-utils.ts'
 
 const { chart } = defineProps<{
   chart: DrHtmlConfig
@@ -27,7 +28,15 @@ const { canvasInst, expose } = useDrComponent({
   changeData,
 })
 
-const renderResult = computed(() => buildHtmlSrcdoc(chart.props.html, chart.props.css, latestDatasetValue.value))
+const placeholderContext = computed(() => {
+  const templateContextField = chart.dataset?.fields?.templateContext?.[0]
+  if (!templateContextField) {
+    return latestDatasetValue.value
+  }
+  return getFieldValue(normalizeRows(latestDatasetValue.value)[0], templateContextField)
+})
+
+const renderResult = computed(() => buildHtmlSrcdoc(chart.props.html, chart.props.css, placeholderContext.value))
 
 const sandboxAttr = computed(() => {
   const sandbox = chart.props.sandbox
@@ -39,6 +48,7 @@ const sandboxAttr = computed(() => {
 })
 
 const placeholderCount = computed(() => getPlaceholderPaths(chart.props.html).length)
+const enableClickCapture = computed(() => Boolean(chart.behaviors?.click && !chart.behaviors.click.disabled))
 
 watch(
   () => renderResult.value.missingPaths.join('|'),
@@ -64,13 +74,20 @@ defineExpose<ComponentExpose>({
 </script>
 
 <template>
-  <div class="dr-html" :id="chart.id" @click="onClick">
+  <div class="dr-html" :id="chart.id">
     <iframe
       class="dr-html__frame"
       :srcdoc="renderResult.srcdoc"
       :sandbox="sandboxAttr"
       referrerpolicy="no-referrer"
       @load="onLoad"
+    />
+    <button
+      v-if="enableClickCapture"
+      class="dr-html__click-capture"
+      type="button"
+      aria-label="HTML组件点击区域"
+      @click.stop="onClick"
     />
   </div>
 </template>
@@ -80,6 +97,7 @@ defineExpose<ComponentExpose>({
   width: 100%;
   height: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 .dr-html__frame {
@@ -87,5 +105,18 @@ defineExpose<ComponentExpose>({
   height: 100%;
   border: 0;
   display: block;
+}
+
+.dr-html__click-capture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  appearance: none;
+  cursor: pointer;
 }
 </style>

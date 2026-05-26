@@ -77,9 +77,6 @@ const applyEditor = () => {
         </el-collapse-item>
 
         <el-collapse-item title="安全沙箱" name="sandbox">
-          <el-form-item label="允许脚本">
-            <el-switch v-model="chartConfig.props.sandbox.allowScripts" />
-          </el-form-item>
           <el-form-item label="允许同源">
             <el-switch v-model="chartConfig.props.sandbox.allowSameOrigin" />
           </el-form-item>
