@@ -54,7 +54,7 @@ const isJavaScriptUrl = (value: string): boolean => {
   return value.replace(/[\u0000-\u0020\u007F]/g, '').toLowerCase().startsWith('javascript:')
 }
 
-const URL_ATTRIBUTES = new Set(['href', 'src', 'xlink:href', 'formaction', 'data'])
+const URL_ATTRIBUTES = new Set(['href', 'src', 'xlink:href', 'action', 'formaction', 'data'])
 
 export const sanitizeHtmlFragment = (html: string): string => {
   const template = document.createElement('template')
