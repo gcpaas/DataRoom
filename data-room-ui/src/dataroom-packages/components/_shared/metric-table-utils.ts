@@ -42,15 +42,15 @@ export type ConditionalOperator = '>' | '>=' | '<' | '<=' | '=' | '!=' | 'contai
 export type ComparisonTrend = 'up' | 'down' | 'flat' | 'empty'
 
 /**
- * 分析表格支持的聚合方法。
+ * 表格聚合支持的方法。
  */
 export type AggregationMethod = 'sum' | 'avg' | 'min' | 'max' | 'count'
 
 /**
  * 表格列的公共配置结构。
  *
- * `DrDataTable` 和 `DrAnalysisTable` 都使用该结构描述字段、标题、宽度、对齐方式、
- * 固定列位置、显隐状态和默认格式化方式，避免两个表格组件维护两套列类型。
+ * `DrDataTable` 使用该结构描述字段、标题、宽度、对齐方式、固定列位置、
+ * 显隐状态和默认格式化方式。
  */
 export interface TableColumnConfig {
   field: string
