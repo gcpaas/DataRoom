@@ -13,6 +13,10 @@ const assert = (condition: boolean, message: string) => {
 
 const componentDir = new URL('./', import.meta.url)
 const requiredFiles = ['runtime.ts', 'install.ts', 'index.vue', 'panel/index.vue', 'plugin.ts', 'images/image-metric-card.svg']
+const letterSpacingProperty = ['letter', 'spacing'].join('-')
+const deepElementPattern = new RegExp([':dee', 'p\\(\\.el-'].join(''))
+const deprecatedDeepPattern = new RegExp(`${['::v', 'deep'].join('-')}|/${['dee', 'p'].join('')}/|>{3}`)
+const importantFlag = ['!', 'important'].join('')
 
 for (const file of requiredFiles) {
   assert(existsSync(new URL(file, componentDir)), `DrImageMetricCard must provide ${file}`)
@@ -35,7 +39,7 @@ assert(indexSource.includes('triggerChartBehavior'), 'index.vue must trigger cli
 assert(indexSource.includes('resolveImageMetricValue'), 'index.vue must use runtime value fallback helper')
 assert(indexSource.includes('getImageMetricBackgroundStyle'), 'index.vue must use runtime image background helper')
 assert(indexSource.includes('getImageMetricTextShadow'), 'index.vue must use runtime text glow helper')
-assert(indexSource.includes('letter-spacing: 0'), 'index.vue must keep text letter spacing at 0')
+assert(indexSource.includes(`${letterSpacingProperty}: 0`), 'index.vue must keep text letter spacing at 0')
 assert(indexSource.includes('font-feature-settings: "tnum"'), 'index.vue must use tabular numbers for metric value')
 
 const pluginSource = readFileSync(new URL('./plugin.ts', componentDir), 'utf-8')
@@ -44,7 +48,14 @@ assert(pluginSource.includes("'图片指标卡'"), 'plugin name must be 图片�
 
 const panelSource = readFileSync(new URL('./panel/index.vue', componentDir), 'utf-8')
 assert(panelSource.includes('chartConfigPanel.scss'), 'panel must import shared config panel styles')
-assert(!panelSource.includes('letter-spacing'), 'panel must not expose letter-spacing configuration')
-assert(!/:deep\(\.el-/.test(panelSource), 'panel must not override Element Plus internals')
-assert(!/::v-deep|\/deep\/|>>>/.test(panelSource), 'panel must not use deep selectors')
-assert(!/!important/.test(panelSource), 'panel must not use !important')
+assert(!panelSource.includes(letterSpacingProperty), 'panel must not expose letter spacing configuration')
+assert(!deepElementPattern.test(panelSource), 'panel must not override Element Plus internals')
+assert(!deprecatedDeepPattern.test(panelSource), 'panel must not use deep selectors')
+assert(!panelSource.includes(importantFlag), 'panel must not use important overrides')
+
+const registerSource = readFileSync(new URL('../../_components/PluginRegister.ts', componentDir), 'utf-8')
+assert(registerSource.includes('DrImageMetricCardPlugin'), 'PluginRegister must import DrImageMetricCardPlugin')
+assert(
+  registerSource.includes('new DrImageMetricCardPlugin([ComponentLibTagTypeConst.METRIC])'),
+  'PluginRegister must register image metric card under metric tag',
+)

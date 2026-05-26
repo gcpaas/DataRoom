@@ -27,6 +27,7 @@ import {DrMetricCardPlugin} from '@/dataroom-packages/components/DrMetricCard/pl
 import {DrAlarmImagePlugin} from '@/dataroom-packages/components/DrAlarmImage/plugin.ts'
 import {DrTrendMetricCardPlugin} from '@/dataroom-packages/components/DrTrendMetricCard/plugin.ts'
 import {DrPeriodCompareCardPlugin} from '@/dataroom-packages/components/DrPeriodCompareCard/plugin.ts'
+import {DrImageMetricCardPlugin} from '@/dataroom-packages/components/DrImageMetricCard/plugin.ts'
 import {DrDataTablePlugin} from '@/dataroom-packages/components/DrDataTable/plugin.ts'
 import {DrDateTimePlugin} from '@/dataroom-packages/components/DrDateTime/plugin.ts'
 import {DrHtmlPlugin} from '@/dataroom-packages/components/DrHtml/plugin.ts'
@@ -112,6 +113,7 @@ const pluginList = [
   new DrAlarmImagePlugin([ComponentLibTagTypeConst.METRIC]),
   new DrTrendMetricCardPlugin([ComponentLibTagTypeConst.METRIC]),
   new DrPeriodCompareCardPlugin([ComponentLibTagTypeConst.METRIC]),
+  new DrImageMetricCardPlugin([ComponentLibTagTypeConst.METRIC]),
   new DrDataTablePlugin([ComponentLibTagTypeConst.TABLE]),
   new DrInputPlugin([ComponentLibTagTypeConst.FORM]),
   new DrSelectPlugin([ComponentLibTagTypeConst.FORM]),
