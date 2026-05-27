@@ -21,24 +21,36 @@
 ![登录页面.png](doc/image/%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.png)
 
 ### 页面管理页
+> 支持目录、大屏、仪表盘创建
+
 ![页面管理页.png](doc/image/%E9%A1%B5%E9%9D%A2%E7%AE%A1%E7%90%86%E9%A1%B5.png)
 
 ### 仪表盘设计页
 ![页面设计页.png](doc/image/%E9%A1%B5%E9%9D%A2%E8%AE%BE%E8%AE%A1%E9%A1%B5.png)
 
 ### 素材库页面
+> 支持目录、图片、视频、3D模型导入
+
 ![素材库页面.png](doc/image/%E7%B4%A0%E6%9D%90%E5%BA%93%E9%A1%B5%E9%9D%A2.png)
 
 ### 数据源页面
+> 支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、GoldenDB、MongoDB、人大金仓、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV数据源接入
+
 ![数据源页面.png](doc/image/%E6%95%B0%E6%8D%AE%E6%BA%90%E9%A1%B5%E9%9D%A2.png)
 
 ### 数据集页面
+> 支持目录、JSON、SQL、HTTP、ES数据集接入
+
 ![数据集页面.png](doc/image/%E6%95%B0%E6%8D%AE%E9%9B%86%E9%A1%B5%E9%9D%A2.png)
 
 ### 地图管理
+> 支持地图数据导入、预览、区域自动解析
+
 ![地图管理.png](doc/image/%E5%9C%B0%E5%9B%BE%E7%AE%A1%E7%90%86.png)
 
 ### 用户管理
+> 支持用户新建、权限管控、密码加密存储
+
 ![用户管理.png](doc/image/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png)
 
 
