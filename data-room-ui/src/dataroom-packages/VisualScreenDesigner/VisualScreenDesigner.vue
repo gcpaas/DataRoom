@@ -81,7 +81,7 @@ const isRulerInteracting = ref(false)
 const isCanvasPanModeActive = computed(() => spacePressed.value || isCanvasPanning.value)
 const isCanvasInteractionBlocked = computed(() => isCanvasPanModeActive.value || isRulerInteracting.value)
 // 记录右侧控制面板是否为页面配置
-const rightControlPanelSetting = ref(false)
+const rightControlPanelSetting = ref(true)
 const visualScreenRuler = computed(() => normalizeVisualScreenRulerConfig(basicConfig.value.ruler, canvasWidth.value, canvasHeight.value))
 const moveableGuidelines = computed(() => getVisualScreenMoveableGuidelines(visualScreenRuler.value, canvasWidth.value, canvasHeight.value))
 const moveableVerticalGuidelines = computed(() => moveableGuidelines.value.verticalGuidelines)

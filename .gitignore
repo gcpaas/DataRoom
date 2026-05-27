@@ -1,3 +1,4 @@
+*.test.ts
 *spec.ts
 *.mjs
 .claude

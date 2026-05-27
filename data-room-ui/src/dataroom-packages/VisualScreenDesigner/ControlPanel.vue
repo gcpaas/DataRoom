@@ -97,7 +97,10 @@ const timers = computed(() => {
 const timerConfigDialogVisible = ref(false)
 const currentTimer = ref<PageTimer | null>(null)
 
-const activeTab = ref('config')
+const activePanelNames = ref(['size', 'background', 'zoom', 'ruler', 'timer'])
+const currentZoomModeDesc = computed(() => {
+  return ZOOM_MODES.find((mode) => mode.value === basicConfig.size.zoom)?.desc || ''
+})
 
 // ==================== 上传相关 ====================
 
@@ -202,209 +205,187 @@ const clearUnlockedGuides = () => {
 </script>
 
 <template>
-  <div class="control-panel">
-    <div class="control-tabs">
-      <div class="control-tabs-header" role="tablist" aria-label="大屏配置">
-        <button type="button" class="control-tab" :class="{ active: activeTab === 'config' }" role="tab" :aria-selected="activeTab === 'config'" @click="activeTab = 'config'">
-          配置
-        </button>
-        <button
-          type="button"
-          class="control-tab"
-          :class="{ active: activeTab === 'interaction' }"
-          role="tab"
-          :aria-selected="activeTab === 'interaction'"
-          @click="activeTab = 'interaction'"
-        >
-          交互
-        </button>
-      </div>
-      <div class="control-tabs-content">
-        <section v-show="activeTab === 'config'" class="control-tab-pane" role="tabpanel">
-          <div class="tab-content">
-            <el-form label-width="80px" label-position="left" size="small">
-              <!-- 大屏尺寸配置 -->
-              <el-divider content-position="left">大屏尺寸</el-divider>
+  <div class="dr-config-panel dr-visual-screen-config-panel">
+    <el-form class="dr-config-panel__form" :model="basicConfig" label-width="72px" size="small" label-position="left">
+      <el-collapse v-model="activePanelNames" class="dr-config-panel__section">
+        <el-collapse-item title="画布尺寸" name="size">
+          <el-form-item label="分辨率">
+            <el-select v-model="selectedPreset" class="dr-config-panel__control" placeholder="请选择分辨率">
+              <el-option v-for="preset in RESOLUTION_PRESETS" :key="preset.value" :label="preset.label" :value="preset.value" />
+            </el-select>
+          </el-form-item>
 
-              <el-form-item label="分辨率">
-                <el-select v-model="selectedPreset" placeholder="请选择分辨率">
-                  <el-option v-for="preset in RESOLUTION_PRESETS" :key="preset.value" :label="preset.label" :value="preset.value" />
-                </el-select>
-              </el-form-item>
+          <el-form-item label="宽度">
+            <el-input-number v-model="basicConfig.size.width" class="dr-config-panel__control" :min="320" :step="10" controls-position="right" />
+          </el-form-item>
 
-              <el-form-item label="宽度">
-                <el-input-number v-model="basicConfig.size.width" :min="320" :step="10" controls-position="right" class="field-full" />
-              </el-form-item>
+          <el-form-item label="高度">
+            <el-input-number v-model="basicConfig.size.height" class="dr-config-panel__control" :min="320" :step="10" controls-position="right" />
+          </el-form-item>
+        </el-collapse-item>
 
-              <el-form-item label="高度">
-                <el-input-number v-model="basicConfig.size.height" :min="320" :step="10" controls-position="right" class="field-full" />
-              </el-form-item>
+        <el-collapse-item title="背景" name="background">
+          <el-form-item label="背景填充">
+            <el-radio-group v-model="basicConfig.background.fill">
+              <el-radio value="color">颜色</el-radio>
+              <el-radio value="image">图片</el-radio>
+            </el-radio-group>
+          </el-form-item>
 
-              <!-- 背景配置 -->
-              <el-divider content-position="left">背景设置</el-divider>
+          <el-form-item v-if="basicConfig.background.fill === 'color'" label="背景颜色">
+            <el-color-picker v-model="basicConfig.background.color" show-alpha />
+          </el-form-item>
 
-              <el-form-item label="背景填充">
-                <el-radio-group v-model="basicConfig.background.fill">
-                  <el-radio value="color">颜色</el-radio>
-                  <el-radio value="image">图片</el-radio>
-                </el-radio-group>
-              </el-form-item>
-
-              <el-form-item label="背景颜色" v-if="basicConfig.background.fill === 'color'">
-                <el-color-picker v-model="basicConfig.background.color" show-alpha></el-color-picker>
-              </el-form-item>
-
-              <template v-if="basicConfig.background.fill === 'image'">
-                <el-form-item label="背景图片">
-                  <div class="bg-upload-section">
-                    <el-upload
-                      :action="uploadUrl"
-                      :headers="uploadHeaders"
-                      :on-success="handleBgUploadSuccess"
-                      :on-error="handleUploadError"
-                      :show-file-list="false"
-                      accept="image/*"
-                      class="bg-uploader"
-                    >
-                      <div class="bg-preview-box">
-                        <el-image v-if="basicConfig.background.url" :src="getResourceUrl(basicConfig.background.url)" fit="contain" class="bg-image" lazy>
-                          <template #error>
-                            <div class="bg-placeholder">
-                              <el-icon>
-                                <Picture />
-                              </el-icon>
-                              <span>加载失败</span>
-                            </div>
-                          </template>
-                        </el-image>
-                        <div v-else class="bg-placeholder">
-                          <el-icon>
+          <template v-if="basicConfig.background.fill === 'image'">
+            <el-form-item label="背景图片">
+              <div class="bg-upload-section">
+                <el-upload
+                  :action="uploadUrl"
+                  :headers="uploadHeaders"
+                  :on-success="handleBgUploadSuccess"
+                  :on-error="handleUploadError"
+                  :show-file-list="false"
+                  accept="image/*"
+                  class="bg-uploader"
+                >
+                  <div class="bg-preview-box">
+                    <el-image v-if="basicConfig.background.url" :src="getResourceUrl(basicConfig.background.url)" fit="contain" class="bg-image" lazy>
+                      <template #error>
+                        <div class="bg-placeholder">
+                          <el-icon class="bg-placeholder-icon">
                             <Picture />
                           </el-icon>
-                          <span>点击上传背景图</span>
+                          <span>加载失败</span>
                         </div>
-                      </div>
-                    </el-upload>
+                      </template>
+                    </el-image>
+                    <div v-else class="bg-placeholder">
+                      <el-icon class="bg-placeholder-icon">
+                        <Picture />
+                      </el-icon>
+                      <span>点击上传背景图</span>
+                    </div>
                   </div>
-                </el-form-item>
-
-                <el-form-item label="透明度">
-                  <el-input-number v-model="basicConfig.background.opacity" :min="0" :max="100" :step="1" controls-position="right" class="field-full" />
-                </el-form-item>
-
-                <el-form-item label="填充方式">
-                  <el-select v-model="basicConfig.background.repeat" placeholder="请选择填充方式">
-                    <el-option label="不重复" value="no-repeat"></el-option>
-                    <el-option label="重复" value="repeat"></el-option>
-                    <el-option label="水平重复" value="repeat-x"></el-option>
-                    <el-option label="垂直重复" value="repeat-y"></el-option>
-                  </el-select>
-                </el-form-item>
-              </template>
-
-              <!-- 缩放模式配置 -->
-              <el-divider content-position="left">缩放模式</el-divider>
-
-              <el-form-item label="预览缩放">
-                <el-select v-model="basicConfig.size.zoom" placeholder="请选择缩放模式">
-                  <el-option v-for="mode in ZOOM_MODES" :key="mode.value" :label="mode.label" :value="mode.value" />
-                </el-select>
-              </el-form-item>
-
-              <div class="zoom-desc" v-if="basicConfig.size.zoom">
-                {{ ZOOM_MODES.find((m) => m.value === basicConfig.size.zoom)?.desc }}
+                </el-upload>
               </div>
+            </el-form-item>
 
-              <el-divider content-position="left">标尺 / 参考线</el-divider>
+            <el-form-item label="透明度">
+              <el-input-number v-model="basicConfig.background.opacity" class="dr-config-panel__control" :min="0" :max="100" :step="1" controls-position="right" />
+            </el-form-item>
 
-              <el-form-item label="显示标尺">
-                <el-switch v-model="rulerConfig.visible" size="small" />
-              </el-form-item>
+            <el-form-item label="填充方式">
+              <el-select v-model="basicConfig.background.repeat" class="dr-config-panel__control" placeholder="请选择填充方式">
+                <el-option label="不重复" value="no-repeat" />
+                <el-option label="重复" value="repeat" />
+                <el-option label="水平重复" value="repeat-x" />
+                <el-option label="垂直重复" value="repeat-y" />
+              </el-select>
+            </el-form-item>
+          </template>
+        </el-collapse-item>
 
-              <el-form-item label="显示参考线">
-                <el-switch v-model="rulerConfig.guidesVisible" size="small" />
-              </el-form-item>
+        <el-collapse-item title="预览缩放" name="zoom">
+          <el-form-item label="缩放模式">
+            <el-select v-model="basicConfig.size.zoom" class="dr-config-panel__control" placeholder="请选择缩放模式">
+              <el-option v-for="mode in ZOOM_MODES" :key="mode.value" :label="mode.label" :value="mode.value" />
+            </el-select>
+          </el-form-item>
 
-              <el-form-item label="锁定全部">
-                <el-switch v-model="rulerConfig.guidesLocked" size="small" />
-              </el-form-item>
-
-              <el-form-item label="清空">
-                <el-button size="small" plain @click="clearUnlockedGuides">清空未锁定</el-button>
-              </el-form-item>
-
-              <div class="guide-section">
-                <div class="guide-section-title">纵向参考线</div>
-                <div v-if="rulerConfig.verticalGuides.length > 0" class="guide-list">
-                  <div v-for="guide in rulerConfig.verticalGuides" :key="guide.id" class="guide-row">
-                    <span class="guide-axis-label">X</span>
-                    <el-input-number
-                      :model-value="guide.position"
-                      :min="0"
-                      :max="basicConfig.size.width"
-                      :step="1"
-                      size="small"
-                      controls-position="right"
-                      class="guide-position-input"
-                      :disabled="isGuideLocked(guide)"
-                      @update:model-value="(value: number | undefined) => updateGuidePosition('vertical', guide, value)"
-                    />
-                    <el-switch v-model="guide.locked" size="small" :disabled="rulerConfig.guidesLocked" />
-                    <el-button size="small" text :disabled="isGuideLocked(guide)" @click="deleteGuide('vertical', guide)">
-                      <el-icon><Delete /></el-icon>
-                    </el-button>
-                  </div>
-                </div>
-                <div v-else class="guide-empty">暂无纵向参考线</div>
-              </div>
-
-              <div class="guide-section">
-                <div class="guide-section-title">横向参考线</div>
-                <div v-if="rulerConfig.horizontalGuides.length > 0" class="guide-list">
-                  <div v-for="guide in rulerConfig.horizontalGuides" :key="guide.id" class="guide-row">
-                    <span class="guide-axis-label">Y</span>
-                    <el-input-number
-                      :model-value="guide.position"
-                      :min="0"
-                      :max="basicConfig.size.height"
-                      :step="1"
-                      size="small"
-                      controls-position="right"
-                      class="guide-position-input"
-                      :disabled="isGuideLocked(guide)"
-                      @update:model-value="(value: number | undefined) => updateGuidePosition('horizontal', guide, value)"
-                    />
-                    <el-switch v-model="guide.locked" size="small" :disabled="rulerConfig.guidesLocked" />
-                    <el-button size="small" text :disabled="isGuideLocked(guide)" @click="deleteGuide('horizontal', guide)">
-                      <el-icon><Delete /></el-icon>
-                    </el-button>
-                  </div>
-                </div>
-                <div v-else class="guide-empty">暂无横向参考线</div>
-              </div>
-            </el-form>
+          <div v-if="currentZoomModeDesc" class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">缩放说明</div>
+            <div class="panel-desc">{{ currentZoomModeDesc }}</div>
           </div>
-        </section>
-        <section v-show="activeTab === 'interaction'" class="control-tab-pane" role="tabpanel">
-          <div class="tab-content">
-            <div class="timer-header">
-              <span class="timer-title">定时器</span>
+        </el-collapse-item>
+
+        <el-collapse-item title="标尺 / 参考线" name="ruler">
+          <el-form-item label="显示标尺">
+            <el-switch v-model="rulerConfig.visible" size="small" />
+          </el-form-item>
+
+          <el-form-item label="显示参考线">
+            <el-switch v-model="rulerConfig.guidesVisible" size="small" />
+          </el-form-item>
+
+          <el-form-item label="锁定全部">
+            <el-switch v-model="rulerConfig.guidesLocked" size="small" />
+          </el-form-item>
+
+          <el-form-item label="清空">
+            <el-button size="small" plain @click="clearUnlockedGuides">清空未锁定</el-button>
+          </el-form-item>
+
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">纵向参考线</div>
+            <div v-if="rulerConfig.verticalGuides.length > 0" class="guide-list">
+              <div v-for="guide in rulerConfig.verticalGuides" :key="guide.id" class="guide-row">
+                <span class="guide-axis-label">X</span>
+                <el-input-number
+                  :model-value="guide.position"
+                  :min="0"
+                  :max="basicConfig.size.width"
+                  :step="1"
+                  size="small"
+                  controls-position="right"
+                  class="guide-position-input"
+                  :disabled="isGuideLocked(guide)"
+                  @update:model-value="(value: number | undefined) => updateGuidePosition('vertical', guide, value)"
+                />
+                <el-switch v-model="guide.locked" size="small" :disabled="rulerConfig.guidesLocked" />
+                <el-button size="small" text :disabled="isGuideLocked(guide)" @click="deleteGuide('vertical', guide)">
+                  <el-icon><Delete /></el-icon>
+                </el-button>
+              </div>
+            </div>
+            <div v-else class="panel-empty">暂无纵向参考线</div>
+          </div>
+
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">横向参考线</div>
+            <div v-if="rulerConfig.horizontalGuides.length > 0" class="guide-list">
+              <div v-for="guide in rulerConfig.horizontalGuides" :key="guide.id" class="guide-row">
+                <span class="guide-axis-label">Y</span>
+                <el-input-number
+                  :model-value="guide.position"
+                  :min="0"
+                  :max="basicConfig.size.height"
+                  :step="1"
+                  size="small"
+                  controls-position="right"
+                  class="guide-position-input"
+                  :disabled="isGuideLocked(guide)"
+                  @update:model-value="(value: number | undefined) => updateGuidePosition('horizontal', guide, value)"
+                />
+                <el-switch v-model="guide.locked" size="small" :disabled="rulerConfig.guidesLocked" />
+                <el-button size="small" text :disabled="isGuideLocked(guide)" @click="deleteGuide('horizontal', guide)">
+                  <el-icon><Delete /></el-icon>
+                </el-button>
+              </div>
+            </div>
+            <div v-else class="panel-empty">暂无横向参考线</div>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="定时器" name="timer">
+          <div class="dr-config-panel__sub-section">
+            <div class="dr-config-panel__sub-title">
+              <span>定时器列表</span>
               <el-button type="primary" size="small" plain @click="addTimer">添加定时器</el-button>
             </div>
             <div class="timer-list">
-              <div class="timer-item" v-for="timer in timers" :key="timer.id">
+              <div v-for="timer in timers" :key="timer.id" class="timer-item">
                 <div class="timer-info">
                   <div class="timer-name">{{ timer.name }}</div>
                   <div class="timer-desc">{{ timer.interval }} 毫秒1次</div>
                 </div>
                 <div class="timer-controls">
                   <el-switch v-model="timer.enabled" size="small" @change="(val: boolean) => toggleTimer(timer, val)" />
-                  <el-icon class="setting-icon" @click="openTimerConfig(timer)">
-                    <Setting />
-                  </el-icon>
-                  <el-icon class="delete-icon" @click="deleteTimer(timer.id)">
-                    <Delete />
-                  </el-icon>
+                  <el-button size="small" text @click="openTimerConfig(timer)">
+                    <el-icon><Setting /></el-icon>
+                  </el-button>
+                  <el-button size="small" text type="danger" @click="deleteTimer(timer.id)">
+                    <el-icon><Delete /></el-icon>
+                  </el-button>
                 </div>
               </div>
               <div v-if="timers.length === 0" class="empty-timer">
@@ -412,287 +393,169 @@ const clearUnlockedGuides = () => {
               </div>
             </div>
           </div>
-        </section>
-      </div>
-    </div>
+        </el-collapse-item>
+      </el-collapse>
+    </el-form>
 
-    <!-- 定时器配置对话框 -->
     <TimerConfigDialog v-if="timerConfigDialogVisible && currentTimer" v-model="timerConfigDialogVisible" :timer="currentTimer" />
   </div>
 </template>
 
 <style scoped lang="scss">
-.control-panel {
+@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+
+.dr-visual-screen-config-panel {
+  --el-collapse-border-color: var(--el-bg-color);
+
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
 
-  .control-tabs {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
+.dr-visual-screen-config-panel .dr-config-panel__form {
+  box-sizing: border-box;
+  min-height: 0;
+  padding: 12px;
+  overflow-y: auto;
+}
 
-    .control-tabs-header {
-      display: flex;
-      flex: 0 0 auto;
-      gap: 4px;
-      padding: 0 16px;
-      border-bottom: 1px solid var(--el-border-color-light);
-    }
+.dr-visual-screen-config-panel .dr-config-panel__section {
+  margin-bottom: 0;
+}
 
-    .control-tab {
-      position: relative;
-      min-width: 56px;
-      height: 40px;
-      padding: 0 12px;
-      border: 0;
-      background: var(--el-bg-color);
-      color: var(--el-text-color-secondary);
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0;
-      cursor: pointer;
-      transition: color 0.2s ease;
-    }
+.panel-desc,
+.panel-empty {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
 
-    .control-tab:hover {
-      color: var(--el-text-color-regular);
-    }
+.guide-list,
+.timer-list {
+  display: grid;
+  gap: 8px;
+}
 
-    .control-tab.active {
-      color: var(--el-text-color-primary);
-    }
+.guide-row {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+}
 
-    .control-tab.active::after {
-      content: '';
-      position: absolute;
-      right: 12px;
-      bottom: 0;
-      left: 12px;
-      height: 2px;
-      background-color: var(--el-color-primary);
-    }
+.guide-axis-label {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  font-feature-settings: 'tnum';
+}
 
-    .control-tabs-content {
-      flex: 1;
-      min-height: 0;
-      overflow: hidden;
-    }
+.guide-position-input {
+  width: 100%;
+}
 
-    .control-tab-pane {
-      height: 100%;
-      min-height: 0;
-    }
+.timer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  background: var(--el-fill-color-blank);
+  border: 1px solid var(--el-border-color);
+  border-radius: 6px;
+  transition: border-color 0.2s;
+}
 
-    .tab-content {
-      padding: 16px;
-      height: 100%;
-      box-sizing: border-box;
-      overflow-y: auto;
+.timer-item:hover {
+  border-color: var(--el-border-color-darker);
+}
 
-      .field-full {
-        width: 100%;
-      }
+.timer-info {
+  flex: 1;
+  min-width: 0;
+}
 
-      .zoom-desc {
-        font-size: 12px;
-        color: var(--el-text-color-secondary);
-        padding: 0 0 12px 80px;
-        margin-top: -8px;
-      }
+.timer-name {
+  margin-bottom: 4px;
+  color: var(--el-text-color-primary);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
 
-      .guide-section {
-        margin-bottom: 16px;
-      }
+.timer-desc {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  letter-spacing: 0;
+  font-feature-settings: 'tnum';
+}
 
-      .guide-section-title {
-        margin-bottom: 8px;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 1.33;
-        color: var(--el-text-color-secondary);
-        letter-spacing: 0;
-      }
+.timer-controls {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 4px;
+}
 
-      .guide-list {
-        display: grid;
-        gap: 8px;
-      }
+.empty-timer {
+  padding: 24px 0;
+}
 
-      .guide-row {
-        display: grid;
-        grid-template-columns: 18px minmax(0, 1fr) auto auto;
-        align-items: center;
-        gap: 8px;
-      }
+.bg-upload-section,
+.bg-uploader {
+  display: block;
+  width: 100%;
+}
 
-      .guide-axis-label {
-        color: var(--el-text-color-secondary);
-        font-size: 12px;
-        font-weight: 500;
-        letter-spacing: 0;
-        font-feature-settings: 'tnum';
-      }
+.bg-uploader {
+  cursor: pointer;
+}
 
-      .guide-position-input {
-        width: 100%;
-      }
+.bg-preview-box {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  height: 160px;
+  padding: 16px;
+  overflow: hidden;
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  transition: border-color 0.2s;
+}
 
-      .guide-empty {
-        color: var(--el-text-color-secondary);
-        font-size: 12px;
-        line-height: 1.5;
-        letter-spacing: 0;
-      }
+.bg-preview-box:hover {
+  border-color: var(--el-color-primary);
+}
 
-      .timer-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--el-border-color-light);
+.bg-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
-        .timer-title {
-          font-size: 12px;
-          font-weight: 500;
-          text-transform: uppercase;
-          color: var(--el-text-color-secondary);
-          letter-spacing: 0;
-        }
-      }
+.bg-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: var(--el-fill-color-extra-light);
+  border-radius: 4px;
+  color: var(--el-text-color-secondary);
+  font-size: 13px;
+  letter-spacing: 0;
+}
 
-      .timer-list {
-        .timer-item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 12px;
-          margin-bottom: 12px;
-          background: var(--el-fill-color-blank);
-          border: 1px solid var(--el-border-color);
-          border-radius: 6px;
-          transition: border-color 0.2s;
-          cursor: pointer;
-
-          &:hover {
-            border-color: var(--el-border-color-darker);
-          }
-
-          .timer-info {
-            flex: 1;
-            min-width: 0;
-            margin-right: 12px;
-
-            .timer-name {
-              font-size: 14px;
-              font-weight: 500;
-              color: var(--el-text-color-primary);
-              margin-bottom: 4px;
-            }
-
-            .timer-desc {
-              font-size: 12px;
-              color: var(--el-text-color-secondary);
-              font-feature-settings: 'tnum';
-            }
-          }
-
-          .timer-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-
-            .setting-icon,
-            .delete-icon {
-              cursor: pointer;
-              transition: color 0.2s;
-            }
-
-            .setting-icon {
-              color: var(--el-text-color-secondary);
-
-              &:hover {
-                color: var(--el-color-primary);
-              }
-            }
-
-            .delete-icon {
-              color: var(--el-color-danger);
-
-              &:hover {
-                opacity: 0.8;
-              }
-            }
-          }
-        }
-
-        .empty-timer {
-          padding: 40px 0;
-        }
-      }
-
-      .bg-upload-section {
-        width: 100%;
-
-        .bg-uploader {
-          width: 100%;
-          display: block;
-          cursor: pointer;
-        }
-
-        .bg-preview-box {
-          width: 100%;
-          height: 160px;
-          border: 1px dashed var(--el-border-color);
-          border-radius: 6px;
-          overflow: hidden;
-          position: relative;
-          transition: border-color 0.2s;
-          padding: 16px;
-          box-sizing: border-box;
-
-          &:hover {
-            border-color: var(--el-color-primary);
-          }
-
-          .bg-image {
-            width: 100%;
-            height: 100%;
-            display: block;
-          }
-
-          .bg-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--el-fill-color-extra-light);
-            color: var(--el-text-color-secondary);
-            font-size: 13px;
-            border-radius: 4px;
-
-            .el-icon {
-              font-size: 48px;
-              margin-bottom: 8px;
-              color: var(--el-text-color-disabled);
-            }
-          }
-        }
-      }
-    }
-  }
+.bg-placeholder-icon {
+  margin-bottom: 8px;
+  color: var(--el-text-color-disabled);
+  font-size: 48px;
 }
 </style>

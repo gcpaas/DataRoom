@@ -450,26 +450,40 @@ onUnmounted(() => {
         <div class="title" @click="onTitleClick">{{ pageStageEntity?.name }}</div>
       </div>
       <div class="header-right">
-        <el-dropdown trigger="click" @command="onInsertCommand">
-          <el-button size="small">
-            插入
-            <el-icon class="el-icon--right">
-              <ArrowDown />
-            </el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="component">组件</el-dropdown-item>
-              <el-dropdown-item command="resource">素材</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-        <el-button @click="openGlobalVariable" size="small">变量</el-button>
-        <el-button @click="openLayerPanel" size="small">图层</el-button>
-        <el-button @click="onHistory" size="small">历史</el-button>
-        <el-button @click="switchPageControlPanel" size="small">设置</el-button>
-        <el-button @click="onPreview" size="small">预览</el-button>
-        <el-button @click="onSave" size="small" type="primary">保存</el-button>
+        <div class="header-action">
+          <el-dropdown trigger="click" @command="onInsertCommand">
+            <el-button size="small">
+              插入
+              <el-icon class="el-icon--right">
+                <ArrowDown />
+              </el-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="component">组件</el-dropdown-item>
+                <el-dropdown-item command="resource">素材</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <div class="header-action">
+          <el-button @click="openGlobalVariable" size="small">变量</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="openLayerPanel" size="small">图层</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="onHistory" size="small">历史</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="switchPageControlPanel" size="small">设置</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="onPreview" size="small">预览</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="onSave" size="small" type="primary">保存</el-button>
+        </div>
       </div>
     </div>
     <div class="main" :style="computedMainStyle">
@@ -633,8 +647,13 @@ onUnmounted(() => {
     & .header-right {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
       margin-right: 8px;
+
+      & .header-action {
+        display: inline-flex;
+        align-items: center;
+      }
     }
   }
 
