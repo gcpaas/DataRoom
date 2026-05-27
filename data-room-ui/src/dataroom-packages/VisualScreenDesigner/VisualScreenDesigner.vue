@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getComponent, getComponentInstance, getPanelComponent } from '@/dataroom-packages/components/AutoInstall.ts'
-import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onMounted, provide, ref, watch } from 'vue'
+import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue'
 import { debounce } from 'lodash'
 import Moveable, { type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd } from 'vue3-moveable'
 import { VueSelecto } from 'vue3-selecto'
@@ -9,58 +9,110 @@ import VanillaSelecto from 'selecto'
 import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { ArrowDown, Minus, Plus } from '@element-plus/icons-vue'
+import { ArrowDown, Minus, Plus, ScaleToOriginal } from '@element-plus/icons-vue'
 import { pageApi } from '@/dataroom-packages/page/api.ts'
 import type { PageStageEntity } from '@/dataroom-packages/page/type/PageStageEntity.ts'
 import { useCanvasInst } from '@/dataroom-packages/hooks/use-canvas-inst'
 import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/GlobalVariable.ts'
 import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 import type { VisualScreenPageBasicConfig } from '@/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts'
+import RulerOverlay from './RulerOverlay.vue'
 import {
-  clampDesignerZoomPercent,
-  getDesignerZoomCenteredScrollPosition,
+  createDesignerViewport,
+  fitDesignerViewportToVisibleArea,
+  getDesignerViewportCenterPoint,
   getDesignerZoomByStep,
   getDesignerZoomControlRightOffset,
   getDesignerZoomFromWheel,
+  getDesignerZoomPercent,
   getDesignerZoomScale,
+  isDesignerZoomWheelEvent,
+  normalizeDesignerZoomPreference,
+  panDesignerViewport,
+  panDesignerViewportByPointerDelta,
+  type DesignerViewportPoint,
+  type DesignerZoomPreferenceMode,
+  updateDesignerViewportSize,
+  zoomDesignerViewportAroundPoint,
   ZOOM_DEFAULT_PERCENT,
+  ZOOM_FIT_PADDING_PX,
   ZOOM_MAX_PERCENT,
   ZOOM_MIN_PERCENT,
   ZOOM_STEP_PERCENT,
-} from './zoom'
+} from './viewport'
+import { getVisualScreenMoveableGuidelines, normalizeVisualScreenRulerConfig, RULER_SIZE_PX, type VisualScreenRulerConfig } from './ruler'
 
 const router = useRouter()
 const route = useRoute()
 const canvasContainer = ref<HTMLElement | null>(null)
 const moveableRef = ref<{ updateRect: () => void } | null>(null)
-const canvasScrollbarRef = ref<{
-  wrapRef?: HTMLDivElement | { value?: HTMLDivElement }
-  setScrollLeft?: (value: number) => void
-  setScrollTop?: (value: number) => void
-  update?: () => void
-} | null>(null)
+const canvasViewportRef = ref<HTMLElement | null>(null)
 const activeChart = ref<ChartConfig<unknown>>()
 const chartList = ref<ChartConfig<unknown>[]>([])
 const pageStageEntity = ref<PageStageEntity>()
 const globalVariable = ref<GlobalVariable[]>([] as GlobalVariable[])
-const designerZoomPercent = ref(ZOOM_DEFAULT_PERCENT)
 const defaultBasicConfig: VisualScreenPageBasicConfig = {
   background: { fill: 'color', color: '#0d1e42', url: '', opacity: 100, repeat: 'no-repeat' },
   size: { width: 1920, height: 1080, zoom: 'contain' },
+  zoom: { mode: 'best', value: ZOOM_DEFAULT_PERCENT, visiable: true },
+  ruler: normalizeVisualScreenRulerConfig(undefined, 1920, 1080),
   timers: [],
 }
 const basicConfig = ref<VisualScreenPageBasicConfig>({ ...defaultBasicConfig })
+const canvasWidth = computed(() => basicConfig.value.size?.width || defaultBasicConfig.size.width)
+const canvasHeight = computed(() => basicConfig.value.size?.height || defaultBasicConfig.size.height)
+const designerViewport = ref(
+  createDesignerViewport({
+    canvasWidth: canvasWidth.value,
+    canvasHeight: canvasHeight.value,
+    viewportWidth: 0,
+    viewportHeight: 0,
+    scale: getDesignerZoomScale(ZOOM_DEFAULT_PERCENT),
+  }),
+)
+const designerZoomScale = computed(() => designerViewport.value.scale)
+const designerZoomPercent = computed(() => getDesignerZoomPercent(designerViewport.value.scale))
+const spacePressed = ref(false)
+const isCanvasPanning = ref(false)
+const canvasPanPointerId = ref<number | null>(null)
+const lastCanvasPanPoint = ref<DesignerViewportPoint | null>(null)
+const rulerPointerPosition = ref<DesignerViewportPoint | null>(null)
+const isRulerInteracting = ref(false)
+const isCanvasPanModeActive = computed(() => spacePressed.value || isCanvasPanning.value)
+const isCanvasInteractionBlocked = computed(() => isCanvasPanModeActive.value || isRulerInteracting.value)
 // 记录右侧控制面板是否为页面配置
 const rightControlPanelSetting = ref(false)
-// 定义水平和垂直线组合的标尺、便于
-const verticalGuidelines = ref<number[]>([])
-const horizontalGuidelines = ref<number[]>([])
-for (let i = 1; i <= 100; i++) {
-  verticalGuidelines.value.push(i * 50)
-}
-for (let i = 1; i <= 100; i++) {
-  horizontalGuidelines.value.push(i * 50)
-}
+const visualScreenRuler = computed(() => normalizeVisualScreenRulerConfig(basicConfig.value.ruler, canvasWidth.value, canvasHeight.value))
+const moveableGuidelines = computed(() => getVisualScreenMoveableGuidelines(visualScreenRuler.value, canvasWidth.value, canvasHeight.value))
+const moveableVerticalGuidelines = computed(() => moveableGuidelines.value.verticalGuidelines)
+const moveableHorizontalGuidelines = computed(() => moveableGuidelines.value.horizontalGuidelines)
+const designerFitInsets = computed(() => {
+  const rulerInset = visualScreenRuler.value.visible ? RULER_SIZE_PX : 0
+  return {
+    top: ZOOM_FIT_PADDING_PX + rulerInset,
+    right: ZOOM_FIT_PADDING_PX,
+    bottom: ZOOM_FIT_PADDING_PX,
+    left: ZOOM_FIT_PADDING_PX + rulerInset,
+  }
+})
+const rulerVisible = computed({
+  get: () => visualScreenRuler.value.visible,
+  set: (visible: boolean) => {
+    updateVisualScreenRulerConfig({
+      ...visualScreenRuler.value,
+      visible,
+    })
+  },
+})
+const designerZoomVisible = computed({
+  get: () => normalizeDesignerZoomPreference(basicConfig.value.zoom).visiable,
+  set: (visiable: boolean) => {
+    basicConfig.value.zoom = normalizeDesignerZoomPreference({
+      ...basicConfig.value.zoom,
+      visiable,
+    })
+  },
+})
 /**
  * 被框选中的组件、可以进行拖拽、旋转、缩放
  */
@@ -401,6 +453,10 @@ const onRotateEnd = (e: OnRotateEnd) => {
  */
 const onSelectDragStart = (e: import('selecto').OnDragStart<VanillaSelecto>) => {
   console.log('onSelectorDragStart ', e)
+  if (isCanvasInteractionBlocked.value) {
+    e.stop()
+    return
+  }
 }
 /**
  * 框选结束、包含点击事件
@@ -441,9 +497,7 @@ const computedChartStyle = (chart: ChartConfig<unknown>): CSSProperties => {
   }
 }
 
-const canvasWidth = computed(() => basicConfig.value.size?.width || 1920)
-const canvasHeight = computed(() => basicConfig.value.size?.height || 1080)
-const designerZoomScale = computed(() => getDesignerZoomScale(designerZoomPercent.value))
+let canvasResizeObserver: ResizeObserver | undefined
 
 const updateMoveableRect = () => {
   nextTick(() => {
@@ -451,45 +505,42 @@ const updateMoveableRect = () => {
   })
 }
 
-const getCanvasScrollbarWrap = () => {
-  const wrapRef = canvasScrollbarRef.value?.wrapRef
-  if (!wrapRef) {
-    return undefined
-  }
-  if (wrapRef instanceof HTMLDivElement) {
-    return wrapRef
-  }
-  return wrapRef.value
-}
-
-const preserveCanvasViewportCenter = (nextPercent: number) => {
-  const nextZoomPercent = clampDesignerZoomPercent(nextPercent)
-  const previousScale = designerZoomScale.value
-  const wrap = getCanvasScrollbarWrap()
-  const viewport = wrap
-    ? {
-        scrollLeft: wrap.scrollLeft,
-        scrollTop: wrap.scrollTop,
-        clientWidth: wrap.clientWidth,
-        clientHeight: wrap.clientHeight,
-      }
-    : undefined
-
-  designerZoomPercent.value = nextZoomPercent
-
-  nextTick(() => {
-    if (viewport) {
-      const nextScrollPosition = getDesignerZoomCenteredScrollPosition(viewport, previousScale, getDesignerZoomScale(nextZoomPercent))
-      canvasScrollbarRef.value?.setScrollLeft?.(nextScrollPosition.scrollLeft)
-      canvasScrollbarRef.value?.setScrollTop?.(nextScrollPosition.scrollTop)
-      canvasScrollbarRef.value?.update?.()
-    }
-    moveableRef.value?.updateRect()
+const setDesignerZoomPreferenceMode = (mode: DesignerZoomPreferenceMode) => {
+  basicConfig.value.zoom = normalizeDesignerZoomPreference({
+    ...basicConfig.value.zoom,
+    value: designerZoomPercent.value,
+    mode,
   })
 }
 
-const setDesignerZoomPercent = (value: number) => {
-  preserveCanvasViewportCenter(value)
+const getDesignerViewportWithCurrentSize = () => {
+  const rect = canvasViewportRef.value?.getBoundingClientRect()
+  return updateDesignerViewportSize(designerViewport.value, {
+    canvasWidth: canvasWidth.value,
+    canvasHeight: canvasHeight.value,
+    viewportWidth: rect?.width || designerViewport.value.viewportWidth,
+    viewportHeight: rect?.height || designerViewport.value.viewportHeight,
+  })
+}
+
+const syncDesignerViewportSize = () => {
+  const nextViewport = getDesignerViewportWithCurrentSize()
+  if (basicConfig.value.zoom?.mode === 'best') {
+    designerViewport.value = fitDesignerViewportToVisibleArea(nextViewport, designerFitInsets.value)
+    setDesignerZoomPreferenceMode('best')
+  } else {
+    designerViewport.value = nextViewport
+  }
+  updateMoveableRect()
+}
+
+const setDesignerZoomPercent = (value: number, persistPreference: boolean = true) => {
+  const nextScale = getDesignerZoomScale(value)
+  designerViewport.value = zoomDesignerViewportAroundPoint(designerViewport.value, nextScale, getDesignerViewportCenterPoint(designerViewport.value))
+  if (persistPreference) {
+    setDesignerZoomPreferenceMode('fixed')
+  }
+  updateMoveableRect()
 }
 
 const decreaseDesignerZoom = () => {
@@ -500,21 +551,181 @@ const increaseDesignerZoom = () => {
   setDesignerZoomPercent(getDesignerZoomByStep(designerZoomPercent.value, 'in'))
 }
 
-const onCanvasWheel = (event: WheelEvent) => {
-  if (!event.ctrlKey) {
+const fitDesignerZoomToViewport = (persistPreference: boolean | Event = true) => {
+  const shouldPersistPreference = persistPreference !== false
+  designerViewport.value = fitDesignerViewportToVisibleArea(getDesignerViewportWithCurrentSize(), designerFitInsets.value)
+  if (shouldPersistPreference) {
+    setDesignerZoomPreferenceMode('best')
+  }
+  updateMoveableRect()
+}
+
+const applySavedDesignerZoomPreference = () => {
+  const preference = normalizeDesignerZoomPreference(basicConfig.value.zoom)
+  basicConfig.value.zoom = preference
+  if (preference.mode === 'best') {
+    fitDesignerZoomToViewport()
+    return
+  }
+  designerViewport.value = getDesignerViewportWithCurrentSize()
+  setDesignerZoomPercent(preference.value, false)
+  setDesignerZoomPreferenceMode('fixed')
+}
+
+const isCanvasPanKeyIgnoredTarget = (target: EventTarget | null) => {
+  if (!(target instanceof Element)) {
+    return false
+  }
+  return Boolean(
+    target.closest(
+      'input, textarea, select, button, [contenteditable="true"], [contenteditable=""], [contenteditable="plaintext-only"], .el-input, .el-textarea, .el-select, .canvas-zoom-control',
+    ),
+  )
+}
+
+const clearCanvasPanning = (releasePointer: boolean = true) => {
+  const pointerId = canvasPanPointerId.value
+  const viewport = canvasViewportRef.value
+  if (releasePointer && pointerId !== null && viewport?.hasPointerCapture(pointerId)) {
+    viewport.releasePointerCapture(pointerId)
+  }
+  isCanvasPanning.value = false
+  canvasPanPointerId.value = null
+  lastCanvasPanPoint.value = null
+  updateMoveableRect()
+}
+
+const resetCanvasPanState = () => {
+  spacePressed.value = false
+  clearCanvasPanning()
+}
+
+const updateRulerPointerPosition = (event: PointerEvent) => {
+  const rect = canvasViewportRef.value?.getBoundingClientRect()
+  if (!rect) {
+    rulerPointerPosition.value = null
+    return
+  }
+  rulerPointerPosition.value = {
+    viewportX: event.clientX - rect.left,
+    viewportY: event.clientY - rect.top,
+  }
+}
+
+const clearRulerPointerPosition = () => {
+  rulerPointerPosition.value = null
+}
+
+const updateVisualScreenRulerConfig = (ruler: VisualScreenRulerConfig) => {
+  basicConfig.value.ruler = normalizeVisualScreenRulerConfig(ruler, canvasWidth.value, canvasHeight.value)
+}
+
+const onCanvasPanKeyDown = (event: KeyboardEvent) => {
+  if (event.code !== 'Space' || isCanvasPanKeyIgnoredTarget(event.target)) {
     return
   }
   event.preventDefault()
-  setDesignerZoomPercent(getDesignerZoomFromWheel(designerZoomPercent.value, event.deltaY))
+  spacePressed.value = true
 }
 
-const computedCanvasScalerStyle = computed<CSSProperties>(() => {
-  const scale = designerZoomScale.value
-  return {
-    width: `${canvasWidth.value * scale}px`,
-    height: `${canvasHeight.value * scale}px`,
+const onCanvasPanKeyUp = (event: KeyboardEvent) => {
+  if (event.code !== 'Space') {
+    return
   }
-})
+  if (spacePressed.value || isCanvasPanning.value) {
+    event.preventDefault()
+  }
+  spacePressed.value = false
+  clearCanvasPanning()
+}
+
+const onCanvasPanPointerDown = (event: PointerEvent) => {
+  if (!spacePressed.value || event.button !== 0) {
+    return
+  }
+  if (event.target instanceof Element && event.target.closest('.canvas-zoom-control, .ruler-overlay')) {
+    return
+  }
+  event.preventDefault()
+  event.stopPropagation()
+  isCanvasPanning.value = true
+  canvasPanPointerId.value = event.pointerId
+  lastCanvasPanPoint.value = {
+    viewportX: event.clientX,
+    viewportY: event.clientY,
+  }
+  if (event.currentTarget instanceof HTMLElement) {
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+  updateMoveableRect()
+}
+
+const onCanvasPanPointerMove = (event: PointerEvent) => {
+  if (!isCanvasPanning.value || canvasPanPointerId.value !== event.pointerId || !lastCanvasPanPoint.value) {
+    return
+  }
+  event.preventDefault()
+  event.stopPropagation()
+  const deltaX = event.clientX - lastCanvasPanPoint.value.viewportX
+  const deltaY = event.clientY - lastCanvasPanPoint.value.viewportY
+  lastCanvasPanPoint.value = {
+    viewportX: event.clientX,
+    viewportY: event.clientY,
+  }
+  designerViewport.value = panDesignerViewportByPointerDelta(designerViewport.value, deltaX, deltaY)
+  updateMoveableRect()
+}
+
+const onCanvasPointerMove = (event: PointerEvent) => {
+  updateRulerPointerPosition(event)
+  onCanvasPanPointerMove(event)
+}
+
+const onCanvasPanPointerUp = (event: PointerEvent) => {
+  if (canvasPanPointerId.value !== event.pointerId) {
+    return
+  }
+  event.preventDefault()
+  event.stopPropagation()
+  clearCanvasPanning()
+}
+
+const onCanvasPanPointerCancel = (event: PointerEvent) => {
+  if (canvasPanPointerId.value !== event.pointerId) {
+    return
+  }
+  event.preventDefault()
+  event.stopPropagation()
+  clearCanvasPanning()
+}
+
+const onCanvasPanLostPointerCapture = (event: PointerEvent) => {
+  if (canvasPanPointerId.value === event.pointerId) {
+    clearCanvasPanning(false)
+  }
+}
+
+const canStartSelectoDrag = () => {
+  return !isCanvasInteractionBlocked.value
+}
+
+const getCurrentPlatform = () => {
+  const nav = navigator as Navigator & { userAgentData?: { platform?: string } }
+  return nav.userAgentData?.platform || nav.platform || ''
+}
+
+const onCanvasWheel = (event: WheelEvent) => {
+  if (event.target instanceof Element && event.target.closest('.canvas-zoom-control')) {
+    return
+  }
+  event.preventDefault()
+  if (isDesignerZoomWheelEvent(event, getCurrentPlatform())) {
+    setDesignerZoomPercent(getDesignerZoomFromWheel(designerZoomPercent.value, event.deltaY))
+    return
+  }
+  designerViewport.value = panDesignerViewport(designerViewport.value, event.deltaX, event.deltaY)
+  updateMoveableRect()
+}
 
 const computedZoomControlStyle = computed<CSSProperties>(() => {
   return {
@@ -542,7 +753,7 @@ const computedCanvasContentStyle = computed<CSSProperties>(() => {
   const styles: CSSProperties = {
     width: `${canvasWidth.value}px`,
     height: `${canvasHeight.value}px`,
-    transform: `scale(${designerZoomScale.value})`,
+    transform: `translate(${designerViewport.value.panX}px, ${designerViewport.value.panY}px) scale(${designerZoomScale.value})`,
     transformOrigin: 'left top',
   }
   const background = basicConfig.value.background
@@ -566,8 +777,19 @@ const computedCanvasContentStyle = computed<CSSProperties>(() => {
   return styles
 })
 
-watch(designerZoomPercent, () => {
-  updateMoveableRect()
+watch([canvasWidth, canvasHeight], () => {
+  basicConfig.value.ruler = normalizeVisualScreenRulerConfig(basicConfig.value.ruler, canvasWidth.value, canvasHeight.value)
+  nextTick(syncDesignerViewportSize)
+})
+
+watch([leftToolPanelShow, rightControlPanelShow], () => {
+  nextTick(syncDesignerViewportSize)
+})
+
+watch(rulerVisible, () => {
+  if (basicConfig.value.zoom?.mode === 'best') {
+    nextTick(() => fitDesignerZoomToViewport(false))
+  }
 })
 
 const computedToolAnchorStyle = computed(() => {
@@ -584,11 +806,19 @@ const computedToolAnchorStyle = computed(() => {
 })
 
 onMounted(() => {
-  // 获取路由中code 参数
+  window.addEventListener('keydown', onCanvasPanKeyDown)
+  window.addEventListener('keyup', onCanvasPanKeyUp)
+  window.addEventListener('blur', resetCanvasPanState)
   const code: string = route.params.pageCode as string
-  // 设置 canvas 容器引用
-  canvasContainer.value = document.querySelector('.canvas-content')
-  // 根据编码获取页面详情
+  nextTick(() => {
+    syncDesignerViewportSize()
+    if (canvasViewportRef.value) {
+      canvasResizeObserver = new ResizeObserver(() => {
+        syncDesignerViewportSize()
+      })
+      canvasResizeObserver.observe(canvasViewportRef.value)
+    }
+  })
   pageApi.getPageConfig(code, 'design').then((res) => {
     pageStageEntity.value = res
     chartList.value = res.pageConfig?.chartList || []
@@ -598,10 +828,21 @@ onMounted(() => {
       basicConfig.value = {
         background: { ...defaultBasicConfig.background, ...loaded.background },
         size: { ...defaultBasicConfig.size, ...loaded.size },
+        zoom: normalizeDesignerZoomPreference(loaded.zoom),
+        ruler: normalizeVisualScreenRulerConfig(loaded.ruler, loaded.size?.width || defaultBasicConfig.size.width, loaded.size?.height || defaultBasicConfig.size.height),
         timers: loaded.timers || [],
       }
+      nextTick(applySavedDesignerZoomPreference)
     }
   })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onCanvasPanKeyDown)
+  window.removeEventListener('keyup', onCanvasPanKeyUp)
+  window.removeEventListener('blur', resetCanvasPanState)
+  resetCanvasPanState()
+  canvasResizeObserver?.disconnect()
 })
 </script>
 
@@ -613,26 +854,66 @@ onMounted(() => {
         <div class="title">{{ pageStageEntity?.name }}</div>
       </div>
       <div class="header-right">
-        <el-dropdown trigger="click" @command="onInsertCommand">
-          <el-button size="small">
-            插入
-            <el-icon class="el-icon--right">
-              <ArrowDown />
-            </el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="component">组件</el-dropdown-item>
-              <el-dropdown-item command="resource">素材</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-        <el-button @click="openGlobalVariable" size="small">变量</el-button>
-        <el-button @click="openLayerPanel" size="small">图层</el-button>
-        <el-button @click="onHistory" size="small">历史</el-button>
-        <el-button @click="switchPageControlPanel" size="small">设置</el-button>
-        <el-button @click="onPreview" size="small">预览</el-button>
-        <el-button @click="onSave" size="small" type="primary">保存</el-button>
+        <div class="header-action">
+          <el-dropdown trigger="click" @command="onInsertCommand">
+            <el-button size="small">
+              插入
+              <el-icon class="el-icon--right">
+                <ArrowDown />
+              </el-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="component">组件</el-dropdown-item>
+                <el-dropdown-item command="resource">素材</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <div class="header-action">
+          <el-dropdown trigger="click" :hide-on-click="false">
+            <el-button size="small">
+              工具
+              <el-icon class="el-icon--right">
+                <ArrowDown />
+              </el-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>
+                  <div class="tool-menu-row" @click.stop>
+                    <span>标尺</span>
+                    <el-switch v-model="rulerVisible" size="small" />
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <div class="tool-menu-row" @click.stop>
+                    <span>缩放</span>
+                    <el-switch v-model="designerZoomVisible" size="small" />
+                  </div>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <div class="header-action">
+          <el-button @click="openGlobalVariable" size="small">变量</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="openLayerPanel" size="small">图层</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="onHistory" size="small">历史</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="switchPageControlPanel" size="small">设置</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="onPreview" size="small">预览</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="onSave" size="small" type="primary">保存</el-button>
+        </div>
       </div>
     </div>
     <div class="main" :style="mainStyle">
@@ -652,76 +933,105 @@ onMounted(() => {
         </div>
       </div>
       <div class="canvas">
-        <div class="canvas-main" id="canvas-main" @wheel="onCanvasWheel">
-          <el-scrollbar ref="canvasScrollbarRef" class="canvas-scrollbar" height="100%">
-            <div class="canvas-scroll-content">
-              <div class="canvas-scaler" :style="computedCanvasScalerStyle">
-                <div class="canvas-content" :style="computedCanvasContentStyle">
-                  <div
-                    class="chart-wrapper"
-                    v-for="item in chartList"
-                    :key="item.id"
-                    :id="item.id"
-                    :data-dr-id="item.id"
-                    :style="computedChartStyle(item)"
-                    @contextmenu="(e: MouseEvent) => onRightClick(e, item)"
-                  >
-                    <component :is="getComponent(item.type)" :chart="item"></component>
-                  </div>
-                  <Moveable
-                    ref="moveableRef"
-                    :draggable="true"
-                    :rotatable="true"
-                    :resizable="true"
-                    :target="moveableTargets"
-                    :zoom="designerZoomScale"
-                    :bounds="{ left: 0, top: 0, right: 0, bottom: 0, position: 'css' }"
-                    :snappable="true"
-                    :snap-directions="{
-                      top: true,
-                      left: true,
-                      bottom: true,
-                      right: true,
-                      center: true,
-                      middle: true,
-                    }"
-                    :verticalGuidelines="verticalGuidelines"
-                    :horizontalGuidelines="horizontalGuidelines"
-                    :max-snap-element-guideline-distance="70"
-                    :element-snap-directions="{
-                      top: true,
-                      left: true,
-                      bottom: true,
-                      right: true,
-                      center: true,
-                      middle: true,
-                    }"
-                    :render-directions="['nw', 'ne', 'sw', 'se', 'n', 's', 'e', 'w']"
-                    @drag="onDrag"
-                    @resize="onResize"
-                    @rotate="onRotate"
-                    @dragStart="onDragStart"
-                    @dragEnd="onDragEnd"
-                    @resizeEnd="onResizeEnd"
-                    @rotateEnd="onRotateEnd"
-                  />
-                  <VueSelecto
-                    :container="canvasContainer"
-                    :selectableTargets="['.chart-wrapper']"
-                    :selectByClick="true"
-                    :selectFromInside="false"
-                    :continueSelect="false"
-                    :toggleContinueSelect="'shift'"
-                    :hitRate="100"
-                    :ratio="0"
-                    @dragStart="onSelectDragStart"
-                    @selectEnd="onSelectEnd"
-                  />
-                </div>
+        <div
+          class="canvas-main"
+          :class="{ 'canvas-main--pan-ready': spacePressed, 'canvas-main--panning': isCanvasPanning }"
+          id="canvas-main"
+          ref="canvasViewportRef"
+          @wheel="onCanvasWheel"
+          @pointerdown.capture="onCanvasPanPointerDown"
+          @pointermove="onCanvasPointerMove"
+          @pointerup="onCanvasPanPointerUp"
+          @pointercancel="onCanvasPanPointerCancel"
+          @pointerleave="clearRulerPointerPosition"
+          @lostpointercapture="onCanvasPanLostPointerCapture"
+        >
+          <RulerOverlay
+            :ruler="visualScreenRuler"
+            :viewport="designerViewport"
+            :pointer-position="rulerPointerPosition"
+            @update:ruler="updateVisualScreenRulerConfig"
+            @interaction-start="isRulerInteracting = true"
+            @interaction-end="isRulerInteracting = false"
+          />
+          <div class="canvas-viewport">
+            <div ref="canvasContainer" class="canvas-content" :style="computedCanvasContentStyle">
+              <div
+                class="chart-wrapper"
+                v-for="item in chartList"
+                :key="item.id"
+                :id="item.id"
+                :data-dr-id="item.id"
+                :style="computedChartStyle(item)"
+                @contextmenu="(e: MouseEvent) => onRightClick(e, item)"
+              >
+                <component :is="getComponent(item.type)" :chart="item"></component>
               </div>
+              <Moveable
+                ref="moveableRef"
+                :draggable="!isCanvasInteractionBlocked"
+                :rotatable="!isCanvasInteractionBlocked"
+                :resizable="!isCanvasInteractionBlocked"
+                :target="moveableTargets"
+                :zoom="designerZoomScale"
+                :bounds="{ left: 0, top: 0, right: 0, bottom: 0, position: 'css' }"
+                :snappable="true"
+                :snap-directions="{
+                  top: true,
+                  left: true,
+                  bottom: true,
+                  right: true,
+                  center: true,
+                  middle: true,
+                }"
+                :verticalGuidelines="moveableVerticalGuidelines"
+                :horizontalGuidelines="moveableHorizontalGuidelines"
+                :max-snap-element-guideline-distance="70"
+                :element-snap-directions="{
+                  top: true,
+                  left: true,
+                  bottom: true,
+                  right: true,
+                  center: true,
+                  middle: true,
+                }"
+                :render-directions="['nw', 'ne', 'sw', 'se', 'n', 's', 'e', 'w']"
+                @drag="onDrag"
+                @resize="onResize"
+                @rotate="onRotate"
+                @dragStart="onDragStart"
+                @dragEnd="onDragEnd"
+                @resizeEnd="onResizeEnd"
+                @rotateEnd="onRotateEnd"
+              />
             </div>
-          </el-scrollbar>
-          <div class="canvas-zoom-control" :style="computedZoomControlStyle" role="group" aria-label="画布缩放">
+            <VueSelecto
+              :container="canvasViewportRef"
+              :dragContainer="canvasViewportRef"
+              :rootContainer="canvasViewportRef"
+              :selectableTargets="['.chart-wrapper']"
+              :selectByClick="!isCanvasInteractionBlocked"
+              :selectFromInside="false"
+              :continueSelect="false"
+              :toggleContinueSelect="'shift'"
+              :hitRate="100"
+              :ratio="0"
+              :dragCondition="canStartSelectoDrag"
+              @dragStart="onSelectDragStart"
+              @selectEnd="onSelectEnd"
+            />
+          </div>
+          <div v-if="designerZoomVisible" class="canvas-zoom-control" :style="computedZoomControlStyle" role="group" aria-label="画布缩放">
+            <button
+              class="zoom-step-button"
+              :class="{ 'zoom-step-button--active': basicConfig.zoom?.mode === 'best' }"
+              type="button"
+              aria-label="适配画布到可视区域"
+              title="适配画布到可视区域"
+              @click="fitDesignerZoomToViewport"
+            >
+              <el-icon><ScaleToOriginal /></el-icon>
+            </button>
             <button class="zoom-step-button" type="button" aria-label="缩小画布" title="缩小画布" @click="decreaseDesignerZoom">
               <el-icon><Minus /></el-icon>
             </button>
@@ -834,8 +1144,13 @@ onMounted(() => {
     & .header-right {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
       margin-right: 8px;
+
+      & .header-action {
+        display: inline-flex;
+        align-items: center;
+      }
     }
   }
 
@@ -912,27 +1227,34 @@ onMounted(() => {
         min-height: 0;
         overflow: hidden;
         position: relative;
+
+        &.canvas-main--pan-ready {
+          cursor: grab;
+        }
+
+        &.canvas-main--panning {
+          cursor: grabbing;
+          user-select: none;
+        }
+
+        &.canvas-main--pan-ready .canvas-content,
+        &.canvas-main--panning .canvas-content {
+          cursor: inherit;
+        }
       }
 
-      & .canvas-scrollbar {
+      & .canvas-viewport {
+        position: relative;
         width: 100%;
         height: 100%;
-      }
-
-      & .canvas-scroll-content {
-        min-width: 100%;
-        min-height: 100%;
-        position: relative;
-      }
-
-      & .canvas-scaler {
-        position: relative;
+        overflow: hidden;
       }
 
       & .canvas-content {
         position: absolute;
         top: 0;
         left: 0;
+        will-change: transform;
       }
 
       & .canvas-zoom-control {
@@ -968,6 +1290,11 @@ onMounted(() => {
             background-color: var(--el-fill-color-lighter);
             color: var(--el-color-primary);
             outline: none;
+          }
+
+          &.zoom-step-button--active {
+            background-color: var(--el-color-primary-light-9);
+            color: var(--el-color-primary);
           }
         }
 
@@ -1065,6 +1392,17 @@ onMounted(() => {
   }
 }
 
+.tool-menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-width: 120px;
+  width: 100%;
+  color: var(--el-text-color-primary);
+  letter-spacing: 0;
+}
+
 :deep(.moveable-control-box) {
   z-index: 1000;
 
@@ -1095,8 +1433,18 @@ onMounted(() => {
 }
 
 :deep(.selecto-selection) {
+  position: relative;
   border: 1px dashed var(--el-color-primary);
-  background: var(--el-color-primary-light-9);
+  background: none;
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    background-color: var(--el-fill-color-darker);
+    content: '';
+    opacity: 0.32;
+    pointer-events: none;
+  }
 }
 
 .chart-wrapper:hover:not(.moveable-target) {

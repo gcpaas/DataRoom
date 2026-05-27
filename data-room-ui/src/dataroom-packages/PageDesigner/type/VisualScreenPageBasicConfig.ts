@@ -1,4 +1,5 @@
-import type {PageTimer} from "@/dataroom-packages/PageDesigner/type/PageTimer.ts";
+import type { PageTimer } from '@/dataroom-packages/PageDesigner/type/PageTimer.ts'
+import type { VisualScreenRulerConfig } from '@/dataroom-packages/VisualScreenDesigner/ruler'
 
 /**
  * 大屏页面基础配置
@@ -25,6 +26,15 @@ export interface VisualScreenPageBasicConfig {
     // 缩放方式
     zoom: 'fitWidth' | 'fitHeight' | 'cover' | 'contain' | 'none'
   }
+  // 设计器编辑态缩放偏好
+  zoom?: {
+    mode: 'best' | 'fixed'
+    value: number
+    visiable?: boolean
+    visible?: boolean
+  }
+  // 设计器编辑态标尺与参考线配置
+  ruler?: VisualScreenRulerConfig
   // 定时器配置列表
   timers?: PageTimer[]
 }

@@ -1,5 +1,6 @@
 <!-- 大屏设计器配置面板 -->
 <script setup lang="ts">
+/* eslint-disable vue/no-mutating-props */
 import { computed, defineAsyncComponent, reactive, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getCookie, getCookieName } from '@/dataroom-packages/_common/_cookie'
@@ -8,12 +9,27 @@ import type { VisualScreenPageBasicConfig } from '@/dataroom-packages/PageDesign
 import type { PageTimer } from '@/dataroom-packages/PageDesigner/type/PageTimer.ts'
 import { getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
 import { v4 as uuidv4 } from 'uuid'
+import { clampVisualScreenGuidePosition, isVisualScreenGuideLocked, normalizeVisualScreenRulerConfig, type VisualScreenGuide, type VisualScreenGuideAxis } from './ruler'
 
 const TimerConfigDialog = defineAsyncComponent(() => import('../PageDesigner/TimerConfigDialog.vue'))
 
 const { basicConfig } = defineProps<{
   basicConfig: VisualScreenPageBasicConfig
 }>()
+
+const normalizeRulerConfig = () => {
+  basicConfig.ruler = normalizeVisualScreenRulerConfig(basicConfig.ruler, basicConfig.size?.width || 0, basicConfig.size?.height || 0)
+}
+
+normalizeRulerConfig()
+
+const rulerConfig = computed(() => basicConfig.ruler!)
+
+watch([() => basicConfig.size?.width, () => basicConfig.size?.height], normalizeRulerConfig)
+
+if (!basicConfig.timers) {
+  basicConfig.timers = []
+}
 
 // ==================== 尺寸预设 ====================
 
@@ -75,10 +91,7 @@ watch([() => basicConfig.size?.width, () => basicConfig.size?.height], ([w, h]) 
 // ==================== 定时器 ====================
 
 const timers = computed(() => {
-  if (!basicConfig.timers) {
-    basicConfig.timers = []
-  }
-  return basicConfig.timers
+  return basicConfig.timers || []
 })
 
 const timerConfigDialogVisible = ref(false)
@@ -99,7 +112,7 @@ const uploadHeaders = reactive({
 /**
  * 背景图上传成功回调
  */
-const handleBgUploadSuccess = (response: any) => {
+const handleBgUploadSuccess = (response: { data?: { url?: string } }) => {
   if (response && response.data) {
     basicConfig.background.url = response.data.url || ''
     ElMessage.success('背景图上传成功')
@@ -151,6 +164,40 @@ const deleteTimer = (id: string) => {
     .catch(() => {
       // 用户取消删除
     })
+}
+
+// ==================== 标尺与参考线 ====================
+
+const getGuideList = (axis: VisualScreenGuideAxis) => {
+  return axis === 'vertical' ? rulerConfig.value.verticalGuides : rulerConfig.value.horizontalGuides
+}
+
+const isGuideLocked = (guide: VisualScreenGuide) => {
+  return isVisualScreenGuideLocked(guide, rulerConfig.value.guidesLocked)
+}
+
+const updateGuidePosition = (axis: VisualScreenGuideAxis, guide: VisualScreenGuide, value: number | undefined) => {
+  if (isGuideLocked(guide)) {
+    return
+  }
+  guide.position = clampVisualScreenGuidePosition(axis, Number(value), basicConfig.size?.width || 0, basicConfig.size?.height || 0)
+}
+
+const deleteGuide = (axis: VisualScreenGuideAxis, guide: VisualScreenGuide) => {
+  if (isGuideLocked(guide)) {
+    return
+  }
+  const list = getGuideList(axis)
+  const index = list.findIndex((item) => item.id === guide.id)
+  if (index >= 0) {
+    list.splice(index, 1)
+  }
+}
+
+const clearUnlockedGuides = () => {
+  rulerConfig.value.verticalGuides = rulerConfig.value.verticalGuides.filter((guide) => isGuideLocked(guide))
+  rulerConfig.value.horizontalGuides = rulerConfig.value.horizontalGuides.filter((guide) => isGuideLocked(guide))
+  ElMessage.success('已清空未锁定参考线')
 }
 </script>
 
@@ -266,6 +313,74 @@ const deleteTimer = (id: string) => {
 
               <div class="zoom-desc" v-if="basicConfig.size.zoom">
                 {{ ZOOM_MODES.find((m) => m.value === basicConfig.size.zoom)?.desc }}
+              </div>
+
+              <el-divider content-position="left">标尺 / 参考线</el-divider>
+
+              <el-form-item label="显示标尺">
+                <el-switch v-model="rulerConfig.visible" size="small" />
+              </el-form-item>
+
+              <el-form-item label="显示参考线">
+                <el-switch v-model="rulerConfig.guidesVisible" size="small" />
+              </el-form-item>
+
+              <el-form-item label="锁定全部">
+                <el-switch v-model="rulerConfig.guidesLocked" size="small" />
+              </el-form-item>
+
+              <el-form-item label="清空">
+                <el-button size="small" plain @click="clearUnlockedGuides">清空未锁定</el-button>
+              </el-form-item>
+
+              <div class="guide-section">
+                <div class="guide-section-title">纵向参考线</div>
+                <div v-if="rulerConfig.verticalGuides.length > 0" class="guide-list">
+                  <div v-for="guide in rulerConfig.verticalGuides" :key="guide.id" class="guide-row">
+                    <span class="guide-axis-label">X</span>
+                    <el-input-number
+                      :model-value="guide.position"
+                      :min="0"
+                      :max="basicConfig.size.width"
+                      :step="1"
+                      size="small"
+                      controls-position="right"
+                      class="guide-position-input"
+                      :disabled="isGuideLocked(guide)"
+                      @update:model-value="(value: number | undefined) => updateGuidePosition('vertical', guide, value)"
+                    />
+                    <el-switch v-model="guide.locked" size="small" :disabled="rulerConfig.guidesLocked" />
+                    <el-button size="small" text :disabled="isGuideLocked(guide)" @click="deleteGuide('vertical', guide)">
+                      <el-icon><Delete /></el-icon>
+                    </el-button>
+                  </div>
+                </div>
+                <div v-else class="guide-empty">暂无纵向参考线</div>
+              </div>
+
+              <div class="guide-section">
+                <div class="guide-section-title">横向参考线</div>
+                <div v-if="rulerConfig.horizontalGuides.length > 0" class="guide-list">
+                  <div v-for="guide in rulerConfig.horizontalGuides" :key="guide.id" class="guide-row">
+                    <span class="guide-axis-label">Y</span>
+                    <el-input-number
+                      :model-value="guide.position"
+                      :min="0"
+                      :max="basicConfig.size.height"
+                      :step="1"
+                      size="small"
+                      controls-position="right"
+                      class="guide-position-input"
+                      :disabled="isGuideLocked(guide)"
+                      @update:model-value="(value: number | undefined) => updateGuidePosition('horizontal', guide, value)"
+                    />
+                    <el-switch v-model="guide.locked" size="small" :disabled="rulerConfig.guidesLocked" />
+                    <el-button size="small" text :disabled="isGuideLocked(guide)" @click="deleteGuide('horizontal', guide)">
+                      <el-icon><Delete /></el-icon>
+                    </el-button>
+                  </div>
+                </div>
+                <div v-else class="guide-empty">暂无横向参考线</div>
               </div>
             </el-form>
           </div>
@@ -394,6 +509,50 @@ const deleteTimer = (id: string) => {
         color: var(--el-text-color-secondary);
         padding: 0 0 12px 80px;
         margin-top: -8px;
+      }
+
+      .guide-section {
+        margin-bottom: 16px;
+      }
+
+      .guide-section-title {
+        margin-bottom: 8px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.33;
+        color: var(--el-text-color-secondary);
+        letter-spacing: 0;
+      }
+
+      .guide-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .guide-row {
+        display: grid;
+        grid-template-columns: 18px minmax(0, 1fr) auto auto;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .guide-axis-label {
+        color: var(--el-text-color-secondary);
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0;
+        font-feature-settings: 'tnum';
+      }
+
+      .guide-position-input {
+        width: 100%;
+      }
+
+      .guide-empty {
+        color: var(--el-text-color-secondary);
+        font-size: 12px;
+        line-height: 1.5;
+        letter-spacing: 0;
       }
 
       .timer-header {
