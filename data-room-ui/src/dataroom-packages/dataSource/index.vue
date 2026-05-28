@@ -14,6 +14,7 @@ import damengImg from './assets/image/Dameng占位符.svg'
 import db2Img from './assets/image/DB2占位符.svg'
 import gbaseImg from './assets/image/GBase占位符.svg'
 import goldendbImg from './assets/image/GoldenDB占位符.svg'
+import greatdbImg from './assets/image/GreatDB.svg'
 import sqlserverImg from './assets/image/SqlServer占位符.png'
 import mongodbImg from './assets/image/MongoDB.svg'
 import kingbaseImg from './assets/image/Kingbase.svg'
@@ -110,6 +111,13 @@ const dataSourceTypeMap = {
     image: goldendbImg,
     description: '中兴分布式关系型数据库',
     component: defineAsyncComponent(() => import('./components/GoldenDbEditor.vue')),
+  },
+  greatdb: {
+    name: 'GreatDB',
+    icon: 'GDB',
+    image: greatdbImg,
+    description: '万里数据库，兼容 MySQL 协议',
+    component: defineAsyncComponent(() => import('./components/GreatDbEditor.vue')),
   },
   sqlserver: {
     name: 'SqlServer',
@@ -278,6 +286,8 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
     } else if (dataSourceType === 'gbase') {
       defaultDriverName = 'com.gbasedbt.jdbc.Driver'
     } else if (dataSourceType === 'goldendb') {
+      defaultDriverName = 'com.mysql.cj.jdbc.Driver'
+    } else if (dataSourceType === 'greatdb') {
       defaultDriverName = 'com.mysql.cj.jdbc.Driver'
     } else if (dataSourceType === 'sqlserver') {
       defaultDriverName = 'com.microsoft.sqlserver.jdbc.SQLServerDriver'

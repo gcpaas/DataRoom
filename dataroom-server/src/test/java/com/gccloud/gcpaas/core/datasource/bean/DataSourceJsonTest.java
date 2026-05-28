@@ -1,6 +1,7 @@
 package com.gccloud.gcpaas.core.datasource.bean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gccloud.gcpaas.core.constant.DataSourceType;
 import com.gccloud.gcpaas.core.entity.DataSourceEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,7 +51,8 @@ class DataSourceJsonTest {
                 Arguments.of("oceanbase", "com.oceanbase.jdbc.Driver", "root", "jdbc:oceanbase://localhost:2881/test"),
                 Arguments.of("hive", "org.apache.hive.jdbc.HiveDriver", "hive", "jdbc:hive2://localhost:10000/default"),
                 Arguments.of("tdengine", "com.taosdata.jdbc.ws.WebSocketDriver", "root", "jdbc:TAOS-WS://localhost:6041/test?varcharAsString=true"),
-                Arguments.of("druid", "org.apache.calcite.avatica.remote.Driver", "druid", "jdbc:avatica:remote:url=http://localhost:8888/druid/v2/sql/avatica/;transparent_reconnection=true")
+                Arguments.of("druid", "org.apache.calcite.avatica.remote.Driver", "druid", "jdbc:avatica:remote:url=http://localhost:8888/druid/v2/sql/avatica/;transparent_reconnection=true"),
+                Arguments.of("greatdb", "com.mysql.cj.jdbc.Driver", "greatdb", "jdbc:mysql://localhost:3306/test")
         );
     }
 
@@ -148,6 +150,23 @@ class DataSourceJsonTest {
         updateDatasource.updatedSensitive(dbDatasource);
 
         assertEquals("newEncryptedPassword", updateDatasource.getPassword());
+    }
+
+    @Test
+    void serializeGreatDbDatasourceKeepsGreatDbTypeId() throws Exception {
+        DataSourceEntity entity = new DataSourceEntity();
+        entity.setName("万里数据库");
+        entity.setDataSourceType(DataSourceType.GREATDB);
+        GreatDbDatasource datasource = new GreatDbDatasource();
+        datasource.setDriverName("com.mysql.cj.jdbc.Driver");
+        datasource.setUsername("greatdb");
+        datasource.setPassword("encrypted");
+        datasource.setUrl("jdbc:mysql://localhost:3306/test");
+        entity.setDataSource(datasource);
+
+        String json = new ObjectMapper().writeValueAsString(entity);
+
+        assertEquals("greatdb", new ObjectMapper().readTree(json).path("dataSource").path("dataSourceType").asText());
     }
 
     @Test

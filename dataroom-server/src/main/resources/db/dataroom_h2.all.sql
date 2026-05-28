@@ -142,6 +142,51 @@ CREATE TABLE IF NOT EXISTS dr_resource
 CREATE INDEX IF NOT EXISTS idx_resource_parent_code ON dr_resource(parent_code);
 
 -- ----------------------------
+-- 操作日志表
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS dr_operation_log
+(
+    id                   VARCHAR(50)  NOT NULL COMMENT '主键',
+    trace_id             VARCHAR(128) DEFAULT NULL COMMENT '链路标识',
+    operator_id          VARCHAR(64)  DEFAULT NULL COMMENT '操作者ID',
+    operator_name        VARCHAR(128) DEFAULT NULL COMMENT '操作者名称',
+    operator_role        VARCHAR(255) DEFAULT NULL COMMENT '操作者角色',
+    target_type          VARCHAR(64)  DEFAULT NULL COMMENT '目标类型',
+    target_id            VARCHAR(128) DEFAULT NULL COMMENT '目标标识',
+    target_name          VARCHAR(255) DEFAULT NULL COMMENT '目标名称',
+    action_type          VARCHAR(64)  DEFAULT NULL COMMENT '动作类型',
+    action_desc          VARCHAR(255) DEFAULT NULL COMMENT '动作说明',
+    business_type        VARCHAR(128) DEFAULT NULL COMMENT '业务类型',
+    business_name        VARCHAR(255) DEFAULT NULL COMMENT '业务名称',
+    business_desc        VARCHAR(255) DEFAULT NULL COMMENT '业务说明',
+    request_uri          VARCHAR(512) DEFAULT NULL COMMENT '请求地址',
+    request_method       VARCHAR(16)  DEFAULT NULL COMMENT '请求方法',
+    client_ip            VARCHAR(64)  DEFAULT NULL COMMENT '客户端IP',
+    user_agent           VARCHAR(512) DEFAULT NULL COMMENT 'User-Agent',
+    content_type         VARCHAR(128) DEFAULT NULL COMMENT '内容类型',
+    query_params         CLOB         DEFAULT NULL COMMENT '查询参数',
+    request_body         CLOB         DEFAULT NULL COMMENT '请求体',
+    request_param_summary CLOB        DEFAULT NULL COMMENT '请求摘要',
+    result_status        VARCHAR(32)  DEFAULT NULL COMMENT '执行结果',
+    response_code        INT          DEFAULT NULL COMMENT '响应码',
+    response_message     VARCHAR(512) DEFAULT NULL COMMENT '响应消息',
+    exception_type       VARCHAR(255) DEFAULT NULL COMMENT '异常类型',
+    exception_stack      CLOB         DEFAULT NULL COMMENT '异常堆栈',
+    request_time         TIMESTAMP    DEFAULT NULL COMMENT '请求时间',
+    duration_ms          BIGINT       DEFAULT NULL COMMENT '总耗时',
+    handler_duration_ms  BIGINT       DEFAULT NULL COMMENT '处理耗时',
+    create_date          TIMESTAMP    DEFAULT NULL COMMENT '创建时间',
+    create_user          VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
+    update_date          TIMESTAMP    DEFAULT NULL COMMENT '更新时间',
+    update_user          VARCHAR(50)  DEFAULT NULL COMMENT '更新人',
+    tenant_code          VARCHAR(50)  DEFAULT NULL COMMENT '租户编码',
+    del_flag             VARCHAR(1)   DEFAULT '0' COMMENT '删除标识(0：正常，1：删除)',
+    PRIMARY KEY (id)
+);
+CREATE INDEX IF NOT EXISTS idx_operation_log_request_time ON dr_operation_log(request_time);
+CREATE INDEX IF NOT EXISTS idx_operation_log_target_type ON dr_operation_log(target_type);
+
+-- ----------------------------
 -- 用户表
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS dr_user
@@ -153,6 +198,7 @@ CREATE TABLE IF NOT EXISTS dr_user
     phone       VARCHAR(20)  DEFAULT NULL COMMENT '联系电话',
     role        VARCHAR(200) DEFAULT NULL COMMENT '角色编码，多个用逗号分隔',
     status      VARCHAR(20)  DEFAULT 'NORMAL' COMMENT '状态：NORMAL-正常 DISABLED-禁用 PASSWORD_EXPIRED-密码过期',
+    expire_date TIMESTAMP    DEFAULT NULL COMMENT '有效期截止时间，NULL表示永久有效',
     create_date TIMESTAMP    DEFAULT NULL COMMENT '创建时间',
     create_user VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
     update_date TIMESTAMP    DEFAULT NULL COMMENT '更新时间',
@@ -162,7 +208,9 @@ CREATE TABLE IF NOT EXISTS dr_user
     PRIMARY KEY (id),
     CONSTRAINT uk_user_account UNIQUE (account)
 );
-CREATE INDEX IF NOT EXISTS idx_user_status ON dr_user(status);
+-- ALTER TABLE dr_user ADD COLUMN IF NOT EXISTS expire_date TIMESTAMP DEFAULT NULL COMMENT '有效期截止时间，NULL表示永久有效';
+-- CREATE INDEX IF NOT EXISTS idx_user_status ON dr_user(status);
+-- CREATE INDEX IF NOT EXISTS idx_user_expire_date ON dr_user(expire_date);
 
 -- ----------------------------
 -- 用户表初始数据

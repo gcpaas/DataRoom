@@ -15,6 +15,7 @@ public enum DataSourceType implements IEnum<String> {
     DB2("db2"),
     GBASE("gbase"),
     GOLDENDB("goldendb"),
+    GREATDB("greatdb"),
     SQLSERVER("sqlserver"),
     MONGODB("mongodb"),
     KINGBASE("kingbase"),
@@ -35,6 +36,7 @@ public enum DataSourceType implements IEnum<String> {
     public static final String DB2_TYPE = "db2";
     public static final String GBASE_TYPE = "gbase";
     public static final String GOLDENDB_TYPE = "goldendb";
+    public static final String GREATDB_TYPE = "greatdb";
     public static final String SQLSERVER_TYPE = "sqlserver";
     public static final String MONGODB_TYPE = "mongodb";
     public static final String KINGBASE_TYPE = "kingbase";

@@ -41,6 +41,7 @@ const sqlDataSourceTypes = new Set([
   'db2',
   'gbase',
   'goldendb',
+  'greatdb',
   'sqlserver',
   'mongodb',
   'kingbase',

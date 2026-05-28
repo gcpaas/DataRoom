@@ -1,6 +1,8 @@
 package com.gccloud.gcpaas.core.captcha;
 
 import com.github.benmanes.caffeine.cache.Cache;
+import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
+import com.gccloud.gcpaas.core.operationlog.model.OperationLogDetailLevel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @Tag(name = "验证码")
 @RestController
 @RequestMapping("/dataRoom/captcha")
+@OperationLogMeta(targetType = "captcha", businessType = "captcha", businessName = "验证码")
 public class CaptchaController {
 
     @Resource(name = "captchaCache")
@@ -32,6 +35,7 @@ public class CaptchaController {
 
     @GetMapping("/generate")
     @Operation(summary = "生成验证码", description = "生成图像验证码，返回图片和captchaKey响应头")
+    @OperationLogMeta(actionType = "生成", actionDesc = "生成验证码", businessType = "auth", businessName = "认证登录", detailLevel = OperationLogDetailLevel.SUMMARY)
     public void generate(HttpServletResponse response) throws IOException {
         // 生成验证码文本
         StringBuilder code = new StringBuilder();

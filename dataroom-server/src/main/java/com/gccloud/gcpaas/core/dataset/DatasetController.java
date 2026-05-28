@@ -10,6 +10,8 @@ import com.gccloud.gcpaas.core.dataset.service.DatasetServiceFactory;
 import com.gccloud.gcpaas.core.entity.DatasetEntity;
 import com.gccloud.gcpaas.core.exception.DataRoomException;
 import com.gccloud.gcpaas.core.mapper.DatasetMapper;
+import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
+import com.gccloud.gcpaas.core.operationlog.model.OperationLogDetailLevel;
 import com.gccloud.gcpaas.core.util.CodeWorker;
 import com.gccloud.gcpaas.core.util.TypeUtils;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
@@ -41,6 +43,7 @@ import java.util.Map;
 @RestController
 @Controller
 @RequestMapping("/dataRoom/dataset")
+@OperationLogMeta(targetType = "dataset", businessType = "dataset_manage", businessName = "数据集管理")
 public class DatasetController {
 
     @Resource
@@ -112,6 +115,7 @@ public class DatasetController {
     @PostMapping("/run")
     @RequiresRoles(value = DataRoomRole.SHARER)
     @Operation(summary = "执行", description = "执行数据集")
+    @OperationLogMeta(actionType = "执行", actionDesc = "数据集执行", businessType = "dataset_runtime", businessName = "数据集运行", targetIdKey = "datasetCode", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<DatasetRunResponse> run(@RequestBody DatasetRunRequest datasetRunRequest) {
         DatasetEntity datasetEntity = datasetMapper.getByCode(datasetRunRequest.getDatasetCode());
         Assert.isTrue(datasetEntity != null, "数据集不存在");
@@ -123,6 +127,7 @@ public class DatasetController {
     @PostMapping("/run/test")
     @RequiresRoles(value = DataRoomRole.SHARER)
     @Operation(summary = "测试执行", description = "测试数据集")
+    @OperationLogMeta(actionType = "执行", actionDesc = "数据集测试执行", businessType = "dataset_runtime", businessName = "数据集运行", targetIdKey = "dataset", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<DatasetRunResponse> runTest(@RequestBody DatasetTestRequest datasetTestRequest) {
         log.info("入参 {}", datasetTestRequest.getInputParam());
         DatasetEntity datasetEntity = datasetTestRequest.getDataset();

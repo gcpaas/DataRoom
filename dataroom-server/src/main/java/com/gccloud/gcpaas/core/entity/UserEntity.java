@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,6 +57,12 @@ public class UserEntity extends BaseEntity {
      */
     @Schema(description = "状态")
     private UserStatus status;
+
+    /**
+     * 有效期截止时间，空表示永久有效
+     */
+    @Schema(description = "有效期截止时间，空表示永久有效")
+    private Date expireDate;
 
     /**
      * 获取角色列表（兼容旧版 roleCodeList）

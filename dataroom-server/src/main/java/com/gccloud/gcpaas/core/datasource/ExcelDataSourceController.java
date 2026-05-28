@@ -9,6 +9,8 @@ import com.gccloud.gcpaas.core.datasource.bean.ExcelDatasource;
 import com.gccloud.gcpaas.core.datasource.service.ExcelDataSourceService;
 import com.gccloud.gcpaas.core.entity.DataSourceEntity;
 import com.gccloud.gcpaas.core.mapper.DataSourceMapper;
+import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
+import com.gccloud.gcpaas.core.operationlog.model.OperationLogDetailLevel;
 import com.gccloud.gcpaas.core.util.CodeWorker;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +32,7 @@ import java.util.List;
 @ApiSort(value = 101)
 @RestController
 @RequestMapping("/dataRoom/dataSource/excel")
+@OperationLogMeta(targetType = "datasource", businessType = "excel_datasource_manage", businessName = "Excel数据源管理")
 public class ExcelDataSourceController {
 
     @Resource
@@ -44,6 +47,7 @@ public class ExcelDataSourceController {
     @PostMapping("/upload")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "上传解析", description = "上传Excel/CSV文件并解析表头和数据类型")
+    @OperationLogMeta(actionType = "上传", actionDesc = "上传并解析Excel文件", businessType = "excel_import", businessName = "Excel导入", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<ExcelDataSourceService.ExcelParseResult> upload(@RequestParam("file") MultipartFile file) {
         if (file == null || file.isEmpty()) {
             return Resp.error("请选择要上传的文件");
@@ -68,6 +72,7 @@ public class ExcelDataSourceController {
     @PostMapping("/createAndImport")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "创建并导入", description = "创建数据库表并导入Excel数据")
+    @OperationLogMeta(actionType = "新增", actionDesc = "创建Excel数据源并导入数据", businessType = "excel_import", businessName = "Excel导入", targetNameKey = "name", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<ExcelCreateResponse> createAndImport(@RequestBody ExcelCreateRequest request) {
         // 校验表名
         try {
@@ -128,6 +133,7 @@ public class ExcelDataSourceController {
     @PostMapping("/reimport")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "重新导入", description = "为已有Excel数据源重新导入数据")
+    @OperationLogMeta(actionType = "上传", actionDesc = "重新导入Excel数据", businessType = "excel_import", businessName = "Excel导入", targetIdKey = "code", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<ReimportResponse> reimport(
             @RequestParam("file") MultipartFile file,
             @RequestParam("code") String code,
@@ -190,6 +196,7 @@ public class ExcelDataSourceController {
     @GetMapping("/viewData")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "查看数据", description = "分页查看Excel数据源对应表的数据")
+    @OperationLogMeta(actionType = "查询", actionDesc = "查看Excel导入数据", businessType = "excel_import", businessName = "Excel导入", targetIdKey = "code", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<ExcelDataSourceService.ExcelViewDataResult> viewData(
             @RequestParam("code") String code,
             @RequestParam(value = "page", defaultValue = "1") int page,

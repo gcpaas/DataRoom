@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
         @JsonSubTypes.Type(value = Db2Datasource.class, name = DataSourceType.DB2_TYPE),
         @JsonSubTypes.Type(value = GbaseDatasource.class, name = DataSourceType.GBASE_TYPE),
         @JsonSubTypes.Type(value = GoldenDbDatasource.class, name = DataSourceType.GOLDENDB_TYPE),
+        @JsonSubTypes.Type(value = GreatDbDatasource.class, name = DataSourceType.GREATDB_TYPE),
         @JsonSubTypes.Type(value = SqlServerDatasource.class, name = DataSourceType.SQLSERVER_TYPE),
         @JsonSubTypes.Type(value = MongoDbDatasource.class, name = DataSourceType.MONGODB_TYPE),
         @JsonSubTypes.Type(value = KingbaseDatasource.class, name = DataSourceType.KINGBASE_TYPE),

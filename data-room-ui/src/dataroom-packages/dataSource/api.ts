@@ -14,6 +14,7 @@ export interface RelationalDataSource {
     | 'db2'
     | 'gbase'
     | 'goldendb'
+    | 'greatdb'
     | 'sqlserver'
     | 'mongodb'
     | 'kingbase'
@@ -66,7 +67,7 @@ export interface EsDataSource {
 /**
  * 数据源实体
  * dataSource 字段根据 dataSourceType 不同而具有不同的结构:
- * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/sqlserver/mongodb/kingbase/clickhouse/mariadb/oceanbase/hive/tdengine/druid): RelationalDataSource
+ * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/greatdb/sqlserver/mongodb/kingbase/clickhouse/mariadb/oceanbase/hive/tdengine/druid): RelationalDataSource
  * - excel: ExcelDataSource
  * - es: EsDataSource
  */
@@ -83,6 +84,7 @@ export interface DataSourceEntity {
     | 'db2'
     | 'gbase'
     | 'goldendb'
+    | 'greatdb'
     | 'sqlserver'
     | 'mongodb'
     | 'kingbase'

@@ -27,6 +27,7 @@ const formData = reactive<UserDTO>({
   phone: '',
   role: '',
   status: 'NORMAL' as UserStatus,
+  expireDate: null,
 })
 
 const confirmPassword = ref('')
@@ -133,6 +134,7 @@ const resetFields = () => {
   formData.phone = ''
   formData.role = ''
   formData.status = 'NORMAL'
+  formData.expireDate = null
   confirmPassword.value = ''
   formRef.value?.resetFields()
 }
@@ -182,6 +184,16 @@ defineExpose({
           <el-option v-for="item in statusOptions" :key="item.value" :value="item.value" :label="item.label" />
         </el-select>
       </el-form-item>
+      <el-form-item label="有效期">
+        <el-date-picker
+          v-model="formData.expireDate"
+          type="datetime"
+          placeholder="不设置表示永久有效"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          class="expire-date-picker"
+          clearable
+        />
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button @click="handleClose">取消</el-button>
@@ -201,6 +213,10 @@ defineExpose({
   }
 
   .status-select {
+    width: 100%;
+  }
+
+  .expire-date-picker {
     width: 100%;
   }
 }

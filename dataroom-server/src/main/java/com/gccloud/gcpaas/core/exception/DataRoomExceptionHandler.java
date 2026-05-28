@@ -1,6 +1,7 @@
 package com.gccloud.gcpaas.core.exception;
 
 import com.gccloud.gcpaas.core.bean.Resp;
+import com.gccloud.gcpaas.core.operationlog.web.OperationLogExceptionBridge;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,11 +23,12 @@ import java.text.MessageFormat;
 public class DataRoomExceptionHandler {
 
     @ExceptionHandler(AuthorizationException.class)
-    public Resp<String> authorizationException(AuthorizationException e) {
+    public Resp<String> authorizationException(AuthorizationException e, HttpServletRequest request) {
         log.error(ExceptionUtils.getStackTrace(e));
         Resp<String> r = new Resp<String>();
         r.setCode(500);
         r.setMessage(e.getMessage());
+        OperationLogExceptionBridge.markFailure(request, r.getCode(), r.getMessage(), e);
         return r;
     }
 
@@ -48,21 +50,25 @@ public class DataRoomExceptionHandler {
         Resp<String> r = new Resp<String>();
         r.setCode(500);
         r.setMessage("您无权限访问 " + uri + " 接口");
+        OperationLogExceptionBridge.markFailure(request, r.getCode(), r.getMessage(), e);
         return r;
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
-    public Resp<String> expiredJwtException(AuthorizationException e) {
+    public Resp<String> expiredJwtException(ExpiredJwtException e, HttpServletRequest request) {
         log.error(ExceptionUtils.getStackTrace(e));
-        return Resp.authError();
+        Resp<String> resp = Resp.authError();
+        OperationLogExceptionBridge.markFailure(request, resp.getCode(), resp.getMessage(), e);
+        return resp;
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public Resp<String> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    public Resp<String> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
         log.error(ExceptionUtils.getStackTrace(e));
         Resp<String> r = new Resp<String>();
         r.setCode(500);
         r.setMessage("不支持该请求方式");
+        OperationLogExceptionBridge.markFailure(request, r.getCode(), r.getMessage(), e);
         return r;
     }
 
@@ -75,24 +81,31 @@ public class DataRoomExceptionHandler {
         Resp<String> r = new Resp<>();
         r.setCode(e.getCode());
         r.setMessage(e.getMessage());
+        OperationLogExceptionBridge.markFailure(request, r.getCode(), r.getMessage(), e);
         return r;
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public Resp<String> illegalArgumentException(Exception e) {
+    public Resp<String> illegalArgumentException(Exception e, HttpServletRequest request) {
         log.error(ExceptionUtils.getStackTrace(e));
-        return Resp.error(e.getMessage());
+        Resp<String> resp = Resp.error(e.getMessage());
+        OperationLogExceptionBridge.markFailure(request, resp.getCode(), resp.getMessage(), e);
+        return resp;
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public Resp<String> noResourceFoundException(Exception e) {
+    public Resp<String> noResourceFoundException(Exception e, HttpServletRequest request) {
         log.error(ExceptionUtils.getStackTrace(e));
-        return Resp.error(404, "访问的地址不存在");
+        Resp<String> resp = Resp.error(404, "访问的地址不存在");
+        OperationLogExceptionBridge.markFailure(request, resp.getCode(), resp.getMessage(), e);
+        return resp;
     }
 
     @ExceptionHandler(Exception.class)
-    public Resp<String> handleException(Exception e) {
+    public Resp<String> handleException(Exception e, HttpServletRequest request) {
         log.error(ExceptionUtils.getStackTrace(e));
-        return Resp.error("服务器异常");
+        Resp<String> resp = Resp.error("服务器异常");
+        OperationLogExceptionBridge.markFailure(request, resp.getCode(), resp.getMessage(), e);
+        return resp;
     }
 }

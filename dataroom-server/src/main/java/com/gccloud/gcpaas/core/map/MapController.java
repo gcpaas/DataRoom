@@ -5,6 +5,7 @@ import com.gccloud.gcpaas.core.bean.Resp;
 import com.gccloud.gcpaas.core.constant.DataRoomRole;
 import com.gccloud.gcpaas.core.entity.MapEntity;
 import com.gccloud.gcpaas.core.mapper.MapMapper;
+import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
 import com.gccloud.gcpaas.core.util.CodeWorker;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +30,7 @@ import java.util.List;
 @RestController
 @Controller
 @RequestMapping("/dataRoom/map")
+@OperationLogMeta(targetType = "map", businessType = "map_manage", businessName = "地图管理")
 public class MapController {
 
     private static final String CODE_PREFIX = "map";

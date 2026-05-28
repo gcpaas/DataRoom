@@ -10,6 +10,7 @@ export const DataSourceType = {
   DB2: 'db2',
   GBASE: 'gbase',
   GOLDENDB: 'goldendb',
+  GREATDB: 'greatdb',
   SQLSERVER: 'sqlserver',
   MONGODB: 'mongodb',
   KINGBASE: 'kingbase',

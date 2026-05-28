@@ -16,6 +16,7 @@ export interface UserEntity {
   phone?: string
   role?: string
   status: UserStatus
+  expireDate?: string | Date | null
   createDate?: string
   updateDate?: string
 }
@@ -41,6 +42,7 @@ export interface UserDTO {
   phone?: string
   role?: string
   status: UserStatus
+  expireDate?: string | Date | null
 }
 
 /**

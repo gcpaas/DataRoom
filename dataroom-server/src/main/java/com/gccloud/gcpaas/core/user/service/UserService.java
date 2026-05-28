@@ -15,12 +15,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.Date;
+
 /**
  * 用户服务
  */
 @Slf4j
 @Service
 public class UserService extends ServiceImpl<UserMapper, UserEntity> {
+
+    public static boolean isExpired(UserEntity user) {
+        if (user == null || user.getExpireDate() == null) {
+            return false;
+        }
+        return !user.getExpireDate().after(new Date());
+    }
 
     /**
      * 分页查询用户
@@ -75,6 +84,7 @@ public class UserService extends ServiceImpl<UserMapper, UserEntity> {
         user.setPhone(dto.getPhone());
         user.setRole(dto.getRole());
         user.setStatus(dto.getStatus() != null ? dto.getStatus() : UserStatus.NORMAL);
+        user.setExpireDate(dto.getExpireDate());
         this.save(user);
     }
 
@@ -111,6 +121,7 @@ public class UserService extends ServiceImpl<UserMapper, UserEntity> {
         if (dto.getStatus() != null) {
             user.setStatus(dto.getStatus());
         }
+        user.setExpireDate(dto.getExpireDate());
         this.updateById(user);
     }
 

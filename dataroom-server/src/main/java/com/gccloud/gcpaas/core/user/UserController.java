@@ -5,6 +5,8 @@ import com.gccloud.gcpaas.core.config.DataRoomConfig;
 import com.gccloud.gcpaas.core.constant.DataRoomRole;
 import com.gccloud.gcpaas.core.entity.UserEntity;
 import com.gccloud.gcpaas.core.exception.DataRoomException;
+import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
+import com.gccloud.gcpaas.core.operationlog.model.OperationLogDetailLevel;
 import com.gccloud.gcpaas.core.shiro.LoginUser;
 import com.gccloud.gcpaas.core.user.dto.UserDTO;
 import com.gccloud.gcpaas.core.user.dto.UserProfileDTO;
@@ -35,6 +37,7 @@ import java.util.Map;
 @RestController
 @Controller
 @RequestMapping("/dataRoom/user")
+@OperationLogMeta(targetType = "user", businessType = "user_manage", businessName = "用户管理")
 public class UserController {
 
     @Resource
@@ -56,6 +59,7 @@ public class UserController {
 
     @PostMapping("/login")
     @Operation(summary = "登录", description = "账号密码登录，需携带验证码")
+    @OperationLogMeta(actionType = "登录", actionDesc = "用户登录", businessType = "auth", businessName = "认证登录", targetNameKey = "username", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<String> login(@RequestBody Map<String, String> params) {
         String username = params.get("username");
         String password = params.get("password");
@@ -86,6 +90,9 @@ public class UserController {
             // 数据库用户认证
             String dbPwd = RsaUtils.decryptByPrivateKey(dbUser.getPassword(), dataRoomConfig.getPrivateKey());
             Assert.isTrue(dbPwd.equals(decryptedPassword), "用户名或密码错误");
+            if (UserService.isExpired(dbUser)) {
+                return Resp.error("用户已过期");
+            }
             String token = tokenService.createToken(username);
             return Resp.success(token);
         }
@@ -145,6 +152,7 @@ public class UserController {
     @PostMapping("/profile/update")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "更新个人信息", description = "仅允许修改用户名和密码")
+    @OperationLogMeta(actionType = "修改", actionDesc = "更新个人信息", businessType = "user_profile", businessName = "个人信息", targetNameKey = "username", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<Void> updateProfile(@RequestBody UserProfileDTO dto) {
         LoginUser currentUser = LoginUserUtils.getCurrentUser();
         userService.updateProfile(currentUser.getAccount(), dto.getUsername(), dto.getPassword());

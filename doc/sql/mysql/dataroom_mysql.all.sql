@@ -149,6 +149,52 @@ CREATE TABLE `dr_resource`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='资源表';
 
 -- ----------------------------
+-- 操作日志表
+-- ----------------------------
+DROP TABLE IF EXISTS `dr_operation_log`;
+CREATE TABLE `dr_operation_log`
+(
+    `id`                   VARCHAR(50)  NOT NULL COMMENT '主键',
+    `trace_id`             VARCHAR(128) DEFAULT NULL COMMENT '链路标识',
+    `operator_id`          VARCHAR(64)  DEFAULT NULL COMMENT '操作者ID',
+    `operator_name`        VARCHAR(128) DEFAULT NULL COMMENT '操作者名称',
+    `operator_role`        VARCHAR(255) DEFAULT NULL COMMENT '操作者角色',
+    `target_type`          VARCHAR(64)  DEFAULT NULL COMMENT '目标类型',
+    `target_id`            VARCHAR(128) DEFAULT NULL COMMENT '目标标识',
+    `target_name`          VARCHAR(255) DEFAULT NULL COMMENT '目标名称',
+    `action_type`          VARCHAR(64)  DEFAULT NULL COMMENT '动作类型',
+    `action_desc`          VARCHAR(255) DEFAULT NULL COMMENT '动作说明',
+    `business_type`        VARCHAR(128) DEFAULT NULL COMMENT '业务类型',
+    `business_name`        VARCHAR(255) DEFAULT NULL COMMENT '业务名称',
+    `business_desc`        VARCHAR(255) DEFAULT NULL COMMENT '业务说明',
+    `request_uri`          VARCHAR(512) DEFAULT NULL COMMENT '请求地址',
+    `request_method`       VARCHAR(16)  DEFAULT NULL COMMENT '请求方法',
+    `client_ip`            VARCHAR(64)  DEFAULT NULL COMMENT '客户端IP',
+    `user_agent`           VARCHAR(512) DEFAULT NULL COMMENT 'User-Agent',
+    `content_type`         VARCHAR(128) DEFAULT NULL COMMENT '内容类型',
+    `query_params`         LONGTEXT     DEFAULT NULL COMMENT '查询参数',
+    `request_body`         LONGTEXT     DEFAULT NULL COMMENT '请求体',
+    `request_param_summary` LONGTEXT    DEFAULT NULL COMMENT '请求摘要',
+    `result_status`        VARCHAR(32)  DEFAULT NULL COMMENT '执行结果',
+    `response_code`        INT          DEFAULT NULL COMMENT '响应码',
+    `response_message`     VARCHAR(512) DEFAULT NULL COMMENT '响应消息',
+    `exception_type`       VARCHAR(255) DEFAULT NULL COMMENT '异常类型',
+    `exception_stack`      LONGTEXT     DEFAULT NULL COMMENT '异常堆栈',
+    `request_time`         DATETIME     DEFAULT NULL COMMENT '请求时间',
+    `duration_ms`          BIGINT       DEFAULT NULL COMMENT '总耗时',
+    `handler_duration_ms`  BIGINT       DEFAULT NULL COMMENT '处理耗时',
+    `create_date`          DATETIME     DEFAULT NULL COMMENT '创建时间',
+    `create_user`          VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
+    `update_date`          DATETIME     DEFAULT NULL COMMENT '更新时间',
+    `update_user`          VARCHAR(50)  DEFAULT NULL COMMENT '更新人',
+    `tenant_code`          VARCHAR(50)  DEFAULT NULL COMMENT '租户编码',
+    `del_flag`             VARCHAR(1)   DEFAULT '0' COMMENT '删除标识(0：正常，1：删除)',
+    PRIMARY KEY (`id`),
+    KEY                    `idx_operation_log_request_time` (`request_time`),
+    KEY                    `idx_operation_log_target_type` (`target_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='操作日志表';
+
+-- ----------------------------
 -- 用户表
 -- ----------------------------
 DROP TABLE IF EXISTS `dr_user`;
@@ -160,6 +206,7 @@ CREATE TABLE `dr_user` (
     `phone`       VARCHAR(20)  DEFAULT NULL COMMENT '联系电话',
     `role`        VARCHAR(200) DEFAULT NULL COMMENT '角色编码，多个用逗号分隔',
     `status`      VARCHAR(20)  DEFAULT 'NORMAL' COMMENT '状态：NORMAL-正常 DISABLED-禁用 PASSWORD_EXPIRED-密码过期',
+    `expire_date` DATETIME     DEFAULT NULL COMMENT '有效期截止时间，NULL表示永久有效',
     `create_date` DATETIME     DEFAULT NULL COMMENT '创建时间',
     `create_user` VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
     `update_date` DATETIME     DEFAULT NULL COMMENT '更新时间',
@@ -168,7 +215,8 @@ CREATE TABLE `dr_user` (
     `del_flag`    VARCHAR(1)   DEFAULT '0' COMMENT '删除标识(0：正常，1：删除)',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_user_account` (`account`),
-    KEY `idx_user_status` (`status`)
+    KEY `idx_user_status` (`status`),
+    KEY `idx_user_expire_date` (`expire_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 -- ----------------------------

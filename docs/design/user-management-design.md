@@ -24,6 +24,7 @@ CREATE TABLE dr_user (
     phone VARCHAR(20) COMMENT '联系电话',
     role VARCHAR(200) COMMENT '角色编码，多个用逗号分隔，如：manager,developer',
     status VARCHAR(20) NOT NULL DEFAULT 'NORMAL' COMMENT '状态：NORMAL-正常 DISABLED-禁用 PASSWORD_EXPIRED-密码过期',
+    expire_date DATETIME COMMENT '有效期截止时间，NULL 表示永久有效',
     create_date DATETIME COMMENT '创建时间',
     create_user VARCHAR(64) COMMENT '创建人',
     update_date DATETIME COMMENT '更新时间',

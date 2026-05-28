@@ -1,74 +1,10 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import config from '../../package.json'
+import { appRoutes } from './routes'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      redirect: '/dataRoom/page/index'
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/dataroom-packages/login/Login.vue'),
-    },
-    {
-      path: '/dataRoom',
-      name: 'dataRoom',
-      component: () => import('@/dataroom-packages/layout/UpDownLayout.vue'),
-      children: [{
-        path: 'page/index',
-        name: 'page',
-        component: () => import('@/dataroom-packages/page/index.vue'),
-      }, {
-        path: 'resource/index',
-        name: 'resource',
-        component: () => import('@/dataroom-packages/resource/index.vue'),
-      }, {
-        path: 'dataSource/index',
-        name: 'dataSource',
-        component: () => import('@/dataroom-packages/dataSource/index.vue'),
-      }, {
-        path: 'dataset/index',
-        name: 'dataset',
-        component: () => import('@/dataroom-packages/dataset/index.vue'),
-      }, {
-        path: 'map/index',
-        name: 'map',
-        component: () => import('@/dataroom-packages/map/index.vue'),
-      }, {
-        path: 'profile',
-        name: 'profile',
-        component: () => import('@/dataroom-packages/profile/index.vue'),
-      }, {
-        path: 'user',
-        name: 'user',
-        component: () => import('@/dataroom-packages/user/index.vue'),
-      }]
-    },
-    {
-      path: '/dataRoom/visualScreenDesigner/:pageCode',
-      name: 'visualScreenDesigner',
-      component: () => import('@/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue'),
-    },
-    {
-      path: '/dataRoom/visualScreenPreview/:pageStatus/:pageCode',
-      name: 'visualScreenPreview',
-      component: () => import('@/dataroom-packages/VisualScreenDesigner/preview/VisualScreenPreview.vue'),
-    },
-    {
-      path: '/dataRoom/pageDesigner/:pageCode',
-      name: 'pageDesigner',
-      component: () => import('@/dataroom-packages/PageDesigner/PageDesigner.vue'),
-    },
-    {
-      path: '/dataRoom/pagePreviewer/:pageStatus/:pageCode',
-      name: 'pagePreviewer',
-      component: () => import('@/dataroom-packages/PageDesigner/preview/PagePreviewer.vue'),
-    },
-  ],
+  routes: appRoutes,
 })
 
 console.log(

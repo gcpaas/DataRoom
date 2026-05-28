@@ -33,6 +33,11 @@ const roleNameMap: Record<string, string> = {
 
 const getStatusMeta = (status: UserStatus) => statusMap[status] || { label: status, type: 'info' }
 
+const isExpired = (expireDate: string | Date | null | undefined) => {
+  if (!expireDate) return false
+  return new Date(expireDate).getTime() <= Date.now()
+}
+
 const formatDate = (date: string | Date | null | undefined) => {
   if (!date) return '-'
   const d = new Date(date)
@@ -43,6 +48,11 @@ const formatDate = (date: string | Date | null | undefined) => {
   const minutes = String(d.getMinutes()).padStart(2, '0')
   const seconds = String(d.getSeconds()).padStart(2, '0')
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
+
+const formatExpireDate = (date: string | Date | null | undefined) => {
+  if (!date) return '永久有效'
+  return formatDate(date)
 }
 
 const getUserList = () => {
@@ -162,6 +172,14 @@ onMounted(() => {
           <template #default="{ row }">
             <el-tag :type="getStatusMeta(row.status).type" size="small" class="status-tag">
               {{ getStatusMeta(row.status).label }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="expireDate" label="有效期" min-width="180">
+          <template #default="{ row }">
+            <el-tag v-if="!row.expireDate" type="info" size="small" class="status-tag">永久有效</el-tag>
+            <el-tag v-else :type="isExpired(row.expireDate) ? 'danger' : 'success'" size="small" class="status-tag">
+              {{ formatExpireDate(row.expireDate) }}
             </el-tag>
           </template>
         </el-table-column>

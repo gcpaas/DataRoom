@@ -34,9 +34,9 @@ const handleCommand = (command: string) => {
     // 跳转到登录页
     router.push('/login')
   } else if (command === 'profile') {
-    router.push('/dataRoom/profile')
+    router.push('/dataRoom/console/profile')
   } else if (command === 'console') {
-    router.push('/dataRoom/user')
+    router.push('/dataRoom/console/user')
   }
 }
 

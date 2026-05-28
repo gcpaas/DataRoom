@@ -2,6 +2,7 @@ package com.gccloud.gcpaas.core.shiro;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gccloud.gcpaas.core.bean.Resp;
+import com.gccloud.gcpaas.core.operationlog.web.OperationLogExceptionBridge;
 import com.gccloud.gcpaas.core.util.TokenUtils;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -54,7 +55,9 @@ public class ShiroAuthFilter extends AuthenticatingFilter {
             httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
             httpResponse.setHeader("Access-Control-Allow-Origin", getOrigin());
             httpResponse.setContentType("application/json;charset=utf-8");
-            String body = OBJECT_MAPPER.writeValueAsString(Resp.authError());
+            Resp<String> authError = Resp.authError();
+            OperationLogExceptionBridge.markFailure(req, authError.getCode(), authError.getMessage(), null);
+            String body = OBJECT_MAPPER.writeValueAsString(authError);
             httpResponse.getWriter().print(body);
             return false;
         }
@@ -70,7 +73,10 @@ public class ShiroAuthFilter extends AuthenticatingFilter {
         try {
             // 处理登录失败的异常
             log.error(ExceptionUtils.getStackTrace(e));
-            String body = OBJECT_MAPPER.writeValueAsString(Resp.authError());
+            HttpServletRequest req = (HttpServletRequest) request;
+            Resp<String> authError = Resp.authError();
+            OperationLogExceptionBridge.markFailure(req, authError.getCode(), authError.getMessage(), e);
+            String body = OBJECT_MAPPER.writeValueAsString(authError);
             httpResponse.getWriter().print(body);
         } catch (IOException e1) {
             log.error(ExceptionUtils.getStackTrace(e1));

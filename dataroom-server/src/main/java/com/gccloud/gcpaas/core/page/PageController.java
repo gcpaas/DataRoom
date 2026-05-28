@@ -14,6 +14,8 @@ import com.gccloud.gcpaas.core.entity.PageEntity;
 import com.gccloud.gcpaas.core.entity.PageStageEntity;
 import com.gccloud.gcpaas.core.exception.DataRoomException;
 import com.gccloud.gcpaas.core.mapper.PageMapper;
+import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
+import com.gccloud.gcpaas.core.operationlog.model.OperationLogDetailLevel;
 import com.gccloud.gcpaas.core.page.bean.BasePageConfig;
 import com.gccloud.gcpaas.core.page.bean.PageStageVo;
 import com.gccloud.gcpaas.core.page.dto.PageOfflineDto;
@@ -52,6 +54,7 @@ import java.util.List;
 @Tag(name = "页面")
 @ApiSort(value = 10)
 @RequestMapping("/dataRoom/page")
+@OperationLogMeta(targetType = "page", businessType = "page_manage", businessName = "页面管理")
 public class PageController {
     @Resource
     private PageService pageService;
@@ -178,6 +181,7 @@ public class PageController {
     @PostMapping("/publish")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "发布", description = "发布页面")
+    @OperationLogMeta(actionType = "发布", actionDesc = "页面发布", businessType = "page_publish", businessName = "页面发布", targetIdKey = "pageCode")
     public Resp<String> publish(@RequestBody PagePublishDto pagePublishDto) throws JsonProcessingException {
         // 修改发布状态
         LambdaUpdateWrapper<PageEntity> updateWrapper = new LambdaUpdateWrapper<PageEntity>()
@@ -216,6 +220,7 @@ public class PageController {
     @PostMapping("/offline")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "取消发布", description = "取消发布")
+    @OperationLogMeta(actionType = "下线", actionDesc = "页面下线", businessType = "page_publish", businessName = "页面发布", targetIdKey = "code")
     public Resp<Void> offline(@RequestBody PageOfflineDto pageOfflineDto) {
         LambdaUpdateWrapper<PageEntity> updateWrapper = new LambdaUpdateWrapper<PageEntity>()
                 .set(PageEntity::getPageStatus, PageStatus.DESIGN)
@@ -266,6 +271,7 @@ public class PageController {
     @PostMapping("/updatePageConfig")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "更新页面配置", description = "更新页面配置")
+    @OperationLogMeta(actionType = "修改", actionDesc = "更新页面设计配置", businessType = "page_design", businessName = "页面设计", targetIdKey = "pageCode", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<Boolean> updatePageConfig(@RequestBody PageStageEntity pageStage) {
         LambdaUpdateWrapper<PageStageEntity> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.set(PageStageEntity::getPageConfig, JSON.toJSONString(pageStage.getPageConfig()));
@@ -285,6 +291,7 @@ public class PageController {
     @PostMapping("/updatePageConfig4Preview")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "更新页面配置", description = "更新页面配置")
+    @OperationLogMeta(actionType = "修改", actionDesc = "更新页面预览配置", businessType = "page_preview", businessName = "页面预览", targetIdKey = "pageCode", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<Boolean> updatePageConfig4Preview(@RequestBody PageStageEntity pageStage) {
         // 查看是否有预览态
         PageStageEntity pageStageEntity = pageStageService.getByCode(pageStage.getPageCode(), PageStatus.PREVIEW);
@@ -320,6 +327,7 @@ public class PageController {
     @GetMapping("/getPageConfig/{pageCode}/{pageStatus}")
     @RequiresRoles(value = DataRoomRole.SHARER)
     @Operation(summary = "获取页面配置", description = "获取页面配置,仅支持获取设计态、预览态、发布态")
+    @OperationLogMeta(actionType = "查询", actionDesc = "获取页面配置", businessType = "page_preview", businessName = "页面预览", targetIdKey = "pageCode", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<PageStageVo> getPageConfig(@PathVariable("pageCode") String pageCode, @PathVariable("pageStatus") String pageStatusStr) {
         PageStatus pageStatus = PageStatus.valueOf(pageStatusStr.toUpperCase());
         LambdaQueryWrapper<PageStageEntity> queryWrapper = new LambdaQueryWrapper<>();
@@ -394,6 +402,7 @@ public class PageController {
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "历史清空", description = "根据页面编码清空对应历史")
     @Parameters({@Parameter(name = "code", description = "页面编码", in = ParameterIn.PATH)})
+    @OperationLogMeta(actionType = "修改", actionDesc = "清空页面历史记录", businessType = "page_stage", businessName = "页面历史", targetIdKey = "code")
     public Resp<Void> stageClear(@PathVariable("code") String code, @PathVariable("state") String state) {
         PageStatus pageStatus = PageStatus.valueOf(state.toUpperCase());
         if (!(pageStatus == PageStatus.HISTORY || pageStatus == PageStatus.SNAPSHOT)) {
@@ -416,6 +425,7 @@ public class PageController {
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "回退", description = "根据历史记录回退")
     @Parameters({@Parameter(name = "id", description = "历史记录ID", in = ParameterIn.PATH)})
+    @OperationLogMeta(actionType = "修改", actionDesc = "页面历史回退", businessType = "page_stage", businessName = "页面历史", targetIdKey = "id")
     public Resp<String> stageRollback(@PathVariable("id") String id) {
         PageStageEntity pageStage = pageStageService.getById(id);
 

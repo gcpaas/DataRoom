@@ -4,6 +4,7 @@ import com.gccloud.gcpaas.core.shiro.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.subject.Subject;
 
 @Slf4j
@@ -18,6 +19,8 @@ public class LoginUserUtils {
                 return null;
             }
             return (LoginUser) principal;
+        } catch (UnavailableSecurityManagerException e) {
+            return null;
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
         }
