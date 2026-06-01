@@ -17,37 +17,37 @@
 
 ## 系统截图
 
-### 登录页面
+### 登录功能
 > 支持账号、密码、验证码登录，支持单点登录，防暴力登录
 
 ![登录页面.png](doc/image/%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.png)
 
-### 页面管理页
+### 页面管理
 > 支持目录、大屏、仪表盘创建
 
 ![页面管理页.png](doc/image/%E9%A1%B5%E9%9D%A2%E7%AE%A1%E7%90%86%E9%A1%B5.png)
 
-### 页面设计页
+### 页面设计器
 > 采用栅格布局，自适应页面大小
 
 ![页面设计器.png](doc/image/%E9%A1%B5%E9%9D%A2%E8%AE%BE%E8%AE%A1%E5%99%A8.png)
 
-### 大屏设计页
+### 大屏设计器
 > 采用绝对定位布局、灵活设计，支持标尺、画布缩放、画布拖拽
 
 ![大屏设计器.png](doc/image/%E5%A4%A7%E5%B1%8F%E8%AE%BE%E8%AE%A1%E5%99%A8.png)
 
-### 素材库页面
+### 素材库
 > 支持目录、图片、视频、3D模型导入与预览
 
 ![素材库页面.png](doc/image/%E7%B4%A0%E6%9D%90%E5%BA%93%E9%A1%B5%E9%9D%A2.png)
 
-### 数据源页面
+### 数据源
 > 支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、GoldenDB、MongoDB、人大金仓、万里、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV数据源接入
 
 ![数据源页面.png](doc/image/%E6%95%B0%E6%8D%AE%E6%BA%90%E9%A1%B5%E9%9D%A2.png)
 
-### 数据集页面
+### 数据集
 > 支持目录、JSON、SQL、HTTP、ES数据集接入
 
 ![数据集页面.png](doc/image/%E6%95%B0%E6%8D%AE%E9%9B%86%E9%A1%B5%E9%9D%A2.png)
