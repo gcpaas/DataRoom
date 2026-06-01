@@ -197,7 +197,9 @@ CREATE TABLE IF NOT EXISTS dr_user
     password    VARCHAR(500) NOT NULL COMMENT '密码',
     phone       VARCHAR(20)  DEFAULT NULL COMMENT '联系电话',
     role        VARCHAR(200) DEFAULT NULL COMMENT '角色编码，多个用逗号分隔',
-    status      VARCHAR(20)  DEFAULT 'NORMAL' COMMENT '状态：NORMAL-正常 DISABLED-禁用 PASSWORD_EXPIRED-密码过期',
+    status      VARCHAR(20)  DEFAULT 'NORMAL' COMMENT '状态：NORMAL-正常 LOCKED-锁定 DISABLED-禁用 PASSWORD_EXPIRED-密码过期',
+    login_fail_count INT     DEFAULT 0 COMMENT '连续登录密码错误次数',
+    login_locked_until TIMESTAMP DEFAULT NULL COMMENT '登录锁定截止时间',
     expire_date TIMESTAMP    DEFAULT NULL COMMENT '有效期截止时间，NULL表示永久有效',
     create_date TIMESTAMP    DEFAULT NULL COMMENT '创建时间',
     create_user VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
@@ -208,6 +210,8 @@ CREATE TABLE IF NOT EXISTS dr_user
     PRIMARY KEY (id),
     CONSTRAINT uk_user_account UNIQUE (account)
 );
+ALTER TABLE dr_user ADD COLUMN IF NOT EXISTS login_fail_count INT DEFAULT 0 COMMENT '连续登录密码错误次数';
+ALTER TABLE dr_user ADD COLUMN IF NOT EXISTS login_locked_until TIMESTAMP DEFAULT NULL COMMENT '登录锁定截止时间';
 -- ALTER TABLE dr_user ADD COLUMN IF NOT EXISTS expire_date TIMESTAMP DEFAULT NULL COMMENT '有效期截止时间，NULL表示永久有效';
 -- CREATE INDEX IF NOT EXISTS idx_user_status ON dr_user(status);
 -- CREATE INDEX IF NOT EXISTS idx_user_expire_date ON dr_user(expire_date);

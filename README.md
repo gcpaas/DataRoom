@@ -18,6 +18,8 @@
 ## 系统截图
 
 ### 登录页面
+> 支持账号、密码、验证码登录，支持单点登录，防暴力登录
+
 ![登录页面.png](doc/image/%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.png)
 
 ### 页面管理页
@@ -25,16 +27,23 @@
 
 ![页面管理页.png](doc/image/%E9%A1%B5%E9%9D%A2%E7%AE%A1%E7%90%86%E9%A1%B5.png)
 
-### 仪表盘设计页
-![页面设计页.png](doc/image/%E9%A1%B5%E9%9D%A2%E8%AE%BE%E8%AE%A1%E9%A1%B5.png)
+### 页面设计页
+> 采用栅格布局，自适应页面大小
+
+![页面设计器.png](doc/image/%E9%A1%B5%E9%9D%A2%E8%AE%BE%E8%AE%A1%E5%99%A8.png)
+
+### 大屏设计页
+> 采用绝对定位布局、灵活设计，支持标尺、画布缩放、画布拖拽
+
+![大屏设计器.png](doc/image/%E5%A4%A7%E5%B1%8F%E8%AE%BE%E8%AE%A1%E5%99%A8.png)
 
 ### 素材库页面
-> 支持目录、图片、视频、3D模型导入
+> 支持目录、图片、视频、3D模型导入与预览
 
 ![素材库页面.png](doc/image/%E7%B4%A0%E6%9D%90%E5%BA%93%E9%A1%B5%E9%9D%A2.png)
 
 ### 数据源页面
-> 支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、GoldenDB、MongoDB、人大金仓、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV数据源接入
+> 支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、GoldenDB、MongoDB、人大金仓、万里、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV数据源接入
 
 ![数据源页面.png](doc/image/%E6%95%B0%E6%8D%AE%E6%BA%90%E9%A1%B5%E9%9D%A2.png)
 
@@ -52,6 +61,11 @@
 > 支持用户新建、权限管控、密码加密存储
 
 ![用户管理.png](doc/image/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png)
+
+### 访问日志
+> 支持用户所有操作记录与查询，确保数据可追溯、行为可核查
+
+![访问日志.png](doc/image/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97.png)
 
 
 ## 快速开始

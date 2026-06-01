@@ -3,7 +3,7 @@ import request from '@/dataroom-packages/_common/_request'
 /**
  * 用户状态
  */
-export type UserStatus = 'NORMAL' | 'DISABLED' | 'PASSWORD_EXPIRED'
+export type UserStatus = 'NORMAL' | 'LOCKED' | 'DISABLED' | 'PASSWORD_EXPIRED'
 
 /**
  * 用户实体
@@ -16,6 +16,8 @@ export interface UserEntity {
   phone?: string
   role?: string
   status: UserStatus
+  loginFailCount?: number
+  loginLockedUntil?: string | Date | null
   expireDate?: string | Date | null
   createDate?: string
   updateDate?: string
@@ -29,6 +31,13 @@ export interface UserQueryDTO {
   status?: UserStatus
   current?: number
   size?: number
+}
+
+export interface PageVo<T> {
+  total: number
+  size: number
+  current: number
+  data: T[]
 }
 
 /**
@@ -61,7 +70,7 @@ export const userApi = {
    * 分页查询用户
    */
   page(params?: UserQueryDTO) {
-    return request.get<{ data: UserEntity[]; total: number }>('/dataRoom/user/page', params)
+    return request.get<PageVo<UserEntity>>('/dataRoom/user/page', params)
   },
 
   /**
@@ -90,6 +99,13 @@ export const userApi = {
    */
   delete(id: string) {
     return request.post<void>(`/dataRoom/user/delete/${id}`)
+  },
+
+  /**
+   * 解锁用户
+   */
+  unlock(id: string) {
+    return request.post<void>(`/dataRoom/user/unlock/${id}`)
   },
 
   /**

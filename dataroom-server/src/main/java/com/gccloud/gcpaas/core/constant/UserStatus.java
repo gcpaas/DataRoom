@@ -18,6 +18,11 @@ public enum UserStatus {
     NORMAL("NORMAL", "正常"),
 
     /**
+     * 锁定
+     */
+    LOCKED("LOCKED", "锁定"),
+
+    /**
      * 禁用
      */
     DISABLED("DISABLED", "禁用"),

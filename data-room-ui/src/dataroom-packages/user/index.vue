@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search, Plus } from '@element-plus/icons-vue'
+import { Search, Plus, Unlock } from '@element-plus/icons-vue'
 import { userApi, type UserEntity, type UserStatus } from './api'
 import UserEdit from './components/UserEdit.vue'
 
@@ -21,6 +21,7 @@ type UserPageResponse = UserEntity[] | { data?: UserEntity[]; total?: number }
 
 const statusMap: Record<UserStatus, { label: string; type: StatusTagType }> = {
   NORMAL: { label: '正常', type: 'success' },
+  LOCKED: { label: '锁定', type: 'warning' },
   DISABLED: { label: '禁用', type: 'danger' },
   PASSWORD_EXPIRED: { label: '密码过期', type: 'warning' },
 }
@@ -134,6 +135,28 @@ const handleDelete = (row: UserEntity) => {
     })
 }
 
+const handleUnlock = (row: UserEntity) => {
+  if (!row.id || row.status !== 'LOCKED') return
+  const userId = row.id
+  ElMessageBox.confirm(`确定要解锁用户「${row.username}」吗？`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => {
+      return userApi.unlock(userId)
+    })
+    .then(() => {
+      ElMessage.success('解锁成功')
+      getUserList()
+    })
+    .catch((error: unknown) => {
+      if (error !== 'cancel') {
+        console.error('解锁失败:', error)
+      }
+    })
+}
+
 const handleEditSuccess = () => {
   getUserList()
 }
@@ -157,44 +180,47 @@ onMounted(() => {
 
     <!-- 表格区域 -->
     <div class="table-area" v-loading="loading">
-      <el-table :data="userList" border class="user-table">
-        <el-table-column prop="account" label="账号" min-width="120" />
-        <el-table-column prop="username" label="用户名" min-width="120" />
-        <el-table-column prop="phone" label="联系电话" min-width="120" />
-        <el-table-column prop="role" label="角色" min-width="180">
-          <template #default="{ row }">
-            <el-tag v-for="r in row.role ? row.role.split(',') : []" :key="r" size="small" class="role-tag">
-              {{ roleNameMap[r] || r }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="status" label="状态" min-width="100">
-          <template #default="{ row }">
-            <el-tag :type="getStatusMeta(row.status).type" size="small" class="status-tag">
-              {{ getStatusMeta(row.status).label }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="expireDate" label="有效期" min-width="180">
-          <template #default="{ row }">
-            <el-tag v-if="!row.expireDate" type="info" size="small" class="status-tag">永久有效</el-tag>
-            <el-tag v-else :type="isExpired(row.expireDate) ? 'danger' : 'success'" size="small" class="status-tag">
-              {{ formatExpireDate(row.expireDate) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="updateDate" label="更新时间" min-width="160">
-          <template #default="{ row }">
-            <span>{{ formatDate(row.updateDate) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="160" fixed="right">
-          <template #default="{ row }">
-            <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
-            <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div class="table-wrapper">
+        <el-table :data="userList" border class="user-table">
+          <el-table-column prop="account" label="账号" min-width="120" />
+          <el-table-column prop="username" label="用户名" min-width="120" />
+          <el-table-column prop="phone" label="联系电话" min-width="120" />
+          <el-table-column prop="role" label="角色" min-width="180">
+            <template #default="{ row }">
+              <el-tag v-for="r in row.role ? row.role.split(',') : []" :key="r" size="small" class="role-tag">
+                {{ roleNameMap[r] || r }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="status" label="状态" min-width="100">
+            <template #default="{ row }">
+              <el-tag :type="getStatusMeta(row.status).type" size="small" class="status-tag">
+                {{ getStatusMeta(row.status).label }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="expireDate" label="有效期" min-width="180">
+            <template #default="{ row }">
+              <el-tag v-if="!row.expireDate" type="info" size="small" class="status-tag">永久有效</el-tag>
+              <el-tag v-else :type="isExpired(row.expireDate) ? 'danger' : 'success'" size="small" class="status-tag">
+                {{ formatExpireDate(row.expireDate) }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="updateDate" label="更新时间" min-width="160">
+            <template #default="{ row }">
+              <span>{{ formatDate(row.updateDate) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="220" fixed="right">
+            <template #default="{ row }">
+              <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
+              <el-button v-if="row.status === 'LOCKED'" type="warning" link :icon="Unlock" @click="handleUnlock(row)">解锁</el-button>
+              <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页 -->
       <div class="pagination">
@@ -244,12 +270,19 @@ onMounted(() => {
 
   .table-area {
     flex: 1;
+    display: flex;
+    flex-direction: column;
     background: var(--el-fill-color-blank);
     border-radius: 8px;
     border: 1px solid var(--el-border-color);
     padding: 16px;
     box-sizing: border-box;
-    overflow: auto;
+    overflow: hidden;
+
+    .table-wrapper {
+      flex: 1;
+      overflow: auto;
+    }
 
     .user-table {
       width: 100%;

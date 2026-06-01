@@ -1,8 +1,10 @@
 package com.gccloud.gcpaas.core.user;
 
 import com.gccloud.gcpaas.core.bean.Resp;
+import com.gccloud.gcpaas.core.bean.PageVo;
 import com.gccloud.gcpaas.core.config.DataRoomConfig;
 import com.gccloud.gcpaas.core.constant.DataRoomRole;
+import com.gccloud.gcpaas.core.constant.UserStatus;
 import com.gccloud.gcpaas.core.entity.UserEntity;
 import com.gccloud.gcpaas.core.exception.DataRoomException;
 import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
@@ -87,12 +89,22 @@ public class UserController {
         // 优先从数据库查询用户（使用account字段查询）
         UserEntity dbUser = userService.getByAccount(username);
         if (dbUser != null) {
+            if (userService.isLoginLockActive(dbUser)) {
+                return Resp.error("账号已锁定，请10分钟后重试");
+            }
+            if (dbUser.getStatus() != UserStatus.NORMAL && dbUser.getStatus() != UserStatus.LOCKED) {
+                return Resp.error("用户已禁用或状态异常");
+            }
             // 数据库用户认证
             String dbPwd = RsaUtils.decryptByPrivateKey(dbUser.getPassword(), dataRoomConfig.getPrivateKey());
-            Assert.isTrue(dbPwd.equals(decryptedPassword), "用户名或密码错误");
+            if (!dbPwd.equals(decryptedPassword)) {
+                userService.recordLoginFailure(dbUser);
+                Assert.isTrue(false, "用户名或密码错误");
+            }
             if (UserService.isExpired(dbUser)) {
                 return Resp.error("用户已过期");
             }
+            userService.recordLoginSuccess(dbUser);
             String token = tokenService.createToken(username);
             return Resp.success(token);
         }
@@ -102,8 +114,8 @@ public class UserController {
     @GetMapping("/page")
     @RequiresRoles(value = DataRoomRole.MANAGER)
     @Operation(summary = "分页查询用户")
-    public Resp<List<UserEntity>> page(UserQueryDTO queryDTO) {
-        return Resp.success(userService.page(queryDTO).getData());
+    public Resp<PageVo<UserEntity>> page(UserQueryDTO queryDTO) {
+        return Resp.success(userService.page(queryDTO));
     }
 
     @GetMapping("/detail/{id}")
@@ -134,6 +146,14 @@ public class UserController {
     @Operation(summary = "删除用户")
     public Resp<Void> delete(@PathVariable String id) {
         userService.delete(id);
+        return Resp.success(null);
+    }
+
+    @PostMapping("/unlock/{id}")
+    @RequiresRoles(value = DataRoomRole.MANAGER)
+    @Operation(summary = "解锁用户")
+    public Resp<Void> unlock(@PathVariable String id) {
+        userService.unlock(id);
         return Resp.success(null);
     }
 

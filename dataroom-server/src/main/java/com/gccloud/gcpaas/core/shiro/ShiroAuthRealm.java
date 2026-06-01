@@ -94,7 +94,7 @@ public class ShiroAuthRealm extends AuthorizingRealm {
                 String username = claims.get("username", String.class);
                 UserEntity user = userService.getByAccount(username);
                 if (user == null || user.getStatus() == null || user.getStatus() != UserStatus.NORMAL || UserService.isExpired(user)) {
-                    throw new DataRoomException("用户不存在、已禁用或已过期");
+                    throw new DataRoomException("用户不存在、已禁用、已锁定或已过期");
                 }
                 loginUser = new LoginUser();
                 BeanUtils.copyProperties(user, loginUser);

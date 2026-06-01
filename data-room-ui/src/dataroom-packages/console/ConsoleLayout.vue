@@ -13,14 +13,14 @@ const route = useRoute()
 
 const consoleMenus: ConsoleMenuItem[] = [
   {
-    key: 'user',
-    label: '用户管理',
-    path: '/dataRoom/console/user',
-  },
-  {
     key: 'profile',
     label: '个人信息',
     path: '/dataRoom/console/profile',
+  },
+  {
+    key: 'user',
+    label: '用户管理',
+    path: '/dataRoom/console/user',
   },
   {
     key: 'log',
@@ -28,7 +28,7 @@ const consoleMenus: ConsoleMenuItem[] = [
     path: '/dataRoom/console/log',
   },
 ]
-const defaultConsolePath = '/dataRoom/console/user'
+const defaultConsolePath = '/dataRoom/console/profile'
 
 const activeMenuPath = computed(() => {
   const matchedMenu = consoleMenus.find((item) => route.path.startsWith(item.path))

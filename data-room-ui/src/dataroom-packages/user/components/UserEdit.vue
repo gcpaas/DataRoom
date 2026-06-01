@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { computed, ref, reactive, watch } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { UserDTO, Role, UserStatus } from '../api'
 import { userApi } from '../api'
@@ -33,12 +33,22 @@ const formData = reactive<UserDTO>({
 const confirmPassword = ref('')
 
 const isEdit = ref(false)
+const originalStatus = ref<UserStatus>('NORMAL')
 
-const statusOptions = [
-  { value: 'NORMAL', label: '正常' },
-  { value: 'DISABLED', label: '禁用' },
-  { value: 'PASSWORD_EXPIRED', label: '密码过期' },
-]
+const statusOptions = computed(() => [
+  {
+    value: 'NORMAL' as UserStatus,
+    label: '正常',
+    disabled: isEdit.value && originalStatus.value !== 'NORMAL' && originalStatus.value !== 'LOCKED',
+  },
+  {
+    value: 'LOCKED' as UserStatus,
+    label: '锁定',
+    disabled: !isEdit.value || originalStatus.value !== 'LOCKED',
+  },
+  { value: 'DISABLED' as UserStatus, label: '禁用', disabled: false },
+  { value: 'PASSWORD_EXPIRED' as UserStatus, label: '密码过期', disabled: false },
+])
 
 // 监听弹窗打开/关闭
 watch(
@@ -62,6 +72,7 @@ watch(
         try {
           const user = await userApi.detail(props.userId)
           Object.assign(formData, user)
+          originalStatus.value = user.status
           formData.password = '' // 编辑时不清除密码
         } catch (error) {
           console.error('加载用户详情失败:', error)
@@ -104,6 +115,15 @@ const handleConfirm = async () => {
       }
     }
 
+    if (isEdit.value && formData.status === 'NORMAL' && originalStatus.value !== 'NORMAL' && originalStatus.value !== 'LOCKED') {
+      ElMessage.error('只有锁定用户才能恢复为正常状态')
+      return
+    }
+    if (formData.status === 'LOCKED' && (!isEdit.value || originalStatus.value !== 'LOCKED')) {
+      ElMessage.error('锁定状态只能由登录安全策略触发')
+      return
+    }
+
     loading.value = true
     if (isEdit.value) {
       await userApi.update(formData)
@@ -135,6 +155,7 @@ const resetFields = () => {
   formData.role = ''
   formData.status = 'NORMAL'
   formData.expireDate = null
+  originalStatus.value = 'NORMAL'
   confirmPassword.value = ''
   formRef.value?.resetFields()
 }
@@ -181,7 +202,7 @@ defineExpose({
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="formData.status" placeholder="请选择状态" class="status-select">
-          <el-option v-for="item in statusOptions" :key="item.value" :value="item.value" :label="item.label" />
+          <el-option v-for="item in statusOptions" :key="item.value" :value="item.value" :label="item.label" :disabled="item.disabled" />
         </el-select>
       </el-form-item>
       <el-form-item label="有效期">

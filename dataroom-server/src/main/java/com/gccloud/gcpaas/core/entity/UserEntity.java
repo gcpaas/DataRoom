@@ -59,6 +59,18 @@ public class UserEntity extends BaseEntity {
     private UserStatus status;
 
     /**
+     * 连续登录密码错误次数
+     */
+    @Schema(description = "连续登录密码错误次数")
+    private Integer loginFailCount;
+
+    /**
+     * 登录锁定截止时间
+     */
+    @Schema(description = "登录锁定截止时间")
+    private Date loginLockedUntil;
+
+    /**
      * 有效期截止时间，空表示永久有效
      */
     @Schema(description = "有效期截止时间，空表示永久有效")
