@@ -32,7 +32,7 @@
         <db2.jdbc.version>12.1.4.0</db2.jdbc.version>
         <gbase.jdbc.version>3.6.3.34_nobson</gbase.jdbc.version>
         <mongodb.jdbc.version>3.0.6</mongodb.jdbc.version>
-        <kingbase.jdbc.version>9.0.1.jre7</kingbase.jdbc.version>
+        <kingbase.jdbc.version>9.0.1</kingbase.jdbc.version>
         <clickhouse.jdbc.version>0.9.8</clickhouse.jdbc.version>
         <mariadb.jdbc.version>3.5.8</mariadb.jdbc.version>
         <oceanbase.jdbc.version>2.4.12</oceanbase.jdbc.version>
