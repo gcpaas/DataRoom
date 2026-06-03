@@ -7,5 +7,6 @@ export const DatasetType = {
   JSON: 'json',
   HTTP: 'http',
   SQL: 'sql',
+  EXCEL: 'excel',
   ES: 'es'
 } as const;

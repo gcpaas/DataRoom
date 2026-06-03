@@ -31,9 +31,6 @@ const repeatModeOptions = [
       <el-collapse class="dr-config-panel__section">
         <el-collapse-item title="图片配置" name="image">
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>图片来源</span>
-            </div>
             <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
@@ -70,9 +67,6 @@ const repeatModeOptions = [
           </div>
 
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>显示方式</span>
-            </div>
             <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
@@ -94,9 +88,6 @@ const repeatModeOptions = [
 
         <el-collapse-item title="超链接" name="hyperlink">
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>链接行为</span>
-            </div>
             <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">

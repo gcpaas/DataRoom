@@ -21,6 +21,8 @@ export interface RelationalDataSource {
     | 'clickhouse'
     | 'mariadb'
     | 'oceanbase'
+    | 'h2'
+    | 'polardb'
     | 'hive'
     | 'tdengine'
     | 'druid'
@@ -67,7 +69,7 @@ export interface EsDataSource {
 /**
  * 数据源实体
  * dataSource 字段根据 dataSourceType 不同而具有不同的结构:
- * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/greatdb/sqlserver/mongodb/kingbase/clickhouse/mariadb/oceanbase/hive/tdengine/druid): RelationalDataSource
+ * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/greatdb/sqlserver/mongodb/kingbase/clickhouse/mariadb/oceanbase/h2/polardb/hive/tdengine/druid): RelationalDataSource
  * - excel: ExcelDataSource
  * - es: EsDataSource
  */
@@ -91,6 +93,8 @@ export interface DataSourceEntity {
     | 'clickhouse'
     | 'mariadb'
     | 'oceanbase'
+    | 'h2'
+    | 'polardb'
     | 'hive'
     | 'tdengine'
     | 'druid'
@@ -126,6 +130,24 @@ export interface ExcelViewDataResponse {
   total: number
   page: number
   pageSize: number
+}
+
+/**
+ * 数据源表元数据
+ */
+export interface DataSourceTableMeta {
+  name: string
+  type?: string
+  comment?: string
+}
+
+/**
+ * 数据源字段元数据
+ */
+export interface DataSourceColumnMeta {
+  name: string
+  type?: string
+  comment?: string
 }
 
 /**
@@ -188,6 +210,22 @@ export const dataSourceApi = {
   },
 
   /**
+   * 查询数据源表信息
+   */
+  listTables(code: string) {
+    return request.get<DataSourceTableMeta[]>(`/dataRoom/dataSource/${code}/tables`)
+  },
+
+  /**
+   * 查询数据源字段信息
+   */
+  listColumns(code: string, tableName: string) {
+    return request.get<DataSourceColumnMeta[]>(
+      `/dataRoom/dataSource/${code}/tables/${encodeURIComponent(tableName)}/columns`
+    )
+  },
+
+  /**
    * Excel: 上传并解析文件
    */
   excelUpload(file: File) {
@@ -227,5 +265,21 @@ export const dataSourceApi = {
       page,
       pageSize,
     })
+  },
+
+  /**
+   * Excel: 查询应用数据库中excel_开头的表信息
+   */
+  excelListTables() {
+    return request.get<DataSourceTableMeta[]>('/dataRoom/dataSource/excel/tables')
+  },
+
+  /**
+   * Excel: 查询应用数据库中excel_开头表的字段信息
+   */
+  excelListColumns(tableName: string) {
+    return request.get<DataSourceColumnMeta[]>(
+      `/dataRoom/dataSource/excel/tables/${encodeURIComponent(tableName)}/columns`
+    )
   },
 }

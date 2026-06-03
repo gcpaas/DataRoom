@@ -50,9 +50,6 @@ const verticalAlignOptions = [
       <el-collapse class="dr-config-panel__section">
         <el-collapse-item title="基础配置" name="basic">
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>时间格式</span>
-            </div>
             <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
@@ -66,9 +63,6 @@ const verticalAlignOptions = [
           </div>
 
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>对齐</span>
-            </div>
             <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
@@ -92,9 +86,6 @@ const verticalAlignOptions = [
 
         <el-collapse-item title="文字样式" name="textStyle">
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>文字</span>
-            </div>
             <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">

@@ -1,17 +1,20 @@
 package com.gccloud.gcpaas.core.resources;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.gccloud.gcpaas.core.bean.Resp;
-import com.gccloud.gcpaas.core.config.DataRoomConfig;
-import com.gccloud.gcpaas.core.config.bean.ResourceBean;
 import com.gccloud.gcpaas.core.constant.DataRoomRole;
 import com.gccloud.gcpaas.core.constant.ResourceType;
 import com.gccloud.gcpaas.core.entity.ResourceEntity;
 import com.gccloud.gcpaas.core.mapper.ResourceMapper;
 import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
 import com.gccloud.gcpaas.core.operationlog.model.OperationLogDetailLevel;
+import com.gccloud.gcpaas.core.resources.storage.ResourceFileVariant;
+import com.gccloud.gcpaas.core.resources.storage.ResourceStorageService;
+import com.gccloud.gcpaas.core.resources.storage.ResourceStoreRequest;
+import com.gccloud.gcpaas.core.resources.storage.ResourceStream;
+import com.gccloud.gcpaas.core.resources.storage.StoredResource;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,16 +22,25 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -47,7 +59,7 @@ public class ResourceController {
     @Resource
     private ResourceMapper resourceMapper;
     @Resource
-    private DataRoomConfig dataRoomConfig;
+    private ResourceStorageService resourceStorageService;
 
     @GetMapping("/list")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
@@ -75,7 +87,7 @@ public class ResourceController {
         }
         queryWrapper.orderByDesc(ResourceEntity::getUpdateDate);
         List<ResourceEntity> list = resourceMapper.selectList(queryWrapper);
-        return Resp.success(list);
+        return Resp.success(normalizeResourceAccessUrl(list));
     }
 
     @GetMapping("/detail/{id}")
@@ -84,95 +96,82 @@ public class ResourceController {
     @Parameters({@Parameter(name = "id", description = "资源id", in = ParameterIn.PATH)})
     public Resp<ResourceEntity> detail(@PathVariable("id") String id) {
         ResourceEntity resourceEntity = resourceMapper.selectById(id);
-        return Resp.success(resourceEntity);
+        return Resp.success(normalizeResourceAccessUrl(resourceEntity));
     }
 
     @PostMapping("/upload")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
-    @Operation(summary = "上传", description = "上传素材")
+    @Operation(summary = "上传", description = "上传素材并保存资源记录")
     @OperationLogMeta(actionType = "上传", actionDesc = "上传素材资源", businessType = "resource_upload", businessName = "素材上传", targetNameKey = "name", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<ResourceEntity> upload(
+            @RequestParam(value = "id", required = false) String id,
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam(value = "cover", required = false) MultipartFile cover,
             @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "resourceType", required = false) String resourceType) throws IOException {
-        ResourceBean resource = dataRoomConfig.getResource();
-        ResourceEntity resourceEntity = new ResourceEntity();
-        String originalFilename = file.getOriginalFilename();
-        resourceEntity.setOriginalName(originalFilename);
-        resourceEntity.setName(StringUtils.isNotBlank(name) ? name : originalFilename);
-
-        // 根据文件扩展名设置资源类型
-        String extension = FilenameUtils.getExtension(originalFilename).toLowerCase();
-        ResourceType type;
-        if (isImageFile(extension)) {
-            type = ResourceType.IMAGE;
-        } else if (isVideoFile(extension)) {
-            type = ResourceType.VIDEO;
-        } else if (isModelFile(extension)) {
-            type = ResourceType.MODEL;
-            // 将模型格式存入 config
-            JSONObject config = new JSONObject();
-            config.put("format", extension.toUpperCase());
-            resourceEntity.setConfig(config.toJSONString());
-        } else {
-            type = ResourceType.IMAGE;
-        }
-        // 如果前端指定了resourceType，优先使用
-        if (StringUtils.isNotBlank(resourceType)) {
-            try {
-                type = ResourceType.valueOf(resourceType.toUpperCase());
-            } catch (IllegalArgumentException ignored) {
+            @RequestParam(value = "resourceType", required = false) String resourceType,
+            @RequestParam(value = "parentCode", required = false) String parentCode,
+            @RequestParam(value = "remark", required = false) String remark) throws IOException {
+        boolean update = StringUtils.isNotBlank(id);
+        ResourceEntity oldResource = null;
+        ResourceEntity resourceEntity;
+        if (update) {
+            oldResource = resourceMapper.selectById(id);
+            if (oldResource == null) {
+                return Resp.error("资源不存在");
             }
-        }
-        resourceEntity.setResourceType(type);
-        // 设置文件大小（单位：KB）
-        resourceEntity.setSize((int) (file.getSize() / 1024));
-        String newFileName = UUID.randomUUID().toString().replace("-", "") + "." + extension;
-        // 根据资源类型存储到不同目录
-        String subDir = getSubDir(type);
-        resourceEntity.setPath(subDir + File.separator + newFileName);
-        resourceEntity.setUrl("/" + subDir + "/" + newFileName);
-        FileUtils.copyInputStreamToFile(file.getInputStream(), new File(resource.getBasePath() + File.separator + subDir + File.separator + newFileName));
-
-        // 处理封面图片
-        if (cover != null && !cover.isEmpty()) {
-            String coverExtension = FilenameUtils.getExtension(cover.getOriginalFilename()).toLowerCase();
-            String coverFileName = UUID.randomUUID().toString().replace("-", "") + "." + coverExtension;
-            String coverPath = subDir + File.separator + coverFileName;
-            FileUtils.copyInputStreamToFile(cover.getInputStream(), new File(resource.getBasePath() + File.separator + coverPath));
-            resourceEntity.setThumbnail("/" + coverPath);
+            resourceEntity = cloneResource(oldResource);
+        } else {
+            if (file == null || file.isEmpty()) {
+                return Resp.error("请上传文件");
+            }
+            resourceEntity = new ResourceEntity();
+            resourceEntity.setId(IdWorker.getIdStr());
+            resourceEntity.setParentCode(StringUtils.defaultIfBlank(parentCode, "root"));
         }
 
-        return Resp.success(resourceEntity);
-    }
+        applyMetadata(resourceEntity, file, name, resourceType, parentCode, remark, update);
 
-    private String getSubDir(ResourceType type) {
-        if (type == null) {
-            return "image";
+        ResourceStorageService storageService = resourceStorageService;
+        List<String> newObjectKeyList = new ArrayList<>();
+        try {
+            if (file != null && !file.isEmpty()) {
+                StoredResource stored = storeMainFile(storageService, resourceEntity, file, resourceType);
+                newObjectKeyList.add(stored.getObjectKey());
+            }
+            if (cover != null && !cover.isEmpty()) {
+                StoredResource storedCover = storeCoverFile(storageService, resourceEntity, cover);
+                newObjectKeyList.add(storedCover.getObjectKey());
+            }
+
+            resourceEntity.setUpdateDate(new Date());
+            if (update) {
+                resourceMapper.updateById(resourceEntity);
+                cleanupOldObjects(storageService, oldResource, resourceEntity);
+            } else {
+                resourceMapper.insert(resourceEntity);
+            }
+            return Resp.success(normalizeResourceAccessUrl(resourceEntity));
+        } catch (Exception e) {
+            rollbackNewObjects(storageService, newObjectKeyList);
+            if (e instanceof IOException ioException) {
+                throw ioException;
+            }
+            throw new IOException("保存素材失败", e);
         }
-        return switch (type) {
-            case VIDEO -> "video";
-            case MODEL -> "model";
-            default -> "image";
-        };
     }
 
-    private boolean isModelFile(String extension) {
-        String ext = extension.toLowerCase();
-        return "glb".equals(ext) || "gltf".equals(ext) || "obj".equals(ext) || "stl".equals(ext);
+    @GetMapping("/file/{id}")
+    @Operation(summary = "读取资源文件", description = "公开代理读取素材主文件")
+    @OperationLogMeta(actionType = "读取", actionDesc = "读取素材文件", businessType = "resource_file", businessName = "素材文件", targetIdKey = "id", detailLevel = OperationLogDetailLevel.SUMMARY)
+    public void file(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        writeResourceFile(id, ResourceFileVariant.MAIN, request, response);
     }
 
-    private boolean isImageFile(String extension) {
-        String ext = extension.toLowerCase();
-        return "jpg".equals(ext) || "jpeg".equals(ext) || "png".equals(ext) || "gif".equals(ext) ||
-                "bmp".equals(ext) || "svg".equals(ext) || "webp".equals(ext);
-    }
-
-    private boolean isVideoFile(String extension) {
-        String ext = extension.toLowerCase();
-        return "mp4".equals(ext) || "avi".equals(ext) || "mov".equals(ext) || "wmv".equals(ext) ||
-                "flv".equals(ext) || "webm".equals(ext) || "m3u8".equals(ext) || "m4v".equals(ext);
+    @GetMapping("/file/{id}/thumbnail")
+    @Operation(summary = "读取资源封面", description = "公开代理读取素材封面文件")
+    @OperationLogMeta(actionType = "读取", actionDesc = "读取素材封面", businessType = "resource_file", businessName = "素材封面", targetIdKey = "id", detailLevel = OperationLogDetailLevel.SUMMARY)
+    public void thumbnail(@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        writeResourceFile(id, ResourceFileVariant.THUMBNAIL, request, response);
     }
 
     @PostMapping("/insert")
@@ -198,8 +197,20 @@ public class ResourceController {
     @Operation(summary = "删除", description = "根据主键删除素材")
     @Parameters({@Parameter(name = "id", description = "素材ID", in = ParameterIn.PATH)})
     public Resp<Void> delete(@PathVariable("id") String id) {
-        resourceMapper.deleteById(id);
-        return Resp.success(null);
+        ResourceEntity resource = resourceMapper.selectById(id);
+        if (resource == null) {
+            return Resp.success(null);
+        }
+        try {
+            ResourceStorageService storageService = resourceStorageService;
+            storageService.delete(resource.getPath());
+            storageService.delete(resource.getThumbnail());
+            resourceMapper.deleteById(id);
+            return Resp.success(null);
+        } catch (Exception e) {
+            log.error("删除素材失败，id={}", id, e);
+            return Resp.error("删除素材文件失败");
+        }
     }
 
     @PostMapping("/updateModelConfig")
@@ -229,21 +240,276 @@ public class ResourceController {
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "上传模型封面", description = "上传模型封面图片")
     @OperationLogMeta(actionType = "上传", actionDesc = "上传模型封面", businessType = "resource_model", businessName = "模型资源", targetIdKey = "id", detailLevel = OperationLogDetailLevel.SUMMARY)
-    public Resp<String> uploadModelCover(
+    public Resp<ResourceEntity> uploadModelCover(
             @RequestParam("id") String id,
-            @RequestParam("file") MultipartFile cover) throws IOException {
-        ResourceEntity entity = resourceMapper.selectById(id);
-        if (entity == null) {
-            return Resp.error("资源不存在");
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam(value = "cover", required = false) MultipartFile cover) throws IOException {
+        MultipartFile coverFile = cover != null && !cover.isEmpty() ? cover : file;
+        if (coverFile == null || coverFile.isEmpty()) {
+            return Resp.error("请上传封面");
         }
-        ResourceBean resource = dataRoomConfig.getResource();
-        String coverExtension = FilenameUtils.getExtension(cover.getOriginalFilename()).toLowerCase();
-        String coverFileName = UUID.randomUUID().toString().replace("-", "") + "." + coverExtension;
-        String coverPath = "model" + File.separator + coverFileName;
-        FileUtils.copyInputStreamToFile(cover.getInputStream(), new File(resource.getBasePath() + File.separator + coverPath));
-        entity.setThumbnail("/" + coverPath);
-        entity.setUpdateDate(new Date());
-        resourceMapper.updateById(entity);
-        return Resp.success(entity.getThumbnail());
+        return upload(id, null, coverFile, null, null, null, null);
+    }
+
+    private void applyMetadata(ResourceEntity resourceEntity, MultipartFile file, String name, String resourceType, String parentCode, String remark, boolean update) {
+        if (StringUtils.isNotBlank(name)) {
+            resourceEntity.setName(name);
+        } else if (!update && file != null && StringUtils.isBlank(resourceEntity.getName())) {
+            resourceEntity.setName(getDisplayName(file.getOriginalFilename()));
+        }
+        if (StringUtils.isNotBlank(parentCode)) {
+            resourceEntity.setParentCode(parentCode);
+        }
+        if (remark != null) {
+            resourceEntity.setRemark(remark);
+        }
+        if (StringUtils.isNotBlank(resourceType)) {
+            try {
+                resourceEntity.setResourceType(ResourceType.valueOf(resourceType.toUpperCase()));
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+    }
+
+    private StoredResource storeMainFile(ResourceStorageService storageService, ResourceEntity resourceEntity, MultipartFile file, String resourceType) throws IOException {
+        String originalFilename = StringUtils.defaultIfBlank(file.getOriginalFilename(), "resource");
+        String extension = FilenameUtils.getExtension(originalFilename).toLowerCase();
+        ResourceType type = resolveResourceType(resourceType, extension);
+        String objectKey = buildObjectKey(type, extension);
+        StoredResource stored = storageService.store(ResourceStoreRequest.builder()
+                .file(file)
+                .objectKey(objectKey)
+                .resourceType(type)
+                .build());
+        resourceEntity.setOriginalName(originalFilename);
+        if (StringUtils.isBlank(resourceEntity.getName())) {
+            resourceEntity.setName(getDisplayName(originalFilename));
+        }
+        resourceEntity.setPath(stored.getObjectKey());
+        resourceEntity.setUrl(isMinioStorage() ? getProxyUrl(resourceEntity.getId()) : stored.getAccessUrl());
+        resourceEntity.setSize(stored.getSize());
+        resourceEntity.setResourceType(type);
+        if (type == ResourceType.MODEL) {
+            resourceEntity.setConfig(mergeModelFormat(resourceEntity.getConfig(), extension));
+        }
+        return stored;
+    }
+
+    private StoredResource storeCoverFile(ResourceStorageService storageService, ResourceEntity resourceEntity, MultipartFile cover) throws IOException {
+        String originalFilename = StringUtils.defaultIfBlank(cover.getOriginalFilename(), "cover");
+        String extension = FilenameUtils.getExtension(originalFilename).toLowerCase();
+        ResourceType type = resourceEntity.getResourceType() == null ? ResourceType.IMAGE : resourceEntity.getResourceType();
+        StoredResource stored = storageService.store(ResourceStoreRequest.builder()
+                .file(cover)
+                .objectKey(buildObjectKey(type, extension))
+                .resourceType(type)
+                .build());
+        resourceEntity.setThumbnail(isMinioStorage() ? stored.getObjectKey() : stored.getAccessUrl());
+        return stored;
+    }
+
+    private void writeResourceFile(String id, ResourceFileVariant variant, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ResourceEntity resource = resourceMapper.selectById(id);
+        if (resource == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        try {
+            ResourceStream stream = resourceStorageService.load(resource, variant);
+            if (stream == null || stream.getInputStream() == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+            writeStream(stream, variant == ResourceFileVariant.MAIN, request, response);
+        } catch (FileNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } catch (IOException e) {
+            log.error("读取素材文件失败，id={}, variant={}", id, variant, e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void writeStream(ResourceStream stream, boolean supportRange, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        long totalLength = stream.getContentLength() == null ? -1 : stream.getContentLength();
+        String contentType = StringUtils.defaultIfBlank(stream.getContentType(), MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        response.setContentType(contentType);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + encodeFileName(stream.getFileName()) + "\"");
+        response.setHeader(HttpHeaders.ACCEPT_RANGES, "bytes");
+
+        String rangeHeader = request.getHeader(HttpHeaders.RANGE);
+        try (var inputStream = stream.getInputStream(); ServletOutputStream outputStream = response.getOutputStream()) {
+            Range range = parseRange(rangeHeader, totalLength);
+            if (supportRange && range != null) {
+                response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
+                response.setHeader(HttpHeaders.CONTENT_RANGE, "bytes " + range.start() + "-" + range.end() + "/" + totalLength);
+                response.setContentLengthLong(range.length());
+                IOUtils.copyLarge(inputStream, outputStream, range.start(), range.length());
+                return;
+            }
+            if (totalLength >= 0) {
+                response.setContentLengthLong(totalLength);
+            }
+            IOUtils.copy(inputStream, outputStream);
+        }
+    }
+
+    private Range parseRange(String rangeHeader, long totalLength) {
+        if (StringUtils.isBlank(rangeHeader) || totalLength <= 0 || !rangeHeader.startsWith("bytes=")) {
+            return null;
+        }
+        String rangeValue = rangeHeader.substring("bytes=".length()).trim();
+        String[] parts = rangeValue.split("-", 2);
+        try {
+            long start = StringUtils.isBlank(parts[0]) ? 0 : Long.parseLong(parts[0]);
+            long end = parts.length > 1 && StringUtils.isNotBlank(parts[1]) ? Long.parseLong(parts[1]) : totalLength - 1;
+            if (start < 0 || end < start || start >= totalLength) {
+                return null;
+            }
+            return new Range(start, Math.min(end, totalLength - 1));
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private void cleanupOldObjects(ResourceStorageService storageService, ResourceEntity oldResource, ResourceEntity newResource) {
+        cleanupOldObject(storageService, oldResource.getPath(), newResource.getPath());
+        cleanupOldObject(storageService, oldResource.getThumbnail(), newResource.getThumbnail());
+    }
+
+    private void cleanupOldObject(ResourceStorageService storageService, String oldObjectKey, String newObjectKey) {
+        if (StringUtils.isBlank(oldObjectKey) || oldObjectKey.equals(newObjectKey)) {
+            return;
+        }
+        try {
+            storageService.delete(oldObjectKey);
+        } catch (Exception e) {
+            log.warn("清理旧素材文件失败，objectKey={}", oldObjectKey, e);
+        }
+    }
+
+    private void rollbackNewObjects(ResourceStorageService storageService, List<String> objectKeyList) {
+        for (String objectKey : objectKeyList) {
+            try {
+                storageService.delete(objectKey);
+            } catch (Exception e) {
+                log.warn("回滚新素材文件失败，objectKey={}", objectKey, e);
+            }
+        }
+    }
+
+    private List<ResourceEntity> normalizeResourceAccessUrl(List<ResourceEntity> resourceList) {
+        return resourceList.stream().map(this::normalizeResourceAccessUrl).toList();
+    }
+
+    private ResourceEntity normalizeResourceAccessUrl(ResourceEntity resource) {
+        if (resource == null) {
+            return null;
+        }
+        ResourceEntity copy = cloneResource(resource);
+        if (isMinioStorage() && !isDirectoryResource(copy)) {
+            copy.setUrl(getProxyUrl(copy.getId()));
+            if (StringUtils.isNotBlank(copy.getThumbnail())) {
+                copy.setThumbnail(getProxyThumbnailUrl(copy.getId()));
+            }
+        }
+        return copy;
+    }
+
+    private ResourceEntity cloneResource(ResourceEntity resource) {
+        ResourceEntity copy = new ResourceEntity();
+        BeanUtils.copyProperties(resource, copy);
+        return copy;
+    }
+
+    private boolean isDirectoryResource(ResourceEntity resource) {
+        return resource.getResourceType() == ResourceType.DIRECTORY;
+    }
+
+    private boolean isMinioStorage() {
+        return "minio".equalsIgnoreCase(resourceStorageService.getStorageType());
+    }
+
+    private String buildObjectKey(ResourceType type, String extension) {
+        String newFileName = UUID.randomUUID().toString().replace("-", "");
+        if (StringUtils.isNotBlank(extension)) {
+            newFileName += "." + extension;
+        }
+        return getSubDir(type) + "/" + newFileName;
+    }
+
+    private String getProxyUrl(String id) {
+        return "/dataRoom/resource/file/" + id;
+    }
+
+    private String getProxyThumbnailUrl(String id) {
+        return getProxyUrl(id) + "/thumbnail";
+    }
+
+    private String getDisplayName(String originalFilename) {
+        String baseName = FilenameUtils.getBaseName(originalFilename);
+        return StringUtils.defaultIfBlank(baseName, StringUtils.defaultIfBlank(originalFilename, "未命名素材"));
+    }
+
+    private ResourceType resolveResourceType(String resourceType, String extension) {
+        if (StringUtils.isNotBlank(resourceType)) {
+            try {
+                return ResourceType.valueOf(resourceType.toUpperCase());
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        if (isImageFile(extension)) {
+            return ResourceType.IMAGE;
+        }
+        if (isVideoFile(extension)) {
+            return ResourceType.VIDEO;
+        }
+        if (isModelFile(extension)) {
+            return ResourceType.MODEL;
+        }
+        return ResourceType.IMAGE;
+    }
+
+    private String mergeModelFormat(String configJson, String extension) {
+        JSONObject config = StringUtils.isNotBlank(configJson) ? JSONObject.parseObject(configJson) : new JSONObject();
+        config.put("format", extension.toUpperCase());
+        return config.toJSONString();
+    }
+
+    private String getSubDir(ResourceType type) {
+        if (type == null) {
+            return "image";
+        }
+        return switch (type) {
+            case VIDEO -> "video";
+            case MODEL -> "model";
+            default -> "image";
+        };
+    }
+
+    private boolean isModelFile(String extension) {
+        String ext = StringUtils.defaultString(extension).toLowerCase();
+        return "glb".equals(ext) || "gltf".equals(ext) || "obj".equals(ext) || "stl".equals(ext);
+    }
+
+    private boolean isImageFile(String extension) {
+        String ext = StringUtils.defaultString(extension).toLowerCase();
+        return "jpg".equals(ext) || "jpeg".equals(ext) || "png".equals(ext) || "gif".equals(ext) ||
+                "bmp".equals(ext) || "svg".equals(ext) || "webp".equals(ext);
+    }
+
+    private boolean isVideoFile(String extension) {
+        String ext = StringUtils.defaultString(extension).toLowerCase();
+        return "mp4".equals(ext) || "avi".equals(ext) || "mov".equals(ext) || "wmv".equals(ext) ||
+                "flv".equals(ext) || "webm".equals(ext) || "m3u8".equals(ext) || "m4v".equals(ext);
+    }
+
+    private String encodeFileName(String fileName) {
+        return URLEncoder.encode(StringUtils.defaultIfBlank(fileName, "resource"), StandardCharsets.UTF_8).replace("+", "%20");
+    }
+
+    private record Range(long start, long end) {
+        long length() {
+            return end - start + 1;
+        }
     }
 }

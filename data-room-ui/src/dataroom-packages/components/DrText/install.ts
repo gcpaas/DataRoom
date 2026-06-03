@@ -83,12 +83,12 @@ const getInstance = (): DrTextConfig => {
       letterSpacing: 0,
       background: {
         enabled: false,
-        color: '#008bff',
-        borderRadius: 10,
+        color: '#007aff',
+        borderRadius: 0,
         border: {
           width: 1,
           style: 'solid',
-          color: '#ffffff',
+          color: '#eeeeee',
         },
       },
       ellipsis: false,

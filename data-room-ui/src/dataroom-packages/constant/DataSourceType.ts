@@ -17,6 +17,8 @@ export const DataSourceType = {
   CLICKHOUSE: 'clickhouse',
   MARIADB: 'mariadb',
   OCEANBASE: 'oceanbase',
+  H2: 'h2',
+  POLARDB: 'polardb',
   HIVE: 'hive',
   TDENGINE: 'tdengine',
   DRUID: 'druid',

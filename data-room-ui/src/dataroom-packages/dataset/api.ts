@@ -25,7 +25,7 @@ export interface DatasetOutputParam {
  * 基础数据集配置
  */
 export interface BaseDataset {
-  datasetType: 'json' | 'http' | 'sql' | 'es'
+  datasetType: 'json' | 'http' | 'sql' | 'excel' | 'es'
 }
 
 /**
@@ -57,6 +57,14 @@ export interface SqlDataset extends BaseDataset {
 }
 
 /**
+ * Excel数据集
+ */
+export interface ExcelDataset extends BaseDataset {
+  datasetType: 'excel'
+  sql: string
+}
+
+/**
  * ES数据集
  */
 export interface EsDataset extends BaseDataset {
@@ -75,9 +83,9 @@ export interface DatasetEntity {
   name: string
   code?: string
   dataSourceCode?: string
-  datasetType: 'directory' | 'json' | 'http' | 'sql' | 'es'
+  datasetType: 'directory' | 'json' | 'http' | 'sql' | 'excel' | 'es'
   parentCode?: string
-  dataset?: JsonDataset | HttpDataset | SqlDataset | EsDataset
+  dataset?: JsonDataset | HttpDataset | SqlDataset | ExcelDataset | EsDataset
   inputList?: DatasetInputParam[]
   outputList?: DatasetOutputParam[]
   createDate?: string
@@ -101,7 +109,7 @@ export interface DatasetTreeNode {
   id?: string
   label: string
   code?: string
-  datasetType: 'directory' | 'json' | 'http' | 'sql' | 'es'
+  datasetType: 'directory' | 'json' | 'http' | 'sql' | 'excel' | 'es'
   children?: DatasetTreeNode[]
   parentCode?: string
 }

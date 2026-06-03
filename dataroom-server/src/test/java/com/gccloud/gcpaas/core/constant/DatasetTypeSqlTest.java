@@ -22,6 +22,14 @@ class DatasetTypeSqlTest {
     }
 
     @Test
+    void excelDatasetTypeUsesExcelWireValue() {
+        DatasetType excelType = DatasetType.valueOf("EXCEL");
+
+        assertEquals("excel", excelType.getType());
+        assertEquals("excel", excelType.getValue());
+    }
+
+    @Test
     void sqlDatasetServiceBeanUsesSqlTypeName() throws Exception {
         Class<?> serviceClass = Class.forName("com.gccloud.gcpaas.core.dataset.service.SqlDatasetService");
 
@@ -42,6 +50,16 @@ class DatasetTypeSqlTest {
     }
 
     @Test
+    void excelDatasetServiceBeanUsesExcelTypeName() throws Exception {
+        Class<?> serviceClass = Class.forName("com.gccloud.gcpaas.core.dataset.service.ExcelDatasetService");
+
+        Service service = serviceClass.getAnnotation(Service.class);
+
+        assertNotNull(service);
+        assertEquals("excel" + DataRoomConstant.Dataset.SERVICE_NAME, service.value());
+    }
+
+    @Test
     void deserializeSqlDatasetEntity() throws Exception {
         String json = """
                 {
@@ -59,6 +77,26 @@ class DatasetTypeSqlTest {
         assertEquals(DatasetType.SQL, entity.getDatasetType());
         RelationalDataset dataset = assertInstanceOf(RelationalDataset.class, entity.getDataset());
         assertEquals("select * from sales", dataset.getSql());
+    }
+
+    @Test
+    void deserializeExcelDatasetEntity() throws Exception {
+        String json = """
+                {
+                  "name": "Excel销售统计",
+                  "datasetType": "excel",
+                  "dataset": {
+                    "datasetType": "excel",
+                    "sql": "select * from excel_sales"
+                  }
+                }
+                """;
+
+        DatasetEntity entity = new ObjectMapper().readValue(json, DatasetEntity.class);
+
+        assertEquals(DatasetType.EXCEL, entity.getDatasetType());
+        RelationalDataset dataset = assertInstanceOf(RelationalDataset.class, entity.getDataset());
+        assertEquals("select * from excel_sales", dataset.getSql());
     }
 
     @Test

@@ -583,7 +583,6 @@ const removeColor = (index: number) => {
 
         <!-- 全局配置 -->
         <el-collapse-item title="全局配置" name="global">
-          <div class="dr-config-panel__sub-title">图表边距</div>
           <el-form-item class="dr-config-panel__sub-form-item">
             <div class="dr-config-panel__sub-row">
               <span class="dr-config-panel__sub-label">上边距</span>

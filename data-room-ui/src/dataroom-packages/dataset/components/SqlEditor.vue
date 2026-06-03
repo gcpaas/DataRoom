@@ -3,7 +3,9 @@ import { computed, ref, reactive, watch } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { DatasetEntity } from '../api'
 import { datasetApi } from '../api'
+import { dataSourceApi, type DataSourceColumnMeta, type DataSourceTableMeta } from '@/dataroom-packages/dataSource/api'
 import { ElMessage } from 'element-plus'
+import { Expand, Fold, Grid, Refresh } from '@element-plus/icons-vue'
 import { parseParams } from '@/dataroom-packages/_common/_utils'
 import { Codemirror } from 'vue-codemirror'
 import { sql } from '@codemirror/lang-sql'
@@ -15,6 +17,23 @@ interface DataSourceOption {
   name?: string
   dataSourceType?: string
 }
+
+interface DataSourceMetaTreeNode {
+  id: string
+  label: string
+  nodeType: 'table' | 'column'
+  tableName?: string
+  type?: string
+  comment?: string
+  isLeaf?: boolean
+}
+
+interface DataSourceMetaLazyNode {
+  level: number
+  data?: DataSourceMetaTreeNode
+}
+
+type DataSourceMetaResolve = (data: DataSourceMetaTreeNode[]) => void
 
 const props = defineProps<{
   modelValue: DatasetEntity
@@ -29,6 +48,13 @@ const emit = defineEmits<{
 
 const formRef = ref<FormInstance>()
 const previewData = ref<unknown>([])
+const metadataPanelCollapsed = ref(false)
+const metadataTreeLoading = ref(false)
+const metadataTreeKey = ref(0)
+const metadataTreeProps = {
+  label: 'label',
+  isLeaf: 'isLeaf'
+}
 
 // CodeMirror 扩展配置：SQL语言 + Eclipse主题，与JSON数据集保持一致
 const cmExtensions = [sql(), eclipse]
@@ -54,6 +80,13 @@ const sqlDataSourceTypes = new Set([
   'excel'
 ])
 const sqlDataSourceList = computed(() => (props.dataSourceList || []).filter(item => item.dataSourceType && sqlDataSourceTypes.has(item.dataSourceType)))
+const selectedDataSourceName = computed(() => {
+  if (!formData.dataSourceCode) {
+    return '未选择数据源'
+  }
+  return sqlDataSourceList.value.find(item => item.code === formData.dataSourceCode)?.name || formData.dataSourceCode
+})
+const metadataTreeEmptyText = computed(() => formData.dataSourceCode ? '暂无表信息' : '请选择数据源')
 
 const formData = reactive<DatasetEntity>({
   name: '',
@@ -98,6 +131,101 @@ const rules = reactive<FormRules<DatasetEntity>>({
   name: [{ required: true, message: '请输入数据集名称', trigger: 'blur' }],
   dataSourceCode: [{ required: true, message: '请选择SQL数据源', trigger: 'change' }]
 })
+
+watch(
+  () => formData.dataSourceCode,
+  () => {
+    metadataTreeKey.value += 1
+  }
+)
+
+const toTableNode = (table: DataSourceTableMeta): DataSourceMetaTreeNode => ({
+  id: `table:${table.name}`,
+  label: table.name,
+  nodeType: 'table',
+  tableName: table.name,
+  comment: table.comment,
+  isLeaf: false
+})
+
+const toColumnNode = (tableName: string, column: DataSourceColumnMeta): DataSourceMetaTreeNode => ({
+  id: `column:${tableName}:${column.name}`,
+  label: column.name,
+  nodeType: 'column',
+  tableName,
+  type: column.type,
+  comment: column.comment,
+  isLeaf: true
+})
+
+const reloadMetadataTree = () => {
+  metadataTreeKey.value += 1
+}
+
+const loadMetadataTables = async (): Promise<DataSourceMetaTreeNode[]> => {
+  const dataSourceCode = formData.dataSourceCode
+  if (!dataSourceCode) {
+    return []
+  }
+  metadataTreeLoading.value = true
+  try {
+    const tables = await dataSourceApi.listTables(dataSourceCode)
+    if (dataSourceCode !== formData.dataSourceCode) {
+      return []
+    }
+    return tables.map(toTableNode)
+  } catch (error) {
+    console.error('获取数据源表信息失败:', error)
+    ElMessage.error('获取表信息失败')
+    return []
+  } finally {
+    metadataTreeLoading.value = false
+  }
+}
+
+const loadMetadataColumns = async (tableName: string): Promise<DataSourceMetaTreeNode[]> => {
+  const dataSourceCode = formData.dataSourceCode
+  if (!dataSourceCode) {
+    return []
+  }
+  try {
+    const columns = await dataSourceApi.listColumns(dataSourceCode, tableName)
+    if (dataSourceCode !== formData.dataSourceCode) {
+      return []
+    }
+    return columns.map(column => toColumnNode(tableName, column))
+  } catch (error) {
+    console.error('获取数据源字段信息失败:', error)
+    ElMessage.error('获取字段信息失败')
+    return []
+  }
+}
+
+const loadMetadataTreeNode = async (node: DataSourceMetaLazyNode, resolve: DataSourceMetaResolve) => {
+  if (node.level === 0) {
+    resolve(await loadMetadataTables())
+    return
+  }
+  const nodeData = node.data
+  if (!nodeData || nodeData.nodeType !== 'table' || !nodeData.tableName) {
+    resolve([])
+    return
+  }
+  resolve(await loadMetadataColumns(nodeData.tableName))
+}
+
+const copyMetadataNodeName = async (data: DataSourceMetaTreeNode) => {
+  const name = data.nodeType === 'table' ? data.tableName || data.label : data.label
+  if (!name) {
+    return
+  }
+  try {
+    await navigator.clipboard.writeText(name)
+  } catch (error) {
+    console.error('复制表结构节点名称失败:', error)
+    ElMessage.error('复制失败,请手动复制')
+  }
+}
 
 /**
  * 表单验证
@@ -251,6 +379,58 @@ defineExpose({
 
 <template>
   <DatasetEditorLayout :preview-data="previewData">
+    <template #before-panel>
+      <aside v-if="!metadataPanelCollapsed" class="sql-metadata-panel">
+        <div class="sql-metadata-panel__header">
+          <div class="sql-metadata-panel__title">
+            <span>表结构</span>
+            <span class="sql-metadata-panel__source">{{ selectedDataSourceName }}</span>
+          </div>
+          <div class="sql-metadata-panel__actions">
+            <el-button
+              link
+              :icon="Refresh"
+              :disabled="!formData.dataSourceCode"
+              @click="reloadMetadataTree"
+            />
+            <el-button link :icon="Fold" @click="metadataPanelCollapsed = true" />
+          </div>
+        </div>
+        <el-scrollbar class="sql-metadata-panel__body">
+          <el-tree
+            class="sql-metadata-tree"
+            :key="metadataTreeKey"
+            lazy
+            :load="loadMetadataTreeNode"
+            :props="metadataTreeProps"
+            node-key="id"
+            highlight-current
+            :expand-on-click-node="true"
+            :empty-text="metadataTreeEmptyText"
+            v-loading="metadataTreeLoading"
+            @node-click="copyMetadataNodeName"
+          >
+            <template #default="{ data }">
+              <div class="sql-metadata-node">
+                <el-icon v-if="data.nodeType === 'table'" class="sql-metadata-node__icon">
+                  <Grid />
+                </el-icon>
+                <span v-if="data.nodeType === 'table'" class="sql-metadata-node__label">{{ data.label }}</span>
+                <span v-else class="sql-metadata-node__content">
+                  <span class="sql-metadata-node__label">{{ data.label }}</span>
+                  <span v-if="data.type" class="sql-metadata-node__type">{{ data.type }}</span>
+                  <span v-if="data.comment?.trim()" class="sql-metadata-node__comment">{{ data.comment }}</span>
+                </span>
+              </div>
+            </template>
+          </el-tree>
+        </el-scrollbar>
+      </aside>
+      <div v-else class="sql-metadata-collapsed">
+        <el-button :icon="Expand" @click="metadataPanelCollapsed = false" />
+      </div>
+    </template>
+
     <el-form class="dataset-editor-form" ref="formRef" :model="formData" :rules="rules" label-width="100px">
       <el-form-item label="数据集名称" prop="name">
         <el-input v-model="formData.name" placeholder="请输入数据集名称" clearable />
@@ -370,6 +550,135 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
+.sql-metadata-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 260px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--el-fill-color-blank);
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 8px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 48px;
+    padding: 8px 10px 8px 12px;
+    border-bottom: 1px solid var(--el-border-color-lighter);
+    box-sizing: border-box;
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    color: var(--el-text-color-primary);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.57;
+    letter-spacing: 0;
+  }
+
+  &__source {
+    overflow: hidden;
+    color: var(--el-text-color-secondary);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  &__body {
+    flex: 1;
+    min-height: 0;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+}
+
+.sql-metadata-collapsed {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex: 0 0 40px;
+  min-width: 0;
+  min-height: 0;
+  padding-top: 4px;
+}
+
+.sql-metadata-node {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  width: 100%;
+  min-height: 26px;
+  padding: 3px 0;
+  box-sizing: border-box;
+  color: var(--el-text-color-primary);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.57;
+  letter-spacing: 0;
+
+  &__icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--el-text-color-regular);
+  }
+
+  &__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    gap: 2px;
+  }
+
+  &__label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__type {
+    overflow: hidden;
+    color: var(--el-text-color-secondary);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__comment {
+    overflow: hidden;
+    color: var(--el-text-color-placeholder);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.sql-metadata-tree {
+  --el-tree-node-content-height: auto;
+}
+
 .dataset-editor-form {
   min-width: 0;
 }

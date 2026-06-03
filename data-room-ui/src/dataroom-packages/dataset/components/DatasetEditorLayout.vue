@@ -8,12 +8,15 @@ defineProps<{
 
 <template>
   <div class="dataset-editor-layout">
-    <section class="dataset-editor-panel">
-      <div class="dataset-editor-panel__title">基础设置</div>
-      <div class="dataset-editor-panel__body">
-        <slot />
-      </div>
-    </section>
+    <div class="dataset-editor-layout__main">
+      <slot name="before-panel" />
+      <section class="dataset-editor-panel">
+        <div class="dataset-editor-panel__title">基础设置</div>
+        <div class="dataset-editor-panel__body">
+          <slot />
+        </div>
+      </section>
+    </div>
     <DatasetPreviewTable :data="previewData" />
   </div>
 </template>
@@ -27,9 +30,18 @@ defineProps<{
   padding: 20px 24px;
 }
 
+.dataset-editor-layout__main {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  min-width: 0;
+  min-height: 0;
+}
+
 .dataset-editor-panel {
   display: flex;
   flex-direction: column;
+  flex: 1;
   min-width: 0;
   min-height: 0;
   padding: 16px;

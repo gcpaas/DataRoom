@@ -21,6 +21,8 @@ import kingbaseImg from './assets/image/Kingbase.svg'
 import clickhouseImg from './assets/image/ClickHouse.svg'
 import mariadbImg from './assets/image/MariaDB.svg'
 import oceanbaseImg from './assets/image/OceanBase.svg'
+import h2Img from './assets/image/H2.svg'
+import polardbImg from './assets/image/PolarDB.svg'
 import hiveImg from './assets/image/Hive.svg'
 import tdengineImg from './assets/image/TDengine.svg'
 import druidImg from './assets/image/Druid.svg'
@@ -160,6 +162,20 @@ const dataSourceTypeMap = {
     image: oceanbaseImg,
     description: '分布式关系型数据库',
     component: defineAsyncComponent(() => import('./components/OceanBaseEditor.vue')),
+  },
+  h2: {
+    name: 'H2',
+    icon: 'H2',
+    image: h2Img,
+    description: '轻量级嵌入式关系型数据库',
+    component: defineAsyncComponent(() => import('./components/H2Editor.vue')),
+  },
+  polardb: {
+    name: 'PolarDB',
+    icon: 'PDB',
+    image: polardbImg,
+    description: '兼容 MySQL 协议的云原生数据库',
+    component: defineAsyncComponent(() => import('./components/PolarDbEditor.vue')),
   },
   hive: {
     name: 'Hive',
@@ -301,6 +317,10 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
       defaultDriverName = 'org.mariadb.jdbc.Driver'
     } else if (dataSourceType === 'oceanbase') {
       defaultDriverName = 'com.oceanbase.jdbc.Driver'
+    } else if (dataSourceType === 'h2') {
+      defaultDriverName = 'org.h2.Driver'
+    } else if (dataSourceType === 'polardb') {
+      defaultDriverName = 'com.mysql.cj.jdbc.Driver'
     } else if (dataSourceType === 'hive') {
       defaultDriverName = 'org.apache.hive.jdbc.HiveDriver'
     } else if (dataSourceType === 'tdengine') {
@@ -469,10 +489,9 @@ const handleSaveExcel = async () => {
 
         await datasetApi.insert({
           name: editorData.name,
-          dataSourceCode: dataSourceCode,
-          datasetType: 'sql',
+          datasetType: 'excel',
           dataset: {
-            datasetType: 'sql',
+            datasetType: 'excel',
             sql: `SELECT * FROM ${tableName} LIMIT 100`,
           },
           outputList,

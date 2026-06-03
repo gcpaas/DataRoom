@@ -193,15 +193,25 @@ export const parseParamsFromMultiple = (texts: string[]): string[] => {
 /**
  *  拼接素材地址
  */
-export const getResourceUrl = (url: string): string => {
+const joinBaseUrl = (baseUrl: string, url: string): string => {
+  if (!baseUrl) {
+    return url
+  }
+  return baseUrl + (baseUrl.endsWith('/') ? '' : '/') + (url.startsWith('/') ? url.substring(1) : url)
+}
+
+export const getResourceUrl = (url?: string): string => {
   if (!url) {
     return ''
   }
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
-  const resourceBaseUrl = import.meta.env.VITE_RESOURCE_BASE_URL
-  return resourceBaseUrl + (resourceBaseUrl.endsWith('/') ? '' : '/') + (url.startsWith('/') ? url.substring(1) : url)
+  if (url.startsWith('/dataRoom/resource/file/')) {
+    return joinBaseUrl(import.meta.env.VITE_API_BASE_URL || '', url)
+  }
+  const resourceBaseUrl = import.meta.env.VITE_RESOURCE_BASE_URL || ''
+  return joinBaseUrl(resourceBaseUrl, url)
 }
 
 /**
@@ -209,7 +219,11 @@ export const getResourceUrl = (url: string): string => {
  * @param chart
  * @param fieldName
  */
-export const getSingleDatasetValueByField = (chart: ChartConfig<unknown>, fieldName: string, datasetValue: any): any => {
+const isRecordValue = (value: unknown): value is Record<string, unknown> => {
+  return typeof value === 'object' && value !== null
+}
+
+export const getSingleDatasetValueByField = <T = string>(chart: ChartConfig<unknown>, fieldName: string, datasetValue: unknown): T | undefined => {
   const fieldValueList: string[] | undefined = chart.dataset?.fields?.[fieldName]
   if (!fieldValueList) {
     return undefined
@@ -228,7 +242,8 @@ export const getSingleDatasetValueByField = (chart: ChartConfig<unknown>, fieldN
       console.error(`组件 ${chart.id} 对应的数据集数据为空`)
       return undefined
     }
-    return datasetValue[0]?.[finalFieldName] ?? undefined
+    const firstValue = datasetValue[0]
+    return isRecordValue(firstValue) ? firstValue[finalFieldName] as T : undefined
   }
-  return datasetValue?.[finalFieldName] ?? undefined
+  return isRecordValue(datasetValue) ? datasetValue[finalFieldName] as T : undefined
 }

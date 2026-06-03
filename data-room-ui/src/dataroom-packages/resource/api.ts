@@ -124,7 +124,7 @@ export const resourceApi = {
    * 上传模型封面
    */
   uploadModelCover(id: string, formData: FormData) {
-    return request.post<string>(`/dataRoom/resource/uploadModelCover`, formData, {
+    return request.post<ResourceEntity>(`/dataRoom/resource/uploadModelCover`, formData, {
       params: { id },
       headers: {
         'Content-Type': 'multipart/form-data'

@@ -68,6 +68,12 @@
 ![访问日志.png](doc/image/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97.png)
 
 
+### 开放API
+> 支持标准的RESTful API
+
+![开放API.png](doc/image/%E5%BC%80%E6%94%BEAPI.png)
+
+
 ## 快速开始
 https://www.yuque.com/gc-starter/dataroom-plus/start
 

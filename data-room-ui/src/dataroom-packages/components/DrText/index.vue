@@ -21,7 +21,7 @@ const {chart} = defineProps<{
  * 定义改变数据的逻辑，每个组件逻辑不一样
  * @param datasetValue
  */
-const changeData = (datasetValue: any) => {
+const changeData = (datasetValue: unknown) => {
   const textContent = getSingleDatasetValueByField(chart, 'text', datasetValue)
   if (textContent) {
     textValue.value = textContent
@@ -53,6 +53,11 @@ const onTextClick = () => {
 const textStyle = computed(() => {
   const props = chart.props
   const style: Record<string, string> = {}
+  const horizontalAlignMap = {
+    left: 'flex-start',
+    center: 'center',
+    right: 'flex-end',
+  } as const
 
   // 文本样式
   if (props.textStyle) {
@@ -65,6 +70,7 @@ const textStyle = computed(() => {
   // 对齐方式
   if (props.align) {
     style.textAlign = props.align
+    style.justifyContent = horizontalAlignMap[props.align]
   }
 
   // 垂直对齐（通过 flexbox 实现）

@@ -36,6 +36,7 @@ interface ConfigChangePayload {
 
 const props = withDefaults(defineProps<{
   modelUrl?: string
+  modelFormat?: string
   coverImage?: string
   errorPlaceholderImage?: string
   autoRotate?: boolean
@@ -223,6 +224,24 @@ const updateLighting = (config: LightingConfig) => {
   pointLight.visible = config.point.enabled
 }
 
+const normalizeModelFormat = (format?: string) => {
+  const normalizedFormat = format?.trim().toLowerCase()
+  if (
+    normalizedFormat === 'glb' ||
+    normalizedFormat === 'gltf' ||
+    normalizedFormat === 'obj' ||
+    normalizedFormat === 'stl'
+  ) {
+    return normalizedFormat
+  }
+  return ''
+}
+
+const getModelFormatFromUrl = (url: string) => {
+  const path = url.split(/[?#]/)[0] || ''
+  return normalizeModelFormat(path.split('.').pop())
+}
+
 const loadModel = (url: string) => {
   if (!url) return
 
@@ -236,7 +255,7 @@ const loadModel = (url: string) => {
     currentModel = null
   }
 
-  const extension = url.split('.').pop()?.toLowerCase()
+  const extension = normalizeModelFormat(props.modelFormat) || getModelFormatFromUrl(url)
 
   if (extension === 'glb' || extension === 'gltf') {
     loadGLTF(url)
@@ -449,7 +468,7 @@ defineExpose({
 })
 
 // Watchers
-watch(() => props.modelUrl, (newUrl) => {
+watch([() => props.modelUrl, () => props.modelFormat], ([newUrl]) => {
   if (newUrl) {
     loadModel(newUrl)
   }

@@ -1,23 +1,19 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from 'vue'
-import { ElMessage, ElMessageBox, ElUpload } from 'element-plus'
+import { nextTick, onMounted, ref } from 'vue'
+import { ElMessage, ElMessageBox, ElUpload, genFileId, type UploadProps, type UploadRawFile } from 'element-plus'
 import { Box, Check, Folder, MoreFilled, Picture, Plus, Search, VideoCamera } from '@element-plus/icons-vue'
 import { resourceApi, type ResourceEntity } from './api'
-import { getCookie, getCookieName } from '@/dataroom-packages/_common/_cookie'
+import { buildResourceUploadFormData, createResourceDraft, getResourceDisplayName } from './resourceForm'
 import directoryPlaceholder from '../page/assets/image/目录占位符.png'
 import imagePlaceholder from './assets/image/图片占位符.png'
 import videoPlaceholder from './assets/image/视频占位符.png'
 import modelLoadFailedPlaceholder from './assets/image/模型加载失败占位符.svg'
 import { ResourceType } from '@/dataroom-packages/constant/ResourceType.ts'
 import ModelPreview from '@/dataroom-packages/three/ModelPreview.vue'
+import { getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
 
 interface Props {
   selectable?: boolean // 是否可选择模式
-}
-
-interface UploadResponse {
-  name?: string
-  data?: ResourceEntity
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,8 +41,10 @@ const currentParentCode = ref('root')
 const uploadDialogVisible = ref(false)
 const editingResource = ref<ResourceEntity | null>(null)
 const uploadRef = ref<InstanceType<typeof ElUpload>>()
-const uploadUrl = `${import.meta.env.VITE_API_BASE_URL}/dataRoom/resource/upload`
-const resourceBaseUrl = import.meta.env.VITE_RESOURCE_BASE_URL || ''
+const modelCoverUploadRef = ref<InstanceType<typeof ElUpload>>()
+const selectedResourceFile = ref<File | null>(null)
+const selectedCoverFile = ref<File | null>(null)
+const savingResource = ref(false)
 
 // 新增类型选择对话框
 const typeSelectDialogVisible = ref(false)
@@ -97,26 +95,6 @@ const capturingCover = ref(false)
 const modelDetailDialogVisible = ref(false)
 const modelDetailResource = ref<ResourceEntity | null>(null)
 
-// 上传请求头，携带token
-const uploadHeaders = computed(() => {
-  const cookieName = getCookieName()
-  const cookieValue = getCookie(cookieName)
-  return {
-    [cookieName]: cookieValue,
-  }
-})
-
-// 获取完整的资源URL
-const getResourceUrl = (url?: string) => {
-  if (!url) return ''
-  // 如果URL已经是完整的http/https地址，直接返回
-  if (url.startsWith('http://') || url.startsWith('https://')) {
-    return url
-  }
-  // 否则拼接基础路径
-  return `${resourceBaseUrl}${url}`
-}
-
 // 格式化文件大小
 const formatFileSize = (sizeInKB?: number) => {
   if (!sizeInKB) return '未知'
@@ -159,6 +137,25 @@ const handleAdd = () => {
   typeSelectDialogVisible.value = true
 }
 
+const clearUploadFiles = () => {
+  uploadRef.value?.clearFiles()
+  modelCoverUploadRef.value?.clearFiles()
+  selectedResourceFile.value = null
+  selectedCoverFile.value = null
+}
+
+const openUploadDialog = () => {
+  uploadDialogVisible.value = true
+  void nextTick(() => {
+    clearUploadFiles()
+  })
+}
+
+const handleUploadDialogClosed = () => {
+  clearUploadFiles()
+  editingResource.value = null
+}
+
 // 选择资源类型后打开对应的新增表单
 const handleSelectType = (type: string) => {
   typeSelectDialogVisible.value = false
@@ -176,43 +173,60 @@ const handleSelectType = (type: string) => {
     default:
       resourceType = ResourceType.IMAGE
   }
-  editingResource.value = {
-    name: '',
-    resourceType,
-    parentCode: currentParentCode.value,
-  }
-  uploadDialogVisible.value = true
+  editingResource.value = createResourceDraft(resourceType, currentParentCode.value)
+  openUploadDialog()
 }
 
 // 编辑资源
 const handleEdit = (item: ResourceEntity) => {
   editingResource.value = { ...item }
-  uploadDialogVisible.value = true
+  openUploadDialog()
 }
 
-// 文件上传成功回调 - 只更新临时数据，不直接保存
-const handleUploadSuccess = (response: UploadResponse) => {
-  if (response?.data) {
-    const res = response.data
-    if (!editingResource.value) return
-    // 将上传返回的数据中的path、url、size、resourceType、originalName更新到editingResource
-    // 如果用户没有填写资源名称，则使用原始文件名自动填充
-    editingResource.value = {
-      ...editingResource.value,
-      name: editingResource.value.name || res.originalName || response.name || '',
-      originalName: res.originalName,
-      path: res.path,
-      url: res.url,
-      size: res.size,
-      resourceType: res.resourceType || editingResource.value.resourceType || ResourceType.IMAGE,
-    }
-    ElMessage.success('文件上传成功，请点击确定保存')
+const fillResourceNameFromFile = (file: File) => {
+  if (!editingResource.value || editingResource.value.name?.trim()) {
+    return
   }
+  editingResource.value.name = getResourceDisplayName(file.name)
 }
 
-// 文件上传错误回调
-const handleUploadError = () => {
-  ElMessage.error('上传失败')
+const handleResourceFileChange: UploadProps['onChange'] = (uploadFile) => {
+  const file = uploadFile.raw
+  if (!file) {
+    return
+  }
+  selectedResourceFile.value = file
+  fillResourceNameFromFile(file)
+}
+
+const handleResourceFileRemove: UploadProps['onRemove'] = () => {
+  selectedResourceFile.value = null
+}
+
+const replaceUploadFile = (upload: InstanceType<typeof ElUpload> | undefined, files: File[]) => {
+  upload?.clearFiles()
+  const file = files[0] as UploadRawFile | undefined
+  if (!file) {
+    return
+  }
+  file.uid = genFileId()
+  upload?.handleStart(file)
+}
+
+const handleResourceFileExceed: UploadProps['onExceed'] = (files) => {
+  replaceUploadFile(uploadRef.value, files)
+}
+
+const handleModelCoverChange: UploadProps['onChange'] = (uploadFile) => {
+  selectedCoverFile.value = uploadFile.raw || null
+}
+
+const handleModelCoverRemove: UploadProps['onRemove'] = () => {
+  selectedCoverFile.value = null
+}
+
+const handleModelCoverExceed: UploadProps['onExceed'] = (files) => {
+  replaceUploadFile(modelCoverUploadRef.value, files)
 }
 
 const isMessageBoxCancel = (error: unknown) => ['cancel', 'close'].includes(String(error))
@@ -274,50 +288,53 @@ const handleCardClick = (item: ResourceEntity) => {
   }
 }
 
+const loadImageNaturalSize = (url?: string) => {
+  imageNaturalWidth.value = 0
+  imageNaturalHeight.value = 0
+  if (!url) {
+    return
+  }
+  const img = new Image()
+  img.onload = () => {
+    imageNaturalWidth.value = img.naturalWidth
+    imageNaturalHeight.value = img.naturalHeight
+  }
+  img.src = getResourceUrl(url)
+}
+
 // 打开图片详情弹框
 const openImageDetail = (item: ResourceEntity) => {
   imageDetailResource.value = { ...item }
-  imageNaturalWidth.value = 0
-  imageNaturalHeight.value = 0
   imageDetailDialogVisible.value = true
-  // 获取图片尺寸
-  if (item.url) {
-    const img = new Image()
-    img.onload = () => {
-      imageNaturalWidth.value = img.naturalWidth
-      imageNaturalHeight.value = img.naturalHeight
-    }
-    img.src = getResourceUrl(item.url)
+  loadImageNaturalSize(item.url)
+}
+
+// 图片重新上传
+const handleImageReUploadChange: UploadProps['onChange'] = async (uploadFile) => {
+  const file = uploadFile.raw
+  if (!file || !imageDetailResource.value?.id) {
+    return
+  }
+  try {
+    const savedResource = await resourceApi.upload(
+      buildResourceUploadFormData({
+        resource: imageDetailResource.value,
+        file,
+      }),
+    )
+    imageDetailResource.value = savedResource
+    ElMessage.success('图片更新成功')
+    void getResourceList()
+    loadImageNaturalSize(savedResource.url)
+  } catch (error) {
+    console.error('图片更新失败:', error)
+  } finally {
+    imageReUploadRef.value?.clearFiles()
   }
 }
 
-// 图片重新上传成功
-const handleImageReUploadSuccess = (response: UploadResponse) => {
-  if (response?.data) {
-    const res = response.data
-    if (!imageDetailResource.value) return
-    imageDetailResource.value = {
-      ...imageDetailResource.value,
-      originalName: res.originalName,
-      path: res.path,
-      url: res.url,
-      size: res.size,
-    }
-    // 更新到数据库
-    resourceApi.update(imageDetailResource.value!).then(() => {
-      ElMessage.success('图片更新成功')
-      void getResourceList()
-      // 重新获取图片尺寸
-      if (imageDetailResource.value?.url) {
-        const img = new Image()
-        img.onload = () => {
-          imageNaturalWidth.value = img.naturalWidth
-          imageNaturalHeight.value = img.naturalHeight
-        }
-        img.src = getResourceUrl(imageDetailResource.value.url)
-      }
-    })
-  }
+const handleImageReUploadExceed: UploadProps['onExceed'] = (files) => {
+  replaceUploadFile(imageReUploadRef.value, files)
 }
 
 // 打开视频详情弹框
@@ -336,9 +353,25 @@ const openVideoDetail = (item: ResourceEntity) => {
   })
 }
 
+const uploadVideoCover = async (cover: Blob, coverName: string) => {
+  if (!videoDetailResource.value?.id) {
+    return
+  }
+  const savedResource = await resourceApi.upload(
+    buildResourceUploadFormData({
+      resource: videoDetailResource.value,
+      cover,
+      coverName,
+    }),
+  )
+  videoDetailResource.value = savedResource
+  ElMessage.success('封面更新成功')
+  void getResourceList()
+}
+
 // 视频截图作为封面
 const handleVideoCapturecover = () => {
-  if (!videoRef.value) return
+  if (!videoRef.value || !videoDetailResource.value?.id) return
   capturingCover.value = true
   const video = videoRef.value
   const canvas = document.createElement('canvas')
@@ -352,58 +385,47 @@ const handleVideoCapturecover = () => {
       capturingCover.value = false
       return
     }
-    const formData = new FormData()
-    formData.append('file', blob, `cover_${Date.now()}.png`)
-    // 上传截图
-    const cookieName = getCookieName()
-    const cookieValue = getCookie(cookieName)
-    fetch(uploadUrl, {
-      method: 'POST',
-      headers: { [cookieName]: cookieValue },
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        const res = response.data as ResourceEntity
-        videoDetailResource.value = {
-          ...videoDetailResource.value!,
-          thumbnail: res.url,
-        }
-        // 更新到数据库
-        resourceApi.update(videoDetailResource.value!).then(() => {
-          ElMessage.success('封面更新成功')
-          capturingCover.value = false
-          void getResourceList()
-        })
-      })
+    uploadVideoCover(blob, `cover_${Date.now()}.png`)
       .catch(() => {
         ElMessage.error('封面上传失败')
+      })
+      .finally(() => {
         capturingCover.value = false
       })
   }, 'image/png')
 }
 
-// 手动上传封面成功
-const handleCoverUploadSuccess = (response: UploadResponse) => {
-  if (response?.data) {
-    const res = response.data
-    if (!videoDetailResource.value) return
-    videoDetailResource.value = {
-      ...videoDetailResource.value,
-      thumbnail: res.url,
-    }
-    // 更新到数据库
-    resourceApi.update(videoDetailResource.value!).then(() => {
-      ElMessage.success('封面更新成功')
-      void getResourceList()
-    })
+// 手动上传封面
+const handleCoverUploadChange: UploadProps['onChange'] = async (uploadFile) => {
+  const file = uploadFile.raw
+  if (!file) {
+    return
   }
+  try {
+    await uploadVideoCover(file, file.name)
+  } catch (error) {
+    console.error('封面上传失败:', error)
+  } finally {
+    coverUploadRef.value?.clearFiles()
+  }
+}
+
+const handleCoverUploadExceed: UploadProps['onExceed'] = (files) => {
+  replaceUploadFile(coverUploadRef.value, files)
 }
 
 // 打开模型详情弹框
 const openModelDetail = (item: ResourceEntity) => {
   modelDetailResource.value = { ...item }
   modelDetailDialogVisible.value = true
+}
+
+const handleModelPreviewSuccess = async () => {
+  await getResourceList()
+  if (!modelDetailResource.value?.id) {
+    return
+  }
+  modelDetailResource.value = await resourceApi.detail(modelDetailResource.value.id)
 }
 
 /**
@@ -480,48 +502,55 @@ const handleBreadcrumbClick = (index: number) => {
   void getResourceList()
 }
 
-// 模型封面上传成功回调
-const handleModelCoverUploadSuccess = (response: UploadResponse) => {
-  if (response?.data) {
-    const res = response.data
-    if (!editingResource.value) return
-    editingResource.value = {
-      ...editingResource.value,
-      thumbnail: res.url,
-    }
-    ElMessage.success('封面上传成功')
-  }
-}
-
 // 确认保存
-const handleEditConfirm = () => {
-  if (!editingResource.value?.name) {
+const handleEditConfirm = async () => {
+  const resource = editingResource.value
+  if (!resource) {
+    return
+  }
+
+  const isDirectory = resource.resourceType === ResourceType.DIRECTORY
+  if (isDirectory && !resource.name?.trim()) {
     ElMessage.warning('请输入资源名称')
     return
   }
 
-  // 对于图片和视频类型，需要检查是否已上传文件
-  if (editingResource.value?.resourceType !== ResourceType.DIRECTORY) {
-    if (!editingResource.value?.path && !editingResource.value?.id) {
-      ElMessage.warning('请先上传文件')
-      return
-    }
+  if (!isDirectory && !resource.name?.trim() && selectedResourceFile.value) {
+    resource.name = getResourceDisplayName(selectedResourceFile.value.name)
   }
 
-  if (editingResource.value?.id) {
-    // 更新资源
-    resourceApi.update(editingResource.value).then(() => {
-      ElMessage.success('更新成功')
-      uploadDialogVisible.value = false
-      void getResourceList()
-    })
-  } else {
-    // 新增资源
-    resourceApi.insert(editingResource.value).then(() => {
-      ElMessage.success('创建成功')
-      uploadDialogVisible.value = false
-      void getResourceList()
-    })
+  if (!isDirectory && !resource.id && !selectedResourceFile.value) {
+    ElMessage.warning('请先选择文件')
+    return
+  }
+
+  savingResource.value = true
+  try {
+    if (isDirectory) {
+      if (resource.id) {
+        await resourceApi.update(resource)
+        ElMessage.success('更新成功')
+      } else {
+        await resourceApi.insert(resource)
+        ElMessage.success('创建成功')
+      }
+    } else {
+      const savedResource = await resourceApi.upload(
+        buildResourceUploadFormData({
+          resource,
+          file: selectedResourceFile.value,
+          cover: selectedCoverFile.value,
+        }),
+      )
+      editingResource.value = savedResource
+      ElMessage.success(resource.id ? '更新成功' : '创建成功')
+    }
+    uploadDialogVisible.value = false
+    void getResourceList()
+  } catch (error) {
+    console.error('保存失败:', error)
+  } finally {
+    savingResource.value = false
   }
 }
 
@@ -672,8 +701,10 @@ onMounted(() => {
       v-model="uploadDialogVisible"
       width="500px"
       :close-on-click-modal="false"
+      destroy-on-close
+      @closed="handleUploadDialogClosed"
     >
-      <el-form label-width="100px">
+      <el-form v-if="editingResource" label-width="100px">
         <el-form-item label="资源名称">
           <el-input v-model="editingResource!.name" placeholder="请输入资源名称" />
         </el-form-item>
@@ -688,11 +719,10 @@ onMounted(() => {
         <el-form-item label="上传文件" v-if="editingResource?.resourceType !== ResourceType.DIRECTORY">
           <el-upload
             ref="uploadRef"
-            :action="uploadUrl"
-            :headers="uploadHeaders"
-            :on-success="handleUploadSuccess"
-            :on-error="handleUploadError"
-            :auto-upload="true"
+            :on-change="handleResourceFileChange"
+            :on-remove="handleResourceFileRemove"
+            :on-exceed="handleResourceFileExceed"
+            :auto-upload="false"
             :show-file-list="true"
             :limit="1"
             :accept="editingResource?.resourceType === ResourceType.MODEL ? '.glb,.gltf,.obj,.stl' : undefined"
@@ -711,12 +741,13 @@ onMounted(() => {
         <!-- 模型封面 -->
         <el-form-item label="模型封面" v-if="editingResource?.resourceType === ResourceType.MODEL">
           <el-upload
-            :action="uploadUrl"
-            :headers="uploadHeaders"
-            :on-success="handleModelCoverUploadSuccess"
-            :on-error="handleUploadError"
-            :auto-upload="true"
-            :show-file-list="false"
+            ref="modelCoverUploadRef"
+            :on-change="handleModelCoverChange"
+            :on-remove="handleModelCoverRemove"
+            :on-exceed="handleModelCoverExceed"
+            :auto-upload="false"
+            :show-file-list="true"
+            :limit="1"
             accept="image/*"
           >
             <template #trigger>
@@ -742,6 +773,7 @@ onMounted(() => {
         <el-button @click="uploadDialogVisible = false">取消</el-button>
         <el-button
           type="primary"
+          :loading="savingResource"
           @click="handleEditConfirm()"
         >
           确定
@@ -786,12 +818,11 @@ onMounted(() => {
           <div class="image-detail-actions">
             <el-upload
               ref="imageReUploadRef"
-              :action="uploadUrl"
-              :headers="uploadHeaders"
-              :on-success="handleImageReUploadSuccess"
-              :on-error="handleUploadError"
-              :auto-upload="true"
+              :on-change="handleImageReUploadChange"
+              :on-exceed="handleImageReUploadExceed"
+              :auto-upload="false"
               :show-file-list="false"
+              :limit="1"
               accept="image/*"
             >
               <template #trigger>
@@ -858,12 +889,11 @@ onMounted(() => {
               <el-button type="primary" :loading="capturingCover" @click="handleVideoCapturecover">截取封面</el-button>
               <el-upload
                 ref="coverUploadRef"
-                :action="uploadUrl"
-                :headers="uploadHeaders"
-                :on-success="handleCoverUploadSuccess"
-                :on-error="handleUploadError"
-                :auto-upload="true"
+                :on-change="handleCoverUploadChange"
+                :on-exceed="handleCoverUploadExceed"
+                :auto-upload="false"
                 :show-file-list="false"
+                :limit="1"
                 accept="image/*"
               >
                 <template #trigger>
@@ -880,7 +910,7 @@ onMounted(() => {
     <ModelPreview
       :visible="modelDetailDialogVisible"
       :resource="modelDetailResource"
-      @success="getResourceList"
+      @success="handleModelPreviewSuccess"
       @update:visible="modelDetailDialogVisible = $event"
     />
   </div>

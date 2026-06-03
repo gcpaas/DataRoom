@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gccloud.gcpaas.core.constant.DataRoomConstant;
 import com.gccloud.gcpaas.core.bean.Resp;
 import com.gccloud.gcpaas.core.constant.DataRoomRole;
+import com.gccloud.gcpaas.core.datasource.bean.DataSourceColumnMeta;
+import com.gccloud.gcpaas.core.datasource.bean.DataSourceTableMeta;
+import com.gccloud.gcpaas.core.datasource.service.DataSourceMetadataService;
 import com.gccloud.gcpaas.core.entity.DataSourceEntity;
 import com.gccloud.gcpaas.core.mapper.DataSourceMapper;
 import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
@@ -38,6 +41,9 @@ public class DataSourceController {
     @Resource
     private DataSourceMapper datasourceMapper;
 
+    @Resource
+    private DataSourceMetadataService dataSourceMetadataService;
+
     @GetMapping("/list")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "列表查询", description = "根据名称查询")
@@ -70,6 +76,27 @@ public class DataSourceController {
         // 脱敏
         datasourceEntity.getDataSource().desensitize();
         return Resp.success(datasourceEntity);
+    }
+
+    @GetMapping("/{code}/tables")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "查询表信息", description = "根据数据源编码查询表信息")
+    @Parameters({@Parameter(name = "code", description = "数据源编码", in = ParameterIn.PATH)})
+    public Resp<List<DataSourceTableMeta>> listTables(@PathVariable("code") String code) {
+        DataSourceEntity datasourceEntity = datasourceMapper.getByCode(code);
+        return Resp.success(dataSourceMetadataService.listTables(datasourceEntity));
+    }
+
+    @GetMapping("/{code}/tables/{tableName}/columns")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "查询字段信息", description = "根据数据源编码和表名查询字段信息")
+    @Parameters({
+            @Parameter(name = "code", description = "数据源编码", in = ParameterIn.PATH),
+            @Parameter(name = "tableName", description = "表名", in = ParameterIn.PATH)
+    })
+    public Resp<List<DataSourceColumnMeta>> listColumns(@PathVariable("code") String code, @PathVariable("tableName") String tableName) {
+        DataSourceEntity datasourceEntity = datasourceMapper.getByCode(code);
+        return Resp.success(dataSourceMetadataService.listColumns(datasourceEntity, tableName));
     }
 
     @PostMapping("/insert")

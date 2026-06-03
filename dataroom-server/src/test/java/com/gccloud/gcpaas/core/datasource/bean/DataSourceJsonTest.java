@@ -52,7 +52,9 @@ class DataSourceJsonTest {
                 Arguments.of("hive", "org.apache.hive.jdbc.HiveDriver", "hive", "jdbc:hive2://localhost:10000/default"),
                 Arguments.of("tdengine", "com.taosdata.jdbc.ws.WebSocketDriver", "root", "jdbc:TAOS-WS://localhost:6041/test?varcharAsString=true"),
                 Arguments.of("druid", "org.apache.calcite.avatica.remote.Driver", "druid", "jdbc:avatica:remote:url=http://localhost:8888/druid/v2/sql/avatica/;transparent_reconnection=true"),
-                Arguments.of("greatdb", "com.mysql.cj.jdbc.Driver", "greatdb", "jdbc:mysql://localhost:3306/test")
+                Arguments.of("greatdb", "com.mysql.cj.jdbc.Driver", "greatdb", "jdbc:mysql://localhost:3306/test"),
+                Arguments.of("h2", "org.h2.Driver", "sa", "jdbc:h2:file:./db/dataroom"),
+                Arguments.of("polardb", "com.mysql.cj.jdbc.Driver", "root", "jdbc:mysql://localhost:3306/test")
         );
     }
 

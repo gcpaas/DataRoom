@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, type UploadProps } from 'element-plus'
 import { resourceApi, type ResourceEntity, type MaterialConfig, type LightingConfig, type BackgroundConfig, type ModelConfig } from '@/dataroom-packages/resource/api'
+import { buildResourceUploadFormData, getResourceModelFormat } from '@/dataroom-packages/resource/resourceForm'
+import { getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
 import ThreeModelViewer from './ThreeModelViewer.vue'
 import modelLoadFailedPlaceholder from '@/dataroom-packages/resource/assets/image/模型加载失败占位符.svg'
 
@@ -10,38 +12,11 @@ interface Props {
   resource: ResourceEntity | null
 }
 
-interface UploadResponse {
-  data?: ResourceEntity
-}
-
 const props = defineProps<Props>()
 const emit = defineEmits<{
   'update:visible': [value: boolean]
   'success': []
 }>()
-
-const resourceBaseUrl = import.meta.env.VITE_RESOURCE_BASE_URL || ''
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || ''
-
-const getResourceUrl = (url?: string) => {
-  if (!url) return ''
-  if (url.startsWith('http://') || url.startsWith('https://')) {
-    return url
-  }
-  return `${resourceBaseUrl}${url}`
-}
-
-const uploadHeaders = computed(() => {
-  const tokenName = import.meta.env.VITE_TOKEN_NAME || 't_token'
-  const tokenKey = import.meta.env.VITE_TOKEN_KEY || 't_token'
-  return {
-    [tokenName]: localStorage.getItem(tokenKey) || ''
-  }
-})
-
-const uploadCoverUrl = computed(() => {
-  return `${apiBaseUrl}/dataRoom/resource/uploadModelCover?id=${props.resource?.id}`
-})
 
 const activeTab = ref('info')
 
@@ -78,11 +53,12 @@ const capturingCover = ref(false)
 
 // Load config from resource
 const loadConfig = () => {
+  localModelFormat.value = getResourceModelFormat(props.resource).toUpperCase()
   if (props.resource?.config) {
     try {
       const config = JSON.parse(props.resource.config) as ModelConfig
       if (config.format) {
-        localModelFormat.value = config.format
+        localModelFormat.value = config.format.toUpperCase()
       }
       if (config.material) {
         localMaterialConfig.value = { ...defaultMaterialConfig, ...config.material }
@@ -116,6 +92,10 @@ const modelUrl = computed(() => {
   return getResourceUrl(props.resource.url)
 })
 
+const modelFormat = computed(() => {
+  return getResourceModelFormat(props.resource)
+})
+
 // Computed cover image URL
 const coverImage = computed(() => {
   if (!props.resource?.thumbnail) return ''
@@ -127,6 +107,20 @@ const formatFileSize = (sizeInKB?: number) => {
   if (!sizeInKB) return '未知'
   if (sizeInKB < 1024) return `${sizeInKB.toFixed(2)} KB`
   return `${(sizeInKB / 1024).toFixed(2)} MB`
+}
+
+const uploadCover = async (cover: Blob, coverName: string) => {
+  if (!props.resource?.id) {
+    return
+  }
+  await resourceApi.upload(
+    buildResourceUploadFormData({
+      resource: props.resource,
+      cover,
+      coverName,
+    }),
+  )
+  emit('success')
 }
 
 // Capture cover
@@ -145,14 +139,10 @@ const handleCaptureCover = () => {
   fetch(base64)
     .then(res => res.blob())
     .then(blob => {
-      const formData = new FormData()
-      formData.append('file', blob, `cover_${Date.now()}.png`)
-      return resourceApi.uploadModelCover(props.resource!.id!, formData)
+      return uploadCover(blob, `cover_${Date.now()}.png`)
     })
     .then(() => {
       ElMessage.success('封面截取成功')
-      emit('success')
-      // Reload resource to get new thumbnail
     })
     .catch(() => {
       ElMessage.error('封面上传失败')
@@ -163,10 +153,16 @@ const handleCaptureCover = () => {
 }
 
 // Upload cover
-const handleCoverUpload = (response: UploadResponse) => {
-  if (response && response.data && props.resource) {
-    emit('success')
+const handleCoverUploadChange: UploadProps['onChange'] = async (uploadFile) => {
+  const file = uploadFile.raw
+  if (!file) {
+    return
+  }
+  try {
+    await uploadCover(file, file.name)
     ElMessage.success('封面上传成功')
+  } catch {
+    ElMessage.error('封面上传失败')
   }
 }
 
@@ -263,6 +259,7 @@ const handleBackgroundChange = (color: string) => {
           <ThreeModelViewer
             ref="viewerRef"
             :model-url="modelUrl"
+            :model-format="modelFormat"
             :cover-image="coverImage"
             :error-placeholder-image="modelLoadFailedPlaceholder"
             :material-config="localMaterialConfig"
@@ -276,10 +273,9 @@ const handleBackgroundChange = (color: string) => {
             截取封面
           </el-button>
           <el-upload
-            :action="uploadCoverUrl"
-            :headers="uploadHeaders"
+            :auto-upload="false"
             :show-file-list="false"
-            :on-success="handleCoverUpload"
+            :on-change="handleCoverUploadChange"
             accept="image/*"
           >
             <template #trigger>
@@ -323,10 +319,9 @@ const handleBackgroundChange = (color: string) => {
                   截取封面
                 </el-button>
                 <el-upload
-                  :action="uploadCoverUrl"
-                  :headers="uploadHeaders"
+                  :auto-upload="false"
                   :show-file-list="false"
-                  :on-success="handleCoverUpload"
+                  :on-change="handleCoverUploadChange"
                   accept="image/*"
                 >
                   <template #trigger>

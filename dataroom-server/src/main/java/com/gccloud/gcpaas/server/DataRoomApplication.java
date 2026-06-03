@@ -18,7 +18,7 @@ import java.util.Base64;
 
 @Slf4j
 @SpringBootApplication(scanBasePackages = "com.gccloud.gcpaas", exclude = MongoAutoConfiguration.class)
-@MapperScan("com.gccloud.gcpaas.**")
+@MapperScan("com.gccloud.gcpaas.core.mapper")
 public class DataRoomApplication {
     @Resource
     private TokenService tokenService;

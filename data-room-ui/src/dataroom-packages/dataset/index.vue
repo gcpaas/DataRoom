@@ -47,7 +47,7 @@ const currentDataset = ref<DatasetEntity>({
   parentCode: 'root'
 })
 const editorRef = ref()
-const wideEditorDatasetTypes = ['json', 'http', 'sql', 'es'] as const
+const wideEditorDatasetTypes = ['json', 'http', 'sql', 'excel', 'es'] as const
 const datasetDialogWidth = computed(() =>
   wideEditorDatasetTypes.includes(currentDataset.value.datasetType as typeof wideEditorDatasetTypes[number])
     ? '90%'
@@ -82,6 +82,11 @@ const addTypeOptions = [
     key: 'sql',
     name: 'SQL数据集',
     description: '通过SQL查询数据库'
+  },
+  {
+    key: 'excel',
+    name: 'Excel数据集',
+    description: '查询Excel导入后的数据表'
   },
   {
     key: 'es',
@@ -134,6 +139,11 @@ const datasetTypeMap = {
     name: 'SQL',
     icon: '🗄️',
     component: defineAsyncComponent(() => import('./components/SqlEditor.vue'))
+  },
+  excel: {
+    name: 'Excel',
+    icon: 'Excel',
+    component: defineAsyncComponent(() => import('./components/ExcelEditor.vue'))
   },
   es: {
     name: 'ES',
@@ -267,7 +277,7 @@ const handleTypeSelect = (type: string) => {
   if (type === 'directory') {
     handleAddFolder(typeSelectParentNode.value)
   } else {
-    handleAddDataset(type as 'json' | 'http' | 'sql' | 'es', typeSelectParentNode.value)
+    handleAddDataset(type as 'json' | 'http' | 'sql' | 'excel' | 'es', typeSelectParentNode.value)
   }
 }
 
@@ -301,7 +311,7 @@ const handleAddFolder = (node?: DatasetTreeNode) => {
 /**
  * 新增数据集
  */
-const handleAddDataset = (datasetType: 'json' | 'http' | 'sql' | 'es', node?: DatasetTreeNode) => {
+const handleAddDataset = (datasetType: 'json' | 'http' | 'sql' | 'excel' | 'es', node?: DatasetTreeNode) => {
   dialogTitle.value = `新增${datasetTypeMap[datasetType].name}数据集`
   currentDataset.value = {
     name: '',
@@ -317,7 +327,9 @@ const handleAddDataset = (datasetType: 'json' | 'http' | 'sql' | 'es', node?: Da
           ? {datasetType: 'http', url: '', method: 'GET', headerList: [], body: '', respJsonPath: ''}
           : datasetType === 'sql'
             ? {datasetType: 'sql', sql: ''}
-            : {datasetType: 'es', path: '', method: 'POST', body: '', respJsonPath: ''}
+            : datasetType === 'excel'
+              ? {datasetType: 'excel', sql: ''}
+              : {datasetType: 'es', path: '', method: 'POST', body: '', respJsonPath: ''}
   }
   dialogVisible.value = true
 }

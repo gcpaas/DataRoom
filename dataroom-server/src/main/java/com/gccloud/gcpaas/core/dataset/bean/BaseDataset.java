@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
         @JsonSubTypes.Type(value = JsonDataset.class, name = DatasetType.JSON_TYPE),
         @JsonSubTypes.Type(value = HttpDataset.class, name = DatasetType.HTTP_TYPE),
         @JsonSubTypes.Type(value = RelationalDataset.class, name = DatasetType.SQL_TYPE),
+        @JsonSubTypes.Type(value = RelationalDataset.class, name = DatasetType.EXCEL_TYPE),
         @JsonSubTypes.Type(value = EsDataset.class, name = DatasetType.ES_TYPE)
 })
 public abstract class BaseDataset {

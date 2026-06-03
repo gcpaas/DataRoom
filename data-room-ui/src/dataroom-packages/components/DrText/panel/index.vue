@@ -51,9 +51,6 @@ const borderStyleOptions = [
       <el-collapse class="dr-config-panel__section">
         <el-collapse-item title="基础配置" name="basic">
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>文本内容</span>
-            </div>
             <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
@@ -61,14 +58,6 @@ const borderStyleOptions = [
                   <el-input v-model="chartConfig.props.text" class="dr-config-panel__control" />
                 </div>
               </el-form-item>
-            </el-form>
-          </div>
-
-          <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>排版</span>
-            </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
                   <span class="dr-config-panel__sub-label">水平</span>
@@ -109,9 +98,6 @@ const borderStyleOptions = [
 
         <el-collapse-item title="文本样式" name="textStyle">
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>文字</span>
-            </div>
             <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">
@@ -204,9 +190,6 @@ const borderStyleOptions = [
 
         <el-collapse-item title="超链接" name="hyperlink">
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>链接行为</span>
-            </div>
             <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
               <el-form-item class="dr-config-panel__sub-form-item">
                 <div class="dr-config-panel__sub-row">

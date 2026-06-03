@@ -22,6 +22,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
         @JsonSubTypes.Type(value = ClickHouseDatasource.class, name = DataSourceType.CLICKHOUSE_TYPE),
         @JsonSubTypes.Type(value = MariaDbDatasource.class, name = DataSourceType.MARIADB_TYPE),
         @JsonSubTypes.Type(value = OceanBaseDatasource.class, name = DataSourceType.OCEANBASE_TYPE),
+        @JsonSubTypes.Type(value = H2Datasource.class, name = DataSourceType.H2_TYPE),
+        @JsonSubTypes.Type(value = PolarDbDatasource.class, name = DataSourceType.POLARDB_TYPE),
         @JsonSubTypes.Type(value = HiveDatasource.class, name = DataSourceType.HIVE_TYPE),
         @JsonSubTypes.Type(value = TDengineDatasource.class, name = DataSourceType.TDENGINE_TYPE),
         @JsonSubTypes.Type(value = DruidDatasource.class, name = DataSourceType.DRUID_TYPE),

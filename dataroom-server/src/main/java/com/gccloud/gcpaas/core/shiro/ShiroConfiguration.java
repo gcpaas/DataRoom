@@ -76,6 +76,8 @@ public class ShiroConfiguration {
         filterMap.put("/doc.html/**", ANON);
         // 静态资源
         filterMap.put("/static/**", ANON);
+        // 非 local 存储资源代理访问，暂时公开不鉴权
+        filterMap.put("/dataRoom/resource/file/**", ANON);
         filterMap.put("/**", OAUTH);
         shiroFilter.setFilterChainDefinitionMap(filterMap);
         return shiroFilter;

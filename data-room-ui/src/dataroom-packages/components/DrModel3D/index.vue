@@ -13,6 +13,7 @@ import type {ComponentExpose} from "@/dataroom-packages/components/type/Componen
 import {computed} from "vue";
 import { Box } from '@element-plus/icons-vue'
 import ThreeModelViewer from '@/dataroom-packages/three/ThreeModelViewer.vue'
+import { getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
 
 const props = defineProps<{
   chart: DrModel3DConfig
@@ -22,16 +23,6 @@ const {canvasInst, expose} = useDrComponent({
   chart: props.chart,
   changeData: () => {}
 })
-
-const resourceBaseUrl = import.meta.env.VITE_RESOURCE_BASE_URL || ''
-
-const getResourceUrl = (url?: string) => {
-  if (!url) return ''
-  if (url.startsWith('http://') || url.startsWith('https://')) {
-    return url
-  }
-  return `${resourceBaseUrl}${url}`
-}
 
 const modelUrl = computed(() => {
   return getResourceUrl(props.chart.props.modelUrl)

@@ -32,8 +32,8 @@ const getInstance = (): DrDateTimeConfig => {
         fontSize: 24,
         fontFamily: 'Microsoft YaHei',
         fontWeight: '400',
-        letterSpacing: 0,
-        color: '#ffffff',
+        letterSpacing: 1,
+        color: '#909399',
       },
       align: 'center',
       verticalAlign: 'center',
@@ -42,7 +42,7 @@ const getInstance = (): DrDateTimeConfig => {
       title: '时间',
       w: 240,
       h: 60,
-    }
+    },
   )
 }
 

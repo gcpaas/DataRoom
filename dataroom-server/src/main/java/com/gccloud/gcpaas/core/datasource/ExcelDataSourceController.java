@@ -6,7 +6,10 @@ import com.gccloud.gcpaas.core.constant.DataRoomRole;
 import com.gccloud.gcpaas.core.constant.DataSourceType;
 import com.gccloud.gcpaas.core.datasource.bean.ExcelColumn;
 import com.gccloud.gcpaas.core.datasource.bean.ExcelDatasource;
+import com.gccloud.gcpaas.core.datasource.bean.DataSourceColumnMeta;
+import com.gccloud.gcpaas.core.datasource.bean.DataSourceTableMeta;
 import com.gccloud.gcpaas.core.datasource.service.ExcelDataSourceService;
+import com.gccloud.gcpaas.core.datasource.service.DataSourceMetadataService;
 import com.gccloud.gcpaas.core.entity.DataSourceEntity;
 import com.gccloud.gcpaas.core.mapper.DataSourceMapper;
 import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
@@ -37,6 +40,9 @@ public class ExcelDataSourceController {
 
     @Resource
     private ExcelDataSourceService excelDataSourceService;
+
+    @Resource
+    private DataSourceMetadataService dataSourceMetadataService;
 
     @Resource
     private DataSourceMapper datasourceMapper;
@@ -217,6 +223,20 @@ public class ExcelDataSourceController {
         } catch (Exception e) {
             return Resp.error("查询数据失败: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/tables")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "查询Excel表信息", description = "查询应用数据库中excel_开头的表信息")
+    public Resp<List<DataSourceTableMeta>> listTables() {
+        return Resp.success(dataSourceMetadataService.listAppExcelTables());
+    }
+
+    @GetMapping("/tables/{tableName}/columns")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "查询Excel字段信息", description = "根据表名查询应用数据库中excel_开头表的字段信息")
+    public Resp<List<DataSourceColumnMeta>> listColumns(@PathVariable("tableName") String tableName) {
+        return Resp.success(dataSourceMetadataService.listAppExcelColumns(tableName));
     }
 
     private boolean isSupportedFile(String originalFilename) {

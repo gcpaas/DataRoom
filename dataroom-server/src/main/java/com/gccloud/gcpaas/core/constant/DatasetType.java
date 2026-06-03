@@ -11,12 +11,14 @@ public enum DatasetType implements IEnum<String> {
     JSON("json"),
     HTTP("http"),
     SQL("sql"),
+    EXCEL("excel"),
     ES("es");
 
     public static final String DIRECTORY_TYPE = "directory";
     public static final String JSON_TYPE = "json";
     public static final String HTTP_TYPE = "http";
     public static final String SQL_TYPE = "sql";
+    public static final String EXCEL_TYPE = "excel";
     public static final String ES_TYPE = "es";
 
 
