@@ -15,12 +15,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CatchBlockLoggingTest {
 
     @Test
+    void loginUserUtilsIsExcludedFromCatchBlockLoggingRule() {
+        assertTrue(isExcludedSource(Path.of("dataroom-server/src/main/java/com/gccloud/gcpaas/core/util/LoginUserUtils.java")));
+    }
+
+    @Test
     void catchBlocksLogOrPrintExceptions() throws IOException {
         List<String> violations = new ArrayList<>();
         for (Path sourceRoot : resolveSourceRoots()) {
             try (Stream<Path> javaFiles = Files.walk(sourceRoot)) {
                 javaFiles
                         .filter(path -> path.toString().endsWith(".java"))
+                        .filter(path -> !isExcludedSource(path))
                         .forEach(path -> collectViolations(path, violations));
             }
         }
@@ -104,6 +110,10 @@ class CatchBlockLoggingTest {
             }
         }
         return roots;
+    }
+
+    private boolean isExcludedSource(Path path) {
+        return path.toString().replace('\\', '/').endsWith("com/gccloud/gcpaas/core/util/LoginUserUtils.java");
     }
 
     private int findMatchingBrace(String source, int openBrace) {

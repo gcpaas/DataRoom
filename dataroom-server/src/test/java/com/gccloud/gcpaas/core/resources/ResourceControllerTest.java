@@ -4,8 +4,8 @@ import com.gccloud.gcpaas.core.bean.Resp;
 import com.gccloud.gcpaas.core.constant.ResourceType;
 import com.gccloud.gcpaas.core.entity.ResourceEntity;
 import com.gccloud.gcpaas.core.mapper.ResourceMapper;
+import com.gccloud.gcpaas.core.resources.storage.IResourceStorageService;
 import com.gccloud.gcpaas.core.resources.storage.ResourceFileVariant;
-import com.gccloud.gcpaas.core.resources.storage.ResourceStorageService;
 import com.gccloud.gcpaas.core.resources.storage.ResourceStoreRequest;
 import com.gccloud.gcpaas.core.resources.storage.ResourceStream;
 import com.gccloud.gcpaas.core.resources.storage.StoredResource;
@@ -32,7 +32,7 @@ class ResourceControllerTest {
     @Test
     void uploadCreatesResourceWithMainFileAndCoverThroughCurrentStorage() throws IOException {
         ResourceMapper resourceMapper = mock(ResourceMapper.class);
-        RecordingStorageService storageService = new RecordingStorageService("minio");
+        RecordingStorageService storageService = new RecordingStorageService("s3");
         ResourceController controller = newController(resourceMapper, storageService);
 
         MockMultipartFile file = new MockMultipartFile("file", "销售看板.png", "image/png", "main".getBytes());
@@ -94,14 +94,14 @@ class ResourceControllerTest {
     }
 
     private ResourceController newController(ResourceMapper resourceMapper,
-                                             ResourceStorageService storageService) {
+                                             IResourceStorageService storageService) {
         ResourceController controller = new ResourceController();
         ReflectionTestUtils.setField(controller, "resourceMapper", resourceMapper);
         ReflectionTestUtils.setField(controller, "resourceStorageService", storageService);
         return controller;
     }
 
-    private static class RecordingStorageService implements ResourceStorageService {
+    private static class RecordingStorageService implements IResourceStorageService {
         private final String storageType;
         private final List<ResourceStoreRequest> storeRequests = new ArrayList<>();
         private final List<String> deletedObjectKeys = new ArrayList<>();

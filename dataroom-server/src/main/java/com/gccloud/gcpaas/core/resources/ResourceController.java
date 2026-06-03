@@ -11,7 +11,7 @@ import com.gccloud.gcpaas.core.mapper.ResourceMapper;
 import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
 import com.gccloud.gcpaas.core.operationlog.model.OperationLogDetailLevel;
 import com.gccloud.gcpaas.core.resources.storage.ResourceFileVariant;
-import com.gccloud.gcpaas.core.resources.storage.ResourceStorageService;
+import com.gccloud.gcpaas.core.resources.storage.IResourceStorageService;
 import com.gccloud.gcpaas.core.resources.storage.ResourceStoreRequest;
 import com.gccloud.gcpaas.core.resources.storage.ResourceStream;
 import com.gccloud.gcpaas.core.resources.storage.StoredResource;
@@ -60,7 +60,7 @@ public class ResourceController {
     @Resource
     private ResourceMapper resourceMapper;
     @Resource
-    private ResourceStorageService resourceStorageService;
+    private IResourceStorageService resourceStorageService;
 
     @GetMapping("/list")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
@@ -133,7 +133,7 @@ public class ResourceController {
 
         applyMetadata(resourceEntity, file, name, resourceType, parentCode, remark, update);
 
-        ResourceStorageService storageService = resourceStorageService;
+        IResourceStorageService storageService = resourceStorageService;
         List<String> newObjectKeyList = new ArrayList<>();
         try {
             if (file != null && !file.isEmpty()) {
@@ -205,7 +205,7 @@ public class ResourceController {
             return Resp.success(null);
         }
         try {
-            ResourceStorageService storageService = resourceStorageService;
+            IResourceStorageService storageService = resourceStorageService;
             storageService.delete(resource.getPath());
             storageService.delete(resource.getThumbnail());
             resourceMapper.deleteById(id);
@@ -275,7 +275,7 @@ public class ResourceController {
         }
     }
 
-    private StoredResource storeMainFile(ResourceStorageService storageService, ResourceEntity resourceEntity, MultipartFile file, String resourceType) throws IOException {
+    private StoredResource storeMainFile(IResourceStorageService storageService, ResourceEntity resourceEntity, MultipartFile file, String resourceType) throws IOException {
         String originalFilename = StringUtils.defaultIfBlank(file.getOriginalFilename(), "resource");
         String extension = FilenameUtils.getExtension(originalFilename).toLowerCase();
         ResourceType type = resolveResourceType(resourceType, extension);
@@ -290,7 +290,7 @@ public class ResourceController {
             resourceEntity.setName(getDisplayName(originalFilename));
         }
         resourceEntity.setPath(stored.getObjectKey());
-        resourceEntity.setUrl(isMinioStorage() ? getProxyUrl(resourceEntity.getId()) : stored.getAccessUrl());
+        resourceEntity.setUrl(isS3Storage() ? getProxyUrl(resourceEntity.getId()) : stored.getAccessUrl());
         resourceEntity.setSize(stored.getSize());
         resourceEntity.setResourceType(type);
         if (type == ResourceType.MODEL) {
@@ -299,7 +299,7 @@ public class ResourceController {
         return stored;
     }
 
-    private StoredResource storeCoverFile(ResourceStorageService storageService, ResourceEntity resourceEntity, MultipartFile cover) throws IOException {
+    private StoredResource storeCoverFile(IResourceStorageService storageService, ResourceEntity resourceEntity, MultipartFile cover) throws IOException {
         String originalFilename = StringUtils.defaultIfBlank(cover.getOriginalFilename(), "cover");
         String extension = FilenameUtils.getExtension(originalFilename).toLowerCase();
         ResourceType type = resourceEntity.getResourceType() == null ? ResourceType.IMAGE : resourceEntity.getResourceType();
@@ -308,7 +308,7 @@ public class ResourceController {
                 .objectKey(buildObjectKey(type, extension))
                 .resourceType(type)
                 .build());
-        resourceEntity.setThumbnail(isMinioStorage() ? stored.getObjectKey() : stored.getAccessUrl());
+        resourceEntity.setThumbnail(isS3Storage() ? stored.getObjectKey() : stored.getAccessUrl());
         return stored;
     }
 
@@ -377,12 +377,12 @@ public class ResourceController {
         }
     }
 
-    private void cleanupOldObjects(ResourceStorageService storageService, ResourceEntity oldResource, ResourceEntity newResource) {
+    private void cleanupOldObjects(IResourceStorageService storageService, ResourceEntity oldResource, ResourceEntity newResource) {
         cleanupOldObject(storageService, oldResource.getPath(), newResource.getPath());
         cleanupOldObject(storageService, oldResource.getThumbnail(), newResource.getThumbnail());
     }
 
-    private void cleanupOldObject(ResourceStorageService storageService, String oldObjectKey, String newObjectKey) {
+    private void cleanupOldObject(IResourceStorageService storageService, String oldObjectKey, String newObjectKey) {
         if (StringUtils.isBlank(oldObjectKey) || oldObjectKey.equals(newObjectKey)) {
             return;
         }
@@ -393,7 +393,7 @@ public class ResourceController {
         }
     }
 
-    private void rollbackNewObjects(ResourceStorageService storageService, List<String> objectKeyList) {
+    private void rollbackNewObjects(IResourceStorageService storageService, List<String> objectKeyList) {
         for (String objectKey : objectKeyList) {
             try {
                 storageService.delete(objectKey);
@@ -412,7 +412,7 @@ public class ResourceController {
             return null;
         }
         ResourceEntity copy = cloneResource(resource);
-        if (isMinioStorage() && !isDirectoryResource(copy)) {
+        if (isS3Storage() && !isDirectoryResource(copy)) {
             copy.setUrl(getProxyUrl(copy.getId()));
             if (StringUtils.isNotBlank(copy.getThumbnail())) {
                 copy.setThumbnail(getProxyThumbnailUrl(copy.getId()));
@@ -431,8 +431,8 @@ public class ResourceController {
         return resource.getResourceType() == ResourceType.DIRECTORY;
     }
 
-    private boolean isMinioStorage() {
-        return "minio".equalsIgnoreCase(resourceStorageService.getStorageType());
+    private boolean isS3Storage() {
+        return "s3".equalsIgnoreCase(resourceStorageService.getStorageType());
     }
 
     private String buildObjectKey(ResourceType type, String extension) {

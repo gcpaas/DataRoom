@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * 资源存储服务
  */
-public interface ResourceStorageService {
+public interface IResourceStorageService {
     /**
      * 存储类型
      */

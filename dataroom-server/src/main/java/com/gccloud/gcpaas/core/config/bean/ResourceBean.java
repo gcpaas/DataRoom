@@ -20,17 +20,17 @@ public class ResourceBean {
     @Data
     public static class Storage {
         /**
-         * 存储类型：local、minio
+         * 存储类型：local、s3
          */
         private String type = "local";
         /**
-         * MinIO / S3 兼容存储配置
+         * S3 兼容存储配置
          */
-        private Minio minio = new Minio();
+        private S3 s3 = new S3();
     }
 
     @Data
-    public static class Minio {
+    public static class S3 {
         /**
          * Endpoint，例如 http://127.0.0.1:9000
          */

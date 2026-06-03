@@ -22,13 +22,13 @@ dataroom:
     uiPath: ./data-room-ui
     urlPrefix: http://127.0.0.1:${server.port}${server.servlet.context-path}/static/
     storage:
-      # 存储类型：local、minio
-      type: local
-      minio:
+      # 存储类型：local、s3
+      type: s3
+      s3:
         endpoint: http://127.0.0.1:9000
         bucket: dataroom
-        accessKey: i09oucfqCYCTZHnnqg1
-        secretKey: pMhhQnUzBXPQ2R4XX7T
+        accessKey: dataroom
+        secretKey: dataroom
         region: us-east-1
         pathStyleAccess: true
   # 公钥、用于加密

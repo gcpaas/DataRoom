@@ -14,7 +14,7 @@ public class StoredResource {
      */
     private String objectKey;
     /**
-     * 可访问地址，local 存储会返回静态资源地址，minio 存储由 Controller 统一规范化
+     * 可访问地址，local 存储会返回静态资源地址，s3 存储由 Controller 统一规范化
      */
     private String accessUrl;
     /**

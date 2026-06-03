@@ -17,7 +17,7 @@ import java.nio.file.Files;
  */
 @Service
 @ConditionalOnProperty(prefix = "dataroom.resource.storage", name = "type", havingValue = "local", matchIfMissing = true)
-public class LocalResourceStorageServiceImpl implements ResourceStorageService {
+public class LocalResourceStorageServiceImpl implements IResourceStorageService {
 
     @Resource
     private DataRoomConfig dataRoomConfig;
