@@ -38,7 +38,7 @@
 ![大屏设计器.png](doc/image/%E5%A4%A7%E5%B1%8F%E8%AE%BE%E8%AE%A1%E5%99%A8.png)
 
 ### 素材库
-> 支持目录、图片、视频、3D模型导入与预览；支持本地存储、MinIO等分布式文件存储
+> 支持目录、图片、视频、3D模型导入与预览；支持本地存储、MFS、MinIO、RustFS、Ceph等分布式文件存储
 
 ![素材库页面.png](doc/image/%E7%B4%A0%E6%9D%90%E5%BA%93%E9%A1%B5%E9%9D%A2.png)
 
@@ -69,7 +69,7 @@
 
 
 ### 开放API
-> 支持标准的RESTful API
+> 支持标准的RESTful API、Open API 3.x规范
 
 ![开放API.png](doc/image/%E5%BC%80%E6%94%BEAPI.png)
 
