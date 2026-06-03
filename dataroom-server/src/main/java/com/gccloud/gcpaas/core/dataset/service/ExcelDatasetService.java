@@ -56,6 +56,7 @@ public class ExcelDatasetService extends AbstractDatasetService {
             validateExcelSql(sql);
             return executeSql(sql);
         } catch (DataRoomException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw e;
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
@@ -71,6 +72,7 @@ public class ExcelDatasetService extends AbstractDatasetService {
         try {
             statement = CCJSqlParserUtil.parse(sql);
         } catch (JSQLParserException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new DataRoomException("Excel数据集SQL解析失败：" + e.getMessage(), e);
         }
         if (!(statement instanceof Select select)) {

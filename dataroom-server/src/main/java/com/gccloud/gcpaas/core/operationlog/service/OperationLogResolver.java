@@ -5,7 +5,9 @@ import com.gccloud.gcpaas.core.operationlog.model.OperationLogContext;
 import com.gccloud.gcpaas.core.operationlog.model.OperationLogDetailLevel;
 import com.gccloud.gcpaas.core.operationlog.model.OperationLogResolvedMeta;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import java.lang.reflect.Method;
 import java.util.*;
 
+@Slf4j
 public class OperationLogResolver {
 
     private static final List<String> TARGET_ID_KEYS = List.of(
@@ -214,6 +217,7 @@ public class OperationLogResolver {
                     }
                 }
             } catch (Exception ignored) {
+                log.error(ExceptionUtils.getStackTrace(ignored));
                 return String.valueOf(value);
             }
         }

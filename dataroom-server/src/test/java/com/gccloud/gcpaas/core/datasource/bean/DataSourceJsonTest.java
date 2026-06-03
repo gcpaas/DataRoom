@@ -3,6 +3,7 @@ package com.gccloud.gcpaas.core.datasource.bean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gccloud.gcpaas.core.constant.DataSourceType;
 import com.gccloud.gcpaas.core.entity.DataSourceEntity;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -279,6 +280,7 @@ class DataSourceJsonTest {
                 field.setAccessible(true);
                 return field.get(target);
             } catch (NoSuchFieldException ignored) {
+                System.err.println(ExceptionUtils.getStackTrace(ignored));
                 clazz = clazz.getSuperclass();
             }
         }

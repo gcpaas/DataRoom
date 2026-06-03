@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gccloud.gcpaas.core.dataset.DatasetRunRequest;
 import com.gccloud.gcpaas.core.dataset.bean.RelationalDataset;
 import com.gccloud.gcpaas.core.entity.DatasetEntity;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.stereotype.Service;
 
@@ -152,6 +153,7 @@ class DatasetTypeSqlTest {
                 field.setAccessible(true);
                 return field.get(target);
             } catch (NoSuchFieldException ignored) {
+                System.err.println(ExceptionUtils.getStackTrace(ignored));
                 clazz = clazz.getSuperclass();
             }
         }

@@ -2,6 +2,7 @@ package com.gccloud.gcpaas.core.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,21 +31,25 @@ public class TypeUtils {
             new SimpleDateFormat("yyyy-MM").parse(val.toString());
             return "Date";
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
         }
         try {
             new SimpleDateFormat("yyyy-MM-dd").parse(val.toString());
             return "Date";
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
         }
         try {
             new SimpleDateFormat("yyyy-MM-dd HH:ss:mm").parse(val.toString());
             return "Date";
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
         }
         try {
             new SimpleDateFormat("HH:ss:mm").parse(val.toString());
             return "Date";
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
         }
         return "String";
     }

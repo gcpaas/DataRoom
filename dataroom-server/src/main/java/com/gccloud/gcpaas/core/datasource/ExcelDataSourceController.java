@@ -20,6 +20,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +38,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/dataRoom/dataSource/excel")
 @OperationLogMeta(targetType = "datasource", businessType = "excel_datasource_manage", businessName = "Excel数据源管理")
+@Slf4j
 public class ExcelDataSourceController {
 
     @Resource
@@ -66,8 +69,10 @@ public class ExcelDataSourceController {
             ExcelDataSourceService.ExcelParseResult result = excelDataSourceService.parseFile(originalFilename, file.getInputStream());
             return Resp.success(result);
         } catch (IOException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return Resp.error("文件读取失败: " + e.getMessage());
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return Resp.error("文件解析失败: " + e.getMessage());
         }
     }
@@ -84,6 +89,7 @@ public class ExcelDataSourceController {
         try {
             excelDataSourceService.validateTableName(request.getTableName());
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return Resp.error(e.getMessage());
         }
 
@@ -129,6 +135,7 @@ public class ExcelDataSourceController {
             response.setTableName(request.getTableName());
             return Resp.success(response);
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return Resp.error("创建失败: " + e.getMessage());
         }
     }
@@ -190,8 +197,10 @@ public class ExcelDataSourceController {
             response.setRowCount(rowCount);
             return Resp.success(response);
         } catch (IOException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return Resp.error("文件读取失败: " + e.getMessage());
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return Resp.error("导入失败: " + e.getMessage());
         }
     }
@@ -221,6 +230,7 @@ public class ExcelDataSourceController {
                     excelDataSourceService.viewData(excelDatasource.getTableName(), page, pageSize);
             return Resp.success(result);
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return Resp.error("查询数据失败: " + e.getMessage());
         }
     }

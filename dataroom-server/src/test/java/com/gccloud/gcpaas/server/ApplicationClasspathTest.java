@@ -1,6 +1,7 @@
 package com.gccloud.gcpaas.server;
 
 import jakarta.servlet.Servlet;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,7 @@ class ApplicationClasspathTest {
             Class<?> jspServlet = Class.forName("org.apache.jasper.servlet.JspServlet");
             assertTrue(Servlet.class.isAssignableFrom(jspServlet), "JspServlet must be compatible with jakarta.servlet.Servlet");
         } catch (ClassNotFoundException ignored) {
+            System.err.println(ExceptionUtils.getStackTrace(ignored));
             // No JSP servlet is fine; this application serves static resources instead of JSP pages.
         }
     }

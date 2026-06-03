@@ -2,6 +2,8 @@ package com.gccloud.gcpaas.core.datasource.service;
 
 import com.gccloud.gcpaas.core.datasource.bean.ExcelColumn;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -12,6 +14,7 @@ import java.util.List;
  * DDL方言工具，根据当前数据库类型生成相应的SQL
  */
 @Component
+@Slf4j
 public class DdlDialectHelper {
 
     @Resource
@@ -35,6 +38,7 @@ public class DdlDialectHelper {
                 return DbType.H2;
             }
         } catch (SQLException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return DbType.H2;
         }
     }
@@ -142,6 +146,7 @@ public class DdlDialectHelper {
             }
             return false;
         } catch (SQLException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new RuntimeException("检查表是否存在失败: " + tableName, e);
         }
     }
@@ -154,6 +159,7 @@ public class DdlDialectHelper {
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
         } catch (SQLException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new RuntimeException("执行DDL失败: " + sql, e);
         }
     }

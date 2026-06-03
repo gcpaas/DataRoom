@@ -215,6 +215,7 @@ public class EsDatasetService extends AbstractDatasetService {
         try {
             return JSON.parse(body);
         } catch (Exception ignored) {
+            log.error(ExceptionUtils.getStackTrace(ignored));
             return parseCatTextBody(body);
         }
     }

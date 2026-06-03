@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.gccloud.gcpaas.core.operationlog.model.OperationLogContext;
 import com.gccloud.gcpaas.core.util.JsonUtils;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 public class OperationLogPolicy {
 
     private static final int MAX_TEXT_LENGTH = 4000;
@@ -124,6 +127,7 @@ public class OperationLogPolicy {
             return JsonUtils.getInstance().readValue(body, new TypeReference<Object>() {
             });
         } catch (Exception ignored) {
+            log.error(ExceptionUtils.getStackTrace(ignored));
             return null;
         }
     }
@@ -159,6 +163,7 @@ public class OperationLogPolicy {
         try {
             return JsonUtils.getInstance().writeValueAsString(value);
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return String.valueOf(value);
         }
     }

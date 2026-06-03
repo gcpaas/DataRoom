@@ -10,7 +10,9 @@ import com.gccloud.gcpaas.core.entity.DataSourceEntity;
 import com.gccloud.gcpaas.core.exception.DataRoomException;
 import com.gccloud.gcpaas.core.util.RsaUtils;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -27,6 +29,7 @@ import java.util.Locale;
  * 数据源表和字段元数据查询服务
  */
 @Service
+@Slf4j
 public class DataSourceMetadataService {
 
     @Resource
@@ -46,6 +49,7 @@ public class DataSourceMetadataService {
         try (Connection connection = openConnection(baseDataSource)) {
             return listTables(connection);
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new DataRoomException("获取表信息失败: " + e.getMessage(), e);
         }
     }
@@ -61,6 +65,7 @@ public class DataSourceMetadataService {
         try (Connection connection = openConnection(baseDataSource)) {
             return listColumns(connection, tableName);
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new DataRoomException("获取字段信息失败: " + e.getMessage(), e);
         }
     }
@@ -71,6 +76,7 @@ public class DataSourceMetadataService {
                     .filter(table -> StringUtils.startsWithIgnoreCase(table.getName(), EXCEL_TABLE_PREFIX))
                     .toList();
         } catch (SQLException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new DataRoomException("获取Excel表信息失败: " + e.getMessage(), e);
         }
     }
@@ -82,6 +88,7 @@ public class DataSourceMetadataService {
         try (Connection connection = appDataSource.getConnection()) {
             return listColumns(connection, tableName);
         } catch (SQLException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new DataRoomException("获取Excel字段信息失败: " + e.getMessage(), e);
         }
     }
@@ -96,6 +103,7 @@ public class DataSourceMetadataService {
                 return tables;
             }
         } catch (SQLException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             // Excel数据源仍可从保存的配置中返回表结构
         }
         DataSourceTableMeta tableMeta = new DataSourceTableMeta();
@@ -115,6 +123,7 @@ public class DataSourceMetadataService {
                 return columns;
             }
         } catch (SQLException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             // Excel数据源仍可从保存的列配置中返回字段结构
         }
         if (excelDatasource.getColumns() == null) {

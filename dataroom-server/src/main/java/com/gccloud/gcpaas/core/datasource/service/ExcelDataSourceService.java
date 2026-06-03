@@ -8,6 +8,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -137,6 +138,7 @@ public class ExcelDataSourceService {
             }
             return new ParsedSheet(headers, allData);
         } catch (IOException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new RuntimeException("CSV文件读取失败: " + e.getMessage(), e);
         }
     }
@@ -355,10 +357,12 @@ public class ExcelDataSourceService {
                 conn.commit();
                 return importedCount;
             } catch (Exception e) {
+                log.error(ExceptionUtils.getStackTrace(e));
                 conn.rollback();
                 throw new RuntimeException("数据导入失败: " + e.getMessage(), e);
             }
         } catch (SQLException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new RuntimeException("获取数据库连接失败", e);
         }
     }
@@ -405,6 +409,7 @@ public class ExcelDataSourceService {
             result.setPageSize(pageSize);
             return result;
         } catch (SQLException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new RuntimeException("查询数据失败: " + e.getMessage(), e);
         }
     }
@@ -450,6 +455,7 @@ public class ExcelDataSourceService {
                 try {
                     Long.parseLong(val.trim());
                 } catch (NumberFormatException e) {
+                    log.error(ExceptionUtils.getStackTrace(e));
                     allInteger = false;
                 }
             }
@@ -459,6 +465,7 @@ public class ExcelDataSourceService {
                 try {
                     new BigDecimal(val.trim());
                 } catch (NumberFormatException e) {
+                    log.error(ExceptionUtils.getStackTrace(e));
                     allDecimal = false;
                 }
             }
@@ -487,6 +494,7 @@ public class ExcelDataSourceService {
                 sdf.parse(value);
                 return true;
             } catch (ParseException e) {
+                log.error(ExceptionUtils.getStackTrace(e));
                 // 继续尝试下一个格式
             }
         }
@@ -511,6 +519,7 @@ public class ExcelDataSourceService {
                 default -> ps.setString(index, strValue);
             }
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             // 类型转换失败时作为字符串存储
             ps.setString(index, strValue);
         }
@@ -528,6 +537,7 @@ public class ExcelDataSourceService {
                 java.util.Date date = sdf.parse(value);
                 return new Timestamp(date.getTime());
             } catch (ParseException e) {
+                log.error(ExceptionUtils.getStackTrace(e));
                 // 继续尝试
             }
         }

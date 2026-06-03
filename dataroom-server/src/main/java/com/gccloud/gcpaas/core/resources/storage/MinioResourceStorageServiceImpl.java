@@ -62,8 +62,10 @@ public class MinioResourceStorageServiceImpl implements ResourceStorageService {
                     .size((int) (request.getFile().getSize() / 1024))
                     .build();
         } catch (IOException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw e;
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new IOException("上传文件到 MinIO 失败", e);
         }
     }
@@ -136,6 +138,7 @@ public class MinioResourceStorageServiceImpl implements ResourceStorageService {
                     .fileName(FilenameUtils.getName(objectKey))
                     .build();
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new IOException("读取 MinIO 文件失败", e);
         }
     }
@@ -154,6 +157,7 @@ public class MinioResourceStorageServiceImpl implements ResourceStorageService {
                             .build()
             );
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             throw new IOException("删除 MinIO 文件失败，objectKey=" + objectKey, e);
         }
     }

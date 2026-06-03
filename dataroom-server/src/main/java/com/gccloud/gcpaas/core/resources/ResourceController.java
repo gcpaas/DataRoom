@@ -29,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpHeaders;
@@ -83,6 +84,7 @@ public class ResourceController {
             try {
                 queryWrapper.eq(ResourceEntity::getResourceType, ResourceType.valueOf(resourceType.toUpperCase()));
             } catch (IllegalArgumentException ignored) {
+                log.error(ExceptionUtils.getStackTrace(ignored));
             }
         }
         queryWrapper.orderByDesc(ResourceEntity::getUpdateDate);
@@ -152,6 +154,7 @@ public class ResourceController {
             }
             return Resp.success(normalizeResourceAccessUrl(resourceEntity));
         } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             rollbackNewObjects(storageService, newObjectKeyList);
             if (e instanceof IOException ioException) {
                 throw ioException;
@@ -267,6 +270,7 @@ public class ResourceController {
             try {
                 resourceEntity.setResourceType(ResourceType.valueOf(resourceType.toUpperCase()));
             } catch (IllegalArgumentException ignored) {
+                log.error(ExceptionUtils.getStackTrace(ignored));
             }
         }
     }
@@ -322,6 +326,7 @@ public class ResourceController {
             }
             writeStream(stream, variant == ResourceFileVariant.MAIN, request, response);
         } catch (FileNotFoundException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } catch (IOException e) {
             log.error("读取素材文件失败，id={}, variant={}", id, variant, e);
@@ -367,6 +372,7 @@ public class ResourceController {
             }
             return new Range(start, Math.min(end, totalLength - 1));
         } catch (NumberFormatException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return null;
         }
     }
@@ -455,18 +461,10 @@ public class ResourceController {
             try {
                 return ResourceType.valueOf(resourceType.toUpperCase());
             } catch (IllegalArgumentException ignored) {
+                log.error(ExceptionUtils.getStackTrace(ignored));
             }
         }
-        if (isImageFile(extension)) {
-            return ResourceType.IMAGE;
-        }
-        if (isVideoFile(extension)) {
-            return ResourceType.VIDEO;
-        }
-        if (isModelFile(extension)) {
-            return ResourceType.MODEL;
-        }
-        return ResourceType.IMAGE;
+        return ResourceType.getByExtension(extension);
     }
 
     private String mergeModelFormat(String configJson, String extension) {
@@ -484,23 +482,6 @@ public class ResourceController {
             case MODEL -> "model";
             default -> "image";
         };
-    }
-
-    private boolean isModelFile(String extension) {
-        String ext = StringUtils.defaultString(extension).toLowerCase();
-        return "glb".equals(ext) || "gltf".equals(ext) || "obj".equals(ext) || "stl".equals(ext);
-    }
-
-    private boolean isImageFile(String extension) {
-        String ext = StringUtils.defaultString(extension).toLowerCase();
-        return "jpg".equals(ext) || "jpeg".equals(ext) || "png".equals(ext) || "gif".equals(ext) ||
-                "bmp".equals(ext) || "svg".equals(ext) || "webp".equals(ext);
-    }
-
-    private boolean isVideoFile(String extension) {
-        String ext = StringUtils.defaultString(extension).toLowerCase();
-        return "mp4".equals(ext) || "avi".equals(ext) || "mov".equals(ext) || "wmv".equals(ext) ||
-                "flv".equals(ext) || "webm".equals(ext) || "m3u8".equals(ext) || "m4v".equals(ext);
     }
 
     private String encodeFileName(String fileName) {

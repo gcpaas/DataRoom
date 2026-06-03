@@ -221,8 +221,9 @@ Vite 构建输出目录为 `dataRoomFront/`，`base` 为 `./`。项目使用 Ele
 - 默认用户配置位于 `application-base.yml`，包含 `admin`、`developer`、`sharer`。
 - 修改图表配置结构时，要同步检查 `install.ts` 默认值、`index.vue` 渲染逻辑和 `panel/index.vue` 面板控件。
 - 修改任何前端样式前，必须先阅读并遵循 `docs/design/DESIGN.md`；交付前检查是否存在硬编码颜色、`--dr-*` 颜色变量、Element Plus 内部样式覆盖、`!important`、负字距等违规项。
+- 后端 Java 代码严禁捕获异常后不打印。禁止空 `catch`，也禁止 `catch` 后只忽略、兜底、返回或重新抛出但不记录异常栈。应引入 `org.apache.commons.lang3.exception.ExceptionUtils`，在 `catch` 中先执行 `log.error(ExceptionUtils.getStackTrace(e));`（测试代码可使用 `System.err.println(ExceptionUtils.getStackTrace(e));`），再保留原有其他处理逻辑不变。
 - 修改前端组件后，至少运行 `npm run type-check`；涉及格式或样式规范时运行 `npm run lint`。
-- 修改后端核心逻辑后，至少运行相关单测；无法运行时需要在交付说明中明确原因。
+- 修改后端核心逻辑后，至少运行相关单测；涉及 Java `catch` 块时，必须额外运行 `mvn -q -pl dataroom-server -Dtest=CatchBlockLoggingTest -DforkCount=0 test` 检查异常捕获日志规范；无法运行时需要在交付说明中明确原因。
 
 ## 技术栈
 

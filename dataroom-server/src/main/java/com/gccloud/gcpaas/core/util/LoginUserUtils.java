@@ -20,6 +20,7 @@ public class LoginUserUtils {
             }
             return (LoginUser) principal;
         } catch (UnavailableSecurityManagerException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return null;
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
