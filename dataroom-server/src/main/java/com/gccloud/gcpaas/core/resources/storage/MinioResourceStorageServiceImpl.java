@@ -53,7 +53,7 @@ public class MinioResourceStorageServiceImpl implements ResourceStorageService {
                     PutObjectArgs.builder()
                             .bucket(config.getBucket())
                             .object(objectKey)
-                            .stream(request.getFile().getInputStream(), request.getFile().getSize(), -1L)
+                            .stream(request.getFile().getInputStream(), Long.valueOf(request.getFile().getSize()), -1L)
                             .contentType(request.getFile().getContentType())
                             .build()
             );

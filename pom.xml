@@ -41,7 +41,8 @@
         <avatica.version>1.28.0</avatica.version>
         <poi.version>5.5.1</poi.version>
         <xmlbeans.version>5.3.0</xmlbeans.version>
-        <minio.version>8.5.10</minio.version>
+        <minio.version>9.0.1</minio.version>
+        <okhttp.version>5.3.2</okhttp.version>
     </properties>
 
     <dependencyManagement>
@@ -107,6 +108,11 @@
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
             <version>${minio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp-jvm</artifactId>
+            <version>${okhttp.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
