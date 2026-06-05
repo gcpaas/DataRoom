@@ -6,7 +6,7 @@ set "SCRIPT_DIR=%~dp0"
 set "PS_SCRIPT=%SCRIPT_DIR%release.ps1"
 
 REM 通过 PowerShell 执行真正的发布逻辑，绕过本机执行策略限制
-powershell -NoProfile -ExecutionPolicy Bypass -File "%PS_SCRIPT%"
+powershell -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "%PS_SCRIPT%"
 
 REM 透传 PowerShell 的退出码，便于 CI 或命令行判断发布是否成功
 set "EXIT_CODE=%ERRORLEVEL%"

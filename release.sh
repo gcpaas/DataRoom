@@ -45,6 +45,10 @@ extract_version() {
     printf '%s\n' "$version"
 }
 
+current_date() {
+    date '+%Y%m%d'
+}
+
 cd "$PROJECT_ROOT"
 
 require_file "$PROJECT_ROOT/pom.xml"
@@ -52,11 +56,16 @@ require_dir "$PROJECT_ROOT/dataRoomFront"
 require_dir "$PROJECT_ROOT/dataRoomServer"
 
 VERSION="$(extract_version)"
-PACKAGE_NAME="dataRoom-${VERSION}"
-PACKAGE_DIR="$RELEASE_DIR/$PACKAGE_NAME"
-ZIP_PATH="$RELEASE_DIR/$PACKAGE_NAME.zip"
+BUILD_DATE="$(current_date)"
+RELEASE_NAME="dataRoom-${VERSION}.${BUILD_DATE}"
+PACKAGE_DIR="$RELEASE_DIR/dataRoom"
+PACKAGE_FRONT_DIR="$PACKAGE_DIR/dataRoomFront/front"
+PACKAGE_CONFIG_DIR="$PACKAGE_DIR/config"
+PACKAGE_RESOURCE_DIR="$PACKAGE_DIR/dataRoomResource"
+ZIP_PATH="$RELEASE_DIR/$RELEASE_NAME.zip"
 
 echo "当前版本号: $VERSION"
+echo "构建日期: $BUILD_DATE"
 
 echo "准备打包前端"
 cd "$PROJECT_ROOT/dataRoomFront"
@@ -77,17 +86,20 @@ mkdir -p "$RELEASE_DIR"
 cleanup_target "$PACKAGE_DIR"
 rm -f "$ZIP_PATH"
 
-mkdir -p "$PACKAGE_DIR/dataRoomFront"
-mkdir -p "$PACKAGE_DIR/config"
+mkdir -p "$PACKAGE_FRONT_DIR"
+mkdir -p "$PACKAGE_CONFIG_DIR"
+mkdir -p "$PACKAGE_RESOURCE_DIR"
 
 cp "$PROJECT_ROOT/dataRoomServer/target/dataRoomServer.jar" "$PACKAGE_DIR/"
-cp -r "$FRONT_BUILD_DIR/." "$PACKAGE_DIR/dataRoomFront"
-cp "$PROJECT_ROOT"/dataRoomServer/src/main/resources/*.yml "$PACKAGE_DIR/config"
+cp -r "$FRONT_BUILD_DIR/." "$PACKAGE_FRONT_DIR"
+cp "$PROJECT_ROOT"/dataRoomServer/src/main/resources/*.yml "$PACKAGE_CONFIG_DIR"
 
 (
     cd "$RELEASE_DIR"
-    zip -r "$ZIP_PATH" "$PACKAGE_NAME"
+    zip -rq "$ZIP_PATH" "dataRoom"
 )
-echo "${PACKAGE_NAME}.zip包构建完毕"
+echo "${RELEASE_NAME}.zip包构建完毕"
+echo "部署包绝对路径: $ZIP_PATH"
+echo "部署教程: https://www.yuque.com/gc-starter/dataroom-plus/deploy"
 
 cleanup_target "$PACKAGE_DIR"
