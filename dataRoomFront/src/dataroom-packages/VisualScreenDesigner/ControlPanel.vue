@@ -143,9 +143,10 @@ const addTimer = () => {
   timers.value.push(newTimer)
 }
 
-const toggleTimer = (timer: PageTimer, enabled: boolean) => {
-  timer.enabled = enabled
-  ElMessage.success(enabled ? '定时器已启用' : '定时器已禁用')
+const toggleTimer = (timer: PageTimer, enabled: string | number | boolean) => {
+  const normalizedEnabled = Boolean(enabled)
+  timer.enabled = normalizedEnabled
+  ElMessage.success(normalizedEnabled ? '定时器已启用' : '定时器已禁用')
 }
 
 const openTimerConfig = (timer: PageTimer) => {
@@ -379,7 +380,7 @@ const clearUnlockedGuides = () => {
                   <div class="timer-desc">{{ timer.interval }} 毫秒1次</div>
                 </div>
                 <div class="timer-controls">
-                  <el-switch v-model="timer.enabled" size="small" @change="(val: boolean) => toggleTimer(timer, val)" />
+                  <el-switch v-model="timer.enabled" size="small" @change="(val: string | number | boolean) => toggleTimer(timer, val)" />
                   <el-button size="small" text @click="openTimerConfig(timer)">
                     <el-icon><Setting /></el-icon>
                   </el-button>

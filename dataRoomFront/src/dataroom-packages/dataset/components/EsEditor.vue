@@ -175,7 +175,7 @@ defineExpose({
             v-for="item in esDataSourceList"
             :key="item.code"
             :label="item.name"
-            :value="item.code"
+            :value="item.code || ''"
           >
             <span class="datasource-option">
               <span class="datasource-option__name">{{ item.name }}</span>

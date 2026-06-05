@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { nextTick, reactive, ref, watch } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance, FormRules, LoadFunction } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { Expand, Fold, Grid, Refresh } from '@element-plus/icons-vue'
 import { Codemirror } from 'vue-codemirror'
@@ -21,13 +21,6 @@ interface ExcelMetaTreeNode {
   comment?: string
   isLeaf?: boolean
 }
-
-interface ExcelMetaLazyNode {
-  level: number
-  data?: ExcelMetaTreeNode
-}
-
-type ExcelMetaResolve = (data: ExcelMetaTreeNode[]) => void
 
 const props = defineProps<{
   modelValue: DatasetEntity
@@ -154,17 +147,19 @@ const loadMetadataColumns = async (tableName: string): Promise<ExcelMetaTreeNode
   }
 }
 
-const loadMetadataTreeNode = async (node: ExcelMetaLazyNode, resolve: ExcelMetaResolve) => {
-  if (node.level === 0) {
-    resolve(await loadMetadataTables())
-    return
-  }
-  const nodeData = node.data
-  if (!nodeData || nodeData.nodeType !== 'table' || !nodeData.tableName) {
-    resolve([])
-    return
-  }
-  resolve(await loadMetadataColumns(nodeData.tableName))
+const loadMetadataTreeNode: LoadFunction = (node, resolve) => {
+  void (async () => {
+    if (node.level === 0) {
+      resolve(await loadMetadataTables())
+      return
+    }
+    const nodeData = node.data as ExcelMetaTreeNode | undefined
+    if (!nodeData || nodeData.nodeType !== 'table' || !nodeData.tableName) {
+      resolve([])
+      return
+    }
+    resolve(await loadMetadataColumns(nodeData.tableName))
+  })()
 }
 
 const copyMetadataNodeName = async (data: ExcelMetaTreeNode) => {

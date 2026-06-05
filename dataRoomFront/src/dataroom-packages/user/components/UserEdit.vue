@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, reactive, watch } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { CheckboxGroupValueType, FormInstance, FormRules } from 'element-plus'
 import type { UserDTO, Role, UserStatus } from '../api'
 import { userApi } from '../api'
 import { ElMessage } from 'element-plus'
@@ -166,8 +166,8 @@ const getSelectedRoles = () => {
 }
 
 // 角色选择变化
-const handleRoleChange = (values: string[]) => {
-  formData.role = values.join(',')
+const handleRoleChange = (values: CheckboxGroupValueType) => {
+  formData.role = values.map(value => String(value)).join(',')
 }
 
 defineExpose({

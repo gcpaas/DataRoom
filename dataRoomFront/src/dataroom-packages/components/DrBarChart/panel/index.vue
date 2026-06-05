@@ -491,7 +491,7 @@ const removeColor = (index: number) => {
               <span class="dr-config-panel__sub-label">颜色列表</span>
               <div class="dr-config-panel__color-list">
                 <div v-for="(color, index) in chartConfig.props.series.colors" :key="index" class="dr-config-panel__inline">
-                  <el-color-picker :model-value="color" @update:model-value="(val: string) => updateColor(index, val || color)" show-alpha />
+                  <el-color-picker :model-value="color" @update:model-value="(val: string | null) => updateColor(index, val || color)" show-alpha />
                   <el-button type="danger" :icon="'Delete'" circle size="small" @click="removeColor(index)" :disabled="chartConfig.props.series.colors.length <= 1" />
                 </div>
                 <el-button type="primary" size="small" @click="addColor">添加颜色</el-button>

@@ -54,9 +54,9 @@ const formatOptions = [
 /**
  * 更新轴线颜色中的位置值
  */
-const updateColorPosition = (index: number, position: number) => {
+const updateColorPosition = (index: number, position: number | undefined) => {
   const colorSegment = axisLineColors.value[index]
-  if (colorSegment) {
+  if (colorSegment && position !== undefined) {
     colorSegment[0] = position
   }
 }
@@ -64,9 +64,9 @@ const updateColorPosition = (index: number, position: number) => {
 /**
  * 更新轴线颜色中的颜色值
  */
-const updateColorValue = (index: number, color: string) => {
+const updateColorValue = (index: number, color: string | null) => {
   const colorSegment = axisLineColors.value[index]
-  if (colorSegment) {
+  if (colorSegment && color) {
     colorSegment[1] = color
   }
 }
@@ -209,9 +209,9 @@ const removeColorSegment = (index: number) => {
                         :step="0.1"
                         :precision="2"
                         controls-position="right"
-                        @update:model-value="(val: number) => updateColorPosition(index, val)"
+                        @update:model-value="(val: number | undefined) => updateColorPosition(index, val)"
                       />
-                      <el-color-picker :model-value="segment[1]" show-alpha @update:model-value="(val: string) => updateColorValue(index, val || segment[1])" />
+                      <el-color-picker :model-value="segment[1]" show-alpha @update:model-value="(val: string | null) => updateColorValue(index, val || segment[1])" />
                       <el-button type="danger" :icon="'Delete'" circle size="small" :disabled="chartConfig.props.axisLine.colors.length <= 1" @click="removeColorSegment(index)" />
                     </div>
                     <el-button type="primary" size="small" @click="addColorSegment">添加色段</el-button>

@@ -1,44 +1,41 @@
 <!-- 图层 -->
 <script setup lang="ts">
-import { computed, type ComputedRef, inject, type Ref, ref, watch } from 'vue'
-import type { TreeInstance } from 'element-plus'
+import { computed, type ComputedRef, inject, ref, watch } from 'vue'
+import type { FilterNodeMethodFunction, TreeInstance, TreeNodeData, TreeOptionProps } from 'element-plus'
 import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 import type { CanvasInst } from '@/dataroom-packages/PageDesigner/type/CanvasInst.ts'
 import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
-const layerTreeProps = {
+const layerTreeProps: TreeOptionProps = {
   label: 'title',
   children: 'children',
 }
-const chartList: ComputedRef<Ref<Array<ChartConfig<unknown>>>> = computed(() => {
-  return canvasInst.chartList
+const chartList: ComputedRef<Array<ChartConfig<unknown>>> = computed(() => {
+  return canvasInst.chartList.value
 })
 
 const layerTreeRef = ref<TreeInstance>()
 const layerName = ref('')
-
-interface Tree {
-  title: string
-}
 
 /**
  * 根据标题过滤图层
  * @param value
  * @param data
  */
-const filterLayer = (value: string, data: Tree) => {
+const filterLayer: FilterNodeMethodFunction = (value, data) => {
   if (!value) return true
-  return data.title.includes(value)
+  return String(data.title || '').includes(String(value))
 }
 
 watch(layerName, (val) => {
   layerTreeRef.value!.filter(val)
 })
 
-const onLayerClick = (data: ChartConfig<unknown>) => {
-  console.log('点击图层', data.id)
-  canvasInst.activeChartById(data.id)
+const onLayerClick = (data: TreeNodeData) => {
+  const chart = data as ChartConfig<unknown>
+  console.log('点击图层', chart.id)
+  canvasInst.activeChartById(chart.id)
 }
 </script>
 

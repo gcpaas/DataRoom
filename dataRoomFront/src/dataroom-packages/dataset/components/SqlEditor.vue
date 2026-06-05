@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, reactive, watch } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance, FormRules, LoadFunction } from 'element-plus'
 import type { DatasetEntity } from '../api'
 import { datasetApi } from '../api'
 import { dataSourceApi, type DataSourceColumnMeta, type DataSourceTableMeta } from '@/dataroom-packages/dataSource/api'
@@ -27,13 +27,6 @@ interface DataSourceMetaTreeNode {
   comment?: string
   isLeaf?: boolean
 }
-
-interface DataSourceMetaLazyNode {
-  level: number
-  data?: DataSourceMetaTreeNode
-}
-
-type DataSourceMetaResolve = (data: DataSourceMetaTreeNode[]) => void
 
 const props = defineProps<{
   modelValue: DatasetEntity
@@ -201,17 +194,19 @@ const loadMetadataColumns = async (tableName: string): Promise<DataSourceMetaTre
   }
 }
 
-const loadMetadataTreeNode = async (node: DataSourceMetaLazyNode, resolve: DataSourceMetaResolve) => {
-  if (node.level === 0) {
-    resolve(await loadMetadataTables())
-    return
-  }
-  const nodeData = node.data
-  if (!nodeData || nodeData.nodeType !== 'table' || !nodeData.tableName) {
-    resolve([])
-    return
-  }
-  resolve(await loadMetadataColumns(nodeData.tableName))
+const loadMetadataTreeNode: LoadFunction = (node, resolve) => {
+  void (async () => {
+    if (node.level === 0) {
+      resolve(await loadMetadataTables())
+      return
+    }
+    const nodeData = node.data as DataSourceMetaTreeNode | undefined
+    if (!nodeData || nodeData.nodeType !== 'table' || !nodeData.tableName) {
+      resolve([])
+      return
+    }
+    resolve(await loadMetadataColumns(nodeData.tableName))
+  })()
 }
 
 const copyMetadataNodeName = async (data: DataSourceMetaTreeNode) => {
@@ -441,7 +436,7 @@ defineExpose({
             v-for="item in sqlDataSourceList"
             :key="item.code"
             :label="item.name"
-            :value="item.code"
+            :value="item.code || ''"
           >
             <span class="datasource-option">
               <span class="datasource-option__name">{{ item.name }}</span>

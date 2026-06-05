@@ -191,19 +191,20 @@ const isBehaviorEnabled = (behavior: Behavior): boolean => {
  * @param behavior
  * @param enabled
  */
-const toggleBehavior = (behavior: Behavior, enabled: boolean) => {
+const toggleBehavior = (behavior: Behavior, enabled: string | number | boolean) => {
+  const normalizedEnabled = Boolean(enabled)
   if (!chartConfig.value.behaviors) {
     chartConfig.value.behaviors = {}
   }
   const oriBehavior = chartConfig.value.behaviors[behavior.method]
   if (!oriBehavior) {
     chartConfig.value.behaviors[behavior.method] = {
-      disabled: !enabled,
+      disabled: !normalizedEnabled,
       actions: [],
     }
     return
   }
-  oriBehavior.disabled = !enabled
+  oriBehavior.disabled = !normalizedEnabled
 }
 
 /**
@@ -427,7 +428,7 @@ const triggerAutoRefresh = () => {
                   <div class="behavior-desc">{{ behavior.desc }}</div>
                 </div>
                 <div class="behavior-controls">
-                  <el-switch :model-value="isBehaviorEnabled(behavior)" size="small" @change="(val: boolean) => toggleBehavior(behavior, val)" />
+                  <el-switch :model-value="isBehaviorEnabled(behavior)" size="small" @change="(val: string | number | boolean) => toggleBehavior(behavior, val)" />
                   <el-icon class="setting-icon" @click="openBehaviorConfig(behavior)">
                     <Setting />
                   </el-icon>

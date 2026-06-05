@@ -217,8 +217,13 @@ const handleDownload = () => {
   link.click()
 }
 
+const getSliderNumber = (value: number | number[]) => {
+  return Array.isArray(value) ? value[0] ?? 0 : value
+}
+
 // Material color update
-const handleMaterialColorChange = (color: string) => {
+const handleMaterialColorChange = (color: string | null) => {
+  if (!color) return
   localMaterialConfig.value.color = color
   viewerRef.value?.updateMaterial(localMaterialConfig.value)
 }
@@ -237,7 +242,8 @@ const handlePointChange = () => {
 }
 
 // Background change
-const handleBackgroundChange = (color: string) => {
+const handleBackgroundChange = (color: string | null) => {
+  if (!color) return
   localBackgroundConfig.value.value = color
   viewerRef.value?.updateBackground(localBackgroundConfig.value)
 }
@@ -347,7 +353,7 @@ const handleBackgroundChange = (color: string) => {
                   <span class="config-label">粗糙度</span>
                   <el-slider
                     :model-value="localMaterialConfig.roughness * 100"
-                    @update:model-value="(v: number) => { localMaterialConfig.roughness = v / 100; viewerRef?.updateMaterial(localMaterialConfig) }"
+                    @update:model-value="(v: number | number[]) => { localMaterialConfig.roughness = getSliderNumber(v) / 100; viewerRef?.updateMaterial(localMaterialConfig) }"
                     :min="0"
                     :max="100"
                     :show-tooltip="true"
@@ -358,7 +364,7 @@ const handleBackgroundChange = (color: string) => {
                   <span class="config-label">金属度</span>
                   <el-slider
                     :model-value="localMaterialConfig.metalness * 100"
-                    @update:model-value="(v: number) => { localMaterialConfig.metalness = v / 100; viewerRef?.updateMaterial(localMaterialConfig) }"
+                    @update:model-value="(v: number | number[]) => { localMaterialConfig.metalness = getSliderNumber(v) / 100; viewerRef?.updateMaterial(localMaterialConfig) }"
                     :min="0"
                     :max="100"
                     :show-tooltip="true"
@@ -369,7 +375,7 @@ const handleBackgroundChange = (color: string) => {
                   <span class="config-label">透明度</span>
                   <el-slider
                     :model-value="localMaterialConfig.opacity * 100"
-                    @update:model-value="(v: number) => { localMaterialConfig.opacity = v / 100; localMaterialConfig.transparent = v < 100; viewerRef?.updateMaterial(localMaterialConfig) }"
+                    @update:model-value="(v: number | number[]) => { const value = getSliderNumber(v); localMaterialConfig.opacity = value / 100; localMaterialConfig.transparent = value < 100; viewerRef?.updateMaterial(localMaterialConfig) }"
                     :min="0"
                     :max="100"
                     :show-tooltip="true"
@@ -380,7 +386,7 @@ const handleBackgroundChange = (color: string) => {
                   <span class="config-label">线框模式</span>
                   <el-switch
                     :model-value="localMaterialConfig.wireframe"
-                    @update:model-value="(v: boolean) => { localMaterialConfig.wireframe = v; viewerRef?.updateMaterial(localMaterialConfig) }"
+                    @update:model-value="(v: string | number | boolean) => { localMaterialConfig.wireframe = Boolean(v); viewerRef?.updateMaterial(localMaterialConfig) }"
                   />
                 </div>
               </div>
@@ -392,14 +398,14 @@ const handleBackgroundChange = (color: string) => {
                   <span class="config-label">环境光</span>
                   <el-switch
                     :model-value="localLightingConfig.ambient.enabled"
-                    @update:model-value="(v: boolean) => { localLightingConfig.ambient.enabled = v; handleAmbientChange() }"
+                    @update:model-value="(v: string | number | boolean) => { localLightingConfig.ambient.enabled = Boolean(v); handleAmbientChange() }"
                   />
                 </div>
                 <div class="config-item" v-if="localLightingConfig.ambient.enabled">
                   <span class="config-label">环境光强度</span>
                   <el-slider
                     :model-value="localLightingConfig.ambient.intensity * 100"
-                    @update:model-value="(v: number) => { localLightingConfig.ambient.intensity = v / 100; handleAmbientChange() }"
+                    @update:model-value="(v: number | number[]) => { localLightingConfig.ambient.intensity = getSliderNumber(v) / 100; handleAmbientChange() }"
                     :min="0"
                     :max="100"
                   />
@@ -409,14 +415,14 @@ const handleBackgroundChange = (color: string) => {
                   <span class="config-label">平行光</span>
                   <el-switch
                     :model-value="localLightingConfig.directional.enabled"
-                    @update:model-value="(v: boolean) => { localLightingConfig.directional.enabled = v; handleDidirectionalChange() }"
+                    @update:model-value="(v: string | number | boolean) => { localLightingConfig.directional.enabled = Boolean(v); handleDidirectionalChange() }"
                   />
                 </div>
                 <div class="config-item" v-if="localLightingConfig.directional.enabled">
                   <span class="config-label">平行光强度</span>
                   <el-slider
                     :model-value="localLightingConfig.directional.intensity * 100"
-                    @update:model-value="(v: number) => { localLightingConfig.directional.intensity = v / 100; handleDidirectionalChange() }"
+                    @update:model-value="(v: number | number[]) => { localLightingConfig.directional.intensity = getSliderNumber(v) / 100; handleDidirectionalChange() }"
                     :min="0"
                     :max="100"
                   />
@@ -426,14 +432,14 @@ const handleBackgroundChange = (color: string) => {
                   <span class="config-label">点光源</span>
                   <el-switch
                     :model-value="localLightingConfig.point.enabled"
-                    @update:model-value="(v: boolean) => { localLightingConfig.point.enabled = v; handlePointChange() }"
+                    @update:model-value="(v: string | number | boolean) => { localLightingConfig.point.enabled = Boolean(v); handlePointChange() }"
                   />
                 </div>
                 <div class="config-item" v-if="localLightingConfig.point.enabled">
                   <span class="config-label">点光源强度</span>
                   <el-slider
                     :model-value="localLightingConfig.point.intensity * 100"
-                    @update:model-value="(v: number) => { localLightingConfig.point.intensity = v / 100; handlePointChange() }"
+                    @update:model-value="(v: number | number[]) => { localLightingConfig.point.intensity = getSliderNumber(v) / 100; handlePointChange() }"
                     :min="0"
                     :max="100"
                   />

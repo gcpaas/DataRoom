@@ -78,9 +78,10 @@ const addTimer = () => {
  * @param timer
  * @param enabled
  */
-const toggleTimer = (timer: PageTimer, enabled: boolean) => {
-  timer.enabled = enabled
-  ElMessage.success(enabled ? '定时器已启用' : '定时器已禁用')
+const toggleTimer = (timer: PageTimer, enabled: string | number | boolean) => {
+  const normalizedEnabled = Boolean(enabled)
+  timer.enabled = normalizedEnabled
+  ElMessage.success(normalizedEnabled ? '定时器已启用' : '定时器已禁用')
 }
 
 /**
@@ -208,7 +209,7 @@ const deleteTimer = (id: string) => {
                   <div class="timer-desc">{{ timer.interval }} 毫秒1次</div>
                 </div>
                 <div class="timer-controls">
-                  <el-switch v-model="timer.enabled" size="small" @change="(val: boolean) => toggleTimer(timer, val)" />
+                  <el-switch v-model="timer.enabled" size="small" @change="(val: string | number | boolean) => toggleTimer(timer, val)" />
                   <el-icon class="setting-icon" @click="openTimerConfig(timer)">
                     <Setting />
                   </el-icon>

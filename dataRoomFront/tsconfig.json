@@ -1,13 +1,8 @@
 {
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "auto-imports.d.ts",   // 👈 加上这个
-    "components.d.ts"     // 👈 加上这个
-  ],
   "files": [],
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo"
+  },
   "references": [
     {
       "path": "./tsconfig.node.json"

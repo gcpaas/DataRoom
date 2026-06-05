@@ -18,7 +18,7 @@ dataroom:
   resource:
     # 资源上传存储路径，可以使用绝对路径
     basePath: ./dataRoomResource
-    # 前端部署包所在目录，可以使用绝对路径
+    # 前端部署包所在目录，可以使用绝对路径，该目录下必须包含front文件夹
     uiPath: ./dataRoomFront
     urlPrefix: http://127.0.0.1:${server.port}${server.servlet.context-path}/static/
     storage:

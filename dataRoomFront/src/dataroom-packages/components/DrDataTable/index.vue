@@ -38,6 +38,7 @@ const keyword = ref('')
 const debouncedKeyword = ref('')
 const currentPage = ref(1)
 const pageSize = ref(chart.props.pagination.pageSize)
+type DefaultTableSortOrder = 'ascending' | 'descending'
 const sortState = ref<{
   field: string
   order: SortOrder
@@ -93,6 +94,16 @@ const pagedRows = computed(() => {
   return getPaginationItems(sortedRows.value, currentPage.value, pageSize.value)
 })
 
+const tableDefaultSort = computed<{ prop: string; order: DefaultTableSortOrder } | undefined>(() => {
+  if (!chart.props.sort.defaultField || chart.props.sort.defaultOrder === 'none') {
+    return undefined
+  }
+  return {
+    prop: chart.props.sort.defaultField,
+    order: chart.props.sort.defaultOrder,
+  }
+})
+
 const tableHeight = computed(() => {
   const searchHeight = chart.props.search.show ? 40 : 0
   const paginationHeight = chart.props.pagination.show ? 40 : 0
@@ -121,10 +132,10 @@ const formatCellValue = (row: DatasetRow, column: TableColumnConfig) => {
   })
 }
 
-const getRowKey = (row: DatasetRow) => {
+const getRowKey = (row: DatasetRow): string => {
   const field = rowKeyField.value
   const value = getFieldValue(row, field)
-  return value === undefined || value === null || value === '' ? rawRows.value.indexOf(row) : String(value)
+  return value === undefined || value === null || value === '' ? String(rawRows.value.indexOf(row)) : String(value)
 }
 
 const getColumnWidth = (column: TableColumnConfig) => {
@@ -314,7 +325,7 @@ defineExpose<ComponentExpose>({
       :row-style="getRowStyle"
       :cell-style="getCellStyle"
       :cell-class-name="getCellClassName"
-      :default-sort="{ prop: chart.props.sort.defaultField, order: chart.props.sort.defaultOrder }"
+      :default-sort="tableDefaultSort"
       @row-click="handleRowClick"
       @cell-click="handleCellClick"
       @sort-change="handleSortChange"
