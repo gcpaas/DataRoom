@@ -7,11 +7,11 @@ DataRoom 需要复用 `/Users/liuchengbiao/Downloads/datav-vue3-master/packages/
 - `DrBorder`：边框组件，通过配置选择 `BorderBox1` 到 `BorderBox13`。
 - `DrDecoration`：装饰组件，通过配置选择 `Decoration1` 到 `Decoration12`。
 
-迁移后的 DataV 源码放在 `data-room-ui/src/dataroom-packages/datav`。原始下载目录只作为来源，不在本次工作中修改。
+迁移后的 DataV 源码放在 `dataRoomFront/src/dataroom-packages/datav`。原始下载目录只作为来源，不在本次工作中修改。
 
 ## 目标
 
-1. 将 `packages/datav-vue3` 复制到 `data-room-ui/src/dataroom-packages/datav`，作为 DataRoom 内部素材库。
+1. 将 `packages/datav-vue3` 复制到 `dataRoomFront/src/dataroom-packages/datav`，作为 DataRoom 内部素材库。
 2. 新增 `DrBorder` 和 `DrDecoration` 两个符合 DataRoom 组件规范的组件。
 3. 两个组件按当前配置异步加载 DataV 子组件，不全局注册 DataV 全量插件。
 4. 配置模型覆盖所有边框和装饰公开属性。
@@ -30,7 +30,7 @@ DataRoom 需要复用 `/Users/liuchengbiao/Downloads/datav-vue3-master/packages/
 采用“内部素材库 + DataRoom 包装组件”的结构：
 
 ```text
-data-room-ui/src/dataroom-packages/
+dataRoomFront/src/dataroom-packages/
 ├── datav/
 │   ├── components/
 │   │   ├── BorderBox1/
@@ -199,7 +199,7 @@ const decorationComponentMap = {
 
 ## 构建适配
 
-DataV 边框组件主要使用 TSX，样式使用 Less。当前 `data-room-ui/package.json` 未包含 DataV 所需的全部依赖。实施时新增：
+DataV 边框组件主要使用 TSX，样式使用 Less。当前 `dataRoomFront/package.json` 未包含 DataV 所需的全部依赖。实施时新增：
 
 1. 增加 `@vitejs/plugin-vue-jsx`，保留 DataV 边框 TSX 源码。
 2. 增加 `less`，保留 DataV 原 Less 样式。
@@ -232,13 +232,13 @@ DataV 边框组件主要使用 TSX，样式使用 Less。当前 `data-room-ui/pa
 
 ## 组件库注册
 
-更新 `data-room-ui/src/dataroom-packages/constant/ComponentLibTagTypeConst.ts`：
+更新 `dataRoomFront/src/dataroom-packages/constant/ComponentLibTagTypeConst.ts`：
 
 ```ts
 DECORATION = 'decoration'
 ```
 
-更新 `data-room-ui/src/dataroom-packages/_components/PluginRegister.ts`：
+更新 `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`：
 
 - 新增分类名称“装饰素材”。
 - 导入 `DrBorderPlugin` 和 `DrDecorationPlugin`。
@@ -269,7 +269,7 @@ DECORATION = 'decoration'
 实施完成后至少执行：
 
 ```bash
-cd data-room-ui
+cd dataRoomFront
 npm run type-check
 npm run lint
 ```
@@ -279,7 +279,7 @@ npm run lint
 建议启动前端开发服务做手动验证：
 
 ```bash
-cd data-room-ui
+cd dataRoomFront
 npm run dev
 ```
 

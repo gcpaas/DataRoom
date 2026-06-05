@@ -141,13 +141,13 @@ basicConfig.zoom.value = currentDisplayedZoomPercent
 运行：
 
 ```bash
-npx tsx data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
-npx tsx data-room-ui/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
-cd data-room-ui && npm run type-check
+npx tsx dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
+npx tsx dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
+cd dataRoomFront && npm run type-check
 ```
 
 如果模板或状态样式改动较多，也运行：
 
 ```bash
-cd data-room-ui && npm run build
+cd dataRoomFront && npm run build
 ```

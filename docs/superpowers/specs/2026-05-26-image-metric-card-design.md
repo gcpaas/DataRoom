@@ -8,7 +8,7 @@
 
 ## 组件定位
 
-- 组件目录：`data-room-ui/src/dataroom-packages/components/DrImageMetricCard/`
+- 组件目录：`dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/`
 - 组件类型：`DrImageMetricCard`
 - 组件库名称：`图片指标卡`
 - 组件库分类：`ComponentLibTagTypeConst.METRIC`
@@ -249,15 +249,15 @@ font-feature-settings: "tnum";
 
 新增文件：
 
-- `data-room-ui/src/dataroom-packages/components/DrImageMetricCard/install.ts`
-- `data-room-ui/src/dataroom-packages/components/DrImageMetricCard/index.vue`
-- `data-room-ui/src/dataroom-packages/components/DrImageMetricCard/panel/index.vue`
-- `data-room-ui/src/dataroom-packages/components/DrImageMetricCard/plugin.ts`
-- `data-room-ui/src/dataroom-packages/components/DrImageMetricCard/images/image-metric-card.svg`
+- `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/install.ts`
+- `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/index.vue`
+- `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/panel/index.vue`
+- `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/plugin.ts`
+- `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/images/image-metric-card.svg`
 
 修改文件：
 
-- `data-room-ui/src/dataroom-packages/_components/PluginRegister.ts`
+- `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`
 
 ## 测试与验证
 

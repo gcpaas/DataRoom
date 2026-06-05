@@ -30,7 +30,7 @@ mvn test
 mvn test -Dtest=JsonUtilsTest
 
 # 启动服务，默认使用 H2 数据库，端口 8081
-mvn spring-boot:run -pl dataroom-server
+mvn spring-boot:run -pl dataRoomServer
 ```
 
 服务默认访问地址为 `http://localhost:8081/dataRoom`。接口文档地址为 `/doc.html`，使用 Knife4j / Swagger。
@@ -38,7 +38,7 @@ mvn spring-boot:run -pl dataroom-server
 ### 前端：Vue 3 / Vite
 
 ```bash
-cd data-room-ui
+cd dataRoomFront
 
 # 安装依赖
 npm install
@@ -46,7 +46,7 @@ npm install
 # 启动开发服务
 npm run dev
 
-# 生产构建，产物输出到 dataRoomFront/
+# 生产构建，产物输出到 dataRoom/
 npm run build
 
 # 运行 lint 并自动修复
@@ -66,12 +66,12 @@ Node.js 版本要求：`^20.19.0 || >=22.12.0`。
 ```text
 DataRoom/
 ├── dataroom-core/       # 核心库占位模块，目前内容较少
-├── dataroom-server/     # Spring Boot 主应用，后端代码集中在这里
+├── dataRoomServer/     # Spring Boot 主应用，后端代码集中在这里
 │   └── src/main/java/com/gccloud/gcpaas/core/
-└── data-room-ui/        # Vue 3 前端应用
+└── dataRoomFront/        # Vue 3 前端应用
 ```
 
-后端业务代码主要位于 `dataroom-server/src/main/java/com/gccloud/gcpaas/core/` 包下。
+后端业务代码主要位于 `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/` 包下。
 
 ## 后端架构
 
@@ -129,7 +129,7 @@ DataRoom/
 
 ## 前端架构
 
-前端主要源码位于 `data-room-ui/src/dataroom-packages/`。
+前端主要源码位于 `dataRoomFront/src/dataroom-packages/`。
 
 | 目录 | 说明 |
 |------|------|
@@ -165,7 +165,7 @@ export const datasetFields   // 数据集字段映射定义
 
 - 可视化配置字段必须先在 `install.ts` 的 `PropsInterface` 和默认值中声明。
 - 面板控件应直接绑定到 `chart.props`，避免复制整份 props 到本地状态。
-- 当前参考实现为 `data-room-ui/src/dataroom-packages/components/DrBarChart/panel/index.vue`。
+- 当前参考实现为 `dataRoomFront/src/dataroom-packages/components/DrBarChart/panel/index.vue`。
 
 ### 前端设计规范
 
@@ -207,7 +207,7 @@ export const datasetFields   // 数据集字段映射定义
 | `/dataRoom/pageDesigner/:pageCode` | 网格化页面设计器 |
 | `/dataRoom/visualScreenDesigner/:pageCode` | 像素级大屏设计器 |
 
-Vite 构建输出目录为 `dataRoomFront/`，`base` 为 `./`。项目使用 Element Plus 和 Vue API 自动导入，并包含自定义 `ReplaceThisPluginType` 插件，用于注入组件类型常量。
+Vite 构建输出目录为 `dataRoom/`，`base` 为 `./`。项目使用 Element Plus 和 Vue API 自动导入，并包含自定义 `ReplaceThisPluginType` 插件，用于注入组件类型常量。
 
 ## 关键开发约定
 
@@ -223,7 +223,7 @@ Vite 构建输出目录为 `dataRoomFront/`，`base` 为 `./`。项目使用 Ele
 - 修改任何前端样式前，必须先阅读并遵循 `docs/design/DESIGN.md`；交付前检查是否存在硬编码颜色、`--dr-*` 颜色变量、Element Plus 内部样式覆盖、`!important`、负字距等违规项。
 - 后端 Java 代码严禁捕获异常后不打印。禁止空 `catch`，也禁止 `catch` 后只忽略、兜底、返回或重新抛出但不记录异常栈。应引入 `org.apache.commons.lang3.exception.ExceptionUtils`，在 `catch` 中先执行 `log.error(ExceptionUtils.getStackTrace(e));`（测试代码可使用 `System.err.println(ExceptionUtils.getStackTrace(e));`），再保留原有其他处理逻辑不变。
 - 修改前端组件后，至少运行 `npm run type-check`；涉及格式或样式规范时运行 `npm run lint`。
-- 修改后端核心逻辑后，至少运行相关单测；涉及 Java `catch` 块时，必须额外运行 `mvn -q -pl dataroom-server -Dtest=CatchBlockLoggingTest -DforkCount=0 test` 检查异常捕获日志规范；无法运行时需要在交付说明中明确原因。
+- 修改后端核心逻辑后，至少运行相关单测；涉及 Java `catch` 块时，必须额外运行 `mvn -q -pl dataRoomServer -Dtest=CatchBlockLoggingTest -DforkCount=0 test` 检查异常捕获日志规范；无法运行时需要在交付说明中明确原因。
 
 ## 技术栈
 

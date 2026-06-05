@@ -70,7 +70,7 @@ DataRoom 当前素材上传只支持本地文件系统。后端在 `ResourceCont
 dataroom:
   resource:
     basePath: ./dataRoomResource
-    uiPath: ./data-room-ui
+    uiPath: ./dataRoomFront
     urlPrefix: http://127.0.0.1:${server.port}${server.servlet.context-path}/static/
     storage:
       type: local

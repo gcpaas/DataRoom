@@ -2,7 +2,7 @@ VERSION=$(grep -A 1 '<artifactId>DataRoom-Plus</artifactId>' ./pom.xml | grep '<
 echo "当前版本号: $VERSION"
 
 echo "准备打包前端"
-cd ./dataroom-ui
+cd ./dataRoomFront
 npm run build
 echo "前端打包完毕"
 
@@ -15,11 +15,11 @@ echo "准备构建RELEASE包"
 rm -rf ./RELEASE
 mkdir -p RELEASE/dataRoom-${VERSION}
 cd RELEASE/dataRoom-${VERSION}
-cp ../../dataroom-server/target/dataRoomServer.jar .
-mkdir dataroom-ui
-cp -r ../../dataroom-ui/dataRoomFront dataroom-ui
+cp ../../dataRoomServer/target/dataRoomServer.jar .
+mkdir dataRoomFront
+cp -r ../../dataRoomFront/dataRoom/. dataRoomFront
 mkdir config
-cp ../../dataroom-server/src/main/resources/*.yml config
+cp ../../dataRoomServer/src/main/resources/*.yml config
 cd ..
 zip -r dataRoom-${VERSION}.zip dataRoom-${VERSION}/
 echo "dataRoom-${VERSION}.zip包构建完毕"

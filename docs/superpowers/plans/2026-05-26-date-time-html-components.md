@@ -12,35 +12,35 @@
 
 ## File Structure
 
-- Modify `data-room-ui/package.json`: add `@codemirror/lang-html` and `@codemirror/lang-css`.
-- Modify `data-room-ui/package-lock.json`: lock the new CodeMirror language packages.
-- Create `data-room-ui/src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs`: static regression script for both component directories, exports, registration, and forbidden panel style patterns.
-- Create `data-room-ui/src/dataroom-packages/components/DrDateTime/time-format.ts`: date format union, format options, and browser-local formatter.
-- Create `data-room-ui/src/dataroom-packages/components/DrDateTime/install.ts`: component contract, defaults, behaviors, dataset field list.
-- Create `data-room-ui/src/dataroom-packages/components/DrDateTime/index.vue`: timer-driven date/time rendering.
-- Create `data-room-ui/src/dataroom-packages/components/DrDateTime/panel/index.vue`: Element Plus configuration panel.
-- Create `data-room-ui/src/dataroom-packages/components/DrDateTime/plugin.ts`: component library metadata.
-- Create `data-room-ui/src/dataroom-packages/components/DrDateTime/images/time.svg`: thumbnail.
-- Create `data-room-ui/src/dataroom-packages/components/DrHtml/html-render.ts`: placeholder extraction, dataset substitution, HTML escaping, sanitization, and iframe `srcdoc` generation.
-- Create `data-room-ui/src/dataroom-packages/components/DrHtml/install.ts`: component contract, defaults, behaviors, dataset field list.
-- Create `data-room-ui/src/dataroom-packages/components/DrHtml/index.vue`: iframe sandbox rendering and dataset refresh handling.
-- Create `data-room-ui/src/dataroom-packages/components/DrHtml/panel/index.vue`: summary panel and CodeMirror edit dialog.
-- Create `data-room-ui/src/dataroom-packages/components/DrHtml/plugin.ts`: component library metadata.
-- Create `data-room-ui/src/dataroom-packages/components/DrHtml/images/html.svg`: thumbnail.
-- Modify `data-room-ui/src/dataroom-packages/_components/PluginRegister.ts`: import both plugins and add them to `pluginList`.
+- Modify `dataRoomFront/package.json`: add `@codemirror/lang-html` and `@codemirror/lang-css`.
+- Modify `dataRoomFront/package-lock.json`: lock the new CodeMirror language packages.
+- Create `dataRoomFront/src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs`: static regression script for both component directories, exports, registration, and forbidden panel style patterns.
+- Create `dataRoomFront/src/dataroom-packages/components/DrDateTime/time-format.ts`: date format union, format options, and browser-local formatter.
+- Create `dataRoomFront/src/dataroom-packages/components/DrDateTime/install.ts`: component contract, defaults, behaviors, dataset field list.
+- Create `dataRoomFront/src/dataroom-packages/components/DrDateTime/index.vue`: timer-driven date/time rendering.
+- Create `dataRoomFront/src/dataroom-packages/components/DrDateTime/panel/index.vue`: Element Plus configuration panel.
+- Create `dataRoomFront/src/dataroom-packages/components/DrDateTime/plugin.ts`: component library metadata.
+- Create `dataRoomFront/src/dataroom-packages/components/DrDateTime/images/time.svg`: thumbnail.
+- Create `dataRoomFront/src/dataroom-packages/components/DrHtml/html-render.ts`: placeholder extraction, dataset substitution, HTML escaping, sanitization, and iframe `srcdoc` generation.
+- Create `dataRoomFront/src/dataroom-packages/components/DrHtml/install.ts`: component contract, defaults, behaviors, dataset field list.
+- Create `dataRoomFront/src/dataroom-packages/components/DrHtml/index.vue`: iframe sandbox rendering and dataset refresh handling.
+- Create `dataRoomFront/src/dataroom-packages/components/DrHtml/panel/index.vue`: summary panel and CodeMirror edit dialog.
+- Create `dataRoomFront/src/dataroom-packages/components/DrHtml/plugin.ts`: component library metadata.
+- Create `dataRoomFront/src/dataroom-packages/components/DrHtml/images/html.svg`: thumbnail.
+- Modify `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`: import both plugins and add them to `pluginList`.
 
 Existing unrelated worktree changes must be preserved. Before editing `PluginRegister.ts`, read its current content and patch only the new imports and `pluginList` entries.
 
 ## Task 1: Dependencies and Static Regression Script
 
 **Files:**
-- Modify: `data-room-ui/package.json`
-- Modify: `data-room-ui/package-lock.json`
-- Create: `data-room-ui/src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs`
+- Modify: `dataRoomFront/package.json`
+- Modify: `dataRoomFront/package-lock.json`
+- Create: `dataRoomFront/src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs`
 
 - [ ] **Step 1: Install CodeMirror language packages**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npm install @codemirror/lang-html @codemirror/lang-css
@@ -50,7 +50,7 @@ Expected: `package.json` and `package-lock.json` include both packages under dep
 
 - [ ] **Step 2: Write the failing static regression script**
 
-Create `data-room-ui/src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs` with this content:
+Create `dataRoomFront/src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs` with this content:
 
 ```js
 import { existsSync, readFileSync } from 'node:fs'
@@ -123,7 +123,7 @@ assert(packageSource.includes('"@codemirror/lang-css"'), 'package.json must incl
 
 - [ ] **Step 3: Run the static script and verify it fails for missing components**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 node src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs
@@ -134,12 +134,12 @@ Expected: FAIL with `DrDateTime directory must exist`.
 ## Task 2: DrDateTime Component
 
 **Files:**
-- Create: `data-room-ui/src/dataroom-packages/components/DrDateTime/time-format.ts`
-- Create: `data-room-ui/src/dataroom-packages/components/DrDateTime/install.ts`
-- Create: `data-room-ui/src/dataroom-packages/components/DrDateTime/index.vue`
-- Create: `data-room-ui/src/dataroom-packages/components/DrDateTime/panel/index.vue`
-- Create: `data-room-ui/src/dataroom-packages/components/DrDateTime/plugin.ts`
-- Create: `data-room-ui/src/dataroom-packages/components/DrDateTime/images/time.svg`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrDateTime/time-format.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrDateTime/install.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrDateTime/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrDateTime/panel/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrDateTime/plugin.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrDateTime/images/time.svg`
 
 - [ ] **Step 1: Create the date formatting helper**
 
@@ -289,7 +289,7 @@ Create `images/time.svg` as a simple clock thumbnail that uses `currentColor` fo
 
 - [ ] **Step 6: Run type-check for the new component**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npm run type-check
@@ -300,7 +300,7 @@ Expected: PASS for `DrDateTime` files. It may still fail if `DrHtml` imports hav
 ## Task 3: DrHtml Rendering Utilities
 
 **Files:**
-- Create: `data-room-ui/src/dataroom-packages/components/DrHtml/html-render.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrHtml/html-render.ts`
 
 - [ ] **Step 1: Create `html-render.ts`**
 
@@ -423,7 +423,7 @@ export const buildHtmlSrcdoc = (
 
 - [ ] **Step 2: Run type-check**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npm run type-check
@@ -434,11 +434,11 @@ Expected: PASS for `html-render.ts`. If TypeScript reports DOM type issues, keep
 ## Task 4: DrHtml Component
 
 **Files:**
-- Create: `data-room-ui/src/dataroom-packages/components/DrHtml/install.ts`
-- Create: `data-room-ui/src/dataroom-packages/components/DrHtml/index.vue`
-- Create: `data-room-ui/src/dataroom-packages/components/DrHtml/panel/index.vue`
-- Create: `data-room-ui/src/dataroom-packages/components/DrHtml/plugin.ts`
-- Create: `data-room-ui/src/dataroom-packages/components/DrHtml/images/html.svg`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrHtml/install.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrHtml/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrHtml/panel/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrHtml/plugin.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrHtml/images/html.svg`
 
 - [ ] **Step 1: Create `install.ts`**
 
@@ -565,7 +565,7 @@ Create `images/html.svg` as a simple HTML tag thumbnail that uses `currentColor`
 
 - [ ] **Step 5: Run type-check**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npm run type-check
@@ -576,7 +576,7 @@ Expected: PASS for `DrHtml` files after dependency installation.
 ## Task 5: Component Library Registration
 
 **Files:**
-- Modify: `data-room-ui/src/dataroom-packages/_components/PluginRegister.ts`
+- Modify: `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`
 
 - [ ] **Step 1: Add imports without disturbing existing user changes**
 
@@ -606,7 +606,7 @@ Place `DrDateTimePlugin` near `DrTextPlugin` and `DrHtmlPlugin` near `DrIframePl
 
 - [ ] **Step 3: Run the static regression script**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 node src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs
@@ -621,7 +621,7 @@ Expected: PASS.
 
 - [ ] **Step 1: Run front-end type-check**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npm run type-check
@@ -631,7 +631,7 @@ Expected: PASS.
 
 - [ ] **Step 2: Run front-end lint**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npm run lint
@@ -644,7 +644,7 @@ Expected: PASS. If ESLint auto-fixes files, review the diff and keep only fixes 
 Run from repo root:
 
 ```bash
-rg -n ":deep\\(\\.el-|::v-deep|/deep/|>>>|!important|--dr-" data-room-ui/src/dataroom-packages/components/DrDateTime data-room-ui/src/dataroom-packages/components/DrHtml
+rg -n ":deep\\(\\.el-|::v-deep|/deep/|>>>|!important|--dr-" dataRoomFront/src/dataroom-packages/components/DrDateTime dataRoomFront/src/dataroom-packages/components/DrHtml
 ```
 
 Expected: no matches.
@@ -654,7 +654,7 @@ Expected: no matches.
 Run from repo root:
 
 ```bash
-rg -n "#[0-9a-fA-F]{3,8}|rgb\\(|rgba\\(|hsl\\(|hsla\\(" data-room-ui/src/dataroom-packages/components/DrDateTime data-room-ui/src/dataroom-packages/components/DrHtml
+rg -n "#[0-9a-fA-F]{3,8}|rgb\\(|rgba\\(|hsl\\(|hsla\\(" dataRoomFront/src/dataroom-packages/components/DrDateTime dataRoomFront/src/dataroom-packages/components/DrHtml
 ```
 
 Expected: matches are only user-authored default component content in `DrHtml/install.ts`, default render colors in component props, or SVG authored content. Panel shell styles must not introduce hardcoded UI colors.
@@ -664,7 +664,7 @@ Expected: matches are only user-authored default component content in `DrHtml/in
 Run from repo root:
 
 ```bash
-git diff -- data-room-ui/package.json data-room-ui/package-lock.json data-room-ui/src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs data-room-ui/src/dataroom-packages/components/DrDateTime data-room-ui/src/dataroom-packages/components/DrHtml data-room-ui/src/dataroom-packages/_components/PluginRegister.ts
+git diff -- dataRoomFront/package.json dataRoomFront/package-lock.json dataRoomFront/src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs dataRoomFront/src/dataroom-packages/components/DrDateTime dataRoomFront/src/dataroom-packages/components/DrHtml dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts
 ```
 
 Expected: diff only covers the planned files and preserves unrelated existing worktree changes.
@@ -674,7 +674,7 @@ Expected: diff only covers the planned files and preserves unrelated existing wo
 Run from repo root:
 
 ```bash
-git add data-room-ui/package.json data-room-ui/package-lock.json data-room-ui/src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs data-room-ui/src/dataroom-packages/components/DrDateTime data-room-ui/src/dataroom-packages/components/DrHtml data-room-ui/src/dataroom-packages/_components/PluginRegister.ts
+git add dataRoomFront/package.json dataRoomFront/package-lock.json dataRoomFront/src/dataroom-packages/components/dateTimeHtmlComponents.spec.mjs dataRoomFront/src/dataroom-packages/components/DrDateTime dataRoomFront/src/dataroom-packages/components/DrHtml dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts
 git commit -m "feat: add date time and html components"
 ```
 

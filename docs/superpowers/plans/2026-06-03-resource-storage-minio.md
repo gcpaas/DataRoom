@@ -13,30 +13,30 @@
 ## File Structure
 
 - Modify `pom.xml`: add `minio.version` and `io.minio:minio`.
-- Modify `dataroom-server/src/main/java/com/gccloud/gcpaas/core/config/bean/ResourceBean.java`: add nested storage config.
-- Modify `dataroom-server/src/main/resources/application-base.yml`: add `dataroom.resource.storage`.
-- Create `dataroom-server/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceStorageService.java`: storage SPI.
-- Create `dataroom-server/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceStoreRequest.java`: storage request DTO.
-- Create `dataroom-server/src/main/java/com/gccloud/gcpaas/core/resources/storage/StoredResource.java`: storage write result DTO.
-- Create `dataroom-server/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceStream.java`: storage read result DTO.
-- Create `dataroom-server/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceFileVariant.java`: main/thumbnail selector.
-- Create `dataroom-server/src/main/java/com/gccloud/gcpaas/core/resources/storage/LocalResourceStorageServiceImpl.java`: local file storage.
-- Create `dataroom-server/src/main/java/com/gccloud/gcpaas/core/resources/storage/MinioResourceStorageServiceImpl.java`: MinIO storage.
+- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/bean/ResourceBean.java`: add nested storage config.
+- Modify `dataRoomServer/src/main/resources/application-base.yml`: add `dataroom.resource.storage`.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceStorageService.java`: storage SPI.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceStoreRequest.java`: storage request DTO.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/StoredResource.java`: storage write result DTO.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceStream.java`: storage read result DTO.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceFileVariant.java`: main/thumbnail selector.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/LocalResourceStorageServiceImpl.java`: local file storage.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/MinioResourceStorageServiceImpl.java`: MinIO storage.
 - Use Spring Boot conditional annotations on storage implementations so `dataroom.resource.storage.type` loads exactly one `ResourceStorageService`.
-- Modify `dataroom-server/src/main/java/com/gccloud/gcpaas/core/resources/ResourceController.java`: unified upload/save, proxy read, URL normalization, delete cleanup.
-- Modify `data-room-ui/src/dataroom-packages/resource/api.ts`: support upload form payload helper.
-- Modify `data-room-ui/src/dataroom-packages/resource/index.vue`: submit file resources through `/upload`, keep directory insert/update.
-- Modify `data-room-ui/src/dataroom-packages/PageDesigner/ControlPanel.vue`: ensure background uploads use unified endpoint response.
-- Modify `data-room-ui/src/dataroom-packages/VisualScreenDesigner/ControlPanel.vue`: same.
+- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/ResourceController.java`: unified upload/save, proxy read, URL normalization, delete cleanup.
+- Modify `dataRoomFront/src/dataroom-packages/resource/api.ts`: support upload form payload helper.
+- Modify `dataRoomFront/src/dataroom-packages/resource/index.vue`: submit file resources through `/upload`, keep directory insert/update.
+- Modify `dataRoomFront/src/dataroom-packages/PageDesigner/ControlPanel.vue`: ensure background uploads use unified endpoint response.
+- Modify `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/ControlPanel.vue`: same.
 - Modify 3D model loading components if URL suffix is assumed directly.
 
 ## Task 1: Backend Config And Storage SPI
 
 **Files:**
 - Modify: `pom.xml`
-- Modify: `dataroom-server/src/main/java/com/gccloud/gcpaas/core/config/bean/ResourceBean.java`
-- Modify: `dataroom-server/src/main/resources/application-base.yml`
-- Create: `dataroom-server/src/main/java/com/gccloud/gcpaas/core/resources/storage/*.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/bean/ResourceBean.java`
+- Modify: `dataRoomServer/src/main/resources/application-base.yml`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/*.java`
 
 - [x] **Step 1: Add MinIO dependency**
 
@@ -165,8 +165,8 @@ Normalize list/detail responses. Delete storage objects before DB delete; on upd
 ## Task 4: Frontend Resource Upload Flow
 
 **Files:**
-- Modify: `data-room-ui/src/dataroom-packages/resource/api.ts`
-- Modify: `data-room-ui/src/dataroom-packages/resource/index.vue`
+- Modify: `dataRoomFront/src/dataroom-packages/resource/api.ts`
+- Modify: `dataRoomFront/src/dataroom-packages/resource/index.vue`
 - Preserve existing local file-name auto-fill helpers already present in the dirty worktree.
 
 - [x] **Step 1: Add upload API helper**
@@ -183,7 +183,7 @@ When editing existing file resources, submit `id`, metadata, optional `file`, op
 
 - [x] **Step 4: Verify frontend type check**
 
-Run: `cd data-room-ui && npm run type-check`
+Run: `cd dataRoomFront && npm run type-check`
 
 Expected: exit 0.
 
@@ -214,19 +214,19 @@ Expected: exit 0.
 
 - [x] **Step 2: Frontend verification**
 
-Run: `cd data-room-ui && npm run type-check`
+Run: `cd dataRoomFront && npm run type-check`
 
 Expected: exit 0.
 
 - [x] **Step 3: Targeted frontend contract**
 
-Run: `cd data-room-ui && npx tsx src/dataroom-packages/resource/resourceForm.contract.ts` if the existing contract remains present.
+Run: `cd dataRoomFront && npx tsx src/dataroom-packages/resource/resourceForm.contract.ts` if the existing contract remains present.
 
 Expected: exit 0.
 
 - [x] **Step 4: Lint changed frontend files**
 
-Run: `cd data-room-ui && ./node_modules/.bin/eslint src/dataroom-packages/resource/index.vue src/dataroom-packages/resource/api.ts src/dataroom-packages/PageDesigner/ControlPanel.vue src/dataroom-packages/VisualScreenDesigner/ControlPanel.vue`
+Run: `cd dataRoomFront && ./node_modules/.bin/eslint src/dataroom-packages/resource/index.vue src/dataroom-packages/resource/api.ts src/dataroom-packages/PageDesigner/ControlPanel.vue src/dataroom-packages/VisualScreenDesigner/ControlPanel.vue`
 
 Expected: exit 0.
 

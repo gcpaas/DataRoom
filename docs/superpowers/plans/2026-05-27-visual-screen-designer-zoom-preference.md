@@ -13,9 +13,9 @@
 ### Task 1: Add Zoom Preference Types and Helper Tests
 
 **Files:**
-- Modify: `data-room-ui/src/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts`
-- Modify: `data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.ts`
-- Test: `data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts`
+- Modify: `dataRoomFront/src/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts`
+- Modify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.ts`
+- Test: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts`
 
 - [ ] **Step 1: Write failing tests**
 
@@ -35,7 +35,7 @@ assert(normalizeDesignerZoomPreference({ mode: 'fixed', value: 999 }).value === 
 Run:
 
 ```bash
-npx tsx data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
+npx tsx dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
 ```
 
 Expected: FAIL because `normalizeDesignerZoomPreference` is not exported.
@@ -75,7 +75,7 @@ Add `zoom?: DesignerZoomPreference` to `VisualScreenPageBasicConfig`.
 Run:
 
 ```bash
-npx tsx data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
+npx tsx dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
 ```
 
 Expected: PASS.
@@ -83,8 +83,8 @@ Expected: PASS.
 ### Task 2: Wire Preference into VisualScreenDesigner
 
 **Files:**
-- Modify: `data-room-ui/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`
-- Test: `data-room-ui/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
+- Modify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`
+- Test: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
 
 - [ ] **Step 1: Write failing source-level assertions**
 
@@ -105,7 +105,7 @@ assert(source.includes(\"setDesignerZoomPreferenceMode('fixed')\"), 'manual zoom
 Run:
 
 ```bash
-npx tsx data-room-ui/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
+npx tsx dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
 ```
 
 Expected: FAIL because preference wiring is not present.
@@ -140,7 +140,7 @@ Manual zoom operations call `setDesignerZoomPreferenceMode('fixed')`. The fit ic
 Run:
 
 ```bash
-npx tsx data-room-ui/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
+npx tsx dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
 ```
 
 Expected: PASS.
@@ -153,8 +153,8 @@ Expected: PASS.
 - [ ] **Step 1: Run focused specs**
 
 ```bash
-npx tsx data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
-npx tsx data-room-ui/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
+npx tsx dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
+npx tsx dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
 ```
 
 Expected: both PASS.
@@ -162,7 +162,7 @@ Expected: both PASS.
 - [ ] **Step 2: Run type check**
 
 ```bash
-cd data-room-ui && npm run type-check
+cd dataRoomFront && npm run type-check
 ```
 
 Expected: exit code 0.
@@ -170,7 +170,7 @@ Expected: exit code 0.
 - [ ] **Step 3: Run build**
 
 ```bash
-cd data-room-ui && npm run build
+cd dataRoomFront && npm run build
 ```
 
 Expected: exit code 0. Existing Vite chunk-size warnings are acceptable.

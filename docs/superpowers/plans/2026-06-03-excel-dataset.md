@@ -13,8 +13,8 @@
 ### Task 1: Backend Dataset Type and SQL Validation Tests
 
 **Files:**
-- Modify: `dataroom-server/src/test/java/com/gccloud/gcpaas/core/constant/DatasetTypeSqlTest.java`
-- Create: `dataroom-server/src/test/java/com/gccloud/gcpaas/core/dataset/service/ExcelDatasetServiceTest.java`
+- Modify: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/constant/DatasetTypeSqlTest.java`
+- Create: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/dataset/service/ExcelDatasetServiceTest.java`
 
 - [ ] **Step 1: Add failing tests for `excel` type registration**
 
@@ -129,7 +129,7 @@ class ExcelDatasetServiceTest {
 Run:
 
 ```bash
-mvn -q -pl dataroom-server -Dtest=DatasetTypeSqlTest,ExcelDatasetServiceTest test
+mvn -q -pl dataRoomServer -Dtest=DatasetTypeSqlTest,ExcelDatasetServiceTest test
 ```
 
 Expected: fail because `DatasetType.EXCEL` and `ExcelDatasetService` do not exist.
@@ -137,11 +137,11 @@ Expected: fail because `DatasetType.EXCEL` and `ExcelDatasetService` do not exis
 ### Task 2: Backend Excel Dataset Implementation
 
 **Files:**
-- Modify: `dataroom-server/src/main/java/com/gccloud/gcpaas/core/constant/DatasetType.java`
-- Modify: `dataroom-server/src/main/java/com/gccloud/gcpaas/core/dataset/bean/BaseDataset.java`
-- Create: `dataroom-server/src/main/java/com/gccloud/gcpaas/core/dataset/service/ExcelDatasetService.java`
-- Test: `dataroom-server/src/test/java/com/gccloud/gcpaas/core/constant/DatasetTypeSqlTest.java`
-- Test: `dataroom-server/src/test/java/com/gccloud/gcpaas/core/dataset/service/ExcelDatasetServiceTest.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/constant/DatasetType.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/dataset/bean/BaseDataset.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/dataset/service/ExcelDatasetService.java`
+- Test: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/constant/DatasetTypeSqlTest.java`
+- Test: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/dataset/service/ExcelDatasetServiceTest.java`
 
 - [ ] **Step 1: Add the `excel` enum value**
 
@@ -187,7 +187,7 @@ Create a focused service that:
 Run:
 
 ```bash
-mvn -q -pl dataroom-server -Dtest=DatasetTypeSqlTest,ExcelDatasetServiceTest test
+mvn -q -pl dataRoomServer -Dtest=DatasetTypeSqlTest,ExcelDatasetServiceTest test
 ```
 
 Expected: pass.
@@ -195,9 +195,9 @@ Expected: pass.
 ### Task 3: Frontend Types and Excel Dataset Editor
 
 **Files:**
-- Modify: `data-room-ui/src/dataroom-packages/constant/DatasetType.ts`
-- Modify: `data-room-ui/src/dataroom-packages/dataset/api.ts`
-- Create: `data-room-ui/src/dataroom-packages/dataset/components/ExcelEditor.vue`
+- Modify: `dataRoomFront/src/dataroom-packages/constant/DatasetType.ts`
+- Modify: `dataRoomFront/src/dataroom-packages/dataset/api.ts`
+- Create: `dataRoomFront/src/dataroom-packages/dataset/components/ExcelEditor.vue`
 
 - [ ] **Step 1: Add `excel` to frontend constants and types**
 
@@ -233,9 +233,9 @@ Keep the SQL editor, format button, input param parsing, output field table, pre
 ### Task 4: Frontend Dataset Page and Excel Auto-Creation
 
 **Files:**
-- Modify: `data-room-ui/src/dataroom-packages/dataset/index.vue`
-- Modify: `data-room-ui/src/dataroom-packages/dataSource/index.vue`
-- Modify: `data-room-ui/src/dataroom-packages/dataSource/api.ts`
+- Modify: `dataRoomFront/src/dataroom-packages/dataset/index.vue`
+- Modify: `dataRoomFront/src/dataroom-packages/dataSource/index.vue`
+- Modify: `dataRoomFront/src/dataroom-packages/dataSource/api.ts`
 
 - [ ] **Step 1: Register Excel dataset editor in the dataset page**
 
@@ -280,7 +280,7 @@ Keep `ExcelCreateRequest` focused on data source creation. Do not add dataset fi
 Run:
 
 ```bash
-mvn -q -pl dataroom-server -Dtest=DatasetTypeSqlTest,ExcelDatasetServiceTest test
+mvn -q -pl dataRoomServer -Dtest=DatasetTypeSqlTest,ExcelDatasetServiceTest test
 ```
 
 Expected: pass.
@@ -290,7 +290,7 @@ Expected: pass.
 Run:
 
 ```bash
-cd data-room-ui
+cd dataRoomFront
 npm run type-check
 ```
 
@@ -301,7 +301,7 @@ Expected: pass.
 Run:
 
 ```bash
-cd data-room-ui
+cd dataRoomFront
 npm run lint
 ```
 
@@ -313,13 +313,13 @@ Run:
 
 ```bash
 git diff --stat
-git diff -- dataroom-server/src/main/java/com/gccloud/gcpaas/core/constant/DatasetType.java \
-  dataroom-server/src/main/java/com/gccloud/gcpaas/core/dataset/bean/BaseDataset.java \
-  dataroom-server/src/main/java/com/gccloud/gcpaas/core/dataset/service/ExcelDatasetService.java \
-  data-room-ui/src/dataroom-packages/dataset/components/ExcelEditor.vue \
-  data-room-ui/src/dataroom-packages/dataset/index.vue \
-  data-room-ui/src/dataroom-packages/dataSource/index.vue \
-  data-room-ui/src/dataroom-packages/dataset/api.ts
+git diff -- dataRoomServer/src/main/java/com/gccloud/gcpaas/core/constant/DatasetType.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/dataset/bean/BaseDataset.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/dataset/service/ExcelDatasetService.java \
+  dataRoomFront/src/dataroom-packages/dataset/components/ExcelEditor.vue \
+  dataRoomFront/src/dataroom-packages/dataset/index.vue \
+  dataRoomFront/src/dataroom-packages/dataSource/index.vue \
+  dataRoomFront/src/dataroom-packages/dataset/api.ts
 ```
 
 Expected: only Excel dataset feature changes, with the pre-existing `DrBarChart` diff left untouched.

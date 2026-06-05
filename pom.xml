@@ -14,7 +14,7 @@
     <version>3.0.0</version>
     <packaging>pom</packaging>
     <modules>
-        <module>dataroom-server</module>
+        <module>dataRoomServer</module>
     </modules>
 
     <properties>

@@ -5,12 +5,11 @@
 CLAUDE.md
 RELEASE
 .worktrees/
-dataRoomFront
+dataRoomFront/dataRoom
 dataRoomResource
 dataroom.mv.db
 dataroom.trace.db
 application-kdgc.yml
-data-room-ui/dist
 package-lock.json
 # Logs
 logs

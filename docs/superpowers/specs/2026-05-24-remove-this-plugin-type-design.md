@@ -2,7 +2,7 @@
 
 ## Context
 
-The frontend currently uses `data-room-ui/ReplaceThisPluginType.ts` as a custom Vite transform. During build, it replaces `DrConst.THIS_PLUGIN_TYPE` in component files with the containing component directory name.
+The frontend currently uses `dataRoomFront/ReplaceThisPluginType.ts` as a custom Vite transform. During build, it replaces `DrConst.THIS_PLUGIN_TYPE` in component files with the containing component directory name.
 
 This hides each component type behind a build-time transform. The new direction is to remove that custom plugin and write each component type directly as a string.
 
@@ -25,16 +25,16 @@ This hides each component type behind a build-time transform. The new direction 
 
 The migration applies to frontend component files under:
 
-- `data-room-ui/src/dataroom-packages/components/**/install.ts`
-- `data-room-ui/src/dataroom-packages/components/**/plugin.ts`
-- `data-room-ui/src/dataroom-packages/components/**/index.vue`
-- `data-room-ui/src/dataroom-packages/components/**/panel/index.vue`
+- `dataRoomFront/src/dataroom-packages/components/**/install.ts`
+- `dataRoomFront/src/dataroom-packages/components/**/plugin.ts`
+- `dataRoomFront/src/dataroom-packages/components/**/index.vue`
+- `dataRoomFront/src/dataroom-packages/components/**/panel/index.vue`
 
 The migration also updates the Vite config and shared constant definition:
 
-- `data-room-ui/vite.config.ts`
-- `data-room-ui/src/dataroom-packages/constant/DrConst.ts`
-- `data-room-ui/ReplaceThisPluginType.ts`
+- `dataRoomFront/vite.config.ts`
+- `dataRoomFront/src/dataroom-packages/constant/DrConst.ts`
+- `dataRoomFront/ReplaceThisPluginType.ts`
 
 ## Design
 
@@ -72,6 +72,6 @@ This migration does not add new runtime error handling. The main risk is a typo 
 After implementation:
 
 - Search the frontend for `DrConst.THIS_PLUGIN_TYPE`, `ReplaceThisPluginType`, and `__THIS_PLUGIN_TYPE__`; all should be gone except historical git data.
-- Run `npm run type-check` in `data-room-ui`.
+- Run `npm run type-check` in `dataRoomFront`.
 - If type checking cannot run because dependencies are missing or the environment blocks it, report that explicitly.
 

@@ -27,13 +27,13 @@
 
 ## 实现范围
 
-仅调整 `data-room-ui/src/dataroom-packages/map/index.vue` 中地图预览面板标题区域的模板和局部样式。不修改接口、不修改地图渲染逻辑、不新增状态。
+仅调整 `dataRoomFront/src/dataroom-packages/map/index.vue` 中地图预览面板标题区域的模板和局部样式。不修改接口、不修改地图渲染逻辑、不新增状态。
 
 ## 验证
 
 修改后运行前端类型检查：
 
 ```bash
-cd data-room-ui
+cd dataRoomFront
 npm run type-check
 ```

@@ -80,7 +80,7 @@
 
 ## 实现约束
 
-- 仅调整 `data-room-ui/src/dataroom-packages/console/ConsoleLayout.vue`
+- 仅调整 `dataRoomFront/src/dataroom-packages/console/ConsoleLayout.vue`
 - 不改动控制台子路由逻辑
 - 不修改 `user / profile / operationLog` 三个页面内部业务逻辑
 - 样式必须继续遵循 `docs/design/DESIGN.md`

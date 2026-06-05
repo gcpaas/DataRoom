@@ -1,5 +1,5 @@
 echo "准备打包前端"
-cd ./dataroom-ui
+cd ./dataRoomFront
 npm run build
 echo "前端打包完毕"
 

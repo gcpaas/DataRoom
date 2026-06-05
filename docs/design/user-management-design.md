@@ -48,18 +48,18 @@ VALUES ('1', 'admin', '管理员', 'RSA加密后的密文', 'manager,developer,s
 
 | 类型 | 路径 |
 |------|------|
-| Entity | `dataroom-server/src/main/java/com/gccloud/gcpaas/core/entity/UserEntity.java` |
-| Mapper | `dataroom-server/src/main/java/com/gccloud/gcpaas/core/mapper/UserMapper.java` |
-| Service | `dataroom-server/src/main/java/com/gccloud/gcpaas/core/user/service/UserService.java` |
-| Controller | `dataroom-server/src/main/java/com/gccloud/gcpaas/core/user/UserController.java` |
-| DTO | `dataroom-server/src/main/java/com/gccloud/gcpaas/core/user/dto/UserDTO.java` |
-| Enum | `dataroom-server/src/main/java/com/gccloud/gcpaas/core/constant/UserStatus.java` |
+| Entity | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/entity/UserEntity.java` |
+| Mapper | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/mapper/UserMapper.java` |
+| Service | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/user/service/UserService.java` |
+| Controller | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/user/UserController.java` |
+| DTO | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/user/dto/UserDTO.java` |
+| Enum | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/constant/UserStatus.java` |
 
 ### 4.2 现有可复用代码
 
-- **BaseEntity**：`dataroom-server/src/main/java/com/gccloud/gcpaas/core/entity/BaseEntity.java`
-- **Resp**：`dataroom-server/src/main/java/com/gccloud/gcpaas/core/bean/Resp.java`
-- **PageVo**：`dataroom-server/src/main/java/com/gccloud/gcpaas/core/bean/PageVo.java`
+- **BaseEntity**：`dataRoomServer/src/main/java/com/gccloud/gcpaas/core/entity/BaseEntity.java`
+- **Resp**：`dataRoomServer/src/main/java/com/gccloud/gcpaas/core/bean/Resp.java`
+- **PageVo**：`dataRoomServer/src/main/java/com/gccloud/gcpaas/core/bean/PageVo.java`
 - **MybatisMetaObjectHandler**：自动填充 createDate、updateDate 等字段
 - **DataRoomException**：自定义异常
 - **DataRoomRole**：内置角色常量接口
@@ -96,15 +96,15 @@ VALUES ('1', 'admin', '管理员', 'RSA加密后的密文', 'manager,developer,s
 
 | 类型 | 路径 |
 |------|------|
-| 页面 | `data-room-ui/src/dataroom-packages/user/index.vue` |
-| API | `data-room-ui/src/dataroom-packages/user/api.ts` |
-| 编辑弹窗组件 | `data-room-ui/src/dataroom-packages/user/components/UserEdit.vue` |
+| 页面 | `dataRoomFront/src/dataroom-packages/user/index.vue` |
+| API | `dataRoomFront/src/dataroom-packages/user/api.ts` |
+| 编辑弹窗组件 | `dataRoomFront/src/dataroom-packages/user/components/UserEdit.vue` |
 
 ### 5.3 现有可复用模式
 
-- **API 调用**：`data-room-ui/src/dataroom-packages/_common/_request.ts` 的 request 封装
-- **列表页模式**：`data-room-ui/src/dataroom-packages/page/index.vue`
-- **表单验证**：`data-room-ui/src/dataroom-packages/dataset/components/HttpEditor.vue`
+- **API 调用**：`dataRoomFront/src/dataroom-packages/_common/_request.ts` 的 request 封装
+- **列表页模式**：`dataRoomFront/src/dataroom-packages/page/index.vue`
+- **表单验证**：`dataRoomFront/src/dataroom-packages/dataset/components/HttpEditor.vue`
 - **表格+分页**：Element Plus `el-table` + `el-pagination`
 
 ### 5.4 前端实现步骤
@@ -138,8 +138,8 @@ VALUES ('1', 'admin', '管理员', 'RSA加密后的密文', 'manager,developer,s
 
 ## 8. 验证步骤
 
-1. 后端启动 `mvn spring-boot:run -pl dataroom-server`
-2. 前端启动 `cd data-room-ui && npm run dev`
+1. 后端启动 `mvn spring-boot:run -pl dataRoomServer`
+2. 前端启动 `cd dataRoomFront && npm run dev`
 3. 访问用户管理页面，验证：
    - 用户列表分页查询正常
    - 新建用户成功

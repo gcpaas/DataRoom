@@ -13,30 +13,30 @@
 ### Task 1: Mechanically Replace Component Type Placeholders
 
 **Files:**
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrAreaChart/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrBarChart/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrBorder/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrBubbleChart/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrDecoration/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrFullScreen/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrGauge/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrHorizontalBarChart/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrIframe/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrImage/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrInput/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrLineChart/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrMap/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrModel3D/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrPieChart/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrProgressBar/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrRadarChart/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrRadio/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrSelect/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrTabList/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrText/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrVideoPlayer/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/DrWordCloud/`
-- Modify component files under `data-room-ui/src/dataroom-packages/components/Remote/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrAreaChart/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrBarChart/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrBorder/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrBubbleChart/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrDecoration/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrFullScreen/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrGauge/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrHorizontalBarChart/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrIframe/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrImage/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrInput/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrLineChart/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrMap/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrModel3D/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrPieChart/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrProgressBar/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrRadarChart/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrRadio/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrSelect/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrTabList/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrText/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrVideoPlayer/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrWordCloud/`
+- Modify component files under `dataRoomFront/src/dataroom-packages/components/Remote/`
 
 - [ ] **Step 1: Run the mechanical replacement script**
 
@@ -47,7 +47,7 @@ node <<'NODE'
 const fs = require('node:fs')
 const path = require('node:path')
 
-const componentsRoot = path.join(process.cwd(), 'data-room-ui/src/dataroom-packages/components')
+const componentsRoot = path.join(process.cwd(), 'dataRoomFront/src/dataroom-packages/components')
 const targetFiles = ['install.ts', 'plugin.ts', 'index.vue', 'panel/index.vue']
 const comment = '组件类型需与当前组件目录名保持一致'
 
@@ -100,10 +100,10 @@ Expected: component files are updated; `DrConst` imports used only for `THIS_PLU
 Run:
 
 ```bash
-sed -n '1,24p' data-room-ui/src/dataroom-packages/components/DrBarChart/plugin.ts
-sed -n '158,172p' data-room-ui/src/dataroom-packages/components/DrBarChart/install.ts
-sed -n '1,12p' data-room-ui/src/dataroom-packages/components/DrBarChart/index.vue
-sed -n '1,12p' data-room-ui/src/dataroom-packages/components/DrBarChart/panel/index.vue
+sed -n '1,24p' dataRoomFront/src/dataroom-packages/components/DrBarChart/plugin.ts
+sed -n '158,172p' dataRoomFront/src/dataroom-packages/components/DrBarChart/install.ts
+sed -n '1,12p' dataRoomFront/src/dataroom-packages/components/DrBarChart/index.vue
+sed -n '1,12p' dataRoomFront/src/dataroom-packages/components/DrBarChart/panel/index.vue
 ```
 
 Expected snippets:
@@ -135,18 +135,18 @@ export default defineComponent({
 - [ ] **Step 3: Commit the component rewrite**
 
 ```bash
-git add data-room-ui/src/dataroom-packages/components
+git add dataRoomFront/src/dataroom-packages/components
 git commit -m "refactor(ui): hardcode component type names"
 ```
 
 ### Task 2: Remove the Vite Plugin and Shared Placeholder Constant
 
 **Files:**
-- Modify: `data-room-ui/vite.config.ts`
-- Modify: `data-room-ui/src/dataroom-packages/constant/DrConst.ts`
-- Delete: `data-room-ui/ReplaceThisPluginType.ts`
+- Modify: `dataRoomFront/vite.config.ts`
+- Modify: `dataRoomFront/src/dataroom-packages/constant/DrConst.ts`
+- Delete: `dataRoomFront/ReplaceThisPluginType.ts`
 
-- [ ] **Step 1: Update `data-room-ui/vite.config.ts`**
+- [ ] **Step 1: Update `dataRoomFront/vite.config.ts`**
 
 Remove this import:
 
@@ -168,7 +168,7 @@ Remove this plugin entry:
     ReplaceThisPluginType(),
 ```
 
-- [ ] **Step 2: Update `data-room-ui/src/dataroom-packages/constant/DrConst.ts`**
+- [ ] **Step 2: Update `dataRoomFront/src/dataroom-packages/constant/DrConst.ts`**
 
 Replace the file contents with:
 
@@ -185,28 +185,28 @@ export enum DrConst {
 }
 ```
 
-- [ ] **Step 3: Delete `data-room-ui/ReplaceThisPluginType.ts`**
+- [ ] **Step 3: Delete `dataRoomFront/ReplaceThisPluginType.ts`**
 
 Delete the file because no source code depends on the build-time replacement behavior.
 
 - [ ] **Step 4: Commit plugin removal**
 
 ```bash
-git add data-room-ui/vite.config.ts data-room-ui/src/dataroom-packages/constant/DrConst.ts data-room-ui/ReplaceThisPluginType.ts
+git add dataRoomFront/vite.config.ts dataRoomFront/src/dataroom-packages/constant/DrConst.ts dataRoomFront/ReplaceThisPluginType.ts
 git commit -m "refactor(ui): remove plugin type replacement"
 ```
 
 ### Task 3: Verify the Migration
 
 **Files:**
-- Inspect: `data-room-ui`
+- Inspect: `dataRoomFront`
 
 - [ ] **Step 1: Search for removed identifiers**
 
 Run:
 
 ```bash
-rg -n "DrConst\\.THIS_PLUGIN_TYPE|ReplaceThisPluginType|__THIS_PLUGIN_TYPE__" data-room-ui
+rg -n "DrConst\\.THIS_PLUGIN_TYPE|ReplaceThisPluginType|__THIS_PLUGIN_TYPE__" dataRoomFront
 ```
 
 Expected: no output.
@@ -216,7 +216,7 @@ Expected: no output.
 Run:
 
 ```bash
-rg -n "import \\{\\s*DrConst\\s*\\}" data-room-ui/src/dataroom-packages/components
+rg -n "import \\{\\s*DrConst\\s*\\}" dataRoomFront/src/dataroom-packages/components
 ```
 
 Expected: no output.
@@ -226,7 +226,7 @@ Expected: no output.
 Run:
 
 ```bash
-cd data-room-ui
+cd dataRoomFront
 npm run type-check
 ```
 
@@ -237,7 +237,7 @@ Expected: `vue-tsc --build` completes successfully.
 If verification reveals only mechanical misses, fix them and commit:
 
 ```bash
-git add data-room-ui
+git add dataRoomFront
 git commit -m "fix(ui): complete component type migration"
 ```
 

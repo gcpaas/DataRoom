@@ -185,7 +185,7 @@ S3 上传、读取、删除失败统一转换为 `IOException`，由现有 Contr
 - 修改涉及 `catch` 块时运行：
 
 ```bash
-mvn -q -pl dataroom-server -Dtest=CatchBlockLoggingTest -DforkCount=0 test
+mvn -q -pl dataRoomServer -Dtest=CatchBlockLoggingTest -DforkCount=0 test
 ```
 
 如环境无法连接真实 RustFS 或 MinIO，第一版不要求真实 S3 集成测试；至少完成配置、装配和 Controller 行为测试。

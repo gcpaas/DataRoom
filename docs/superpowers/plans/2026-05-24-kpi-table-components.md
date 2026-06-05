@@ -4,7 +4,7 @@
 
 **Goal:** Add five independent big-screen visualization components: `DrMetricCard`, `DrTrendMetricCard`, `DrPeriodCompareCard`, `DrDataTable`, and `DrAnalysisTable`.
 
-**Architecture:** Each component follows the existing auto-registration convention under `data-room-ui/src/dataroom-packages/components/<ComponentName>/` with `install.ts`, `index.vue`, and `panel/index.vue`. Shared data normalization, number formatting, comparison, sorting, aggregation, and conditional-format helpers live in one focused utility module consumed by the five components.
+**Architecture:** Each component follows the existing auto-registration convention under `dataRoomFront/src/dataroom-packages/components/<ComponentName>/` with `install.ts`, `index.vue`, and `panel/index.vue`. Shared data normalization, number formatting, comparison, sorting, aggregation, and conditional-format helpers live in one focused utility module consumed by the five components.
 
 **Tech Stack:** Vue 3, TypeScript, Element Plus, ECharts 6, existing `useDrComponent`, existing `ChartConfig` factory, static Node spec scripts, `vue-tsc`, ESLint.
 
@@ -12,15 +12,15 @@
 
 ## File Structure
 
-- Create `data-room-ui/src/dataroom-packages/components/_shared/metric-table-utils.ts`: reusable dataset, formatting, date, sorting, comparison, aggregation, and conditional rule helpers.
-- Create `data-room-ui/src/dataroom-packages/components/kpiTableComponents.spec.mjs`: static regression test for the five component directories, required exports, panel stylesheet imports, and forbidden Element Plus style overrides.
+- Create `dataRoomFront/src/dataroom-packages/components/_shared/metric-table-utils.ts`: reusable dataset, formatting, date, sorting, comparison, aggregation, and conditional rule helpers.
+- Create `dataRoomFront/src/dataroom-packages/components/kpiTableComponents.spec.mjs`: static regression test for the five component directories, required exports, panel stylesheet imports, and forbidden Element Plus style overrides.
 - Create each component directory with `install.ts`, `index.vue`, and `panel/index.vue`:
   `DrMetricCard`, `DrTrendMetricCard`, `DrPeriodCompareCard`, `DrDataTable`, `DrAnalysisTable`.
 
 ## Task 1: Static Regression Test
 
 **Files:**
-- Create: `data-room-ui/src/dataroom-packages/components/kpiTableComponents.spec.mjs`
+- Create: `dataRoomFront/src/dataroom-packages/components/kpiTableComponents.spec.mjs`
 
 - [ ] **Step 1: Write the failing static test**
 
@@ -67,13 +67,13 @@ for (const helper of ['normalizeRows', 'formatMetricValue', 'calculateChange', '
 
 - [ ] **Step 2: Run it to verify it fails**
 
-Run: `node src/dataroom-packages/components/kpiTableComponents.spec.mjs` from `data-room-ui`.
+Run: `node src/dataroom-packages/components/kpiTableComponents.spec.mjs` from `dataRoomFront`.
 Expected: FAIL because the new component directories and shared utility do not exist yet.
 
 ## Task 2: Shared Utility Module
 
 **Files:**
-- Create: `data-room-ui/src/dataroom-packages/components/_shared/metric-table-utils.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/_shared/metric-table-utils.ts`
 
 - [ ] **Step 1: Implement helpers**
 
@@ -81,15 +81,15 @@ Implement and export: `normalizeRows`, `getDatasetFieldNames`, `getFieldValue`, 
 
 - [ ] **Step 2: Run type-check**
 
-Run: `npm run type-check` from `data-room-ui`.
+Run: `npm run type-check` from `dataRoomFront`.
 Expected: PASS.
 
 ## Task 3: DrMetricCard
 
 **Files:**
-- Create: `data-room-ui/src/dataroom-packages/components/DrMetricCard/install.ts`
-- Create: `data-room-ui/src/dataroom-packages/components/DrMetricCard/index.vue`
-- Create: `data-room-ui/src/dataroom-packages/components/DrMetricCard/panel/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrMetricCard/install.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrMetricCard/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrMetricCard/panel/index.vue`
 
 - [ ] **Step 1: Implement install.ts**
 
@@ -106,9 +106,9 @@ Use the chart config panel structure, bind directly to `chartConfig.props`, incl
 ## Task 4: DrTrendMetricCard
 
 **Files:**
-- Create: `data-room-ui/src/dataroom-packages/components/DrTrendMetricCard/install.ts`
-- Create: `data-room-ui/src/dataroom-packages/components/DrTrendMetricCard/index.vue`
-- Create: `data-room-ui/src/dataroom-packages/components/DrTrendMetricCard/panel/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrTrendMetricCard/install.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrTrendMetricCard/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrTrendMetricCard/panel/index.vue`
 
 - [ ] **Step 1: Implement install.ts**
 
@@ -125,9 +125,9 @@ Bind controls for global, layout, title, value, timestamp, compare, trend, axis,
 ## Task 5: DrPeriodCompareCard
 
 **Files:**
-- Create: `data-room-ui/src/dataroom-packages/components/DrPeriodCompareCard/install.ts`
-- Create: `data-room-ui/src/dataroom-packages/components/DrPeriodCompareCard/index.vue`
-- Create: `data-room-ui/src/dataroom-packages/components/DrPeriodCompareCard/panel/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrPeriodCompareCard/install.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrPeriodCompareCard/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrPeriodCompareCard/panel/index.vue`
 
 - [ ] **Step 1: Implement install.ts**
 
@@ -144,9 +144,9 @@ Bind controls for data mode, current, comparison, indicator, layout, text style,
 ## Task 6: DrDataTable
 
 **Files:**
-- Create: `data-room-ui/src/dataroom-packages/components/DrDataTable/install.ts`
-- Create: `data-room-ui/src/dataroom-packages/components/DrDataTable/index.vue`
-- Create: `data-room-ui/src/dataroom-packages/components/DrDataTable/panel/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrDataTable/install.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrDataTable/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrDataTable/panel/index.vue`
 
 - [ ] **Step 1: Implement install.ts**
 
@@ -163,9 +163,9 @@ Provide rich controls for global, table basics, manual column list, header/row/c
 ## Task 7: DrAnalysisTable
 
 **Files:**
-- Create: `data-room-ui/src/dataroom-packages/components/DrAnalysisTable/install.ts`
-- Create: `data-room-ui/src/dataroom-packages/components/DrAnalysisTable/index.vue`
-- Create: `data-room-ui/src/dataroom-packages/components/DrAnalysisTable/panel/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrAnalysisTable/install.ts`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrAnalysisTable/index.vue`
+- Create: `dataRoomFront/src/dataroom-packages/components/DrAnalysisTable/panel/index.vue`
 
 - [ ] **Step 1: Implement install.ts**
 
@@ -186,17 +186,17 @@ Provide controls for global, table basics, analysis fields, column config, searc
 
 - [ ] **Step 1: Run static regression test**
 
-Run: `node src/dataroom-packages/components/kpiTableComponents.spec.mjs` from `data-room-ui`.
+Run: `node src/dataroom-packages/components/kpiTableComponents.spec.mjs` from `dataRoomFront`.
 Expected: PASS.
 
 - [ ] **Step 2: Run type-check**
 
-Run: `npm run type-check` from `data-room-ui`.
+Run: `npm run type-check` from `dataRoomFront`.
 Expected: PASS.
 
 - [ ] **Step 3: Run lint**
 
-Run: `npm run lint` from `data-room-ui`.
+Run: `npm run lint` from `dataRoomFront`.
 Expected: PASS or only auto-fixed files under the implemented component paths.
 
 - [ ] **Step 4: Final spec and quality reviews**

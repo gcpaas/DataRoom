@@ -13,8 +13,8 @@
 ### Task 1: Update Map Preview Title Layout
 
 **Files:**
-- Modify: `data-room-ui/src/dataroom-packages/map/index.vue`
-- Test: `data-room-ui` type check
+- Modify: `dataRoomFront/src/dataroom-packages/map/index.vue`
+- Test: `dataRoomFront` type check
 
 - [ ] **Step 1: Update the preview panel template**
 
@@ -61,7 +61,7 @@ In `.map-preview-panel .panel-title`, use flex layout to separate the main title
 Run:
 
 ```bash
-cd data-room-ui
+cd dataRoomFront
 npm run type-check
 ```
 

@@ -12,31 +12,31 @@
 
 ## File Structure
 
-- Create `data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.ts`
+- Create `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.ts`
   - Owns zoom constants, percent-to-scale helpers, viewport state, pan clamp, centered zoom, wheel zoom, and right-panel zoom-control offset.
-- Create `data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts`
+- Create `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts`
   - Fast math tests for viewport behavior without Vue or DOM.
-- Modify `data-room-ui/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`
+- Modify `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`
   - Replace scrollbar-centered zoom compensation with viewport state.
   - Bind `transform: translate(...) scale(...)` to the canvas content.
   - Read visible canvas size through a `ResizeObserver`.
   - Keep component data in logical canvas coordinates.
-- Modify `data-room-ui/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
+- Modify `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
   - Convert the structural spec from scrollbar-centered zoom assertions to viewport-model assertions.
-- Delete `data-room-ui/src/dataroom-packages/VisualScreenDesigner/zoom.ts`
+- Delete `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/zoom.ts`
   - Superseded by `viewport.ts`.
-- Delete `data-room-ui/src/dataroom-packages/VisualScreenDesigner/zoom.spec.ts`
+- Delete `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/zoom.spec.ts`
   - Superseded by `viewport.spec.ts`.
 
 ## Task 1: Add Viewport Math Helper
 
 **Files:**
-- Create: `data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts`
-- Create: `data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.ts`
+- Create: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts`
+- Create: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.ts`
 
 - [ ] **Step 1: Write the failing viewport math spec**
 
-Create `data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts`:
+Create `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts`:
 
 ```ts
 import {
@@ -158,7 +158,7 @@ assert(resized.panY <= 0, 'resized larger canvas should not drift past the top e
 
 - [ ] **Step 2: Run the viewport spec to verify it fails**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npx jiti src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
@@ -168,7 +168,7 @@ Expected: FAIL with an import error for `./viewport`.
 
 - [ ] **Step 3: Implement the viewport helper**
 
-Create `data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.ts`:
+Create `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.ts`:
 
 ```ts
 export const ZOOM_MIN_PERCENT = 1
@@ -345,7 +345,7 @@ Keep the existing `zoom.ts` and `zoom.spec.ts` files in place during this task. 
 
 - [ ] **Step 4: Run the viewport spec to verify it passes**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npx jiti src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
@@ -356,22 +356,22 @@ Expected: PASS with no output.
 - [ ] **Step 5: Commit the viewport helper**
 
 ```bash
-git add data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.ts \
-  data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
+git add dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.ts \
+  dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
 git commit -m "feat(designer): add viewport zoom math"
 ```
 
 ## Task 2: Wire VisualScreenDesigner To The Viewport Model
 
 **Files:**
-- Modify: `data-room-ui/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`
-- Modify: `data-room-ui/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
-- Delete: `data-room-ui/src/dataroom-packages/VisualScreenDesigner/zoom.ts`
-- Delete: `data-room-ui/src/dataroom-packages/VisualScreenDesigner/zoom.spec.ts`
+- Modify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`
+- Modify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
+- Delete: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/zoom.ts`
+- Delete: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/zoom.spec.ts`
 
 - [ ] **Step 1: Write the failing structural spec**
 
-Replace `data-room-ui/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts` with:
+Replace `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts` with:
 
 ```ts
 declare const require: (id: string) => {
@@ -429,7 +429,7 @@ assert(!source.includes('transparent'), 'zoom control styles should avoid hardco
 
 - [ ] **Step 2: Run the structural spec to verify it fails**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npx jiti src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
@@ -775,11 +775,11 @@ Keep the existing `.canvas-zoom-control`, `.zoom-step-button`, `.zoom-range`, an
 Delete the superseded files after `VisualScreenDesigner.vue` imports `./viewport`:
 
 ```text
-data-room-ui/src/dataroom-packages/VisualScreenDesigner/zoom.ts
-data-room-ui/src/dataroom-packages/VisualScreenDesigner/zoom.spec.ts
+dataRoomFront/src/dataroom-packages/VisualScreenDesigner/zoom.ts
+dataRoomFront/src/dataroom-packages/VisualScreenDesigner/zoom.spec.ts
 ```
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npx jiti src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
@@ -791,10 +791,10 @@ Expected: both commands PASS with no output.
 - [ ] **Step 10: Commit the component wiring**
 
 ```bash
-git add data-room-ui/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue \
-  data-room-ui/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
-git add -u data-room-ui/src/dataroom-packages/VisualScreenDesigner/zoom.ts \
-  data-room-ui/src/dataroom-packages/VisualScreenDesigner/zoom.spec.ts
+git add dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue \
+  dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
+git add -u dataRoomFront/src/dataroom-packages/VisualScreenDesigner/zoom.ts \
+  dataRoomFront/src/dataroom-packages/VisualScreenDesigner/zoom.spec.ts
 git commit -m "feat(designer): use viewport-centered canvas zoom"
 ```
 
@@ -805,7 +805,7 @@ git commit -m "feat(designer): use viewport-centered canvas zoom"
 
 - [ ] **Step 1: Run targeted specs**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npx jiti src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
@@ -816,7 +816,7 @@ Expected: both commands PASS with no output.
 
 - [ ] **Step 2: Run frontend type check**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npm run type-check
@@ -826,7 +826,7 @@ Expected: PASS with `vue-tsc --build` completing successfully.
 
 - [ ] **Step 3: Run lint only if type check passes**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npm run lint
@@ -836,7 +836,7 @@ Expected: PASS. ESLint may rewrite files because the project script includes `--
 
 - [ ] **Step 4: Start the dev server for manual validation**
 
-Run from `data-room-ui`:
+Run from `dataRoomFront`:
 
 ```bash
 npm run dev -- --host 127.0.0.1
@@ -874,10 +874,10 @@ Expected: dev server process exits.
 If `npm run lint` changed files or verification required fixes, commit only the changed planned files:
 
 ```bash
-git add data-room-ui/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue \
-  data-room-ui/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts \
-  data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.ts \
-  data-room-ui/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
+git add dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue \
+  dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts \
+  dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.ts \
+  dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
 git commit -m "chore(designer): verify viewport zoom"
 ```
 

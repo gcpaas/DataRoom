@@ -54,9 +54,9 @@ Issue 信号：
 
 源码现状：
 
-- `data-room-ui/src/dataroom-packages/hooks/use-canvas-inst/index.ts` 已有 `fillDatasetParams`、`triggerChartBehavior`、`updateGlobalVariableValue`。
-- `data-room-ui/src/dataroom-packages/_components/BehaviorConfigDialog.vue` 已有行为动作配置界面。
-- `data-room-ui/src/dataroom-packages/components/type/ChartAction.ts` 当前动作结构较简单，主要支持 `code`。
+- `dataRoomFront/src/dataroom-packages/hooks/use-canvas-inst/index.ts` 已有 `fillDatasetParams`、`triggerChartBehavior`、`updateGlobalVariableValue`。
+- `dataRoomFront/src/dataroom-packages/_components/BehaviorConfigDialog.vue` 已有行为动作配置界面。
+- `dataRoomFront/src/dataroom-packages/components/type/ChartAction.ts` 当前动作结构较简单，主要支持 `code`。
 
 需求范围：
 
@@ -84,8 +84,8 @@ Issue 信号：
 
 源码现状：
 
-- `data-room-ui/src/dataroom-packages/hooks/use-timer-manager/index.ts` 已有定时器管理，但主要执行 code action。
-- `data-room-ui/src/dataroom-packages/hooks/use-dr-component/index.ts` 已有 `autoRefreshData`，组件挂载时会自动拉取数据。
+- `dataRoomFront/src/dataroom-packages/hooks/use-timer-manager/index.ts` 已有定时器管理，但主要执行 code action。
+- `dataRoomFront/src/dataroom-packages/hooks/use-dr-component/index.ts` 已有 `autoRefreshData`，组件挂载时会自动拉取数据。
 - `VisualScreenDesigner` 和预览页已有 `timers` 配置加载。
 
 需求范围：

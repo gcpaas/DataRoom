@@ -68,7 +68,7 @@ Add `excel` to frontend dataset types and tree node types.
 Add a dedicated Excel dataset editor component under the dataset module, for example:
 
 ```text
-data-room-ui/src/dataroom-packages/dataset/components/ExcelEditor.vue
+dataRoomFront/src/dataroom-packages/dataset/components/ExcelEditor.vue
 ```
 
 The component should be implemented by referencing `SqlEditor.vue`, not by parameterizing or reusing it.
