@@ -9,7 +9,7 @@ import VanillaSelecto from 'selecto'
 import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { ArrowDown, Minus, Plus, ScaleToOriginal } from '@element-plus/icons-vue'
+import { Minus, Plus, ScaleToOriginal } from '@element-plus/icons-vue'
 import { pageApi } from '@/dataroom-packages/page/api.ts'
 import type { PageStageEntity } from '@/dataroom-packages/page/type/PageStageEntity.ts'
 import { useCanvasInst } from '@/dataroom-packages/hooks/use-canvas-inst'
@@ -165,7 +165,7 @@ const leftToolPanelShow = ref(false)
 const rightControlPanelShow = ref(true)
 
 // 弹框显示状态（组件、素材、变量）
-const componentLibDialogVisible = ref(false)
+const componentLibVisible = ref(false)
 const resourceLibDialogVisible = ref(false)
 const globalVariableDialogVisible = ref(false)
 
@@ -328,7 +328,10 @@ const onSave = () => {
  * 打开组件库弹框
  */
 const openComponentLib = () => {
-  componentLibDialogVisible.value = true
+  componentLibVisible.value = false
+  nextTick(() => {
+    componentLibVisible.value = true
+  })
 }
 
 /**
@@ -856,12 +859,7 @@ onBeforeUnmount(() => {
       <div class="header-right">
         <div class="header-action">
           <el-dropdown trigger="click" @command="onInsertCommand">
-            <el-button size="small">
-              插入
-              <el-icon class="el-icon--right">
-                <ArrowDown />
-              </el-icon>
-            </el-button>
+            <el-button size="small">插入</el-button>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item command="component">组件</el-dropdown-item>
@@ -872,12 +870,7 @@ onBeforeUnmount(() => {
         </div>
         <div class="header-action">
           <el-dropdown trigger="click" :hide-on-click="false">
-            <el-button size="small">
-              工具
-              <el-icon class="el-icon--right">
-                <ArrowDown />
-              </el-icon>
-            </el-button>
+            <el-button size="small">工具</el-button>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item>
@@ -1083,9 +1076,7 @@ onBeforeUnmount(() => {
   ></ContextMenu>
 
   <!-- 组件库 -->
-  <el-dialog v-model="componentLibDialogVisible" title="组件库" width="760px" :close-on-click-modal="false">
-    <ComponentLib mode="dialog"></ComponentLib>
-  </el-dialog>
+  <ComponentLib v-if="componentLibVisible" @close="componentLibVisible = false" />
 
   <!-- 素材库（组件自带弹框，用 v-if 控制挂载） -->
   <ResourceLib v-if="resourceLibDialogVisible" @close="resourceLibDialogVisible = false" />

@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from 'uuid'
 import { getChartById, getResourceUrl, deleteChartById } from '@/dataroom-packages/_common/_utils.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
 import { pageApi } from '@/dataroom-packages/page/api.ts'
 import { useCanvasInst } from '@/dataroom-packages/hooks/use-canvas-inst'
 import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
@@ -121,7 +120,7 @@ const switchLeftToolPanel = (open: boolean = true) => {
   leftToolPanelShow.value = open
 }
 
-const componentLibDialogVisible = ref(false)
+const componentLibVisible = ref(false)
 const resourceLibVisible = ref(false)
 const globalVariableVisible = ref(false)
 const contextMenuVisible = ref(false)
@@ -129,7 +128,10 @@ const contextMenuVisible = ref(false)
  * 打开组件库弹框
  */
 const openComponentLib = () => {
-  componentLibDialogVisible.value = true
+  componentLibVisible.value = false
+  nextTick(() => {
+    componentLibVisible.value = true
+  })
 }
 
 /**
@@ -452,12 +454,7 @@ onUnmounted(() => {
       <div class="header-right">
         <div class="header-action">
           <el-dropdown trigger="click" @command="onInsertCommand">
-            <el-button size="small">
-              插入
-              <el-icon class="el-icon--right">
-                <ArrowDown />
-              </el-icon>
-            </el-button>
+            <el-button size="small">插入</el-button>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item command="component">组件</el-dropdown-item>
@@ -544,9 +541,7 @@ onUnmounted(() => {
       </el-icon>
     </div>
   </div>
-  <el-dialog v-model="componentLibDialogVisible" title="组件库" width="760px" :close-on-click-modal="false">
-    <ComponentLib mode="dialog"></ComponentLib>
-  </el-dialog>
+  <ComponentLib v-if="componentLibVisible" @close="componentLibVisible = false"></ComponentLib>
   <ResourceLib v-if="resourceLibVisible" ref="resourceLibRef"></ResourceLib>
   <GlobalVariableComponent v-if="globalVariableVisible" ref="globalVariableRef" :globalVariable="globalVariable"></GlobalVariableComponent>
   <ContextMenu
