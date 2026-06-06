@@ -1,11 +1,19 @@
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:file:./db/dataroom;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    url: jdbc:h2:file:./db/dataroom;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: root
     password: dataRoom@2026
   sql:
     init:
       mode: always
-      schema-locations: classpath:db/dataroom_h2.all.sql
+      schema-locations: classpath:h2/dataroom_h2.all.sql
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        # false 仅本机访问；true 允许局域网/外网访问（生产别开true）
+        web-allow-others: false
+        # 开启 H2 控制台的详细日志追踪
+        trace: false

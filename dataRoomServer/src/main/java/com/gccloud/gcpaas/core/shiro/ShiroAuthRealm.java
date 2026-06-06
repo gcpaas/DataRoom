@@ -139,9 +139,6 @@ public class ShiroAuthRealm extends AuthorizingRealm {
             }
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
-            if (e instanceof DataRoomException) {
-                throw e;
-            }
             throw new DataRoomException("认证失败", 401);
         }
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(loginUser, token.getPrincipal(), getName());
