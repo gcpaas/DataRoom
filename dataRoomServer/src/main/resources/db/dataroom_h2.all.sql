@@ -131,6 +131,7 @@ CREATE TABLE IF NOT EXISTS dr_resource
     thumbnail     VARCHAR(500) DEFAULT NULL COMMENT '缩略图、封面地址',
     size          INT          DEFAULT NULL COMMENT '文件大小（单位：KB）',
     remark        VARCHAR(500) DEFAULT NULL COMMENT '描述',
+    config        CLOB         DEFAULT NULL COMMENT '模型个性化配置（JSON）',
     create_date   TIMESTAMP    DEFAULT NULL COMMENT '创建时间',
     create_user   VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
     update_date   TIMESTAMP    DEFAULT NULL COMMENT '更新时间',
@@ -210,19 +211,19 @@ CREATE TABLE IF NOT EXISTS dr_user
     PRIMARY KEY (id),
     CONSTRAINT uk_user_account UNIQUE (account)
 );
-ALTER TABLE dr_user ADD COLUMN IF NOT EXISTS login_fail_count INT DEFAULT 0 COMMENT '连续登录密码错误次数';
-ALTER TABLE dr_user ADD COLUMN IF NOT EXISTS login_locked_until TIMESTAMP DEFAULT NULL COMMENT '登录锁定截止时间';
--- ALTER TABLE dr_user ADD COLUMN IF NOT EXISTS expire_date TIMESTAMP DEFAULT NULL COMMENT '有效期截止时间，NULL表示永久有效';
--- CREATE INDEX IF NOT EXISTS idx_user_status ON dr_user(status);
--- CREATE INDEX IF NOT EXISTS idx_user_expire_date ON dr_user(expire_date);
 
 -- ----------------------------
 -- 用户表初始数据
+-- 仅当对应 account 不存在时插入，避免重复初始化
 -- ----------------------------
--- INSERT INTO dr_user (id, account, username, password, role, status, tenant_code, del_flag) VALUES
--- ('1', 'admin', '管理员', 'mtl8l4fQr6laQ9qETcol8dNjAuKroZUB7KqLnHIAIrcrdft+5A16oSOTDRKJSln3FhOjHNZcchO7hQ815M2OFWfVogakKVKZb4U+dP9TZ9WMg3/i5wLCRLTZQW2cpb5zD9gFjsIQ3vDeTnR+fS12HWqgBZ+npyAS80FdAYyNsuHGzTQPn8lIAnZf5qTjd6X15H9MrEz5HtjHGOfpdcTJm9796mPNllyccjhegESrfkf7EHxG1ONCR2MdkEL2MypbQpzDhFpyOl/AGbXJLEwkGa7DVmnps96/AFYDUJdX8sqm+YjEstlC491g5ALhvkD/N7AVkyhwx4Ynjgn0Toj3vg==', 'manager,developer,sharer', 'NORMAL', 'default', '0'),
--- ('2', 'developer', '开发者', 'K0LmVpWYPrDwtbaJ40v+xSRsK/g42UZRq+Et1KS8FMYTrC3fsR0n9C7HUTb0ngRLMUuN57KE2pX0vcAhWDB+/5XOiMBBmdmW1Zz5b9kP10Zcxf2aajqg0tVWB8VDkSAsVcj9q5Mdfozpn2Ms5Q61FMfIEFnN6DR67aOD9tczwAPJ/bZbu84PjqGeiKq2VevZHUOL/z1t6Zto4Ql53JliTroah7ZTsP5IiUf6lhX5Ckk2RrviB7KwmWq1CgVZ1JEcqj40ZB7IjKI6ZiPGwKVG188jgkPTXGgAfs0uLKs89OGUhxY1iL01aj7jcj/v80RoXJmWa5UJqWLGmtXfwqhqCQ==', 'developer,sharer', 'NORMAL', 'default', '0'),
--- ('3', 'sharer', '分享者', 'MQhucQR4QZwvLQHmOEbWeVP5hR+oJMZTBHLKcvksa5xsaGc+X6WAhvc4qctWvXdfKyRt1tUJaC5FArc4Q74+TVPaQhhn8a4K2UWb+Mm+35xPfiO7ZfWVRu9JoEDkxqnO92o0Bw/FDTfYz9OL0xdeYDYD8PN9x9DSlTNDuGE0bpyJqv6ZlgT79vzEG/iTUJN7u6QS71kV/7yJFJ0hm1CgSBvaa9X3q+5N0eD+P7q4UFNaFqTmuytc/5/OnHUDQJq6bvEsM+mV6HIEp+LXF2hqw7GJtoFc+5VZTiKn4PVGG7DBxh9rR7GbdS+Uhdnta6QO9sGbl3rQclUk+ObgiwUTnA==', 'sharer', 'NORMAL', 'default', '0');
+INSERT INTO dr_user (id, account, username, password, role, status, tenant_code, del_flag)
+SELECT '1', 'admin', '管理员', 'mtl8l4fQr6laQ9qETcol8dNjAuKroZUB7KqLnHIAIrcrdft+5A16oSOTDRKJSln3FhOjHNZcchO7hQ815M2OFWfVogakKVKZb4U+dP9TZ9WMg3/i5wLCRLTZQW2cpb5zD9gFjsIQ3vDeTnR+fS12HWqgBZ+npyAS80FdAYyNsuHGzTQPn8lIAnZf5qTjd6X15H9MrEz5HtjHGOfpdcTJm9796mPNllyccjhegESrfkf7EHxG1ONCR2MdkEL2MypbQpzDhFpyOl/AGbXJLEwkGa7DVmnps96/AFYDUJdX8sqm+YjEstlC491g5ALhvkD/N7AVkyhwx4Ynjgn0Toj3vg==', 'manager,developer,sharer', 'NORMAL', 'default', '0'
+WHERE NOT EXISTS (SELECT 1 FROM dr_user WHERE account = 'admin');
 
+INSERT INTO dr_user (id, account, username, password, role, status, tenant_code, del_flag)
+SELECT '2', 'developer', '开发者', 'K0LmVpWYPrDwtbaJ40v+xSRsK/g42UZRq+Et1KS8FMYTrC3fsR0n9C7HUTb0ngRLMUuN57KE2pX0vcAhWDB+/5XOiMBBmdmW1Zz5b9kP10Zcxf2aajqg0tVWB8VDkSAsVcj9q5Mdfozpn2Ms5Q61FMfIEFnN6DR67aOD9tczwAPJ/bZbu84PjqGeiKq2VevZHUOL/z1t6Zto4Ql53JliTroah7ZTsP5IiUf6lhX5Ckk2RrviB7KwmWq1CgVZ1JEcqj40ZB7IjKI6ZiPGwKVG188jgkPTXGgAfs0uLKs89OGUhxY1iL01aj7jcj/v80RoXJmWa5UJqWLGmtXfwqhqCQ==', 'developer,sharer', 'NORMAL', 'default', '0'
+WHERE NOT EXISTS (SELECT 1 FROM dr_user WHERE account = 'developer');
 
--- ALTER TABLE dr_resource ADD COLUMN config JSON COMMENT '模型个性化配置';
+INSERT INTO dr_user (id, account, username, password, role, status, tenant_code, del_flag)
+SELECT '3', 'sharer', '分享者', 'MQhucQR4QZwvLQHmOEbWeVP5hR+oJMZTBHLKcvksa5xsaGc+X6WAhvc4qctWvXdfKyRt1tUJaC5FArc4Q74+TVPaQhhn8a4K2UWb+Mm+35xPfiO7ZfWVRu9JoEDkxqnO92o0Bw/FDTfYz9OL0xdeYDYD8PN9x9DSlTNDuGE0bpyJqv6ZlgT79vzEG/iTUJN7u6QS71kV/7yJFJ0hm1CgSBvaa9X3q+5N0eD+P7q4UFNaFqTmuytc/5/OnHUDQJq6bvEsM+mV6HIEp+LXF2hqw7GJtoFc+5VZTiKn4PVGG7DBxh9rR7GbdS+Uhdnta6QO9sGbl3rQclUk+ObgiwUTnA==', 'sharer', 'NORMAL', 'default', '0'
+WHERE NOT EXISTS (SELECT 1 FROM dr_user WHERE account = 'sharer');

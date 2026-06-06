@@ -1,5 +1,6 @@
 package com.gccloud.gcpaas.server;
 
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -15,7 +16,7 @@ import java.net.InetAddress;
 @Component
 public class SuccessCommandLineRunner implements CommandLineRunner {
 
-    @jakarta.annotation.Resource
+    @Resource
     private Environment env;
 
     @Override
@@ -28,11 +29,11 @@ public class SuccessCommandLineRunner implements CommandLineRunner {
         // 获取 JVM 启动时间（毫秒）
         RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
         long startTimeMillis = runtimeMxBean.getStartTime();
-        log.info("启动耗时: {} 毫秒", System.currentTimeMillis() - startTimeMillis);
-        log.info("后端服务地址: http://{}:{}{}", ip, port, path);
+        log.info("DataRoom启动成功，启动耗时 {} 毫秒", System.currentTimeMillis() - startTimeMillis);
         log.info("接口文档地址: http://{}:{}{}/doc.html", ip, port, path);
-        log.info("页面访问地址: http://{}:{}{}/static/dataRoom/index.html", ip, port, path);
-        log.info("DataRoom启动成功 ^_^，使用问题请反馈到 https://gitee.com/gcpaas/DataRoom-Plus/issues");
+        log.info("后端服务地址: http://{}:{}{}", ip, port, path);
+        log.info("页面访问地址: http://{}:{}{}/static/front/index.html", ip, port, path);
+        log.info("使用问题请反馈到 https://gitee.com/gcpaas/DataRoom/issues");
         log.info(LINE);
     }
 }

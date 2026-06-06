@@ -41,6 +41,20 @@ function Remove-ReleaseTarget {
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $scriptDir
 $frontBuildDir = Join-Path $scriptDir "dataRoomFront/front"
+$scriptSourceDir = Join-Path $scriptDir "doc/script"
+
+if (-not (Test-Path $scriptSourceDir -PathType Container)) {
+    throw "缺少脚本目录: $scriptSourceDir"
+}
+
+$packageScripts = @(
+    "startup.sh",
+    "shutdown.sh",
+    "restart.sh",
+    "startup.bat",
+    "shutdown.bat",
+    "restart.bat"
+)
 
 [xml]$pom = Get-Content -Path (Join-Path $scriptDir "pom.xml")
 $version = $pom.project.version
@@ -100,6 +114,14 @@ Copy-Item -Path (Join-Path $frontBuildDir "*") -Destination $packageFrontDir -Re
 New-Item -ItemType Directory -Path $packageConfigDir -Force | Out-Null
 Copy-Item -Path (Join-Path $scriptDir "dataRoomServer/src/main/resources/*.yml") -Destination $packageConfigDir
 New-Item -ItemType Directory -Path $packageResourceDir -Force | Out-Null
+
+foreach ($scriptName in $packageScripts) {
+    $sourcePath = Join-Path $scriptSourceDir $scriptName
+    if (-not (Test-Path $sourcePath -PathType Leaf)) {
+        throw "缺少脚本文件: $sourcePath"
+    }
+    Copy-Item -Path $sourcePath -Destination $packageDir
+}
 
 Compress-Archive -Path $packageDir -DestinationPath $zipPath -Force
 Write-Host "$releaseName.zip包构建完毕"

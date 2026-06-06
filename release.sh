@@ -5,6 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$SCRIPT_DIR"
 RELEASE_DIR="$PROJECT_ROOT/RELEASE"
 FRONT_BUILD_DIR="$PROJECT_ROOT/dataRoomFront/front"
+SCRIPT_SOURCE_DIR="$PROJECT_ROOT/doc/script"
 
 require_file() {
     local path="$1"
@@ -54,6 +55,7 @@ cd "$PROJECT_ROOT"
 require_file "$PROJECT_ROOT/pom.xml"
 require_dir "$PROJECT_ROOT/dataRoomFront"
 require_dir "$PROJECT_ROOT/dataRoomServer"
+require_dir "$SCRIPT_SOURCE_DIR"
 
 VERSION="$(extract_version)"
 BUILD_DATE="$(current_date)"
@@ -63,6 +65,14 @@ PACKAGE_FRONT_DIR="$PACKAGE_DIR/dataRoomFront/front"
 PACKAGE_CONFIG_DIR="$PACKAGE_DIR/config"
 PACKAGE_RESOURCE_DIR="$PACKAGE_DIR/dataRoomResource"
 ZIP_PATH="$RELEASE_DIR/$RELEASE_NAME.zip"
+PACKAGE_SCRIPTS=(
+    "startup.sh"
+    "shutdown.sh"
+    "restart.sh"
+    "startup.bat"
+    "shutdown.bat"
+    "restart.bat"
+)
 
 echo "当前版本号: $VERSION"
 echo "构建日期: $BUILD_DATE"
@@ -93,6 +103,10 @@ mkdir -p "$PACKAGE_RESOURCE_DIR"
 cp "$PROJECT_ROOT/dataRoomServer/target/dataRoomServer.jar" "$PACKAGE_DIR/"
 cp -r "$FRONT_BUILD_DIR/." "$PACKAGE_FRONT_DIR"
 cp "$PROJECT_ROOT"/dataRoomServer/src/main/resources/*.yml "$PACKAGE_CONFIG_DIR"
+for script_name in "${PACKAGE_SCRIPTS[@]}"; do
+    require_file "$SCRIPT_SOURCE_DIR/$script_name"
+    cp "$SCRIPT_SOURCE_DIR/$script_name" "$PACKAGE_DIR/"
+done
 
 (
     cd "$RELEASE_DIR"

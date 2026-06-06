@@ -73,7 +73,6 @@
 
 ![开放API.png](doc/image/%E5%BC%80%E6%94%BEAPI.png)
 
-
 ## 快速开始
 https://www.yuque.com/gc-starter/dataroom-plus/start
 
