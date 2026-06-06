@@ -76,6 +76,8 @@
 ## 快速开始
 https://www.yuque.com/gc-starter/dataroom-plus/start
 
+## 托管平台
+[码云](https://gitee.com/gcpaas/DataRoom)、[GitHub](https://github.com/gcpaas/DataRoom)、[AtomGit](https://atomgit.com/gcpaas/DataRoom)
 
 ## QQ群
 
