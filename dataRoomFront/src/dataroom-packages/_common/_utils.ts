@@ -147,6 +147,32 @@ export const normalizeChartTransformPosition = (position: {
   }
 }
 
+type ChartTransformStateTarget = Pick<ChartConfig<unknown>, 'x' | 'y' | 'w' | 'h' | 'rotateX' | 'rotateY' | 'rotateZ'>
+
+type ChartTransformStateInput = {
+  transform: string
+  width?: number
+  height?: number
+}
+
+const resolveChartTransformSize = (value: number | undefined, fallback: number): number => {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback
+}
+
+export const applyChartTransformState = (
+  chart: ChartTransformStateTarget,
+  { transform, width, height }: ChartTransformStateInput,
+) => {
+  const { x, y, rotateX, rotateY, rotateZ } = normalizeChartTransformPosition(extractPositionFromTransform(transform))
+  chart.x = x
+  chart.y = y
+  chart.w = resolveChartTransformSize(width, chart.w)
+  chart.h = resolveChartTransformSize(height, chart.h)
+  chart.rotateX = rotateX
+  chart.rotateY = rotateY
+  chart.rotateZ = rotateZ
+}
+
 /**
  * 根据文件夹路径获取父文件夹名称
  * @param filePath

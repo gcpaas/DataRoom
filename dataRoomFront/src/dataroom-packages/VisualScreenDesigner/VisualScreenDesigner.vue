@@ -3,7 +3,7 @@ import { getComponent, getComponentInstance, getPanelComponent } from '@/dataroo
 import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue'
 import Moveable, { type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd } from 'vue3-moveable'
 import { VueSelecto } from 'vue3-selecto'
-import { deleteChartById, extractPositionFromTransform, getChartByElement, getChartById, getResourceUrl, normalizeChartTransformPosition } from '@/dataroom-packages/_common/_utils.ts'
+import { applyChartTransformState, deleteChartById, getChartByElement, getChartById, getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
 import VanillaSelecto from 'selecto'
 import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
 import { useRoute, useRouter } from 'vue-router'
@@ -420,16 +420,13 @@ const onDragEnd = (e: OnDragEnd) => {
   console.log('onDragEnd', e)
 }
 
-const updateTransform = (e: OnEvent, transform: string, width: number, height: number) => {
+const updateTransform = (e: OnEvent, transform: string, width?: number, height?: number) => {
   const chart: ChartConfig<unknown> = getChartByElement(e.target, chartList.value)
-  const { x, y, rotateX, rotateY, rotateZ } = normalizeChartTransformPosition(extractPositionFromTransform(transform))
-  chart.x = x
-  chart.y = y
-  chart.w = width
-  chart.h = height
-  chart.rotateX = rotateX
-  chart.rotateY = rotateY
-  chart.rotateZ = rotateZ
+  applyChartTransformState(chart, {
+    transform,
+    width,
+    height,
+  })
 }
 /**
  * 缩放组件中
@@ -454,8 +451,9 @@ const onResizeEnd = (e: OnResizeEnd) => {
  * @param e
  */
 const onRotate = (e: OnRotate) => {
-  console.log('onRotate', e.drag.transform)
-  e.target.style.transform = e.drag.transform
+  console.log('onRotate', e.transform)
+  e.target.style.transform = e.transform
+  updateTransform(e, e.transform)
 }
 
 /**
@@ -464,9 +462,8 @@ const onRotate = (e: OnRotate) => {
  */
 const onRotateEnd = (e: OnRotateEnd) => {
   console.log('onRotateEnd', e)
-  const width: number = parseInt(e.target.style.width.replace('px', ''))
-  const height: number = parseInt(e.target.style.height.replace('px', ''))
-  updateTransform(e, e.target.style.transform, width, height)
+  const transform = e.lastEvent?.transform || e.target.style.transform
+  updateTransform(e, transform)
 }
 /**
  * 框选开始
