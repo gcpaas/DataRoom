@@ -21,6 +21,7 @@ import com.gccloud.gcpaas.core.page.bean.PageStageVo;
 import com.gccloud.gcpaas.core.page.dto.PageOfflineDto;
 import com.gccloud.gcpaas.core.page.dto.PagePublishDto;
 import com.gccloud.gcpaas.core.page.dto.PageRenameDto;
+import com.gccloud.gcpaas.core.page.dto.PageHistoryBackupDto;
 import com.gccloud.gcpaas.core.page.dto.PageStageSearchDto;
 import com.gccloud.gcpaas.core.page.service.PageService;
 import com.gccloud.gcpaas.core.page.service.PageStageService;
@@ -375,10 +376,23 @@ public class PageController {
         queryWrapper.eq(PageStageEntity::getPageCode, stageSearch.getCode());
         queryWrapper.eq(stageSearch.getPageStatus() != null, PageStageEntity::getPageStatus, stageSearch.getPageStatus());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        queryWrapper.ge(StringUtils.isNotBlank(stageSearch.getStartDate()), PageStageEntity::getCreateDate, sdf.parse(stageSearch.getStartDate()));
-        queryWrapper.lt(StringUtils.isNotBlank(stageSearch.getEndDate()), PageStageEntity::getCreateDate, sdf.parse(stageSearch.getEndDate()));
+        if (StringUtils.isNotBlank(stageSearch.getStartDate())) {
+            queryWrapper.ge(PageStageEntity::getCreateDate, sdf.parse(stageSearch.getStartDate()));
+        }
+        if (StringUtils.isNotBlank(stageSearch.getEndDate())) {
+            queryWrapper.lt(PageStageEntity::getCreateDate, sdf.parse(stageSearch.getEndDate()));
+        }
+        queryWrapper.orderByDesc(PageStageEntity::getCreateDate, PageStageEntity::getId);
         Page<PageStageEntity> page = pageStageService.page(searchPage, queryWrapper);
         return Resp.success(PageVo.build(page));
+    }
+
+    @PostMapping("/history/backup")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "新增历史备份", description = "为设计器创建一条历史记录")
+    @OperationLogMeta(actionType = "新增", actionDesc = "页面历史备份", businessType = "page_stage", businessName = "页面历史", targetIdKey = "pageCode")
+    public Resp<String> historyBackup(@RequestBody PageHistoryBackupDto dto) {
+        return Resp.success(pageStageService.backupHistory(dto));
     }
 
     /**
@@ -418,6 +432,15 @@ public class PageController {
         return Resp.success(null);
     }
 
+    @PostMapping("/history/rollback/{id}")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "历史回滚设计态", description = "根据历史记录快照回滚设计态")
+    @Parameters({@Parameter(name = "id", description = "历史记录ID", in = ParameterIn.PATH)})
+    @OperationLogMeta(actionType = "修改", actionDesc = "页面历史回滚", businessType = "page_stage", businessName = "页面历史", targetIdKey = "id")
+    public Resp<String> historyRollback(@PathVariable("id") String id) {
+        return Resp.success(pageStageService.rollbackDesignByHistoryId(id));
+    }
+
     /**
      * 回退到某个历史、快照
      *
@@ -430,6 +453,7 @@ public class PageController {
     @Parameters({@Parameter(name = "id", description = "历史记录ID", in = ParameterIn.PATH)})
     @OperationLogMeta(actionType = "修改", actionDesc = "页面历史回退", businessType = "page_stage", businessName = "页面历史", targetIdKey = "id")
     public Resp<String> stageRollback(@PathVariable("id") String id) {
+        // 兼容旧的状态互换逻辑，设计器必须改用 /history/rollback/{id} 的快照复制语义接口。
         PageStageEntity pageStage = pageStageService.getById(id);
 
         // 当前设计态修改为历史

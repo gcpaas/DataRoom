@@ -56,6 +56,21 @@ import {
 } from './viewport'
 import { getVisualScreenMoveableGuidelines, normalizeVisualScreenRulerConfig, RULER_SIZE_PX, type VisualScreenRulerConfig } from './ruler'
 import { handleSaveBeforeLeaveAction, type SaveBeforeLeaveAction } from '@/dataroom-packages/_common/save-before-leave'
+import {
+  createDesignerHistoryAutoBackupController,
+  createDesignerHistoryHash,
+  hasUnsavedChanges,
+} from '@/dataroom-packages/_common/designer-history-backup.ts'
+import { PAGE_HISTORY_REMARKS } from '@/dataroom-packages/_common/page-history-remark.ts'
+import {
+  applySavedDesignerHistoryState,
+  createAliveGuard,
+  createCoalescedLatestAsyncTask,
+  createLatestDesignerHashSync,
+  createPageHistoryBackupPayload,
+  savePageWithHistoryBackup,
+} from '@/dataroom-packages/_common/designer-history-save.ts'
+import { createVisualScreenPageConfigPayload } from './visual-screen-designer-history.ts'
 
 const router = useRouter()
 const route = useRoute()
@@ -275,6 +290,17 @@ const ControlPanelWrapper = defineAsyncComponent(() => import('@/dataroom-packag
 const VisualScreenControlPanel = defineAsyncComponent(() => import('./ControlPanel.vue'))
 const ContextMenu = defineAsyncComponent(() => import('@/dataroom-packages/PageDesigner/ContextMenu.vue'))
 const SaveBeforeLeaveDialog = defineAsyncComponent(() => import('@/dataroom-packages/_components/SaveBeforeLeaveDialog.vue'))
+const PageHistoryDialog = defineAsyncComponent(() => import('@/dataroom-packages/_components/PageHistoryDialog.vue'))
+
+const lastSavedHash = ref<string>()
+const lastAutoBackupHash = ref<string>()
+const currentPageConfigHash = ref<string>()
+const historyDialogVisible = ref(false)
+
+const visualScreenDesignerAliveGuard = createAliveGuard()
+const currentPageConfigHashSync = createLatestDesignerHashSync((hash) => {
+  currentPageConfigHash.value = hash
+})
 
 type InsertCommand = 'component' | 'resource'
 
@@ -413,23 +439,12 @@ const onRenameConfirm = () => {
  * 页面预览
  */
 const onPreview = () => {
-  if (!pageStageEntity.value) {
-    ElMessage({
-      message: '页面信息未加载',
-      type: 'error',
-    })
+  const payload = getPageConfigPayload()
+  if (!payload) {
     return
   }
   pageApi
-    .updatePageConfig4Preview({
-      ...pageStageEntity.value,
-      pageConfig: {
-        ...pageStageEntity.value.pageConfig,
-        chartList: chartList.value,
-        basicConfig: basicConfig.value,
-        globalVariableList: globalVariable.value,
-      },
-    })
+    .updatePageConfig4Preview(payload)
     .then(() => {
       const routeData = router.resolve({
         path: `/dataRoom/visualScreenPreview/preview/${pageStageEntity.value!.pageCode}`,
@@ -438,25 +453,67 @@ const onPreview = () => {
     })
 }
 
-const getPageConfigPayload = () => {
-  if (!pageStageEntity.value) {
+const getPageConfigPayload = (showLoadError: boolean = true) => {
+  const payload = createVisualScreenPageConfigPayload({
+    pageStageEntity: pageStageEntity.value,
+    chartList: chartList.value,
+    basicConfig: basicConfig.value,
+    globalVariableList: globalVariable.value,
+  })
+
+  if (!payload && showLoadError) {
     ElMessage({
       message: '页面信息未加载',
       type: 'error',
     })
-    return null
   }
 
-  return {
-    ...pageStageEntity.value,
-    pageConfig: {
-      ...pageStageEntity.value.pageConfig,
-      chartList: chartList.value,
-      basicConfig: basicConfig.value,
-      globalVariableList: globalVariable.value,
-    },
-  }
+  return payload
 }
+
+const computePageConfigHash = async (payload: PageStageEntity | null = getPageConfigPayload(false)) => {
+  if (!payload) {
+    return null
+  }
+  return createDesignerHistoryHash(payload.pageConfig)
+}
+
+const syncCurrentPageConfigHash = async (payload: PageStageEntity | null = getPageConfigPayload(false)) => {
+  return currentPageConfigHashSync.sync(async () => computePageConfigHash(payload))
+}
+
+const currentPageConfigHashSyncTask = createCoalescedLatestAsyncTask(
+  async () => {
+    await syncCurrentPageConfigHash()
+  },
+  {
+    onError: (error) => {
+      console.error(error)
+    },
+  },
+)
+
+const historyAutoBackupController = createDesignerHistoryAutoBackupController({
+  getCurrentHash: async () => computePageConfigHash(),
+  getLastAutoBackupHash: () => lastAutoBackupHash.value,
+  setLastAutoBackupHash: (hash: string) => {
+    lastAutoBackupHash.value = hash
+  },
+  backup: async () => {
+    const payload = getPageConfigPayload(false)
+    if (!payload) {
+      throw new Error('page config is not ready')
+    }
+    await pageApi.historyBackup(createPageHistoryBackupPayload(payload, PAGE_HISTORY_REMARKS.autoBackup))
+  },
+  onError: (error) => {
+    console.error(error)
+  },
+})
+
+const hasPageConfigUnsavedChanges = computed(() => {
+  return hasUnsavedChanges(currentPageConfigHash.value, lastSavedHash.value)
+})
 
 /**
  * 保存页面配置
@@ -467,12 +524,43 @@ const savePageConfig = async () => {
     return false
   }
 
-  await pageApi.updatePageConfig(payload)
+  const savedHash = await savePageWithHistoryBackup({
+    payload,
+    updatePageConfig: pageApi.updatePageConfig,
+    historyBackup: pageApi.historyBackup,
+  })
+
+  if (savedHash.status === 'design_save_failed') {
+    return savedHash
+  }
+
+  applySavedDesignerHistoryState({
+    savedHash: savedHash.hash,
+    historyBackupSucceeded: savedHash.status === 'saved_with_history',
+    setLastSavedHash: (hash) => {
+      lastSavedHash.value = hash
+    },
+    setLastAutoBackupHash: (hash) => {
+      lastAutoBackupHash.value = hash
+    },
+    invalidateCurrentHash: currentPageConfigHashSync.invalidate,
+    triggerCurrentHashSync: currentPageConfigHashSyncTask.trigger,
+  })
+
+  if (savedHash.status === 'saved_without_history') {
+    console.error(savedHash.historyBackupError)
+    ElMessage({
+      message: '保存成功，但历史备份失败，请稍后重试',
+      type: 'warning',
+    })
+    return savedHash
+  }
+
   ElMessage({
     message: '保存成功',
     type: 'success',
   })
-  return true
+  return savedHash
 }
 
 const onSave = async () => {
@@ -978,6 +1066,14 @@ watch([leftToolPanelShow, rightControlPanelShow], () => {
   nextTick(syncDesignerViewportSize)
 })
 
+watch(
+  [chartList, basicConfig, globalVariable],
+  () => {
+    currentPageConfigHashSyncTask.trigger()
+  },
+  { deep: true },
+)
+
 watch(rulerVisible, () => {
   if (basicConfig.value.zoom?.mode === 'best') {
     nextTick(() => fitDesignerZoomToViewport(false))
@@ -1016,7 +1112,7 @@ const onSaveBeforeLeaveAction = async (action: SaveBeforeLeaveAction) => {
     await handleSaveBeforeLeaveAction(action, {
       save: async () => {
         const saved = await savePageConfig()
-        if (!saved) {
+        if (!saved || saved.status === 'design_save_failed') {
           throw new Error('page config is not ready')
         }
       },
@@ -1025,6 +1121,10 @@ const onSaveBeforeLeaveAction = async (action: SaveBeforeLeaveAction) => {
   } catch {
     saveBeforeLeaveDialogVisible.value = true
   }
+}
+
+const onHistoryRolledBack = () => {
+  window.location.reload()
 }
 
 onMounted(() => {
@@ -1041,7 +1141,10 @@ onMounted(() => {
       canvasResizeObserver.observe(canvasViewportRef.value)
     }
   })
-  pageApi.getPageConfig(code, 'design').then((res) => {
+  void pageApi.getPageConfig(code, 'design').then(async (res) => {
+    if (!visualScreenDesignerAliveGuard.isAlive()) {
+      return
+    }
     pageStageEntity.value = res
     chartList.value = res.pageConfig?.chartList || []
     globalVariable.value = res.pageConfig?.globalVariableList || []
@@ -1054,15 +1157,30 @@ onMounted(() => {
         ruler: normalizeVisualScreenRulerConfig(loaded.ruler, loaded.size?.width || defaultBasicConfig.size.width, loaded.size?.height || defaultBasicConfig.size.height),
         timers: loaded.timers || [],
       }
-      nextTick(applySavedDesignerZoomPreference)
     }
+    await nextTick()
+    if (!visualScreenDesignerAliveGuard.isAlive()) {
+      return
+    }
+    applySavedDesignerZoomPreference()
+    const initialHash = await syncCurrentPageConfigHash()
+    if (!visualScreenDesignerAliveGuard.isAlive()) {
+      return
+    }
+    if (initialHash) {
+      lastSavedHash.value = initialHash
+      lastAutoBackupHash.value = initialHash
+    }
+    historyAutoBackupController.start()
   })
 })
 
 onBeforeUnmount(() => {
+  visualScreenDesignerAliveGuard.dispose()
   window.removeEventListener('keydown', onWindowKeyDown)
   window.removeEventListener('keyup', onCanvasPanKeyUp)
   window.removeEventListener('blur', resetCanvasPanState)
+  historyAutoBackupController.stop()
   gestureStartLayoutState.clear()
   resetCanvasPanState()
   canvasResizeObserver?.disconnect()
@@ -1127,6 +1245,9 @@ onBeforeUnmount(() => {
         </div>
         <div class="header-action">
           <el-button @click="switchPageControlPanel" size="small">设置</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="historyDialogVisible = true" size="small">历史</el-button>
         </div>
         <div class="header-action">
           <el-button @click="onPreview" size="small">预览</el-button>
@@ -1317,6 +1438,12 @@ onBeforeUnmount(() => {
       <el-button type="primary" @click="onRenameConfirm">确定</el-button>
     </template>
   </el-dialog>
+  <PageHistoryDialog
+    v-model="historyDialogVisible"
+    :page-code="pageStageEntity?.pageCode || ''"
+    :has-unsaved-changes="hasPageConfigUnsavedChanges"
+    @rolled-back="onHistoryRolledBack"
+  />
   <SaveBeforeLeaveDialog v-model="saveBeforeLeaveDialogVisible" @action="onSaveBeforeLeaveAction" />
 </template>
 

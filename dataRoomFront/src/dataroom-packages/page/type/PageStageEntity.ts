@@ -7,6 +7,10 @@ import type {VisualScreenPageConfig} from "@/dataroom-packages/PageDesigner/type
 export interface PageStageEntity {
   // ID
   id?: string
+  // 创建时间
+  createDate?: string
+  // 更新时间
+  updateDate?: string
   // 页面名称
   name?: string
   // 页面编码

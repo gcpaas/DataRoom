@@ -1,4 +1,5 @@
 import request from '@/dataroom-packages/_common/_request'
+import type { PageHistoryRemark } from '@/dataroom-packages/_common/page-history-remark.ts'
 import type {PageStageEntity} from "@/dataroom-packages/page/type/PageStageEntity.ts";
 
 /**
@@ -31,6 +32,33 @@ export interface PagePublishDto {
 export interface PageOfflineDto {
   code: string
   remark: string
+}
+
+export interface PageVo<T> {
+  total: number
+  size: number
+  current: number
+  data: T[]
+}
+
+export interface PageHistoryBackupDto {
+  pageCode: string
+  remark: PageHistoryRemark | string
+  pageType: PageStageEntity['pageType']
+  pageConfig: PageStageEntity['pageConfig']
+}
+
+export interface PageHistoryListParams {
+  code: string
+  pageStatus?: PageStageEntity['pageStatus']
+  startDate?: string
+  endDate?: string
+  current?: number
+  size?: number
+}
+
+export type PageHistoryItem = Omit<PageStageEntity, 'pageConfig'> & {
+  pageConfig?: PageStageEntity['pageConfig']
 }
 
 /**
@@ -113,5 +141,17 @@ export const pageApi = {
    */
   updateName(code: string, name: string) {
     return request.post<boolean>('/dataRoom/page/updateName', { code, name })
+  },
+
+  historyBackup(data: PageHistoryBackupDto) {
+    return request.post<string>('/dataRoom/page/history/backup', data)
+  },
+
+  historyList(params: PageHistoryListParams) {
+    return request.get<PageVo<PageHistoryItem>>('/dataRoom/page/stage/list', params)
+  },
+
+  historyRollback(id: string) {
+    return request.post<string>(`/dataRoom/page/history/rollback/${id}`)
   },
 }

@@ -15,7 +15,13 @@ import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/Globa
 import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 import { useTimerManager } from '@/dataroom-packages/hooks/use-timer-manager'
 import { handleSaveBeforeLeaveAction, type SaveBeforeLeaveAction } from '@/dataroom-packages/_common/save-before-leave'
+import {
+  createDesignerHistoryAutoBackupController,
+  createDesignerHistoryHash,
+  hasUnsavedChanges,
+} from '@/dataroom-packages/_common/designer-history-backup.ts'
 import type { ChartLayerMoveDirection } from '@/dataroom-packages/PageDesigner/type/CanvasInst.ts'
+import { PAGE_HISTORY_REMARKS } from '@/dataroom-packages/_common/page-history-remark.ts'
 import {
   ChartLayoutBaselineTracker,
   EditorHistoryManager,
@@ -31,6 +37,14 @@ import {
   removeChartWithLocation,
   reorderChartWithinParent,
 } from '@/dataroom-packages/_common/editor-history.ts'
+import {
+  applySavedDesignerHistoryState,
+  createAliveGuard,
+  createCoalescedLatestAsyncTask,
+  createLatestDesignerHashSync,
+  createPageHistoryBackupPayload,
+  savePageWithHistoryBackup,
+} from '@/dataroom-packages/_common/designer-history-save.ts'
 
 const router = useRouter()
 const route = useRoute()
@@ -58,6 +72,17 @@ const ComponentLayer = defineAsyncComponent(() => import('@/dataroom-packages/_c
 const GlobalVariableComponent = defineAsyncComponent(() => import('@/dataroom-packages/_components/GlobalVariable.vue'))
 const ResourceLib = defineAsyncComponent(() => import('@/dataroom-packages/_components/ResourceLib.vue'))
 const SaveBeforeLeaveDialog = defineAsyncComponent(() => import('@/dataroom-packages/_components/SaveBeforeLeaveDialog.vue'))
+const PageHistoryDialog = defineAsyncComponent(() => import('@/dataroom-packages/_components/PageHistoryDialog.vue'))
+
+const lastSavedHash = ref<string>()
+const lastAutoBackupHash = ref<string>()
+const currentPageConfigHash = ref<string>()
+const historyDialogVisible = ref(false)
+
+const pageDesignerAliveGuard = createAliveGuard()
+const currentPageConfigHashSync = createLatestDesignerHashSync((hash) => {
+  currentPageConfigHash.value = hash
+})
 
 type InsertCommand = 'component' | 'resource'
 
@@ -444,6 +469,7 @@ const onPreview = () => {
         ...pageStageEntity.value.pageConfig,
         chartList: chartList.value,
         basicConfig: pageBasicConfig.value,
+        globalVariableList: globalVariable.value,
       },
     })
     .then(() => {
@@ -454,12 +480,14 @@ const onPreview = () => {
     })
 }
 
-const getPageConfigPayload = () => {
+const getPageConfigPayload = (showLoadError: boolean = true) => {
   if (!pageStageEntity.value) {
-    ElMessage({
-      message: '页面信息未加载',
-      type: 'error',
-    })
+    if (showLoadError) {
+      ElMessage({
+        message: '页面信息未加载',
+        type: 'error',
+      })
+    }
     return null
   }
 
@@ -469,9 +497,55 @@ const getPageConfigPayload = () => {
       ...pageStageEntity.value.pageConfig,
       chartList: chartList.value,
       basicConfig: pageBasicConfig.value,
+      globalVariableList: globalVariable.value,
     },
   }
 }
+
+const computePageConfigHash = async (payload: PageStageEntity | null = getPageConfigPayload(false)) => {
+  if (!payload) {
+    return null
+  }
+  return createDesignerHistoryHash(payload.pageConfig)
+}
+
+const syncCurrentPageConfigHash = async (payload: PageStageEntity | null = getPageConfigPayload(false)) => {
+  return currentPageConfigHashSync.sync(async () => computePageConfigHash(payload))
+}
+
+const currentPageConfigHashSyncTask = createCoalescedLatestAsyncTask(
+  async () => {
+    await syncCurrentPageConfigHash()
+  },
+  {
+    onError: (error) => {
+      console.error(error)
+    },
+  },
+)
+
+const historyAutoBackupController = createDesignerHistoryAutoBackupController({
+  getCurrentHash: async () => computePageConfigHash(),
+  getLastAutoBackupHash: () => lastAutoBackupHash.value,
+  setLastAutoBackupHash: (hash: string) => {
+    lastAutoBackupHash.value = hash
+  },
+  backup: async () => {
+    const payload = getPageConfigPayload(false)
+    if (!payload) {
+      throw new Error('page config is not ready')
+    }
+    await pageApi.historyBackup(createPageHistoryBackupPayload(payload, PAGE_HISTORY_REMARKS.autoBackup))
+  },
+  onError: (error) => {
+    console.error(error)
+  },
+})
+
+const hasPageConfigUnsavedChanges = computed(() => {
+  return hasUnsavedChanges(currentPageConfigHash.value, lastSavedHash.value)
+})
+
 /**
  * 保存
  */
@@ -481,12 +555,43 @@ const savePageConfig = async () => {
     return false
   }
 
-  await pageApi.updatePageConfig(payload)
+  const savedHash = await savePageWithHistoryBackup({
+    payload,
+    updatePageConfig: pageApi.updatePageConfig,
+    historyBackup: pageApi.historyBackup,
+  })
+
+  if (savedHash.status === 'design_save_failed') {
+    return savedHash
+  }
+
+  applySavedDesignerHistoryState({
+    savedHash: savedHash.hash,
+    historyBackupSucceeded: savedHash.status === 'saved_with_history',
+    setLastSavedHash: (hash) => {
+      lastSavedHash.value = hash
+    },
+    setLastAutoBackupHash: (hash) => {
+      lastAutoBackupHash.value = hash
+    },
+    invalidateCurrentHash: currentPageConfigHashSync.invalidate,
+    triggerCurrentHashSync: currentPageConfigHashSyncTask.trigger,
+  })
+
+  if (savedHash.status === 'saved_without_history') {
+    console.error(savedHash.historyBackupError)
+    ElMessage({
+      message: '保存成功，但历史备份失败，请稍后重试',
+      type: 'warning',
+    })
+    return savedHash
+  }
+
   ElMessage({
     message: '保存成功',
     type: 'success',
   })
-  return true
+  return savedHash
 }
 
 const onSave = async () => {
@@ -543,7 +648,7 @@ const onSaveBeforeLeaveAction = async (action: SaveBeforeLeaveAction) => {
     await handleSaveBeforeLeaveAction(action, {
       save: async () => {
         const saved = await savePageConfig()
-        if (!saved) {
+        if (!saved || saved.status === 'design_save_failed') {
           throw new Error('page config is not ready')
         }
       },
@@ -621,12 +726,25 @@ watch(
   { deep: true },
 )
 
+watch(
+  [chartList, pageBasicConfig, globalVariable],
+  () => {
+    currentPageConfigHashSyncTask.trigger()
+  },
+  { deep: true },
+)
+
+const onHistoryRolledBack = () => {
+  window.location.reload()
+}
+
 onMounted(() => {
   window.addEventListener('keydown', onHistoryKeyDown)
-  // 获取路由中code 参数
   const code: string = route.params.pageCode as string
-  // 根据编码获取页面详情
-  pageApi.getPageConfig(code, 'design').then((res) => {
+  void pageApi.getPageConfig(code, 'design').then(async (res) => {
+    if (!pageDesignerAliveGuard.isAlive()) {
+      return
+    }
     pageStageEntity.value = res
     chartList.value = res.pageConfig?.chartList || []
     rebuildChartLayoutBaselines()
@@ -635,10 +753,20 @@ onMounted(() => {
       pageBasicConfig.value.timers = []
     }
     globalVariable.value = res.pageConfig?.globalVariableList || []
-    // 页面加载完成后，初始化并启动所有启用的定时器
-    nextTick(() => {
-      timerManager.reloadAllTimers()
-    })
+    await nextTick()
+    if (!pageDesignerAliveGuard.isAlive()) {
+      return
+    }
+    timerManager.reloadAllTimers()
+    const initialHash = await syncCurrentPageConfigHash()
+    if (!pageDesignerAliveGuard.isAlive()) {
+      return
+    }
+    if (initialHash) {
+      lastSavedHash.value = initialHash
+      lastAutoBackupHash.value = initialHash
+    }
+    historyAutoBackupController.start()
   })
 })
 
@@ -646,7 +774,9 @@ onMounted(() => {
  * 组件卸载时清理所有定时器
  */
 onUnmounted(() => {
+  pageDesignerAliveGuard.dispose()
   window.removeEventListener('keydown', onHistoryKeyDown)
+  historyAutoBackupController.stop()
   if (timerManager) {
     timerManager.clearAllTimers()
   }
@@ -690,6 +820,9 @@ onUnmounted(() => {
         </div>
         <div class="header-action">
           <el-button @click="switchPageControlPanel" size="small">设置</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="historyDialogVisible = true" size="small">历史</el-button>
         </div>
         <div class="header-action">
           <el-button @click="onPreview" size="small">预览</el-button>
@@ -775,6 +908,12 @@ onUnmounted(() => {
       <el-button type="primary" @click="onRenameConfirm">确定</el-button>
     </template>
   </el-dialog>
+  <PageHistoryDialog
+    v-model="historyDialogVisible"
+    :page-code="pageStageEntity?.pageCode || ''"
+    :has-unsaved-changes="hasPageConfigUnsavedChanges"
+    @rolled-back="onHistoryRolledBack"
+  />
   <SaveBeforeLeaveDialog v-model="saveBeforeLeaveDialogVisible" @action="onSaveBeforeLeaveAction" />
 </template>
 
