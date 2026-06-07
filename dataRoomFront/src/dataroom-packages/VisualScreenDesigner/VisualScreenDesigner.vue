@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { getComponent, getComponentInstance, getPanelComponent } from '@/dataroom-packages/components/AutoInstall.ts'
-import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue'
+import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, watch } from 'vue'
 import Moveable, { type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd } from 'vue3-moveable'
 import { VueSelecto } from 'vue3-selecto'
-import { applyChartTransformState, deleteChartById, getChartByElement, getChartById, getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
+import { applyChartTransformState, getChartByElement, getChartById, getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
 import VanillaSelecto from 'selecto'
 import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
 import { useRoute, useRouter } from 'vue-router'
@@ -15,6 +15,21 @@ import { useCanvasInst } from '@/dataroom-packages/hooks/use-canvas-inst'
 import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/GlobalVariable.ts'
 import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 import type { VisualScreenPageBasicConfig } from '@/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts'
+import type { ChartLayerMoveDirection } from '@/dataroom-packages/PageDesigner/type/CanvasInst.ts'
+import {
+  EditorHistoryManager,
+  captureChartLayoutState,
+  createAddChartHistoryEntry,
+  createChartLayoutHistoryEntry,
+  createRemoveChartHistoryEntry,
+  createReorderChartHistoryEntry,
+  findChartReference,
+  getChartListByParent,
+  getEditorHistoryShortcutAction,
+  isNativeTextEditingTarget,
+  removeChartWithLocation,
+  reorderChartWithinParent,
+} from '@/dataroom-packages/_common/editor-history.ts'
 import RulerOverlay from './RulerOverlay.vue'
 import {
   createDesignerViewport,
@@ -82,6 +97,13 @@ const isCanvasPanModeActive = computed(() => spacePressed.value || isCanvasPanni
 const isCanvasInteractionBlocked = computed(() => isCanvasPanModeActive.value || isRulerInteracting.value)
 // 记录右侧控制面板是否为页面配置
 const rightControlPanelSetting = ref(true)
+const editorHistory = reactive(
+  new EditorHistoryManager({
+    source: 'visual-screen-designer',
+    getChartList: () => chartList.value,
+  }),
+)
+const gestureStartLayoutState = new Map<string, ReturnType<typeof captureChartLayoutState>>()
 const visualScreenRuler = computed(() => normalizeVisualScreenRulerConfig(basicConfig.value.ruler, canvasWidth.value, canvasHeight.value))
 const moveableGuidelines = computed(() => getVisualScreenMoveableGuidelines(visualScreenRuler.value, canvasWidth.value, canvasHeight.value))
 const moveableVerticalGuidelines = computed(() => moveableGuidelines.value.verticalGuidelines)
@@ -124,6 +146,94 @@ const moveableTargets: ComputedRef<(HTMLElement | null)[]> = computed(() => {
   return [dom]
 })
 
+const syncActiveChartReference = () => {
+  if (!activeChart.value) {
+    return
+  }
+
+  const reference = findChartReference(activeChart.value.id, chartList.value)
+  if (!reference) {
+    activeChart.value = undefined
+    rightControlPanelSetting.value = true
+    return
+  }
+
+  activeChart.value = reference.chart
+}
+
+const commitChartAdd = (chart: ChartConfig<unknown>, label: string = '新增组件') => {
+  const reference = findChartReference(chart.id, chartList.value)
+  if (!reference) {
+    return
+  }
+
+  editorHistory.record(createAddChartHistoryEntry(label, 'visual-screen-designer', reference.chart, reference.parent, reference.index))
+}
+
+const deleteChartWithHistory = (chartId: string, label: string = '删除组件') => {
+  const removed = removeChartWithLocation(chartId, chartList.value)
+  if (!removed) {
+    return false
+  }
+
+  editorHistory.record(createRemoveChartHistoryEntry(label, 'visual-screen-designer', removed.parent, removed.index, removed.chart))
+  syncActiveChartReference()
+  return true
+}
+
+const moveChartLayer = (chartId: string, direction: ChartLayerMoveDirection) => {
+  const reference = findChartReference(chartId, chartList.value)
+  if (!reference) {
+    return false
+  }
+
+  const siblingList = getChartListByParent(chartList.value, reference.parent)
+  if (!siblingList || siblingList.length <= 1) {
+    return false
+  }
+
+  let targetIndex = reference.index
+  let label = '调整图层顺序'
+  if (direction === 'top') {
+    targetIndex = 0
+    label = '图层置顶'
+  } else if (direction === 'up') {
+    targetIndex = Math.max(0, reference.index - 1)
+    label = '图层上移'
+  } else if (direction === 'down') {
+    targetIndex = Math.min(siblingList.length - 1, reference.index + 1)
+    label = '图层下移'
+  } else if (direction === 'bottom') {
+    targetIndex = siblingList.length - 1
+    label = '图层置底'
+  }
+
+  const reordered = reorderChartWithinParent(chartList.value, {
+    parent: reference.parent,
+    chartId,
+    toIndex: targetIndex,
+  })
+  if (!reordered || targetIndex === reference.index) {
+    return false
+  }
+
+  editorHistory.record(createReorderChartHistoryEntry(label, 'visual-screen-designer', reference.parent, chartId, reference.index, targetIndex))
+  syncActiveChartReference()
+  return true
+}
+
+const applyHistoryAction = (action: 'undo' | 'redo') => {
+  const changed = action === 'undo' ? editorHistory.undo() : editorHistory.redo()
+  if (!changed) {
+    return false
+  }
+
+  contextMenuVisible.value = false
+  syncActiveChartReference()
+  updateMoveableRect()
+  return true
+}
+
 const addChart = (type: string) => {
   const chartInst: ChartConfig<unknown> = getComponentInstance(type)
   chartList.value.push(chartInst)
@@ -148,6 +258,12 @@ const { canvasInst } = useCanvasInst({
   globalVariable,
   addChart,
   activeChartById,
+  commitChartAdd,
+  undo: () => applyHistoryAction('undo'),
+  redo: () => applyHistoryAction('redo'),
+  canUndo: () => editorHistory.canUndo,
+  canRedo: () => editorHistory.canRedo,
+  moveChartLayer,
 })
 provide(DrConst.CANVAS_INST, canvasInst)
 
@@ -248,8 +364,7 @@ const onRightClick = (e: MouseEvent, chart: ChartConfig<unknown>) => {
  * @param chartId
  */
 const onChartDeleteClick = (chartId: string) => {
-  deleteChartById(chartId, chartList.value)
-  activeChart.value = undefined
+  deleteChartWithHistory(chartId)
 }
 
 /**
@@ -263,8 +378,12 @@ const computedContextMenuStyle = computed(() => {
   }
 })
 
-const onHistory = () => {
-  // TODO: 实现历史记录功能
+const onUndo = () => {
+  applyHistoryAction('undo')
+}
+
+const onRedo = () => {
+  applyHistoryAction('redo')
 }
 
 // 重命名对话框
@@ -409,12 +528,39 @@ const onInsertCommand = (command: InsertCommand) => {
   openResourceLib()
 }
 
+const rememberGestureStartLayout = (chartId: string) => {
+  if (gestureStartLayoutState.has(chartId)) {
+    return
+  }
+  const reference = findChartReference(chartId, chartList.value)
+  if (!reference) {
+    return
+  }
+  gestureStartLayoutState.set(chartId, captureChartLayoutState(reference.chart))
+}
+
+const finalizeGestureHistory = (chartId: string, label: string) => {
+  const before = gestureStartLayoutState.get(chartId)
+  gestureStartLayoutState.delete(chartId)
+  if (!before) {
+    return
+  }
+
+  const reference = findChartReference(chartId, chartList.value)
+  if (!reference) {
+    return
+  }
+
+  editorHistory.record(createChartLayoutHistoryEntry(label, 'visual-screen-designer', chartId, before, captureChartLayoutState(reference.chart)))
+}
+
 /**
  * 拖拽组件开始
  * @param e
  */
 const onDragStart = (e: OnDragStart) => {
-  console.log('onDragStart ', e)
+  const chart = getChartByElement(e.target, chartList.value)
+  rememberGestureStartLayout(chart.id)
 }
 
 /**
@@ -431,7 +577,8 @@ const onDrag = (e: OnDrag) => {
  * @param e
  */
 const onDragEnd = (e: OnDragEnd) => {
-  console.log('onDragEnd', e)
+  const chart = getChartByElement(e.target, chartList.value)
+  finalizeGestureHistory(chart.id, '移动组件')
 }
 
 const updateTransform = (e: OnEvent, transform: string, width?: number, height?: number) => {
@@ -447,6 +594,8 @@ const updateTransform = (e: OnEvent, transform: string, width?: number, height?:
  * @param e
  */
 const onResize = (e: OnResize) => {
+  const chart = getChartByElement(e.target, chartList.value)
+  rememberGestureStartLayout(chart.id)
   e.target.style.width = `${e.width}px`
   e.target.style.height = `${e.height}px`
   e.target.style.transform = e.drag.transform
@@ -457,15 +606,16 @@ const onResize = (e: OnResize) => {
  * @param e
  */
 const onResizeEnd = (e: OnResizeEnd) => {
-  console.log('onResizeEnd', e)
-  return null
+  const chart = getChartByElement(e.target, chartList.value)
+  finalizeGestureHistory(chart.id, '调整组件大小')
 }
 /**
  * 旋转组件中
  * @param e
  */
 const onRotate = (e: OnRotate) => {
-  console.log('onRotate', e.transform)
+  const chart = getChartByElement(e.target, chartList.value)
+  rememberGestureStartLayout(chart.id)
   e.target.style.transform = e.transform
   updateTransform(e, e.transform)
 }
@@ -475,9 +625,10 @@ const onRotate = (e: OnRotate) => {
  * @param e
  */
 const onRotateEnd = (e: OnRotateEnd) => {
-  console.log('onRotateEnd', e)
   const transform = e.lastEvent?.transform || e.target.style.transform
   updateTransform(e, transform)
+  const chart = getChartByElement(e.target, chartList.value)
+  finalizeGestureHistory(chart.id, '旋转组件')
 }
 /**
  * 框选开始
@@ -652,7 +803,16 @@ const updateVisualScreenRulerConfig = (ruler: VisualScreenRulerConfig) => {
   basicConfig.value.ruler = normalizeVisualScreenRulerConfig(ruler, canvasWidth.value, canvasHeight.value)
 }
 
-const onCanvasPanKeyDown = (event: KeyboardEvent) => {
+const onWindowKeyDown = (event: KeyboardEvent) => {
+  const historyAction = getEditorHistoryShortcutAction(event)
+  if (historyAction && !isNativeTextEditingTarget(event.target)) {
+    const handled = applyHistoryAction(historyAction)
+    if (handled) {
+      event.preventDefault()
+      return
+    }
+  }
+
   if (event.code !== 'Space' || isCanvasPanKeyIgnoredTarget(event.target)) {
     return
   }
@@ -868,7 +1028,7 @@ const onSaveBeforeLeaveAction = async (action: SaveBeforeLeaveAction) => {
 }
 
 onMounted(() => {
-  window.addEventListener('keydown', onCanvasPanKeyDown)
+  window.addEventListener('keydown', onWindowKeyDown)
   window.addEventListener('keyup', onCanvasPanKeyUp)
   window.addEventListener('blur', resetCanvasPanState)
   const code: string = route.params.pageCode as string
@@ -900,9 +1060,10 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('keydown', onCanvasPanKeyDown)
+  window.removeEventListener('keydown', onWindowKeyDown)
   window.removeEventListener('keyup', onCanvasPanKeyUp)
   window.removeEventListener('blur', resetCanvasPanState)
+  gestureStartLayoutState.clear()
   resetCanvasPanState()
   canvasResizeObserver?.disconnect()
 })
@@ -916,6 +1077,16 @@ onBeforeUnmount(() => {
         <div class="title" @click="onTitleClick">{{ pageStageEntity?.name }}</div>
       </div>
       <div class="header-right">
+        <div class="header-action">
+          <el-button size="small" :disabled="!editorHistory.canUndo" aria-label="回退" title="回退" @click="onUndo">
+            <el-icon><RefreshLeft /></el-icon>
+          </el-button>
+        </div>
+        <div class="header-action">
+          <el-button size="small" :disabled="!editorHistory.canRedo" aria-label="重做" title="重做" @click="onRedo">
+            <el-icon><RefreshRight /></el-icon>
+          </el-button>
+        </div>
         <div class="header-action">
           <el-dropdown trigger="click" @command="onInsertCommand">
             <el-button size="small">插入</el-button>
@@ -953,9 +1124,6 @@ onBeforeUnmount(() => {
         </div>
         <div class="header-action">
           <el-button @click="openLayerPanel" size="small">图层</el-button>
-        </div>
-        <div class="header-action">
-          <el-button @click="onHistory" size="small">历史</el-button>
         </div>
         <div class="header-action">
           <el-button @click="switchPageControlPanel" size="small">设置</el-button>

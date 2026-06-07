@@ -39,6 +39,7 @@ const onConfirm = () => {
   // 添加选中的素材到画布
   const chartInst = canvasInst.addChart('DrImage') as DrImageConfig
   chartInst.props.url = selectedResource.value.url!
+  canvasInst.commitChartAdd(chartInst, '新增素材')
   resourceLibVisible.value = false
 }
 

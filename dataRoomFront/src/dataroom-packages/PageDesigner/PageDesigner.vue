@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { getComponent, getComponentInstance, getPanelComponent } from '@/dataroom-packages/components/AutoInstall.ts'
-import { computed, type CSSProperties, defineAsyncComponent, nextTick, onMounted, onUnmounted, provide, ref, watch } from 'vue'
+import { computed, type CSSProperties, defineAsyncComponent, nextTick, onMounted, onUnmounted, provide, reactive, ref, watch } from 'vue'
 import { GridItem, GridLayout } from 'vue-grid-layout-v3'
 import { v4 as uuidv4 } from 'uuid'
-import { getChartById, getResourceUrl, deleteChartById } from '@/dataroom-packages/_common/_utils.ts'
+import { getChartById, getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { pageApi } from '@/dataroom-packages/page/api.ts'
@@ -15,6 +15,22 @@ import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/Globa
 import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 import { useTimerManager } from '@/dataroom-packages/hooks/use-timer-manager'
 import { handleSaveBeforeLeaveAction, type SaveBeforeLeaveAction } from '@/dataroom-packages/_common/save-before-leave'
+import type { ChartLayerMoveDirection } from '@/dataroom-packages/PageDesigner/type/CanvasInst.ts'
+import {
+  ChartLayoutBaselineTracker,
+  EditorHistoryManager,
+  captureChartLayoutState,
+  createAddChartHistoryEntry,
+  createChartLayoutHistoryEntry,
+  createRemoveChartHistoryEntry,
+  createReorderChartHistoryEntry,
+  findChartReference,
+  getChartListByParent,
+  getEditorHistoryShortcutAction,
+  isNativeTextEditingTarget,
+  removeChartWithLocation,
+  reorderChartWithinParent,
+} from '@/dataroom-packages/_common/editor-history.ts'
 
 const router = useRouter()
 const route = useRoute()
@@ -27,6 +43,13 @@ const leftToolPanelShow = ref(false)
 const rightControlPanelShow = ref(true)
 // 记录右侧控制面板是否为页面配置
 const rightControlPanelSetting = ref(true)
+const editorHistory = reactive(
+  new EditorHistoryManager({
+    source: 'page-designer',
+    getChartList: () => chartList.value,
+  }),
+)
+const chartLayoutBaselineTracker = new ChartLayoutBaselineTracker()
 const ContextMenu = defineAsyncComponent(() => import('@/dataroom-packages/PageDesigner/ContextMenu.vue'))
 const ControlPanelWrapper = defineAsyncComponent(() => import('@/dataroom-packages/_components/ControlPanel.vue'))
 const ControlPanel = defineAsyncComponent(() => import('@/dataroom-packages/PageDesigner/ControlPanel.vue'))
@@ -37,6 +60,128 @@ const ResourceLib = defineAsyncComponent(() => import('@/dataroom-packages/_comp
 const SaveBeforeLeaveDialog = defineAsyncComponent(() => import('@/dataroom-packages/_components/SaveBeforeLeaveDialog.vue'))
 
 type InsertCommand = 'component' | 'resource'
+
+const syncActiveChartReference = () => {
+  if (!activeChart.value) {
+    return
+  }
+
+  const reference = findChartReference(activeChart.value.id, chartList.value)
+  if (!reference) {
+    activeChart.value = undefined
+    rightControlPanelSetting.value = true
+    return
+  }
+
+  activeChart.value = reference.chart
+}
+
+const rebuildChartLayoutBaselines = () => {
+  chartLayoutBaselineTracker.rebuild(chartList.value)
+}
+
+const getChartLayoutBaseline = (chart: ChartConfig<unknown>) => {
+  return chartLayoutBaselineTracker.get(chart)
+}
+
+const rememberChartLayoutBaseline = (chart: ChartConfig<unknown>) => {
+  chartLayoutBaselineTracker.remember(chart)
+}
+
+const commitChartLayoutHistory = (chart: ChartConfig<unknown>, label: string) => {
+  const before = getChartLayoutBaseline(chart)
+  const after = captureChartLayoutState(chart)
+  editorHistory.record(createChartLayoutHistoryEntry(label, 'page-designer', chart.id, before, after))
+  rememberChartLayoutBaseline(chart)
+}
+
+const commitChartAdd = (chart: ChartConfig<unknown>, label: string = '新增组件') => {
+  const reference = findChartReference(chart.id, chartList.value)
+  if (!reference) {
+    return
+  }
+
+  editorHistory.record(createAddChartHistoryEntry(label, 'page-designer', reference.chart, reference.parent, reference.index))
+  rememberChartLayoutBaseline(reference.chart)
+}
+
+const deleteChartWithHistory = (chartId: string, label: string = '删除组件') => {
+  const removed = removeChartWithLocation(chartId, chartList.value)
+  if (!removed) {
+    return false
+  }
+
+  editorHistory.record(createRemoveChartHistoryEntry(label, 'page-designer', removed.parent, removed.index, removed.chart))
+  chartLayoutBaselineTracker.forget(chartId)
+  syncActiveChartReference()
+  return true
+}
+
+const moveChartLayer = (chartId: string, direction: ChartLayerMoveDirection) => {
+  const reference = findChartReference(chartId, chartList.value)
+  if (!reference) {
+    return false
+  }
+
+  const siblingList = getChartListByParent(chartList.value, reference.parent)
+  if (!siblingList || siblingList.length <= 1) {
+    return false
+  }
+
+  let targetIndex = reference.index
+  let label = '调整图层顺序'
+  if (direction === 'top') {
+    targetIndex = 0
+    label = '图层置顶'
+  } else if (direction === 'up') {
+    targetIndex = Math.max(0, reference.index - 1)
+    label = '图层上移'
+  } else if (direction === 'down') {
+    targetIndex = Math.min(siblingList.length - 1, reference.index + 1)
+    label = '图层下移'
+  } else if (direction === 'bottom') {
+    targetIndex = siblingList.length - 1
+    label = '图层置底'
+  }
+
+  const reordered = reorderChartWithinParent(chartList.value, {
+    parent: reference.parent,
+    chartId,
+    toIndex: targetIndex,
+  })
+  if (!reordered || targetIndex === reference.index) {
+    return false
+  }
+
+  editorHistory.record(createReorderChartHistoryEntry(label, 'page-designer', reference.parent, chartId, reference.index, targetIndex))
+  rebuildChartLayoutBaselines()
+  syncActiveChartReference()
+  return true
+}
+
+const applyHistoryAction = (action: 'undo' | 'redo') => {
+  const changed = action === 'undo' ? editorHistory.undo() : editorHistory.redo()
+  if (!changed) {
+    return false
+  }
+
+  contextMenuVisible.value = false
+  rebuildChartLayoutBaselines()
+  syncActiveChartReference()
+  return true
+}
+
+const onHistoryKeyDown = (event: KeyboardEvent) => {
+  const action = getEditorHistoryShortcutAction(event)
+  if (!action || isNativeTextEditingTarget(event.target)) {
+    return
+  }
+
+  const handled = applyHistoryAction(action)
+  if (handled) {
+    event.preventDefault()
+  }
+}
 /**
  * 激活组件
  * @param id
@@ -71,8 +216,13 @@ const addChart = (type: string) => {
   chartInst.w = 16
   chartInst.h = 5
   chartList.value.push(chartInst)
+  rememberChartLayoutBaseline(chartInst)
   nextTick(() => {
-    activeChart.value = chartInst
+    const reference = findChartReference(chartInst.id, chartList.value)
+    if (!reference) {
+      return
+    }
+    activeChart.value = reference.chart
   })
   return chartInst
 }
@@ -82,6 +232,12 @@ const { canvasInst } = useCanvasInst({
   globalVariable,
   addChart,
   activeChartById,
+  commitChartAdd,
+  undo: () => applyHistoryAction('undo'),
+  redo: () => applyHistoryAction('redo'),
+  canUndo: () => editorHistory.canUndo,
+  canRedo: () => editorHistory.canRedo,
+  moveChartLayer,
 })
 
 const { timerManager } = useTimerManager({
@@ -207,6 +363,7 @@ const onResized = (i: string, newH: number, newW: number) => {
   const chart: ChartConfig<unknown> = getChartById(i, chartList.value)
   chart.w = newW
   chart.h = newH
+  commitChartLayoutHistory(chart, '调整组件大小')
 }
 /**
  * 组件位置改变结束
@@ -218,6 +375,7 @@ const onMoved = (i: string, newX: number, newY: number) => {
   const chart: ChartConfig<unknown> = getChartById(i, chartList.value)
   chart.x = newX
   chart.y = newY
+  commitChartLayoutHistory(chart, '移动组件')
 }
 
 /**
@@ -255,7 +413,7 @@ const onRightClick = (e: MouseEvent, chart: ChartConfig<unknown>) => {
  * @param chartId
  */
 const onChartDeleteClick = (chartId: string) => {
-  deleteChartById(chartId, chartList.value)
+  deleteChartWithHistory(chartId)
 }
 /**
  * 右击菜单样式
@@ -335,8 +493,12 @@ const onSave = async () => {
   await savePageConfig()
 }
 
-const onHistory = () => {
-  ElMessage.info('功能开发中...')
+const onUndo = () => {
+  applyHistoryAction('undo')
+}
+
+const onRedo = () => {
+  applyHistoryAction('redo')
 }
 
 // 重命名对话框
@@ -460,12 +622,14 @@ watch(
 )
 
 onMounted(() => {
+  window.addEventListener('keydown', onHistoryKeyDown)
   // 获取路由中code 参数
   const code: string = route.params.pageCode as string
   // 根据编码获取页面详情
   pageApi.getPageConfig(code, 'design').then((res) => {
     pageStageEntity.value = res
     chartList.value = res.pageConfig?.chartList || []
+    rebuildChartLayoutBaselines()
     pageBasicConfig.value = res.pageConfig?.basicConfig || {}
     if (!pageBasicConfig.value.timers) {
       pageBasicConfig.value.timers = []
@@ -482,6 +646,7 @@ onMounted(() => {
  * 组件卸载时清理所有定时器
  */
 onUnmounted(() => {
+  window.removeEventListener('keydown', onHistoryKeyDown)
   if (timerManager) {
     timerManager.clearAllTimers()
   }
@@ -496,6 +661,16 @@ onUnmounted(() => {
         <div class="title" @click="onTitleClick">{{ pageStageEntity?.name }}</div>
       </div>
       <div class="header-right">
+        <div class="header-action">
+          <el-button size="small" :disabled="!editorHistory.canUndo" aria-label="回退" title="回退" @click="onUndo">
+            <el-icon><RefreshLeft /></el-icon>
+          </el-button>
+        </div>
+        <div class="header-action">
+          <el-button size="small" :disabled="!editorHistory.canRedo" aria-label="重做" title="重做" @click="onRedo">
+            <el-icon><RefreshRight /></el-icon>
+          </el-button>
+        </div>
         <div class="header-action">
           <el-dropdown trigger="click" @command="onInsertCommand">
             <el-button size="small">插入</el-button>
@@ -512,9 +687,6 @@ onUnmounted(() => {
         </div>
         <div class="header-action">
           <el-button @click="openLayerPanel" size="small">图层</el-button>
-        </div>
-        <div class="header-action">
-          <el-button @click="onHistory" size="small">历史</el-button>
         </div>
         <div class="header-action">
           <el-button @click="switchPageControlPanel" size="small">设置</el-button>

@@ -37,6 +37,14 @@ const onLayerClick = (data: TreeNodeData) => {
   console.log('点击图层', chart.id)
   canvasInst.activeChartById(chart.id)
 }
+
+const moveLayer = (chart: ChartConfig<unknown>, direction: 'top' | 'up' | 'down' | 'bottom', event: MouseEvent) => {
+  event.stopPropagation()
+  const moved = canvasInst.moveChartLayer(chart.id, direction)
+  if (moved) {
+    canvasInst.activeChartById(chart.id)
+  }
+}
 </script>
 
 <template>
@@ -55,7 +63,19 @@ const onLayerClick = (data: TreeNodeData) => {
       :expand-on-click-node="true"
       :filter-node-method="filterLayer"
       @node-click="onLayerClick"
-    />
+    >
+      <template #default="{ data }">
+        <div class="layer-node">
+          <span class="layer-node__title">{{ data.title }}</span>
+          <div class="layer-node__actions">
+            <el-button size="small" text @click="(event: MouseEvent) => moveLayer(data, 'top', event)">顶</el-button>
+            <el-button size="small" text @click="(event: MouseEvent) => moveLayer(data, 'up', event)">上</el-button>
+            <el-button size="small" text @click="(event: MouseEvent) => moveLayer(data, 'down', event)">下</el-button>
+            <el-button size="small" text @click="(event: MouseEvent) => moveLayer(data, 'bottom', event)">底</el-button>
+          </div>
+        </div>
+      </template>
+    </el-tree>
   </div>
 </template>
 
@@ -73,5 +93,26 @@ const onLayerClick = (data: TreeNodeData) => {
 .dr-layer-tree {
   margin-top: 8px;
   background: var(--el-fill-color-light);
+}
+
+.layer-node {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.layer-node__title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.layer-node__actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 2px;
 }
 </style>

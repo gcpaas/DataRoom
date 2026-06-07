@@ -16,7 +16,8 @@ const searchName = ref('')
  * @param type
  */
 const addChart = (type: string) => {
-  canvasInst.addChart(type)
+  const chart = canvasInst.addChart(type)
+  canvasInst.commitChartAdd(chart)
 }
 
 /**

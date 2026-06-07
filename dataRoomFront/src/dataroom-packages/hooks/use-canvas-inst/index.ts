@@ -4,9 +4,10 @@ import {type ComponentInternalInstance} from 'vue'
 import {ElMessage} from "element-plus";
 import type {ChartConfig} from "@/dataroom-packages/components/type/ChartConfig.ts";
 import type {GlobalVariable} from "@/dataroom-packages/PageDesigner/type/GlobalVariable.ts";
-import type {CanvasInst} from "@/dataroom-packages/PageDesigner/type/CanvasInst.ts";
+import type {CanvasInst, ChartLayerMoveDirection} from "@/dataroom-packages/PageDesigner/type/CanvasInst.ts";
 import type {ChartAction} from "@/dataroom-packages/components/type/ChartAction.ts";
 import type {BehaviorEventParam} from "@/dataroom-packages/components/type/BehaviorEvent.ts";
+import type {ChartParentRef} from '@/dataroom-packages/_common/editor-history.ts'
 
 type ChartInstanceMap = Record<string, ComponentInternalInstance>
 
@@ -15,6 +16,12 @@ interface UseCanvasInstOptions {
   globalVariable: Ref<GlobalVariable[]>
   addChart?: (type: string) => ChartConfig<unknown>
   activeChartById?: (id: string) => void
+  commitChartAdd?: (chart: ChartConfig<unknown>, label?: string, parent?: ChartParentRef, index?: number) => void
+  undo?: () => boolean
+  redo?: () => boolean
+  canUndo?: () => boolean
+  canRedo?: () => boolean
+  moveChartLayer?: (chartId: string, direction: ChartLayerMoveDirection) => boolean
 }
 
 /**
@@ -23,7 +30,7 @@ interface UseCanvasInstOptions {
  * @param options
  */
 export function useCanvasInst(options: UseCanvasInstOptions) {
-  const {chartList, globalVariable, addChart, activeChartById} = options
+  const {chartList, globalVariable, addChart, activeChartById, commitChartAdd, undo, redo, canUndo, canRedo, moveChartLayer} = options
 
   const chartInstanceMap: ChartInstanceMap = {}
 
@@ -36,7 +43,7 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
       throw new Error('activeChartById方法未实现')
     }),
     fillDatasetParams: (chart: ChartConfig<unknown>) => {
-      const paramMap: Record<string, any> = {}
+      const paramMap: Record<string, unknown> = {}
       const datasetParams = chart.dataset.params
       if (!datasetParams) {
         console.warn(`组件 ${chart.id} 数据集 ${chart.dataset.code} 参数未配置`)
@@ -83,7 +90,7 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
       }
       return chartInstance
     },
-    triggerChartAction: (charId: string = 'unknown', action: ChartAction, data: any) => {
+    triggerChartAction: (charId: string = 'unknown', action: ChartAction, data: unknown) => {
       if (action.type === 'code') {
         try {
           const behaviorEventParam: BehaviorEventParam = {
@@ -102,7 +109,7 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
       chartInstance.exposed?.triggerAction(action, data)
       return
     },
-    triggerChartBehavior: (charId: string, behaviorName: string, triggerData: any) => {
+    triggerChartBehavior: (charId: string, behaviorName: string, triggerData: unknown) => {
       const chart = getChartById(charId, chartList.value)
       if (!chart) {
         return
@@ -181,7 +188,7 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
       }
       return paramValue;
     },
-    updateGlobalVariableValue: (globalVariableName: string, value: any) => {
+    updateGlobalVariableValue: (globalVariableName: string, value: string) => {
       for (let i = 0; i < globalVariable.value.length; i++) {
         const globalVar = globalVariable.value[i]
         if (!globalVar) {
@@ -195,7 +202,17 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
           console.warn(`全局变量 ${globalVar.name} 的默认值被设置为了空`)
         }
       }
-    }
+    },
+    commitChartAdd: commitChartAdd || (() => {}),
+    undo: undo || (() => false),
+    redo: redo || (() => false),
+    get canUndo() {
+      return canUndo ? canUndo() : false
+    },
+    get canRedo() {
+      return canRedo ? canRedo() : false
+    },
+    moveChartLayer: moveChartLayer || (() => false)
   })
 
   return {
