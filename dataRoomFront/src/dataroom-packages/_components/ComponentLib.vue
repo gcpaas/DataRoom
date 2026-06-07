@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue'
 import { pluginList } from '@/dataroom-packages/_components/PluginRegister.ts'
-import { Search } from '@element-plus/icons-vue'
+import { Check, Search } from '@element-plus/icons-vue'
 import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 import type { CanvasInst } from '@/dataroom-packages/PageDesigner/type/CanvasInst.ts'
 
@@ -11,13 +11,35 @@ const emit = defineEmits(['close'])
 const componentLibVisible = ref(true)
 
 const searchName = ref('')
+const selectedPluginTypes = ref<string[]>([])
 /**
- * 添加组件到画布
+ * 切换组件选中状态
  * @param type
  */
-const addChart = (type: string) => {
-  const chart = canvasInst.addChart(type)
-  canvasInst.commitChartAdd(chart)
+const togglePluginSelection = (type: string) => {
+  const targetIndex = selectedPluginTypes.value.indexOf(type)
+  if (targetIndex >= 0) {
+    selectedPluginTypes.value.splice(targetIndex, 1)
+    return
+  }
+  selectedPluginTypes.value.push(type)
+}
+
+const isPluginSelected = (type: string) => selectedPluginTypes.value.includes(type)
+
+const closeDialog = () => {
+  componentLibVisible.value = false
+}
+
+/**
+ * 按选中顺序逐个插入组件
+ */
+const handleConfirm = () => {
+  selectedPluginTypes.value.forEach((type) => {
+    const chart = canvasInst.addChart(type)
+    canvasInst.commitChartAdd(chart)
+  })
+  closeDialog()
 }
 
 /**
@@ -42,7 +64,18 @@ const filterPluginList = computed(() => {
       </div>
       <el-scrollbar class="component-card-scrollbar">
         <div class="component-card">
-          <div class="card" v-for="plugin in filterPluginList" :key="plugin.name" @click="addChart(plugin.type)">
+          <div
+            class="card"
+            v-for="plugin in filterPluginList"
+            :key="plugin.name"
+            :class="{ 'card--selected': isPluginSelected(plugin.type) }"
+            @click="togglePluginSelection(plugin.type)"
+          >
+            <div class="selection-overlay" v-if="isPluginSelected(plugin.type)">
+              <el-icon class="selection-icon">
+                <Check />
+              </el-icon>
+            </div>
             <div class="image">
               <el-image :src="plugin.thumbnail" lazy fit="contain" />
             </div>
@@ -50,6 +83,13 @@ const filterPluginList = computed(() => {
           </div>
         </div>
       </el-scrollbar>
+      <div class="footer">
+        <div class="selection-summary">已选 {{ selectedPluginTypes.length }} 个组件</div>
+        <div class="footer-actions">
+          <el-button @click="closeDialog">取消</el-button>
+          <el-button type="primary" :disabled="selectedPluginTypes.length === 0" @click="handleConfirm">确定</el-button>
+        </div>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -86,37 +126,55 @@ const filterPluginList = computed(() => {
   & .component-card {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
-    padding-right: 4px;
-    padding-bottom: 4px;
+    gap: 16px;
+    padding: 2px 4px 20px 2px;
 
     & .card {
+      position: relative;
       background-color: var(--el-fill-color-blank);
-      border: 1px solid var(--el-border-color);
-      border-radius: 6px;
+      border: 1px solid var(--el-border-color-light);
+      border-radius: 8px;
       overflow: hidden;
-      padding: 8px;
-      transition:
-        border-color 0.2s ease,
-        transform 0.2s ease;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
 
       &:hover {
         cursor: pointer;
-        border-color: var(--el-border-color-darker);
-        transform: scale(1.02);
+        border-color: var(--el-border-color);
       }
 
-      &:active {
-        transform: scale(1);
+      &.card--selected {
+        background: var(--el-color-primary-light-9);
+        border-color: var(--el-color-primary);
+      }
+
+      & .selection-overlay {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--el-fill-color-blank);
+        border: 1px solid var(--el-border-color-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+
+        & .selection-icon {
+          font-size: 18px;
+          color: var(--el-color-primary);
+        }
       }
 
       & .image {
         width: 100%;
-        height: 60px;
+        height: 96px;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 4px;
+        padding: 16px 16px 12px;
+        background: var(--el-fill-color-extra-light);
         box-sizing: border-box;
 
         & .el-image {
@@ -126,9 +184,8 @@ const filterPluginList = computed(() => {
       }
 
       & .desc {
-        padding: 4px 4px 0;
-        height: 24px;
-        line-height: 24px;
+        padding: 12px 12px 14px;
+        line-height: 1.5;
         font-size: 12px;
         font-weight: 500;
         color: var(--el-text-color-primary);
@@ -136,8 +193,31 @@ const filterPluginList = computed(() => {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        border-top: 1px solid var(--el-border-color-lighter);
       }
     }
+  }
+
+  & .footer {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--el-border-color-lighter);
+    gap: 16px;
+  }
+
+  & .selection-summary {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--el-text-color-regular);
+  }
+
+  & .footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 }
 </style>

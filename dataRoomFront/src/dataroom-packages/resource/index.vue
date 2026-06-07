@@ -564,9 +564,13 @@ const getResourceThumbnailSrc = (item: ResourceEntity) => {
   return getDefaultPlaceholder(item.resourceType)
 }
 
-const getResourceThumbnailClass = (item: ResourceEntity) => ({
+const getResourceThumbnailStageClass = (item: ResourceEntity) => ({
+  'thumbnail-stage--preview': item.resourceType !== ResourceType.DIRECTORY,
+  'thumbnail-stage--directory': item.resourceType === ResourceType.DIRECTORY,
+})
+
+const getResourceThumbnailImageClass = (item: ResourceEntity) => ({
   'thumbnail-image--directory': item.resourceType === ResourceType.DIRECTORY,
-  'thumbnail-image--media': item.resourceType === ResourceType.VIDEO || item.resourceType === ResourceType.MODEL,
 })
 
 const getPlaceholderAlt = (resourceType?: string) => `${getTypeName(resourceType || '') || '默认'}占位图`
@@ -633,19 +637,21 @@ onMounted(() => {
                   <Check />
                 </el-icon>
               </div>
-              <el-image
-                :src="getResourceThumbnailSrc(item)"
-                :lazy="true"
-                fit="contain"
-                class="thumbnail-image"
-                :class="getResourceThumbnailClass(item)"
-              >
-                <template #error>
-                  <div class="image-error">
-                    <img :src="getDefaultPlaceholder(item.resourceType)" :alt="getPlaceholderAlt(item.resourceType)" />
-                  </div>
-                </template>
-              </el-image>
+              <div class="thumbnail-stage" :class="getResourceThumbnailStageClass(item)">
+                <el-image
+                  :src="getResourceThumbnailSrc(item)"
+                  :lazy="true"
+                  fit="contain"
+                  class="thumbnail-image"
+                  :class="getResourceThumbnailImageClass(item)"
+                >
+                  <template #error>
+                    <div class="image-error">
+                      <img :src="getDefaultPlaceholder(item.resourceType)" :alt="getPlaceholderAlt(item.resourceType)" />
+                    </div>
+                  </template>
+                </el-image>
+              </div>
             </div>
             <div class="card-footer">
               <div class="card-info">
@@ -971,12 +977,11 @@ onMounted(() => {
         border: 1px solid var(--el-border-color-light);
         border-radius: 8px;
         overflow: hidden;
-        transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
         cursor: pointer;
 
         &:hover {
           border-color: var(--el-border-color);
-          transform: scale(1.02);
         }
 
         &.selected {
@@ -991,7 +996,6 @@ onMounted(() => {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 16px;
           overflow: hidden;
           position: relative;
           box-sizing: border-box;
@@ -1016,18 +1020,34 @@ onMounted(() => {
             }
           }
 
-          .thumbnail-image {
-            max-width: 100%;
-            max-height: 100%;
+          .thumbnail-stage {
+            width: 100%;
+            height: 100%;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
 
-            &.thumbnail-image--directory {
-              width: 100px;
-              height: 100px;
+            &.thumbnail-stage--preview {
+              padding: 12px;
             }
 
-            &.thumbnail-image--media {
+            &.thumbnail-stage--directory {
+              padding: 24px;
+            }
+
+            .thumbnail-image {
               width: 100%;
               height: 100%;
+              display: block;
+
+              &.thumbnail-image--directory {
+                width: 100px;
+                height: 100px;
+                max-width: 100%;
+                max-height: 100%;
+              }
             }
 
             .image-error {
@@ -1038,10 +1058,15 @@ onMounted(() => {
               justify-content: center;
 
               img {
-                width: 60%;
-                height: 60%;
+                width: 100%;
+                height: 100%;
                 object-fit: contain;
               }
+            }
+
+            &.thumbnail-stage--directory .image-error img {
+              width: 60%;
+              height: 60%;
             }
           }
         }

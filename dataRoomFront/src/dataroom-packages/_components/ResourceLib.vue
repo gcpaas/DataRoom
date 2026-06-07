@@ -111,13 +111,10 @@ const onCopyUrl = async () => {
   :deep(.file-card) {
     border: 1px solid var(--el-border-color);
     border-radius: 6px;
-    transition:
-      border-color 0.2s ease,
-      transform 0.2s ease;
+    transition: border-color 0.2s ease;
 
     &:hover {
       border-color: var(--el-border-color-darker);
-      transform: scale(1.02);
     }
   }
 }
