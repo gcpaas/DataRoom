@@ -302,8 +302,11 @@ public class PageController {
             newPageStage.setRemark("初始化预览");
             newPageStage.setPageStatus(PageStatus.PREVIEW);
             newPageStage.setPageType(pageStage.getPageType());
-            BasePageConfig basePageConfig = pageStageService.getDefaultPageConfig(pageStage.getPageType().getType());
-            newPageStage.setPageConfig(basePageConfig);
+            BasePageConfig previewPageConfig = pageStage.getPageConfig();
+            if (previewPageConfig == null) {
+                previewPageConfig = pageStageService.getDefaultPageConfig(pageStage.getPageType().getType());
+            }
+            newPageStage.setPageConfig(previewPageConfig);
             pageStageService.save(newPageStage);
         } else {
             // 更新
