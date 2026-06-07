@@ -34,7 +34,7 @@ const filterPluginList = computed(() => {
 })
 </script>
 <template>
-  <el-dialog v-model="componentLibVisible" title="组件库" width="760px" :close-on-click-modal="false" @closed="emit('close')">
+  <el-dialog v-model="componentLibVisible" title="组件库" width="80%" :close-on-click-modal="false" @closed="emit('close')">
     <div class="dr-component-lib-wrapper">
       <div class="search">
         <el-input v-model="searchName" :suffix-icon="Search" placeholder="搜索" clearable></el-input>
@@ -57,7 +57,7 @@ const filterPluginList = computed(() => {
 .dr-component-lib-wrapper {
   display: flex;
   flex-direction: column;
-  height: 60vh;
+  height: 600px;
   padding: 0;
   box-sizing: border-box;
   overflow: hidden;
