@@ -40,6 +40,7 @@ import {
   ZOOM_STEP_PERCENT,
 } from './viewport'
 import { getVisualScreenMoveableGuidelines, normalizeVisualScreenRulerConfig, RULER_SIZE_PX, type VisualScreenRulerConfig } from './ruler'
+import { handleSaveBeforeLeaveAction, type SaveBeforeLeaveAction } from '@/dataroom-packages/_common/save-before-leave'
 
 const router = useRouter()
 const route = useRoute()
@@ -157,6 +158,7 @@ const ResourceLib = defineAsyncComponent(() => import('@/dataroom-packages/_comp
 const ControlPanelWrapper = defineAsyncComponent(() => import('@/dataroom-packages/_components/ControlPanel.vue'))
 const VisualScreenControlPanel = defineAsyncComponent(() => import('./ControlPanel.vue'))
 const ContextMenu = defineAsyncComponent(() => import('@/dataroom-packages/PageDesigner/ContextMenu.vue'))
+const SaveBeforeLeaveDialog = defineAsyncComponent(() => import('@/dataroom-packages/_components/SaveBeforeLeaveDialog.vue'))
 
 type InsertCommand = 'component' | 'resource'
 
@@ -317,33 +319,45 @@ const onPreview = () => {
     })
 }
 
-/**
- * 保存页面配置
- */
-const onSave = () => {
+const getPageConfigPayload = () => {
   if (!pageStageEntity.value) {
     ElMessage({
       message: '页面信息未加载',
       type: 'error',
     })
-    return
+    return null
   }
-  pageApi
-    .updatePageConfig({
-      ...pageStageEntity.value,
-      pageConfig: {
-        ...pageStageEntity.value.pageConfig,
-        chartList: chartList.value,
-        basicConfig: basicConfig.value,
-        globalVariableList: globalVariable.value,
-      },
-    })
-    .then(() => {
-      ElMessage({
-        message: '保存成功',
-        type: 'success',
-      })
-    })
+
+  return {
+    ...pageStageEntity.value,
+    pageConfig: {
+      ...pageStageEntity.value.pageConfig,
+      chartList: chartList.value,
+      basicConfig: basicConfig.value,
+      globalVariableList: globalVariable.value,
+    },
+  }
+}
+
+/**
+ * 保存页面配置
+ */
+const savePageConfig = async () => {
+  const payload = getPageConfigPayload()
+  if (!payload) {
+    return false
+  }
+
+  await pageApi.updatePageConfig(payload)
+  ElMessage({
+    message: '保存成功',
+    type: 'success',
+  })
+  return true
+}
+
+const onSave = async () => {
+  await savePageConfig()
 }
 
 /**
@@ -823,6 +837,36 @@ const computedToolAnchorStyle = computed(() => {
   }
 })
 
+const saveBeforeLeaveDialogVisible = ref(false)
+
+const navigateToPageIndex = () => {
+  router.push('/dataRoom/page/index')
+}
+
+const onBackByLogo = () => {
+  saveBeforeLeaveDialogVisible.value = true
+}
+
+const onSaveBeforeLeaveAction = async (action: SaveBeforeLeaveAction) => {
+  if (action === 'cancel') {
+    return
+  }
+
+  try {
+    await handleSaveBeforeLeaveAction(action, {
+      save: async () => {
+        const saved = await savePageConfig()
+        if (!saved) {
+          throw new Error('page config is not ready')
+        }
+      },
+      navigate: navigateToPageIndex,
+    })
+  } catch {
+    saveBeforeLeaveDialogVisible.value = true
+  }
+}
+
 onMounted(() => {
   window.addEventListener('keydown', onCanvasPanKeyDown)
   window.addEventListener('keyup', onCanvasPanKeyUp)
@@ -868,7 +912,7 @@ onBeforeUnmount(() => {
   <div class="dr-vs-editor">
     <div class="header" ref="titleRef">
       <div class="header-left">
-        <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="router.push('/dataRoom/page/index')" />
+        <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="onBackByLogo" />
         <div class="title" @click="onTitleClick">{{ pageStageEntity?.name }}</div>
       </div>
       <div class="header-right">
@@ -1105,6 +1149,7 @@ onBeforeUnmount(() => {
       <el-button type="primary" @click="onRenameConfirm">确定</el-button>
     </template>
   </el-dialog>
+  <SaveBeforeLeaveDialog v-model="saveBeforeLeaveDialogVisible" @action="onSaveBeforeLeaveAction" />
 </template>
 
 <style scoped lang="scss">

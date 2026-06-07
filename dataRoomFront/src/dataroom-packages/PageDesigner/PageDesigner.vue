@@ -14,6 +14,7 @@ import type { PageBasicConfig } from '@/dataroom-packages/PageDesigner/type/Page
 import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/GlobalVariable.ts'
 import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 import { useTimerManager } from '@/dataroom-packages/hooks/use-timer-manager'
+import { handleSaveBeforeLeaveAction, type SaveBeforeLeaveAction } from '@/dataroom-packages/_common/save-before-leave'
 
 const router = useRouter()
 const route = useRoute()
@@ -33,6 +34,7 @@ const ComponentLib = defineAsyncComponent(() => import('@/dataroom-packages/_com
 const ComponentLayer = defineAsyncComponent(() => import('@/dataroom-packages/_components/ComponentLayer.vue'))
 const GlobalVariableComponent = defineAsyncComponent(() => import('@/dataroom-packages/_components/GlobalVariable.vue'))
 const ResourceLib = defineAsyncComponent(() => import('@/dataroom-packages/_components/ResourceLib.vue'))
+const SaveBeforeLeaveDialog = defineAsyncComponent(() => import('@/dataroom-packages/_components/SaveBeforeLeaveDialog.vue'))
 
 type InsertCommand = 'component' | 'resource'
 /**
@@ -293,32 +295,44 @@ const onPreview = () => {
       window.open(routeData.href, '_blank')
     })
 }
-/**
- * 保存
- */
-const onSave = () => {
+
+const getPageConfigPayload = () => {
   if (!pageStageEntity.value) {
     ElMessage({
       message: '页面信息未加载',
       type: 'error',
     })
-    return
+    return null
   }
-  pageApi
-    .updatePageConfig({
-      ...pageStageEntity.value,
-      pageConfig: {
-        ...pageStageEntity.value.pageConfig,
-        chartList: chartList.value,
-        basicConfig: pageBasicConfig.value,
-      },
-    })
-    .then(() => {
-      ElMessage({
-        message: '保存成功',
-        type: 'success',
-      })
-    })
+
+  return {
+    ...pageStageEntity.value,
+    pageConfig: {
+      ...pageStageEntity.value.pageConfig,
+      chartList: chartList.value,
+      basicConfig: pageBasicConfig.value,
+    },
+  }
+}
+/**
+ * 保存
+ */
+const savePageConfig = async () => {
+  const payload = getPageConfigPayload()
+  if (!payload) {
+    return false
+  }
+
+  await pageApi.updatePageConfig(payload)
+  ElMessage({
+    message: '保存成功',
+    type: 'success',
+  })
+  return true
+}
+
+const onSave = async () => {
+  await savePageConfig()
 }
 
 const onHistory = () => {
@@ -346,6 +360,36 @@ const onRenameConfirm = () => {
     ElMessage.success('修改成功')
     renameDialogVisible.value = false
   })
+}
+
+const saveBeforeLeaveDialogVisible = ref(false)
+
+const navigateToPageIndex = () => {
+  router.push('/dataRoom/page/index')
+}
+
+const onBackByLogo = () => {
+  saveBeforeLeaveDialogVisible.value = true
+}
+
+const onSaveBeforeLeaveAction = async (action: SaveBeforeLeaveAction) => {
+  if (action === 'cancel') {
+    return
+  }
+
+  try {
+    await handleSaveBeforeLeaveAction(action, {
+      save: async () => {
+        const saved = await savePageConfig()
+        if (!saved) {
+          throw new Error('page config is not ready')
+        }
+      },
+      navigate: navigateToPageIndex,
+    })
+  } catch {
+    saveBeforeLeaveDialogVisible.value = true
+  }
 }
 
 const computedMainStyle = computed(() => {
@@ -448,7 +492,7 @@ onUnmounted(() => {
   <div class="dr-page-designer">
     <div class="header" ref="titleRef">
       <div class="header-left">
-        <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="router.push('/dataRoom/page/index')" />
+        <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="onBackByLogo" />
         <div class="title" @click="onTitleClick">{{ pageStageEntity?.name }}</div>
       </div>
       <div class="header-right">
@@ -559,6 +603,7 @@ onUnmounted(() => {
       <el-button type="primary" @click="onRenameConfirm">确定</el-button>
     </template>
   </el-dialog>
+  <SaveBeforeLeaveDialog v-model="saveBeforeLeaveDialogVisible" @action="onSaveBeforeLeaveAction" />
 </template>
 
 <style scoped lang="scss">

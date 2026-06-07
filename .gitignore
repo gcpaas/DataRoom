@@ -1,5 +1,6 @@
 *.test.ts
 *spec.ts
+!dataRoomFront/src/dataroom-packages/_common/save-before-leave.spec.ts
 *.mjs
 .claude
 CLAUDE.md
