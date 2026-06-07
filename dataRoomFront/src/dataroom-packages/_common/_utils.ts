@@ -101,36 +101,50 @@ export const extractPositionFromTransform = (
   const translateMatch = transformStr.match(translateReg)
   if (translateMatch) {
     // @ts-expect-error ignore
-    result.x = parseInt(translateMatch[1])
+    result.x = parseFloat(translateMatch[1])
     // @ts-expect-error ignore
-    result.y = parseInt(translateMatch[3])
+    result.y = parseFloat(translateMatch[3])
   }
   const rotateXReg = /rotateX\s*\(\s*([-+]?\d+(\.\d+)?)(?:deg)?\s*\)/i
   const rotateXMatch = transformStr.match(rotateXReg)
   if (rotateXMatch) {
     // @ts-expect-error ignore
-    result.rotateX = parseInt(rotateXMatch[1])
+    result.rotateX = parseFloat(rotateXMatch[1])
   }
   const rotateYReg = /rotateY\s*\(\s*([-+]?\d+(\.\d+)?)(?:deg)?\s*\)/i
   const rotateYMatch = transformStr.match(rotateYReg)
   if (rotateYMatch) {
     // @ts-expect-error ignore
-    result.rotateY = parseInt(rotateYMatch[1])
+    result.rotateY = parseFloat(rotateYMatch[1])
   }
   const rotateReg = /rotate\s*\(\s*([-+]?\d+(\.\d+)?)(?:deg)?\s*\)/i
   const rotateMatch = transformStr.match(rotateReg)
   if (rotateMatch) {
     // @ts-expect-error ignore
-    result.rotateZ = parseInt(rotateMatch[1])
+    result.rotateZ = parseFloat(rotateMatch[1])
   } else {
     const rotateZReg = /rotateZ\s*\(\s*([-+]?\d+(\.\d+)?)(?:deg)?\s*\)/i
     const rotateZMatch = transformStr.match(rotateZReg)
     if (rotateZMatch) {
       // @ts-expect-error ignore
-      result.rotateZ = parseInt(rotateZMatch[1])
+      result.rotateZ = parseFloat(rotateZMatch[1])
     }
   }
   return result
+}
+
+export const normalizeChartTransformPosition = (position: {
+  x: number
+  y: number
+  rotateX: number
+  rotateY: number
+  rotateZ: number
+}) => {
+  return {
+    ...position,
+    x: Math.round(position.x),
+    y: Math.round(position.y),
+  }
 }
 
 /**

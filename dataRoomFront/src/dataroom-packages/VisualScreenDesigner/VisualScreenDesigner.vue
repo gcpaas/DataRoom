@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { getComponent, getComponentInstance, getPanelComponent } from '@/dataroom-packages/components/AutoInstall.ts'
 import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue'
-import { debounce } from 'lodash'
 import Moveable, { type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd } from 'vue3-moveable'
 import { VueSelecto } from 'vue3-selecto'
-import { deleteChartById, extractPositionFromTransform, getChartByElement, getChartById, getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
+import { deleteChartById, extractPositionFromTransform, getChartByElement, getChartById, getResourceUrl, normalizeChartTransformPosition } from '@/dataroom-packages/_common/_utils.ts'
 import VanillaSelecto from 'selecto'
 import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
 import { useRoute, useRouter } from 'vue-router'
@@ -421,10 +420,9 @@ const onDragEnd = (e: OnDragEnd) => {
   console.log('onDragEnd', e)
 }
 
-const _updateTransform = (e: OnEvent, transform: string, width: number, height: number) => {
-  console.log('updateTransform', width)
+const updateTransform = (e: OnEvent, transform: string, width: number, height: number) => {
   const chart: ChartConfig<unknown> = getChartByElement(e.target, chartList.value)
-  const { x, y, rotateX, rotateY, rotateZ } = extractPositionFromTransform(transform)
+  const { x, y, rotateX, rotateY, rotateZ } = normalizeChartTransformPosition(extractPositionFromTransform(transform))
   chart.x = x
   chart.y = y
   chart.w = width
@@ -433,9 +431,6 @@ const _updateTransform = (e: OnEvent, transform: string, width: number, height: 
   chart.rotateY = rotateY
   chart.rotateZ = rotateZ
 }
-const updateTransform = debounce((e: OnEvent, transform: string, width: number, height: number) => {
-  _updateTransform(e, transform, width, height)
-}, 100)
 /**
  * 缩放组件中
  * @param e
