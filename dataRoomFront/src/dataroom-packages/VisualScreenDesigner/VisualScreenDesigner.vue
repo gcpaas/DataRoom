@@ -61,6 +61,7 @@ import {
   createDesignerHistoryHash,
   hasUnsavedChanges,
 } from '@/dataroom-packages/_common/designer-history-backup.ts'
+import { filterVisibleCharts } from '@/dataroom-packages/_common/chart-visibility.ts'
 import { PAGE_HISTORY_REMARKS } from '@/dataroom-packages/_common/page-history-remark.ts'
 import {
   applySavedDesignerHistoryState,
@@ -158,8 +159,9 @@ const moveableTargets: ComputedRef<(HTMLElement | null)[]> = computed(() => {
     return []
   }
   const dom = document.getElementById(activeChart.value.id)
-  return [dom]
+  return dom ? [dom] : []
 })
+const visibleChartList = computed(() => filterVisibleCharts(chartList.value))
 
 const syncActiveChartReference = () => {
   if (!activeChart.value) {
@@ -193,6 +195,18 @@ const deleteChartWithHistory = (chartId: string, label: string = '删除组件')
 
   editorHistory.record(createRemoveChartHistoryEntry(label, 'visual-screen-designer', removed.parent, removed.index, removed.chart))
   syncActiveChartReference()
+  return true
+}
+
+const setChartHidden = (chartId: string, hidden: boolean) => {
+  const reference = findChartReference(chartId, chartList.value)
+  if (!reference || reference.chart.hide === hidden) {
+    return false
+  }
+
+  reference.chart.hide = hidden
+  syncActiveChartReference()
+  updateMoveableRect()
   return true
 }
 
@@ -262,6 +276,7 @@ const addChart = (type: string) => {
 const activeChartById = (id: string) => {
   const chart: ChartConfig<unknown> = getChartById(id, chartList.value)
   activeChart.value = chart
+  rightControlPanelShow.value = true
   rightControlPanelSetting.value = false
 }
 
@@ -279,6 +294,8 @@ const { canvasInst } = useCanvasInst({
   canUndo: () => editorHistory.canUndo,
   canRedo: () => editorHistory.canRedo,
   moveChartLayer,
+  deleteChart: deleteChartWithHistory,
+  setChartHidden,
 })
 provide(DrConst.CANVAS_INST, canvasInst)
 
@@ -301,8 +318,6 @@ const visualScreenDesignerAliveGuard = createAliveGuard()
 const currentPageConfigHashSync = createLatestDesignerHashSync((hash) => {
   currentPageConfigHash.value = hash
 })
-
-type InsertCommand = 'component' | 'resource'
 
 const leftToolPanelShow = ref(false)
 const rightControlPanelShow = ref(true)
@@ -363,9 +378,14 @@ const switchRightControlPanel = (open: boolean = true) => {
   rightControlPanelShow.value = open
 }
 
-const switchPageControlPanel = () => {
-  switchRightControlPanel(true)
+const togglePageControlPanel = () => {
+  if (rightControlPanelShow.value && rightControlPanelSetting.value) {
+    switchRightControlPanel(false)
+    return
+  }
+
   rightControlPanelSetting.value = true
+  switchRightControlPanel(true)
 }
 
 const contextMenuVisible = ref(false)
@@ -601,19 +621,7 @@ const openGlobalVariable = () => {
  * 打开左侧图层面板
  */
 const openLayerPanel = () => {
-  leftToolPanelShow.value = true
-}
-
-/**
- * 顶部插入菜单命令
- * @param command
- */
-const onInsertCommand = (command: InsertCommand) => {
-  if (command === 'component') {
-    openComponentLib()
-    return
-  }
-  openResourceLib()
+  switchLeftToolPanel(!leftToolPanelShow.value)
 }
 
 const rememberGestureStartLayout = (chartId: string) => {
@@ -741,8 +749,7 @@ const onSelectEnd = (e: import('selecto').OnSelectEnd<VanillaSelecto>) => {
   const target = e.selected[0]
   if (target) {
     const active = getChartByElement(target, chartList.value)
-    activeChart.value = active
-    rightControlPanelSetting.value = false
+    activeChartById(active.id)
   }
 }
 /**
@@ -1194,27 +1201,18 @@ onBeforeUnmount(() => {
         <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="onBackByLogo" />
         <div class="title" @click="onTitleClick">{{ pageStageEntity?.name }}</div>
       </div>
-      <div class="header-right">
+      <div class="header-actions header-actions--primary">
         <div class="header-action">
-          <el-button size="small" :disabled="!editorHistory.canUndo" aria-label="回退" title="回退" @click="onUndo">
-            <el-icon><RefreshLeft /></el-icon>
-          </el-button>
+          <el-button size="small" type="primary" @click="openComponentLib">组件</el-button>
         </div>
         <div class="header-action">
-          <el-button size="small" :disabled="!editorHistory.canRedo" aria-label="重做" title="重做" @click="onRedo">
-            <el-icon><RefreshRight /></el-icon>
-          </el-button>
+          <el-button size="small" @click="openResourceLib">素材</el-button>
         </div>
         <div class="header-action">
-          <el-dropdown trigger="click" @command="onInsertCommand">
-            <el-button size="small">插入</el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item command="component">组件</el-dropdown-item>
-                <el-dropdown-item command="resource">素材</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
+          <el-button @click="openGlobalVariable" size="small">变量</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="openLayerPanel" size="small">图层</el-button>
         </div>
         <div class="header-action">
           <el-dropdown trigger="click" :hide-on-click="false">
@@ -1238,14 +1236,20 @@ onBeforeUnmount(() => {
           </el-dropdown>
         </div>
         <div class="header-action">
-          <el-button @click="openGlobalVariable" size="small">变量</el-button>
+          <el-button @click="togglePageControlPanel" size="small">设置</el-button>
         </div>
         <div class="header-action">
-          <el-button @click="openLayerPanel" size="small">图层</el-button>
+          <el-button size="small" :disabled="!editorHistory.canUndo" aria-label="回退" title="回退" @click="onUndo">
+            撤销
+          </el-button>
         </div>
         <div class="header-action">
-          <el-button @click="switchPageControlPanel" size="small">设置</el-button>
+          <el-button size="small" :disabled="!editorHistory.canRedo" aria-label="重做" title="重做" @click="onRedo">
+            恢复
+          </el-button>
         </div>
+      </div>
+      <div class="header-actions header-actions--secondary">
         <div class="header-action">
           <el-button @click="historyDialogVisible = true" size="small">历史</el-button>
         </div>
@@ -1299,7 +1303,7 @@ onBeforeUnmount(() => {
             <div ref="canvasContainer" class="canvas-content" :style="computedCanvasContentStyle">
               <div
                 class="chart-wrapper"
-                v-for="item in chartList"
+                v-for="item in visibleChartList"
                 :key="item.id"
                 :id="item.id"
                 :data-dr-id="item.id"
@@ -1465,18 +1469,20 @@ onBeforeUnmount(() => {
     background-color: var(--el-bg-color);
     color: var(--el-text-color-primary);
     font-weight: 600;
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    justify-content: space-between;
     border-bottom: 1px solid var(--el-border-color);
     position: relative;
     z-index: 10;
+    column-gap: 16px;
+    padding: 0 8px;
 
     & .header-left {
       display: flex;
       align-items: center;
-      margin-left: 8px;
       flex-shrink: 0;
+      min-width: 0;
 
       & .logo {
         height: 30px;
@@ -1500,16 +1506,23 @@ onBeforeUnmount(() => {
       }
     }
 
-    & .header-right {
+    & .header-actions {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-right: 8px;
 
       & .header-action {
         display: inline-flex;
         align-items: center;
       }
+    }
+
+    & .header-actions--primary {
+      justify-self: center;
+    }
+
+    & .header-actions--secondary {
+      justify-self: end;
     }
   }
 

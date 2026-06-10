@@ -91,4 +91,15 @@ export interface CanvasInst {
    * @param direction
    */
   moveChartLayer: (chartId: string, direction: ChartLayerMoveDirection) => boolean
+  /**
+   * 删除组件
+   * @param chartId
+   */
+  deleteChart: (chartId: string) => boolean
+  /**
+   * 更新组件隐藏状态
+   * @param chartId
+   * @param hidden
+   */
+  setChartHidden: (chartId: string, hidden: boolean) => boolean
 }

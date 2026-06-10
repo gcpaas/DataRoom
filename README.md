@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>DataRoom Vue3</h1>
+  <h1>DataRoom</h1>
   <strong>简单、免费、开源的大屏设计器</strong>
 </div>
 <p align="center">
@@ -11,10 +11,6 @@
 </p>
 🔥DataRoom是一款基于SpringBoot3.x、JDK17、Vue3.x、Vite8.x、Element-plus、Echarts6.x等技术栈的大屏设计器，具备大屏、仪表板设计、预览能力，支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV等20+数据源接入，使用简单，完全免费，代码开源。<br/>
 
-## 特别说明
-
-❗️❗️❗️Vue3版本功能未开发完成, 请勿用于生产环境, 持续更新中、生产环境可使用`2.1.0.RELEASE`分支
-
 ## 系统截图
 
 ### 登录功能
@@ -23,12 +19,12 @@
 ![登录页面.png](doc/image/%E7%99%BB%E5%BD%95%E9%A1%B5%E9%9D%A2.png)
 
 ### 页面管理
-> 支持目录、大屏、仪表盘创建
+> 支持目录、大屏、仪表盘创建、设计、预览
 
 ![页面管理页.png](doc/image/%E9%A1%B5%E9%9D%A2%E7%AE%A1%E7%90%86%E9%A1%B5.png)
 
 ### 页面设计器
-> 采用栅格布局，自适应页面大小
+> 采用栅格布局，自适应页面大小，适用于低代码场景
 
 ![页面设计器.png](doc/image/%E9%A1%B5%E9%9D%A2%E8%AE%BE%E8%AE%A1%E5%99%A8.png)
 

@@ -22,6 +22,8 @@ interface UseCanvasInstOptions {
   canUndo?: () => boolean
   canRedo?: () => boolean
   moveChartLayer?: (chartId: string, direction: ChartLayerMoveDirection) => boolean
+  deleteChart?: (chartId: string) => boolean
+  setChartHidden?: (chartId: string, hidden: boolean) => boolean
 }
 
 /**
@@ -30,7 +32,7 @@ interface UseCanvasInstOptions {
  * @param options
  */
 export function useCanvasInst(options: UseCanvasInstOptions) {
-  const {chartList, globalVariable, addChart, activeChartById, commitChartAdd, undo, redo, canUndo, canRedo, moveChartLayer} = options
+  const {chartList, globalVariable, addChart, activeChartById, commitChartAdd, undo, redo, canUndo, canRedo, moveChartLayer, deleteChart, setChartHidden} = options
 
   const chartInstanceMap: ChartInstanceMap = {}
 
@@ -212,7 +214,9 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
     get canRedo() {
       return canRedo ? canRedo() : false
     },
-    moveChartLayer: moveChartLayer || (() => false)
+    moveChartLayer: moveChartLayer || (() => false),
+    deleteChart: deleteChart || (() => false),
+    setChartHidden: setChartHidden || (() => false),
   })
 
   return {

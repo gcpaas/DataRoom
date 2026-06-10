@@ -87,7 +87,7 @@ const filterPluginList = computed(() => {
         <div class="selection-summary">已选 {{ selectedPluginTypes.length }} 个组件</div>
         <div class="footer-actions">
           <el-button @click="closeDialog">取消</el-button>
-          <el-button type="primary" :disabled="selectedPluginTypes.length === 0" @click="handleConfirm">确定</el-button>
+          <el-button type="primary" :disabled="selectedPluginTypes.length === 0" @click="handleConfirm">插入</el-button>
         </div>
       </div>
     </div>

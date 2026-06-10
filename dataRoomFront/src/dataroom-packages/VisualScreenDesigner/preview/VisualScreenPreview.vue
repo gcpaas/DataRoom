@@ -12,6 +12,7 @@ import type { VisualScreenPageBasicConfig } from '@/dataroom-packages/PageDesign
 import type { GlobalVariable } from '@/dataroom-packages/PageDesigner/type/GlobalVariable.ts'
 import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
 import { useTimerManager } from '@/dataroom-packages/hooks/use-timer-manager'
+import { filterVisibleCharts } from '@/dataroom-packages/_common/chart-visibility.ts'
 
 const pageStageEntity = ref<PageStageEntity>()
 const chartList = ref<ChartConfig<unknown>[]>([])
@@ -27,6 +28,7 @@ const route = useRoute()
 // 视口尺寸响应式
 const viewportWidth = ref(window.innerWidth)
 const viewportHeight = ref(window.innerHeight)
+const visibleChartList = computed(() => filterVisibleCharts(chartList.value))
 
 /**
  * 创建画布实例供子组件使用
@@ -182,7 +184,7 @@ const computedScalerStyle = computed<CSSProperties>(() => {
   <div class="vs-preview-viewport">
     <div class="vs-preview-scaler" :style="computedScalerStyle">
       <div class="canvas-content" :style="computedCanvasContentStyle">
-        <div class="chart-wrapper" v-for="item in chartList" :key="item.id" :id="item.id" :data-dr-id="item.id" :style="computedChartStyle(item)">
+        <div class="chart-wrapper" v-for="item in visibleChartList" :key="item.id" :id="item.id" :data-dr-id="item.id" :style="computedChartStyle(item)">
           <component :is="getComponent(item.type)" :chart="item"></component>
         </div>
       </div>

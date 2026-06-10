@@ -53,7 +53,6 @@ const pageStageEntity = ref<PageStageEntity>()
 const chartList = ref<ChartConfig<unknown>[]>([])
 const pageBasicConfig = ref<PageBasicConfig>({} as PageBasicConfig)
 const globalVariable = ref<GlobalVariable[]>([] as GlobalVariable[])
-const leftToolPanelShow = ref(false)
 const rightControlPanelShow = ref(true)
 // 记录右侧控制面板是否为页面配置
 const rightControlPanelSetting = ref(true)
@@ -68,7 +67,6 @@ const ContextMenu = defineAsyncComponent(() => import('@/dataroom-packages/PageD
 const ControlPanelWrapper = defineAsyncComponent(() => import('@/dataroom-packages/_components/ControlPanel.vue'))
 const ControlPanel = defineAsyncComponent(() => import('@/dataroom-packages/PageDesigner/ControlPanel.vue'))
 const ComponentLib = defineAsyncComponent(() => import('@/dataroom-packages/_components/ComponentLib.vue'))
-const ComponentLayer = defineAsyncComponent(() => import('@/dataroom-packages/_components/ComponentLayer.vue'))
 const GlobalVariableComponent = defineAsyncComponent(() => import('@/dataroom-packages/_components/GlobalVariable.vue'))
 const ResourceLib = defineAsyncComponent(() => import('@/dataroom-packages/_components/ResourceLib.vue'))
 const SaveBeforeLeaveDialog = defineAsyncComponent(() => import('@/dataroom-packages/_components/SaveBeforeLeaveDialog.vue'))
@@ -83,8 +81,6 @@ const pageDesignerAliveGuard = createAliveGuard()
 const currentPageConfigHashSync = createLatestDesignerHashSync((hash) => {
   currentPageConfigHash.value = hash
 })
-
-type InsertCommand = 'component' | 'resource'
 
 const syncActiveChartReference = () => {
   if (!activeChart.value) {
@@ -225,8 +221,13 @@ const switchRightControlPanel = (open: boolean = true) => {
   rightControlPanelShow.value = open
 }
 const switchPageControlPanel = () => {
-  switchRightControlPanel(true)
+  if (rightControlPanelShow.value && rightControlPanelSetting.value) {
+    switchRightControlPanel(false)
+    return
+  }
+
   rightControlPanelSetting.value = true
+  switchRightControlPanel(true)
 }
 /**
  * 添加组件到画布中、默认添加到左上角
@@ -273,17 +274,6 @@ const { timerManager } = useTimerManager({
 provide(DrConst.CANVAS_INST, canvasInst)
 
 /**
- * 左侧工具面版样式
- */
-const computedLeftToolPanelStyle = computed(() => {
-  if (!leftToolPanelShow.value) {
-    return {
-      display: 'none',
-    }
-  }
-  return {}
-})
-/**
  * 右侧配置面版样式
  */
 const computedRightControlPanelStyle = computed(() => {
@@ -294,14 +284,6 @@ const computedRightControlPanelStyle = computed(() => {
   }
   return {}
 })
-
-/**
- * 左侧工具面板开关
- * @param open
- */
-const switchLeftToolPanel = (open: boolean = true) => {
-  leftToolPanelShow.value = open
-}
 
 const componentLibVisible = ref(false)
 const resourceLibVisible = ref(false)
@@ -337,24 +319,6 @@ const openGlobalVariable = () => {
   })
 }
 
-/**
- * 打开左侧图层面板
- */
-const openLayerPanel = () => {
-  switchLeftToolPanel(true)
-}
-
-/**
- * 顶部插入菜单命令
- * @param command
- */
-const onInsertCommand = (command: InsertCommand) => {
-  if (command === 'component') {
-    openComponentLib()
-    return
-  }
-  openResourceLib()
-}
 /**
  * 计算组件坐标样式
  * @param chart
@@ -660,22 +624,13 @@ const onSaveBeforeLeaveAction = async (action: SaveBeforeLeaveAction) => {
 }
 
 const computedMainStyle = computed(() => {
-  if (leftToolPanelShow.value && rightControlPanelShow.value) {
-    return {
-      gridTemplateColumns: '240px auto 330px',
-    }
-  } else if (!leftToolPanelShow.value && !rightControlPanelShow.value) {
+  if (!rightControlPanelShow.value) {
     return {
       gridTemplateColumns: 'auto',
     }
-  } else if (!leftToolPanelShow.value && rightControlPanelShow.value) {
-    return {
-      gridTemplateColumns: 'auto 330px',
-    }
-  } else {
-    return {
-      gridTemplateColumns: '240px auto',
-    }
+  }
+  return {
+    gridTemplateColumns: 'auto 330px',
   }
 })
 
@@ -790,37 +745,31 @@ onUnmounted(() => {
         <img src="@/dataroom-packages/assets/logo-small.png" alt="logo" class="logo" @click="onBackByLogo" />
         <div class="title" @click="onTitleClick">{{ pageStageEntity?.name }}</div>
       </div>
-      <div class="header-right">
+      <div class="header-actions header-actions--primary">
         <div class="header-action">
-          <el-button size="small" :disabled="!editorHistory.canUndo" aria-label="回退" title="回退" @click="onUndo">
-            <el-icon><RefreshLeft /></el-icon>
-          </el-button>
+          <el-button size="small" type="primary" @click="openComponentLib">组件</el-button>
         </div>
         <div class="header-action">
-          <el-button size="small" :disabled="!editorHistory.canRedo" aria-label="重做" title="重做" @click="onRedo">
-            <el-icon><RefreshRight /></el-icon>
-          </el-button>
-        </div>
-        <div class="header-action">
-          <el-dropdown trigger="click" @command="onInsertCommand">
-            <el-button size="small">插入</el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item command="component">组件</el-dropdown-item>
-                <el-dropdown-item command="resource">素材</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
+          <el-button size="small" @click="openResourceLib">素材</el-button>
         </div>
         <div class="header-action">
           <el-button @click="openGlobalVariable" size="small">变量</el-button>
         </div>
         <div class="header-action">
-          <el-button @click="openLayerPanel" size="small">图层</el-button>
-        </div>
-        <div class="header-action">
           <el-button @click="switchPageControlPanel" size="small">设置</el-button>
         </div>
+        <div class="header-action">
+          <el-button size="small" :disabled="!editorHistory.canUndo" aria-label="回退" title="回退" @click="onUndo">
+            撤销
+          </el-button>
+        </div>
+        <div class="header-action">
+          <el-button size="small" :disabled="!editorHistory.canRedo" aria-label="重做" title="重做" @click="onRedo">
+            恢复
+          </el-button>
+        </div>
+      </div>
+      <div class="header-actions header-actions--secondary">
         <div class="header-action">
           <el-button @click="historyDialogVisible = true" size="small">历史</el-button>
         </div>
@@ -833,21 +782,6 @@ onUnmounted(() => {
       </div>
     </div>
     <div class="main" :style="computedMainStyle">
-      <div class="left-tool-panel" :style="computedLeftToolPanelStyle">
-        <div class="panel-header">
-          <div class="panel-header-inner">
-            <span class="title">图层</span>
-            <el-icon class="close" @click="switchLeftToolPanel(false)">
-              <Close />
-            </el-icon>
-          </div>
-        </div>
-        <div class="panel-body">
-          <el-scrollbar>
-            <ComponentLayer />
-          </el-scrollbar>
-        </div>
-      </div>
       <div class="canvas">
         <div class="canvas-main" id="canvas-main" :style="computedCanvasMainContainerStyle" @click="onCanvasClick">
           <el-scrollbar>
@@ -963,17 +897,19 @@ onUnmounted(() => {
     background-color: var(--el-bg-color);
     color: var(--el-text-color-primary);
     font-weight: 600;
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    justify-content: space-between;
     border-bottom: 1px solid var(--el-border-color);
     position: relative;
     z-index: 10;
+    column-gap: 16px;
+    padding: 0 8px;
 
     & .header-left {
+      min-width: 0;
       display: flex;
       align-items: center;
-      margin-left: 8px;
 
       & .logo {
         height: 30px;
@@ -995,16 +931,23 @@ onUnmounted(() => {
       }
     }
 
-    & .header-right {
+    & .header-actions {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-right: 8px;
 
       & .header-action {
         display: inline-flex;
         align-items: center;
       }
+    }
+
+    & .header-actions--primary {
+      justify-self: center;
+    }
+
+    & .header-actions--secondary {
+      justify-self: end;
     }
   }
 
@@ -1012,58 +955,7 @@ onUnmounted(() => {
     background-color: var(--el-bg-color-page);
     display: grid;
     min-height: 0;
-    grid-template-columns: 240px auto 330px;
-
-    & .left-tool-panel {
-      background-color: var(--el-bg-color);
-      display: grid;
-      grid-template-rows: 40px auto;
-      height: calc(100vh - 48px);
-      box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
-
-      & .panel-header {
-        background-color: var(--el-fill-color-light);
-        box-sizing: border-box;
-        box-shadow: inset 0 -1px 0 0 var(--el-border-color-light);
-        font-size: 12px;
-        font-weight: 500;
-        text-transform: uppercase;
-        color: var(--el-text-color-secondary);
-        line-height: 40px;
-        height: 40px;
-        align-self: center;
-        padding-left: 12px;
-
-        & .panel-header-inner {
-          position: relative;
-        }
-
-        & .title {
-          letter-spacing: 0;
-        }
-
-        & .close {
-          position: absolute;
-          height: 40px;
-          line-height: 40px;
-          right: 16px;
-          top: 0px;
-          color: var(--el-text-color-secondary);
-          transition: color 0.2s;
-
-          &:hover {
-            cursor: pointer;
-            color: var(--el-color-primary);
-          }
-        }
-      }
-
-      & .panel-body {
-        background-color: var(--el-bg-color);
-        overflow-y: hidden;
-        padding: 8px 4px 16px 4px;
-      }
-    }
+    grid-template-columns: auto 330px;
 
     & .canvas {
       display: grid;

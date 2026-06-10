@@ -31,6 +31,8 @@ export interface ChartConfig<T> {
   rotateZ: number
   // 图表组件个性化配置
   props: T,
+  // 是否隐藏组件，true 时设计器与预览不渲染
+  hide?: boolean
   // 子组件，仅在容器类组件有效
   children?: ChartConfig<unknown>[]
   // 图表交互

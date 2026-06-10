@@ -88,7 +88,10 @@ const getComponent = (name: string) => {
 const getComponentInstance = (name: string): ChartConfig<unknown> => {
   const instanceFn = componentInstances[name]!
   if (instanceFn) {
-    return instanceFn()
+    return {
+      hide: false,
+      ...instanceFn(),
+    }
   }
   console.error(`未找到组件 ${name} 对应的实例化方法`)
   return {} as ChartConfig<unknown>
