@@ -96,8 +96,12 @@ const handleLogin = async () => {
     if (valid) {
       loading.value = true
       try {
+        // 对用户名和密码进行 trim 处理
+        const trimmedUsername = loginForm.username.trim()
+        const trimmedPassword = loginForm.password.trim()
+
         // 加密密码
-        const encryptedPassword = encryptByRsa(loginForm.password)
+        const encryptedPassword = encryptByRsa(trimmedPassword)
         if (!encryptedPassword) {
           ElMessage.error('密码加密失败,请重试')
           loading.value = false
@@ -106,7 +110,7 @@ const handleLogin = async () => {
 
         // 调用登录接口（携带验证码信息）
         const token = await request.post('/dataRoom/user/login', {
-          username: loginForm.username,
+          username: trimmedUsername,
           password: encryptedPassword,
           captchaKey: captchaKey.value,
           captchaCode: loginForm.captchaCode,
