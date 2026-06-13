@@ -12,6 +12,7 @@ import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataroom-packages/hooks/use-dr-component"
 import type {ComponentExpose} from "@/dataroom-packages/components/type/ComponentExpose.ts"
+import {getChartDatasetFieldNames, shouldUseDefaultChartData} from "@/dataroom-packages/components/_shared/chart-data-defaults.ts"
 
 const {chart} = defineProps<{
   chart: DrRadarChartConfig
@@ -75,9 +76,9 @@ const buildOption = () => {
   const data = chartData.value
 
   // 解析数据集字段映射
-  const indicatorFieldNames = chart.dataset?.fields?.indicatorField || ['indicator']
-  const valueFieldNames = chart.dataset?.fields?.valueField || ['value']
-  const seriesFieldNames = chart.dataset?.fields?.seriesField || []
+  const indicatorFieldNames = getChartDatasetFieldNames(chart, 'indicatorField', ['indicator'])
+  const valueFieldNames = getChartDatasetFieldNames(chart, 'valueField', ['value'])
+  const seriesFieldNames = getChartDatasetFieldNames(chart, 'seriesField')
   const indicatorFieldName = indicatorFieldNames[0] || 'indicator'
   const valueFieldName = valueFieldNames[0] || 'value'
   const seriesFieldName = seriesFieldNames[0] || ''
@@ -276,7 +277,7 @@ const initChart = () => {
 
   // 绑定点击事件
   chartInstance.on('click', (params: any) => {
-    const indicatorFieldNames = chart.dataset?.fields?.indicatorField || ['indicator']
+    const indicatorFieldNames = getChartDatasetFieldNames(chart, 'indicatorField', ['indicator'])
     const indicatorFieldName = indicatorFieldNames[0] || 'indicator'
     const indicators = [...new Set(chartData.value.map((item: any) => item[indicatorFieldName]))]
 
@@ -296,7 +297,7 @@ const initChart = () => {
   })
 
   // 使用默认示例数据渲染
-  if (chartData.value.length === 0) {
+  if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
     chartData.value = [
       {indicator: '攻击', value: 80, series: '战士'},
       {indicator: '防御', value: 90, series: '战士'},

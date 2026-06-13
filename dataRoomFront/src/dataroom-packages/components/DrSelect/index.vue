@@ -76,6 +76,10 @@ const getSelectedLabel = (value: string | string[]) => {
   return option ? option.label : value
 }
 
+const normalizeGlobalVariableValue = (value: string | string[]) => {
+  return Array.isArray(value) ? value.join(',') : value
+}
+
 /**
  * 选中值变化时的回调
  */
@@ -83,7 +87,7 @@ const onSelectChange = (value: string | string[]) => {
   // 更新全局变量
   const globalVarName = chart.props.globalVar?.globalVarName
   if (globalVarName) {
-    canvasInst.updateGlobalVariableValue(globalVarName, value)
+    canvasInst.updateGlobalVariableValue(globalVarName, normalizeGlobalVariableValue(value))
   }
   // 触发行为事件
   const label = getSelectedLabel(value)
@@ -97,7 +101,7 @@ const onSelectClear = () => {
   // 更新全局变量为空
   const globalVarName = chart.props.globalVar?.globalVarName
   if (globalVarName) {
-    canvasInst.updateGlobalVariableValue(globalVarName, chart.props.basic.multiple ? [] : '')
+    canvasInst.updateGlobalVariableValue(globalVarName, '')
   }
   // 触发清空行为事件
   canvasInst.triggerChartBehavior(chart.id, 'clear', {})
@@ -120,7 +124,7 @@ onMounted(() => {
     // 同步默认值到全局变量
     const globalVarName = chart.props.globalVar?.globalVarName
     if (globalVarName) {
-      canvasInst.updateGlobalVariableValue(globalVarName, selectedValue.value)
+      canvasInst.updateGlobalVariableValue(globalVarName, normalizeGlobalVariableValue(selectedValue.value))
     }
   }
 })

@@ -16,7 +16,7 @@ const {chart} = defineProps<{
 }>()
 
 const now = ref(new Date())
-let timer: ReturnType<typeof window.setInterval> | undefined
+let timer: number | undefined
 
 const displayText = computed(() => formatDateTime(now.value, chart.props.format))
 

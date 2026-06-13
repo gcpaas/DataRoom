@@ -13,6 +13,7 @@ import * as echarts from 'echarts'
 import 'echarts-wordcloud'
 import {useDrComponent} from "@/dataroom-packages/hooks/use-dr-component"
 import type {ComponentExpose} from "@/dataroom-packages/components/type/ComponentExpose.ts"
+import {getChartDatasetFieldNames, shouldUseDefaultChartData} from "@/dataroom-packages/components/_shared/chart-data-defaults.ts"
 
 const {chart} = defineProps<{
   chart: DrWordCloudConfig
@@ -52,8 +53,8 @@ const buildOption = () => {
   const data = chartData.value
 
   // 解析数据集字段映射
-  const wordFieldNames = chart.dataset?.fields?.wordField || ['word']
-  const valueFieldNames = chart.dataset?.fields?.valueField || ['value']
+  const wordFieldNames = getChartDatasetFieldNames(chart, 'wordField', ['word'])
+  const valueFieldNames = getChartDatasetFieldNames(chart, 'valueField', ['value'])
   const wordFieldName = wordFieldNames[0] || 'word'
   const valueFieldName = valueFieldNames[0] || 'value'
 
@@ -149,7 +150,7 @@ const initChart = () => {
   })
 
   // 使用默认示例数据渲染
-  if (chartData.value.length === 0) {
+  if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
     chartData.value = [
       {word: '可视化', value: 100},
       {word: '大数据', value: 80},

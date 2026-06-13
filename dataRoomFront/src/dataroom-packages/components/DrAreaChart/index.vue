@@ -12,6 +12,7 @@ import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataroom-packages/hooks/use-dr-component"
 import type {ComponentExpose} from "@/dataroom-packages/components/type/ComponentExpose.ts"
+import {getChartDatasetFieldNames, shouldUseDefaultChartData} from "@/dataroom-packages/components/_shared/chart-data-defaults.ts"
 
 const {chart} = defineProps<{
   chart: DrAreaChartConfig
@@ -51,9 +52,9 @@ const buildOption = () => {
   const data = chartData.value
 
   // 解析数据集字段映射
-  const xFieldNames = chart.dataset?.fields?.xField || ['x']
-  const yFieldNames = chart.dataset?.fields?.yField || ['y']
-  const seriesFieldNames = chart.dataset?.fields?.seriesField || []
+  const xFieldNames = getChartDatasetFieldNames(chart, 'xField', ['x'])
+  const yFieldNames = getChartDatasetFieldNames(chart, 'yField', ['y'])
+  const seriesFieldNames = getChartDatasetFieldNames(chart, 'seriesField')
   const xFieldName = xFieldNames[0] || 'x'
   const seriesFieldName = seriesFieldNames[0] || ''
 
@@ -308,7 +309,7 @@ const initChart = () => {
   })
 
   // 使用默认示例数据渲染
-  if (chartData.value.length === 0) {
+  if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
     chartData.value = [
       {x: '一月', y: 820, s: '系列1'},
       {x: '二月', y: 932, s: '系列1'},

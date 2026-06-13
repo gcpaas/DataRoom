@@ -12,6 +12,7 @@ import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataroom-packages/hooks/use-dr-component"
 import type {ComponentExpose} from "@/dataroom-packages/components/type/ComponentExpose.ts"
+import {getChartDatasetFieldNames, shouldUseDefaultChartData} from "@/dataroom-packages/components/_shared/chart-data-defaults.ts"
 
 const {chart} = defineProps<{
   chart: DrHorizontalBarChartConfig
@@ -76,9 +77,9 @@ const buildOption = () => {
 
   // 解析数据集字段映射
   // 注意：对于横向条形图，xField 是数值字段，yField 是类目字段
-  const xFieldNames = chart.dataset?.fields?.xField || ['x']
-  const yFieldNames = chart.dataset?.fields?.yField || ['y']
-  const seriesFieldNames = chart.dataset?.fields?.seriesField || []
+  const xFieldNames = getChartDatasetFieldNames(chart, 'xField', ['x'])
+  const yFieldNames = getChartDatasetFieldNames(chart, 'yField', ['y'])
+  const seriesFieldNames = getChartDatasetFieldNames(chart, 'seriesField')
   const yFieldName = yFieldNames[0] || 'y'
   const seriesFieldName = seriesFieldNames[0] || ''
 
@@ -344,7 +345,7 @@ const initChart = () => {
   })
 
   // 使用默认示例数据渲染
-  if (chartData.value.length === 0) {
+  if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
     chartData.value = [
       {y: '产品A', x: 120},
       {y: '产品B', x: 200},

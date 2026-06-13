@@ -12,6 +12,7 @@ import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataroom-packages/hooks/use-dr-component"
 import type {ComponentExpose} from "@/dataroom-packages/components/type/ComponentExpose.ts"
+import {getChartDatasetFieldNames, shouldUseDefaultChartData} from "@/dataroom-packages/components/_shared/chart-data-defaults.ts"
 
 const {chart} = defineProps<{
   chart: DrPieChartConfig
@@ -119,8 +120,8 @@ const buildOption = () => {
   const data = chartData.value
 
   // 解析数据集字段映射
-  const nameFieldNames = chart.dataset?.fields?.nameField || ['name']
-  const valueFieldNames = chart.dataset?.fields?.valueField || ['value']
+  const nameFieldNames = getChartDatasetFieldNames(chart, 'nameField', ['name'])
+  const valueFieldNames = getChartDatasetFieldNames(chart, 'valueField', ['value'])
   const nameField = nameFieldNames[0] || 'name'
   const valueField = valueFieldNames[0] || 'value'
 
@@ -314,7 +315,7 @@ const initChart = () => {
   })
 
   // 使用默认示例数据渲染
-  if (chartData.value.length === 0) {
+  if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
     chartData.value = [
       {name: '分类A', value: 335},
       {name: '分类B', value: 310},

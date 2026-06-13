@@ -12,6 +12,7 @@ import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataroom-packages/hooks/use-dr-component"
 import type {ComponentExpose} from "@/dataroom-packages/components/type/ComponentExpose.ts"
+import {getChartDatasetFieldNames, shouldUseDefaultChartData} from "@/dataroom-packages/components/_shared/chart-data-defaults.ts"
 
 const {chart} = defineProps<{
   chart: DrGaugeConfig
@@ -39,8 +40,8 @@ const changeData = (datasetValue: any) => {
   if (data.length > 0) {
     const item = data[0]
     // 解析数值字段
-    const valueFieldNames = chart.dataset?.fields?.valueField || ['value']
-    const titleFieldNames = chart.dataset?.fields?.titleField || ['title']
+    const valueFieldNames = getChartDatasetFieldNames(chart, 'valueField', ['value'])
+    const titleFieldNames = getChartDatasetFieldNames(chart, 'titleField', ['title'])
     const valueFieldName = valueFieldNames[0] || 'value'
     const titleFieldName = titleFieldNames[0] || 'title'
 
@@ -243,7 +244,7 @@ const initChart = () => {
   })
 
   // 使用默认示例数据渲染
-  if (gaugeValue.value === 0) {
+  if (shouldUseDefaultChartData(chart) && gaugeValue.value === 0) {
     gaugeValue.value = 58.6
   }
   updateChart()

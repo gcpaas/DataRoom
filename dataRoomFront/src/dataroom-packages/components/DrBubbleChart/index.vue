@@ -12,6 +12,7 @@ import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataroom-packages/hooks/use-dr-component"
 import type {ComponentExpose} from "@/dataroom-packages/components/type/ComponentExpose.ts"
+import {getChartDatasetFieldNames, shouldUseDefaultChartData} from "@/dataroom-packages/components/_shared/chart-data-defaults.ts"
 
 const {chart} = defineProps<{
   chart: DrBubbleChartConfig
@@ -62,11 +63,11 @@ const buildOption = () => {
   const data = chartData.value
 
   // 解析数据集字段映射
-  const xFieldNames = chart.dataset?.fields?.xField || ['x']
-  const yFieldNames = chart.dataset?.fields?.yField || ['y']
-  const sizeFieldNames = chart.dataset?.fields?.sizeField || ['size']
-  const colorFieldNames = chart.dataset?.fields?.colorField || []
-  const nameFieldNames = chart.dataset?.fields?.nameField || []
+  const xFieldNames = getChartDatasetFieldNames(chart, 'xField', ['x'])
+  const yFieldNames = getChartDatasetFieldNames(chart, 'yField', ['y'])
+  const sizeFieldNames = getChartDatasetFieldNames(chart, 'sizeField', ['size'])
+  const colorFieldNames = getChartDatasetFieldNames(chart, 'colorField')
+  const nameFieldNames = getChartDatasetFieldNames(chart, 'nameField')
 
   const xFieldName = xFieldNames[0] || 'x'
   const yFieldName = yFieldNames[0] || 'y'
@@ -377,7 +378,7 @@ const initChart = () => {
   })
 
   // 使用默认示例数据渲染
-  if (chartData.value.length === 0) {
+  if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
     chartData.value = [
       {x: 10, y: 20, size: 30, name: 'A', group: '组1'},
       {x: 25, y: 45, size: 60, name: 'B', group: '组1'},
