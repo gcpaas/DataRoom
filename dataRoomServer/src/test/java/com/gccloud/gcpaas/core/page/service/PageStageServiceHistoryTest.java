@@ -1,13 +1,19 @@
 package com.gccloud.gcpaas.core.page.service;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
+import com.baomidou.mybatisplus.core.MybatisMapperBuilderAssistant;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.gccloud.gcpaas.core.constant.PageStatus;
 import com.gccloud.gcpaas.core.constant.PageType;
 import com.gccloud.gcpaas.core.entity.PageStageEntity;
 import com.gccloud.gcpaas.core.exception.DataRoomException;
 import com.gccloud.gcpaas.core.mapper.PageStageMapper;
+import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
+import com.gccloud.gcpaas.core.page.PageController;
 import com.gccloud.gcpaas.core.page.bean.PageConfig;
 import com.gccloud.gcpaas.core.page.dto.PageHistoryBackupDto;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -31,13 +37,36 @@ import static org.mockito.Mockito.when;
 
 class PageStageServiceHistoryTest {
 
+    @BeforeAll
+    static void initTableInfo() {
+        TableInfoHelper.initTableInfo(new MybatisMapperBuilderAssistant(new MybatisConfiguration(), ""), PageStageEntity.class);
+    }
+
     @Test
     void historyMutationMethodsAreTransactional() throws Exception {
         Method backupMethod = PageStageService.class.getMethod("backupHistory", PageHistoryBackupDto.class);
         Method rollbackMethod = PageStageService.class.getMethod("rollbackDesignByHistoryId", String.class);
+        Method deleteMethod = PageStageService.class.getMethod("deleteHistoryById", String.class);
+        Method remarkMethod = PageStageService.class.getMethod("updateHistoryRemark", String.class, String.class);
 
         assertNotNull(backupMethod.getAnnotation(Transactional.class));
         assertNotNull(rollbackMethod.getAnnotation(Transactional.class));
+        assertNotNull(deleteMethod.getAnnotation(Transactional.class));
+        assertNotNull(remarkMethod.getAnnotation(Transactional.class));
+    }
+
+    @Test
+    void historyDeleteEndpointIsOperationLogged() throws Exception {
+        Method deleteMethod = PageController.class.getMethod("historyDelete", String.class);
+
+        OperationLogMeta meta = deleteMethod.getAnnotation(OperationLogMeta.class);
+
+        assertNotNull(meta);
+        assertEquals("删除", meta.actionType());
+        assertEquals("删除页面历史记录", meta.actionDesc());
+        assertEquals("page_stage", meta.businessType());
+        assertEquals("页面历史", meta.businessName());
+        assertEquals("id", meta.targetIdKey());
     }
 
     @Test
@@ -229,6 +258,78 @@ class PageStageServiceHistoryTest {
         DataRoomException exception = assertThrows(DataRoomException.class, () -> service.rollbackDesignByHistoryId("history-1"));
 
         assertEquals("历史回滚失败", exception.getMessage());
+    }
+
+    @Test
+    void deleteHistoryByIdDeletesHistoryStageWithoutPreQuery() {
+        PageStageMapper mapper = mock(PageStageMapper.class);
+        PageStageService service = newService(mapper);
+        when(mapper.delete(any())).thenReturn(1);
+
+        String id = service.deleteHistoryById("history-1");
+
+        assertEquals("history-1", id);
+        verify(mapper, never()).selectById("history-1");
+        verify(mapper, times(1)).delete(any());
+    }
+
+    @Test
+    void deleteHistoryByIdThrowsWhenDeleteFails() {
+        PageStageMapper mapper = mock(PageStageMapper.class);
+        PageStageService service = newService(mapper);
+        when(mapper.delete(any())).thenReturn(0);
+
+        DataRoomException exception = assertThrows(DataRoomException.class, () -> service.deleteHistoryById("history-1"));
+
+        assertEquals("历史记录不存在或已被删除", exception.getMessage());
+        verify(mapper, never()).selectById("history-1");
+    }
+
+    @Test
+    void updateHistoryRemarkUpdatesOnlyHistoryStageWithoutPreQuery() {
+        PageStageMapper mapper = mock(PageStageMapper.class);
+        PageStageService service = newService(mapper);
+        when(mapper.update(any(), any())).thenReturn(1);
+
+        String id = service.updateHistoryRemark("history-1", "新的备注");
+
+        assertEquals("history-1", id);
+        verify(mapper, never()).selectById("history-1");
+        verify(mapper, times(1)).update(any(), any());
+    }
+
+    @Test
+    void updateHistoryRemarkAllowsEmptyRemark() {
+        PageStageMapper mapper = mock(PageStageMapper.class);
+        PageStageService service = newService(mapper);
+        when(mapper.update(any(), any())).thenReturn(1);
+
+        String id = service.updateHistoryRemark("history-1", "");
+
+        assertEquals("history-1", id);
+        verify(mapper, times(1)).update(any(), any());
+    }
+
+    @Test
+    void updateHistoryRemarkRejectsBlankId() {
+        PageStageMapper mapper = mock(PageStageMapper.class);
+        PageStageService service = newService(mapper);
+
+        DataRoomException exception = assertThrows(DataRoomException.class, () -> service.updateHistoryRemark("  ", "备注"));
+
+        assertEquals("历史记录ID不能为空", exception.getMessage());
+        verify(mapper, never()).update(any(), any());
+    }
+
+    @Test
+    void updateHistoryRemarkThrowsWhenUpdateFails() {
+        PageStageMapper mapper = mock(PageStageMapper.class);
+        PageStageService service = newService(mapper);
+        when(mapper.update(any(), any())).thenReturn(0);
+
+        DataRoomException exception = assertThrows(DataRoomException.class, () -> service.updateHistoryRemark("history-1", "新的备注"));
+
+        assertEquals("历史记录不存在或已被删除", exception.getMessage());
     }
 
     private static PageStageService newService(PageStageMapper mapper) {

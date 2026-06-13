@@ -1,6 +1,7 @@
 package com.gccloud.gcpaas.core.page.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gccloud.gcpaas.core.constant.PageStatus;
 import com.gccloud.gcpaas.core.constant.PageType;
@@ -91,6 +92,33 @@ public class PageStageService extends ServiceImpl<PageStageMapper, PageStageEnti
         designUpdate.setUpdateDate(new Date());
         if (!this.updateById(designUpdate)) {
             throw new DataRoomException("历史回滚失败");
+        }
+        return id;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public String deleteHistoryById(String id) {
+        LambdaQueryWrapper<PageStageEntity> deleteWrapper = new LambdaQueryWrapper<>();
+        deleteWrapper.eq(PageStageEntity::getId, id);
+        deleteWrapper.eq(PageStageEntity::getPageStatus, PageStatus.HISTORY);
+        if (!this.remove(deleteWrapper)) {
+            throw new DataRoomException("历史记录不存在或已被删除");
+        }
+        return id;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public String updateHistoryRemark(String id, String remark) {
+        if (StringUtils.isBlank(id)) {
+            throw new DataRoomException("历史记录ID不能为空");
+        }
+        LambdaUpdateWrapper<PageStageEntity> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(PageStageEntity::getId, id);
+        updateWrapper.eq(PageStageEntity::getPageStatus, PageStatus.HISTORY);
+        updateWrapper.set(PageStageEntity::getRemark, remark);
+        updateWrapper.set(PageStageEntity::getUpdateDate, new Date());
+        if (!this.update(updateWrapper)) {
+            throw new DataRoomException("历史记录不存在或已被删除");
         }
         return id;
     }

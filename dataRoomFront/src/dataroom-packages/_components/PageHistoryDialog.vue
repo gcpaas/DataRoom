@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { computed, nextTick, ref, type ComponentPublicInstance, watch } from 'vue'
+import { ElMessage, ElMessageBox, type InputInstance } from 'element-plus'
 import { pageApi, type PageHistoryItem } from '@/dataroom-packages/page/api'
 
 const props = defineProps<{
@@ -23,6 +23,12 @@ const visible = computed({
 
 const loading = ref(false)
 const rollbackLoadingId = ref<string>()
+const deleteLoadingId = ref<string>()
+const remarkSavingId = ref<string>()
+const editingRemarkId = ref<string>()
+const editingRemark = ref('')
+const originalRemark = ref('')
+const remarkInputRefs = ref<Record<string, InputInstance | undefined>>({})
 const currentPage = ref(1)
 const total = ref(0)
 const historyList = ref<PageHistoryItem[]>([])
@@ -44,6 +50,65 @@ const resetHistoryPage = () => {
   currentPage.value = 1
   total.value = 0
   historyList.value = []
+  resetRemarkEdit()
+}
+
+const normalizeRemark = (value?: string | null) => value ?? ''
+
+const resetRemarkEdit = () => {
+  editingRemarkId.value = undefined
+  editingRemark.value = ''
+  originalRemark.value = ''
+}
+
+const setRemarkInputRef = (id?: string) => (input: Element | ComponentPublicInstance | null) => {
+  if (!id) {
+    return
+  }
+  if (input) {
+    remarkInputRefs.value[id] = input as InputInstance
+    return
+  }
+  delete remarkInputRefs.value[id]
+}
+
+const startRemarkEdit = async (history: PageHistoryItem) => {
+  if (!history.id || remarkSavingId.value) {
+    return
+  }
+  editingRemarkId.value = history.id
+  editingRemark.value = normalizeRemark(history.remark)
+  originalRemark.value = editingRemark.value
+  await nextTick()
+  remarkInputRefs.value[history.id]?.focus()
+}
+
+const finishRemarkEdit = async (history: PageHistoryItem) => {
+  const id = history.id
+  if (!id || editingRemarkId.value !== id || remarkSavingId.value === id) {
+    return
+  }
+
+  const nextRemark = editingRemark.value
+  const previousRemark = originalRemark.value
+  if (nextRemark === previousRemark) {
+    resetRemarkEdit()
+    return
+  }
+
+  remarkSavingId.value = id
+  try {
+    await pageApi.historyRemark({ id, remark: nextRemark })
+    history.remark = nextRemark
+    ElMessage.success('备注已更新')
+    resetRemarkEdit()
+  } catch {
+    history.remark = previousRemark
+    ElMessage.error('备注更新失败，请稍后重试')
+    resetRemarkEdit()
+  } finally {
+    remarkSavingId.value = undefined
+  }
 }
 
 const loadHistory = async (page = 1) => {
@@ -72,6 +137,9 @@ const loadHistory = async (page = 1) => {
 
 const handleClosed = () => {
   rollbackLoadingId.value = undefined
+  deleteLoadingId.value = undefined
+  remarkSavingId.value = undefined
+  resetRemarkEdit()
 }
 
 const handlePageChange = (page: number) => {
@@ -115,6 +183,27 @@ const handleRollback = async (history: PageHistoryItem) => {
   }
 }
 
+const handleDelete = async (history: PageHistoryItem) => {
+  if (!history.id) {
+    ElMessage.error('历史记录缺少标识，无法删除')
+    return
+  }
+
+  deleteLoadingId.value = history.id
+  try {
+    await pageApi.historyDelete(history.id)
+    ElMessage.success('删除成功')
+    const nextPage = historyList.value.length === 1 && currentPage.value > 1
+      ? currentPage.value - 1
+      : currentPage.value
+    await loadHistory(nextPage)
+  } catch {
+    ElMessage.error('删除失败，请稍后重试')
+  } finally {
+    deleteLoadingId.value = undefined
+  }
+}
+
 watch(
   () => props.modelValue,
   (opened) => {
@@ -143,11 +232,17 @@ watch(
     v-model="visible"
     title="历史记录"
     width="760px"
+    align-center
     destroy-on-close
     @closed="handleClosed"
   >
     <div class="page-history-dialog" v-loading="loading">
-      <el-table :data="historyList" border empty-text="暂无历史记录">
+      <el-table
+        :data="historyList"
+        border
+        empty-text="暂无历史记录"
+        max-height="calc(100vh - 260px)"
+      >
         <el-table-column prop="createDate" label="时间" min-width="180">
           <template #default="{ row }">
             <span class="page-history-dialog__time">{{ formatDateTime(row.createDate) }}</span>
@@ -155,19 +250,54 @@ watch(
         </el-table-column>
         <el-table-column prop="remark" label="备注" min-width="320" show-overflow-tooltip>
           <template #default="{ row }">
-            <span>{{ row.remark || '-' }}</span>
+            <el-input
+              v-if="editingRemarkId === row.id"
+              :ref="setRemarkInputRef(row.id)"
+              v-model="editingRemark"
+              size="small"
+              clearable
+              :disabled="remarkSavingId === row.id"
+              @keyup.enter="finishRemarkEdit(row)"
+              @blur="finishRemarkEdit(row)"
+            />
+            <span
+              v-else
+              class="page-history-dialog__remark"
+              @click="startRemarkEdit(row)"
+            >
+              {{ row.remark || '-' }}
+            </span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="120" align="center">
+        <el-table-column label="操作" width="160" align="center">
           <template #default="{ row }">
-            <el-button
-              type="primary"
-              link
-              :loading="rollbackLoadingId === row.id"
-              @click="handleRollback(row)"
-            >
-              回滚
-            </el-button>
+            <el-space :size="8">
+              <el-button
+                type="primary"
+                link
+                :loading="rollbackLoadingId === row.id"
+                @click="handleRollback(row)"
+              >
+                回滚
+              </el-button>
+              <el-popconfirm
+                title="确认删除这条历史记录？"
+                confirm-button-text="删除"
+                cancel-button-text="取消"
+                width="200"
+                @confirm="handleDelete(row)"
+              >
+                <template #reference>
+                  <el-button
+                    type="danger"
+                    link
+                    :loading="deleteLoadingId === row.id"
+                  >
+                    删除
+                  </el-button>
+                </template>
+              </el-popconfirm>
+            </el-space>
           </template>
         </el-table-column>
       </el-table>
@@ -194,10 +324,17 @@ watch(
 
 .page-history-dialog__pagination {
   display: flex;
+  flex: 0 0 auto;
   justify-content: flex-end;
 }
 
 .page-history-dialog__time {
   font-feature-settings: 'tnum';
+}
+
+.page-history-dialog__remark {
+  display: block;
+  min-height: 24px;
+  cursor: text;
 }
 </style>

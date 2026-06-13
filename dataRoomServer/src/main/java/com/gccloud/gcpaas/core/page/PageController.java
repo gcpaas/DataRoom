@@ -22,6 +22,7 @@ import com.gccloud.gcpaas.core.page.dto.PageOfflineDto;
 import com.gccloud.gcpaas.core.page.dto.PagePublishDto;
 import com.gccloud.gcpaas.core.page.dto.PageRenameDto;
 import com.gccloud.gcpaas.core.page.dto.PageHistoryBackupDto;
+import com.gccloud.gcpaas.core.page.dto.PageHistoryRemarkDto;
 import com.gccloud.gcpaas.core.page.dto.PageStageSearchDto;
 import com.gccloud.gcpaas.core.page.service.PageService;
 import com.gccloud.gcpaas.core.page.service.PageStageService;
@@ -393,6 +394,23 @@ public class PageController {
     @OperationLogMeta(actionType = "新增", actionDesc = "页面历史备份", businessType = "page_stage", businessName = "页面历史", targetIdKey = "pageCode")
     public Resp<String> historyBackup(@RequestBody PageHistoryBackupDto dto) {
         return Resp.success(pageStageService.backupHistory(dto));
+    }
+
+    @PostMapping("/history/delete/{id}")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "删除历史记录", description = "根据历史记录ID删除单条历史")
+    @Parameters({@Parameter(name = "id", description = "历史记录ID", in = ParameterIn.PATH)})
+    @OperationLogMeta(actionType = "删除", actionDesc = "删除页面历史记录", businessType = "page_stage", businessName = "页面历史", targetIdKey = "id")
+    public Resp<String> historyDelete(@PathVariable("id") String id) {
+        return Resp.success(pageStageService.deleteHistoryById(id));
+    }
+
+    @PostMapping("/history/remark")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "修改历史备注", description = "根据历史记录ID修改备注")
+    @OperationLogMeta(actionType = "修改", actionDesc = "修改页面历史备注", businessType = "page_stage", businessName = "页面历史", targetIdKey = "id")
+    public Resp<String> historyRemark(@RequestBody PageHistoryRemarkDto dto) {
+        return Resp.success(pageStageService.updateHistoryRemark(dto.getId(), dto.getRemark()));
     }
 
     /**

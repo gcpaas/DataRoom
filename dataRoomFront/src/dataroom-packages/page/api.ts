@@ -48,6 +48,11 @@ export interface PageHistoryBackupDto {
   pageConfig: PageStageEntity['pageConfig']
 }
 
+export interface PageHistoryRemarkDto {
+  id: string
+  remark: string
+}
+
 export interface PageHistoryListParams {
   code: string
   pageStatus?: PageStageEntity['pageStatus']
@@ -153,5 +158,13 @@ export const pageApi = {
 
   historyRollback(id: string) {
     return request.post<string>(`/dataRoom/page/history/rollback/${id}`)
+  },
+
+  historyDelete(id: string) {
+    return request.post<string>(`/dataRoom/page/history/delete/${id}`)
+  },
+
+  historyRemark(data: PageHistoryRemarkDto) {
+    return request.post<string>('/dataRoom/page/history/remark', data)
   },
 }
