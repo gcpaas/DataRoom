@@ -78,6 +78,9 @@
 ## 快速开始
 https://www.yuque.com/gc-starter/dataroom-plus/start
 
+## 更新日志
+[版本区别、功能变更、安全变更日志](CHANGELOG.md)
+
 ## 托管平台
 [码云](https://gitee.com/gcpaas/DataRoom)、[GitHub](https://github.com/gcpaas/DataRoom)、[AtomGit](https://atomgit.com/gcpaas/DataRoom)
 
