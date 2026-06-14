@@ -30,16 +30,7 @@ public class OperationLogResolver {
     );
 
     public OperationLogResolvedMeta resolve(HttpServletRequest request, HandlerMethod handlerMethod, Map<String, Object> requestBody) {
-        OperationLogResolvedMeta resolvedMeta = new OperationLogResolvedMeta();
         String uri = normalizeUri(request);
-        OperationLogMeta classMeta = AnnotatedElementUtils.findMergedAnnotation(handlerMethod.getBeanType(), OperationLogMeta.class);
-        OperationLogMeta methodMeta = AnnotatedElementUtils.findMergedAnnotation(handlerMethod.getMethod(), OperationLogMeta.class);
-
-        applyBaseRules(resolvedMeta, uri);
-        applyAnnotation(resolvedMeta, classMeta);
-        applyMethodRules(resolvedMeta, uri, handlerMethod.getMethod());
-        applyAnnotation(resolvedMeta, methodMeta);
-
         Map<String, Object> candidates = new LinkedHashMap<>();
         Object pathVars = request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         if (pathVars instanceof Map<?, ?> pathVarMap) {
@@ -56,6 +47,18 @@ public class OperationLogResolver {
         if (requestBody != null) {
             candidates.putAll(requestBody);
         }
+        return resolve(uri, handlerMethod.getBeanType(), handlerMethod.getMethod(), candidates);
+    }
+
+    public OperationLogResolvedMeta resolve(String uri, Class<?> beanType, Method method, Map<String, Object> candidates) {
+        OperationLogResolvedMeta resolvedMeta = new OperationLogResolvedMeta();
+        OperationLogMeta classMeta = AnnotatedElementUtils.findMergedAnnotation(beanType, OperationLogMeta.class);
+        OperationLogMeta methodMeta = AnnotatedElementUtils.findMergedAnnotation(method, OperationLogMeta.class);
+
+        applyBaseRules(resolvedMeta, uri);
+        applyAnnotation(resolvedMeta, classMeta);
+        applyMethodRules(resolvedMeta, uri, method);
+        applyAnnotation(resolvedMeta, methodMeta);
 
         resolvedMeta.setTargetId(extractValue(candidates, StringUtils.defaultIfBlank(resolvedMeta.getTargetIdKey(), null), TARGET_ID_KEYS));
         resolvedMeta.setTargetName(extractValue(candidates, StringUtils.defaultIfBlank(resolvedMeta.getTargetNameKey(), null), TARGET_NAME_KEYS));
@@ -82,6 +85,10 @@ public class OperationLogResolver {
         if (requestBody != null) {
             candidates.putAll(requestBody);
         }
+        fillTargetFields(context, candidates);
+    }
+
+    public void fillTargetFields(OperationLogContext context, Map<String, Object> candidates) {
         if (StringUtils.isBlank(context.getTargetId())) {
             context.setTargetId(extractValue(candidates, StringUtils.defaultIfBlank(context.getTargetIdKey(), null), TARGET_ID_KEYS));
         }

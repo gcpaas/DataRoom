@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
@@ -104,6 +106,13 @@ public class OperationLogPolicy {
         return truncate(summary.toString(), SUMMARY_LENGTH);
     }
 
+    public String sanitizePayload(Object value) {
+        if (value == null) {
+            return null;
+        }
+        return truncate(toJson(redactObject(value)), MAX_TEXT_LENGTH);
+    }
+
     public String truncateStack(String stack) {
         return truncate(stack, MAX_TEXT_LENGTH);
     }
@@ -152,7 +161,34 @@ public class OperationLogPolicy {
             }
             return result;
         }
+        if (!isSimpleValue(value)) {
+            try {
+                BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(value);
+                Map<String, Object> result = new LinkedHashMap<>();
+                for (var descriptor : beanWrapper.getPropertyDescriptors()) {
+                    String name = descriptor.getName();
+                    if (!"class".equals(name) && beanWrapper.isReadableProperty(name)) {
+                        if (isSensitiveKey(name)) {
+                            result.put(name, "***");
+                        } else {
+                            result.put(name, redactObject(beanWrapper.getPropertyValue(name)));
+                        }
+                    }
+                }
+                return result;
+            } catch (Exception e) {
+                log.error(ExceptionUtils.getStackTrace(e));
+                return value;
+            }
+        }
         return value;
+    }
+
+    private boolean isSimpleValue(Object value) {
+        return value instanceof CharSequence
+                || value instanceof Number
+                || value instanceof Boolean
+                || value instanceof Enum<?>;
     }
 
     private boolean isSensitiveKey(String key) {

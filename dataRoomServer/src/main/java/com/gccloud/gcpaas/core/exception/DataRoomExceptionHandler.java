@@ -5,10 +5,12 @@ import com.gccloud.gcpaas.core.operationlog.web.OperationLogExceptionBridge;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.http.MediaType;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -102,10 +104,20 @@ public class DataRoomExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public Resp<String> handleException(Exception e, HttpServletRequest request) {
+    public Resp<String> handleException(Exception e, HttpServletRequest request, HttpServletResponse response) {
         log.error(ExceptionUtils.getStackTrace(e));
+        if (isEventStreamResponse(response)) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            OperationLogExceptionBridge.markFailure(request, 500, "服务器异常", e);
+            return null;
+        }
         Resp<String> resp = Resp.error("服务器异常");
         OperationLogExceptionBridge.markFailure(request, resp.getCode(), resp.getMessage(), e);
         return resp;
+    }
+
+    private boolean isEventStreamResponse(HttpServletResponse response) {
+        String contentType = response.getContentType();
+        return contentType != null && contentType.startsWith(MediaType.TEXT_EVENT_STREAM_VALUE);
     }
 }
