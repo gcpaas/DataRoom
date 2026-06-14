@@ -4,13 +4,123 @@
   "description": "输入框、input、表单、搜索",
   "fields": [
     {
-      "field": "basic.placeholder",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrInput"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "输入框"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 200
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 40
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.basic.placeholder",
       "type": "string",
       "description": "输入框占位提示文本",
       "defaultValue": "请输入内容"
     },
     {
-      "field": "basic.inputType",
+      "field": "props.basic.inputType",
       "type": "enum",
       "description": "输入框类型",
       "options": [
@@ -21,85 +131,85 @@
       "defaultValue": "text"
     },
     {
-      "field": "basic.defaultValue",
+      "field": "props.basic.defaultValue",
       "type": "string",
       "description": "输入框默认值",
       "defaultValue": ""
     },
     {
-      "field": "basic.clearable",
+      "field": "props.basic.clearable",
       "type": "boolean",
       "description": "是否显示清空按钮",
       "defaultValue": true
     },
     {
-      "field": "basic.disabled",
+      "field": "props.basic.disabled",
       "type": "boolean",
       "description": "是否禁用",
       "defaultValue": false
     },
     {
-      "field": "basic.maxLength",
+      "field": "props.basic.maxLength",
       "type": "number",
       "description": "最大输入字符数，0表示不限制",
       "defaultValue": 0
     },
     {
-      "field": "basic.readonly",
+      "field": "props.basic.readonly",
       "type": "boolean",
       "description": "是否只读",
       "defaultValue": false
     },
     {
-      "field": "style.fontSize",
+      "field": "props.style.fontSize",
       "type": "number",
       "description": "文本字号(px)",
       "defaultValue": 14
     },
     {
-      "field": "style.color",
+      "field": "props.style.color",
       "type": "string",
       "description": "输入文本颜色",
       "defaultValue": "#FFFFFF"
     },
     {
-      "field": "style.placeholderColor",
+      "field": "props.style.placeholderColor",
       "type": "string",
       "description": "占位文本颜色",
       "defaultValue": "#999999"
     },
     {
-      "field": "style.backgroundColor",
+      "field": "props.style.backgroundColor",
       "type": "string",
       "description": "背景颜色",
       "defaultValue": "rgba(255, 255, 255, 0.1)"
     },
     {
-      "field": "style.borderColor",
+      "field": "props.style.borderColor",
       "type": "string",
       "description": "边框颜色",
       "defaultValue": "#444444"
     },
     {
-      "field": "style.borderWidth",
+      "field": "props.style.borderWidth",
       "type": "number",
       "description": "边框宽度(px)",
       "defaultValue": 1
     },
     {
-      "field": "style.borderRadius",
+      "field": "props.style.borderRadius",
       "type": "number",
       "description": "边框圆角(px)",
       "defaultValue": 4
     },
     {
-      "field": "style.height",
+      "field": "props.style.height",
       "type": "number",
       "description": "输入框高度(px)",
       "defaultValue": 40
     },
     {
-      "field": "style.padding",
+      "field": "props.style.padding",
       "type": "array",
       "description": "内边距 [上, 右, 下, 左]",
       "defaultValue": [
@@ -110,31 +220,31 @@
       ]
     },
     {
-      "field": "focus.borderColor",
+      "field": "props.focus.borderColor",
       "type": "string",
       "description": "聚焦时边框颜色",
       "defaultValue": "#409EFF"
     },
     {
-      "field": "focus.shadowColor",
+      "field": "props.focus.shadowColor",
       "type": "string",
       "description": "聚焦时阴影颜色",
       "defaultValue": "rgba(64, 158, 255, 0.3)"
     },
     {
-      "field": "focus.shadowSize",
+      "field": "props.focus.shadowSize",
       "type": "number",
       "description": "聚焦时阴影扩散大小(px)",
       "defaultValue": 3
     },
     {
-      "field": "globalVar.globalVarName",
+      "field": "props.globalVar.globalVarName",
       "type": "string",
       "description": "绑定的全局变量名称",
       "defaultValue": ""
     },
     {
-      "field": "globalVar.triggerOnInput",
+      "field": "props.globalVar.triggerOnInput",
       "type": "boolean",
       "description": "是否在输入时即时触发全局变量更新",
       "defaultValue": false

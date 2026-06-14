@@ -4,19 +4,129 @@
   "description": "告警、图片、阈值、指标、状态、区间",
   "fields": [
     {
-      "field": "value.show",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrAlarmImage"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "告警图"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 220
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 180
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.value.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "value.defaultValue",
+      "field": "props.value.defaultValue",
       "type": "number",
       "description": "defaultValue",
       "defaultValue": 95
     },
     {
-      "field": "value.format",
+      "field": "props.value.format",
       "type": "enum",
       "description": "format",
       "options": [
@@ -31,49 +141,49 @@
       "defaultValue": "integer"
     },
     {
-      "field": "value.decimalPlaces",
+      "field": "props.value.decimalPlaces",
       "type": "number",
       "description": "decimalPlaces",
       "defaultValue": 0
     },
     {
-      "field": "value.thousandSeparator",
+      "field": "props.value.thousandSeparator",
       "type": "boolean",
       "description": "thousandSeparator",
       "defaultValue": false
     },
     {
-      "field": "value.prefix",
+      "field": "props.value.prefix",
       "type": "string",
       "description": "prefix",
       "defaultValue": ""
     },
     {
-      "field": "value.suffix",
+      "field": "props.value.suffix",
       "type": "string",
       "description": "suffix",
       "defaultValue": ""
     },
     {
-      "field": "value.emptyText",
+      "field": "props.value.emptyText",
       "type": "string",
       "description": "emptyText",
       "defaultValue": "--"
     },
     {
-      "field": "value.fontSize",
+      "field": "props.value.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 28
     },
     {
-      "field": "value.color",
+      "field": "props.value.color",
       "type": "string",
       "description": "color",
       "defaultValue": "var(--el-text-color-primary)"
     },
     {
-      "field": "value.fontWeight",
+      "field": "props.value.fontWeight",
       "type": "enum",
       "description": "fontWeight",
       "options": [
@@ -84,19 +194,19 @@
       "defaultValue": "bold"
     },
     {
-      "field": "value.lineHeight",
+      "field": "props.value.lineHeight",
       "type": "number",
       "description": "lineHeight",
       "defaultValue": 1
     },
     {
-      "field": "image.defaultItemId",
+      "field": "props.image.defaultItemId",
       "type": "string",
       "description": "defaultItemId",
       "defaultValue": "normal"
     },
     {
-      "field": "image.repeatMode",
+      "field": "props.image.repeatMode",
       "type": "enum",
       "description": "repeatMode",
       "options": [
@@ -110,13 +220,13 @@
       "defaultValue": "no-repeat-contain"
     },
     {
-      "field": "image.borderRadius",
+      "field": "props.image.borderRadius",
       "type": "number",
       "description": "borderRadius",
       "defaultValue": 0
     },
     {
-      "field": "image.items",
+      "field": "props.image.items",
       "type": "array",
       "description": "items",
       "defaultValue": [
@@ -144,7 +254,7 @@
       ]
     },
     {
-      "field": "layout.direction",
+      "field": "props.layout.direction",
       "type": "enum",
       "description": "direction",
       "options": [
@@ -154,7 +264,7 @@
       "defaultValue": "vertical"
     },
     {
-      "field": "layout.imageSize",
+      "field": "props.layout.imageSize",
       "type": "enum",
       "description": "imageSize",
       "options": [
@@ -164,13 +274,13 @@
       "defaultValue": "contain"
     },
     {
-      "field": "layout.gap",
+      "field": "props.layout.gap",
       "type": "number",
       "description": "gap",
       "defaultValue": 8
     },
     {
-      "field": "layout.horizontalAlign",
+      "field": "props.layout.horizontalAlign",
       "type": "enum",
       "description": "horizontalAlign",
       "options": [
@@ -181,7 +291,7 @@
       "defaultValue": "center"
     },
     {
-      "field": "layout.verticalAlign",
+      "field": "props.layout.verticalAlign",
       "type": "enum",
       "description": "verticalAlign",
       "options": [
@@ -192,13 +302,13 @@
       "defaultValue": "center"
     },
     {
-      "field": "animation.enabled",
+      "field": "props.animation.enabled",
       "type": "boolean",
       "description": "enabled",
       "defaultValue": true
     },
     {
-      "field": "animation.duration",
+      "field": "props.animation.duration",
       "type": "number",
       "description": "duration",
       "defaultValue": 200

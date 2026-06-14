@@ -4,13 +4,123 @@
   "description": "iframe、网页嵌入、外部页面、嵌入网页",
   "fields": [
     {
-      "field": "basic.url",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrIframe"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "Iframe"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 400
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 300
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.basic.url",
       "type": "string",
       "description": "嵌入页面的URL地址",
       "defaultValue": "https://www.example.com"
     },
     {
-      "field": "basic.scrolling",
+      "field": "props.basic.scrolling",
       "type": "enum",
       "description": "是否显示滚动条",
       "options": [
@@ -21,55 +131,55 @@
       "defaultValue": "auto"
     },
     {
-      "field": "basic.frameBorder",
+      "field": "props.basic.frameBorder",
       "type": "boolean",
       "description": "是否显示iframe边框",
       "defaultValue": false
     },
     {
-      "field": "autoRefresh.enabled",
+      "field": "props.autoRefresh.enabled",
       "type": "boolean",
       "description": "是否开启自动刷新",
       "defaultValue": false
     },
     {
-      "field": "autoRefresh.interval",
+      "field": "props.autoRefresh.interval",
       "type": "number",
       "description": "自动刷新间隔时间（秒）",
       "defaultValue": 60
     },
     {
-      "field": "style.borderRadius",
+      "field": "props.style.borderRadius",
       "type": "number",
       "description": "圆角半径（px）",
       "defaultValue": 0
     },
     {
-      "field": "style.backgroundColor",
+      "field": "props.style.backgroundColor",
       "type": "string",
       "description": "背景颜色",
       "defaultValue": "transparent"
     },
     {
-      "field": "style.border.show",
+      "field": "props.style.border.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "style.border.color",
+      "field": "props.style.border.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#333333"
     },
     {
-      "field": "style.border.width",
+      "field": "props.style.border.width",
       "type": "number",
       "description": "width",
       "defaultValue": 1
     },
     {
-      "field": "style.border.style",
+      "field": "props.style.border.style",
       "type": "enum",
       "description": "style",
       "options": [
@@ -80,49 +190,49 @@
       "defaultValue": "solid"
     },
     {
-      "field": "sandbox.allowScripts",
+      "field": "props.sandbox.allowScripts",
       "type": "boolean",
       "description": "允许执行脚本",
       "defaultValue": true
     },
     {
-      "field": "sandbox.allowSameOrigin",
+      "field": "props.sandbox.allowSameOrigin",
       "type": "boolean",
       "description": "允许同源访问",
       "defaultValue": true
     },
     {
-      "field": "sandbox.allowForms",
+      "field": "props.sandbox.allowForms",
       "type": "boolean",
       "description": "允许提交表单",
       "defaultValue": true
     },
     {
-      "field": "sandbox.allowPopups",
+      "field": "props.sandbox.allowPopups",
       "type": "boolean",
       "description": "允许弹出窗口",
       "defaultValue": false
     },
     {
-      "field": "sandbox.allowModals",
+      "field": "props.sandbox.allowModals",
       "type": "boolean",
       "description": "允许打开模态窗口",
       "defaultValue": false
     },
     {
-      "field": "sandbox.allowFullscreen",
+      "field": "props.sandbox.allowFullscreen",
       "type": "boolean",
       "description": "允许全屏",
       "defaultValue": true
     },
     {
-      "field": "sandbox.allowCamera",
+      "field": "props.sandbox.allowCamera",
       "type": "boolean",
       "description": "允许访问摄像头",
       "defaultValue": false
     },
     {
-      "field": "sandbox.allowMicrophone",
+      "field": "props.sandbox.allowMicrophone",
       "type": "boolean",
       "description": "允许访问麦克风",
       "defaultValue": false

@@ -1,9 +1,96 @@
 import ts from 'typescript'
+import { existsSync, readFileSync } from 'node:fs'
 import { mkdir, readFile, readdir, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
 const registerPath = 'src/dataroom-packages/_components/PluginRegister.ts'
 const componentsPath = 'src/dataroom-packages/components'
+const chartConfigPath = 'src/dataroom-packages/components/type/ChartConfig.ts'
+const pageConfigPath = 'src/dataroom-packages/PageDesigner/type/PageConfig.ts'
+const visualScreenPageConfigPath = 'src/dataroom-packages/PageDesigner/type/VisualScreenPageConfig.ts'
+
+const baseChartConfigDefaults = {
+  title: '未命名组件',
+  w: 150,
+  h: 100,
+  x: 100,
+  y: 100,
+  z: 100,
+  rotateX: 0,
+  rotateY: 0,
+  rotateZ: 0,
+  behaviors: {},
+  dataset: {
+    code: '',
+    fields: {},
+    script: '',
+    params: {},
+  },
+}
+
+const pageConfigSchemaDefinitions = [
+  {
+    componentName: 'PageConfig',
+    displayName: '页面配置',
+    description: '网格化页面设计器页面配置。chartList数组元素为组件配置，需要结合具体组件配置文件填写。',
+    sourcePath: pageConfigPath,
+    interfaceName: 'PageConfig',
+    defaults: {
+      pageType: 'page',
+      basicConfig: {
+        background: {
+          fill: 'color',
+          color: '',
+          url: '',
+          opacity: 1,
+          repeat: 'no-repeat',
+        },
+        timers: [],
+      },
+      globalVariableList: [],
+      chartList: [],
+    },
+  },
+  {
+    componentName: 'VisualScreenPageConfig',
+    displayName: '大屏配置',
+    description: '像素级自由布局大屏设计器页面配置。chartList数组元素为组件配置，需要结合具体组件配置文件填写。',
+    sourcePath: visualScreenPageConfigPath,
+    interfaceName: 'VisualScreenPageConfig',
+    defaults: {
+      pageType: 'visualScreen',
+      basicConfig: {
+        background: {
+          fill: 'color',
+          color: '#0d1e42',
+          url: '',
+          opacity: 100,
+          repeat: 'no-repeat',
+        },
+        size: {
+          width: 1920,
+          height: 1080,
+          zoom: 'contain',
+        },
+        zoom: {
+          mode: 'best',
+          value: 100,
+          visiable: true,
+        },
+        ruler: {
+          visible: true,
+          guidesVisible: true,
+          guidesLocked: false,
+          verticalGuides: [],
+          horizontalGuides: [],
+        },
+        timers: [],
+      },
+      globalVariableList: [],
+      chartList: [],
+    },
+  },
+]
 
 export function parseLiteralOptions(typeText) {
   const parts = typeText
@@ -90,6 +177,8 @@ export function flattenConfigFields(interfaceInfo, defaults, prefix = '') {
 export async function exportComponentConfigs({ projectRoot, outputDir }) {
   const registerSource = await readText(path.join(projectRoot, registerPath))
   const registeredComponents = parseRegisteredComponents(registerSource)
+  const chartConfigInterface = await parseChartConfigInterface(projectRoot)
+  const pageConfigDetails = buildPageConfigDetails(projectRoot)
   const summaries = []
   const details = []
 
@@ -101,8 +190,8 @@ export async function exportComponentConfigs({ projectRoot, outputDir }) {
     const pluginMeta = parsePluginMetadata(pluginSource, componentName)
     const typeAliases = await parseImportedTypeAliases(projectRoot, installPath, installSource)
     const interfaceInfo = parsePropsInterface(installSource, componentName, typeAliases)
-    const defaults = parsePropsDefaults(installSource, componentName)
-    const fields = flattenConfigFields(interfaceInfo, defaults)
+    const defaults = parseCreateChartConfigDefaults(installSource, componentName)
+    const fields = buildComponentConfigFields(chartConfigInterface, interfaceInfo, defaults)
     const summary = {
       componentName: pluginMeta.componentName,
       displayName: pluginMeta.displayName,
@@ -116,10 +205,54 @@ export async function exportComponentConfigs({ projectRoot, outputDir }) {
   await mkdir(outputDir, { recursive: true })
   await cleanOutputDir(outputDir)
   await writeJson(path.join(outputDir, 'index.json'), summaries)
-  for (const detail of details) {
+  for (const detail of [...details, ...pageConfigDetails]) {
     await writeJson(path.join(outputDir, `${detail.componentName}.config.json`), detail)
   }
-  return { components: summaries, details }
+  return { components: summaries, details, pageConfigs: pageConfigDetails }
+}
+
+function buildComponentConfigFields(chartConfigInterface, propsInterface, defaults) {
+  const baseInterface = {
+    ...chartConfigInterface,
+    properties: chartConfigInterface.properties.filter((property) => property.name !== 'props'),
+  }
+  return [
+    ...flattenConfigFields(baseInterface, defaults.chartConfig),
+    ...flattenConfigFields(propsInterface, defaults.props, 'props'),
+  ]
+}
+
+function buildPageConfigDetails(projectRoot) {
+  return pageConfigSchemaDefinitions.map((definition) => {
+    const interfaceInfo = parseInterfaceFromFile(projectRoot, definition.sourcePath, definition.interfaceName)
+    const fields = flattenConfigFields(interfaceInfo, definition.defaults).map((field) => {
+      if (field.field === 'chartList') {
+        return {
+          ...field,
+          description: `${field.description}，数组元素为ChartConfig结构；组件个性化props字段请通过getComponentConfig(componentName)查询对应组件配置。`,
+        }
+      }
+      if (field.field === 'globalVariableList') {
+        return {
+          ...field,
+          description: `${field.description}，数组元素为GlobalVariable结构。`,
+        }
+      }
+      if (field.field === 'basicConfig.timers') {
+        return {
+          ...field,
+          description: `${field.description}，数组元素为PageTimer结构。`,
+        }
+      }
+      return field
+    })
+    return {
+      componentName: definition.componentName,
+      displayName: definition.displayName,
+      description: definition.description,
+      fields,
+    }
+  })
 }
 
 async function cleanOutputDir(outputDir) {
@@ -133,6 +266,92 @@ function readDefaultValue(defaults, key) {
     return undefined
   }
   return defaults[key]
+}
+
+function parseInterfaceFromFile(projectRoot, relativeSourcePath, interfaceName, seen = new Set()) {
+  const sourcePath = path.join(projectRoot, relativeSourcePath)
+  return parseInterfaceFromPath(projectRoot, sourcePath, interfaceName, seen)
+}
+
+function parseInterfaceFromPath(projectRoot, sourcePath, interfaceName, seen = new Set()) {
+  const interfaceKey = `${sourcePath}:${interfaceName}`
+  if (seen.has(interfaceKey)) {
+    return null
+  }
+  seen.add(interfaceKey)
+  const source = readTextSync(sourcePath)
+  const sourceFile = ts.createSourceFile(sourcePath, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
+  const interfaceNode = findInterface(sourceFile, interfaceName)
+  if (!interfaceNode) {
+    throw new Error(`${sourcePath} 中未找到 ${interfaceName} interface`)
+  }
+  const typeAliases = parseLocalTypeAliases(sourceFile)
+  const importMap = parseNamedImportMap(projectRoot, sourcePath, sourceFile)
+  const interfaceResolver = (typeName) => {
+    const localInterface = findInterface(sourceFile, typeName)
+    if (localInterface) {
+      const localKey = `${sourcePath}:${typeName}`
+      if (seen.has(localKey)) {
+        return null
+      }
+      seen.add(localKey)
+      return {
+        name: localInterface.name.text,
+        properties: parseInterfaceMembers(localInterface.members, sourceFile, typeAliases, interfaceResolver),
+      }
+    }
+    const imported = importMap.get(typeName)
+    if (!imported) {
+      return null
+    }
+    return parseInterfaceFromPath(projectRoot, imported.sourcePath, imported.importedName, seen)
+  }
+  return {
+    name: interfaceNode.name.text,
+    properties: parseInterfaceMembers(interfaceNode.members, sourceFile, typeAliases, interfaceResolver),
+  }
+}
+
+function parseNamedImportMap(projectRoot, fromFile, sourceFile) {
+  const imports = new Map()
+  sourceFile.forEachChild((node) => {
+    if (!ts.isImportDeclaration(node) || !node.importClause || !node.moduleSpecifier || !ts.isStringLiteral(node.moduleSpecifier)) {
+      return
+    }
+    const bindings = node.importClause.namedBindings
+    if (!bindings || !ts.isNamedImports(bindings)) {
+      return
+    }
+    const importPath = resolveImportPath(projectRoot, fromFile, node.moduleSpecifier.text)
+    if (!importPath) {
+      return
+    }
+    for (const element of bindings.elements) {
+      imports.set(element.name.text, {
+        sourcePath: importPath,
+        importedName: element.propertyName?.text ?? element.name.text,
+      })
+    }
+  })
+  return imports
+}
+
+function readTextSync(filePath) {
+  return readFileSync(filePath, 'utf8')
+}
+
+async function parseChartConfigInterface(projectRoot) {
+  const sourcePath = path.join(projectRoot, chartConfigPath)
+  const source = await readText(sourcePath)
+  const sourceFile = ts.createSourceFile(sourcePath, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
+  const interfaceNode = findInterface(sourceFile, 'ChartConfig')
+  if (!interfaceNode) {
+    throw new Error('ChartConfig.ts 中未找到 ChartConfig interface')
+  }
+  return {
+    name: interfaceNode.name.text,
+    properties: parseInterfaceMembers(interfaceNode.members, sourceFile, new Map()),
+  }
 }
 
 function parseRegisteredComponents(source) {
@@ -232,7 +451,7 @@ function resolveImportPath(projectRoot, fromFile, moduleText) {
     : path.resolve(path.dirname(fromFile), moduleText)
   for (const candidate of [basePath, `${basePath}.ts`]) {
     const relative = path.relative(projectRoot, candidate)
-    if (!relative.startsWith('..')) {
+    if (!relative.startsWith('..') && existsSync(candidate)) {
       return candidate
     }
   }
@@ -264,7 +483,20 @@ function findPropsInterface(sourceFile, componentName) {
   return found
 }
 
-function parseInterfaceMembers(members, sourceFile, typeAliases) {
+function findInterface(sourceFile, interfaceName) {
+  let found
+  const visit = (node) => {
+    if (ts.isInterfaceDeclaration(node) && node.name.text === interfaceName) {
+      found = node
+      return
+    }
+    ts.forEachChild(node, visit)
+  }
+  visit(sourceFile)
+  return found
+}
+
+function parseInterfaceMembers(members, sourceFile, typeAliases, interfaceResolver = () => null) {
   const properties = []
   for (const member of members) {
     if (!ts.isPropertySignature(member) || !member.type || !member.name) {
@@ -275,14 +507,32 @@ function parseInterfaceMembers(members, sourceFile, typeAliases) {
     const property = {
       name,
       typeText: rawTypeText,
-      description: readJsDoc(member),
+      description: readDescription(member, sourceFile),
     }
     if (ts.isTypeLiteralNode(member.type)) {
-      property.properties = parseInterfaceMembers(member.type.members, sourceFile, typeAliases)
+      const childProperties = parseInterfaceMembers(member.type.members, sourceFile, typeAliases, interfaceResolver)
+      if (childProperties.length > 0) {
+        property.properties = childProperties
+      } else {
+        property.typeText = 'object'
+      }
+    } else {
+      const referencedInterface = resolveReferencedInterface(member.type, sourceFile, interfaceResolver)
+      if (referencedInterface?.properties?.length) {
+        property.properties = referencedInterface.properties
+      }
     }
     properties.push(property)
   }
   return properties
+}
+
+function resolveReferencedInterface(typeNode, sourceFile, interfaceResolver) {
+  if (!ts.isTypeReferenceNode(typeNode)) {
+    return null
+  }
+  const typeName = typeNode.typeName.getText(sourceFile)
+  return interfaceResolver(typeName)
 }
 
 function resolveTypeText(typeText, typeAliases, seen = new Set()) {
@@ -297,17 +547,30 @@ function resolveTypeText(typeText, typeAliases, seen = new Set()) {
   return resolveTypeText(aliasText, typeAliases, seen)
 }
 
-function readJsDoc(node) {
+function readDescription(node, sourceFile) {
   const docs = ts.getJSDocCommentsAndTags(node)
   for (const doc of docs) {
     if (ts.isJSDoc(doc) && doc.comment) {
       return String(doc.comment)
     }
   }
+  const fullText = sourceFile.getFullText()
+  const comments = ts.getLeadingCommentRanges(fullText, node.pos) ?? []
+  if (comments.length > 0) {
+    return normalizeCommentText(fullText.slice(comments[comments.length - 1].pos, comments[comments.length - 1].end))
+  }
   return ''
 }
 
-function parsePropsDefaults(source, componentName) {
+function normalizeCommentText(commentText) {
+  return commentText
+    .split('\n')
+    .map((line) => line.trim().replace(/^\/\*\*?/, '').replace(/\*\/$/, '').replace(/^\*/, '').replace(/^\/\//, '').trim())
+    .filter(Boolean)
+    .join('\n')
+}
+
+function parseCreateChartConfigDefaults(source, componentName) {
   const sourceFile = ts.createSourceFile(`${componentName}.defaults.ts`, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
   const call = findCreateChartConfigCall(sourceFile)
   if (!call) {
@@ -317,7 +580,32 @@ function parsePropsDefaults(source, componentName) {
   if (!propsArg || !ts.isObjectLiteralExpression(propsArg)) {
     throw new Error(`${componentName}/install.ts 中 props 默认配置不是对象字面量`)
   }
-  return objectLiteralToValue(propsArg, sourceFile)
+  const componentType = readComponentTypeArgument(call, sourceFile, componentName)
+  const overrides = readOverridesArgument(call, sourceFile)
+  return {
+    chartConfig: {
+      ...baseChartConfigDefaults,
+      type: componentType,
+      ...overrides,
+    },
+    props: objectLiteralToValue(propsArg, sourceFile),
+  }
+}
+
+function readComponentTypeArgument(call, sourceFile, componentName) {
+  const typeArg = call.arguments[0]
+  if (typeArg && (ts.isStringLiteral(typeArg) || ts.isNoSubstitutionTemplateLiteral(typeArg))) {
+    return typeArg.text
+  }
+  return componentName
+}
+
+function readOverridesArgument(call, sourceFile) {
+  const overridesArg = call.arguments[2]
+  if (!overridesArg || !ts.isObjectLiteralExpression(overridesArg)) {
+    return {}
+  }
+  return objectLiteralToValue(overridesArg, sourceFile)
 }
 
 function findCreateChartConfigCall(sourceFile) {

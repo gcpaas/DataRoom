@@ -4,7 +4,117 @@
   "description": "数据表格、明细表、列表、分页、搜索、排序、设备清单、告警记录",
   "fields": [
     {
-      "field": "global.padding",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrDataTable"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "数据表格"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 640
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 360
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 0
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 0
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.global.padding",
       "type": "array",
       "description": "padding",
       "defaultValue": [
@@ -15,37 +125,37 @@
       ]
     },
     {
-      "field": "global.backgroundColor",
+      "field": "props.global.backgroundColor",
       "type": "string",
       "description": "backgroundColor",
       "defaultValue": "rgba(0, 0, 0, 0)"
     },
     {
-      "field": "global.borderColor",
+      "field": "props.global.borderColor",
       "type": "string",
       "description": "borderColor",
       "defaultValue": "rgba(0, 0, 0, 0)"
     },
     {
-      "field": "global.borderWidth",
+      "field": "props.global.borderWidth",
       "type": "number",
       "description": "borderWidth",
       "defaultValue": 0
     },
     {
-      "field": "global.borderRadius",
+      "field": "props.global.borderRadius",
       "type": "number",
       "description": "borderRadius",
       "defaultValue": 6
     },
     {
-      "field": "table.autoColumns",
+      "field": "props.table.autoColumns",
       "type": "boolean",
       "description": "autoColumns",
       "defaultValue": true
     },
     {
-      "field": "table.columns",
+      "field": "props.table.columns",
       "type": "array",
       "description": "columns",
       "defaultValue": [
@@ -76,13 +186,13 @@
       ]
     },
     {
-      "field": "table.rowKey",
+      "field": "props.table.rowKey",
       "type": "string",
       "description": "rowKey",
       "defaultValue": ""
     },
     {
-      "field": "table.size",
+      "field": "props.table.size",
       "type": "enum",
       "description": "size",
       "options": [
@@ -93,61 +203,61 @@
       "defaultValue": "default"
     },
     {
-      "field": "table.border",
+      "field": "props.table.border",
       "type": "boolean",
       "description": "border",
       "defaultValue": false
     },
     {
-      "field": "table.stripe",
+      "field": "props.table.stripe",
       "type": "boolean",
       "description": "stripe",
       "defaultValue": true
     },
     {
-      "field": "table.fit",
+      "field": "props.table.fit",
       "type": "boolean",
       "description": "fit",
       "defaultValue": true
     },
     {
-      "field": "table.showIndex",
+      "field": "props.table.showIndex",
       "type": "boolean",
       "description": "showIndex",
       "defaultValue": false
     },
     {
-      "field": "table.emptyText",
+      "field": "props.table.emptyText",
       "type": "string",
       "description": "emptyText",
       "defaultValue": "暂无数据"
     },
     {
-      "field": "headerStyle.height",
+      "field": "props.headerStyle.height",
       "type": "number",
       "description": "height",
       "defaultValue": 42
     },
     {
-      "field": "headerStyle.backgroundColor",
+      "field": "props.headerStyle.backgroundColor",
       "type": "string",
       "description": "backgroundColor",
       "defaultValue": "#f5f7fa"
     },
     {
-      "field": "headerStyle.color",
+      "field": "props.headerStyle.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#303133"
     },
     {
-      "field": "headerStyle.fontSize",
+      "field": "props.headerStyle.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 14
     },
     {
-      "field": "headerStyle.fontWeight",
+      "field": "props.headerStyle.fontWeight",
       "type": "enum",
       "description": "fontWeight",
       "options": [
@@ -158,7 +268,7 @@
       "defaultValue": "bold"
     },
     {
-      "field": "headerStyle.textAlign",
+      "field": "props.headerStyle.textAlign",
       "type": "enum",
       "description": "textAlign",
       "options": [
@@ -169,49 +279,49 @@
       "defaultValue": "left"
     },
     {
-      "field": "rowStyle.height",
+      "field": "props.rowStyle.height",
       "type": "number",
       "description": "height",
       "defaultValue": 40
     },
     {
-      "field": "rowStyle.backgroundColor",
+      "field": "props.rowStyle.backgroundColor",
       "type": "string",
       "description": "backgroundColor",
       "defaultValue": "rgba(0, 0, 0, 0)"
     },
     {
-      "field": "rowStyle.stripeBackgroundColor",
+      "field": "props.rowStyle.stripeBackgroundColor",
       "type": "string",
       "description": "stripeBackgroundColor",
       "defaultValue": "#fafafa"
     },
     {
-      "field": "rowStyle.hoverBackgroundColor",
+      "field": "props.rowStyle.hoverBackgroundColor",
       "type": "string",
       "description": "hoverBackgroundColor",
       "defaultValue": "#ecf5ff"
     },
     {
-      "field": "rowStyle.borderColor",
+      "field": "props.rowStyle.borderColor",
       "type": "string",
       "description": "borderColor",
       "defaultValue": "#ebeef5"
     },
     {
-      "field": "cellStyle.color",
+      "field": "props.cellStyle.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#606266"
     },
     {
-      "field": "cellStyle.fontSize",
+      "field": "props.cellStyle.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 14
     },
     {
-      "field": "cellStyle.fontWeight",
+      "field": "props.cellStyle.fontWeight",
       "type": "enum",
       "description": "fontWeight",
       "options": [
@@ -222,7 +332,7 @@
       "defaultValue": "normal"
     },
     {
-      "field": "cellStyle.padding",
+      "field": "props.cellStyle.padding",
       "type": "array",
       "description": "padding",
       "defaultValue": [
@@ -233,7 +343,7 @@
       ]
     },
     {
-      "field": "cellStyle.overflow",
+      "field": "props.cellStyle.overflow",
       "type": "enum",
       "description": "overflow",
       "options": [
@@ -244,49 +354,49 @@
       "defaultValue": "ellipsis"
     },
     {
-      "field": "cellStyle.showTooltip",
+      "field": "props.cellStyle.showTooltip",
       "type": "boolean",
       "description": "showTooltip",
       "defaultValue": true
     },
     {
-      "field": "search.show",
+      "field": "props.search.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "search.placeholder",
+      "field": "props.search.placeholder",
       "type": "string",
       "description": "placeholder",
       "defaultValue": "搜索"
     },
     {
-      "field": "search.fields",
+      "field": "props.search.fields",
       "type": "array",
       "description": "fields",
       "defaultValue": []
     },
     {
-      "field": "search.debounce",
+      "field": "props.search.debounce",
       "type": "number",
       "description": "debounce",
       "defaultValue": 200
     },
     {
-      "field": "sort.enabled",
+      "field": "props.sort.enabled",
       "type": "boolean",
       "description": "enabled",
       "defaultValue": true
     },
     {
-      "field": "sort.defaultField",
+      "field": "props.sort.defaultField",
       "type": "string",
       "description": "defaultField",
       "defaultValue": ""
     },
     {
-      "field": "sort.defaultOrder",
+      "field": "props.sort.defaultOrder",
       "type": "enum",
       "description": "defaultOrder",
       "options": [
@@ -297,19 +407,19 @@
       "defaultValue": "none"
     },
     {
-      "field": "pagination.show",
+      "field": "props.pagination.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "pagination.pageSize",
+      "field": "props.pagination.pageSize",
       "type": "number",
       "description": "pageSize",
       "defaultValue": 10
     },
     {
-      "field": "pagination.pageSizes",
+      "field": "props.pagination.pageSizes",
       "type": "array",
       "description": "pageSizes",
       "defaultValue": [
@@ -320,7 +430,7 @@
       ]
     },
     {
-      "field": "pagination.layout",
+      "field": "props.pagination.layout",
       "type": "enum",
       "description": "layout",
       "options": [
@@ -331,7 +441,7 @@
       "defaultValue": "prev, pager, next"
     },
     {
-      "field": "pagination.position",
+      "field": "props.pagination.position",
       "type": "enum",
       "description": "position",
       "options": [
@@ -343,7 +453,7 @@
       "defaultValue": "bottomRight"
     },
     {
-      "field": "formatting.defaultNumberFormat",
+      "field": "props.formatting.defaultNumberFormat",
       "type": "enum",
       "description": "defaultNumberFormat",
       "options": [
@@ -363,13 +473,13 @@
       "defaultValue": "value"
     },
     {
-      "field": "formatting.dateFormat",
+      "field": "props.formatting.dateFormat",
       "type": "string",
       "description": "dateFormat",
       "defaultValue": "YYYY-MM-DD HH:mm:ss"
     },
     {
-      "field": "formatting.nullText",
+      "field": "props.formatting.nullText",
       "type": "string",
       "description": "nullText",
       "defaultValue": "--"

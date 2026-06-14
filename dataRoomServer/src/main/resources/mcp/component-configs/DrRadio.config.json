@@ -4,19 +4,129 @@
   "description": "单选框、radio、单选、表单、筛选",
   "fields": [
     {
-      "field": "basic.defaultValue",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrRadio"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "单选框"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 300
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 40
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.basic.defaultValue",
       "type": "string",
       "description": "默认选中值",
       "defaultValue": ""
     },
     {
-      "field": "basic.disabled",
+      "field": "props.basic.disabled",
       "type": "boolean",
       "description": "是否禁用",
       "defaultValue": false
     },
     {
-      "field": "layout.direction",
+      "field": "props.layout.direction",
       "type": "enum",
       "description": "排列方向",
       "options": [
@@ -26,55 +136,55 @@
       "defaultValue": "horizontal"
     },
     {
-      "field": "layout.gap",
+      "field": "props.layout.gap",
       "type": "number",
       "description": "选项间距(px)",
       "defaultValue": 12
     },
     {
-      "field": "style.fontSize",
+      "field": "props.style.fontSize",
       "type": "number",
       "description": "字号(px)",
       "defaultValue": 14
     },
     {
-      "field": "style.color",
+      "field": "props.style.color",
       "type": "string",
       "description": "未选中文本颜色",
       "defaultValue": "#CCCCCC"
     },
     {
-      "field": "style.activeColor",
+      "field": "props.style.activeColor",
       "type": "string",
       "description": "选中文本颜色",
       "defaultValue": "#FFFFFF"
     },
     {
-      "field": "style.activeBgColor",
+      "field": "props.style.activeBgColor",
       "type": "string",
       "description": "选中背景色",
       "defaultValue": "#409EFF"
     },
     {
-      "field": "style.inactiveColor",
+      "field": "props.style.inactiveColor",
       "type": "string",
       "description": "未选中文本颜色",
       "defaultValue": "#CCCCCC"
     },
     {
-      "field": "style.inactiveBgColor",
+      "field": "props.style.inactiveBgColor",
       "type": "string",
       "description": "未选中背景色",
       "defaultValue": "rgba(255, 255, 255, 0.1)"
     },
     {
-      "field": "style.borderRadius",
+      "field": "props.style.borderRadius",
       "type": "number",
       "description": "圆角(px)",
       "defaultValue": 4
     },
     {
-      "field": "style.padding",
+      "field": "props.style.padding",
       "type": "array",
       "description": "内边距 [上, 右, 下, 左]",
       "defaultValue": [
@@ -85,7 +195,7 @@
       ]
     },
     {
-      "field": "options.staticOptions",
+      "field": "props.options.staticOptions",
       "type": "array",
       "description": "静态选项列表",
       "defaultValue": [
@@ -104,7 +214,7 @@
       ]
     },
     {
-      "field": "globalVar.globalVarName",
+      "field": "props.globalVar.globalVarName",
       "type": "string",
       "description": "绑定的全局变量名称",
       "defaultValue": ""

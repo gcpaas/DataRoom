@@ -4,7 +4,117 @@
   "description": "时间、日期、当前时间、当前日期",
   "fields": [
     {
-      "field": "format",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrDateTime"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "时间"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 240
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 60
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.format",
       "type": "enum",
       "description": "format",
       "options": [
@@ -15,37 +125,37 @@
       "defaultValue": "yyyy-MM-dd HH:mm:ss"
     },
     {
-      "field": "textStyle.fontSize",
+      "field": "props.textStyle.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 24
     },
     {
-      "field": "textStyle.fontFamily",
+      "field": "props.textStyle.fontFamily",
       "type": "string",
       "description": "fontFamily",
       "defaultValue": "Microsoft YaHei"
     },
     {
-      "field": "textStyle.fontWeight",
+      "field": "props.textStyle.fontWeight",
       "type": "string",
       "description": "fontWeight",
       "defaultValue": "400"
     },
     {
-      "field": "textStyle.letterSpacing",
+      "field": "props.textStyle.letterSpacing",
       "type": "number",
       "description": "letterSpacing",
       "defaultValue": 1
     },
     {
-      "field": "textStyle.color",
+      "field": "props.textStyle.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#909399"
     },
     {
-      "field": "align",
+      "field": "props.align",
       "type": "enum",
       "description": "align",
       "options": [
@@ -56,7 +166,7 @@
       "defaultValue": "center"
     },
     {
-      "field": "verticalAlign",
+      "field": "props.verticalAlign",
       "type": "enum",
       "description": "verticalAlign",
       "options": [

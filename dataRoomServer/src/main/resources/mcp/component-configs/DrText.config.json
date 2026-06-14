@@ -4,37 +4,147 @@
   "description": "文字、文本、数字",
   "fields": [
     {
-      "field": "text",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrText"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "文本"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 150
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.text",
       "type": "string",
       "description": "文本内容",
       "defaultValue": "文本占位符"
     },
     {
-      "field": "textStyle.fontSize",
+      "field": "props.textStyle.fontSize",
       "type": "number",
       "description": "字体大小(px)",
       "defaultValue": 14
     },
     {
-      "field": "textStyle.fontWeight",
+      "field": "props.textStyle.fontWeight",
       "type": "string",
       "description": "字体粗细: 'normal' | 'bold' | '100'~'900'",
       "defaultValue": "normal"
     },
     {
-      "field": "textStyle.fontFamily",
+      "field": "props.textStyle.fontFamily",
       "type": "string",
       "description": "字体族",
       "defaultValue": "Microsoft YaHei"
     },
     {
-      "field": "textStyle.color",
+      "field": "props.textStyle.color",
       "type": "string",
       "description": "字体颜色",
       "defaultValue": "#333333"
     },
     {
-      "field": "align",
+      "field": "props.align",
       "type": "enum",
       "description": "对齐方式: left | center | right",
       "options": [
@@ -45,7 +155,7 @@
       "defaultValue": "left"
     },
     {
-      "field": "verticalAlign",
+      "field": "props.verticalAlign",
       "type": "enum",
       "description": "垂直对齐: top | center | bottom",
       "options": [
@@ -56,37 +166,37 @@
       "defaultValue": "top"
     },
     {
-      "field": "letterSpacing",
+      "field": "props.letterSpacing",
       "type": "number",
       "description": "文字间隔(px)",
       "defaultValue": 0
     },
     {
-      "field": "background.enabled",
+      "field": "props.background.enabled",
       "type": "boolean",
       "description": "是否启用背景样式",
       "defaultValue": false
     },
     {
-      "field": "background.color",
+      "field": "props.background.color",
       "type": "string",
       "description": "背景色",
       "defaultValue": "#007aff"
     },
     {
-      "field": "background.borderRadius",
+      "field": "props.background.borderRadius",
       "type": "number",
       "description": "圆角(px)",
       "defaultValue": 0
     },
     {
-      "field": "background.border.width",
+      "field": "props.background.border.width",
       "type": "number",
       "description": "边框宽度(px)",
       "defaultValue": 1
     },
     {
-      "field": "background.border.style",
+      "field": "props.background.border.style",
       "type": "enum",
       "description": "边框样式: solid | dashed | dotted | none",
       "options": [
@@ -98,25 +208,25 @@
       "defaultValue": "solid"
     },
     {
-      "field": "background.border.color",
+      "field": "props.background.border.color",
       "type": "string",
       "description": "边框颜色",
       "defaultValue": "#eeeeee"
     },
     {
-      "field": "ellipsis",
+      "field": "props.ellipsis",
       "type": "boolean",
       "description": "文本溢出省略号",
       "defaultValue": false
     },
     {
-      "field": "hyperlink.url",
+      "field": "props.hyperlink.url",
       "type": "string",
       "description": "超链接URL",
       "defaultValue": ""
     },
     {
-      "field": "hyperlink.openNewWindow",
+      "field": "props.hyperlink.openNewWindow",
       "type": "boolean",
       "description": "是否新开窗口",
       "defaultValue": false

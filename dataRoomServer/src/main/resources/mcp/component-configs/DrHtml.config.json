@@ -4,43 +4,153 @@
   "description": "html、css、自定义片段、自定义内容",
   "fields": [
     {
-      "field": "html",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrHtml"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "HTML"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 400
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 300
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.html",
       "type": "string",
       "description": "html",
       "defaultValue": "<div class=\"html-card\"><h3>HTML 组件</h3><p>支持 #{user.name} 占位符</p></div>"
     },
     {
-      "field": "css",
+      "field": "props.css",
       "type": "string",
       "description": "css",
       "defaultValue": ".html-card {\n  width: 100%;\n  height: 100%;\n  padding: 24px;\n  border: 1px solid rgba(255, 255, 255, 0.24);\n  border-radius: 12px;\n  background: rgba(15, 23, 42, 0.72);\n  color: #ffffff;\n  font-family: Inter, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif;\n}\n\n.html-card h3 {\n  margin: 0 0 12px;\n  font-size: 24px;\n  font-weight: 600;\n  line-height: 1.3;\n}\n\n.html-card p {\n  margin: 0;\n  font-size: 14px;\n  line-height: 1.6;\n}"
     },
     {
-      "field": "sandbox.allowScripts",
+      "field": "props.sandbox.allowScripts",
       "type": "boolean",
       "description": "allowScripts",
       "defaultValue": false
     },
     {
-      "field": "sandbox.allowSameOrigin",
+      "field": "props.sandbox.allowSameOrigin",
       "type": "boolean",
       "description": "allowSameOrigin",
       "defaultValue": false
     },
     {
-      "field": "sandbox.allowForms",
+      "field": "props.sandbox.allowForms",
       "type": "boolean",
       "description": "allowForms",
       "defaultValue": false
     },
     {
-      "field": "sandbox.allowPopups",
+      "field": "props.sandbox.allowPopups",
       "type": "boolean",
       "description": "allowPopups",
       "defaultValue": false
     },
     {
-      "field": "placeholder.escapeMode",
+      "field": "props.placeholder.escapeMode",
       "type": "enum",
       "description": "escapeMode",
       "options": [

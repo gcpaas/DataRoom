@@ -4,7 +4,117 @@
   "description": "趋势指标卡、KPI、趋势线、折线、面积、变化率、同比、环比",
   "fields": [
     {
-      "field": "global.padding",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrTrendMetricCard"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "趋势指标卡"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 360
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 180
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 0
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 0
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.global.padding",
       "type": "array",
       "description": "padding",
       "defaultValue": [
@@ -15,31 +125,31 @@
       ]
     },
     {
-      "field": "global.backgroundColor",
+      "field": "props.global.backgroundColor",
       "type": "string",
       "description": "backgroundColor",
       "defaultValue": "rgba(0, 0, 0, 0)"
     },
     {
-      "field": "global.borderColor",
+      "field": "props.global.borderColor",
       "type": "string",
       "description": "borderColor",
       "defaultValue": "rgba(0, 0, 0, 0)"
     },
     {
-      "field": "global.borderWidth",
+      "field": "props.global.borderWidth",
       "type": "number",
       "description": "borderWidth",
       "defaultValue": 0
     },
     {
-      "field": "global.borderRadius",
+      "field": "props.global.borderRadius",
       "type": "number",
       "description": "borderRadius",
       "defaultValue": 8
     },
     {
-      "field": "layout.trendPosition",
+      "field": "props.layout.trendPosition",
       "type": "enum",
       "description": "trendPosition",
       "options": [
@@ -49,7 +159,7 @@
       "defaultValue": "bottom"
     },
     {
-      "field": "layout.horizontalAlign",
+      "field": "props.layout.horizontalAlign",
       "type": "enum",
       "description": "horizontalAlign",
       "options": [
@@ -60,49 +170,49 @@
       "defaultValue": "left"
     },
     {
-      "field": "layout.gap",
+      "field": "props.layout.gap",
       "type": "number",
       "description": "gap",
       "defaultValue": 10
     },
     {
-      "field": "layout.trendHeight",
+      "field": "props.layout.trendHeight",
       "type": "number",
       "description": "trendHeight",
       "defaultValue": 64
     },
     {
-      "field": "layout.trendWidth",
+      "field": "props.layout.trendWidth",
       "type": "number",
       "description": "trendWidth",
       "defaultValue": 140
     },
     {
-      "field": "title.show",
+      "field": "props.title.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "title.text",
+      "field": "props.title.text",
       "type": "string",
       "description": "text",
       "defaultValue": "趋势指标"
     },
     {
-      "field": "title.fontSize",
+      "field": "props.title.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 14
     },
     {
-      "field": "title.color",
+      "field": "props.title.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#909399"
     },
     {
-      "field": "title.fontWeight",
+      "field": "props.title.fontWeight",
       "type": "enum",
       "description": "fontWeight",
       "options": [
@@ -113,13 +223,13 @@
       "defaultValue": "normal"
     },
     {
-      "field": "value.defaultValue",
+      "field": "props.value.defaultValue",
       "type": "number",
       "description": "defaultValue",
       "defaultValue": 9860
     },
     {
-      "field": "value.format",
+      "field": "props.value.format",
       "type": "enum",
       "description": "format",
       "options": [
@@ -134,37 +244,37 @@
       "defaultValue": "thousand"
     },
     {
-      "field": "value.decimalPlaces",
+      "field": "props.value.decimalPlaces",
       "type": "number",
       "description": "decimalPlaces",
       "defaultValue": 0
     },
     {
-      "field": "value.prefix",
+      "field": "props.value.prefix",
       "type": "string",
       "description": "prefix",
       "defaultValue": ""
     },
     {
-      "field": "value.suffix",
+      "field": "props.value.suffix",
       "type": "string",
       "description": "suffix",
       "defaultValue": ""
     },
     {
-      "field": "value.fontSize",
+      "field": "props.value.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 34
     },
     {
-      "field": "value.color",
+      "field": "props.value.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#303133"
     },
     {
-      "field": "value.fontWeight",
+      "field": "props.value.fontWeight",
       "type": "enum",
       "description": "fontWeight",
       "options": [
@@ -175,43 +285,43 @@
       "defaultValue": "bold"
     },
     {
-      "field": "timestamp.show",
+      "field": "props.timestamp.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "timestamp.format",
+      "field": "props.timestamp.format",
       "type": "string",
       "description": "format",
       "defaultValue": "YYYY-MM-DD HH:mm"
     },
     {
-      "field": "timestamp.prefix",
+      "field": "props.timestamp.prefix",
       "type": "string",
       "description": "prefix",
       "defaultValue": "更新时间 "
     },
     {
-      "field": "timestamp.fontSize",
+      "field": "props.timestamp.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 12
     },
     {
-      "field": "timestamp.color",
+      "field": "props.timestamp.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#909399"
     },
     {
-      "field": "compare.show",
+      "field": "props.compare.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "compare.mode",
+      "field": "props.compare.mode",
       "type": "enum",
       "description": "mode",
       "options": [
@@ -222,37 +332,37 @@
       "defaultValue": "rate"
     },
     {
-      "field": "compare.positiveColor",
+      "field": "props.compare.positiveColor",
       "type": "string",
       "description": "positiveColor",
       "defaultValue": "#67c23a"
     },
     {
-      "field": "compare.negativeColor",
+      "field": "props.compare.negativeColor",
       "type": "string",
       "description": "negativeColor",
       "defaultValue": "#f56c6c"
     },
     {
-      "field": "compare.neutralColor",
+      "field": "props.compare.neutralColor",
       "type": "string",
       "description": "neutralColor",
       "defaultValue": "#909399"
     },
     {
-      "field": "compare.fontSize",
+      "field": "props.compare.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 12
     },
     {
-      "field": "trend.show",
+      "field": "props.trend.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "trend.chartType",
+      "field": "props.trend.chartType",
       "type": "enum",
       "description": "chartType",
       "options": [
@@ -262,109 +372,109 @@
       "defaultValue": "line"
     },
     {
-      "field": "trend.smooth",
+      "field": "props.trend.smooth",
       "type": "boolean",
       "description": "smooth",
       "defaultValue": true
     },
     {
-      "field": "trend.lineWidth",
+      "field": "props.trend.lineWidth",
       "type": "number",
       "description": "lineWidth",
       "defaultValue": 2
     },
     {
-      "field": "trend.lineColor",
+      "field": "props.trend.lineColor",
       "type": "string",
       "description": "lineColor",
       "defaultValue": "#409eff"
     },
     {
-      "field": "trend.areaColor",
+      "field": "props.trend.areaColor",
       "type": "string",
       "description": "areaColor",
       "defaultValue": "#ecf5ff"
     },
     {
-      "field": "trend.areaOpacity",
+      "field": "props.trend.areaOpacity",
       "type": "number",
       "description": "areaOpacity",
       "defaultValue": 0.35
     },
     {
-      "field": "trend.showSymbol",
+      "field": "props.trend.showSymbol",
       "type": "boolean",
       "description": "showSymbol",
       "defaultValue": false
     },
     {
-      "field": "trend.symbolSize",
+      "field": "props.trend.symbolSize",
       "type": "number",
       "description": "symbolSize",
       "defaultValue": 4
     },
     {
-      "field": "trend.startYAxisAtZero",
+      "field": "props.trend.startYAxisAtZero",
       "type": "boolean",
       "description": "startYAxisAtZero",
       "defaultValue": false
     },
     {
-      "field": "axis.showXAxis",
+      "field": "props.axis.showXAxis",
       "type": "boolean",
       "description": "showXAxis",
       "defaultValue": false
     },
     {
-      "field": "axis.showYAxis",
+      "field": "props.axis.showYAxis",
       "type": "boolean",
       "description": "showYAxis",
       "defaultValue": false
     },
     {
-      "field": "axis.showMinMaxLabel",
+      "field": "props.axis.showMinMaxLabel",
       "type": "boolean",
       "description": "showMinMaxLabel",
       "defaultValue": false
     },
     {
-      "field": "axis.labelColor",
+      "field": "props.axis.labelColor",
       "type": "string",
       "description": "labelColor",
       "defaultValue": "#909399"
     },
     {
-      "field": "axis.labelFontSize",
+      "field": "props.axis.labelFontSize",
       "type": "number",
       "description": "labelFontSize",
       "defaultValue": 10
     },
     {
-      "field": "tooltip.show",
+      "field": "props.tooltip.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "tooltip.formatter",
+      "field": "props.tooltip.formatter",
       "type": "string",
       "description": "formatter",
       "defaultValue": "{time}<br/>{value}"
     },
     {
-      "field": "animation.enabled",
+      "field": "props.animation.enabled",
       "type": "boolean",
       "description": "enabled",
       "defaultValue": true
     },
     {
-      "field": "animation.duration",
+      "field": "props.animation.duration",
       "type": "number",
       "description": "duration",
       "defaultValue": 1000
     },
     {
-      "field": "animation.easing",
+      "field": "props.animation.easing",
       "type": "enum",
       "description": "easing",
       "options": [

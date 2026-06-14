@@ -4,7 +4,117 @@
   "description": "仪表盘、gauge、速度计、进度盘、刻度盘、KPI",
   "fields": [
     {
-      "field": "global.padding",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrGauge"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "仪表盘"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 300
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 300
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.global.padding",
       "type": "array",
       "description": "图表内边距 [上, 右, 下, 左] (px)",
       "defaultValue": [
@@ -15,49 +125,49 @@
       ]
     },
     {
-      "field": "gauge.startAngle",
+      "field": "props.gauge.startAngle",
       "type": "number",
       "description": "起始角度（正上方为90，顺时针减小）",
       "defaultValue": 225
     },
     {
-      "field": "gauge.endAngle",
+      "field": "props.gauge.endAngle",
       "type": "number",
       "description": "结束角度",
       "defaultValue": -45
     },
     {
-      "field": "gauge.min",
+      "field": "props.gauge.min",
       "type": "number",
       "description": "最小刻度值",
       "defaultValue": 0
     },
     {
-      "field": "gauge.max",
+      "field": "props.gauge.max",
       "type": "number",
       "description": "最大刻度值",
       "defaultValue": 100
     },
     {
-      "field": "gauge.splitNumber",
+      "field": "props.gauge.splitNumber",
       "type": "number",
       "description": "仪表盘刻度分割段数",
       "defaultValue": 10
     },
     {
-      "field": "gauge.clockwise",
+      "field": "props.gauge.clockwise",
       "type": "boolean",
       "description": "是否顺时针增长",
       "defaultValue": true
     },
     {
-      "field": "gauge.radius",
+      "field": "props.gauge.radius",
       "type": "string",
       "description": "仪表盘半径（百分比或像素值）",
       "defaultValue": "75%"
     },
     {
-      "field": "gauge.center",
+      "field": "props.gauge.center",
       "type": "array",
       "description": "中心位置 [x, y]",
       "defaultValue": [
@@ -66,25 +176,25 @@
       ]
     },
     {
-      "field": "axisLine.show",
+      "field": "props.axisLine.show",
       "type": "boolean",
       "description": "是否显示轴线",
       "defaultValue": true
     },
     {
-      "field": "axisLine.width",
+      "field": "props.axisLine.width",
       "type": "number",
       "description": "轴线宽度(px)",
       "defaultValue": 20
     },
     {
-      "field": "axisLine.roundCap",
+      "field": "props.axisLine.roundCap",
       "type": "boolean",
       "description": "轴线两端是否显示为圆形",
       "defaultValue": false
     },
     {
-      "field": "axisLine.colors",
+      "field": "props.axisLine.colors",
       "type": "array",
       "description": "轴线渐变色段 [[位置, 颜色], ...]，位置为0~1之间的值",
       "defaultValue": [
@@ -103,115 +213,115 @@
       ]
     },
     {
-      "field": "axisTick.show",
+      "field": "props.axisTick.show",
       "type": "boolean",
       "description": "是否显示刻度线",
       "defaultValue": true
     },
     {
-      "field": "axisTick.splitNumber",
+      "field": "props.axisTick.splitNumber",
       "type": "number",
       "description": "每个分割段内的刻度数",
       "defaultValue": 5
     },
     {
-      "field": "axisTick.length",
+      "field": "props.axisTick.length",
       "type": "number",
       "description": "刻度线长度(px)",
       "defaultValue": 6
     },
     {
-      "field": "axisTick.color",
+      "field": "props.axisTick.color",
       "type": "string",
       "description": "刻度线颜色，auto表示自动取轴线颜色",
       "defaultValue": "auto"
     },
     {
-      "field": "axisTick.width",
+      "field": "props.axisTick.width",
       "type": "number",
       "description": "刻度线宽度(px)",
       "defaultValue": 1
     },
     {
-      "field": "splitLine.show",
+      "field": "props.splitLine.show",
       "type": "boolean",
       "description": "是否显示分割线",
       "defaultValue": true
     },
     {
-      "field": "splitLine.length",
+      "field": "props.splitLine.length",
       "type": "number",
       "description": "分割线长度(px)",
       "defaultValue": 12
     },
     {
-      "field": "splitLine.color",
+      "field": "props.splitLine.color",
       "type": "string",
       "description": "分割线颜色，auto表示自动取轴线颜色",
       "defaultValue": "auto"
     },
     {
-      "field": "splitLine.width",
+      "field": "props.splitLine.width",
       "type": "number",
       "description": "分割线宽度(px)",
       "defaultValue": 2
     },
     {
-      "field": "axisLabel.show",
+      "field": "props.axisLabel.show",
       "type": "boolean",
       "description": "是否显示刻度标签",
       "defaultValue": true
     },
     {
-      "field": "axisLabel.fontSize",
+      "field": "props.axisLabel.fontSize",
       "type": "number",
       "description": "字号(px)",
       "defaultValue": 12
     },
     {
-      "field": "axisLabel.color",
+      "field": "props.axisLabel.color",
       "type": "string",
       "description": "标签颜色",
       "defaultValue": "#999999"
     },
     {
-      "field": "axisLabel.distance",
+      "field": "props.axisLabel.distance",
       "type": "number",
       "description": "标签到轴线的距离(px)",
       "defaultValue": 15
     },
     {
-      "field": "axisLabel.formatter",
+      "field": "props.axisLabel.formatter",
       "type": "string",
       "description": "标签格式化模板，{value}为数值占位符",
       "defaultValue": "{value}"
     },
     {
-      "field": "pointer.show",
+      "field": "props.pointer.show",
       "type": "boolean",
       "description": "是否显示指针",
       "defaultValue": true
     },
     {
-      "field": "pointer.length",
+      "field": "props.pointer.length",
       "type": "string",
       "description": "指针长度（百分比相对于半径）",
       "defaultValue": "60%"
     },
     {
-      "field": "pointer.width",
+      "field": "props.pointer.width",
       "type": "number",
       "description": "指针宽度(px)",
       "defaultValue": 6
     },
     {
-      "field": "pointer.color",
+      "field": "props.pointer.color",
       "type": "string",
       "description": "指针颜色，auto表示跟随轴线颜色",
       "defaultValue": "auto"
     },
     {
-      "field": "pointer.type",
+      "field": "props.pointer.type",
       "type": "enum",
       "description": "指针形状类型",
       "options": [
@@ -223,79 +333,79 @@
       "defaultValue": "default"
     },
     {
-      "field": "anchor.show",
+      "field": "props.anchor.show",
       "type": "boolean",
       "description": "是否显示锚点",
       "defaultValue": true
     },
     {
-      "field": "anchor.size",
+      "field": "props.anchor.size",
       "type": "number",
       "description": "锚点大小(px)",
       "defaultValue": 10
     },
     {
-      "field": "anchor.color",
+      "field": "props.anchor.color",
       "type": "string",
       "description": "锚点颜色",
       "defaultValue": "#5470c6"
     },
     {
-      "field": "anchor.borderWidth",
+      "field": "props.anchor.borderWidth",
       "type": "number",
       "description": "锚点边框宽度(px)",
       "defaultValue": 2
     },
     {
-      "field": "anchor.borderColor",
+      "field": "props.anchor.borderColor",
       "type": "string",
       "description": "锚点边框颜色",
       "defaultValue": "#5470c6"
     },
     {
-      "field": "progress.show",
+      "field": "props.progress.show",
       "type": "boolean",
       "description": "是否显示进度条",
       "defaultValue": false
     },
     {
-      "field": "progress.width",
+      "field": "props.progress.width",
       "type": "number",
       "description": "进度条宽度(px)，默认与轴线同宽",
       "defaultValue": 20
     },
     {
-      "field": "progress.roundCap",
+      "field": "props.progress.roundCap",
       "type": "boolean",
       "description": "进度条两端是否圆形",
       "defaultValue": false
     },
     {
-      "field": "progress.color",
+      "field": "props.progress.color",
       "type": "string",
       "description": "进度条颜色",
       "defaultValue": "#5470c6"
     },
     {
-      "field": "detail.show",
+      "field": "props.detail.show",
       "type": "boolean",
       "description": "是否显示数值",
       "defaultValue": true
     },
     {
-      "field": "detail.fontSize",
+      "field": "props.detail.fontSize",
       "type": "number",
       "description": "数值字号(px)",
       "defaultValue": 28
     },
     {
-      "field": "detail.color",
+      "field": "props.detail.color",
       "type": "string",
       "description": "数值颜色，auto表示跟随轴线颜色",
       "defaultValue": "auto"
     },
     {
-      "field": "detail.fontWeight",
+      "field": "props.detail.fontWeight",
       "type": "enum",
       "description": "数值字重",
       "options": [
@@ -308,7 +418,7 @@
       "defaultValue": "bold"
     },
     {
-      "field": "detail.format",
+      "field": "props.detail.format",
       "type": "enum",
       "description": "数值格式化方式",
       "options": [
@@ -321,49 +431,49 @@
       "defaultValue": "value"
     },
     {
-      "field": "detail.offsetY",
+      "field": "props.detail.offsetY",
       "type": "number",
       "description": "数值纵向偏移(%)，正值向下",
       "defaultValue": 60
     },
     {
-      "field": "detail.prefix",
+      "field": "props.detail.prefix",
       "type": "string",
       "description": "数值前缀文本",
       "defaultValue": ""
     },
     {
-      "field": "detail.suffix",
+      "field": "props.detail.suffix",
       "type": "string",
       "description": "数值后缀文本",
       "defaultValue": ""
     },
     {
-      "field": "title.show",
+      "field": "props.title.show",
       "type": "boolean",
       "description": "是否显示标题文字",
       "defaultValue": true
     },
     {
-      "field": "title.text",
+      "field": "props.title.text",
       "type": "string",
       "description": "固定标题文字（优先使用数据集中的标题字段）",
       "defaultValue": ""
     },
     {
-      "field": "title.fontSize",
+      "field": "props.title.fontSize",
       "type": "number",
       "description": "标题字号(px)",
       "defaultValue": 14
     },
     {
-      "field": "title.color",
+      "field": "props.title.color",
       "type": "string",
       "description": "标题颜色",
       "defaultValue": "#999999"
     },
     {
-      "field": "title.fontWeight",
+      "field": "props.title.fontWeight",
       "type": "enum",
       "description": "标题字重",
       "options": [
@@ -376,25 +486,25 @@
       "defaultValue": "normal"
     },
     {
-      "field": "title.offsetY",
+      "field": "props.title.offsetY",
       "type": "number",
       "description": "标题纵向偏移(%)，正值向下",
       "defaultValue": 75
     },
     {
-      "field": "animation.enabled",
+      "field": "props.animation.enabled",
       "type": "boolean",
       "description": "是否启用动画",
       "defaultValue": true
     },
     {
-      "field": "animation.duration",
+      "field": "props.animation.duration",
       "type": "number",
       "description": "动画时长(ms)",
       "defaultValue": 1000
     },
     {
-      "field": "animation.easing",
+      "field": "props.animation.easing",
       "type": "enum",
       "description": "动画缓动函数",
       "options": [

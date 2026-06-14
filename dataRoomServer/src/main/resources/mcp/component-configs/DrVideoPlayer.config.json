@@ -4,43 +4,153 @@
   "description": "视频播放器、video、视频、播放器、MP4、直播、监控",
   "fields": [
     {
-      "field": "basic.url",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrVideoPlayer"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "视频播放器"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 480
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 270
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.basic.url",
       "type": "string",
       "description": "视频链接地址，支持MP4、FLV、M3U8、RTMP格式",
       "defaultValue": ""
     },
     {
-      "field": "basic.poster",
+      "field": "props.basic.poster",
       "type": "string",
       "description": "视频封面图URL",
       "defaultValue": ""
     },
     {
-      "field": "basic.autoplay",
+      "field": "props.basic.autoplay",
       "type": "boolean",
       "description": "是否自动播放",
       "defaultValue": false
     },
     {
-      "field": "basic.loop",
+      "field": "props.basic.loop",
       "type": "boolean",
       "description": "是否循环播放",
       "defaultValue": false
     },
     {
-      "field": "basic.muted",
+      "field": "props.basic.muted",
       "type": "boolean",
       "description": "是否静音",
       "defaultValue": false
     },
     {
-      "field": "basic.controls",
+      "field": "props.basic.controls",
       "type": "boolean",
       "description": "是否显示播放控制栏",
       "defaultValue": true
     },
     {
-      "field": "basic.preload",
+      "field": "props.basic.preload",
       "type": "enum",
       "description": "视频预加载策略",
       "options": [
@@ -51,7 +161,7 @@
       "defaultValue": "auto"
     },
     {
-      "field": "style.objectFit",
+      "field": "props.style.objectFit",
       "type": "enum",
       "description": "视频填充模式",
       "options": [
@@ -63,31 +173,31 @@
       "defaultValue": "contain"
     },
     {
-      "field": "style.borderRadius",
+      "field": "props.style.borderRadius",
       "type": "number",
       "description": "圆角半径（px）",
       "defaultValue": 0
     },
     {
-      "field": "style.backgroundColor",
+      "field": "props.style.backgroundColor",
       "type": "string",
       "description": "背景颜色",
       "defaultValue": "#000000"
     },
     {
-      "field": "volume.defaultVolume",
+      "field": "props.volume.defaultVolume",
       "type": "number",
       "description": "默认音量大小 0-1",
       "defaultValue": 0.7
     },
     {
-      "field": "playbackRate.defaultRate",
+      "field": "props.playbackRate.defaultRate",
       "type": "number",
       "description": "默认播放速率",
       "defaultValue": 1
     },
     {
-      "field": "playbackRate.rates",
+      "field": "props.playbackRate.rates",
       "type": "array",
       "description": "可选的播放速率列表",
       "defaultValue": [

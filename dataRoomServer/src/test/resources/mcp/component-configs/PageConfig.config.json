@@ -1,0 +1,25 @@
+{
+  "componentName": "PageConfig",
+  "displayName": "页面配置",
+  "description": "网格化页面设计器页面配置",
+  "fields": [
+    {
+      "field": "pageType",
+      "type": "string",
+      "description": "页面类型",
+      "defaultValue": "page"
+    },
+    {
+      "field": "basicConfig.background.fill",
+      "type": "enum",
+      "options": ["image", "color"],
+      "description": "背景填充方式",
+      "defaultValue": "color"
+    },
+    {
+      "field": "chartList",
+      "type": "array",
+      "description": "图表组件配置，数组元素为ChartConfig结构"
+    }
+  ]
+}

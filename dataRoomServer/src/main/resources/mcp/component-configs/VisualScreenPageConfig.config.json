@@ -1,0 +1,149 @@
+{
+  "componentName": "VisualScreenPageConfig",
+  "displayName": "大屏配置",
+  "description": "像素级自由布局大屏设计器页面配置。chartList数组元素为组件配置，需要结合具体组件配置文件填写。",
+  "fields": [
+    {
+      "field": "pageType",
+      "type": "string",
+      "description": "页面类型",
+      "defaultValue": "visualScreen"
+    },
+    {
+      "field": "basicConfig.background.fill",
+      "type": "string",
+      "description": "背景填充方式",
+      "defaultValue": "color"
+    },
+    {
+      "field": "basicConfig.background.color",
+      "type": "string",
+      "description": "背景色",
+      "defaultValue": "#0d1e42"
+    },
+    {
+      "field": "basicConfig.background.url",
+      "type": "string",
+      "description": "背景图url",
+      "defaultValue": ""
+    },
+    {
+      "field": "basicConfig.background.opacity",
+      "type": "number",
+      "description": "背景图透明度",
+      "defaultValue": 100
+    },
+    {
+      "field": "basicConfig.background.repeat",
+      "type": "enum",
+      "description": "背景图填充方式",
+      "options": [
+        "no-repeat",
+        "repeat",
+        "repeat-x",
+        "repeat-y"
+      ],
+      "defaultValue": "no-repeat"
+    },
+    {
+      "field": "basicConfig.size.width",
+      "type": "number",
+      "description": "宽度、单位：像素",
+      "defaultValue": 1920
+    },
+    {
+      "field": "basicConfig.size.height",
+      "type": "number",
+      "description": "高度，单位：像素",
+      "defaultValue": 1080
+    },
+    {
+      "field": "basicConfig.size.zoom",
+      "type": "enum",
+      "description": "缩放方式",
+      "options": [
+        "fitWidth",
+        "fitHeight",
+        "cover",
+        "contain",
+        "none"
+      ],
+      "defaultValue": "contain"
+    },
+    {
+      "field": "basicConfig.zoom.mode",
+      "type": "enum",
+      "description": "mode",
+      "options": [
+        "best",
+        "fixed"
+      ],
+      "defaultValue": "best"
+    },
+    {
+      "field": "basicConfig.zoom.value",
+      "type": "number",
+      "description": "value",
+      "defaultValue": 100
+    },
+    {
+      "field": "basicConfig.zoom.visiable",
+      "type": "boolean",
+      "description": "visiable",
+      "defaultValue": true
+    },
+    {
+      "field": "basicConfig.zoom.visible",
+      "type": "boolean",
+      "description": "visible"
+    },
+    {
+      "field": "basicConfig.ruler.visible",
+      "type": "boolean",
+      "description": "visible",
+      "defaultValue": true
+    },
+    {
+      "field": "basicConfig.ruler.guidesVisible",
+      "type": "boolean",
+      "description": "guidesVisible",
+      "defaultValue": true
+    },
+    {
+      "field": "basicConfig.ruler.guidesLocked",
+      "type": "boolean",
+      "description": "guidesLocked",
+      "defaultValue": false
+    },
+    {
+      "field": "basicConfig.ruler.verticalGuides",
+      "type": "array",
+      "description": "verticalGuides",
+      "defaultValue": []
+    },
+    {
+      "field": "basicConfig.ruler.horizontalGuides",
+      "type": "array",
+      "description": "horizontalGuides",
+      "defaultValue": []
+    },
+    {
+      "field": "basicConfig.timers",
+      "type": "array",
+      "description": "定时器配置列表，数组元素为PageTimer结构。",
+      "defaultValue": []
+    },
+    {
+      "field": "globalVariableList",
+      "type": "array",
+      "description": "全局变量，数组元素为GlobalVariable结构。",
+      "defaultValue": []
+    },
+    {
+      "field": "chartList",
+      "type": "array",
+      "description": "图表组件配置，数组元素为ChartConfig结构；组件个性化props字段请通过getComponentConfig(componentName)查询对应组件配置。",
+      "defaultValue": []
+    }
+  ]
+}

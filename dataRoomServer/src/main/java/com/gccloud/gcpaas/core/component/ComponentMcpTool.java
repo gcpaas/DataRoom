@@ -18,12 +18,14 @@ public class ComponentMcpTool {
         this.componentConfigResourceService = componentConfigResourceService;
     }
 
-    @Tool(name = "listComponents", description = "获取当前系统可用组件列表。返回componentName、displayName和description；componentName可作为getComponentConfig工具的入参。")
+    @Tool(name = "listComponents", description = "获取当前系统可用组件列表。返回componentName、displayName和description;" +
+            "componentName可作为getComponentConfig工具的入参")
     public Resp<List<ComponentSummary>> listComponents() {
         return Resp.success(componentConfigResourceService.listComponents());
     }
 
-    @Tool(name = "getComponentConfig", description = "根据组件名称获取组件详细配置。参数componentName为组件名称，例如DrText；返回组件基础信息和扁平化配置字段列表")
+    @Tool(name = "getComponentConfig", description = "根据组件名称获取组件详细配置，参数componentName为组件名称，例如DrText；" +
+            "返回组件扁平化配置字段列表，初始化组件时需要将fields直接转为JSON树的结构，只需要fields字段信息")
     public Resp<ComponentConfig> getComponentConfig(String componentName) {
         return Resp.success(componentConfigResourceService.getComponentConfig(componentName));
     }

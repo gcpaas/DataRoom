@@ -4,19 +4,129 @@
   "description": "Tab列表、tab、标签页、标签切换、tablist",
   "fields": [
     {
-      "field": "basic.defaultIndex",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrTabList"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "Tab列表"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 400
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 44
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.basic.defaultIndex",
       "type": "number",
       "description": "默认选中的标签索引（从0开始）",
       "defaultValue": 0
     },
     {
-      "field": "basic.disabled",
+      "field": "props.basic.disabled",
       "type": "boolean",
       "description": "是否禁用整个Tab组",
       "defaultValue": false
     },
     {
-      "field": "layout.direction",
+      "field": "props.layout.direction",
       "type": "enum",
       "description": "排列方向",
       "options": [
@@ -26,7 +136,7 @@
       "defaultValue": "horizontal"
     },
     {
-      "field": "layout.align",
+      "field": "props.layout.align",
       "type": "enum",
       "description": "标签对齐方式",
       "options": [
@@ -38,49 +148,49 @@
       "defaultValue": "start"
     },
     {
-      "field": "tabStyle.fontSize",
+      "field": "props.tabStyle.fontSize",
       "type": "number",
       "description": "标签文本字号（px）",
       "defaultValue": 14
     },
     {
-      "field": "tabStyle.color",
+      "field": "props.tabStyle.color",
       "type": "string",
       "description": "未选中标签文本颜色",
       "defaultValue": "#999999"
     },
     {
-      "field": "tabStyle.activeColor",
+      "field": "props.tabStyle.activeColor",
       "type": "string",
       "description": "选中标签文本颜色",
       "defaultValue": "#FFFFFF"
     },
     {
-      "field": "tabStyle.backgroundColor",
+      "field": "props.tabStyle.backgroundColor",
       "type": "string",
       "description": "未选中标签背景颜色",
       "defaultValue": "transparent"
     },
     {
-      "field": "tabStyle.activeBgColor",
+      "field": "props.tabStyle.activeBgColor",
       "type": "string",
       "description": "选中标签背景颜色",
       "defaultValue": "transparent"
     },
     {
-      "field": "tabStyle.borderRadius",
+      "field": "props.tabStyle.borderRadius",
       "type": "number",
       "description": "标签圆角（px）",
       "defaultValue": 0
     },
     {
-      "field": "tabStyle.gap",
+      "field": "props.tabStyle.gap",
       "type": "number",
       "description": "标签之间的间距（px）",
       "defaultValue": 24
     },
     {
-      "field": "tabStyle.padding",
+      "field": "props.tabStyle.padding",
       "type": "array",
       "description": "标签内边距 [上, 右, 下, 左]（px）",
       "defaultValue": [
@@ -91,55 +201,55 @@
       ]
     },
     {
-      "field": "tabStyle.height",
+      "field": "props.tabStyle.height",
       "type": "number",
       "description": "标签高度（px），0表示自适应",
       "defaultValue": 44
     },
     {
-      "field": "tabStyle.borderBottom.show",
+      "field": "props.tabStyle.borderBottom.show",
       "type": "boolean",
       "description": "是否显示底部边框线",
       "defaultValue": false
     },
     {
-      "field": "tabStyle.borderBottom.color",
+      "field": "props.tabStyle.borderBottom.color",
       "type": "string",
       "description": "边框线颜色",
       "defaultValue": "#333333"
     },
     {
-      "field": "tabStyle.borderBottom.width",
+      "field": "props.tabStyle.borderBottom.width",
       "type": "number",
       "description": "边框线宽度（px）",
       "defaultValue": 1
     },
     {
-      "field": "indicator.show",
+      "field": "props.indicator.show",
       "type": "boolean",
       "description": "是否显示选中指示器",
       "defaultValue": true
     },
     {
-      "field": "indicator.color",
+      "field": "props.indicator.color",
       "type": "string",
       "description": "指示器颜色",
       "defaultValue": "#409EFF"
     },
     {
-      "field": "indicator.height",
+      "field": "props.indicator.height",
       "type": "number",
       "description": "指示器高度/粗细（px）",
       "defaultValue": 3
     },
     {
-      "field": "indicator.borderRadius",
+      "field": "props.indicator.borderRadius",
       "type": "number",
       "description": "指示器圆角（px）",
       "defaultValue": 2
     },
     {
-      "field": "options.staticTabs",
+      "field": "props.options.staticTabs",
       "type": "array",
       "description": "静态标签列表",
       "defaultValue": [
@@ -158,7 +268,7 @@
       ]
     },
     {
-      "field": "globalVar.globalVarName",
+      "field": "props.globalVar.globalVarName",
       "type": "string",
       "description": "绑定的全局变量名称",
       "defaultValue": ""

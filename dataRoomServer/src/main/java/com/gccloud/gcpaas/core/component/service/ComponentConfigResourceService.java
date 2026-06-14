@@ -22,6 +22,7 @@ public class ComponentConfigResourceService {
 
     private static final String BASE_PATH = "mcp/component-configs/";
     private static final String EXPORT_COMMAND = "npm run export:component-configs";
+    private static final List<String> PAGE_CONFIG_NAMES = List.of("PageConfig", "VisualScreenPageConfig");
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -44,21 +45,28 @@ public class ComponentConfigResourceService {
             throw new DataRoomException("组件名称不能为空");
         }
         String normalizedName = componentName.trim();
+        if (PAGE_CONFIG_NAMES.contains(normalizedName)) {
+            return readConfig(normalizedName);
+        }
         List<ComponentSummary> components = listComponents();
         boolean componentExists = components.stream()
                 .anyMatch(component -> StringUtils.equals(component.getComponentName(), normalizedName));
         if (!componentExists) {
             throw new DataRoomException("组件不存在: " + normalizedName + availableComponentNamesMessage(components));
         }
-        ClassPathResource resource = new ClassPathResource(BASE_PATH + normalizedName + ".config.json");
+        return readConfig(normalizedName);
+    }
+
+    private ComponentConfig readConfig(String configName) {
+        ClassPathResource resource = new ClassPathResource(BASE_PATH + configName + ".config.json");
         if (!resource.exists()) {
-            throw new DataRoomException("组件配置文件不存在: " + normalizedName + "，请先执行 " + EXPORT_COMMAND);
+            throw new DataRoomException("组件配置文件不存在: " + configName + "，请先执行 " + EXPORT_COMMAND);
         }
         try (InputStream inputStream = resource.getInputStream()) {
             return objectMapper.readValue(inputStream, ComponentConfig.class);
         } catch (IOException e) {
             log.error(ExceptionUtils.getStackTrace(e));
-            throw new DataRoomException("组件配置文件读取失败: " + normalizedName, e);
+            throw new DataRoomException("组件配置文件读取失败: " + configName, e);
         }
     }
 

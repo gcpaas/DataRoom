@@ -4,61 +4,171 @@
   "description": "CSS实现的进度条组件，以水平条形展示数值进度，支持渐变、圆角、动画及多种标签格式",
   "fields": [
     {
-      "field": "value.current",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrProgressBar"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "进度条"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 300
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 60
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.value.current",
       "type": "number",
       "description": "当前进度值（无数据集绑定时使用此固定值）",
       "defaultValue": 65
     },
     {
-      "field": "value.max",
+      "field": "props.value.max",
       "type": "number",
       "description": "最大值（进度条满格对应的值）",
       "defaultValue": 100
     },
     {
-      "field": "bar.height",
+      "field": "props.bar.height",
       "type": "number",
       "description": "进度条高度(px)",
       "defaultValue": 20
     },
     {
-      "field": "bar.fillColor",
+      "field": "props.bar.fillColor",
       "type": "string",
       "description": "进度填充颜色（非渐变模式时使用）",
       "defaultValue": "#5470c6"
     },
     {
-      "field": "bar.backgroundColor",
+      "field": "props.bar.backgroundColor",
       "type": "string",
       "description": "进度条轨道背景颜色",
       "defaultValue": "rgba(255, 255, 255, 0.1)"
     },
     {
-      "field": "bar.borderRadius",
+      "field": "props.bar.borderRadius",
       "type": "number",
       "description": "进度条圆角(px)",
       "defaultValue": 10
     },
     {
-      "field": "bar.gradient.enabled",
+      "field": "props.bar.gradient.enabled",
       "type": "boolean",
       "description": "是否启用渐变",
       "defaultValue": false
     },
     {
-      "field": "bar.gradient.startColor",
+      "field": "props.bar.gradient.startColor",
       "type": "string",
       "description": "渐变起始颜色",
       "defaultValue": "#5470c6"
     },
     {
-      "field": "bar.gradient.endColor",
+      "field": "props.bar.gradient.endColor",
       "type": "string",
       "description": "渐变结束颜色",
       "defaultValue": "#73c0de"
     },
     {
-      "field": "bar.gradient.direction",
+      "field": "props.bar.gradient.direction",
       "type": "enum",
       "description": "渐变方向",
       "options": [
@@ -68,13 +178,13 @@
       "defaultValue": "horizontal"
     },
     {
-      "field": "label.show",
+      "field": "props.label.show",
       "type": "boolean",
       "description": "是否显示标签",
       "defaultValue": true
     },
     {
-      "field": "label.position",
+      "field": "props.label.position",
       "type": "enum",
       "description": "标签位置",
       "options": [
@@ -85,19 +195,19 @@
       "defaultValue": "outside"
     },
     {
-      "field": "label.fontSize",
+      "field": "props.label.fontSize",
       "type": "number",
       "description": "标签字号(px)",
       "defaultValue": 14
     },
     {
-      "field": "label.color",
+      "field": "props.label.color",
       "type": "string",
       "description": "标签颜色",
       "defaultValue": "#ffffff"
     },
     {
-      "field": "label.fontWeight",
+      "field": "props.label.fontWeight",
       "type": "enum",
       "description": "标签字重",
       "options": [
@@ -110,7 +220,7 @@
       "defaultValue": "normal"
     },
     {
-      "field": "label.format",
+      "field": "props.label.format",
       "type": "enum",
       "description": "标签内容格式",
       "options": [
@@ -121,55 +231,55 @@
       "defaultValue": "percent"
     },
     {
-      "field": "label.customFormat",
+      "field": "props.label.customFormat",
       "type": "string",
       "description": "自定义格式模板",
       "defaultValue": "{percent}%"
     },
     {
-      "field": "track.backgroundColor",
+      "field": "props.track.backgroundColor",
       "type": "string",
       "description": "轨道背景颜色",
       "defaultValue": "rgba(255, 255, 255, 0.1)"
     },
     {
-      "field": "track.borderRadius",
+      "field": "props.track.borderRadius",
       "type": "number",
       "description": "轨道圆角(px)",
       "defaultValue": 10
     },
     {
-      "field": "border.show",
+      "field": "props.border.show",
       "type": "boolean",
       "description": "是否显示边框",
       "defaultValue": false
     },
     {
-      "field": "border.color",
+      "field": "props.border.color",
       "type": "string",
       "description": "边框颜色",
       "defaultValue": "#444444"
     },
     {
-      "field": "border.width",
+      "field": "props.border.width",
       "type": "number",
       "description": "边框宽度(px)",
       "defaultValue": 1
     },
     {
-      "field": "title.show",
+      "field": "props.title.show",
       "type": "boolean",
       "description": "是否显示标题",
       "defaultValue": false
     },
     {
-      "field": "title.text",
+      "field": "props.title.text",
       "type": "string",
       "description": "标题文字",
       "defaultValue": ""
     },
     {
-      "field": "title.position",
+      "field": "props.title.position",
       "type": "enum",
       "description": "标题位置",
       "options": [
@@ -179,37 +289,37 @@
       "defaultValue": "left"
     },
     {
-      "field": "title.fontSize",
+      "field": "props.title.fontSize",
       "type": "number",
       "description": "标题字号(px)",
       "defaultValue": 14
     },
     {
-      "field": "title.color",
+      "field": "props.title.color",
       "type": "string",
       "description": "标题颜色",
       "defaultValue": "#cccccc"
     },
     {
-      "field": "title.width",
+      "field": "props.title.width",
       "type": "number",
       "description": "标题区域宽度(px)，仅position为left时有效",
       "defaultValue": 80
     },
     {
-      "field": "animation.enabled",
+      "field": "props.animation.enabled",
       "type": "boolean",
       "description": "是否启用进度动画",
       "defaultValue": true
     },
     {
-      "field": "animation.duration",
+      "field": "props.animation.duration",
       "type": "number",
       "description": "动画时长(ms)",
       "defaultValue": 1000
     },
     {
-      "field": "animation.easing",
+      "field": "props.animation.easing",
       "type": "enum",
       "description": "动画缓动函数",
       "options": [

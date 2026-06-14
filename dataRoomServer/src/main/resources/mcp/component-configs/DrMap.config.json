@@ -4,7 +4,117 @@
   "description": "地图、行政区、GeoJSON、标记点、飞线",
   "fields": [
     {
-      "field": "source.mode",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrMap"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "地图"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 20
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 20
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.source.mode",
       "type": "enum",
       "description": "mode",
       "options": [
@@ -14,49 +124,49 @@
       "defaultValue": "geoJson"
     },
     {
-      "field": "source.regionCode",
+      "field": "props.source.regionCode",
       "type": "string",
       "description": "regionCode",
       "defaultValue": "340000"
     },
     {
-      "field": "source.showSouthChinaSea",
+      "field": "props.source.showSouthChinaSea",
       "type": "boolean",
       "description": "showSouthChinaSea",
       "defaultValue": true
     },
     {
-      "field": "source.enableDrillDown",
+      "field": "props.source.enableDrillDown",
       "type": "boolean",
       "description": "enableDrillDown",
       "defaultValue": false
     },
     {
-      "field": "source.onlineProvider.apiKey",
+      "field": "props.source.onlineProvider.apiKey",
       "type": "string",
       "description": "apiKey",
       "defaultValue": ""
     },
     {
-      "field": "source.onlineProvider.style",
+      "field": "props.source.onlineProvider.style",
       "type": "string",
       "description": "style",
       "defaultValue": "dark"
     },
     {
-      "field": "source.onlineProvider.customStyleId",
+      "field": "props.source.onlineProvider.customStyleId",
       "type": "string",
       "description": "customStyleId",
       "defaultValue": ""
     },
     {
-      "field": "source.onlineProvider.language",
+      "field": "props.source.onlineProvider.language",
       "type": "string",
       "description": "language",
       "defaultValue": "zh_cn"
     },
     {
-      "field": "view.center",
+      "field": "props.view.center",
       "type": "array",
       "description": "center",
       "defaultValue": [
@@ -65,19 +175,19 @@
       ]
     },
     {
-      "field": "view.zoom",
+      "field": "props.view.zoom",
       "type": "number",
       "description": "zoom",
       "defaultValue": 1
     },
     {
-      "field": "view.roam",
+      "field": "props.view.roam",
       "type": "boolean",
       "description": "roam",
       "defaultValue": false
     },
     {
-      "field": "view.viewMode",
+      "field": "props.view.viewMode",
       "type": "enum",
       "description": "viewMode",
       "options": [
@@ -87,25 +197,25 @@
       "defaultValue": "2D"
     },
     {
-      "field": "view.pitch",
+      "field": "props.view.pitch",
       "type": "number",
       "description": "pitch",
       "defaultValue": 60
     },
     {
-      "field": "view.skyColor",
+      "field": "props.view.skyColor",
       "type": "string",
       "description": "skyColor",
       "defaultValue": "#53A9DE"
     },
     {
-      "field": "view.showOnlineLabel",
+      "field": "props.view.showOnlineLabel",
       "type": "boolean",
       "description": "showOnlineLabel",
       "defaultValue": true
     },
     {
-      "field": "view.onlineFeatures",
+      "field": "props.view.onlineFeatures",
       "type": "array",
       "description": "onlineFeatures",
       "defaultValue": [
@@ -116,7 +226,7 @@
       ]
     },
     {
-      "field": "regionStyle.areaGradient",
+      "field": "props.regionStyle.areaGradient",
       "type": "array",
       "description": "areaGradient",
       "defaultValue": [
@@ -125,31 +235,31 @@
       ]
     },
     {
-      "field": "regionStyle.borderColor",
+      "field": "props.regionStyle.borderColor",
       "type": "string",
       "description": "borderColor",
       "defaultValue": "#7babea"
     },
     {
-      "field": "regionStyle.borderWidth",
+      "field": "props.regionStyle.borderWidth",
       "type": "number",
       "description": "borderWidth",
       "defaultValue": 1
     },
     {
-      "field": "regionStyle.shadowColor",
+      "field": "props.regionStyle.shadowColor",
       "type": "string",
       "description": "shadowColor",
       "defaultValue": "transparent"
     },
     {
-      "field": "regionStyle.shadowBlur",
+      "field": "props.regionStyle.shadowBlur",
       "type": "number",
       "description": "shadowBlur",
       "defaultValue": 0
     },
     {
-      "field": "regionStyle.shadowOffset",
+      "field": "props.regionStyle.shadowOffset",
       "type": "array",
       "description": "shadowOffset",
       "defaultValue": [
@@ -158,67 +268,67 @@
       ]
     },
     {
-      "field": "regionLabel.show",
+      "field": "props.regionLabel.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "regionLabel.fontSize",
+      "field": "props.regionLabel.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 10
     },
     {
-      "field": "regionLabel.color",
+      "field": "props.regionLabel.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#333333"
     },
     {
-      "field": "emphasis.disabled",
+      "field": "props.emphasis.disabled",
       "type": "boolean",
       "description": "disabled",
       "defaultValue": false
     },
     {
-      "field": "emphasis.areaColor",
+      "field": "props.emphasis.areaColor",
       "type": "string",
       "description": "areaColor",
       "defaultValue": "#4d90e8"
     },
     {
-      "field": "emphasis.borderWidth",
+      "field": "props.emphasis.borderWidth",
       "type": "number",
       "description": "borderWidth",
       "defaultValue": 1
     },
     {
-      "field": "emphasis.shadowColor",
+      "field": "props.emphasis.shadowColor",
       "type": "string",
       "description": "shadowColor",
       "defaultValue": "transparent"
     },
     {
-      "field": "emphasis.label.fontSize",
+      "field": "props.emphasis.label.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 12
     },
     {
-      "field": "emphasis.label.color",
+      "field": "props.emphasis.label.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#FFFFFF"
     },
     {
-      "field": "visualMap.show",
+      "field": "props.visualMap.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "visualMap.orient",
+      "field": "props.visualMap.orient",
       "type": "enum",
       "description": "orient",
       "options": [
@@ -228,7 +338,7 @@
       "defaultValue": "vertical"
     },
     {
-      "field": "visualMap.pieces",
+      "field": "props.visualMap.pieces",
       "type": "array",
       "description": "pieces",
       "defaultValue": [
@@ -263,7 +373,7 @@
       ]
     },
     {
-      "field": "visualMap.colors",
+      "field": "props.visualMap.colors",
       "type": "array",
       "description": "colors",
       "defaultValue": [
@@ -276,19 +386,19 @@
       ]
     },
     {
-      "field": "visualMap.textStyle.color",
+      "field": "props.visualMap.textStyle.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#FFFFFF"
     },
     {
-      "field": "marker.show",
+      "field": "props.marker.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "marker.type",
+      "field": "props.marker.type",
       "type": "enum",
       "description": "type",
       "options": [
@@ -300,49 +410,49 @@
       "defaultValue": "effectScatter"
     },
     {
-      "field": "marker.symbolSize",
+      "field": "props.marker.symbolSize",
       "type": "number",
       "description": "symbolSize",
       "defaultValue": 4
     },
     {
-      "field": "marker.color",
+      "field": "props.marker.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#FFFFFF"
     },
     {
-      "field": "marker.borderColor",
+      "field": "props.marker.borderColor",
       "type": "string",
       "description": "borderColor",
       "defaultValue": "rgba(225, 255, 255, 1)"
     },
     {
-      "field": "marker.borderWidth",
+      "field": "props.marker.borderWidth",
       "type": "number",
       "description": "borderWidth",
       "defaultValue": 4
     },
     {
-      "field": "marker.ripple.show",
+      "field": "props.marker.ripple.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "marker.ripple.scale",
+      "field": "props.marker.ripple.scale",
       "type": "number",
       "description": "scale",
       "defaultValue": 6
     },
     {
-      "field": "marker.ripple.color",
+      "field": "props.marker.ripple.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#FFFFFF"
     },
     {
-      "field": "marker.ripple.brushType",
+      "field": "props.marker.ripple.brushType",
       "type": "enum",
       "description": "brushType",
       "options": [
@@ -352,13 +462,13 @@
       "defaultValue": "fill"
     },
     {
-      "field": "marker.label.show",
+      "field": "props.marker.label.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "marker.label.position",
+      "field": "props.marker.label.position",
       "type": "enum",
       "description": "position",
       "options": [
@@ -371,19 +481,19 @@
       "defaultValue": "bottom"
     },
     {
-      "field": "marker.label.fontSize",
+      "field": "props.marker.label.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 11
     },
     {
-      "field": "marker.label.color",
+      "field": "props.marker.label.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#FFFFFF"
     },
     {
-      "field": "marker.label.offset",
+      "field": "props.marker.label.offset",
       "type": "array",
       "description": "offset",
       "defaultValue": [
@@ -392,73 +502,73 @@
       ]
     },
     {
-      "field": "flowLine.show",
+      "field": "props.flowLine.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "flowLine.color",
+      "field": "props.flowLine.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#4fb6d2"
     },
     {
-      "field": "flowLine.width",
+      "field": "props.flowLine.width",
       "type": "number",
       "description": "width",
       "defaultValue": 1
     },
     {
-      "field": "flowLine.opacity",
+      "field": "props.flowLine.opacity",
       "type": "number",
       "description": "opacity",
       "defaultValue": 0.1
     },
     {
-      "field": "flowLine.curveness",
+      "field": "props.flowLine.curveness",
       "type": "number",
       "description": "curveness",
       "defaultValue": 0.3
     },
     {
-      "field": "flowLine.effect.show",
+      "field": "props.flowLine.effect.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "flowLine.effect.period",
+      "field": "props.flowLine.effect.period",
       "type": "number",
       "description": "period",
       "defaultValue": 4
     },
     {
-      "field": "flowLine.effect.trailLength",
+      "field": "props.flowLine.effect.trailLength",
       "type": "number",
       "description": "trailLength",
       "defaultValue": 0.4
     },
     {
-      "field": "flowLine.effect.symbol",
+      "field": "props.flowLine.effect.symbol",
       "type": "string",
       "description": "symbol",
       "defaultValue": "arrow"
     },
     {
-      "field": "flowLine.effect.symbolSize",
+      "field": "props.flowLine.effect.symbolSize",
       "type": "number",
       "description": "symbolSize",
       "defaultValue": 7
     },
     {
-      "field": "tooltip.show",
+      "field": "props.tooltip.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "tooltip.trigger",
+      "field": "props.tooltip.trigger",
       "type": "enum",
       "description": "trigger",
       "options": [
@@ -467,67 +577,67 @@
       "defaultValue": "item"
     },
     {
-      "field": "tooltip.backgroundColor",
+      "field": "props.tooltip.backgroundColor",
       "type": "string",
       "description": "backgroundColor",
       "defaultValue": "#FFFFFF"
     },
     {
-      "field": "tooltip.borderColor",
+      "field": "props.tooltip.borderColor",
       "type": "string",
       "description": "borderColor",
       "defaultValue": "#FFFFFF"
     },
     {
-      "field": "tooltip.textStyle.fontSize",
+      "field": "props.tooltip.textStyle.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 12
     },
     {
-      "field": "tooltip.textStyle.color",
+      "field": "props.tooltip.textStyle.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#333333"
     },
     {
-      "field": "backControl.text",
+      "field": "props.backControl.text",
       "type": "string",
       "description": "text",
       "defaultValue": "返回上级"
     },
     {
-      "field": "backControl.fontSize",
+      "field": "props.backControl.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 20
     },
     {
-      "field": "backControl.color",
+      "field": "props.backControl.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#FFFFFF"
     },
     {
-      "field": "onlineLayers.satellite.show",
+      "field": "props.onlineLayers.satellite.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "onlineLayers.satellite.zIndex",
+      "field": "props.onlineLayers.satellite.zIndex",
       "type": "number",
       "description": "zIndex",
       "defaultValue": 1
     },
     {
-      "field": "onlineLayers.satellite.opacity",
+      "field": "props.onlineLayers.satellite.opacity",
       "type": "number",
       "description": "opacity",
       "defaultValue": 1
     },
     {
-      "field": "onlineLayers.satellite.zoomRange",
+      "field": "props.onlineLayers.satellite.zoomRange",
       "type": "array",
       "description": "zoomRange",
       "defaultValue": [
@@ -536,25 +646,25 @@
       ]
     },
     {
-      "field": "onlineLayers.roadNet.show",
+      "field": "props.onlineLayers.roadNet.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "onlineLayers.roadNet.zIndex",
+      "field": "props.onlineLayers.roadNet.zIndex",
       "type": "number",
       "description": "zIndex",
       "defaultValue": 2
     },
     {
-      "field": "onlineLayers.roadNet.opacity",
+      "field": "props.onlineLayers.roadNet.opacity",
       "type": "number",
       "description": "opacity",
       "defaultValue": 1
     },
     {
-      "field": "onlineLayers.roadNet.zoomRange",
+      "field": "props.onlineLayers.roadNet.zoomRange",
       "type": "array",
       "description": "zoomRange",
       "defaultValue": [
@@ -563,25 +673,25 @@
       ]
     },
     {
-      "field": "onlineLayers.traffic.show",
+      "field": "props.onlineLayers.traffic.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "onlineLayers.traffic.zIndex",
+      "field": "props.onlineLayers.traffic.zIndex",
       "type": "number",
       "description": "zIndex",
       "defaultValue": 3
     },
     {
-      "field": "onlineLayers.traffic.opacity",
+      "field": "props.onlineLayers.traffic.opacity",
       "type": "number",
       "description": "opacity",
       "defaultValue": 1
     },
     {
-      "field": "onlineLayers.traffic.zoomRange",
+      "field": "props.onlineLayers.traffic.zoomRange",
       "type": "array",
       "description": "zoomRange",
       "defaultValue": [

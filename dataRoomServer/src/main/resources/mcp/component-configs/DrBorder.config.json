@@ -4,7 +4,117 @@
   "description": "边框、装饰边框、DataV边框",
   "fields": [
     {
-      "field": "borderType",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrBorder"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "边框"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 400
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 240
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.borderType",
       "type": "enum",
       "description": "borderType",
       "options": [
@@ -25,43 +135,43 @@
       "defaultValue": "BorderBox1"
     },
     {
-      "field": "colors",
+      "field": "props.colors",
       "type": "array",
       "description": "colors",
       "defaultValue": []
     },
     {
-      "field": "backgroundColor",
+      "field": "props.backgroundColor",
       "type": "string",
       "description": "backgroundColor",
       "defaultValue": "transparent"
     },
     {
-      "field": "reverse",
+      "field": "props.reverse",
       "type": "boolean",
       "description": "reverse",
       "defaultValue": false
     },
     {
-      "field": "dur",
+      "field": "props.dur",
       "type": "number",
       "description": "dur",
       "defaultValue": null
     },
     {
-      "field": "title",
+      "field": "props.title",
       "type": "string",
       "description": "title",
       "defaultValue": ""
     },
     {
-      "field": "titleWidth",
+      "field": "props.titleWidth",
       "type": "number",
       "description": "titleWidth",
       "defaultValue": 250
     },
     {
-      "field": "animate",
+      "field": "props.animate",
       "type": "boolean",
       "description": "animate",
       "defaultValue": true

@@ -38,6 +38,17 @@ class ComponentConfigResourceServiceTest {
     }
 
     @Test
+    void getComponentConfigReadsPageConfigFileOutsideComponentIndex() {
+        ComponentConfig config = service.getComponentConfig("PageConfig");
+
+        assertEquals("PageConfig", config.getComponentName());
+        assertEquals("页面配置", config.getDisplayName());
+        assertEquals("pageType", config.getFields().get(0).getField());
+        assertEquals("page", config.getFields().get(0).getDefaultValue());
+        assertEquals("chartList", config.getFields().get(2).getField());
+    }
+
+    @Test
     void getComponentConfigRejectsBlankName() {
         DataRoomException exception = assertThrows(DataRoomException.class, () -> service.getComponentConfig(" "));
 

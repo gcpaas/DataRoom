@@ -121,6 +121,12 @@ public class PageController {
         if (StringUtils.isBlank(pageEntity.getCode())) {
             pageEntity.setCode(CodeWorker.generateCode(null));
         }
+        if (StringUtils.isBlank(pageEntity.getParentCode())) {
+            pageEntity.setParentCode("root");
+        }
+        if (StringUtils.isBlank(pageEntity.getId())) {
+            pageEntity.setId(null);
+        }
         pageEntity.setPageStatus(PageStatus.DESIGN);
         pageService.save(pageEntity);
         if (PageType.DIRECTORY != pageEntity.getPageType()) {
@@ -145,8 +151,6 @@ public class PageController {
      */
     @PostMapping("/update")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
-    @Tool(name = "updatePage", description = "更新页面。参数pageDesignEntity为页面配置信息，返回页面ID")
-    @OperationLogMeta(actionType = "更新页面", actionDesc = "更新页面", businessType = "updatePage", businessName = "更新页面", targetIdKey = "code", detailLevel = OperationLogDetailLevel.SUMMARY)
     @Operation(summary = "更新", description = "更新页面")
     public Resp<String> update(@RequestBody PageEntity pageDesignEntity) {
         pageDesignEntity.setUpdateDate(new Date());

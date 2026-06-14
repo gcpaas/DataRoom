@@ -4,7 +4,117 @@
   "description": "周期对比卡、KPI、同比、环比、变化值、变化率、对比分析",
   "fields": [
     {
-      "field": "global.padding",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrPeriodCompareCard"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "周期对比卡"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 360
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 160
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 0
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 0
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.global.padding",
       "type": "array",
       "description": "padding",
       "defaultValue": [
@@ -15,31 +125,31 @@
       ]
     },
     {
-      "field": "global.backgroundColor",
+      "field": "props.global.backgroundColor",
       "type": "string",
       "description": "backgroundColor",
       "defaultValue": "rgba(0, 0, 0, 0)"
     },
     {
-      "field": "global.borderColor",
+      "field": "props.global.borderColor",
       "type": "string",
       "description": "borderColor",
       "defaultValue": "rgba(0, 0, 0, 0)"
     },
     {
-      "field": "global.borderWidth",
+      "field": "props.global.borderWidth",
       "type": "number",
       "description": "borderWidth",
       "defaultValue": 0
     },
     {
-      "field": "global.borderRadius",
+      "field": "props.global.borderRadius",
       "type": "number",
       "description": "borderRadius",
       "defaultValue": 8
     },
     {
-      "field": "dataMode.mode",
+      "field": "props.dataMode.mode",
       "type": "enum",
       "description": "mode",
       "options": [
@@ -50,13 +160,13 @@
       "defaultValue": "autoFallback"
     },
     {
-      "field": "dataMode.lag",
+      "field": "props.dataMode.lag",
       "type": "number",
       "description": "lag",
       "defaultValue": 1
     },
     {
-      "field": "dataMode.sortByTime",
+      "field": "props.dataMode.sortByTime",
       "type": "enum",
       "description": "sortByTime",
       "options": [
@@ -67,7 +177,7 @@
       "defaultValue": "asc"
     },
     {
-      "field": "dataMode.zeroPolicy",
+      "field": "props.dataMode.zeroPolicy",
       "type": "enum",
       "description": "zeroPolicy",
       "options": [
@@ -78,31 +188,31 @@
       "defaultValue": "empty"
     },
     {
-      "field": "title.show",
+      "field": "props.title.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "title.text",
+      "field": "props.title.text",
       "type": "string",
       "description": "text",
       "defaultValue": "周期对比"
     },
     {
-      "field": "title.fontSize",
+      "field": "props.title.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 14
     },
     {
-      "field": "title.color",
+      "field": "props.title.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#909399"
     },
     {
-      "field": "title.fontWeight",
+      "field": "props.title.fontWeight",
       "type": "enum",
       "description": "fontWeight",
       "options": [
@@ -113,19 +223,19 @@
       "defaultValue": "normal"
     },
     {
-      "field": "current.label",
+      "field": "props.current.label",
       "type": "string",
       "description": "label",
       "defaultValue": "当前"
     },
     {
-      "field": "current.defaultValue",
+      "field": "props.current.defaultValue",
       "type": "number",
       "description": "defaultValue",
       "defaultValue": 1280
     },
     {
-      "field": "current.format",
+      "field": "props.current.format",
       "type": "enum",
       "description": "format",
       "options": [
@@ -140,31 +250,31 @@
       "defaultValue": "thousand"
     },
     {
-      "field": "current.prefix",
+      "field": "props.current.prefix",
       "type": "string",
       "description": "prefix",
       "defaultValue": ""
     },
     {
-      "field": "current.suffix",
+      "field": "props.current.suffix",
       "type": "string",
       "description": "suffix",
       "defaultValue": ""
     },
     {
-      "field": "current.fontSize",
+      "field": "props.current.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 34
     },
     {
-      "field": "current.color",
+      "field": "props.current.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#303133"
     },
     {
-      "field": "current.fontWeight",
+      "field": "props.current.fontWeight",
       "type": "enum",
       "description": "fontWeight",
       "options": [
@@ -175,31 +285,31 @@
       "defaultValue": "bold"
     },
     {
-      "field": "comparison.label",
+      "field": "props.comparison.label",
       "type": "string",
       "description": "label",
       "defaultValue": "对比"
     },
     {
-      "field": "comparison.showPreviousValue",
+      "field": "props.comparison.showPreviousValue",
       "type": "boolean",
       "description": "showPreviousValue",
       "defaultValue": true
     },
     {
-      "field": "comparison.showChangeValue",
+      "field": "props.comparison.showChangeValue",
       "type": "boolean",
       "description": "showChangeValue",
       "defaultValue": true
     },
     {
-      "field": "comparison.showChangeRate",
+      "field": "props.comparison.showChangeRate",
       "type": "boolean",
       "description": "showChangeRate",
       "defaultValue": true
     },
     {
-      "field": "comparison.rateFormat",
+      "field": "props.comparison.rateFormat",
       "type": "enum",
       "description": "rateFormat",
       "options": [
@@ -210,25 +320,25 @@
       "defaultValue": "percent2"
     },
     {
-      "field": "comparison.changeValuePrefix",
+      "field": "props.comparison.changeValuePrefix",
       "type": "string",
       "description": "changeValuePrefix",
       "defaultValue": ""
     },
     {
-      "field": "comparison.changeValueSuffix",
+      "field": "props.comparison.changeValueSuffix",
       "type": "string",
       "description": "changeValueSuffix",
       "defaultValue": ""
     },
     {
-      "field": "indicator.show",
+      "field": "props.indicator.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "indicator.type",
+      "field": "props.indicator.type",
       "type": "enum",
       "description": "type",
       "options": [
@@ -240,7 +350,7 @@
       "defaultValue": "arrow"
     },
     {
-      "field": "indicator.positiveDirection",
+      "field": "props.indicator.positiveDirection",
       "type": "enum",
       "description": "positiveDirection",
       "options": [
@@ -251,31 +361,31 @@
       "defaultValue": "increaseGood"
     },
     {
-      "field": "indicator.positiveColor",
+      "field": "props.indicator.positiveColor",
       "type": "string",
       "description": "positiveColor",
       "defaultValue": "#67c23a"
     },
     {
-      "field": "indicator.negativeColor",
+      "field": "props.indicator.negativeColor",
       "type": "string",
       "description": "negativeColor",
       "defaultValue": "#f56c6c"
     },
     {
-      "field": "indicator.neutralColor",
+      "field": "props.indicator.neutralColor",
       "type": "string",
       "description": "neutralColor",
       "defaultValue": "#909399"
     },
     {
-      "field": "indicator.iconSize",
+      "field": "props.indicator.iconSize",
       "type": "number",
       "description": "iconSize",
       "defaultValue": 14
     },
     {
-      "field": "layout.mode",
+      "field": "props.layout.mode",
       "type": "enum",
       "description": "mode",
       "options": [
@@ -286,7 +396,7 @@
       "defaultValue": "compact"
     },
     {
-      "field": "layout.horizontalAlign",
+      "field": "props.layout.horizontalAlign",
       "type": "enum",
       "description": "horizontalAlign",
       "options": [
@@ -297,37 +407,37 @@
       "defaultValue": "left"
     },
     {
-      "field": "layout.gap",
+      "field": "props.layout.gap",
       "type": "number",
       "description": "gap",
       "defaultValue": 10
     },
     {
-      "field": "layout.labelWidth",
+      "field": "props.layout.labelWidth",
       "type": "number",
       "description": "labelWidth",
       "defaultValue": 0
     },
     {
-      "field": "textStyle.labelFontSize",
+      "field": "props.textStyle.labelFontSize",
       "type": "number",
       "description": "labelFontSize",
       "defaultValue": 12
     },
     {
-      "field": "textStyle.labelColor",
+      "field": "props.textStyle.labelColor",
       "type": "string",
       "description": "labelColor",
       "defaultValue": "#909399"
     },
     {
-      "field": "textStyle.compareFontSize",
+      "field": "props.textStyle.compareFontSize",
       "type": "number",
       "description": "compareFontSize",
       "defaultValue": 14
     },
     {
-      "field": "textStyle.compareFontWeight",
+      "field": "props.textStyle.compareFontWeight",
       "type": "enum",
       "description": "compareFontWeight",
       "options": [
@@ -338,19 +448,19 @@
       "defaultValue": "normal"
     },
     {
-      "field": "animation.enabled",
+      "field": "props.animation.enabled",
       "type": "boolean",
       "description": "enabled",
       "defaultValue": true
     },
     {
-      "field": "animation.duration",
+      "field": "props.animation.duration",
       "type": "number",
       "description": "duration",
       "defaultValue": 800
     },
     {
-      "field": "animation.easing",
+      "field": "props.animation.easing",
       "type": "enum",
       "description": "easing",
       "options": [

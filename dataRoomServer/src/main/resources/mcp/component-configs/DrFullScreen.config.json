@@ -4,97 +4,207 @@
   "description": "全屏切换、fullscreen、全屏、退出全屏",
   "fields": [
     {
-      "field": "icon.enterIcon",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrFullScreen"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "全屏切换"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 40
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 40
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.icon.enterIcon",
       "type": "string",
       "description": "进入全屏时显示的图标（图标名称）",
       "defaultValue": "FullScreen"
     },
     {
-      "field": "icon.exitIcon",
+      "field": "props.icon.exitIcon",
       "type": "string",
       "description": "退出全屏时显示的图标（图标名称）",
       "defaultValue": "ScaleToOriginal"
     },
     {
-      "field": "icon.iconSize",
+      "field": "props.icon.iconSize",
       "type": "number",
       "description": "图标大小（px）",
       "defaultValue": 24
     },
     {
-      "field": "icon.iconColor",
+      "field": "props.icon.iconColor",
       "type": "string",
       "description": "图标颜色",
       "defaultValue": "#ffffff"
     },
     {
-      "field": "icon.hoverColor",
+      "field": "props.icon.hoverColor",
       "type": "string",
       "description": "鼠标悬停时的图标颜色",
       "defaultValue": "#409EFF"
     },
     {
-      "field": "tooltip.show",
+      "field": "props.tooltip.show",
       "type": "boolean",
       "description": "是否显示悬停提示文字",
       "defaultValue": true
     },
     {
-      "field": "tooltip.enterText",
+      "field": "props.tooltip.enterText",
       "type": "string",
       "description": "进入全屏的提示文字",
       "defaultValue": "进入全屏"
     },
     {
-      "field": "tooltip.exitText",
+      "field": "props.tooltip.exitText",
       "type": "string",
       "description": "退出全屏的提示文字",
       "defaultValue": "退出全屏"
     },
     {
-      "field": "style.backgroundColor",
+      "field": "props.style.backgroundColor",
       "type": "string",
       "description": "背景颜色",
       "defaultValue": "rgba(0, 0, 0, 0.5)"
     },
     {
-      "field": "style.borderRadius",
+      "field": "props.style.borderRadius",
       "type": "number",
       "description": "圆角半径（px）",
       "defaultValue": 50
     },
     {
-      "field": "style.border.show",
+      "field": "props.style.border.show",
       "type": "boolean",
       "description": "是否显示边框",
       "defaultValue": false
     },
     {
-      "field": "style.border.color",
+      "field": "props.style.border.color",
       "type": "string",
       "description": "边框颜色",
       "defaultValue": "#333333"
     },
     {
-      "field": "style.border.width",
+      "field": "props.style.border.width",
       "type": "number",
       "description": "边框宽度",
       "defaultValue": 1
     },
     {
-      "field": "style.padding",
+      "field": "props.style.padding",
       "type": "number",
       "description": "内边距（px）",
       "defaultValue": 8
     },
     {
-      "field": "style.cursor",
+      "field": "props.style.cursor",
       "type": "string",
       "description": "鼠标样式",
       "defaultValue": "pointer"
     },
     {
-      "field": "style.alwaysShow",
+      "field": "props.style.alwaysShow",
       "type": "boolean",
       "description": "是否常驻显示（关闭时仅鼠标悬停可见）",
       "defaultValue": true

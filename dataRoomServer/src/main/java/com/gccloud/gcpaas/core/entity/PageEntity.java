@@ -28,7 +28,7 @@ public class PageEntity extends BaseEntity {
     /**
      * 页面类型
      */
-    @Schema(description = "页面类型")
+    @Schema(description = "页面类型, 使用字符串传入时需要转为驼峰法格式")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private PageType pageType = PageType.PAGE;
     /**
@@ -49,6 +49,6 @@ public class PageEntity extends BaseEntity {
     /**
      * 页面状态
      */
-    @Schema(description = "页面状态")
+    @Schema(description = "页面状态，使用字符串传入时需要转为驼峰法格式")
     private PageStatus pageStatus = PageStatus.DESIGN;
 }

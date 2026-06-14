@@ -4,7 +4,117 @@
   "description": "雷达图、radar、蛛网图、能力图",
   "fields": [
     {
-      "field": "global.padding",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrRadarChart"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "雷达图"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 400
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 400
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.global.padding",
       "type": "array",
       "description": "图表内边距 [上, 右, 下, 左] (px)",
       "defaultValue": [
@@ -15,7 +125,7 @@
       ]
     },
     {
-      "field": "radar.shape",
+      "field": "props.radar.shape",
       "type": "enum",
       "description": "形状",
       "options": [
@@ -25,43 +135,43 @@
       "defaultValue": "polygon"
     },
     {
-      "field": "radar.radius",
+      "field": "props.radar.radius",
       "type": "string",
       "description": "半径",
       "defaultValue": "65%"
     },
     {
-      "field": "radar.startAngle",
+      "field": "props.radar.startAngle",
       "type": "number",
       "description": "起始角度",
       "defaultValue": 90
     },
     {
-      "field": "radar.splitNumber",
+      "field": "props.radar.splitNumber",
       "type": "number",
       "description": "分割段数",
       "defaultValue": 5
     },
     {
-      "field": "radar.axisLine.show",
+      "field": "props.radar.axisLine.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "radar.axisLine.color",
+      "field": "props.radar.axisLine.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#cccccc"
     },
     {
-      "field": "radar.axisLine.width",
+      "field": "props.radar.axisLine.width",
       "type": "number",
       "description": "width",
       "defaultValue": 1
     },
     {
-      "field": "radar.axisLine.type",
+      "field": "props.radar.axisLine.type",
       "type": "enum",
       "description": "type",
       "options": [
@@ -72,25 +182,25 @@
       "defaultValue": "solid"
     },
     {
-      "field": "radar.splitLine.show",
+      "field": "props.radar.splitLine.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "radar.splitLine.color",
+      "field": "props.radar.splitLine.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#dddddd"
     },
     {
-      "field": "radar.splitLine.width",
+      "field": "props.radar.splitLine.width",
       "type": "number",
       "description": "width",
       "defaultValue": 1
     },
     {
-      "field": "radar.splitLine.type",
+      "field": "props.radar.splitLine.type",
       "type": "enum",
       "description": "type",
       "options": [
@@ -101,13 +211,13 @@
       "defaultValue": "solid"
     },
     {
-      "field": "radar.splitArea.show",
+      "field": "props.radar.splitArea.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "radar.splitArea.colors",
+      "field": "props.radar.splitArea.colors",
       "type": "array",
       "description": "colors",
       "defaultValue": [
@@ -116,67 +226,67 @@
       ]
     },
     {
-      "field": "radar.axisLabel.show",
+      "field": "props.radar.axisLabel.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "radar.axisLabel.fontSize",
+      "field": "props.radar.axisLabel.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 11
     },
     {
-      "field": "radar.axisLabel.color",
+      "field": "props.radar.axisLabel.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#999999"
     },
     {
-      "field": "indicator.nameStyle.fontSize",
+      "field": "props.indicator.nameStyle.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 12
     },
     {
-      "field": "indicator.nameStyle.color",
+      "field": "props.indicator.nameStyle.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#666666"
     },
     {
-      "field": "indicator.nameStyle.fontWeight",
+      "field": "props.indicator.nameStyle.fontWeight",
       "type": "string",
       "description": "fontWeight",
       "defaultValue": "normal"
     },
     {
-      "field": "indicator.nameStyle.fontFamily",
+      "field": "props.indicator.nameStyle.fontFamily",
       "type": "string",
       "description": "fontFamily",
       "defaultValue": "Microsoft YaHei"
     },
     {
-      "field": "indicator.nameGap",
+      "field": "props.indicator.nameGap",
       "type": "number",
       "description": "名称与轴的距离",
       "defaultValue": 15
     },
     {
-      "field": "indicator.max",
+      "field": "props.indicator.max",
       "type": "number",
       "description": "最大值(null=自动)",
       "defaultValue": null
     },
     {
-      "field": "legend.show",
+      "field": "props.legend.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "legend.position",
+      "field": "props.legend.position",
       "type": "enum",
       "description": "position",
       "options": [
@@ -188,37 +298,37 @@
       "defaultValue": "top"
     },
     {
-      "field": "legend.textStyle.fontSize",
+      "field": "props.legend.textStyle.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 12
     },
     {
-      "field": "legend.textStyle.color",
+      "field": "props.legend.textStyle.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#666666"
     },
     {
-      "field": "legend.textStyle.fontWeight",
+      "field": "props.legend.textStyle.fontWeight",
       "type": "string",
       "description": "fontWeight",
       "defaultValue": "normal"
     },
     {
-      "field": "legend.itemGap",
+      "field": "props.legend.itemGap",
       "type": "number",
       "description": "itemGap",
       "defaultValue": 16
     },
     {
-      "field": "tooltip.show",
+      "field": "props.tooltip.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "tooltip.trigger",
+      "field": "props.tooltip.trigger",
       "type": "enum",
       "description": "trigger",
       "options": [
@@ -227,31 +337,31 @@
       "defaultValue": "item"
     },
     {
-      "field": "tooltip.backgroundColor",
+      "field": "props.tooltip.backgroundColor",
       "type": "string",
       "description": "backgroundColor",
       "defaultValue": "rgba(50, 50, 50, 0.7)"
     },
     {
-      "field": "tooltip.borderColor",
+      "field": "props.tooltip.borderColor",
       "type": "string",
       "description": "borderColor",
       "defaultValue": "transparent"
     },
     {
-      "field": "tooltip.textStyle.fontSize",
+      "field": "props.tooltip.textStyle.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 12
     },
     {
-      "field": "tooltip.textStyle.color",
+      "field": "props.tooltip.textStyle.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#ffffff"
     },
     {
-      "field": "series.colors",
+      "field": "props.series.colors",
       "type": "array",
       "description": "颜色列表",
       "defaultValue": [
@@ -264,13 +374,13 @@
       ]
     },
     {
-      "field": "series.lineWidth",
+      "field": "props.series.lineWidth",
       "type": "number",
       "description": "线宽",
       "defaultValue": 2
     },
     {
-      "field": "series.lineStyle",
+      "field": "props.series.lineStyle",
       "type": "enum",
       "description": "线条样式",
       "options": [
@@ -281,25 +391,25 @@
       "defaultValue": "solid"
     },
     {
-      "field": "series.areaStyle.show",
+      "field": "props.series.areaStyle.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "series.areaStyle.opacity",
+      "field": "props.series.areaStyle.opacity",
       "type": "number",
       "description": "opacity",
       "defaultValue": 0.3
     },
     {
-      "field": "series.symbol.show",
+      "field": "props.series.symbol.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "series.symbol.type",
+      "field": "props.series.symbol.type",
       "type": "enum",
       "description": "type",
       "options": [
@@ -312,37 +422,37 @@
       "defaultValue": "circle"
     },
     {
-      "field": "series.symbol.size",
+      "field": "props.series.symbol.size",
       "type": "number",
       "description": "size",
       "defaultValue": 4
     },
     {
-      "field": "series.symbol.borderWidth",
+      "field": "props.series.symbol.borderWidth",
       "type": "number",
       "description": "borderWidth",
       "defaultValue": 1
     },
     {
-      "field": "series.label.show",
+      "field": "props.series.label.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": false
     },
     {
-      "field": "series.label.fontSize",
+      "field": "props.series.label.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 11
     },
     {
-      "field": "series.label.color",
+      "field": "props.series.label.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#333333"
     },
     {
-      "field": "series.label.format",
+      "field": "props.series.label.format",
       "type": "enum",
       "description": "format",
       "options": [
@@ -358,19 +468,19 @@
       "defaultValue": "default"
     },
     {
-      "field": "animation.enabled",
+      "field": "props.animation.enabled",
       "type": "boolean",
       "description": "enabled",
       "defaultValue": true
     },
     {
-      "field": "animation.duration",
+      "field": "props.animation.duration",
       "type": "number",
       "description": "duration",
       "defaultValue": 1000
     },
     {
-      "field": "animation.easing",
+      "field": "props.animation.easing",
       "type": "enum",
       "description": "easing",
       "options": [

@@ -1,0 +1,67 @@
+{
+  "componentName": "PageConfig",
+  "displayName": "页面配置",
+  "description": "网格化页面设计器页面配置。chartList数组元素为组件配置，需要结合具体组件配置文件填写。",
+  "fields": [
+    {
+      "field": "pageType",
+      "type": "string",
+      "description": "页面类型",
+      "defaultValue": "page"
+    },
+    {
+      "field": "basicConfig.background.fill",
+      "type": "string",
+      "description": "背景填充方式",
+      "defaultValue": "color"
+    },
+    {
+      "field": "basicConfig.background.color",
+      "type": "string",
+      "description": "背景色",
+      "defaultValue": ""
+    },
+    {
+      "field": "basicConfig.background.url",
+      "type": "string",
+      "description": "背景图url",
+      "defaultValue": ""
+    },
+    {
+      "field": "basicConfig.background.opacity",
+      "type": "number",
+      "description": "背景图透明度",
+      "defaultValue": 1
+    },
+    {
+      "field": "basicConfig.background.repeat",
+      "type": "enum",
+      "description": "背景图填充方式",
+      "options": [
+        "no-repeat",
+        "repeat",
+        "repeat-x",
+        "repeat-y"
+      ],
+      "defaultValue": "no-repeat"
+    },
+    {
+      "field": "basicConfig.timers",
+      "type": "array",
+      "description": "定时器配置列表，数组元素为PageTimer结构。",
+      "defaultValue": []
+    },
+    {
+      "field": "globalVariableList",
+      "type": "array",
+      "description": "全局变量，数组元素为GlobalVariable结构。",
+      "defaultValue": []
+    },
+    {
+      "field": "chartList",
+      "type": "array",
+      "description": "图表组件配置，数组元素为ChartConfig结构；组件个性化props字段请通过getComponentConfig(componentName)查询对应组件配置。",
+      "defaultValue": []
+    }
+  ]
+}

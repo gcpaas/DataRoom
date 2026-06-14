@@ -4,7 +4,117 @@
   "description": "饼图、pie、环形图、玫瑰图、占比",
   "fields": [
     {
-      "field": "global.padding",
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，仅仪表盘类型使用"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrPieChart"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "饼图"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 350
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 350
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.global.padding",
       "type": "array",
       "description": "图表内边距 [上, 右, 下, 左] (px)",
       "defaultValue": [
@@ -15,19 +125,19 @@
       ]
     },
     {
-      "field": "pie.innerRadius",
+      "field": "props.pie.innerRadius",
       "type": "number",
       "description": "内半径百分比(0=实心饼图, >0=环形图)",
       "defaultValue": 0
     },
     {
-      "field": "pie.outerRadius",
+      "field": "props.pie.outerRadius",
       "type": "number",
       "description": "外半径百分比",
       "defaultValue": 75
     },
     {
-      "field": "pie.center",
+      "field": "props.pie.center",
       "type": "array",
       "description": "中心位置 [x, y]",
       "defaultValue": [
@@ -36,43 +146,43 @@
       ]
     },
     {
-      "field": "pie.startAngle",
+      "field": "props.pie.startAngle",
       "type": "number",
       "description": "起始角度",
       "defaultValue": 90
     },
     {
-      "field": "pie.roseType",
+      "field": "props.pie.roseType",
       "type": "string",
       "description": "玫瑰图类型",
       "defaultValue": false
     },
     {
-      "field": "pie.borderColor",
+      "field": "props.pie.borderColor",
       "type": "string",
       "description": "扇形边框颜色",
       "defaultValue": "#ffffff"
     },
     {
-      "field": "pie.borderWidth",
+      "field": "props.pie.borderWidth",
       "type": "number",
       "description": "扇形边框宽度",
       "defaultValue": 1
     },
     {
-      "field": "pie.borderRadius",
+      "field": "props.pie.borderRadius",
       "type": "number",
       "description": "扇形圆角",
       "defaultValue": 0
     },
     {
-      "field": "centerContent.show",
+      "field": "props.centerContent.show",
       "type": "boolean",
       "description": "是否显示",
       "defaultValue": false
     },
     {
-      "field": "centerContent.type",
+      "field": "props.centerContent.type",
       "type": "enum",
       "description": "内容类型",
       "options": [
@@ -82,67 +192,67 @@
       "defaultValue": "text"
     },
     {
-      "field": "centerContent.title.text",
+      "field": "props.centerContent.title.text",
       "type": "string",
       "description": "text",
       "defaultValue": "总计"
     },
     {
-      "field": "centerContent.title.fontSize",
+      "field": "props.centerContent.title.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 14
     },
     {
-      "field": "centerContent.title.color",
+      "field": "props.centerContent.title.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#999999"
     },
     {
-      "field": "centerContent.title.fontWeight",
+      "field": "props.centerContent.title.fontWeight",
       "type": "string",
       "description": "fontWeight",
       "defaultValue": "normal"
     },
     {
-      "field": "centerContent.title.offsetY",
+      "field": "props.centerContent.title.offsetY",
       "type": "number",
       "description": "offsetY",
       "defaultValue": -10
     },
     {
-      "field": "centerContent.value.field",
+      "field": "props.centerContent.value.field",
       "type": "string",
       "description": "数值来源字段",
       "defaultValue": ""
     },
     {
-      "field": "centerContent.value.fontSize",
+      "field": "props.centerContent.value.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 24
     },
     {
-      "field": "centerContent.value.color",
+      "field": "props.centerContent.value.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#333333"
     },
     {
-      "field": "centerContent.value.fontWeight",
+      "field": "props.centerContent.value.fontWeight",
       "type": "string",
       "description": "fontWeight",
       "defaultValue": "bold"
     },
     {
-      "field": "centerContent.value.offsetY",
+      "field": "props.centerContent.value.offsetY",
       "type": "number",
       "description": "offsetY",
       "defaultValue": 10
     },
     {
-      "field": "centerContent.value.format",
+      "field": "props.centerContent.value.format",
       "type": "enum",
       "description": "格式化方式",
       "options": [
@@ -158,43 +268,43 @@
       "defaultValue": "default"
     },
     {
-      "field": "centerContent.value.prefix",
+      "field": "props.centerContent.value.prefix",
       "type": "string",
       "description": "前缀",
       "defaultValue": ""
     },
     {
-      "field": "centerContent.value.suffix",
+      "field": "props.centerContent.value.suffix",
       "type": "string",
       "description": "后缀",
       "defaultValue": ""
     },
     {
-      "field": "centerContent.image.url",
+      "field": "props.centerContent.image.url",
       "type": "string",
       "description": "url",
       "defaultValue": ""
     },
     {
-      "field": "centerContent.image.width",
+      "field": "props.centerContent.image.width",
       "type": "number",
       "description": "width",
       "defaultValue": 40
     },
     {
-      "field": "centerContent.image.height",
+      "field": "props.centerContent.image.height",
       "type": "number",
       "description": "height",
       "defaultValue": 40
     },
     {
-      "field": "label.show",
+      "field": "props.label.show",
       "type": "boolean",
       "description": "是否显示",
       "defaultValue": true
     },
     {
-      "field": "label.position",
+      "field": "props.label.position",
       "type": "enum",
       "description": "标签位置",
       "options": [
@@ -205,7 +315,7 @@
       "defaultValue": "outside"
     },
     {
-      "field": "label.content",
+      "field": "props.label.content",
       "type": "enum",
       "description": "标签内容",
       "options": [
@@ -218,61 +328,61 @@
       "defaultValue": "name+percent"
     },
     {
-      "field": "label.fontSize",
+      "field": "props.label.fontSize",
       "type": "number",
       "description": "字号",
       "defaultValue": 12
     },
     {
-      "field": "label.color",
+      "field": "props.label.color",
       "type": "string",
       "description": "颜色",
       "defaultValue": ""
     },
     {
-      "field": "label.fontWeight",
+      "field": "props.label.fontWeight",
       "type": "string",
       "description": "字重",
       "defaultValue": "normal"
     },
     {
-      "field": "label.guideLine.show",
+      "field": "props.label.guideLine.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "label.guideLine.length",
+      "field": "props.label.guideLine.length",
       "type": "number",
       "description": "length",
       "defaultValue": 15
     },
     {
-      "field": "label.guideLine.length2",
+      "field": "props.label.guideLine.length2",
       "type": "number",
       "description": "length2",
       "defaultValue": 20
     },
     {
-      "field": "label.guideLine.lineWidth",
+      "field": "props.label.guideLine.lineWidth",
       "type": "number",
       "description": "lineWidth",
       "defaultValue": 1
     },
     {
-      "field": "label.guideLine.color",
+      "field": "props.label.guideLine.color",
       "type": "string",
       "description": "color",
       "defaultValue": ""
     },
     {
-      "field": "legend.show",
+      "field": "props.legend.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "legend.position",
+      "field": "props.legend.position",
       "type": "enum",
       "description": "position",
       "options": [
@@ -284,37 +394,37 @@
       "defaultValue": "bottom"
     },
     {
-      "field": "legend.textStyle.fontSize",
+      "field": "props.legend.textStyle.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 12
     },
     {
-      "field": "legend.textStyle.color",
+      "field": "props.legend.textStyle.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#666666"
     },
     {
-      "field": "legend.textStyle.fontWeight",
+      "field": "props.legend.textStyle.fontWeight",
       "type": "string",
       "description": "fontWeight",
       "defaultValue": "normal"
     },
     {
-      "field": "legend.itemGap",
+      "field": "props.legend.itemGap",
       "type": "number",
       "description": "itemGap",
       "defaultValue": 16
     },
     {
-      "field": "tooltip.show",
+      "field": "props.tooltip.show",
       "type": "boolean",
       "description": "show",
       "defaultValue": true
     },
     {
-      "field": "tooltip.trigger",
+      "field": "props.tooltip.trigger",
       "type": "enum",
       "description": "trigger",
       "options": [
@@ -323,37 +433,37 @@
       "defaultValue": "item"
     },
     {
-      "field": "tooltip.backgroundColor",
+      "field": "props.tooltip.backgroundColor",
       "type": "string",
       "description": "backgroundColor",
       "defaultValue": "rgba(50, 50, 50, 0.7)"
     },
     {
-      "field": "tooltip.borderColor",
+      "field": "props.tooltip.borderColor",
       "type": "string",
       "description": "borderColor",
       "defaultValue": "transparent"
     },
     {
-      "field": "tooltip.textStyle.fontSize",
+      "field": "props.tooltip.textStyle.fontSize",
       "type": "number",
       "description": "fontSize",
       "defaultValue": 12
     },
     {
-      "field": "tooltip.textStyle.color",
+      "field": "props.tooltip.textStyle.color",
       "type": "string",
       "description": "color",
       "defaultValue": "#ffffff"
     },
     {
-      "field": "tooltip.showPercent",
+      "field": "props.tooltip.showPercent",
       "type": "boolean",
       "description": "是否显示百分比",
       "defaultValue": true
     },
     {
-      "field": "series.colors",
+      "field": "props.series.colors",
       "type": "array",
       "description": "颜色列表",
       "defaultValue": [
@@ -368,7 +478,7 @@
       ]
     },
     {
-      "field": "series.selectedMode",
+      "field": "props.series.selectedMode",
       "type": "enum",
       "description": "选中模式",
       "options": [
@@ -379,49 +489,49 @@
       "defaultValue": false
     },
     {
-      "field": "series.selectedOffset",
+      "field": "props.series.selectedOffset",
       "type": "number",
       "description": "选中偏移量",
       "defaultValue": 10
     },
     {
-      "field": "series.minAngle",
+      "field": "props.series.minAngle",
       "type": "number",
       "description": "最小角度",
       "defaultValue": 0
     },
     {
-      "field": "series.merge.enabled",
+      "field": "props.series.merge.enabled",
       "type": "boolean",
       "description": "enabled",
       "defaultValue": false
     },
     {
-      "field": "series.merge.maxCount",
+      "field": "props.series.merge.maxCount",
       "type": "number",
       "description": "maxCount",
       "defaultValue": 10
     },
     {
-      "field": "series.merge.mergeLabel",
+      "field": "props.series.merge.mergeLabel",
       "type": "string",
       "description": "mergeLabel",
       "defaultValue": "其他"
     },
     {
-      "field": "animation.enabled",
+      "field": "props.animation.enabled",
       "type": "boolean",
       "description": "enabled",
       "defaultValue": true
     },
     {
-      "field": "animation.duration",
+      "field": "props.animation.duration",
       "type": "number",
       "description": "duration",
       "defaultValue": 1000
     },
     {
-      "field": "animation.easing",
+      "field": "props.animation.easing",
       "type": "enum",
       "description": "easing",
       "options": [

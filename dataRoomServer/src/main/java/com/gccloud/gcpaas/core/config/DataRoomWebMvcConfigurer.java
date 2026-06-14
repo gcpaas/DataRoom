@@ -23,6 +23,7 @@ public class DataRoomWebMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new PageStatusConverter());
+        registry.addConverter(new PageTypeConverter());
     }
 
     @Bean("operationLogExecutor")

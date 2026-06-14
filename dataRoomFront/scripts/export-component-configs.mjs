@@ -8,4 +8,4 @@ const outputDir = path.resolve(projectRoot, '../dataRoomServer/src/main/resource
 
 const result = await exportComponentConfigs({ projectRoot, outputDir })
 
-console.log(`Exported ${result.components.length} component config files to ${outputDir}`)
+console.log(`Exported ${result.components.length} component config files and ${result.pageConfigs.length} page config files to ${outputDir}`)
