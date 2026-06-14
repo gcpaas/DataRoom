@@ -1,6 +1,6 @@
 <div align="center">
   <h1>DataRoom</h1>
-  <strong>简单、免费、开源的大屏设计器</strong>
+  <strong>简单、免费、开源的大屏、页面设计器，支持通过AI对话生成</strong>
 </div>
 <p align="center">
     <img alt="stars" src="https://gitee.com/gcpaas/DataRoom/badge/star.svg?theme=dark">
@@ -9,7 +9,7 @@
     <img alt="Company" src="https://img.shields.io/badge/公司-科大国创云网科技有限公司-blue.svg">
     <a href="http://gcpaas.gccloud.com"><img src="https://img.shields.io/badge/%E9%A2%84%E8%A7%88-演示环境-yellow" alt="预览"></a>
 </p>
-🔥DataRoom是一款基于SpringBoot3.x、JDK17、Vue3.x、Vite8.x、Element-plus、Echarts6.x等技术栈的大屏设计器，具备大屏、仪表板设计、预览能力，支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV等20+数据源接入，支持MCP协议，使用简单，完全免费，代码开源。<br/>
+🔥DataRoom是一款基于SpringBoot3.x、JDK17、Vue3.x、Vite8.x、Element-plus、Echarts6.x等技术栈的大屏设计器，具备大屏、仪表板设计、预览能力，支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV等20+数据源接入，支持AI生成页面，使用简单，完全免费，代码开源。<br/>
 
 ## 🎉特别说明
 * 当前项目代码完全开源，暂时未提供演示环境
@@ -18,6 +18,15 @@
 * 商业版与当前开源版本不是一个东西
 
 ## 系统截图
+
+### AI对话生成大屏、页面
+> 支持通过MCP协议，接入AI工具，通过对话方式新建大屏、页面
+
+![AI生成大屏.png](doc/image/AI%E7%94%9F%E6%88%90%E5%A4%A7%E5%B1%8F.png)
+
+> 下图为AI首次生成的效果（原话：使用MCP帮我创建一个618监控大屏）
+
+![AI生成大屏效果.png](doc/image/AI%E7%94%9F%E6%88%90%E5%A4%A7%E5%B1%8F%E6%95%88%E6%9E%9C.png)
 
 ### 登录功能
 > 支持账号、密码、验证码登录，支持单点登录，防暴力登录
@@ -74,11 +83,6 @@
 > 支持标准的RESTful API、Open API 3.x规范
 
 ![开放API.png](doc/image/%E5%BC%80%E6%94%BEAPI.png)
-
-### MCP
-> 支持MCP协议，接入AI工具，通过对话方式新建大屏、执行数据集等，以下用户数据为AI生成
-
-![MCP.png](doc/image/MCP.png)
 
 
 ## 快速开始
