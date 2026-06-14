@@ -1,0 +1,436 @@
+{
+  "componentName": "DrPieChart",
+  "displayName": "饼图",
+  "description": "饼图、pie、环形图、玫瑰图、占比",
+  "fields": [
+    {
+      "field": "global.padding",
+      "type": "array",
+      "description": "图表内边距 [上, 右, 下, 左] (px)",
+      "defaultValue": [
+        20,
+        20,
+        20,
+        20
+      ]
+    },
+    {
+      "field": "pie.innerRadius",
+      "type": "number",
+      "description": "内半径百分比(0=实心饼图, >0=环形图)",
+      "defaultValue": 0
+    },
+    {
+      "field": "pie.outerRadius",
+      "type": "number",
+      "description": "外半径百分比",
+      "defaultValue": 75
+    },
+    {
+      "field": "pie.center",
+      "type": "array",
+      "description": "中心位置 [x, y]",
+      "defaultValue": [
+        "50%",
+        "50%"
+      ]
+    },
+    {
+      "field": "pie.startAngle",
+      "type": "number",
+      "description": "起始角度",
+      "defaultValue": 90
+    },
+    {
+      "field": "pie.roseType",
+      "type": "string",
+      "description": "玫瑰图类型",
+      "defaultValue": false
+    },
+    {
+      "field": "pie.borderColor",
+      "type": "string",
+      "description": "扇形边框颜色",
+      "defaultValue": "#ffffff"
+    },
+    {
+      "field": "pie.borderWidth",
+      "type": "number",
+      "description": "扇形边框宽度",
+      "defaultValue": 1
+    },
+    {
+      "field": "pie.borderRadius",
+      "type": "number",
+      "description": "扇形圆角",
+      "defaultValue": 0
+    },
+    {
+      "field": "centerContent.show",
+      "type": "boolean",
+      "description": "是否显示",
+      "defaultValue": false
+    },
+    {
+      "field": "centerContent.type",
+      "type": "enum",
+      "description": "内容类型",
+      "options": [
+        "text",
+        "image"
+      ],
+      "defaultValue": "text"
+    },
+    {
+      "field": "centerContent.title.text",
+      "type": "string",
+      "description": "text",
+      "defaultValue": "总计"
+    },
+    {
+      "field": "centerContent.title.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "centerContent.title.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#999999"
+    },
+    {
+      "field": "centerContent.title.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "centerContent.title.offsetY",
+      "type": "number",
+      "description": "offsetY",
+      "defaultValue": -10
+    },
+    {
+      "field": "centerContent.value.field",
+      "type": "string",
+      "description": "数值来源字段",
+      "defaultValue": ""
+    },
+    {
+      "field": "centerContent.value.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 24
+    },
+    {
+      "field": "centerContent.value.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#333333"
+    },
+    {
+      "field": "centerContent.value.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "bold"
+    },
+    {
+      "field": "centerContent.value.offsetY",
+      "type": "number",
+      "description": "offsetY",
+      "defaultValue": 10
+    },
+    {
+      "field": "centerContent.value.format",
+      "type": "enum",
+      "description": "格式化方式",
+      "options": [
+        "default",
+        "integer",
+        "float1",
+        "float2",
+        "percent",
+        "percent1",
+        "thousand",
+        "thousand1"
+      ],
+      "defaultValue": "default"
+    },
+    {
+      "field": "centerContent.value.prefix",
+      "type": "string",
+      "description": "前缀",
+      "defaultValue": ""
+    },
+    {
+      "field": "centerContent.value.suffix",
+      "type": "string",
+      "description": "后缀",
+      "defaultValue": ""
+    },
+    {
+      "field": "centerContent.image.url",
+      "type": "string",
+      "description": "url",
+      "defaultValue": ""
+    },
+    {
+      "field": "centerContent.image.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 40
+    },
+    {
+      "field": "centerContent.image.height",
+      "type": "number",
+      "description": "height",
+      "defaultValue": 40
+    },
+    {
+      "field": "label.show",
+      "type": "boolean",
+      "description": "是否显示",
+      "defaultValue": true
+    },
+    {
+      "field": "label.position",
+      "type": "enum",
+      "description": "标签位置",
+      "options": [
+        "inside",
+        "outside",
+        "spider"
+      ],
+      "defaultValue": "outside"
+    },
+    {
+      "field": "label.content",
+      "type": "enum",
+      "description": "标签内容",
+      "options": [
+        "name",
+        "value",
+        "percent",
+        "name+value",
+        "name+percent"
+      ],
+      "defaultValue": "name+percent"
+    },
+    {
+      "field": "label.fontSize",
+      "type": "number",
+      "description": "字号",
+      "defaultValue": 12
+    },
+    {
+      "field": "label.color",
+      "type": "string",
+      "description": "颜色",
+      "defaultValue": ""
+    },
+    {
+      "field": "label.fontWeight",
+      "type": "string",
+      "description": "字重",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "label.guideLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "label.guideLine.length",
+      "type": "number",
+      "description": "length",
+      "defaultValue": 15
+    },
+    {
+      "field": "label.guideLine.length2",
+      "type": "number",
+      "description": "length2",
+      "defaultValue": 20
+    },
+    {
+      "field": "label.guideLine.lineWidth",
+      "type": "number",
+      "description": "lineWidth",
+      "defaultValue": 1
+    },
+    {
+      "field": "label.guideLine.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": ""
+    },
+    {
+      "field": "legend.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "legend.position",
+      "type": "enum",
+      "description": "position",
+      "options": [
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "defaultValue": "bottom"
+    },
+    {
+      "field": "legend.textStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "legend.textStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#666666"
+    },
+    {
+      "field": "legend.textStyle.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "legend.itemGap",
+      "type": "number",
+      "description": "itemGap",
+      "defaultValue": 16
+    },
+    {
+      "field": "tooltip.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "tooltip.trigger",
+      "type": "enum",
+      "description": "trigger",
+      "options": [
+        "item"
+      ],
+      "defaultValue": "item"
+    },
+    {
+      "field": "tooltip.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "rgba(50, 50, 50, 0.7)"
+    },
+    {
+      "field": "tooltip.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "transparent"
+    },
+    {
+      "field": "tooltip.textStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "tooltip.textStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#ffffff"
+    },
+    {
+      "field": "tooltip.showPercent",
+      "type": "boolean",
+      "description": "是否显示百分比",
+      "defaultValue": true
+    },
+    {
+      "field": "series.colors",
+      "type": "array",
+      "description": "颜色列表",
+      "defaultValue": [
+        "#5470c6",
+        "#91cc75",
+        "#fac858",
+        "#ee6666",
+        "#73c0de",
+        "#3ba272",
+        "#fc8452",
+        "#9a60b4"
+      ]
+    },
+    {
+      "field": "series.selectedMode",
+      "type": "enum",
+      "description": "选中模式",
+      "options": [
+        false,
+        "single",
+        "multiple"
+      ],
+      "defaultValue": false
+    },
+    {
+      "field": "series.selectedOffset",
+      "type": "number",
+      "description": "选中偏移量",
+      "defaultValue": 10
+    },
+    {
+      "field": "series.minAngle",
+      "type": "number",
+      "description": "最小角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "series.merge.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": false
+    },
+    {
+      "field": "series.merge.maxCount",
+      "type": "number",
+      "description": "maxCount",
+      "defaultValue": 10
+    },
+    {
+      "field": "series.merge.mergeLabel",
+      "type": "string",
+      "description": "mergeLabel",
+      "defaultValue": "其他"
+    },
+    {
+      "field": "animation.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": true
+    },
+    {
+      "field": "animation.duration",
+      "type": "number",
+      "description": "duration",
+      "defaultValue": 1000
+    },
+    {
+      "field": "animation.easing",
+      "type": "enum",
+      "description": "easing",
+      "options": [
+        "linear",
+        "cubicOut",
+        "elasticOut",
+        "bounceOut"
+      ],
+      "defaultValue": "cubicOut"
+    }
+  ]
+}

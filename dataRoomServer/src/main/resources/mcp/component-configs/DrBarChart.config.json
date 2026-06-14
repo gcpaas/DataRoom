@@ -1,0 +1,477 @@
+{
+  "componentName": "DrBarChart",
+  "displayName": "柱状图",
+  "description": "柱状图、bar、柱形图、条形图",
+  "fields": [
+    {
+      "field": "global.padding",
+      "type": "array",
+      "description": "图表内边距 [上, 右, 下, 左] (px)",
+      "defaultValue": [
+        40,
+        20,
+        30,
+        40
+      ]
+    },
+    {
+      "field": "xAxis.show",
+      "type": "boolean",
+      "description": "是否显示",
+      "defaultValue": true
+    },
+    {
+      "field": "xAxis.type",
+      "type": "enum",
+      "description": "数据类型",
+      "options": [
+        "category",
+        "time"
+      ],
+      "defaultValue": "category"
+    },
+    {
+      "field": "xAxis.axisLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "xAxis.axisLine.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#cccccc"
+    },
+    {
+      "field": "xAxis.axisLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "xAxis.axisLabel.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "xAxis.axisLabel.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "xAxis.axisLabel.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#999999"
+    },
+    {
+      "field": "xAxis.axisLabel.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "xAxis.axisLabel.fontFamily",
+      "type": "string",
+      "description": "fontFamily",
+      "defaultValue": "Microsoft YaHei"
+    },
+    {
+      "field": "xAxis.axisLabel.rotate",
+      "type": "number",
+      "description": "旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "xAxis.axisTick.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "xAxis.axisTick.length",
+      "type": "number",
+      "description": "length",
+      "defaultValue": 5
+    },
+    {
+      "field": "xAxis.axisTick.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#cccccc"
+    },
+    {
+      "field": "xAxis.splitLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "xAxis.splitLine.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#eeeeee"
+    },
+    {
+      "field": "xAxis.splitLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "xAxis.splitLine.type",
+      "type": "enum",
+      "description": "type",
+      "options": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "defaultValue": "dashed"
+    },
+    {
+      "field": "yAxis.show",
+      "type": "boolean",
+      "description": "是否显示",
+      "defaultValue": true
+    },
+    {
+      "field": "yAxis.name",
+      "type": "string",
+      "description": "轴名称",
+      "defaultValue": ""
+    },
+    {
+      "field": "yAxis.range.auto",
+      "type": "boolean",
+      "description": "auto",
+      "defaultValue": true
+    },
+    {
+      "field": "yAxis.range.min",
+      "type": "number",
+      "description": "min",
+      "defaultValue": 0
+    },
+    {
+      "field": "yAxis.range.max",
+      "type": "number",
+      "description": "max",
+      "defaultValue": 100
+    },
+    {
+      "field": "yAxis.axisLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "yAxis.axisLine.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#cccccc"
+    },
+    {
+      "field": "yAxis.axisLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "yAxis.axisLabel.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "yAxis.axisLabel.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "yAxis.axisLabel.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#999999"
+    },
+    {
+      "field": "yAxis.axisLabel.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "yAxis.axisLabel.fontFamily",
+      "type": "string",
+      "description": "fontFamily",
+      "defaultValue": "Microsoft YaHei"
+    },
+    {
+      "field": "yAxis.axisTick.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "yAxis.axisTick.length",
+      "type": "number",
+      "description": "length",
+      "defaultValue": 5
+    },
+    {
+      "field": "yAxis.axisTick.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#cccccc"
+    },
+    {
+      "field": "yAxis.splitLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "yAxis.splitLine.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#eeeeee"
+    },
+    {
+      "field": "yAxis.splitLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "yAxis.splitLine.type",
+      "type": "enum",
+      "description": "type",
+      "options": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "defaultValue": "dashed"
+    },
+    {
+      "field": "legend.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "legend.position",
+      "type": "enum",
+      "description": "position",
+      "options": [
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "defaultValue": "top"
+    },
+    {
+      "field": "legend.textStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "legend.textStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#666666"
+    },
+    {
+      "field": "legend.textStyle.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "legend.itemGap",
+      "type": "number",
+      "description": "itemGap",
+      "defaultValue": 16
+    },
+    {
+      "field": "tooltip.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "tooltip.trigger",
+      "type": "enum",
+      "description": "trigger",
+      "options": [
+        "axis",
+        "item"
+      ],
+      "defaultValue": "axis"
+    },
+    {
+      "field": "tooltip.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "rgba(50, 50, 50, 0.7)"
+    },
+    {
+      "field": "tooltip.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "transparent"
+    },
+    {
+      "field": "tooltip.textStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "tooltip.textStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#ffffff"
+    },
+    {
+      "field": "series.displayMode",
+      "type": "enum",
+      "description": "展示形式",
+      "options": [
+        "group",
+        "stack"
+      ],
+      "defaultValue": "group"
+    },
+    {
+      "field": "series.barWidth",
+      "type": "number",
+      "description": "柱子宽度(px), null=自适应",
+      "defaultValue": null
+    },
+    {
+      "field": "series.barMaxWidth",
+      "type": "number",
+      "description": "柱子最大宽度(px)",
+      "defaultValue": 40
+    },
+    {
+      "field": "series.barCategoryGap",
+      "type": "string",
+      "description": "类目间距",
+      "defaultValue": "30%"
+    },
+    {
+      "field": "series.barGap",
+      "type": "string",
+      "description": "组内间距",
+      "defaultValue": "20%"
+    },
+    {
+      "field": "series.borderRadius",
+      "type": "array",
+      "description": "圆角 [左上, 右上, 右下, 左下]",
+      "defaultValue": [
+        2,
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "field": "series.colors",
+      "type": "array",
+      "description": "颜色列表",
+      "defaultValue": [
+        "#5470c6",
+        "#91cc75",
+        "#fac858",
+        "#ee6666",
+        "#73c0de",
+        "#3ba272"
+      ]
+    },
+    {
+      "field": "series.gradient.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": false
+    },
+    {
+      "field": "series.gradient.direction",
+      "type": "enum",
+      "description": "direction",
+      "options": [
+        "vertical",
+        "horizontal"
+      ],
+      "defaultValue": "vertical"
+    },
+    {
+      "field": "series.label.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "series.label.position",
+      "type": "enum",
+      "description": "position",
+      "options": [
+        "top",
+        "inside",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "defaultValue": "top"
+    },
+    {
+      "field": "series.label.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "series.label.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#333333"
+    },
+    {
+      "field": "series.label.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "animation.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": true
+    },
+    {
+      "field": "animation.duration",
+      "type": "number",
+      "description": "duration",
+      "defaultValue": 1000
+    },
+    {
+      "field": "animation.easing",
+      "type": "enum",
+      "description": "easing",
+      "options": [
+        "linear",
+        "cubicOut",
+        "elasticOut",
+        "bounceOut"
+      ],
+      "defaultValue": "cubicOut"
+    }
+  ]
+}

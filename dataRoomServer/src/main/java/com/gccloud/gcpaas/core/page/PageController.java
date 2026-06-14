@@ -277,8 +277,9 @@ public class PageController {
      */
     @PostMapping("/updatePageConfig")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Tool(name = "updatePageConfig", description = "更新页面配置。参数pageStage为页面配置信息")
     @Operation(summary = "更新页面配置", description = "更新页面配置")
-    @OperationLogMeta(actionType = "修改", actionDesc = "更新页面设计配置", businessType = "page_design", businessName = "页面设计", targetIdKey = "pageCode", detailLevel = OperationLogDetailLevel.SUMMARY)
+    @OperationLogMeta(actionType = "更新页面配置", actionDesc = "更新页面设计配置", businessType = "page_design", businessName = "页面设计", targetIdKey = "pageCode", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<Boolean> updatePageConfig(@RequestBody PageStageEntity pageStage) {
         LambdaUpdateWrapper<PageStageEntity> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.set(PageStageEntity::getPageConfig, JSON.toJSONString(pageStage.getPageConfig()));

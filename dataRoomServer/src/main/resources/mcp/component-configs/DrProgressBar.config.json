@@ -1,0 +1,225 @@
+{
+  "componentName": "DrProgressBar",
+  "displayName": "进度条",
+  "description": "CSS实现的进度条组件，以水平条形展示数值进度，支持渐变、圆角、动画及多种标签格式",
+  "fields": [
+    {
+      "field": "value.current",
+      "type": "number",
+      "description": "当前进度值（无数据集绑定时使用此固定值）",
+      "defaultValue": 65
+    },
+    {
+      "field": "value.max",
+      "type": "number",
+      "description": "最大值（进度条满格对应的值）",
+      "defaultValue": 100
+    },
+    {
+      "field": "bar.height",
+      "type": "number",
+      "description": "进度条高度(px)",
+      "defaultValue": 20
+    },
+    {
+      "field": "bar.fillColor",
+      "type": "string",
+      "description": "进度填充颜色（非渐变模式时使用）",
+      "defaultValue": "#5470c6"
+    },
+    {
+      "field": "bar.backgroundColor",
+      "type": "string",
+      "description": "进度条轨道背景颜色",
+      "defaultValue": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "field": "bar.borderRadius",
+      "type": "number",
+      "description": "进度条圆角(px)",
+      "defaultValue": 10
+    },
+    {
+      "field": "bar.gradient.enabled",
+      "type": "boolean",
+      "description": "是否启用渐变",
+      "defaultValue": false
+    },
+    {
+      "field": "bar.gradient.startColor",
+      "type": "string",
+      "description": "渐变起始颜色",
+      "defaultValue": "#5470c6"
+    },
+    {
+      "field": "bar.gradient.endColor",
+      "type": "string",
+      "description": "渐变结束颜色",
+      "defaultValue": "#73c0de"
+    },
+    {
+      "field": "bar.gradient.direction",
+      "type": "enum",
+      "description": "渐变方向",
+      "options": [
+        "horizontal",
+        "vertical"
+      ],
+      "defaultValue": "horizontal"
+    },
+    {
+      "field": "label.show",
+      "type": "boolean",
+      "description": "是否显示标签",
+      "defaultValue": true
+    },
+    {
+      "field": "label.position",
+      "type": "enum",
+      "description": "标签位置",
+      "options": [
+        "inside",
+        "outside",
+        "top"
+      ],
+      "defaultValue": "outside"
+    },
+    {
+      "field": "label.fontSize",
+      "type": "number",
+      "description": "标签字号(px)",
+      "defaultValue": 14
+    },
+    {
+      "field": "label.color",
+      "type": "string",
+      "description": "标签颜色",
+      "defaultValue": "#ffffff"
+    },
+    {
+      "field": "label.fontWeight",
+      "type": "enum",
+      "description": "标签字重",
+      "options": [
+        "normal",
+        "bold",
+        "300",
+        "500",
+        "800"
+      ],
+      "defaultValue": "normal"
+    },
+    {
+      "field": "label.format",
+      "type": "enum",
+      "description": "标签内容格式",
+      "options": [
+        "percent",
+        "value",
+        "custom"
+      ],
+      "defaultValue": "percent"
+    },
+    {
+      "field": "label.customFormat",
+      "type": "string",
+      "description": "自定义格式模板",
+      "defaultValue": "{percent}%"
+    },
+    {
+      "field": "track.backgroundColor",
+      "type": "string",
+      "description": "轨道背景颜色",
+      "defaultValue": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "field": "track.borderRadius",
+      "type": "number",
+      "description": "轨道圆角(px)",
+      "defaultValue": 10
+    },
+    {
+      "field": "border.show",
+      "type": "boolean",
+      "description": "是否显示边框",
+      "defaultValue": false
+    },
+    {
+      "field": "border.color",
+      "type": "string",
+      "description": "边框颜色",
+      "defaultValue": "#444444"
+    },
+    {
+      "field": "border.width",
+      "type": "number",
+      "description": "边框宽度(px)",
+      "defaultValue": 1
+    },
+    {
+      "field": "title.show",
+      "type": "boolean",
+      "description": "是否显示标题",
+      "defaultValue": false
+    },
+    {
+      "field": "title.text",
+      "type": "string",
+      "description": "标题文字",
+      "defaultValue": ""
+    },
+    {
+      "field": "title.position",
+      "type": "enum",
+      "description": "标题位置",
+      "options": [
+        "left",
+        "top"
+      ],
+      "defaultValue": "left"
+    },
+    {
+      "field": "title.fontSize",
+      "type": "number",
+      "description": "标题字号(px)",
+      "defaultValue": 14
+    },
+    {
+      "field": "title.color",
+      "type": "string",
+      "description": "标题颜色",
+      "defaultValue": "#cccccc"
+    },
+    {
+      "field": "title.width",
+      "type": "number",
+      "description": "标题区域宽度(px)，仅position为left时有效",
+      "defaultValue": 80
+    },
+    {
+      "field": "animation.enabled",
+      "type": "boolean",
+      "description": "是否启用进度动画",
+      "defaultValue": true
+    },
+    {
+      "field": "animation.duration",
+      "type": "number",
+      "description": "动画时长(ms)",
+      "defaultValue": 1000
+    },
+    {
+      "field": "animation.easing",
+      "type": "enum",
+      "description": "动画缓动函数",
+      "options": [
+        "linear",
+        "ease",
+        "ease-in",
+        "ease-out",
+        "ease-in-out"
+      ],
+      "defaultValue": "ease-out"
+    }
+  ]
+}

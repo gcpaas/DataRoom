@@ -1,0 +1,70 @@
+{
+  "componentName": "DrDateTime",
+  "displayName": "时间",
+  "description": "时间、日期、当前时间、当前日期",
+  "fields": [
+    {
+      "field": "format",
+      "type": "enum",
+      "description": "format",
+      "options": [
+        "yyyy-MM-dd",
+        "yyyy-MM-dd HH:mm",
+        "yyyy-MM-dd HH:mm:ss"
+      ],
+      "defaultValue": "yyyy-MM-dd HH:mm:ss"
+    },
+    {
+      "field": "textStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 24
+    },
+    {
+      "field": "textStyle.fontFamily",
+      "type": "string",
+      "description": "fontFamily",
+      "defaultValue": "Microsoft YaHei"
+    },
+    {
+      "field": "textStyle.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "400"
+    },
+    {
+      "field": "textStyle.letterSpacing",
+      "type": "number",
+      "description": "letterSpacing",
+      "defaultValue": 1
+    },
+    {
+      "field": "textStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "align",
+      "type": "enum",
+      "description": "align",
+      "options": [
+        "left",
+        "center",
+        "right"
+      ],
+      "defaultValue": "center"
+    },
+    {
+      "field": "verticalAlign",
+      "type": "enum",
+      "description": "verticalAlign",
+      "options": [
+        "top",
+        "center",
+        "bottom"
+      ],
+      "defaultValue": "center"
+    }
+  ]
+}

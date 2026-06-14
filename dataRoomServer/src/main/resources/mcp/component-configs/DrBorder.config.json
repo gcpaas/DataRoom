@@ -1,0 +1,70 @@
+{
+  "componentName": "DrBorder",
+  "displayName": "边框",
+  "description": "边框、装饰边框、DataV边框",
+  "fields": [
+    {
+      "field": "borderType",
+      "type": "enum",
+      "description": "borderType",
+      "options": [
+        "BorderBox1",
+        "BorderBox2",
+        "BorderBox3",
+        "BorderBox4",
+        "BorderBox5",
+        "BorderBox6",
+        "BorderBox7",
+        "BorderBox8",
+        "BorderBox9",
+        "BorderBox10",
+        "BorderBox11",
+        "BorderBox12",
+        "BorderBox13"
+      ],
+      "defaultValue": "BorderBox1"
+    },
+    {
+      "field": "colors",
+      "type": "array",
+      "description": "colors",
+      "defaultValue": []
+    },
+    {
+      "field": "backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "transparent"
+    },
+    {
+      "field": "reverse",
+      "type": "boolean",
+      "description": "reverse",
+      "defaultValue": false
+    },
+    {
+      "field": "dur",
+      "type": "number",
+      "description": "dur",
+      "defaultValue": null
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "title",
+      "defaultValue": ""
+    },
+    {
+      "field": "titleWidth",
+      "type": "number",
+      "description": "titleWidth",
+      "defaultValue": 250
+    },
+    {
+      "field": "animate",
+      "type": "boolean",
+      "description": "animate",
+      "defaultValue": true
+    }
+  ]
+}

@@ -1,0 +1,593 @@
+{
+  "componentName": "DrMap",
+  "displayName": "地图",
+  "description": "地图、行政区、GeoJSON、标记点、飞线",
+  "fields": [
+    {
+      "field": "source.mode",
+      "type": "enum",
+      "description": "mode",
+      "options": [
+        "geoJson",
+        "online"
+      ],
+      "defaultValue": "geoJson"
+    },
+    {
+      "field": "source.regionCode",
+      "type": "string",
+      "description": "regionCode",
+      "defaultValue": "340000"
+    },
+    {
+      "field": "source.showSouthChinaSea",
+      "type": "boolean",
+      "description": "showSouthChinaSea",
+      "defaultValue": true
+    },
+    {
+      "field": "source.enableDrillDown",
+      "type": "boolean",
+      "description": "enableDrillDown",
+      "defaultValue": false
+    },
+    {
+      "field": "source.onlineProvider.apiKey",
+      "type": "string",
+      "description": "apiKey",
+      "defaultValue": ""
+    },
+    {
+      "field": "source.onlineProvider.style",
+      "type": "string",
+      "description": "style",
+      "defaultValue": "dark"
+    },
+    {
+      "field": "source.onlineProvider.customStyleId",
+      "type": "string",
+      "description": "customStyleId",
+      "defaultValue": ""
+    },
+    {
+      "field": "source.onlineProvider.language",
+      "type": "string",
+      "description": "language",
+      "defaultValue": "zh_cn"
+    },
+    {
+      "field": "view.center",
+      "type": "array",
+      "description": "center",
+      "defaultValue": [
+        116.397428,
+        39.90923
+      ]
+    },
+    {
+      "field": "view.zoom",
+      "type": "number",
+      "description": "zoom",
+      "defaultValue": 1
+    },
+    {
+      "field": "view.roam",
+      "type": "boolean",
+      "description": "roam",
+      "defaultValue": false
+    },
+    {
+      "field": "view.viewMode",
+      "type": "enum",
+      "description": "viewMode",
+      "options": [
+        "2D",
+        "3D"
+      ],
+      "defaultValue": "2D"
+    },
+    {
+      "field": "view.pitch",
+      "type": "number",
+      "description": "pitch",
+      "defaultValue": 60
+    },
+    {
+      "field": "view.skyColor",
+      "type": "string",
+      "description": "skyColor",
+      "defaultValue": "#53A9DE"
+    },
+    {
+      "field": "view.showOnlineLabel",
+      "type": "boolean",
+      "description": "showOnlineLabel",
+      "defaultValue": true
+    },
+    {
+      "field": "view.onlineFeatures",
+      "type": "array",
+      "description": "onlineFeatures",
+      "defaultValue": [
+        "bg",
+        "point",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "field": "regionStyle.areaGradient",
+      "type": "array",
+      "description": "areaGradient",
+      "defaultValue": [
+        "#e0ecff",
+        "#e0ecff"
+      ]
+    },
+    {
+      "field": "regionStyle.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "#7babea"
+    },
+    {
+      "field": "regionStyle.borderWidth",
+      "type": "number",
+      "description": "borderWidth",
+      "defaultValue": 1
+    },
+    {
+      "field": "regionStyle.shadowColor",
+      "type": "string",
+      "description": "shadowColor",
+      "defaultValue": "transparent"
+    },
+    {
+      "field": "regionStyle.shadowBlur",
+      "type": "number",
+      "description": "shadowBlur",
+      "defaultValue": 0
+    },
+    {
+      "field": "regionStyle.shadowOffset",
+      "type": "array",
+      "description": "shadowOffset",
+      "defaultValue": [
+        0,
+        0
+      ]
+    },
+    {
+      "field": "regionLabel.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "regionLabel.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 10
+    },
+    {
+      "field": "regionLabel.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#333333"
+    },
+    {
+      "field": "emphasis.disabled",
+      "type": "boolean",
+      "description": "disabled",
+      "defaultValue": false
+    },
+    {
+      "field": "emphasis.areaColor",
+      "type": "string",
+      "description": "areaColor",
+      "defaultValue": "#4d90e8"
+    },
+    {
+      "field": "emphasis.borderWidth",
+      "type": "number",
+      "description": "borderWidth",
+      "defaultValue": 1
+    },
+    {
+      "field": "emphasis.shadowColor",
+      "type": "string",
+      "description": "shadowColor",
+      "defaultValue": "transparent"
+    },
+    {
+      "field": "emphasis.label.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "emphasis.label.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "visualMap.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "visualMap.orient",
+      "type": "enum",
+      "description": "orient",
+      "options": [
+        "vertical",
+        "horizontal"
+      ],
+      "defaultValue": "vertical"
+    },
+    {
+      "field": "visualMap.pieces",
+      "type": "array",
+      "description": "pieces",
+      "defaultValue": [
+        {
+          "gte": 1000,
+          "label": ">1000"
+        },
+        {
+          "gte": 600,
+          "lte": 999,
+          "label": "600-999"
+        },
+        {
+          "gte": 200,
+          "lte": 599,
+          "label": "200-599"
+        },
+        {
+          "gte": 50,
+          "lte": 199,
+          "label": "50-199"
+        },
+        {
+          "gte": 10,
+          "lte": 49,
+          "label": "10-49"
+        },
+        {
+          "lte": 9,
+          "label": "<9"
+        }
+      ]
+    },
+    {
+      "field": "visualMap.colors",
+      "type": "array",
+      "description": "colors",
+      "defaultValue": [
+        "#c3d7df",
+        "#5cb3cc",
+        "#8abcd1",
+        "#66a9c9",
+        "#2f90b9",
+        "#1781b5"
+      ]
+    },
+    {
+      "field": "visualMap.textStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "marker.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "marker.type",
+      "type": "enum",
+      "description": "type",
+      "options": [
+        "effectScatter",
+        "circle",
+        "pin",
+        "none"
+      ],
+      "defaultValue": "effectScatter"
+    },
+    {
+      "field": "marker.symbolSize",
+      "type": "number",
+      "description": "symbolSize",
+      "defaultValue": 4
+    },
+    {
+      "field": "marker.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "marker.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "rgba(225, 255, 255, 1)"
+    },
+    {
+      "field": "marker.borderWidth",
+      "type": "number",
+      "description": "borderWidth",
+      "defaultValue": 4
+    },
+    {
+      "field": "marker.ripple.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "marker.ripple.scale",
+      "type": "number",
+      "description": "scale",
+      "defaultValue": 6
+    },
+    {
+      "field": "marker.ripple.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "marker.ripple.brushType",
+      "type": "enum",
+      "description": "brushType",
+      "options": [
+        "fill",
+        "stroke"
+      ],
+      "defaultValue": "fill"
+    },
+    {
+      "field": "marker.label.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "marker.label.position",
+      "type": "enum",
+      "description": "position",
+      "options": [
+        "top",
+        "bottom",
+        "left",
+        "right",
+        "inside"
+      ],
+      "defaultValue": "bottom"
+    },
+    {
+      "field": "marker.label.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 11
+    },
+    {
+      "field": "marker.label.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "marker.label.offset",
+      "type": "array",
+      "description": "offset",
+      "defaultValue": [
+        0,
+        2
+      ]
+    },
+    {
+      "field": "flowLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "flowLine.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#4fb6d2"
+    },
+    {
+      "field": "flowLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "flowLine.opacity",
+      "type": "number",
+      "description": "opacity",
+      "defaultValue": 0.1
+    },
+    {
+      "field": "flowLine.curveness",
+      "type": "number",
+      "description": "curveness",
+      "defaultValue": 0.3
+    },
+    {
+      "field": "flowLine.effect.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "flowLine.effect.period",
+      "type": "number",
+      "description": "period",
+      "defaultValue": 4
+    },
+    {
+      "field": "flowLine.effect.trailLength",
+      "type": "number",
+      "description": "trailLength",
+      "defaultValue": 0.4
+    },
+    {
+      "field": "flowLine.effect.symbol",
+      "type": "string",
+      "description": "symbol",
+      "defaultValue": "arrow"
+    },
+    {
+      "field": "flowLine.effect.symbolSize",
+      "type": "number",
+      "description": "symbolSize",
+      "defaultValue": 7
+    },
+    {
+      "field": "tooltip.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "tooltip.trigger",
+      "type": "enum",
+      "description": "trigger",
+      "options": [
+        "item"
+      ],
+      "defaultValue": "item"
+    },
+    {
+      "field": "tooltip.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "tooltip.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "tooltip.textStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "tooltip.textStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#333333"
+    },
+    {
+      "field": "backControl.text",
+      "type": "string",
+      "description": "text",
+      "defaultValue": "返回上级"
+    },
+    {
+      "field": "backControl.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 20
+    },
+    {
+      "field": "backControl.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "onlineLayers.satellite.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "onlineLayers.satellite.zIndex",
+      "type": "number",
+      "description": "zIndex",
+      "defaultValue": 1
+    },
+    {
+      "field": "onlineLayers.satellite.opacity",
+      "type": "number",
+      "description": "opacity",
+      "defaultValue": 1
+    },
+    {
+      "field": "onlineLayers.satellite.zoomRange",
+      "type": "array",
+      "description": "zoomRange",
+      "defaultValue": [
+        3,
+        18
+      ]
+    },
+    {
+      "field": "onlineLayers.roadNet.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "onlineLayers.roadNet.zIndex",
+      "type": "number",
+      "description": "zIndex",
+      "defaultValue": 2
+    },
+    {
+      "field": "onlineLayers.roadNet.opacity",
+      "type": "number",
+      "description": "opacity",
+      "defaultValue": 1
+    },
+    {
+      "field": "onlineLayers.roadNet.zoomRange",
+      "type": "array",
+      "description": "zoomRange",
+      "defaultValue": [
+        3,
+        18
+      ]
+    },
+    {
+      "field": "onlineLayers.traffic.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "onlineLayers.traffic.zIndex",
+      "type": "number",
+      "description": "zIndex",
+      "defaultValue": 3
+    },
+    {
+      "field": "onlineLayers.traffic.opacity",
+      "type": "number",
+      "description": "opacity",
+      "defaultValue": 1
+    },
+    {
+      "field": "onlineLayers.traffic.zoomRange",
+      "type": "array",
+      "description": "zoomRange",
+      "defaultValue": [
+        3,
+        18
+      ]
+    }
+  ]
+}

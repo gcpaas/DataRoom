@@ -1,0 +1,103 @@
+{
+  "componentName": "DrVideoPlayer",
+  "displayName": "视频播放器",
+  "description": "视频播放器、video、视频、播放器、MP4、直播、监控",
+  "fields": [
+    {
+      "field": "basic.url",
+      "type": "string",
+      "description": "视频链接地址，支持MP4、FLV、M3U8、RTMP格式",
+      "defaultValue": ""
+    },
+    {
+      "field": "basic.poster",
+      "type": "string",
+      "description": "视频封面图URL",
+      "defaultValue": ""
+    },
+    {
+      "field": "basic.autoplay",
+      "type": "boolean",
+      "description": "是否自动播放",
+      "defaultValue": false
+    },
+    {
+      "field": "basic.loop",
+      "type": "boolean",
+      "description": "是否循环播放",
+      "defaultValue": false
+    },
+    {
+      "field": "basic.muted",
+      "type": "boolean",
+      "description": "是否静音",
+      "defaultValue": false
+    },
+    {
+      "field": "basic.controls",
+      "type": "boolean",
+      "description": "是否显示播放控制栏",
+      "defaultValue": true
+    },
+    {
+      "field": "basic.preload",
+      "type": "enum",
+      "description": "视频预加载策略",
+      "options": [
+        "auto",
+        "metadata",
+        "none"
+      ],
+      "defaultValue": "auto"
+    },
+    {
+      "field": "style.objectFit",
+      "type": "enum",
+      "description": "视频填充模式",
+      "options": [
+        "contain",
+        "cover",
+        "fill",
+        "none"
+      ],
+      "defaultValue": "contain"
+    },
+    {
+      "field": "style.borderRadius",
+      "type": "number",
+      "description": "圆角半径（px）",
+      "defaultValue": 0
+    },
+    {
+      "field": "style.backgroundColor",
+      "type": "string",
+      "description": "背景颜色",
+      "defaultValue": "#000000"
+    },
+    {
+      "field": "volume.defaultVolume",
+      "type": "number",
+      "description": "默认音量大小 0-1",
+      "defaultValue": 0.7
+    },
+    {
+      "field": "playbackRate.defaultRate",
+      "type": "number",
+      "description": "默认播放速率",
+      "defaultValue": 1
+    },
+    {
+      "field": "playbackRate.rates",
+      "type": "array",
+      "description": "可选的播放速率列表",
+      "defaultValue": [
+        0.5,
+        0.75,
+        1,
+        1.25,
+        1.5,
+        2
+      ]
+    }
+  ]
+}

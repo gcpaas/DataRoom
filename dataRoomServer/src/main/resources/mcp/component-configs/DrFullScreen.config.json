@@ -1,0 +1,103 @@
+{
+  "componentName": "DrFullScreen",
+  "displayName": "全屏切换",
+  "description": "全屏切换、fullscreen、全屏、退出全屏",
+  "fields": [
+    {
+      "field": "icon.enterIcon",
+      "type": "string",
+      "description": "进入全屏时显示的图标（图标名称）",
+      "defaultValue": "FullScreen"
+    },
+    {
+      "field": "icon.exitIcon",
+      "type": "string",
+      "description": "退出全屏时显示的图标（图标名称）",
+      "defaultValue": "ScaleToOriginal"
+    },
+    {
+      "field": "icon.iconSize",
+      "type": "number",
+      "description": "图标大小（px）",
+      "defaultValue": 24
+    },
+    {
+      "field": "icon.iconColor",
+      "type": "string",
+      "description": "图标颜色",
+      "defaultValue": "#ffffff"
+    },
+    {
+      "field": "icon.hoverColor",
+      "type": "string",
+      "description": "鼠标悬停时的图标颜色",
+      "defaultValue": "#409EFF"
+    },
+    {
+      "field": "tooltip.show",
+      "type": "boolean",
+      "description": "是否显示悬停提示文字",
+      "defaultValue": true
+    },
+    {
+      "field": "tooltip.enterText",
+      "type": "string",
+      "description": "进入全屏的提示文字",
+      "defaultValue": "进入全屏"
+    },
+    {
+      "field": "tooltip.exitText",
+      "type": "string",
+      "description": "退出全屏的提示文字",
+      "defaultValue": "退出全屏"
+    },
+    {
+      "field": "style.backgroundColor",
+      "type": "string",
+      "description": "背景颜色",
+      "defaultValue": "rgba(0, 0, 0, 0.5)"
+    },
+    {
+      "field": "style.borderRadius",
+      "type": "number",
+      "description": "圆角半径（px）",
+      "defaultValue": 50
+    },
+    {
+      "field": "style.border.show",
+      "type": "boolean",
+      "description": "是否显示边框",
+      "defaultValue": false
+    },
+    {
+      "field": "style.border.color",
+      "type": "string",
+      "description": "边框颜色",
+      "defaultValue": "#333333"
+    },
+    {
+      "field": "style.border.width",
+      "type": "number",
+      "description": "边框宽度",
+      "defaultValue": 1
+    },
+    {
+      "field": "style.padding",
+      "type": "number",
+      "description": "内边距（px）",
+      "defaultValue": 8
+    },
+    {
+      "field": "style.cursor",
+      "type": "string",
+      "description": "鼠标样式",
+      "defaultValue": "pointer"
+    },
+    {
+      "field": "style.alwaysShow",
+      "type": "boolean",
+      "description": "是否常驻显示（关闭时仅鼠标悬停可见）",
+      "defaultValue": true
+    }
+  ]
+}

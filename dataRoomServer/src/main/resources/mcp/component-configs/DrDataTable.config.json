@@ -1,0 +1,378 @@
+{
+  "componentName": "DrDataTable",
+  "displayName": "数据表格",
+  "description": "数据表格、明细表、列表、分页、搜索、排序、设备清单、告警记录",
+  "fields": [
+    {
+      "field": "global.padding",
+      "type": "array",
+      "description": "padding",
+      "defaultValue": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "field": "global.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "field": "global.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "field": "global.borderWidth",
+      "type": "number",
+      "description": "borderWidth",
+      "defaultValue": 0
+    },
+    {
+      "field": "global.borderRadius",
+      "type": "number",
+      "description": "borderRadius",
+      "defaultValue": 6
+    },
+    {
+      "field": "table.autoColumns",
+      "type": "boolean",
+      "description": "autoColumns",
+      "defaultValue": true
+    },
+    {
+      "field": "table.columns",
+      "type": "array",
+      "description": "columns",
+      "defaultValue": [
+        {
+          "field": "name",
+          "label": "名称",
+          "width": 160,
+          "align": "left",
+          "format": "text",
+          "visible": true
+        },
+        {
+          "field": "value",
+          "label": "数值",
+          "width": 120,
+          "align": "right",
+          "format": "thousand",
+          "visible": true
+        },
+        {
+          "field": "status",
+          "label": "状态",
+          "width": 120,
+          "align": "center",
+          "format": "text",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "field": "table.rowKey",
+      "type": "string",
+      "description": "rowKey",
+      "defaultValue": ""
+    },
+    {
+      "field": "table.size",
+      "type": "enum",
+      "description": "size",
+      "options": [
+        "large",
+        "default",
+        "small"
+      ],
+      "defaultValue": "default"
+    },
+    {
+      "field": "table.border",
+      "type": "boolean",
+      "description": "border",
+      "defaultValue": false
+    },
+    {
+      "field": "table.stripe",
+      "type": "boolean",
+      "description": "stripe",
+      "defaultValue": true
+    },
+    {
+      "field": "table.fit",
+      "type": "boolean",
+      "description": "fit",
+      "defaultValue": true
+    },
+    {
+      "field": "table.showIndex",
+      "type": "boolean",
+      "description": "showIndex",
+      "defaultValue": false
+    },
+    {
+      "field": "table.emptyText",
+      "type": "string",
+      "description": "emptyText",
+      "defaultValue": "暂无数据"
+    },
+    {
+      "field": "headerStyle.height",
+      "type": "number",
+      "description": "height",
+      "defaultValue": 42
+    },
+    {
+      "field": "headerStyle.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "#f5f7fa"
+    },
+    {
+      "field": "headerStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#303133"
+    },
+    {
+      "field": "headerStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "headerStyle.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "bold"
+    },
+    {
+      "field": "headerStyle.textAlign",
+      "type": "enum",
+      "description": "textAlign",
+      "options": [
+        "left",
+        "center",
+        "right"
+      ],
+      "defaultValue": "left"
+    },
+    {
+      "field": "rowStyle.height",
+      "type": "number",
+      "description": "height",
+      "defaultValue": 40
+    },
+    {
+      "field": "rowStyle.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "field": "rowStyle.stripeBackgroundColor",
+      "type": "string",
+      "description": "stripeBackgroundColor",
+      "defaultValue": "#fafafa"
+    },
+    {
+      "field": "rowStyle.hoverBackgroundColor",
+      "type": "string",
+      "description": "hoverBackgroundColor",
+      "defaultValue": "#ecf5ff"
+    },
+    {
+      "field": "rowStyle.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "#ebeef5"
+    },
+    {
+      "field": "cellStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#606266"
+    },
+    {
+      "field": "cellStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "cellStyle.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "normal"
+    },
+    {
+      "field": "cellStyle.padding",
+      "type": "array",
+      "description": "padding",
+      "defaultValue": [
+        8,
+        12,
+        8,
+        12
+      ]
+    },
+    {
+      "field": "cellStyle.overflow",
+      "type": "enum",
+      "description": "overflow",
+      "options": [
+        "ellipsis",
+        "wrap",
+        "clip"
+      ],
+      "defaultValue": "ellipsis"
+    },
+    {
+      "field": "cellStyle.showTooltip",
+      "type": "boolean",
+      "description": "showTooltip",
+      "defaultValue": true
+    },
+    {
+      "field": "search.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "search.placeholder",
+      "type": "string",
+      "description": "placeholder",
+      "defaultValue": "搜索"
+    },
+    {
+      "field": "search.fields",
+      "type": "array",
+      "description": "fields",
+      "defaultValue": []
+    },
+    {
+      "field": "search.debounce",
+      "type": "number",
+      "description": "debounce",
+      "defaultValue": 200
+    },
+    {
+      "field": "sort.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": true
+    },
+    {
+      "field": "sort.defaultField",
+      "type": "string",
+      "description": "defaultField",
+      "defaultValue": ""
+    },
+    {
+      "field": "sort.defaultOrder",
+      "type": "enum",
+      "description": "defaultOrder",
+      "options": [
+        "ascending",
+        "descending",
+        "none"
+      ],
+      "defaultValue": "none"
+    },
+    {
+      "field": "pagination.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "pagination.pageSize",
+      "type": "number",
+      "description": "pageSize",
+      "defaultValue": 10
+    },
+    {
+      "field": "pagination.pageSizes",
+      "type": "array",
+      "description": "pageSizes",
+      "defaultValue": [
+        10,
+        20,
+        50,
+        100
+      ]
+    },
+    {
+      "field": "pagination.layout",
+      "type": "enum",
+      "description": "layout",
+      "options": [
+        "prev, pager, next",
+        "total, prev, pager, next",
+        "sizes, prev, pager, next"
+      ],
+      "defaultValue": "prev, pager, next"
+    },
+    {
+      "field": "pagination.position",
+      "type": "enum",
+      "description": "position",
+      "options": [
+        "bottomLeft",
+        "bottomCenter",
+        "bottomRight",
+        "topRight"
+      ],
+      "defaultValue": "bottomRight"
+    },
+    {
+      "field": "formatting.defaultNumberFormat",
+      "type": "enum",
+      "description": "defaultNumberFormat",
+      "options": [
+        "text",
+        "value",
+        "integer",
+        "float1",
+        "float2",
+        "percent",
+        "percent0",
+        "percent1",
+        "percent2",
+        "thousand",
+        "currency",
+        "date"
+      ],
+      "defaultValue": "value"
+    },
+    {
+      "field": "formatting.dateFormat",
+      "type": "string",
+      "description": "dateFormat",
+      "defaultValue": "YYYY-MM-DD HH:mm:ss"
+    },
+    {
+      "field": "formatting.nullText",
+      "type": "string",
+      "description": "nullText",
+      "defaultValue": "--"
+    }
+  ]
+}

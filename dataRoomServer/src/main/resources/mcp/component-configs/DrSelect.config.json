@@ -1,0 +1,175 @@
+{
+  "componentName": "DrSelect",
+  "displayName": "下拉框",
+  "description": "下拉框、select、下拉选择、筛选",
+  "fields": [
+    {
+      "field": "basic.placeholder",
+      "type": "string",
+      "description": "占位提示文本",
+      "defaultValue": "请选择"
+    },
+    {
+      "field": "basic.defaultValue",
+      "type": "string",
+      "description": "默认选中值",
+      "defaultValue": ""
+    },
+    {
+      "field": "basic.multiple",
+      "type": "boolean",
+      "description": "是否多选",
+      "defaultValue": false
+    },
+    {
+      "field": "basic.clearable",
+      "type": "boolean",
+      "description": "是否可清空",
+      "defaultValue": true
+    },
+    {
+      "field": "basic.disabled",
+      "type": "boolean",
+      "description": "是否禁用",
+      "defaultValue": false
+    },
+    {
+      "field": "basic.filterable",
+      "type": "boolean",
+      "description": "是否支持搜索过滤",
+      "defaultValue": false
+    },
+    {
+      "field": "basic.size",
+      "type": "enum",
+      "description": "尺寸",
+      "options": [
+        "small",
+        "default",
+        "large"
+      ],
+      "defaultValue": "default"
+    },
+    {
+      "field": "style.fontSize",
+      "type": "number",
+      "description": "选中文本字号(px)",
+      "defaultValue": 14
+    },
+    {
+      "field": "style.color",
+      "type": "string",
+      "description": "选中文本颜色",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "style.placeholderColor",
+      "type": "string",
+      "description": "占位文本颜色",
+      "defaultValue": "#999999"
+    },
+    {
+      "field": "style.backgroundColor",
+      "type": "string",
+      "description": "输入框背景颜色",
+      "defaultValue": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "field": "style.borderColor",
+      "type": "string",
+      "description": "边框颜色",
+      "defaultValue": "#444444"
+    },
+    {
+      "field": "style.borderWidth",
+      "type": "number",
+      "description": "边框宽度(px)",
+      "defaultValue": 1
+    },
+    {
+      "field": "style.borderRadius",
+      "type": "number",
+      "description": "边框圆角(px)",
+      "defaultValue": 4
+    },
+    {
+      "field": "style.height",
+      "type": "number",
+      "description": "输入框高度(px)",
+      "defaultValue": 40
+    },
+    {
+      "field": "options.staticOptions",
+      "type": "array",
+      "description": "静态选项列表",
+      "defaultValue": [
+        {
+          "label": "选项一",
+          "value": "1"
+        },
+        {
+          "label": "选项二",
+          "value": "2"
+        },
+        {
+          "label": "选项三",
+          "value": "3"
+        }
+      ]
+    },
+    {
+      "field": "options.optionFontSize",
+      "type": "number",
+      "description": "选项文本字号(px)",
+      "defaultValue": 14
+    },
+    {
+      "field": "options.optionColor",
+      "type": "string",
+      "description": "选项文本颜色",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "dropdown.maxHeight",
+      "type": "number",
+      "description": "下拉面板最大高度(px)",
+      "defaultValue": 200
+    },
+    {
+      "field": "dropdown.backgroundColor",
+      "type": "string",
+      "description": "下拉面板背景颜色",
+      "defaultValue": "rgba(30, 30, 30, 0.95)"
+    },
+    {
+      "field": "dropdown.borderColor",
+      "type": "string",
+      "description": "下拉面板边框颜色",
+      "defaultValue": "#444444"
+    },
+    {
+      "field": "dropdown.hoverBgColor",
+      "type": "string",
+      "description": "选项悬浮时背景颜色",
+      "defaultValue": "rgba(64, 158, 255, 0.2)"
+    },
+    {
+      "field": "dropdown.activeBgColor",
+      "type": "string",
+      "description": "选项选中时背景颜色",
+      "defaultValue": "rgba(64, 158, 255, 0.3)"
+    },
+    {
+      "field": "dropdown.activeColor",
+      "type": "string",
+      "description": "选项选中时文本颜色",
+      "defaultValue": "#409EFF"
+    },
+    {
+      "field": "globalVar.globalVarName",
+      "type": "string",
+      "description": "绑定的全局变量名称",
+      "defaultValue": ""
+    }
+  ]
+}

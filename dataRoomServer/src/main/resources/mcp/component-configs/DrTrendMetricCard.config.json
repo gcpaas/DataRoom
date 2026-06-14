@@ -1,0 +1,379 @@
+{
+  "componentName": "DrTrendMetricCard",
+  "displayName": "趋势指标卡",
+  "description": "趋势指标卡、KPI、趋势线、折线、面积、变化率、同比、环比",
+  "fields": [
+    {
+      "field": "global.padding",
+      "type": "array",
+      "description": "padding",
+      "defaultValue": [
+        16,
+        18,
+        14,
+        18
+      ]
+    },
+    {
+      "field": "global.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "field": "global.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "field": "global.borderWidth",
+      "type": "number",
+      "description": "borderWidth",
+      "defaultValue": 0
+    },
+    {
+      "field": "global.borderRadius",
+      "type": "number",
+      "description": "borderRadius",
+      "defaultValue": 8
+    },
+    {
+      "field": "layout.trendPosition",
+      "type": "enum",
+      "description": "trendPosition",
+      "options": [
+        "bottom",
+        "right"
+      ],
+      "defaultValue": "bottom"
+    },
+    {
+      "field": "layout.horizontalAlign",
+      "type": "enum",
+      "description": "horizontalAlign",
+      "options": [
+        "left",
+        "center",
+        "right"
+      ],
+      "defaultValue": "left"
+    },
+    {
+      "field": "layout.gap",
+      "type": "number",
+      "description": "gap",
+      "defaultValue": 10
+    },
+    {
+      "field": "layout.trendHeight",
+      "type": "number",
+      "description": "trendHeight",
+      "defaultValue": 64
+    },
+    {
+      "field": "layout.trendWidth",
+      "type": "number",
+      "description": "trendWidth",
+      "defaultValue": 140
+    },
+    {
+      "field": "title.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "title.text",
+      "type": "string",
+      "description": "text",
+      "defaultValue": "趋势指标"
+    },
+    {
+      "field": "title.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "title.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "title.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "normal"
+    },
+    {
+      "field": "value.defaultValue",
+      "type": "number",
+      "description": "defaultValue",
+      "defaultValue": 9860
+    },
+    {
+      "field": "value.format",
+      "type": "enum",
+      "description": "format",
+      "options": [
+        "value",
+        "integer",
+        "float1",
+        "float2",
+        "percent",
+        "thousand",
+        "currency"
+      ],
+      "defaultValue": "thousand"
+    },
+    {
+      "field": "value.decimalPlaces",
+      "type": "number",
+      "description": "decimalPlaces",
+      "defaultValue": 0
+    },
+    {
+      "field": "value.prefix",
+      "type": "string",
+      "description": "prefix",
+      "defaultValue": ""
+    },
+    {
+      "field": "value.suffix",
+      "type": "string",
+      "description": "suffix",
+      "defaultValue": ""
+    },
+    {
+      "field": "value.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 34
+    },
+    {
+      "field": "value.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#303133"
+    },
+    {
+      "field": "value.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "bold"
+    },
+    {
+      "field": "timestamp.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "timestamp.format",
+      "type": "string",
+      "description": "format",
+      "defaultValue": "YYYY-MM-DD HH:mm"
+    },
+    {
+      "field": "timestamp.prefix",
+      "type": "string",
+      "description": "prefix",
+      "defaultValue": "更新时间 "
+    },
+    {
+      "field": "timestamp.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "timestamp.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "compare.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "compare.mode",
+      "type": "enum",
+      "description": "mode",
+      "options": [
+        "value",
+        "rate",
+        "both"
+      ],
+      "defaultValue": "rate"
+    },
+    {
+      "field": "compare.positiveColor",
+      "type": "string",
+      "description": "positiveColor",
+      "defaultValue": "#67c23a"
+    },
+    {
+      "field": "compare.negativeColor",
+      "type": "string",
+      "description": "negativeColor",
+      "defaultValue": "#f56c6c"
+    },
+    {
+      "field": "compare.neutralColor",
+      "type": "string",
+      "description": "neutralColor",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "compare.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "trend.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "trend.chartType",
+      "type": "enum",
+      "description": "chartType",
+      "options": [
+        "line",
+        "area"
+      ],
+      "defaultValue": "line"
+    },
+    {
+      "field": "trend.smooth",
+      "type": "boolean",
+      "description": "smooth",
+      "defaultValue": true
+    },
+    {
+      "field": "trend.lineWidth",
+      "type": "number",
+      "description": "lineWidth",
+      "defaultValue": 2
+    },
+    {
+      "field": "trend.lineColor",
+      "type": "string",
+      "description": "lineColor",
+      "defaultValue": "#409eff"
+    },
+    {
+      "field": "trend.areaColor",
+      "type": "string",
+      "description": "areaColor",
+      "defaultValue": "#ecf5ff"
+    },
+    {
+      "field": "trend.areaOpacity",
+      "type": "number",
+      "description": "areaOpacity",
+      "defaultValue": 0.35
+    },
+    {
+      "field": "trend.showSymbol",
+      "type": "boolean",
+      "description": "showSymbol",
+      "defaultValue": false
+    },
+    {
+      "field": "trend.symbolSize",
+      "type": "number",
+      "description": "symbolSize",
+      "defaultValue": 4
+    },
+    {
+      "field": "trend.startYAxisAtZero",
+      "type": "boolean",
+      "description": "startYAxisAtZero",
+      "defaultValue": false
+    },
+    {
+      "field": "axis.showXAxis",
+      "type": "boolean",
+      "description": "showXAxis",
+      "defaultValue": false
+    },
+    {
+      "field": "axis.showYAxis",
+      "type": "boolean",
+      "description": "showYAxis",
+      "defaultValue": false
+    },
+    {
+      "field": "axis.showMinMaxLabel",
+      "type": "boolean",
+      "description": "showMinMaxLabel",
+      "defaultValue": false
+    },
+    {
+      "field": "axis.labelColor",
+      "type": "string",
+      "description": "labelColor",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "axis.labelFontSize",
+      "type": "number",
+      "description": "labelFontSize",
+      "defaultValue": 10
+    },
+    {
+      "field": "tooltip.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "tooltip.formatter",
+      "type": "string",
+      "description": "formatter",
+      "defaultValue": "{time}<br/>{value}"
+    },
+    {
+      "field": "animation.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": true
+    },
+    {
+      "field": "animation.duration",
+      "type": "number",
+      "description": "duration",
+      "defaultValue": 1000
+    },
+    {
+      "field": "animation.easing",
+      "type": "enum",
+      "description": "easing",
+      "options": [
+        "linear",
+        "cubicOut",
+        "elasticOut",
+        "bounceOut"
+      ],
+      "defaultValue": "cubicOut"
+    }
+  ]
+}

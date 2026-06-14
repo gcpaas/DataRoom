@@ -1,0 +1,167 @@
+{
+  "componentName": "DrTabList",
+  "displayName": "Tab列表",
+  "description": "Tab列表、tab、标签页、标签切换、tablist",
+  "fields": [
+    {
+      "field": "basic.defaultIndex",
+      "type": "number",
+      "description": "默认选中的标签索引（从0开始）",
+      "defaultValue": 0
+    },
+    {
+      "field": "basic.disabled",
+      "type": "boolean",
+      "description": "是否禁用整个Tab组",
+      "defaultValue": false
+    },
+    {
+      "field": "layout.direction",
+      "type": "enum",
+      "description": "排列方向",
+      "options": [
+        "horizontal",
+        "vertical"
+      ],
+      "defaultValue": "horizontal"
+    },
+    {
+      "field": "layout.align",
+      "type": "enum",
+      "description": "标签对齐方式",
+      "options": [
+        "start",
+        "center",
+        "end",
+        "stretch"
+      ],
+      "defaultValue": "start"
+    },
+    {
+      "field": "tabStyle.fontSize",
+      "type": "number",
+      "description": "标签文本字号（px）",
+      "defaultValue": 14
+    },
+    {
+      "field": "tabStyle.color",
+      "type": "string",
+      "description": "未选中标签文本颜色",
+      "defaultValue": "#999999"
+    },
+    {
+      "field": "tabStyle.activeColor",
+      "type": "string",
+      "description": "选中标签文本颜色",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "tabStyle.backgroundColor",
+      "type": "string",
+      "description": "未选中标签背景颜色",
+      "defaultValue": "transparent"
+    },
+    {
+      "field": "tabStyle.activeBgColor",
+      "type": "string",
+      "description": "选中标签背景颜色",
+      "defaultValue": "transparent"
+    },
+    {
+      "field": "tabStyle.borderRadius",
+      "type": "number",
+      "description": "标签圆角（px）",
+      "defaultValue": 0
+    },
+    {
+      "field": "tabStyle.gap",
+      "type": "number",
+      "description": "标签之间的间距（px）",
+      "defaultValue": 24
+    },
+    {
+      "field": "tabStyle.padding",
+      "type": "array",
+      "description": "标签内边距 [上, 右, 下, 左]（px）",
+      "defaultValue": [
+        8,
+        16,
+        8,
+        16
+      ]
+    },
+    {
+      "field": "tabStyle.height",
+      "type": "number",
+      "description": "标签高度（px），0表示自适应",
+      "defaultValue": 44
+    },
+    {
+      "field": "tabStyle.borderBottom.show",
+      "type": "boolean",
+      "description": "是否显示底部边框线",
+      "defaultValue": false
+    },
+    {
+      "field": "tabStyle.borderBottom.color",
+      "type": "string",
+      "description": "边框线颜色",
+      "defaultValue": "#333333"
+    },
+    {
+      "field": "tabStyle.borderBottom.width",
+      "type": "number",
+      "description": "边框线宽度（px）",
+      "defaultValue": 1
+    },
+    {
+      "field": "indicator.show",
+      "type": "boolean",
+      "description": "是否显示选中指示器",
+      "defaultValue": true
+    },
+    {
+      "field": "indicator.color",
+      "type": "string",
+      "description": "指示器颜色",
+      "defaultValue": "#409EFF"
+    },
+    {
+      "field": "indicator.height",
+      "type": "number",
+      "description": "指示器高度/粗细（px）",
+      "defaultValue": 3
+    },
+    {
+      "field": "indicator.borderRadius",
+      "type": "number",
+      "description": "指示器圆角（px）",
+      "defaultValue": 2
+    },
+    {
+      "field": "options.staticTabs",
+      "type": "array",
+      "description": "静态标签列表",
+      "defaultValue": [
+        {
+          "label": "标签一",
+          "value": "tab1"
+        },
+        {
+          "label": "标签二",
+          "value": "tab2"
+        },
+        {
+          "label": "标签三",
+          "value": "tab3"
+        }
+      ]
+    },
+    {
+      "field": "globalVar.globalVarName",
+      "type": "string",
+      "description": "绑定的全局变量名称",
+      "defaultValue": ""
+    }
+  ]
+}

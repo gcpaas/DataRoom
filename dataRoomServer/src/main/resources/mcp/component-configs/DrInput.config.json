@@ -1,0 +1,143 @@
+{
+  "componentName": "DrInput",
+  "displayName": "输入框",
+  "description": "输入框、input、表单、搜索",
+  "fields": [
+    {
+      "field": "basic.placeholder",
+      "type": "string",
+      "description": "输入框占位提示文本",
+      "defaultValue": "请输入内容"
+    },
+    {
+      "field": "basic.inputType",
+      "type": "enum",
+      "description": "输入框类型",
+      "options": [
+        "text",
+        "number",
+        "password"
+      ],
+      "defaultValue": "text"
+    },
+    {
+      "field": "basic.defaultValue",
+      "type": "string",
+      "description": "输入框默认值",
+      "defaultValue": ""
+    },
+    {
+      "field": "basic.clearable",
+      "type": "boolean",
+      "description": "是否显示清空按钮",
+      "defaultValue": true
+    },
+    {
+      "field": "basic.disabled",
+      "type": "boolean",
+      "description": "是否禁用",
+      "defaultValue": false
+    },
+    {
+      "field": "basic.maxLength",
+      "type": "number",
+      "description": "最大输入字符数，0表示不限制",
+      "defaultValue": 0
+    },
+    {
+      "field": "basic.readonly",
+      "type": "boolean",
+      "description": "是否只读",
+      "defaultValue": false
+    },
+    {
+      "field": "style.fontSize",
+      "type": "number",
+      "description": "文本字号(px)",
+      "defaultValue": 14
+    },
+    {
+      "field": "style.color",
+      "type": "string",
+      "description": "输入文本颜色",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "style.placeholderColor",
+      "type": "string",
+      "description": "占位文本颜色",
+      "defaultValue": "#999999"
+    },
+    {
+      "field": "style.backgroundColor",
+      "type": "string",
+      "description": "背景颜色",
+      "defaultValue": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "field": "style.borderColor",
+      "type": "string",
+      "description": "边框颜色",
+      "defaultValue": "#444444"
+    },
+    {
+      "field": "style.borderWidth",
+      "type": "number",
+      "description": "边框宽度(px)",
+      "defaultValue": 1
+    },
+    {
+      "field": "style.borderRadius",
+      "type": "number",
+      "description": "边框圆角(px)",
+      "defaultValue": 4
+    },
+    {
+      "field": "style.height",
+      "type": "number",
+      "description": "输入框高度(px)",
+      "defaultValue": 40
+    },
+    {
+      "field": "style.padding",
+      "type": "array",
+      "description": "内边距 [上, 右, 下, 左]",
+      "defaultValue": [
+        0,
+        12,
+        0,
+        12
+      ]
+    },
+    {
+      "field": "focus.borderColor",
+      "type": "string",
+      "description": "聚焦时边框颜色",
+      "defaultValue": "#409EFF"
+    },
+    {
+      "field": "focus.shadowColor",
+      "type": "string",
+      "description": "聚焦时阴影颜色",
+      "defaultValue": "rgba(64, 158, 255, 0.3)"
+    },
+    {
+      "field": "focus.shadowSize",
+      "type": "number",
+      "description": "聚焦时阴影扩散大小(px)",
+      "defaultValue": 3
+    },
+    {
+      "field": "globalVar.globalVarName",
+      "type": "string",
+      "description": "绑定的全局变量名称",
+      "defaultValue": ""
+    },
+    {
+      "field": "globalVar.triggerOnInput",
+      "type": "boolean",
+      "description": "是否在输入时即时触发全局变量更新",
+      "defaultValue": false
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "componentName": "DrImage",
+  "displayName": "图片",
+  "description": "图片、素材",
+  "fields": [
+    {
+      "field": "imageType",
+      "type": "enum",
+      "description": "图片类型: bitmap(位图) | svg(矢量图)",
+      "options": [
+        "bitmap",
+        "svg"
+      ],
+      "defaultValue": "bitmap"
+    },
+    {
+      "field": "url",
+      "type": "string",
+      "description": "图片地址(URL或相对路径)",
+      "defaultValue": "/dataRoom/resource/image/placeholder.png"
+    },
+    {
+      "field": "repeatMode",
+      "type": "enum",
+      "description": "图片重复/填充模式",
+      "options": [
+        "no-repeat-stretch",
+        "no-repeat-contain",
+        "no-repeat-center",
+        "repeat",
+        "repeat-x",
+        "repeat-y"
+      ],
+      "defaultValue": "no-repeat-stretch"
+    },
+    {
+      "field": "borderRadius",
+      "type": "number",
+      "description": "圆角(px)",
+      "defaultValue": 0
+    },
+    {
+      "field": "hyperlink.url",
+      "type": "string",
+      "description": "超链接URL",
+      "defaultValue": ""
+    },
+    {
+      "field": "hyperlink.openNewWindow",
+      "type": "boolean",
+      "description": "是否新开窗口",
+      "defaultValue": false
+    },
+    {
+      "field": "hyperlink.cursorPointer",
+      "type": "boolean",
+      "description": "是否显示手势光标(pointer)",
+      "defaultValue": true
+    }
+  ]
+}

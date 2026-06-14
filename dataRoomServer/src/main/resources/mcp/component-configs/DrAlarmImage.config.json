@@ -1,0 +1,207 @@
+{
+  "componentName": "DrAlarmImage",
+  "displayName": "告警图",
+  "description": "告警、图片、阈值、指标、状态、区间",
+  "fields": [
+    {
+      "field": "value.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "value.defaultValue",
+      "type": "number",
+      "description": "defaultValue",
+      "defaultValue": 95
+    },
+    {
+      "field": "value.format",
+      "type": "enum",
+      "description": "format",
+      "options": [
+        "value",
+        "integer",
+        "float1",
+        "float2",
+        "percent",
+        "thousand",
+        "currency"
+      ],
+      "defaultValue": "integer"
+    },
+    {
+      "field": "value.decimalPlaces",
+      "type": "number",
+      "description": "decimalPlaces",
+      "defaultValue": 0
+    },
+    {
+      "field": "value.thousandSeparator",
+      "type": "boolean",
+      "description": "thousandSeparator",
+      "defaultValue": false
+    },
+    {
+      "field": "value.prefix",
+      "type": "string",
+      "description": "prefix",
+      "defaultValue": ""
+    },
+    {
+      "field": "value.suffix",
+      "type": "string",
+      "description": "suffix",
+      "defaultValue": ""
+    },
+    {
+      "field": "value.emptyText",
+      "type": "string",
+      "description": "emptyText",
+      "defaultValue": "--"
+    },
+    {
+      "field": "value.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 28
+    },
+    {
+      "field": "value.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "var(--el-text-color-primary)"
+    },
+    {
+      "field": "value.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "bold"
+    },
+    {
+      "field": "value.lineHeight",
+      "type": "number",
+      "description": "lineHeight",
+      "defaultValue": 1
+    },
+    {
+      "field": "image.defaultItemId",
+      "type": "string",
+      "description": "defaultItemId",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "image.repeatMode",
+      "type": "enum",
+      "description": "repeatMode",
+      "options": [
+        "no-repeat-stretch",
+        "no-repeat-contain",
+        "no-repeat-center",
+        "repeat",
+        "repeat-x",
+        "repeat-y"
+      ],
+      "defaultValue": "no-repeat-contain"
+    },
+    {
+      "field": "image.borderRadius",
+      "type": "number",
+      "description": "borderRadius",
+      "defaultValue": 0
+    },
+    {
+      "field": "image.items",
+      "type": "array",
+      "description": "items",
+      "defaultValue": [
+        {
+          "id": "normal",
+          "name": "正常",
+          "url": "/dataRoom/resource/image/placeholder.png",
+          "condition": "",
+          "enabled": true
+        },
+        {
+          "id": "warning",
+          "name": "预警",
+          "url": "/dataRoom/resource/image/placeholder.png",
+          "condition": "100 > x > 90",
+          "enabled": true
+        },
+        {
+          "id": "danger",
+          "name": "异常",
+          "url": "/dataRoom/resource/image/placeholder.png",
+          "condition": "x >= 100",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "field": "layout.direction",
+      "type": "enum",
+      "description": "direction",
+      "options": [
+        "vertical",
+        "horizontal"
+      ],
+      "defaultValue": "vertical"
+    },
+    {
+      "field": "layout.imageSize",
+      "type": "enum",
+      "description": "imageSize",
+      "options": [
+        "auto",
+        "contain"
+      ],
+      "defaultValue": "contain"
+    },
+    {
+      "field": "layout.gap",
+      "type": "number",
+      "description": "gap",
+      "defaultValue": 8
+    },
+    {
+      "field": "layout.horizontalAlign",
+      "type": "enum",
+      "description": "horizontalAlign",
+      "options": [
+        "left",
+        "center",
+        "right"
+      ],
+      "defaultValue": "center"
+    },
+    {
+      "field": "layout.verticalAlign",
+      "type": "enum",
+      "description": "verticalAlign",
+      "options": [
+        "top",
+        "center",
+        "bottom"
+      ],
+      "defaultValue": "center"
+    },
+    {
+      "field": "animation.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": true
+    },
+    {
+      "field": "animation.duration",
+      "type": "number",
+      "description": "duration",
+      "defaultValue": 200
+    }
+  ]
+}

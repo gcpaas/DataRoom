@@ -1,0 +1,12 @@
+[
+  {
+    "componentName": "DrText",
+    "displayName": "文本",
+    "description": "文字、文本、数字"
+  },
+  {
+    "componentName": "DrMissingDetail",
+    "displayName": "缺少详情",
+    "description": "用于测试详情文件缺失"
+  }
+]

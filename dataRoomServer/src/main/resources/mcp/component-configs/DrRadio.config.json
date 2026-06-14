@@ -1,0 +1,113 @@
+{
+  "componentName": "DrRadio",
+  "displayName": "单选框",
+  "description": "单选框、radio、单选、表单、筛选",
+  "fields": [
+    {
+      "field": "basic.defaultValue",
+      "type": "string",
+      "description": "默认选中值",
+      "defaultValue": ""
+    },
+    {
+      "field": "basic.disabled",
+      "type": "boolean",
+      "description": "是否禁用",
+      "defaultValue": false
+    },
+    {
+      "field": "layout.direction",
+      "type": "enum",
+      "description": "排列方向",
+      "options": [
+        "horizontal",
+        "vertical"
+      ],
+      "defaultValue": "horizontal"
+    },
+    {
+      "field": "layout.gap",
+      "type": "number",
+      "description": "选项间距(px)",
+      "defaultValue": 12
+    },
+    {
+      "field": "style.fontSize",
+      "type": "number",
+      "description": "字号(px)",
+      "defaultValue": 14
+    },
+    {
+      "field": "style.color",
+      "type": "string",
+      "description": "未选中文本颜色",
+      "defaultValue": "#CCCCCC"
+    },
+    {
+      "field": "style.activeColor",
+      "type": "string",
+      "description": "选中文本颜色",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "style.activeBgColor",
+      "type": "string",
+      "description": "选中背景色",
+      "defaultValue": "#409EFF"
+    },
+    {
+      "field": "style.inactiveColor",
+      "type": "string",
+      "description": "未选中文本颜色",
+      "defaultValue": "#CCCCCC"
+    },
+    {
+      "field": "style.inactiveBgColor",
+      "type": "string",
+      "description": "未选中背景色",
+      "defaultValue": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "field": "style.borderRadius",
+      "type": "number",
+      "description": "圆角(px)",
+      "defaultValue": 4
+    },
+    {
+      "field": "style.padding",
+      "type": "array",
+      "description": "内边距 [上, 右, 下, 左]",
+      "defaultValue": [
+        6,
+        16,
+        6,
+        16
+      ]
+    },
+    {
+      "field": "options.staticOptions",
+      "type": "array",
+      "description": "静态选项列表",
+      "defaultValue": [
+        {
+          "label": "选项A",
+          "value": "A"
+        },
+        {
+          "label": "选项B",
+          "value": "B"
+        },
+        {
+          "label": "选项C",
+          "value": "C"
+        }
+      ]
+    },
+    {
+      "field": "globalVar.globalVarName",
+      "type": "string",
+      "description": "绑定的全局变量名称",
+      "defaultValue": ""
+    }
+  ]
+}

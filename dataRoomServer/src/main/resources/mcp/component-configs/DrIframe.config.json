@@ -1,0 +1,131 @@
+{
+  "componentName": "DrIframe",
+  "displayName": "Iframe",
+  "description": "iframe、网页嵌入、外部页面、嵌入网页",
+  "fields": [
+    {
+      "field": "basic.url",
+      "type": "string",
+      "description": "嵌入页面的URL地址",
+      "defaultValue": "https://www.example.com"
+    },
+    {
+      "field": "basic.scrolling",
+      "type": "enum",
+      "description": "是否显示滚动条",
+      "options": [
+        "auto",
+        "yes",
+        "no"
+      ],
+      "defaultValue": "auto"
+    },
+    {
+      "field": "basic.frameBorder",
+      "type": "boolean",
+      "description": "是否显示iframe边框",
+      "defaultValue": false
+    },
+    {
+      "field": "autoRefresh.enabled",
+      "type": "boolean",
+      "description": "是否开启自动刷新",
+      "defaultValue": false
+    },
+    {
+      "field": "autoRefresh.interval",
+      "type": "number",
+      "description": "自动刷新间隔时间（秒）",
+      "defaultValue": 60
+    },
+    {
+      "field": "style.borderRadius",
+      "type": "number",
+      "description": "圆角半径（px）",
+      "defaultValue": 0
+    },
+    {
+      "field": "style.backgroundColor",
+      "type": "string",
+      "description": "背景颜色",
+      "defaultValue": "transparent"
+    },
+    {
+      "field": "style.border.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "style.border.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#333333"
+    },
+    {
+      "field": "style.border.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "style.border.style",
+      "type": "enum",
+      "description": "style",
+      "options": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "defaultValue": "solid"
+    },
+    {
+      "field": "sandbox.allowScripts",
+      "type": "boolean",
+      "description": "允许执行脚本",
+      "defaultValue": true
+    },
+    {
+      "field": "sandbox.allowSameOrigin",
+      "type": "boolean",
+      "description": "允许同源访问",
+      "defaultValue": true
+    },
+    {
+      "field": "sandbox.allowForms",
+      "type": "boolean",
+      "description": "允许提交表单",
+      "defaultValue": true
+    },
+    {
+      "field": "sandbox.allowPopups",
+      "type": "boolean",
+      "description": "允许弹出窗口",
+      "defaultValue": false
+    },
+    {
+      "field": "sandbox.allowModals",
+      "type": "boolean",
+      "description": "允许打开模态窗口",
+      "defaultValue": false
+    },
+    {
+      "field": "sandbox.allowFullscreen",
+      "type": "boolean",
+      "description": "允许全屏",
+      "defaultValue": true
+    },
+    {
+      "field": "sandbox.allowCamera",
+      "type": "boolean",
+      "description": "允许访问摄像头",
+      "defaultValue": false
+    },
+    {
+      "field": "sandbox.allowMicrophone",
+      "type": "boolean",
+      "description": "允许访问麦克风",
+      "defaultValue": false
+    }
+  ]
+}

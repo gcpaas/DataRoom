@@ -1,0 +1,6 @@
+{
+  "componentName": "DrStale",
+  "displayName": "旧组件",
+  "description": "用于测试旧详情文件不应绕过索引",
+  "fields": []
+}

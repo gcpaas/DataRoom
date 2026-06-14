@@ -1,0 +1,152 @@
+[
+  {
+    "componentName": "DrText",
+    "displayName": "文本",
+    "description": "文字、文本、数字"
+  },
+  {
+    "componentName": "DrDateTime",
+    "displayName": "时间",
+    "description": "时间、日期、当前时间、当前日期"
+  },
+  {
+    "componentName": "DrImage",
+    "displayName": "图片",
+    "description": "图片、素材"
+  },
+  {
+    "componentName": "DrBarChart",
+    "displayName": "柱状图",
+    "description": "柱状图、bar、柱形图、条形图"
+  },
+  {
+    "componentName": "DrLineChart",
+    "displayName": "折线图",
+    "description": "折线图、line、曲线图、趋势图"
+  },
+  {
+    "componentName": "DrAreaChart",
+    "displayName": "区域图",
+    "description": "区域图、面积图、area、堆叠面积图"
+  },
+  {
+    "componentName": "DrPieChart",
+    "displayName": "饼图",
+    "description": "饼图、pie、环形图、玫瑰图、占比"
+  },
+  {
+    "componentName": "DrBubbleChart",
+    "displayName": "气泡图",
+    "description": "气泡图、bubble、散点图、scatter"
+  },
+  {
+    "componentName": "DrHorizontalBarChart",
+    "displayName": "条形图",
+    "description": "条形图、横向柱状图、horizontal bar"
+  },
+  {
+    "componentName": "DrRadarChart",
+    "displayName": "雷达图",
+    "description": "雷达图、radar、蛛网图、能力图"
+  },
+  {
+    "componentName": "DrWordCloud",
+    "displayName": "词云",
+    "description": "词云、wordcloud、标签云、关键词、热词"
+  },
+  {
+    "componentName": "DrGauge",
+    "displayName": "仪表盘",
+    "description": "仪表盘、gauge、速度计、进度盘、刻度盘、KPI"
+  },
+  {
+    "componentName": "DrProgressBar",
+    "displayName": "进度条",
+    "description": "CSS实现的进度条组件，以水平条形展示数值进度，支持渐变、圆角、动画及多种标签格式"
+  },
+  {
+    "componentName": "DrMetricCard",
+    "displayName": "指标卡",
+    "description": "指标卡、KPI、单值、核心指标、数值、单位、条件色"
+  },
+  {
+    "componentName": "DrAlarmImage",
+    "displayName": "告警图",
+    "description": "告警、图片、阈值、指标、状态、区间"
+  },
+  {
+    "componentName": "DrTrendMetricCard",
+    "displayName": "趋势指标卡",
+    "description": "趋势指标卡、KPI、趋势线、折线、面积、变化率、同比、环比"
+  },
+  {
+    "componentName": "DrPeriodCompareCard",
+    "displayName": "周期对比卡",
+    "description": "周期对比卡、KPI、同比、环比、变化值、变化率、对比分析"
+  },
+  {
+    "componentName": "DrImageMetricCard",
+    "displayName": "图片指标卡",
+    "description": "图片指标卡、图文指标、KPI、金额、单值、图标、数值"
+  },
+  {
+    "componentName": "DrDataTable",
+    "displayName": "数据表格",
+    "description": "数据表格、明细表、列表、分页、搜索、排序、设备清单、告警记录"
+  },
+  {
+    "componentName": "DrInput",
+    "displayName": "输入框",
+    "description": "输入框、input、表单、搜索"
+  },
+  {
+    "componentName": "DrSelect",
+    "displayName": "下拉框",
+    "description": "下拉框、select、下拉选择、筛选"
+  },
+  {
+    "componentName": "DrRadio",
+    "displayName": "单选框",
+    "description": "单选框、radio、单选、表单、筛选"
+  },
+  {
+    "componentName": "DrTabList",
+    "displayName": "Tab列表",
+    "description": "Tab列表、tab、标签页、标签切换、tablist"
+  },
+  {
+    "componentName": "DrIframe",
+    "displayName": "Iframe",
+    "description": "iframe、网页嵌入、外部页面、嵌入网页"
+  },
+  {
+    "componentName": "DrHtml",
+    "displayName": "HTML",
+    "description": "html、css、自定义片段、自定义内容"
+  },
+  {
+    "componentName": "DrVideoPlayer",
+    "displayName": "视频播放器",
+    "description": "视频播放器、video、视频、播放器、MP4、直播、监控"
+  },
+  {
+    "componentName": "DrBorder",
+    "displayName": "边框",
+    "description": "边框、装饰边框、DataV边框"
+  },
+  {
+    "componentName": "DrDecoration",
+    "displayName": "装饰",
+    "description": "装饰、分割线、DataV装饰"
+  },
+  {
+    "componentName": "DrFullScreen",
+    "displayName": "全屏切换",
+    "description": "全屏切换、fullscreen、全屏、退出全屏"
+  },
+  {
+    "componentName": "DrMap",
+    "displayName": "地图",
+    "description": "地图、行政区、GeoJSON、标记点、飞线"
+  }
+]

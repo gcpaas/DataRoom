@@ -1,0 +1,385 @@
+{
+  "componentName": "DrRadarChart",
+  "displayName": "雷达图",
+  "description": "雷达图、radar、蛛网图、能力图",
+  "fields": [
+    {
+      "field": "global.padding",
+      "type": "array",
+      "description": "图表内边距 [上, 右, 下, 左] (px)",
+      "defaultValue": [
+        40,
+        40,
+        40,
+        40
+      ]
+    },
+    {
+      "field": "radar.shape",
+      "type": "enum",
+      "description": "形状",
+      "options": [
+        "polygon",
+        "circle"
+      ],
+      "defaultValue": "polygon"
+    },
+    {
+      "field": "radar.radius",
+      "type": "string",
+      "description": "半径",
+      "defaultValue": "65%"
+    },
+    {
+      "field": "radar.startAngle",
+      "type": "number",
+      "description": "起始角度",
+      "defaultValue": 90
+    },
+    {
+      "field": "radar.splitNumber",
+      "type": "number",
+      "description": "分割段数",
+      "defaultValue": 5
+    },
+    {
+      "field": "radar.axisLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "radar.axisLine.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#cccccc"
+    },
+    {
+      "field": "radar.axisLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "radar.axisLine.type",
+      "type": "enum",
+      "description": "type",
+      "options": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "defaultValue": "solid"
+    },
+    {
+      "field": "radar.splitLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "radar.splitLine.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#dddddd"
+    },
+    {
+      "field": "radar.splitLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "radar.splitLine.type",
+      "type": "enum",
+      "description": "type",
+      "options": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "defaultValue": "solid"
+    },
+    {
+      "field": "radar.splitArea.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "radar.splitArea.colors",
+      "type": "array",
+      "description": "colors",
+      "defaultValue": [
+        "rgba(200, 200, 200, 0.1)",
+        "rgba(200, 200, 200, 0.05)"
+      ]
+    },
+    {
+      "field": "radar.axisLabel.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "radar.axisLabel.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 11
+    },
+    {
+      "field": "radar.axisLabel.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#999999"
+    },
+    {
+      "field": "indicator.nameStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "indicator.nameStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#666666"
+    },
+    {
+      "field": "indicator.nameStyle.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "indicator.nameStyle.fontFamily",
+      "type": "string",
+      "description": "fontFamily",
+      "defaultValue": "Microsoft YaHei"
+    },
+    {
+      "field": "indicator.nameGap",
+      "type": "number",
+      "description": "名称与轴的距离",
+      "defaultValue": 15
+    },
+    {
+      "field": "indicator.max",
+      "type": "number",
+      "description": "最大值(null=自动)",
+      "defaultValue": null
+    },
+    {
+      "field": "legend.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "legend.position",
+      "type": "enum",
+      "description": "position",
+      "options": [
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "defaultValue": "top"
+    },
+    {
+      "field": "legend.textStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "legend.textStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#666666"
+    },
+    {
+      "field": "legend.textStyle.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "legend.itemGap",
+      "type": "number",
+      "description": "itemGap",
+      "defaultValue": 16
+    },
+    {
+      "field": "tooltip.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "tooltip.trigger",
+      "type": "enum",
+      "description": "trigger",
+      "options": [
+        "item"
+      ],
+      "defaultValue": "item"
+    },
+    {
+      "field": "tooltip.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "rgba(50, 50, 50, 0.7)"
+    },
+    {
+      "field": "tooltip.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "transparent"
+    },
+    {
+      "field": "tooltip.textStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "tooltip.textStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#ffffff"
+    },
+    {
+      "field": "series.colors",
+      "type": "array",
+      "description": "颜色列表",
+      "defaultValue": [
+        "#5470c6",
+        "#91cc75",
+        "#fac858",
+        "#ee6666",
+        "#73c0de",
+        "#3ba272"
+      ]
+    },
+    {
+      "field": "series.lineWidth",
+      "type": "number",
+      "description": "线宽",
+      "defaultValue": 2
+    },
+    {
+      "field": "series.lineStyle",
+      "type": "enum",
+      "description": "线条样式",
+      "options": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "defaultValue": "solid"
+    },
+    {
+      "field": "series.areaStyle.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "series.areaStyle.opacity",
+      "type": "number",
+      "description": "opacity",
+      "defaultValue": 0.3
+    },
+    {
+      "field": "series.symbol.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "series.symbol.type",
+      "type": "enum",
+      "description": "type",
+      "options": [
+        "circle",
+        "rect",
+        "triangle",
+        "diamond",
+        "none"
+      ],
+      "defaultValue": "circle"
+    },
+    {
+      "field": "series.symbol.size",
+      "type": "number",
+      "description": "size",
+      "defaultValue": 4
+    },
+    {
+      "field": "series.symbol.borderWidth",
+      "type": "number",
+      "description": "borderWidth",
+      "defaultValue": 1
+    },
+    {
+      "field": "series.label.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "series.label.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 11
+    },
+    {
+      "field": "series.label.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#333333"
+    },
+    {
+      "field": "series.label.format",
+      "type": "enum",
+      "description": "format",
+      "options": [
+        "default",
+        "integer",
+        "float1",
+        "float2",
+        "percent",
+        "percent1",
+        "thousand",
+        "thousand1"
+      ],
+      "defaultValue": "default"
+    },
+    {
+      "field": "animation.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": true
+    },
+    {
+      "field": "animation.duration",
+      "type": "number",
+      "description": "duration",
+      "defaultValue": 1000
+    },
+    {
+      "field": "animation.easing",
+      "type": "enum",
+      "description": "easing",
+      "options": [
+        "linear",
+        "cubicOut",
+        "elasticOut",
+        "bounceOut"
+      ],
+      "defaultValue": "cubicOut"
+    }
+  ]
+}

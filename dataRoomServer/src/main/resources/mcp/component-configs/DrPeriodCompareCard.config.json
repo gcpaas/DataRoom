@@ -1,0 +1,365 @@
+{
+  "componentName": "DrPeriodCompareCard",
+  "displayName": "周期对比卡",
+  "description": "周期对比卡、KPI、同比、环比、变化值、变化率、对比分析",
+  "fields": [
+    {
+      "field": "global.padding",
+      "type": "array",
+      "description": "padding",
+      "defaultValue": [
+        16,
+        18,
+        16,
+        18
+      ]
+    },
+    {
+      "field": "global.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "field": "global.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "field": "global.borderWidth",
+      "type": "number",
+      "description": "borderWidth",
+      "defaultValue": 0
+    },
+    {
+      "field": "global.borderRadius",
+      "type": "number",
+      "description": "borderRadius",
+      "defaultValue": 8
+    },
+    {
+      "field": "dataMode.mode",
+      "type": "enum",
+      "description": "mode",
+      "options": [
+        "fields",
+        "series",
+        "autoFallback"
+      ],
+      "defaultValue": "autoFallback"
+    },
+    {
+      "field": "dataMode.lag",
+      "type": "number",
+      "description": "lag",
+      "defaultValue": 1
+    },
+    {
+      "field": "dataMode.sortByTime",
+      "type": "enum",
+      "description": "sortByTime",
+      "options": [
+        "asc",
+        "desc",
+        "none"
+      ],
+      "defaultValue": "asc"
+    },
+    {
+      "field": "dataMode.zeroPolicy",
+      "type": "enum",
+      "description": "zeroPolicy",
+      "options": [
+        "empty",
+        "zero",
+        "infinite"
+      ],
+      "defaultValue": "empty"
+    },
+    {
+      "field": "title.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "title.text",
+      "type": "string",
+      "description": "text",
+      "defaultValue": "周期对比"
+    },
+    {
+      "field": "title.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "title.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "title.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "normal"
+    },
+    {
+      "field": "current.label",
+      "type": "string",
+      "description": "label",
+      "defaultValue": "当前"
+    },
+    {
+      "field": "current.defaultValue",
+      "type": "number",
+      "description": "defaultValue",
+      "defaultValue": 1280
+    },
+    {
+      "field": "current.format",
+      "type": "enum",
+      "description": "format",
+      "options": [
+        "value",
+        "integer",
+        "float1",
+        "float2",
+        "percent",
+        "thousand",
+        "currency"
+      ],
+      "defaultValue": "thousand"
+    },
+    {
+      "field": "current.prefix",
+      "type": "string",
+      "description": "prefix",
+      "defaultValue": ""
+    },
+    {
+      "field": "current.suffix",
+      "type": "string",
+      "description": "suffix",
+      "defaultValue": ""
+    },
+    {
+      "field": "current.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 34
+    },
+    {
+      "field": "current.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#303133"
+    },
+    {
+      "field": "current.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "bold"
+    },
+    {
+      "field": "comparison.label",
+      "type": "string",
+      "description": "label",
+      "defaultValue": "对比"
+    },
+    {
+      "field": "comparison.showPreviousValue",
+      "type": "boolean",
+      "description": "showPreviousValue",
+      "defaultValue": true
+    },
+    {
+      "field": "comparison.showChangeValue",
+      "type": "boolean",
+      "description": "showChangeValue",
+      "defaultValue": true
+    },
+    {
+      "field": "comparison.showChangeRate",
+      "type": "boolean",
+      "description": "showChangeRate",
+      "defaultValue": true
+    },
+    {
+      "field": "comparison.rateFormat",
+      "type": "enum",
+      "description": "rateFormat",
+      "options": [
+        "percent0",
+        "percent1",
+        "percent2"
+      ],
+      "defaultValue": "percent2"
+    },
+    {
+      "field": "comparison.changeValuePrefix",
+      "type": "string",
+      "description": "changeValuePrefix",
+      "defaultValue": ""
+    },
+    {
+      "field": "comparison.changeValueSuffix",
+      "type": "string",
+      "description": "changeValueSuffix",
+      "defaultValue": ""
+    },
+    {
+      "field": "indicator.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "indicator.type",
+      "type": "enum",
+      "description": "type",
+      "options": [
+        "arrow",
+        "triangle",
+        "text",
+        "none"
+      ],
+      "defaultValue": "arrow"
+    },
+    {
+      "field": "indicator.positiveDirection",
+      "type": "enum",
+      "description": "positiveDirection",
+      "options": [
+        "increaseGood",
+        "decreaseGood",
+        "neutral"
+      ],
+      "defaultValue": "increaseGood"
+    },
+    {
+      "field": "indicator.positiveColor",
+      "type": "string",
+      "description": "positiveColor",
+      "defaultValue": "#67c23a"
+    },
+    {
+      "field": "indicator.negativeColor",
+      "type": "string",
+      "description": "negativeColor",
+      "defaultValue": "#f56c6c"
+    },
+    {
+      "field": "indicator.neutralColor",
+      "type": "string",
+      "description": "neutralColor",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "indicator.iconSize",
+      "type": "number",
+      "description": "iconSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "layout.mode",
+      "type": "enum",
+      "description": "mode",
+      "options": [
+        "compact",
+        "horizontal",
+        "vertical"
+      ],
+      "defaultValue": "compact"
+    },
+    {
+      "field": "layout.horizontalAlign",
+      "type": "enum",
+      "description": "horizontalAlign",
+      "options": [
+        "left",
+        "center",
+        "right"
+      ],
+      "defaultValue": "left"
+    },
+    {
+      "field": "layout.gap",
+      "type": "number",
+      "description": "gap",
+      "defaultValue": 10
+    },
+    {
+      "field": "layout.labelWidth",
+      "type": "number",
+      "description": "labelWidth",
+      "defaultValue": 0
+    },
+    {
+      "field": "textStyle.labelFontSize",
+      "type": "number",
+      "description": "labelFontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "textStyle.labelColor",
+      "type": "string",
+      "description": "labelColor",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "textStyle.compareFontSize",
+      "type": "number",
+      "description": "compareFontSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "textStyle.compareFontWeight",
+      "type": "enum",
+      "description": "compareFontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "normal"
+    },
+    {
+      "field": "animation.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": true
+    },
+    {
+      "field": "animation.duration",
+      "type": "number",
+      "description": "duration",
+      "defaultValue": 800
+    },
+    {
+      "field": "animation.easing",
+      "type": "enum",
+      "description": "easing",
+      "options": [
+        "linear",
+        "cubicOut",
+        "elasticOut",
+        "bounceOut"
+      ],
+      "defaultValue": "cubicOut"
+    }
+  ]
+}

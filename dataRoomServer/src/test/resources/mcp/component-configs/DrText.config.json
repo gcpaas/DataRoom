@@ -1,0 +1,20 @@
+{
+  "componentName": "DrText",
+  "displayName": "文本",
+  "description": "文字、文本、数字",
+  "fields": [
+    {
+      "field": "text",
+      "type": "string",
+      "description": "文本内容",
+      "defaultValue": "文本占位符"
+    },
+    {
+      "field": "align",
+      "type": "enum",
+      "options": ["left", "center", "right"],
+      "description": "对齐方式",
+      "defaultValue": "left"
+    }
+  ]
+}

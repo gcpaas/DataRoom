@@ -1,0 +1,346 @@
+{
+  "componentName": "DrMetricCard",
+  "displayName": "指标卡",
+  "description": "指标卡、KPI、单值、核心指标、数值、单位、条件色",
+  "fields": [
+    {
+      "field": "global.padding",
+      "type": "array",
+      "description": "padding",
+      "defaultValue": [
+        16,
+        18,
+        16,
+        18
+      ]
+    },
+    {
+      "field": "global.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "field": "global.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "field": "global.borderWidth",
+      "type": "number",
+      "description": "borderWidth",
+      "defaultValue": 0
+    },
+    {
+      "field": "global.borderRadius",
+      "type": "number",
+      "description": "borderRadius",
+      "defaultValue": 8
+    },
+    {
+      "field": "global.shadow.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": false
+    },
+    {
+      "field": "global.shadow.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "rgba(0, 0, 0, 0.16)"
+    },
+    {
+      "field": "global.shadow.blur",
+      "type": "number",
+      "description": "blur",
+      "defaultValue": 12
+    },
+    {
+      "field": "global.shadow.offsetX",
+      "type": "number",
+      "description": "offsetX",
+      "defaultValue": 0
+    },
+    {
+      "field": "global.shadow.offsetY",
+      "type": "number",
+      "description": "offsetY",
+      "defaultValue": 4
+    },
+    {
+      "field": "layout.direction",
+      "type": "enum",
+      "description": "direction",
+      "options": [
+        "vertical",
+        "horizontal"
+      ],
+      "defaultValue": "vertical"
+    },
+    {
+      "field": "layout.horizontalAlign",
+      "type": "enum",
+      "description": "horizontalAlign",
+      "options": [
+        "left",
+        "center",
+        "right"
+      ],
+      "defaultValue": "left"
+    },
+    {
+      "field": "layout.verticalAlign",
+      "type": "enum",
+      "description": "verticalAlign",
+      "options": [
+        "top",
+        "center",
+        "bottom"
+      ],
+      "defaultValue": "center"
+    },
+    {
+      "field": "layout.gap",
+      "type": "number",
+      "description": "gap",
+      "defaultValue": 8
+    },
+    {
+      "field": "title.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "title.text",
+      "type": "string",
+      "description": "text",
+      "defaultValue": "指标名称"
+    },
+    {
+      "field": "title.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "title.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "title.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "normal"
+    },
+    {
+      "field": "value.defaultValue",
+      "type": "number",
+      "description": "defaultValue",
+      "defaultValue": 1280
+    },
+    {
+      "field": "value.format",
+      "type": "enum",
+      "description": "format",
+      "options": [
+        "value",
+        "integer",
+        "float1",
+        "float2",
+        "percent",
+        "thousand",
+        "currency"
+      ],
+      "defaultValue": "thousand"
+    },
+    {
+      "field": "value.decimalPlaces",
+      "type": "number",
+      "description": "decimalPlaces",
+      "defaultValue": 0
+    },
+    {
+      "field": "value.thousandSeparator",
+      "type": "boolean",
+      "description": "thousandSeparator",
+      "defaultValue": true
+    },
+    {
+      "field": "value.prefix",
+      "type": "string",
+      "description": "prefix",
+      "defaultValue": ""
+    },
+    {
+      "field": "value.suffix",
+      "type": "string",
+      "description": "suffix",
+      "defaultValue": ""
+    },
+    {
+      "field": "value.emptyText",
+      "type": "string",
+      "description": "emptyText",
+      "defaultValue": "--"
+    },
+    {
+      "field": "value.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 36
+    },
+    {
+      "field": "value.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#303133"
+    },
+    {
+      "field": "value.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "bold"
+    },
+    {
+      "field": "value.lineHeight",
+      "type": "number",
+      "description": "lineHeight",
+      "defaultValue": 1
+    },
+    {
+      "field": "subtitle.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "subtitle.text",
+      "type": "string",
+      "description": "text",
+      "defaultValue": "实时统计"
+    },
+    {
+      "field": "subtitle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "subtitle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "subtitle.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "normal"
+    },
+    {
+      "field": "unit.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "unit.text",
+      "type": "string",
+      "description": "text",
+      "defaultValue": ""
+    },
+    {
+      "field": "unit.position",
+      "type": "enum",
+      "description": "position",
+      "options": [
+        "prefix",
+        "suffix",
+        "top",
+        "bottom"
+      ],
+      "defaultValue": "suffix"
+    },
+    {
+      "field": "unit.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "unit.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "unit.gap",
+      "type": "number",
+      "description": "gap",
+      "defaultValue": 4
+    },
+    {
+      "field": "conditional.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": false
+    },
+    {
+      "field": "conditional.rules",
+      "type": "array",
+      "description": "rules",
+      "defaultValue": [
+        {
+          "operator": ">=",
+          "value": 1000,
+          "valueColor": "#67c23a",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    },
+    {
+      "field": "animation.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": true
+    },
+    {
+      "field": "animation.duration",
+      "type": "number",
+      "description": "duration",
+      "defaultValue": 800
+    },
+    {
+      "field": "animation.easing",
+      "type": "enum",
+      "description": "easing",
+      "options": [
+        "linear",
+        "cubicOut",
+        "elasticOut",
+        "bounceOut"
+      ],
+      "defaultValue": "cubicOut"
+    }
+  ]
+}
