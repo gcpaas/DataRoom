@@ -124,9 +124,8 @@ public class PageController {
         if (StringUtils.isBlank(pageEntity.getParentCode())) {
             pageEntity.setParentCode("root");
         }
-        if (StringUtils.isBlank(pageEntity.getId())) {
-            pageEntity.setId(null);
-        }
+        // 防止AI生成时自定义ID
+        pageEntity.setId(null);
         pageEntity.setPageStatus(PageStatus.DESIGN);
         pageService.save(pageEntity);
         if (PageType.DIRECTORY != pageEntity.getPageType()) {
