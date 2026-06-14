@@ -25,6 +25,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -115,6 +116,7 @@ public class DatasetController {
     @PostMapping("/run")
     @RequiresRoles(value = DataRoomRole.SHARER)
     @Operation(summary = "执行", description = "执行数据集")
+    @Tool(name = "runDataRoomDataset", description = "执行DataRoom数据集。参数datasetCode为数据集编码，inputParam为数据集入参键值对；返回数据集执行结果、输出字段和执行状态。")
     @OperationLogMeta(actionType = "执行", actionDesc = "数据集执行", businessType = "dataset_runtime", businessName = "数据集运行", targetIdKey = "datasetCode", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<DatasetRunResponse> run(@RequestBody DatasetRunRequest datasetRunRequest) {
         DatasetEntity datasetEntity = datasetMapper.getByCode(datasetRunRequest.getDatasetCode());

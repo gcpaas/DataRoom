@@ -13,6 +13,16 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  ai:
+    mcp:
+      server:
+        name: dataroom-mcp-server
+        version: ${project.version}
+        type: sync
+        protocol: streamable
+        streamable-http:
+          # MCP 访问地址  http://ip:port/context-path/mcp/sse
+          mcp-endpoint: /mcp/sse
 
 dataroom:
   resource:

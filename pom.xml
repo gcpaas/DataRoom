@@ -41,10 +41,18 @@
         <avatica.version>1.28.0</avatica.version>
         <poi.version>5.5.1</poi.version>
         <xmlbeans.version>5.3.0</xmlbeans.version>
+        <spring-ai.version>1.1.8</spring-ai.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi</artifactId>
@@ -72,6 +80,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
