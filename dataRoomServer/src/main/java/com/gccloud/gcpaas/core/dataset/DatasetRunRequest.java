@@ -15,17 +15,17 @@ public class DatasetRunRequest {
     /**
      * 数据集编码
      */
-    @Schema(description = "数据集编码", required = true)
+    @Schema(description = "数据集编码", requiredMode = Schema.RequiredMode.REQUIRED)
     private String datasetCode;
     /**
      * 图表名称
      */
-    @Schema(description = "图表名称",required = false)
+    @Schema(description = "图表名称",requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String chartName;
     /**
      * 入参列表
      */
     @JsonAlias("paramMap")
-    @Schema(description = "数据集参数",required = false)
+    @Schema(description = "数据集参数",requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private Map<String, Object> inputParam = new HashMap<>();
 }

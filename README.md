@@ -9,7 +9,7 @@
     <img alt="Company" src="https://img.shields.io/badge/公司-科大国创云网科技有限公司-blue.svg">
     <a href="http://gcpaas.gccloud.com"><img src="https://img.shields.io/badge/%E9%A2%84%E8%A7%88-演示环境-yellow" alt="预览"></a>
 </p>
-🔥DataRoom是一款基于SpringBoot3.x、JDK17、Vue3.x、Vite8.x、Element-plus、Echarts6.x等技术栈的大屏设计器，具备大屏、仪表板设计、预览能力，支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV等20+数据源接入，使用简单，完全免费，代码开源。<br/>
+🔥DataRoom是一款基于SpringBoot3.x、JDK17、Vue3.x、Vite8.x、Element-plus、Echarts6.x等技术栈的大屏设计器，具备大屏、仪表板设计、预览能力，支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV等20+数据源接入，支持MCP协议，使用简单，完全免费，代码开源。<br/>
 
 ## 🎉特别说明
 * 当前项目代码完全开源，暂时未提供演示环境
@@ -74,6 +74,12 @@
 > 支持标准的RESTful API、Open API 3.x规范
 
 ![开放API.png](doc/image/%E5%BC%80%E6%94%BEAPI.png)
+
+### MCP
+> 支持MCP协议，接入AI工具，通过对话方式新建大屏、执行数据集等，以下用户数据为AI生成
+
+![MCP.png](doc/image/MCP.png)
+
 
 ## 快速开始
 https://www.yuque.com/gc-starter/dataroom-plus/start
