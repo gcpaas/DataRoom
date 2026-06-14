@@ -116,8 +116,8 @@ public class DatasetController {
     @PostMapping("/run")
     @RequiresRoles(value = DataRoomRole.SHARER)
     @Operation(summary = "执行", description = "执行数据集")
-    @Tool(name = "runDataRoomDataset", description = "执行DataRoom数据集。参数datasetCode为数据集编码，inputParam为数据集入参键值对；返回数据集执行结果、输出字段和执行状态。")
-    @OperationLogMeta(actionType = "执行", actionDesc = "数据集执行", businessType = "dataset_runtime", businessName = "数据集运行", targetIdKey = "datasetCode", detailLevel = OperationLogDetailLevel.SUMMARY)
+    @Tool(name = "runDataset", description = "执行DataRoom数据集。参数datasetCode为数据集编码，inputParam为数据集入参键值对；返回数据集执行结果、输出字段和执行状态。")
+    @OperationLogMeta(actionType = "执行", actionDesc = "数据集执行", businessType = "dataset", businessName = "数据集运行", targetIdKey = "datasetCode", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<DatasetRunResponse> run(@RequestBody DatasetRunRequest datasetRunRequest) {
         DatasetEntity datasetEntity = datasetMapper.getByCode(datasetRunRequest.getDatasetCode());
         Assert.isTrue(datasetEntity != null, "数据集不存在");

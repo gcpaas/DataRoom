@@ -38,6 +38,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -112,8 +113,10 @@ public class PageController {
      */
     @PostMapping("/insert")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Tool(name = "newPage", description = "新增页面。参数pageEntity为页面配置信息，返回页面ID")
+    @OperationLogMeta(actionType = "新增页面", actionDesc = "新增页面", businessType = "newPage", businessName = "新增页面", targetIdKey = "code", detailLevel = OperationLogDetailLevel.SUMMARY)
     @Operation(summary = "新增", description = "新增页面")
-    public Resp<String> insert(@RequestBody PageEntity pageEntity) {
+    public Resp<String> newPage(@RequestBody PageEntity pageEntity) {
         log.info("新增页面 {}", pageEntity);
         if (StringUtils.isBlank(pageEntity.getCode())) {
             pageEntity.setCode(CodeWorker.generateCode(null));
@@ -142,6 +145,8 @@ public class PageController {
      */
     @PostMapping("/update")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Tool(name = "updatePage", description = "更新页面。参数pageDesignEntity为页面配置信息，返回页面ID")
+    @OperationLogMeta(actionType = "更新页面", actionDesc = "更新页面", businessType = "updatePage", businessName = "更新页面", targetIdKey = "code", detailLevel = OperationLogDetailLevel.SUMMARY)
     @Operation(summary = "更新", description = "更新页面")
     public Resp<String> update(@RequestBody PageEntity pageDesignEntity) {
         pageDesignEntity.setUpdateDate(new Date());
