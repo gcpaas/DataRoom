@@ -36,22 +36,4 @@ public class TokenService {
         builder.setId(id);
         return builder.compact();
     }
-
-    /**
-     * 创建分享者token
-     *
-     * @param username
-     * @return
-     */
-    public String createSharerToken(String username) {
-        Jwt jwtConfig = dataRoomConfig.getJwt();
-        Map<String, Object> claims = new HashMap<>(16);
-        claims.put("username", "sharer");
-        claims.put("sharer", true);
-        JwtBuilder builder = Jwts.builder().signWith(SignatureAlgorithm.forName(jwtConfig.getAlg()), jwtConfig.getSecret()).setClaims(claims).setIssuer(jwtConfig.getIssuer()).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration() * 1000L));
-        String id = IdWorker.getIdStr();
-        builder.setId(id);
-        return builder.compact();
-    }
-
 }

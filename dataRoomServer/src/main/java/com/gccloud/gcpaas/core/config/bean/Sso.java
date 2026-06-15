@@ -13,10 +13,6 @@ public class Sso {
      */
     private Boolean enable = true;
     /**
-     * 是否默认代理，用于处理无法识别的token
-     */
-    private Boolean defaultProxy = false;
-    /**
      * 颁发者，用于区分token是单点的还是本系统的
      */
     private String issuer = "unknown";
