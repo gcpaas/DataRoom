@@ -1,0 +1,567 @@
+name: superpowers-bridge
+version: 1
+description: >
+  Spec-driven workflow integrated with Superpowers skills.
+  Requirements: Superpowers plugin installed, providing skills:
+  brainstorming, writing-plans, using-git-worktrees,
+  subagent-driven-development, finishing-a-development-branch.
+  Requires a subagent-capable platform (Claude Code, Codex, etc.) —
+  this schema does not support runtimes without subagent support,
+  because the alternative executor (executing-plans) loses TDD and
+  code-review transitive activation, defeating Superpowers' value.
+  If your platform lacks subagent support, use spec-driven instead.
+  Each artifact / apply step verifies its required skills before
+  invoking and surfaces a clear error if any are missing.
+  brainstorm → proposal → specs → tasks → plan → verify → retrospective.
+  design is required (reorganizes raw brainstorm output into structured
+  Context / Goals / Decisions / Risks / Migration; referenced by tasks
+  and plan for implementation guidance).
+  Apply phase uses git worktrees + subagent-driven-development
+  (brings TDD and code-review transitively).
+
+artifacts:
+  - id: brainstorm
+    generates: brainstorm.md
+    description: Collaborative design exploration using Superpowers brainstorming
+    template: brainstorm.md
+    instruction: |
+      PRECHECK — required skill availability:
+      Before invoking, confirm `superpowers:brainstorming` appears in
+      your available skills list. If missing, STOP and inform the user
+      that the Superpowers plugin must be installed (or that they can
+      explicitly opt to write brainstorm.md manually using the template
+      below). Do NOT silently fall back.
+
+      Use the Skill tool to invoke **superpowers:brainstorming**.
+
+      IMPORTANT output redirection:
+      - Do NOT write to `docs/superpowers/specs/`. Instead, write the
+        brainstorming output directly to this change's `brainstorm.md`.
+      - brainstorm.md is a RAW CAPTURE — write the brainstorming
+        skill's full output as-is, without forcing any template
+        structure. The skill's natural output is typically a decision
+        log (background → decision chain Q1-Qn → design trade-offs),
+        but the format varies by conversation. Preserve the skill's
+        natural organization.
+      - Do NOT pre-fill design.md during this step. design.md is a
+        separate artifact that reorganizes brainstorm.md content into
+        structured sections (Context, Goals, Decisions, Risks,
+        Migration). That transformation happens in the design step.
+
+      The brainstorming skill will:
+      1. Explore project context
+      2. Ask clarifying questions (one at a time)
+      3. Propose 2-3 approaches with trade-offs
+      4. Present design sections for approval
+      5. Output the validated design
+    requires: []
+
+  - id: proposal
+    generates: proposal.md
+    description: Initial proposal document outlining the change
+    template: proposal.md
+    instruction: |
+      Create the proposal document based on the brainstorming output.
+
+      Read brainstorm.md for the validated design. Extract:
+      - **Why**: The motivation (from brainstorming discussion)
+      - **What Changes**: Specific changes agreed upon
+      - **Capabilities**: Identify which specs will be created or modified:
+        - **New Capabilities**: List capabilities being introduced. Each becomes a new `specs/<name>/spec.md`. Use kebab-case names.
+        - **Modified Capabilities**: List existing capabilities whose REQUIREMENTS are changing. Check `openspec/specs/` for existing spec names.
+      - **Impact**: Affected code, APIs, dependencies, or systems.
+
+      Since brainstorming already explored the problem space,
+      this should be a concise extraction, not a new exploration.
+
+      IMPORTANT: The Capabilities section is critical. It creates the contract between
+      proposal and specs phases. Each capability listed here will need a spec file.
+
+      Keep it concise (1-2 pages). Focus on the "why" not the "how".
+    requires:
+      - brainstorm
+
+  - id: design
+    generates: design.md
+    description: Technical design document with implementation details
+    template: design.md
+    instruction: |
+      Create the design document explaining HOW to implement the change.
+
+      Read brainstorm.md as input. brainstorm.md is a raw capture of
+      the brainstorming skill's output (typically a decision log with
+      Q1-Qn decisions, trade-offs, and context). Your job is to
+      REORGANIZE that content into the structured sections below.
+
+      This is a transformation, not a copy. Extract and restructure:
+      - Decisions (Q1-Qn from brainstorm) → design.md §Decisions
+      - Background/context → design.md §Context
+      - Trade-offs → design.md §Risks / Trade-offs
+      - Add Goals/Non-Goals and Migration Plan (may require
+        inference from brainstorm.md content)
+
+      Sections:
+      - **Context**: Background, current state, constraints, stakeholders
+      - **Goals / Non-Goals**: What this design achieves and explicitly excludes
+      - **Decisions**: Key technical choices with rationale (why X over Y?). Include alternatives considered per decision.
+      - **Risks / Trade-offs**: Known limitations, things that could go wrong. Format: [Risk] → Mitigation
+      - **Migration Plan**: Steps to deploy, rollback strategy (if applicable)
+      - **Open Questions**: Outstanding decisions or unknowns to resolve
+
+      Focus on architecture and approach, not line-by-line implementation.
+      Good design docs explain the "why" behind technical decisions.
+    requires:
+      - brainstorm
+
+  - id: specs
+    generates: "specs/**/*.md"
+    description: Detailed specifications for the change
+    template: spec.md
+    instruction: |
+      Create specification files that define WHAT the system should do.
+
+      Create one spec file per capability listed in the proposal's Capabilities section.
+      - New capabilities: use the exact kebab-case name from the proposal (specs/<capability>/spec.md).
+      - Modified capabilities: use the existing spec folder name from openspec/specs/<capability>/ when creating the delta spec at specs/<capability>/spec.md.
+
+      Delta operations (use ## headers):
+      - **ADDED Requirements**: New capabilities
+      - **MODIFIED Requirements**: Changed behavior - MUST include full updated content
+      - **REMOVED Requirements**: Deprecated features - MUST include **Reason** and **Migration**
+      - **RENAMED Requirements**: Name changes only - use FROM:/TO: format
+
+      Format requirements:
+      - Each requirement: `### Requirement: <name>` followed by description
+      - Use SHALL/MUST for normative requirements (avoid should/may)
+      - Each scenario: `#### Scenario: <name>` with WHEN/THEN format
+      - **CRITICAL**: Scenarios MUST use exactly 4 hashtags (`####`). Using 3 hashtags or bullets will fail silently.
+      - Every requirement MUST have at least one scenario.
+
+      Specs should be testable - each scenario is a potential test case.
+    requires:
+      - proposal
+
+  - id: tasks
+    generates: tasks.md
+    description: Implementation checklist with trackable tasks
+    template: tasks.md
+    instruction: |
+      Create the task list that breaks down the implementation work.
+
+      **IMPORTANT: Follow the template below exactly.** The apply phase parses
+      checkbox format to track progress. Tasks not using `- [ ]` won't be tracked.
+
+      Guidelines:
+      - Group related tasks under ## numbered headings
+      - Each task MUST be a checkbox: `- [ ] X.Y Task description`
+      - Tasks should be small enough to complete in one session
+      - Order tasks by dependency (what must be done first?)
+
+      Reference specs for what needs to be built and design.md for
+      how to build it (architecture decisions, trade-offs, migration).
+    requires:
+      - specs
+      - design
+
+  - id: plan
+    generates: plan.md
+    description: Micro-task implementation plan using Superpowers writing-plans
+    template: plan.md
+    instruction: |
+      PRECHECK — required skill availability:
+      Before invoking, confirm `superpowers:writing-plans` appears in
+      your available skills list. If missing, STOP and inform the user
+      that the Superpowers plugin must be installed (or that they can
+      explicitly opt to write plan.md manually using the template
+      below). Do NOT silently fall back.
+
+      Use the Skill tool to invoke **superpowers:writing-plans**.
+
+      IMPORTANT output redirection:
+      - Do NOT write to `docs/superpowers/plans/`. Instead, write
+        the plan directly to this change's `plan.md`.
+
+      The writing-plans skill will:
+      1. Read the tasks.md and design.md for context
+      2. Break each task into 2-5 minute micro-steps (TDD style)
+      3. Include exact file paths, code snippets, test commands
+      4. Add commit points after each task
+
+      Pass the tasks.md content to the skill as the input for
+      decomposition. The plan should reference the specs and
+      design artifacts in this change directory.
+    requires:
+      - tasks
+
+  - id: verify
+    generates: verify.md
+    description: Post-implementation verification against specs, design, and tasks
+    template: verify.md
+    instruction: |
+      PRECHECK — implementation evidence:
+      Before producing verify.md, run BOTH commands. If either
+      returns 0, STOP and tell the user that apply phase has not
+      yet produced reviewable changes.
+
+      1. Commit evidence (must return > 0):
+         git log --oneline $(git merge-base HEAD origin/main 2>/dev/null || git merge-base HEAD origin/master 2>/dev/null)..HEAD | wc -l
+
+      2. Task progress (must return > 0):
+         grep -c '^- \[x\]' openspec/changes/<change-name>/tasks.md
+
+      Only after BOTH return positive numbers, proceed to invoke
+      the verification skill below.
+
+      Use the Skill tool to invoke **openspec-verify-change** (the
+      `/opsx:verify` slash command is its user-facing equivalent).
+
+      IMPORTANT timing note:
+      - Unlike other artifacts, verify.md is produced AFTER the apply
+        phase completes, NOT during planning. The `requires: [plan]`
+        edge exists only for schema graph purposes — the actual
+        verification step MUST run on a completed implementation.
+
+      The verify step MUST perform the following checks and record
+      results in verify.md using the template:
+
+      1. **Structural validation**: Run `openspec validate --all --json`
+         in the repository root and confirm every item returns
+         `"valid": true`. If any item fails, record the issues and
+         return to fix the underlying artifact before proceeding.
+
+      2. **Task completion**: Confirm every checkbox in tasks.md is
+         `- [x]`. For any `- [ ]` remaining, document the reason
+         (e.g. manual / out-of-scope / blocked) and whether it blocks
+         archive.
+
+      3. **Delta spec sync state**: For each directory under
+         `openspec/changes/<name>/specs/`, compare against the
+         corresponding `openspec/specs/<capability>/spec.md` and
+         record one of:
+         - ✓ Already synced
+         - ✗ Needs sync (list the capabilities)
+         - N/A (no delta specs produced)
+
+      4. **Design/specs coherence**: Spot-check that design.md
+         decisions reference or align with the requirements listed
+         in specs/. Record any drift as a warning (non-blocking).
+
+      5. **Implementation signal**: Confirm all code changes are
+         committed (no unstaged files in the worktree). Cite the
+         commit range if known.
+
+      6. **Front-door routing leak detector** (warning, non-blocking):
+
+         For projects using superpowers-bridge, design output
+         should never land in `docs/superpowers/specs/` — the
+         brainstorm artifact's output redirection (see this
+         schema's brainstorm.instruction) routes it to
+         `openspec/changes/<name>/brainstorm.md`. Run:
+
+           ls docs/superpowers/specs/*.md 2>/dev/null
+
+         If any files exist, record a WARNING: "Front-door routing
+         leak — design output found at docs/superpowers/specs/...;
+         these belong in openspec/changes/<name>/brainstorm.md or
+         design.md. Move/delete after confirming content is captured
+         in the change directory."
+
+         Non-blocking — adopters may have legitimate non-schema use
+         of that directory predating schema install. Surfaces the
+         leak so the user can decide whether to clean up.
+
+      7. **Deferred dogfood vs automated-test equivalence**:
+
+         If plan.md has any tasks marked `[~]` deferred (manual smoke /
+         dogfood / live-environment checks that weren't run in this
+         cycle), enumerate each in verify.md §7 and identify the
+         equivalent automated test that covers the same assertions.
+
+         If no equivalent automated test exists for a deferred manual
+         check, that row is a real coverage gap — record in
+         retrospective Misses with a follow-up plan, not silently
+         deferred.
+
+         The decision table makes "deferred-but-covered" vs "deferred-
+         and-gapped" visible at archive time, so reviewers can audit
+         completeness without re-deriving the rationale from plan +
+         test files.
+
+         Non-blocking on its own — Overall Decision remains PASS even
+         with identified gaps, provided they're recorded as follow-up.
+         Blocks only if §7 is empty AND plan.md has `[~]` rows (means
+         the gap analysis was skipped, not that gaps don't exist).
+
+      Verify MAY be re-run multiple times as the implementation is
+      refined — each run overwrites verify.md with current state.
+
+      If `openspec-verify-change` skill is unavailable, fall back to
+      running the numbered checks above manually and recording results
+      in verify.md.
+    requires:
+      - plan
+
+  - id: retrospective
+    generates: retrospective.md
+    description: Evidence-first retrospective of completed change
+    template: retrospective.md
+    instruction: |
+      PRECHECK — verify completion evidence:
+      Before producing retrospective.md, run these commands. If
+      either fails, STOP and tell the user verify must pass first.
+
+      1. verify.md exists:
+         test -f openspec/changes/<change-name>/verify.md
+
+      2. verify.md's Overall Decision is NOT marked as FAIL.
+         The verify.md template has 3 mutually-exclusive checkboxes
+         in its "Overall Decision" section: "✅ PASS", "⚠️ PASS WITH
+         WARNINGS", "❌ FAIL". Only "❌ FAIL" being checked is blocking:
+         ! grep -q '^- \[x\] ❌ FAIL' openspec/changes/<change-name>/verify.md
+
+      Only after both succeed, proceed.
+
+      Write a retrospective of this change with evidence-first analysis.
+
+      IMPORTANT timing note:
+      - retrospective.md is produced AFTER apply phase completes and
+        verify.md shows no blocking issues. The `requires: [verify]`
+        edge exists only for schema graph purposes; the actual
+        retrospective MUST run on a completed, verified implementation.
+
+      Process (follow these 3 steps):
+
+      1. **Gather evidence**
+         - Run `git log --oneline <base>..HEAD` in the change worktree
+           (or main checkout if the worktree was already merged) to
+           get the commit range
+         - Read brainstorm.md, plan.md, tasks.md in this change
+           directory for plan-vs-actual comparison
+         - If verify.md contains failing items, address them BEFORE
+           writing the retro
+
+      2. **Write the retrospective sections** — each claim cites
+         a commit hash, file path, test name, or measurable fact.
+
+         The retrospective has §0 Evidence (quantitative front-
+         matter) plus 6 analysis sections (§1–§6). Downstream
+         analysis bullets reference §0 instead of inlining
+         `[evidence: commit X]` per line.
+
+         §0) **Evidence** — quantitative front-matter populated
+             from `git log <base>..HEAD`, `tasks.md`, and
+             verify.md: commit count, diff size (lines/files),
+             tasks-done ratio, active hours, subagent dispatch
+             count, new external dependencies, post-merge bugs,
+             OpenSpec validate state at archive, test coverage
+             signal, and a one-line commit chain.
+
+         §1) **Wins** — what worked well, with evidence
+
+         §2) **Misses** — what didn't, marked by severity:
+             - 🔴 blocking
+             - 🟡 painful
+             - 📌 nit
+
+         §3) **Plan deviations** — tasks whose scope changed, and why
+
+         §4) **Skill / workflow compliance** — list each skill in
+             this schema's apply phase; mark whether it was
+             actually used. For any ✗, fill the
+             `### Deliberately Skipped Skills` subsection per the
+             rules below.
+
+         §5) **Surprises** — assumptions that turned out wrong
+
+         §6) **Promote candidates → long-term learning** — use
+             a `- [ ]` checklist (not a flat table). Each
+             candidate:
+
+             - Title with severity emoji (🔴/🟡/📌) + one-
+               sentence learning
+             - `→ **Promote to** <destination>` (memory /
+               CLAUDE.md / schema / skill / one-off)
+             - Two body lines aligned with the feedback memory
+               schema: `> **Why**: <reason>` and
+               `> **How to apply**: <trigger condition>`
+
+             Unchecked `- [ ]` items represent in-flight
+             candidates that carry into the next cycle's retro
+             for re-evaluation. The checklist + Why/How body
+             shape lets candidates transfer mechanically to
+             `~/.claude/memory/` without re-writing.
+
+         **Skipped-skill rules for §4**:
+
+         The schema was designed with the explicit intent that
+         no apply-phase skill should be skipped — each skill is
+         in the flow for a reason. Default expectation: §4 has
+         every row marked ✓.
+
+         For any skill marked ✗, DO NOT just write a one-line
+         reason. Instead, the `### Deliberately Skipped Skills`
+         subsection must answer three questions per skipped
+         skill:
+
+         - **What was skipped**: the specific skill or sub-step
+         - **Why this cycle**: the concrete cycle condition that
+           triggered the skip. Vague reasons ("not needed", "too
+           small", "no time", "blocked by external dep", "output
+           looked off") are insufficient — name the actual trigger
+           (a specific commit hash, log line, or observed behavior).
+         - **How to prevent recurrence**: which of these the
+           next cycle in the same situation should rely on
+           instead — schema graph fix / skill description
+           tightening / CLAUDE.md trigger / scope-judgment
+           rule / explicit "one-off — schema boundary case" (the
+           last must state why it's a boundary, not just label
+           the exception).
+
+         If multiple cycles skip the same skill with similar
+         "How to prevent" answers, that pattern is a §6 Promote
+         candidate (schema / skill PR motivator). The §4
+         subsection is a feedback loop into schema maintenance —
+         it should make the next retro's subsection shorter, not
+         longer.
+
+      3. **Retrospective skipping policy** (different from §4
+         skill skipping — this is whether to write the retro at
+         all):
+
+         - Trivial single-commit fixes: OK to skip the
+           retrospective entirely. Write a one-liner reason in
+           retrospective.md (e.g. "Skipped: single-commit linter
+           fix, no insights").
+         - Anything else: produce §0 Evidence plus all 6 analysis
+           sections (a placeholder "(none observed)" is fine if
+           a section truly has nothing).
+
+      4. **Forward-pointer policy (when facts change after writing)**
+
+         Retrospective.md reflects state at write-time. If
+         subsequent cycles discover that a claim, evidence, or
+         conclusion in this retro was wrong/incomplete:
+
+         - Do NOT rewrite the retrospective (loses audit trail of
+           what was known at the time)
+         - Add a forward-pointer in the retrospective itself:
+           `> **Update YYYY-MM-DD**: section X superseded by
+           <link to follow-up retro / commit / issue>`
+         - The follow-up artifact carries the corrected analysis
+
+         Why: retrospective is evidence-based — its value is
+         capturing what was known and reasoned at a specific point.
+         Rewriting it removes that audit trail.
+
+      Write output to retrospective.md using the template structure.
+    requires:
+      - verify
+
+apply:
+  requires: [plan]
+  tracks: tasks.md
+  instruction: |
+    Before implementing, set up an isolated workspace and executor:
+
+    0. **Pre-flight — verify required Superpowers skills**:
+
+       This schema's apply phase requires the following skills.
+       Confirm each appears in your available skills list before
+       proceeding:
+
+       - superpowers:using-git-worktrees
+       - superpowers:subagent-driven-development
+         (transitively: superpowers:test-driven-development,
+                        superpowers:requesting-code-review)
+       - superpowers:finishing-a-development-branch
+
+       If any required skill is missing, STOP and inform the user —
+       do NOT proceed and do NOT silently fall back to manual
+       implementation. The user can install the Superpowers plugin,
+       or explicitly opt into the manual fallback path described at
+       the end of this instruction.
+
+       Additionally, confirm the project's expected CLI tools are
+       on PATH. The exact list depends on the project — read
+       plan.md and surface any tool mentioned (e.g., `mvn`/`mvnw`,
+       `docker`, `python3`, `jq`, `glab`/`gh`, `node`/`npm`). If
+       a tool is missing, surface as WARNING (not STOP) — the user
+       may have a fallback. Print the missing list once at apply
+       start so the user isn't surprised mid-cycle.
+
+    1. **Workspace**: Use the Skill tool to invoke
+       **superpowers:using-git-worktrees** to create an isolated
+       git worktree for this change.
+
+    2. **Executor — subagent-driven-development**:
+
+       Use the Skill tool to invoke
+       **superpowers:subagent-driven-development** to execute
+       the plan.md micro-tasks with fresh subagents per task.
+
+       Tell the executor:
+       - Read plan.md in this change directory for micro-tasks
+       - Update tasks.md checkboxes as coarse tasks complete
+       - Work within the created worktree
+
+       IMPORTANT — transitive skill activation:
+       subagent-driven-development internally enforces the
+       following skills, so you do NOT need to invoke them
+       manually:
+       - **superpowers:test-driven-development** — every task
+         follows RED-GREEN-REFACTOR. Implementation code written
+         before a failing test is deleted.
+       - **superpowers:requesting-code-review** — after each
+         task, a code-reviewer subagent is dispatched to catch
+         spec compliance and code quality issues. A final review
+         runs for the entire implementation before apply
+         concludes.
+
+       This schema does NOT support `superpowers:executing-plans`
+       as a fallback for non-subagent platforms. Per its SKILL.md,
+       executing-plans does not transitively activate TDD or
+       code-review — defeating the rigor that Superpowers brings.
+       If your platform lacks subagent support, use the built-in
+       `spec-driven` schema instead of this one.
+
+    3. **Verification**: When all tasks are done, produce the
+       `verify` artifact by invoking **openspec-verify-change**
+       to check completeness, correctness, and coherence.
+       Re-run verify until all blocking issues are resolved.
+
+    4. **Retrospective (write while context is hot)**:
+
+       Once verify.md shows no blocking issues, produce the
+       `retrospective` artifact BEFORE opening any PR. Run the
+       retrospective artifact's instruction (which has its own
+       PRECHECK confirming verify.md exists and is not FAIL).
+
+       Why now, not after PR: retrospective is part of this cycle's
+       deliverables and should land in the same PR. Writing it after
+       PR merge produces a separate trailing commit and loses the
+       hot context (running tests, fresh fix memory).
+
+    5. **Archive (sync spec delta + move folder)**:
+
+       After retrospective.md is written, run `openspec archive -y`
+       (or invoke `/opsx:archive`). This:
+       - syncs delta specs from `openspec/changes/<name>/specs/`
+         into `openspec/specs/<capability>/spec.md`
+       - moves the change folder to
+         `openspec/changes/archive/YYYY-MM-DD-<name>/`
+
+       The PR diff after archive contains the COMPLETE cycle state:
+       all 8 artifacts done, spec synced into main specs, change
+       under archive/.
+
+    6. **Completion (PR is the LAST step)**:
+
+       After retrospective + archive are both done, use the Skill
+       tool to invoke **superpowers:finishing-a-development-branch**.
+
+       The branch's PR diff MUST contain the complete archived
+       cycle. If it doesn't (e.g., because retrospective or archive
+       was skipped), STOP and complete those first.
+
+       This is the canonical opening sequence for the PR — do NOT
+       reorder.

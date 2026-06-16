@@ -90,6 +90,9 @@
 
 ![MCP.png](doc/image/MCP.png)
 
+### 系统集成
+> 支持通过配置的方式与若依框架完成单点登录，可扩展其他框架单点登录
+
 ## 快速开始
 https://www.yuque.com/gc-starter/dataroom-plus/start
 

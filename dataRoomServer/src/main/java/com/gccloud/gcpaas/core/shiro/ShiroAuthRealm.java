@@ -8,6 +8,7 @@ import com.gccloud.gcpaas.core.config.bean.Sso;
 import com.gccloud.gcpaas.core.constant.UserStatus;
 import com.gccloud.gcpaas.core.entity.UserEntity;
 import com.gccloud.gcpaas.core.exception.DataRoomException;
+import com.gccloud.gcpaas.core.shiro.sso.ISsoAdapterService;
 import com.gccloud.gcpaas.core.user.service.UserService;
 import com.gccloud.gcpaas.core.util.TokenUtils;
 import io.jsonwebtoken.Claims;
@@ -32,7 +33,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +48,8 @@ public class ShiroAuthRealm extends AuthorizingRealm {
     private RestTemplate restTemplate;
     @Resource
     private UserService userService;
+    @Resource
+    private ISsoAdapterService ssoAdapterService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -91,34 +93,27 @@ public class ShiroAuthRealm extends AuthorizingRealm {
             if (localIssuer.equals(tokenIssuer)) {
                 Claims claims = Jwts.parser().setSigningKey(jwt.getSecret()).build().parseClaimsJws(accessToken).getBody();
                 // 解析token，然后获取用户相关信息
-                String username = claims.get("username", String.class);
-                UserEntity user = userService.getByAccount(username);
+                String account = claims.get("account", String.class);
+                UserEntity user = userService.getByAccount(account);
                 if (user == null || user.getStatus() == null || user.getStatus() != UserStatus.NORMAL || UserService.isExpired(user)) {
                     throw new DataRoomException("用户不存在、已禁用、已锁定或已过期");
                 }
                 loginUser = new LoginUser();
                 BeanUtils.copyProperties(user, loginUser);
             } else {
-                Sso thirdPartySso = null;
-                // 单点登录，带着其他应用的token进来的
-                List<Sso> ssoList = dataRoomConfig.getSsoList();
-                for (Sso sso : ssoList) {
-                    if (!sso.getEnable()) {
-                        continue;
-                    }
-                    if (sso.getIssuer().equals(tokenIssuer)) {
-                        thirdPartySso = sso;
-                        break;
-                    }
-                }
-                if (thirdPartySso == null) {
-                    // 不是本系统的token，直接抛异常
-                    log.error("不是符合指定的应用token值规范，无法完成单点登录");
+                Sso thirdPartySso = dataRoomConfig.getSso();
+                if (!thirdPartySso.getEnable()) {
+                    log.error("未开启单点登录配置，无法完成单点登录");
                     throw new DataRoomException("单点登录接入失败");
                 }
                 HttpHeaders headers = new HttpHeaders();
-                headers.add(thirdPartySso.getTokenKey(), accessToken);
-                headers.add("Cookie", thirdPartySso.getTokenKey() + "=" + accessToken);
+                String headerValue = "";
+                if (StringUtils.isNotBlank(thirdPartySso.getHeaderValuePrefix())) {
+                    headerValue = thirdPartySso.getHeaderValuePrefix() + " " + accessToken;
+                } else {
+                    headerValue = accessToken;
+                }
+                headers.add(thirdPartySso.getHeaderKey(), headerValue);
                 HttpEntity<Void> requestEntity = new HttpEntity<>(null, headers);
                 long start = System.currentTimeMillis();
                 ResponseEntity<String> responseEntity = restTemplate.exchange(thirdPartySso.getCurrentUserUrl(), HttpMethod.GET, requestEntity, String.class);
@@ -129,13 +124,8 @@ public class ShiroAuthRealm extends AuthorizingRealm {
                 String respBody = responseEntity.getBody();
                 log.info("单点登录校验结果，url: {} 响应内容: {} 耗时: {} 毫秒", thirdPartySso.getCurrentUserUrl(), respBody, System.currentTimeMillis() - start);
                 JSONObject respObj = JSON.parseObject(respBody);
-                int code = respObj.getIntValue("code");
-                if (code != 200) {
-                    throw new DataRoomException("单点登录校验失败");
-                }
-                JSONObject respDataObj = respObj.getJSONObject("data");
-                // 设置当前用户、用于下面去远程获取权限后使用
-                loginUser = respDataObj.toJavaObject(LoginUser.class);
+                // 响应适配器
+                loginUser = ssoAdapterService.adapter(respObj);
             }
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));

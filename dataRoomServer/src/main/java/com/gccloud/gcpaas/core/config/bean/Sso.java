@@ -7,21 +7,25 @@ import lombok.Data;
  */
 @Data
 public class Sso {
-
     /**
      * 是否启用
      */
     private Boolean enable = true;
     /**
-     * 颁发者，用于区分token是单点的还是本系统的
-     */
-    private String issuer = "unknown";
-    /**
      * 获取登录用户信息、判断是否登录
      */
     private String currentUserUrl;
     /**
+     * 单点登录适配器
+     */
+    private String adapter = "default";
+    /**
      * 回调认证时其他系统的token名称
      */
-    private String tokenKey = "token";
+    private String headerKey = "token";
+    /**
+     * 回调认证时其他系统的token值前缀，如：Bearer
+     */
+    private String headerValuePrefix = "";
+
 }

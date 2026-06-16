@@ -1,0 +1,16 @@
+schema: superpowers-bridge
+
+context: |
+  后端技术栈: Spring Boot 3.5.10、MyBatis-Plus 3.5.12、Shiro 2.0.6 Jakarta、JJWT 0.12.6、Knife4j 4.5.0、FastJSON 2、Caffeine
+  前端技术栈: Vue 3.5、TypeScript 5.9、Vite 7、Element Plus、ECharts 6、Pinia 3、vue-grid-layout-v3、vue3-moveable、vue3-selecto
+  数据库: H2、MySQL、PostgreSQL，默认H2
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours

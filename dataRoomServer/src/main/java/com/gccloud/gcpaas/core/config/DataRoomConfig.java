@@ -7,9 +7,6 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "dataroom")
@@ -33,5 +30,5 @@ public class DataRoomConfig {
     /**
      * 单点登录配置
      */
-    private List<Sso> ssoList = new ArrayList<>();
+    private Sso sso = new Sso();
 }
