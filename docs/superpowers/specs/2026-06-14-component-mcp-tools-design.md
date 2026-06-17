@@ -15,7 +15,7 @@
 
 前端组件信息目前主要分布在两个位置：
 
-- `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts` 通过组件插件类构建设计器可见的组件列表。
+- `dataRoomFront/src/dataRoom/_components/PluginRegister.ts` 通过组件插件类构建设计器可见的组件列表。
 - 每个组件目录中包含 `plugin.ts` 和 `install.ts`：
   - `plugin.ts` 定义组件标识、中文名称、中文说明和缩略图。
   - `install.ts` 定义 `getInstance()`、props TypeScript 接口、数据集字段和交互行为。

@@ -1,14 +1,14 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import 'normalize.css'
-import '@/dataroom-packages/assets/element-theme.scss'
+import '@/dataRoom/assets/element-theme.scss'
 import App from './App.vue'
 import router from './router'
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
-import { injectRouter } from '@/dataroom-packages/_common/_request.ts'
+import { injectRouter } from '@/dataRoom/_common/_request.ts'
 // 注入路由实例，便于进行路由跳转
 injectRouter(router)
 

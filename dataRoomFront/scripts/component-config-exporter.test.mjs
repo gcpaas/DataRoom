@@ -58,11 +58,11 @@ try {
   ])
 
   const projectDir = path.join(rootDir, 'project')
-  const componentsDir = path.join(projectDir, 'src/dataroom-packages/components')
-  const registerDir = path.join(projectDir, 'src/dataroom-packages/_components')
-  const typeDir = path.join(projectDir, 'src/dataroom-packages/components/type')
-  const pageTypeDir = path.join(projectDir, 'src/dataroom-packages/PageDesigner/type')
-  const visualScreenDir = path.join(projectDir, 'src/dataroom-packages/VisualScreenDesigner')
+  const componentsDir = path.join(projectDir, 'src/dataRoom/components')
+  const registerDir = path.join(projectDir, 'src/dataRoom/_components')
+  const typeDir = path.join(projectDir, 'src/dataRoom/components/type')
+  const pageTypeDir = path.join(projectDir, 'src/dataRoom/PageDesigner/type')
+  const visualScreenDir = path.join(projectDir, 'src/dataRoom/VisualScreenDesigner')
   const outputDir = path.join(rootDir, 'output')
   await mkdir(path.join(componentsDir, 'DrText'), { recursive: true })
   await mkdir(registerDir, { recursive: true })
@@ -74,7 +74,7 @@ try {
   await writeFile(path.join(outputDir, 'notes.txt'), '保留非生成文件', 'utf8')
 
   await writeFile(path.join(registerDir, 'PluginRegister.ts'), `
-import {DrTextPlugin} from '@/dataroom-packages/components/DrText/plugin.ts'
+import {DrTextPlugin} from '@/dataRoom/components/DrText/plugin.ts'
 const pluginList = [
   new DrTextPlugin(['TEXT'])
 ]
@@ -252,7 +252,7 @@ export interface VisualScreenRulerConfig {
 
   await writeFile(path.join(componentsDir, 'DrText/plugin.ts'), `
 import thumbnail from './images/text.png'
-import {ChartPlugin} from "@/dataroom-packages/components/type/ChartPlugin.ts";
+import {ChartPlugin} from "@/dataRoom/components/type/ChartPlugin.ts";
 export class DrTextPlugin extends ChartPlugin {
   constructor(tags: string[]) {
     super('DrText', '文本', '文字、文本、数字', thumbnail, tags)
@@ -262,7 +262,7 @@ export class DrTextPlugin extends ChartPlugin {
 
   await writeFile(path.join(componentsDir, 'DrText/install.ts'), `
 import {createChartConfig} from '../type/define'
-import type { ValueFormat } from '@/dataroom-packages/components/_shared/metric-table-utils.ts'
+import type { ValueFormat } from '@/dataRoom/components/_shared/metric-table-utils.ts'
 type TextAlign =
   | 'left'
   | 'center'
@@ -298,8 +298,8 @@ const getInstance = () => {
 export {getInstance}
 `, 'utf8')
 
-  await mkdir(path.join(projectDir, 'src/dataroom-packages/components/_shared'), { recursive: true })
-  await writeFile(path.join(projectDir, 'src/dataroom-packages/components/_shared/metric-table-utils.ts'), `
+  await mkdir(path.join(projectDir, 'src/dataRoom/components/_shared'), { recursive: true })
+  await writeFile(path.join(projectDir, 'src/dataRoom/components/_shared/metric-table-utils.ts'), `
 export type ValueFormat =
   | 'text'
   | 'value'

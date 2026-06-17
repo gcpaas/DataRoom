@@ -25,15 +25,15 @@ This hides each component type behind a build-time transform. The new direction 
 
 The migration applies to frontend component files under:
 
-- `dataRoomFront/src/dataroom-packages/components/**/install.ts`
-- `dataRoomFront/src/dataroom-packages/components/**/plugin.ts`
-- `dataRoomFront/src/dataroom-packages/components/**/index.vue`
-- `dataRoomFront/src/dataroom-packages/components/**/panel/index.vue`
+- `dataRoomFront/src/dataRoom/components/**/install.ts`
+- `dataRoomFront/src/dataRoom/components/**/plugin.ts`
+- `dataRoomFront/src/dataRoom/components/**/index.vue`
+- `dataRoomFront/src/dataRoom/components/**/panel/index.vue`
 
 The migration also updates the Vite config and shared constant definition:
 
 - `dataRoomFront/vite.config.ts`
-- `dataRoomFront/src/dataroom-packages/constant/DrConst.ts`
+- `dataRoomFront/src/dataRoom/constant/DrConst.ts`
 - `dataRoomFront/ReplaceThisPluginType.ts`
 
 ## Design

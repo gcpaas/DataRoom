@@ -1,6 +1,6 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import config from '../../package.json'
-import { setCookie } from '@/dataroom-packages/_common/_cookie'
+import { setCookie } from '@/dataRoom/_common/_cookie'
 import { appRoutes } from './routes'
 
 const router = createRouter({

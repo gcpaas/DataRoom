@@ -14,60 +14,60 @@
 
 ### New backend package
 
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/annotation/OperationLogMeta.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/annotation/OperationLogMeta.java`
   - Controller class / method annotation for explicit target, action, and business semantics.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/model/OperationLogContext.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/model/OperationLogContext.java`
   - Mutable per-request context object stored in request attributes.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/model/OperationLogResolvedMeta.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/model/OperationLogResolvedMeta.java`
   - Immutable resolved metadata object returned by the resolver.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/model/OperationLogDetailLevel.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/model/OperationLogDetailLevel.java`
   - Enum-like detail level for `FULL` and `SUMMARY`.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogPolicy.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogPolicy.java`
   - URI-based policy for full logging, summary logging, truncation, and sensitive-field handling.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogResolver.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogResolver.java`
   - Annotation-first resolver for target, action, business, and descriptive text.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogPublisher.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogPublisher.java`
   - Async task submission boundary.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogPersistService.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogPersistService.java`
   - Convert contexts into `OperationLogEntity` and insert through mapper.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogContextHolder.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogContextHolder.java`
   - Request-attribute helper for sharing the current context across filter, interceptor, advice, and exception bridge.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogFilter.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogFilter.java`
   - Earliest request hook, body capture, timing, auth-failure fallback.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogInterceptor.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogInterceptor.java`
   - Handler-aware metadata enrichment and handler timing.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogResponseAdvice.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogResponseAdvice.java`
   - `Resp` result mapping.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogExceptionBridge.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogExceptionBridge.java`
   - Shared helper for attaching exceptions and failure reasons.
 
 ### New persistence files
 
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/entity/OperationLogEntity.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/entity/OperationLogEntity.java`
   - MyBatis-Plus entity mapped to `dr_operation_log`.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/mapper/OperationLogMapper.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/mapper/OperationLogMapper.java`
   - Mapper for inserts and future queries.
 
 ### Configuration and integration points
 
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/OperationLogConfiguration.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/OperationLogConfiguration.java`
   - Beans for async executor, filter registration, interceptor registration, and resolver/policy wiring.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/DataRoomConfiguration.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/DataRoomConfiguration.java`
   - Keep existing common config; only adjust if shared beans must move.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/shiro/ShiroAuthFilter.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/shiro/ShiroAuthFilter.java`
   - Attach auth-failure metadata to the current operation-log context before writing the 401 body.
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/exception/DataRoomExceptionHandler.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/exception/DataRoomExceptionHandler.java`
   - Bridge exceptions into the request context before returning `Resp`.
 
 ### Controller annotation adoption
 
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/page/PageController.java`
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/dataset/DatasetController.java`
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/datasource/DataSourceController.java`
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/datasource/ExcelDataSourceController.java`
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/ResourceController.java`
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/map/MapController.java`
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/user/UserController.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/page/PageController.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/dataset/DatasetController.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/datasource/DataSourceController.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/datasource/ExcelDataSourceController.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/ResourceController.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/map/MapController.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/user/UserController.java`
   - Add class defaults and method overrides only where business semantics must outrank URL inference.
 
 ### Controller annotation retrofit checklist
@@ -122,17 +122,17 @@
 
 ### Existing references to keep open while implementing
 
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/bean/Resp.java`
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/util/LoginUserUtils.java`
-- `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/MybatisMetaObjectHandler.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/bean/Resp.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/util/LoginUserUtils.java`
+- `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/MybatisMetaObjectHandler.java`
 
 ---
 
 ### Task 1: Schema And Persistence Skeleton
 
 **Files:**
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/entity/OperationLogEntity.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/mapper/OperationLogMapper.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/entity/OperationLogEntity.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/mapper/OperationLogMapper.java`
 - Create: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/operationlog/OperationLogSchemaTest.java`
 - Modify: `dataRoomServer/src/main/resources/db/dataroom_h2.all.sql`
 - Modify: `doc/sql/mysql/dataroom_mysql.all.sql`
@@ -143,7 +143,7 @@
 Create `OperationLogSchemaTest.java` with direct file-content assertions so the table contract is locked before code exists:
 
 ```java
-package com.gccloud.gcpaas.core.operationlog;
+package com.gccloud.gcpaas.dataroom.core.operationlog;
 
 import org.junit.jupiter.api.Test;
 
@@ -263,8 +263,8 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add dataRoomServer/src/main/java/com/gccloud/gcpaas/core/entity/OperationLogEntity.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/mapper/OperationLogMapper.java \
+git add dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/entity/OperationLogEntity.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/mapper/OperationLogMapper.java \
   dataRoomServer/src/main/resources/db/dataroom_h2.all.sql \
   doc/sql/mysql/dataroom_mysql.all.sql \
   doc/sql/pg/dataroom_pg.all.sql \
@@ -275,11 +275,11 @@ git commit -m "feat: add operation log schema"
 ### Task 2: Annotation Contract, Policy, And Resolver
 
 **Files:**
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/annotation/OperationLogMeta.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/model/OperationLogDetailLevel.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/model/OperationLogResolvedMeta.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogPolicy.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogResolver.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/annotation/OperationLogMeta.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/model/OperationLogDetailLevel.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/model/OperationLogResolvedMeta.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogPolicy.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogResolver.java`
 - Create: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/operationlog/OperationLogResolverTest.java`
 
 - [ ] **Step 1: Write the failing resolver tests**
@@ -349,11 +349,11 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/annotation/OperationLogMeta.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/model/OperationLogDetailLevel.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/model/OperationLogResolvedMeta.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogPolicy.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogResolver.java \
+git add dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/annotation/OperationLogMeta.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/model/OperationLogDetailLevel.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/model/OperationLogResolvedMeta.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogPolicy.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogResolver.java \
   dataRoomServer/src/test/java/com/gccloud/gcpaas/core/operationlog/OperationLogResolverTest.java
 git commit -m "feat: add operation log resolver"
 ```
@@ -361,11 +361,11 @@ git commit -m "feat: add operation log resolver"
 ### Task 3: Request Context And Async Persistence
 
 **Files:**
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/model/OperationLogContext.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogContextHolder.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogPublisher.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogPersistService.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/OperationLogConfiguration.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/model/OperationLogContext.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogContextHolder.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogPublisher.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogPersistService.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/OperationLogConfiguration.java`
 - Create: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/operationlog/OperationLogPublisherTest.java`
 
 - [ ] **Step 1: Write the failing async persistence tests**
@@ -449,11 +449,11 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/model/OperationLogContext.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogContextHolder.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogPublisher.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogPersistService.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/OperationLogConfiguration.java \
+git add dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/model/OperationLogContext.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogContextHolder.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogPublisher.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogPersistService.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/OperationLogConfiguration.java \
   dataRoomServer/src/test/java/com/gccloud/gcpaas/core/operationlog/OperationLogPublisherTest.java
 git commit -m "feat: add operation log async persistence"
 ```
@@ -461,13 +461,13 @@ git commit -m "feat: add operation log async persistence"
 ### Task 4: Web Lifecycle Hooks And Failure Bridging
 
 **Files:**
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogFilter.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogInterceptor.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogResponseAdvice.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogExceptionBridge.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/OperationLogConfiguration.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/shiro/ShiroAuthFilter.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/exception/DataRoomExceptionHandler.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogFilter.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogInterceptor.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogResponseAdvice.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogExceptionBridge.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/OperationLogConfiguration.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/shiro/ShiroAuthFilter.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/exception/DataRoomExceptionHandler.java`
 - Create: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/operationlog/OperationLogWebFlowTest.java`
 
 - [ ] **Step 1: Write the failing web-flow tests**
@@ -555,12 +555,12 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogFilter.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogInterceptor.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogResponseAdvice.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/web/OperationLogExceptionBridge.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/shiro/ShiroAuthFilter.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/exception/DataRoomExceptionHandler.java \
+git add dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogFilter.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogInterceptor.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogResponseAdvice.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/web/OperationLogExceptionBridge.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/shiro/ShiroAuthFilter.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/exception/DataRoomExceptionHandler.java \
   dataRoomServer/src/test/java/com/gccloud/gcpaas/core/operationlog/OperationLogWebFlowTest.java
 git commit -m "feat: wire operation log web lifecycle"
 ```
@@ -568,15 +568,15 @@ git commit -m "feat: wire operation log web lifecycle"
 ### Task 5: Controller Annotation Adoption And Sensitive-Field Coverage
 
 **Files:**
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/page/PageController.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/dataset/DatasetController.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/datasource/DataSourceController.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/datasource/ExcelDataSourceController.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/ResourceController.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/map/MapController.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/user/UserController.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/page/PageController.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/dataset/DatasetController.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/datasource/DataSourceController.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/datasource/ExcelDataSourceController.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/ResourceController.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/map/MapController.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/user/UserController.java`
 - Create: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/operationlog/OperationLogControllerAnnotationTest.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogPolicy.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogPolicy.java`
 
 - [ ] **Step 1: Write the failing annotation coverage test**
 
@@ -835,14 +835,14 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add dataRoomServer/src/main/java/com/gccloud/gcpaas/core/page/PageController.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/dataset/DatasetController.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/datasource/DataSourceController.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/datasource/ExcelDataSourceController.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/ResourceController.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/map/MapController.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/user/UserController.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/service/OperationLogPolicy.java \
+git add dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/page/PageController.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/dataset/DatasetController.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/datasource/DataSourceController.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/datasource/ExcelDataSourceController.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/ResourceController.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/map/MapController.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/user/UserController.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/service/OperationLogPolicy.java \
   dataRoomServer/src/test/java/com/gccloud/gcpaas/core/operationlog/OperationLogControllerAnnotationTest.java
 git commit -m "feat: annotate operation log business semantics"
 ```
@@ -850,7 +850,7 @@ git commit -m "feat: annotate operation log business semantics"
 ### Task 6: End-To-End Verification And Cleanup
 
 **Files:**
-- Verify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog/**`
+- Verify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog/**`
 - Verify: `dataRoomServer/src/main/resources/db/dataroom_h2.all.sql`
 - Verify: `doc/sql/mysql/dataroom_mysql.all.sql`
 - Verify: `doc/sql/pg/dataroom_pg.all.sql`
@@ -890,7 +890,7 @@ Expected: PASS, or only unrelated pre-existing failures. If failures are unrelat
 Run:
 
 ```bash
-rg -n "password|secretKey|privateKey|authorization|cookie" dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog
+rg -n "password|secretKey|privateKey|authorization|cookie" dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog
 ```
 
 Expected: only the intended redaction list and policy code remain; no literal sensitive values or accidental logging of raw credentials.
@@ -898,7 +898,7 @@ Expected: only the intended redaction list and policy code remain; no literal se
 - [ ] **Step 5: Commit**
 
 ```bash
-git add dataRoomServer/src/main/java/com/gccloud/gcpaas/core/operationlog \
+git add dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/operationlog \
   dataRoomServer/src/main/resources/db/dataroom_h2.all.sql \
   doc/sql/mysql/dataroom_mysql.all.sql \
   doc/sql/pg/dataroom_pg.all.sql \

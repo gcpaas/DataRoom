@@ -13,30 +13,30 @@
 ## File Structure
 
 - Modify `pom.xml`: add `minio.version` and `io.minio:minio`.
-- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/bean/ResourceBean.java`: add nested storage config.
+- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/bean/ResourceBean.java`: add nested storage config.
 - Modify `dataRoomServer/src/main/resources/application-base.yml`: add `dataroom.resource.storage`.
-- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceStorageService.java`: storage SPI.
-- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceStoreRequest.java`: storage request DTO.
-- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/StoredResource.java`: storage write result DTO.
-- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceStream.java`: storage read result DTO.
-- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceFileVariant.java`: main/thumbnail selector.
-- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/LocalResourceStorageServiceImpl.java`: local file storage.
-- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/MinioResourceStorageServiceImpl.java`: MinIO storage.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/ResourceStorageService.java`: storage SPI.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/ResourceStoreRequest.java`: storage request DTO.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/StoredResource.java`: storage write result DTO.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/ResourceStream.java`: storage read result DTO.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/ResourceFileVariant.java`: main/thumbnail selector.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/LocalResourceStorageServiceImpl.java`: local file storage.
+- Create `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/MinioResourceStorageServiceImpl.java`: MinIO storage.
 - Use Spring Boot conditional annotations on storage implementations so `dataroom.resource.storage.type` loads exactly one `ResourceStorageService`.
-- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/ResourceController.java`: unified upload/save, proxy read, URL normalization, delete cleanup.
-- Modify `dataRoomFront/src/dataroom-packages/resource/api.ts`: support upload form payload helper.
-- Modify `dataRoomFront/src/dataroom-packages/resource/index.vue`: submit file resources through `/upload`, keep directory insert/update.
-- Modify `dataRoomFront/src/dataroom-packages/PageDesigner/ControlPanel.vue`: ensure background uploads use unified endpoint response.
-- Modify `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/ControlPanel.vue`: same.
+- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/ResourceController.java`: unified upload/save, proxy read, URL normalization, delete cleanup.
+- Modify `dataRoomFront/src/dataRoom/resource/api.ts`: support upload form payload helper.
+- Modify `dataRoomFront/src/dataRoom/resource/index.vue`: submit file resources through `/upload`, keep directory insert/update.
+- Modify `dataRoomFront/src/dataRoom/PageDesigner/ControlPanel.vue`: ensure background uploads use unified endpoint response.
+- Modify `dataRoomFront/src/dataRoom/VisualScreenDesigner/ControlPanel.vue`: same.
 - Modify 3D model loading components if URL suffix is assumed directly.
 
 ## Task 1: Backend Config And Storage SPI
 
 **Files:**
 - Modify: `pom.xml`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/bean/ResourceBean.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/bean/ResourceBean.java`
 - Modify: `dataRoomServer/src/main/resources/application-base.yml`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/*.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/*.java`
 
 - [x] **Step 1: Add MinIO dependency**
 
@@ -165,8 +165,8 @@ Normalize list/detail responses. Delete storage objects before DB delete; on upd
 ## Task 4: Frontend Resource Upload Flow
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/resource/api.ts`
-- Modify: `dataRoomFront/src/dataroom-packages/resource/index.vue`
+- Modify: `dataRoomFront/src/dataRoom/resource/api.ts`
+- Modify: `dataRoomFront/src/dataRoom/resource/index.vue`
 - Preserve existing local file-name auto-fill helpers already present in the dirty worktree.
 
 - [x] **Step 1: Add upload API helper**
@@ -220,13 +220,13 @@ Expected: exit 0.
 
 - [x] **Step 3: Targeted frontend contract**
 
-Run: `cd dataRoomFront && npx tsx src/dataroom-packages/resource/resourceForm.contract.ts` if the existing contract remains present.
+Run: `cd dataRoomFront && npx tsx src/dataRoom/resource/resourceForm.contract.ts` if the existing contract remains present.
 
 Expected: exit 0.
 
 - [x] **Step 4: Lint changed frontend files**
 
-Run: `cd dataRoomFront && ./node_modules/.bin/eslint src/dataroom-packages/resource/index.vue src/dataroom-packages/resource/api.ts src/dataroom-packages/PageDesigner/ControlPanel.vue src/dataroom-packages/VisualScreenDesigner/ControlPanel.vue`
+Run: `cd dataRoomFront && ./node_modules/.bin/eslint src/dataRoom/resource/index.vue src/dataRoom/resource/api.ts src/dataRoom/PageDesigner/ControlPanel.vue src/dataRoom/VisualScreenDesigner/ControlPanel.vue`
 
 Expected: exit 0.
 

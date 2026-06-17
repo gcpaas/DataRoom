@@ -31,7 +31,7 @@ void excelDatasetTypeUsesExcelWireValue() {
 
 @Test
 void excelDatasetServiceBeanUsesExcelTypeName() throws Exception {
-    Class<?> serviceClass = Class.forName("com.gccloud.gcpaas.core.dataset.service.ExcelDatasetService");
+    Class<?> serviceClass = Class.forName("com.gccloud.gcpaas.dataroom.core.dataset.service.ExcelDatasetService");
 
     Service service = serviceClass.getAnnotation(Service.class);
 
@@ -65,9 +65,9 @@ void deserializeExcelDatasetEntity() throws Exception {
 Create `ExcelDatasetServiceTest`:
 
 ```java
-package com.gccloud.gcpaas.core.dataset.service;
+package com.gccloud.gcpaas.dataroom.core.dataset.service;
 
-import com.gccloud.gcpaas.core.exception.DataRoomException;
+import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -137,9 +137,9 @@ Expected: fail because `DatasetType.EXCEL` and `ExcelDatasetService` do not exis
 ### Task 2: Backend Excel Dataset Implementation
 
 **Files:**
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/constant/DatasetType.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/dataset/bean/BaseDataset.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/dataset/service/ExcelDatasetService.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/constant/DatasetType.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/dataset/bean/BaseDataset.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/dataset/service/ExcelDatasetService.java`
 - Test: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/constant/DatasetTypeSqlTest.java`
 - Test: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/dataset/service/ExcelDatasetServiceTest.java`
 
@@ -195,9 +195,9 @@ Expected: pass.
 ### Task 3: Frontend Types and Excel Dataset Editor
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/constant/DatasetType.ts`
-- Modify: `dataRoomFront/src/dataroom-packages/dataset/api.ts`
-- Create: `dataRoomFront/src/dataroom-packages/dataset/components/ExcelEditor.vue`
+- Modify: `dataRoomFront/src/dataRoom/constant/DatasetType.ts`
+- Modify: `dataRoomFront/src/dataRoom/dataset/api.ts`
+- Create: `dataRoomFront/src/dataRoom/dataset/components/ExcelEditor.vue`
 
 - [ ] **Step 1: Add `excel` to frontend constants and types**
 
@@ -233,9 +233,9 @@ Keep the SQL editor, format button, input param parsing, output field table, pre
 ### Task 4: Frontend Dataset Page and Excel Auto-Creation
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/dataset/index.vue`
-- Modify: `dataRoomFront/src/dataroom-packages/dataSource/index.vue`
-- Modify: `dataRoomFront/src/dataroom-packages/dataSource/api.ts`
+- Modify: `dataRoomFront/src/dataRoom/dataset/index.vue`
+- Modify: `dataRoomFront/src/dataRoom/dataSource/index.vue`
+- Modify: `dataRoomFront/src/dataRoom/dataSource/api.ts`
 
 - [ ] **Step 1: Register Excel dataset editor in the dataset page**
 
@@ -313,13 +313,13 @@ Run:
 
 ```bash
 git diff --stat
-git diff -- dataRoomServer/src/main/java/com/gccloud/gcpaas/core/constant/DatasetType.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/dataset/bean/BaseDataset.java \
-  dataRoomServer/src/main/java/com/gccloud/gcpaas/core/dataset/service/ExcelDatasetService.java \
-  dataRoomFront/src/dataroom-packages/dataset/components/ExcelEditor.vue \
-  dataRoomFront/src/dataroom-packages/dataset/index.vue \
-  dataRoomFront/src/dataroom-packages/dataSource/index.vue \
-  dataRoomFront/src/dataroom-packages/dataset/api.ts
+git diff -- dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/constant/DatasetType.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/dataset/bean/BaseDataset.java \
+  dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/dataset/service/ExcelDatasetService.java \
+  dataRoomFront/src/dataRoom/dataset/components/ExcelEditor.vue \
+  dataRoomFront/src/dataRoom/dataset/index.vue \
+  dataRoomFront/src/dataRoom/dataSource/index.vue \
+  dataRoomFront/src/dataRoom/dataset/api.ts
 ```
 
 Expected: only Excel dataset feature changes, with the pre-existing `DrBarChart` diff left untouched.

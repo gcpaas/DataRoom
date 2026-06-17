@@ -13,30 +13,30 @@
 ### Task 1: Mechanically Replace Component Type Placeholders
 
 **Files:**
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrAreaChart/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrBarChart/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrBorder/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrBubbleChart/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrDecoration/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrFullScreen/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrGauge/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrHorizontalBarChart/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrIframe/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrImage/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrInput/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrLineChart/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrMap/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrModel3D/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrPieChart/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrProgressBar/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrRadarChart/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrRadio/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrSelect/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrTabList/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrText/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrVideoPlayer/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/DrWordCloud/`
-- Modify component files under `dataRoomFront/src/dataroom-packages/components/Remote/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrAreaChart/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrBarChart/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrBorder/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrBubbleChart/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrDecoration/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrFullScreen/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrGauge/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrHorizontalBarChart/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrIframe/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrImage/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrInput/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrLineChart/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrMap/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrModel3D/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrPieChart/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrProgressBar/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrRadarChart/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrRadio/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrSelect/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrTabList/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrText/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrVideoPlayer/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/DrWordCloud/`
+- Modify component files under `dataRoomFront/src/dataRoom/components/Remote/`
 
 - [ ] **Step 1: Run the mechanical replacement script**
 
@@ -47,7 +47,7 @@ node <<'NODE'
 const fs = require('node:fs')
 const path = require('node:path')
 
-const componentsRoot = path.join(process.cwd(), 'dataRoomFront/src/dataroom-packages/components')
+const componentsRoot = path.join(process.cwd(), 'dataRoomFront/src/dataRoom/components')
 const targetFiles = ['install.ts', 'plugin.ts', 'index.vue', 'panel/index.vue']
 const comment = '组件类型需与当前组件目录名保持一致'
 
@@ -100,10 +100,10 @@ Expected: component files are updated; `DrConst` imports used only for `THIS_PLU
 Run:
 
 ```bash
-sed -n '1,24p' dataRoomFront/src/dataroom-packages/components/DrBarChart/plugin.ts
-sed -n '158,172p' dataRoomFront/src/dataroom-packages/components/DrBarChart/install.ts
-sed -n '1,12p' dataRoomFront/src/dataroom-packages/components/DrBarChart/index.vue
-sed -n '1,12p' dataRoomFront/src/dataroom-packages/components/DrBarChart/panel/index.vue
+sed -n '1,24p' dataRoomFront/src/dataRoom/components/DrBarChart/plugin.ts
+sed -n '158,172p' dataRoomFront/src/dataRoom/components/DrBarChart/install.ts
+sed -n '1,12p' dataRoomFront/src/dataRoom/components/DrBarChart/index.vue
+sed -n '1,12p' dataRoomFront/src/dataRoom/components/DrBarChart/panel/index.vue
 ```
 
 Expected snippets:
@@ -135,7 +135,7 @@ export default defineComponent({
 - [ ] **Step 3: Commit the component rewrite**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components
+git add dataRoomFront/src/dataRoom/components
 git commit -m "refactor(ui): hardcode component type names"
 ```
 
@@ -143,7 +143,7 @@ git commit -m "refactor(ui): hardcode component type names"
 
 **Files:**
 - Modify: `dataRoomFront/vite.config.ts`
-- Modify: `dataRoomFront/src/dataroom-packages/constant/DrConst.ts`
+- Modify: `dataRoomFront/src/dataRoom/constant/DrConst.ts`
 - Delete: `dataRoomFront/ReplaceThisPluginType.ts`
 
 - [ ] **Step 1: Update `dataRoomFront/vite.config.ts`**
@@ -168,7 +168,7 @@ Remove this plugin entry:
     ReplaceThisPluginType(),
 ```
 
-- [ ] **Step 2: Update `dataRoomFront/src/dataroom-packages/constant/DrConst.ts`**
+- [ ] **Step 2: Update `dataRoomFront/src/dataRoom/constant/DrConst.ts`**
 
 Replace the file contents with:
 
@@ -192,7 +192,7 @@ Delete the file because no source code depends on the build-time replacement beh
 - [ ] **Step 4: Commit plugin removal**
 
 ```bash
-git add dataRoomFront/vite.config.ts dataRoomFront/src/dataroom-packages/constant/DrConst.ts dataRoomFront/ReplaceThisPluginType.ts
+git add dataRoomFront/vite.config.ts dataRoomFront/src/dataRoom/constant/DrConst.ts dataRoomFront/ReplaceThisPluginType.ts
 git commit -m "refactor(ui): remove plugin type replacement"
 ```
 
@@ -216,7 +216,7 @@ Expected: no output.
 Run:
 
 ```bash
-rg -n "import \\{\\s*DrConst\\s*\\}" dataRoomFront/src/dataroom-packages/components
+rg -n "import \\{\\s*DrConst\\s*\\}" dataRoomFront/src/dataRoom/components
 ```
 
 Expected: no output.

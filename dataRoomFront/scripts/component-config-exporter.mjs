@@ -3,11 +3,11 @@ import { existsSync, readFileSync } from 'node:fs'
 import { mkdir, readFile, readdir, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
-const registerPath = 'src/dataroom-packages/_components/PluginRegister.ts'
-const componentsPath = 'src/dataroom-packages/components'
-const chartConfigPath = 'src/dataroom-packages/components/type/ChartConfig.ts'
-const pageConfigPath = 'src/dataroom-packages/PageDesigner/type/PageConfig.ts'
-const visualScreenPageConfigPath = 'src/dataroom-packages/PageDesigner/type/VisualScreenPageConfig.ts'
+const registerPath = 'src/dataRoom/_components/PluginRegister.ts'
+const componentsPath = 'src/dataRoom/components'
+const chartConfigPath = 'src/dataRoom/components/type/ChartConfig.ts'
+const pageConfigPath = 'src/dataRoom/PageDesigner/type/PageConfig.ts'
+const visualScreenPageConfigPath = 'src/dataRoom/PageDesigner/type/VisualScreenPageConfig.ts'
 
 const baseChartConfigDefaults = {
   title: '未命名组件',

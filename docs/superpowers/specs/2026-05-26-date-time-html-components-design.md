@@ -4,7 +4,7 @@
 
 DataRoom front-end visual components follow the existing convention:
 
-- Each component lives under `dataRoomFront/src/dataroom-packages/components/<ComponentName>/`.
+- Each component lives under `dataRoomFront/src/dataRoom/components/<ComponentName>/`.
 - `install.ts` exports the async component, control panel, default instance factory, behaviors, and dataset field definitions.
 - `index.vue` renders the component on the designer canvas.
 - `panel/index.vue` renders the right-side configuration panel.
@@ -44,7 +44,7 @@ The components are intentionally separate. Time display has a small timer-driven
 
 Directory:
 
-`dataRoomFront/src/dataroom-packages/components/DrDateTime/`
+`dataRoomFront/src/dataRoom/components/DrDateTime/`
 
 Files:
 
@@ -59,13 +59,13 @@ Registration:
 - Component type: `DrDateTime`
 - Component title: `时间`
 - Component library category: `ComponentLibTagTypeConst.TEXT`
-- Manual registration in `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`
+- Manual registration in `dataRoomFront/src/dataRoom/_components/PluginRegister.ts`
 
 ### DrHtml
 
 Directory:
 
-`dataRoomFront/src/dataroom-packages/components/DrHtml/`
+`dataRoomFront/src/dataRoom/components/DrHtml/`
 
 Files:
 
@@ -80,7 +80,7 @@ Registration:
 - Component type: `DrHtml`
 - Component title: `HTML`
 - Component library category: `ComponentLibTagTypeConst.MEDIA`
-- Manual registration in `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`
+- Manual registration in `dataRoomFront/src/dataRoom/_components/PluginRegister.ts`
 
 ## DrDateTime Design
 

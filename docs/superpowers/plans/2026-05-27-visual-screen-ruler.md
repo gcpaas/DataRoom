@@ -14,9 +14,9 @@
 
 **Files:**
 
-- Modify: `dataRoomFront/src/dataroom-packages/PageDesigner/type/VisualScreenPageBasicConfig.ts`
-- Create: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/ruler.ts`
-- Create: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/ruler.spec.ts`
+- Modify: `dataRoomFront/src/dataRoom/PageDesigner/type/VisualScreenPageBasicConfig.ts`
+- Create: `dataRoomFront/src/dataRoom/VisualScreenDesigner/ruler.ts`
+- Create: `dataRoomFront/src/dataRoom/VisualScreenDesigner/ruler.spec.ts`
 
 - [ ] **Step 1: Add failing tests for ruler defaults, normalization, projection, and guideline bridging**
 
@@ -24,7 +24,7 @@ Create `ruler.spec.ts` with assertions for missing config defaults, invalid arra
 
 - [ ] **Step 2: Run the ruler test and verify it fails**
 
-Run: `cd dataRoomFront && npx tsx src/dataroom-packages/VisualScreenDesigner/ruler.spec.ts`
+Run: `cd dataRoomFront && npx tsx src/dataRoom/VisualScreenDesigner/ruler.spec.ts`
 
 Expected: FAIL because `ruler.ts` does not exist.
 
@@ -38,7 +38,7 @@ Import and add `ruler?: VisualScreenRulerConfig` under `basicConfig`, next to `z
 
 - [ ] **Step 5: Run the ruler test and verify it passes**
 
-Run: `cd dataRoomFront && npx tsx src/dataroom-packages/VisualScreenDesigner/ruler.spec.ts`
+Run: `cd dataRoomFront && npx tsx src/dataRoom/VisualScreenDesigner/ruler.spec.ts`
 
 Expected: PASS.
 
@@ -46,9 +46,9 @@ Expected: PASS.
 
 **Files:**
 
-- Create: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/RulerOverlay.vue`
-- Modify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`
-- Test: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
+- Create: `dataRoomFront/src/dataRoom/VisualScreenDesigner/RulerOverlay.vue`
+- Modify: `dataRoomFront/src/dataRoom/VisualScreenDesigner/VisualScreenDesigner.vue`
+- Test: `dataRoomFront/src/dataRoom/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
 
 - [ ] **Step 1: Add source-level checks for overlay integration**
 
@@ -56,7 +56,7 @@ Extend `visualScreenDesignerZoom.spec.ts` to assert that `RulerOverlay` is impor
 
 - [ ] **Step 2: Run source-level test and verify it fails**
 
-Run: `cd dataRoomFront && npx tsx src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
+Run: `cd dataRoomFront && npx tsx src/dataRoom/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
 
 Expected: FAIL because overlay is not integrated yet.
 
@@ -70,7 +70,7 @@ Normalize `basicConfig.ruler` defaults, render overlay inside `.canvas-main`, ad
 
 - [ ] **Step 5: Run source-level test and verify it passes**
 
-Run: `cd dataRoomFront && npx tsx src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
+Run: `cd dataRoomFront && npx tsx src/dataRoom/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
 
 Expected: PASS.
 
@@ -78,8 +78,8 @@ Expected: PASS.
 
 **Files:**
 
-- Modify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/ControlPanel.vue`
-- Test: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/ruler.spec.ts`
+- Modify: `dataRoomFront/src/dataRoom/VisualScreenDesigner/ControlPanel.vue`
+- Test: `dataRoomFront/src/dataRoom/VisualScreenDesigner/ruler.spec.ts`
 
 - [ ] **Step 1: Add panel controls**
 
@@ -87,7 +87,7 @@ Add a "标尺 / 参考线" section with Element Plus controls for ruler visibili
 
 - [ ] **Step 2: Run tests**
 
-Run: `cd dataRoomFront && npx tsx src/dataroom-packages/VisualScreenDesigner/ruler.spec.ts`
+Run: `cd dataRoomFront && npx tsx src/dataRoom/VisualScreenDesigner/ruler.spec.ts`
 
 Expected: PASS.
 
@@ -101,9 +101,9 @@ Expected: PASS.
 
 Run:
 
-- `cd dataRoomFront && npx tsx src/dataroom-packages/VisualScreenDesigner/ruler.spec.ts`
-- `cd dataRoomFront && npx tsx src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts`
-- `cd dataRoomFront && npx tsx src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
+- `cd dataRoomFront && npx tsx src/dataRoom/VisualScreenDesigner/ruler.spec.ts`
+- `cd dataRoomFront && npx tsx src/dataRoom/VisualScreenDesigner/viewport.spec.ts`
+- `cd dataRoomFront && npx tsx src/dataRoom/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
 
 Expected: all PASS.
 

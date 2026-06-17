@@ -67,17 +67,17 @@ Node.js 版本要求：`^20.19.0 || >=22.12.0`。
 DataRoom/
 ├── dataroom-core/       # 核心库占位模块，目前内容较少
 ├── dataRoomServer/     # Spring Boot 主应用，后端代码集中在这里
-│   └── src/main/java/com/gccloud/gcpaas/core/
+│   └── src/main/java/com/gccloud/gcpaas/dataroom/core/
 └── dataRoomFront/        # Vue 3 前端应用
 ```
 
-后端业务代码主要位于 `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/` 包下。
+后端业务代码主要位于 `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/` 包下。
 
 ## 后端架构
 
 ### 应用入口
 
-后端入口类为 `com.gccloud.gcpaas.server.DataRoomApplication`，并通过 `@MapperScan("com.gccloud.gcpaas.**")` 扫描 MyBatis Mapper。
+后端入口类为 `com.gccloud.gcpaas.dataroom.server.DataRoomApplication`，并通过 `@MapperScan("com.gccloud.gcpaas.**")` 扫描 MyBatis Mapper。
 
 ### 核心包说明
 
@@ -129,7 +129,7 @@ DataRoom/
 
 ## 前端架构
 
-前端主要源码位于 `dataRoomFront/src/dataroom-packages/`。
+前端主要源码位于 `dataRoomFront/src/dataRoom/`。
 
 | 目录 | 说明 |
 |------|------|
@@ -165,7 +165,7 @@ export const datasetFields   // 数据集字段映射定义
 
 - 可视化配置字段必须先在 `install.ts` 的 `PropsInterface` 和默认值中声明。
 - 面板控件应直接绑定到 `chart.props`，避免复制整份 props 到本地状态。
-- 当前参考实现为 `dataRoomFront/src/dataroom-packages/components/DrBarChart/panel/index.vue`。
+- 当前参考实现为 `dataRoomFront/src/dataRoom/components/DrBarChart/panel/index.vue`。
 
 ### 前端设计规范
 

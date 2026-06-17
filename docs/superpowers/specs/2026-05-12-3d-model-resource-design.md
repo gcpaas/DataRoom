@@ -121,7 +121,7 @@ config JSON 结构：
 
 ### 4.1 组件路径
 
-`dataRoomFront/src/dataroom-packages/components/DrModel3D/`
+`dataRoomFront/src/dataRoom/components/DrModel3D/`
 
 ### 4.2 配置结构
 

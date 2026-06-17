@@ -13,10 +13,10 @@
 ### Task 1: Backend history backup and rollback contract
 
 **Files:**
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/page/dto/PageHistoryBackupDto.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/page/dto/PageHistoryBackupDto.java`
 - Create: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/page/service/PageStageServiceHistoryTest.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/page/PageController.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/page/service/PageStageService.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/page/PageController.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/page/service/PageStageService.java`
 
 - [ ] Add `PageHistoryBackupDto` with `pageCode`, `remark`, `pageType`, and `pageConfig`, matching the existing `PageStageEntity` payload shape used by the designers.
 - [ ] Extend `PageStageService` with `backupHistory(PageHistoryBackupDto dto)` and `rollbackDesignByHistoryId(String id)` so the controller does not embed snapshot-copy logic.
@@ -28,7 +28,7 @@
 ### Task 2: Backend history list ordering and service tests
 
 **Files:**
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/page/PageController.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/page/PageController.java`
 - Test: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/page/service/PageStageServiceHistoryTest.java`
 
 - [ ] Update `/dataRoom/page/stage/list` to append explicit `orderByDesc(PageStageEntity::getCreateDate)` so the history dialog always gets deterministic descending order.
@@ -44,9 +44,9 @@
 ### Task 3: Shared frontend history hashing and auto-backup utilities
 
 **Files:**
-- Create: `dataRoomFront/src/dataroom-packages/_common/designer-history-backup.ts`
-- Create: `dataRoomFront/src/dataroom-packages/_common/designer-history-backup.spec.ts`
-- Modify: `dataRoomFront/src/dataroom-packages/page/api.ts`
+- Create: `dataRoomFront/src/dataRoom/_common/designer-history-backup.ts`
+- Create: `dataRoomFront/src/dataRoom/_common/designer-history-backup.spec.ts`
+- Modify: `dataRoomFront/src/dataRoom/page/api.ts`
 
 - [ ] Add pure helpers in `designer-history-backup.ts` for stable page-config serialization, MD5-compatible hash generation, unsaved-change detection, and a small auto-backup controller with start/stop and one-minute polling.
 - [ ] Keep the helper framework-free so it can be tested with `node:test` and reused by both designers without Vue coupling.
@@ -59,13 +59,13 @@
   - `hasUnsavedChanges(currentHash, lastSavedHash)` behavior
   - auto-backup skip when `currentHash === lastAutoBackupHash`
   - auto-backup trigger when hashes differ
-- [ ] Run: `cd dataRoomFront && npx tsx --test src/dataroom-packages/_common/designer-history-backup.spec.ts`
+- [ ] Run: `cd dataRoomFront && npx tsx --test src/dataRoom/_common/designer-history-backup.spec.ts`
 
 ### Task 4: Shared history dialog component
 
 **Files:**
-- Create: `dataRoomFront/src/dataroom-packages/_components/PageHistoryDialog.vue`
-- Modify: `dataRoomFront/src/dataroom-packages/page/type/PageStageEntity.ts`
+- Create: `dataRoomFront/src/dataRoom/_components/PageHistoryDialog.vue`
+- Modify: `dataRoomFront/src/dataRoom/page/type/PageStageEntity.ts`
 - Reference: `docs/design/DESIGN.md`
 
 - [ ] Build one reusable history dialog component with props for `pageCode`, `modelValue`, and `hasUnsavedChanges`, plus emits for `update:modelValue`, `rolled-back`, and optional `refresh-requested`.
@@ -78,8 +78,8 @@
 ### Task 5: PageDesigner integration
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/PageDesigner/PageDesigner.vue`
-- Modify: `dataRoomFront/src/dataroom-packages/page/api.ts`
+- Modify: `dataRoomFront/src/dataRoom/PageDesigner/PageDesigner.vue`
+- Modify: `dataRoomFront/src/dataRoom/page/api.ts`
 
 - [ ] Add local state for `lastSavedHash`, `lastAutoBackupHash`, and `historyDialogVisible`.
 - [ ] Replace the existing save flow with: build current `pageConfig` -> `updatePageConfig` -> `historyBackup({ remark: '手动保存自动备份' })` -> update both hashes -> show one success message.
@@ -91,8 +91,8 @@
 ### Task 6: VisualScreenDesigner integration
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`
-- Modify: `dataRoomFront/src/dataroom-packages/page/api.ts`
+- Modify: `dataRoomFront/src/dataRoom/VisualScreenDesigner/VisualScreenDesigner.vue`
+- Modify: `dataRoomFront/src/dataRoom/page/api.ts`
 
 - [ ] Mirror the same `lastSavedHash`, `lastAutoBackupHash`, `historyDialogVisible`, save-with-history, and auto-backup flow used in `PageDesigner.vue`.
 - [ ] Reuse the same shared helper functions for page-config assembly and hash updates instead of duplicating per-designer comparison logic.
@@ -104,10 +104,10 @@
 
 **Files:**
 - Test: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/page/service/PageStageServiceHistoryTest.java`
-- Test: `dataRoomFront/src/dataroom-packages/_common/designer-history-backup.spec.ts`
+- Test: `dataRoomFront/src/dataRoom/_common/designer-history-backup.spec.ts`
 
 - [ ] Run: `mvn -q -pl dataRoomServer -Dtest=PageStageServiceHistoryTest test`
-- [ ] Run: `cd dataRoomFront && npx tsx --test src/dataroom-packages/_common/designer-history-backup.spec.ts`
+- [ ] Run: `cd dataRoomFront && npx tsx --test src/dataRoom/_common/designer-history-backup.spec.ts`
 - [ ] Run: `cd dataRoomFront && npm run type-check`
 - [ ] Run: `cd dataRoomFront && npm run lint`
 - [ ] Manually verify in both designers:

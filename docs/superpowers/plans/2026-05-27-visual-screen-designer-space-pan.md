@@ -13,8 +13,8 @@
 ### Task 1: Viewport Helper
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.ts`
-- Test: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts`
+- Modify: `dataRoomFront/src/dataRoom/VisualScreenDesigner/viewport.ts`
+- Test: `dataRoomFront/src/dataRoom/VisualScreenDesigner/viewport.spec.ts`
 
 - [ ] **Step 1: Write the failing helper test**
 
@@ -28,7 +28,7 @@ assertClose(mouseDraggedViewport.panY, 80, 'mouse drag down should move the canv
 
 - [ ] **Step 2: Run the viewport spec and verify RED**
 
-Run: `npx tsx src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts` from `dataRoomFront`.
+Run: `npx tsx src/dataRoom/VisualScreenDesigner/viewport.spec.ts` from `dataRoomFront`.
 Expected: FAIL because `panDesignerViewportByPointerDelta` is not exported.
 
 - [ ] **Step 3: Implement the helper**
@@ -53,14 +53,14 @@ export const panDesignerViewportByPointerDelta = (
 
 - [ ] **Step 4: Run the viewport spec and verify GREEN**
 
-Run: `npx tsx src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts` from `dataRoomFront`.
+Run: `npx tsx src/dataRoom/VisualScreenDesigner/viewport.spec.ts` from `dataRoomFront`.
 Expected: PASS.
 
 ### Task 2: VisualScreenDesigner Interaction
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`
-- Test: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
+- Modify: `dataRoomFront/src/dataRoom/VisualScreenDesigner/VisualScreenDesigner.vue`
+- Test: `dataRoomFront/src/dataRoom/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts`
 
 - [ ] **Step 1: Write the failing static interaction test**
 
@@ -77,7 +77,7 @@ assert(source.includes(':selectByClick="!isCanvasPanModeActive"'), 'Selecto clic
 
 - [ ] **Step 2: Run the static spec and verify RED**
 
-Run: `npx tsx src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts` from `dataRoomFront`.
+Run: `npx tsx src/dataRoom/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts` from `dataRoomFront`.
 Expected: FAIL because the Space + pointer handlers are missing.
 
 - [ ] **Step 3: Implement Space + pointer panning**
@@ -96,7 +96,7 @@ Use `window` key listeners, `.canvas-main` pointer listeners, `setPointerCapture
 
 - [ ] **Step 4: Run static spec and type-check**
 
-Run: `npx tsx src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts` from `dataRoomFront`.
+Run: `npx tsx src/dataRoom/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts` from `dataRoomFront`.
 Expected: PASS.
 
 Run: `npm run type-check` from `dataRoomFront`.
@@ -105,16 +105,16 @@ Expected: PASS.
 ### Task 3: Final Verification
 
 **Files:**
-- Verify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`
-- Verify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.ts`
+- Verify: `dataRoomFront/src/dataRoom/VisualScreenDesigner/VisualScreenDesigner.vue`
+- Verify: `dataRoomFront/src/dataRoom/VisualScreenDesigner/viewport.ts`
 
 - [ ] **Step 1: Run focused specs**
 
 Run:
 
 ```bash
-npx tsx src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
-npx tsx src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
+npx tsx src/dataRoom/VisualScreenDesigner/viewport.spec.ts
+npx tsx src/dataRoom/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
 ```
 
 Expected: both PASS.
@@ -126,5 +126,5 @@ Expected: PASS.
 
 - [ ] **Step 3: Inspect style constraints**
 
-Run: `rg -n "#[0-9a-fA-F]{3,8}|rgb\\(|rgba\\(|hsl\\(|hsla\\(|--dr-|!important|letter-spacing:\\s*-" dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`.
+Run: `rg -n "#[0-9a-fA-F]{3,8}|rgb\\(|rgba\\(|hsl\\(|hsla\\(|--dr-|!important|letter-spacing:\\s*-" dataRoomFront/src/dataRoom/VisualScreenDesigner/VisualScreenDesigner.vue`.
 Expected: no new violations from the Space pan implementation.

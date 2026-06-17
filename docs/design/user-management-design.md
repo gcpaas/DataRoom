@@ -48,18 +48,18 @@ VALUES ('1', 'admin', '管理员', 'RSA加密后的密文', 'manager,developer,s
 
 | 类型 | 路径 |
 |------|------|
-| Entity | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/entity/UserEntity.java` |
-| Mapper | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/mapper/UserMapper.java` |
-| Service | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/user/service/UserService.java` |
-| Controller | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/user/UserController.java` |
-| DTO | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/user/dto/UserDTO.java` |
-| Enum | `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/constant/UserStatus.java` |
+| Entity | `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/entity/UserEntity.java` |
+| Mapper | `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/mapper/UserMapper.java` |
+| Service | `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/user/service/UserService.java` |
+| Controller | `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/user/UserController.java` |
+| DTO | `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/user/dto/UserDTO.java` |
+| Enum | `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/constant/UserStatus.java` |
 
 ### 4.2 现有可复用代码
 
-- **BaseEntity**：`dataRoomServer/src/main/java/com/gccloud/gcpaas/core/entity/BaseEntity.java`
-- **Resp**：`dataRoomServer/src/main/java/com/gccloud/gcpaas/core/bean/Resp.java`
-- **PageVo**：`dataRoomServer/src/main/java/com/gccloud/gcpaas/core/bean/PageVo.java`
+- **BaseEntity**：`dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/entity/BaseEntity.java`
+- **Resp**：`dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/bean/Resp.java`
+- **PageVo**：`dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/bean/PageVo.java`
 - **MybatisMetaObjectHandler**：自动填充 createDate、updateDate 等字段
 - **DataRoomException**：自定义异常
 - **DataRoomRole**：内置角色常量接口
@@ -96,15 +96,15 @@ VALUES ('1', 'admin', '管理员', 'RSA加密后的密文', 'manager,developer,s
 
 | 类型 | 路径 |
 |------|------|
-| 页面 | `dataRoomFront/src/dataroom-packages/user/index.vue` |
-| API | `dataRoomFront/src/dataroom-packages/user/api.ts` |
-| 编辑弹窗组件 | `dataRoomFront/src/dataroom-packages/user/components/UserEdit.vue` |
+| 页面 | `dataRoomFront/src/dataRoom/user/index.vue` |
+| API | `dataRoomFront/src/dataRoom/user/api.ts` |
+| 编辑弹窗组件 | `dataRoomFront/src/dataRoom/user/components/UserEdit.vue` |
 
 ### 5.3 现有可复用模式
 
-- **API 调用**：`dataRoomFront/src/dataroom-packages/_common/_request.ts` 的 request 封装
-- **列表页模式**：`dataRoomFront/src/dataroom-packages/page/index.vue`
-- **表单验证**：`dataRoomFront/src/dataroom-packages/dataset/components/HttpEditor.vue`
+- **API 调用**：`dataRoomFront/src/dataRoom/_common/_request.ts` 的 request 封装
+- **列表页模式**：`dataRoomFront/src/dataRoom/page/index.vue`
+- **表单验证**：`dataRoomFront/src/dataRoom/dataset/components/HttpEditor.vue`
 - **表格+分页**：Element Plus `el-table` + `el-pagination`
 
 ### 5.4 前端实现步骤

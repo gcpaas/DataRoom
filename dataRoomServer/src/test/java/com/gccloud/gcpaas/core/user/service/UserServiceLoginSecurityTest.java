@@ -1,9 +1,10 @@
 package com.gccloud.gcpaas.core.user.service;
 
-import com.gccloud.gcpaas.core.constant.UserStatus;
-import com.gccloud.gcpaas.core.entity.UserEntity;
-import com.gccloud.gcpaas.core.exception.DataRoomException;
-import com.gccloud.gcpaas.core.user.dto.UserDTO;
+import com.gccloud.gcpaas.dataroom.core.constant.UserStatus;
+import com.gccloud.gcpaas.dataroom.core.entity.UserEntity;
+import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
+import com.gccloud.gcpaas.dataroom.core.user.dto.UserDTO;
+import com.gccloud.gcpaas.dataroom.core.user.service.UserService;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
@@ -126,6 +127,44 @@ class UserServiceLoginSecurityTest {
     }
 
     @Test
+    void updateStoresEncryptedPasswordProvidedByUserManagementChange() {
+        TestUserService userService = new TestUserService(new Date(8_500_000L));
+        UserEntity user = user("1", UserStatus.NORMAL);
+        userService.user = user;
+        UserDTO dto = new UserDTO();
+        dto.setId("1");
+        dto.setPassword("rsa-encrypted-new-password");
+
+        userService.update(dto);
+
+        assertEquals("rsa-encrypted-new-password", userService.updatedUser.getPassword());
+    }
+
+    @Test
+    void addStoresEncryptedPasswordProvidedByFrontend() {
+        TestUserService userService = new TestUserService(new Date(8_550_000L));
+        UserDTO dto = new UserDTO();
+        dto.setAccount("bob");
+        dto.setUsername("Bob");
+        dto.setPassword("rsa-encrypted-initial-password");
+
+        userService.add(dto);
+
+        assertEquals("rsa-encrypted-initial-password", userService.savedUser.getPassword());
+    }
+
+    @Test
+    void updateProfileStoresEncryptedPasswordProvidedByFrontend() {
+        TestUserService userService = new TestUserService(new Date(8_600_000L));
+        UserEntity user = user("1", UserStatus.NORMAL);
+        userService.user = user;
+
+        userService.updateProfile("alice", "Alice", "rsa-encrypted-profile-password");
+
+        assertEquals("rsa-encrypted-profile-password", userService.updatedUser.getPassword());
+    }
+
+    @Test
     void activeLoginLockExpiresOnlyAfterLockedUntilPasses() {
         Date now = new Date(10_000_000L);
         TestUserService userService = new TestUserService(now);
@@ -147,6 +186,7 @@ class UserServiceLoginSecurityTest {
     private static class TestUserService extends UserService {
         private final Date now;
         private UserEntity user;
+        private UserEntity savedUser;
         private UserEntity updatedUser;
 
         private TestUserService(Date now) {
@@ -167,6 +207,17 @@ class UserServiceLoginSecurityTest {
         public boolean updateById(UserEntity entity) {
             updatedUser = entity;
             return true;
+        }
+
+        @Override
+        public boolean save(UserEntity entity) {
+            savedUser = entity;
+            return true;
+        }
+
+        @Override
+        public UserEntity getByAccount(String account) {
+            return user;
         }
     }
 }

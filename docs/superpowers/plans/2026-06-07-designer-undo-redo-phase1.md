@@ -13,8 +13,8 @@
 ### Task 1: Shared history and chart-tree utilities
 
 **Files:**
-- Create: `dataRoomFront/src/dataroom-packages/_common/editor-history.ts`
-- Create: `dataRoomFront/src/dataroom-packages/_common/editor-history.spec.ts`
+- Create: `dataRoomFront/src/dataRoom/_common/editor-history.ts`
+- Create: `dataRoomFront/src/dataRoom/_common/editor-history.spec.ts`
 
 - [ ] Define chart layout snapshot, parent reference, and history entry types for add/delete/layout/reorder.
 - [ ] Write failing `node:test` cases for push/undo/redo, redo clearing, remove+restore by parent/index, and reorder replay.
@@ -24,9 +24,9 @@
 ### Task 2: Canvas instance history and layer APIs
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/PageDesigner/type/CanvasInst.ts`
-- Modify: `dataRoomFront/src/dataroom-packages/hooks/use-canvas-inst/index.ts`
-- Modify: `dataRoomFront/src/dataroom-packages/_components/ComponentLayer.vue`
+- Modify: `dataRoomFront/src/dataRoom/PageDesigner/type/CanvasInst.ts`
+- Modify: `dataRoomFront/src/dataRoom/hooks/use-canvas-inst/index.ts`
+- Modify: `dataRoomFront/src/dataRoom/_components/ComponentLayer.vue`
 
 - [ ] Extend `CanvasInst` with optional undo/redo state and reorder operations required by the layer panel.
 - [ ] Keep preview-mode `CanvasInst` safe by using no-op defaults where history is absent.
@@ -35,7 +35,7 @@
 ### Task 3: PageDesigner integration
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/PageDesigner/PageDesigner.vue`
+- Modify: `dataRoomFront/src/dataRoom/PageDesigner/PageDesigner.vue`
 
 - [ ] Record add and delete history in `addChart` and `onChartDeleteClick`.
 - [ ] Record move and resize history from `onMoved` and `onResized` using before/after layout snapshots.
@@ -46,7 +46,7 @@
 ### Task 4: VisualScreenDesigner integration
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue`
+- Modify: `dataRoomFront/src/dataRoom/VisualScreenDesigner/VisualScreenDesigner.vue`
 
 - [ ] Record add and delete history in `addChart` and `onChartDeleteClick`.
 - [ ] Capture gesture-start layout state and record move/resize/rotate history only on gesture end.
@@ -57,7 +57,7 @@
 ### Task 5: Verification
 
 **Files:**
-- Test: `dataRoomFront/src/dataroom-packages/_common/editor-history.spec.ts`
+- Test: `dataRoomFront/src/dataRoom/_common/editor-history.spec.ts`
 
 - [ ] Run the new shared history tests.
 - [ ] Run `npm run type-check` in `dataRoomFront`.

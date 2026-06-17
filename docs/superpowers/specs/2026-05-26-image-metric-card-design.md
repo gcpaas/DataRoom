@@ -8,7 +8,7 @@
 
 ## 组件定位
 
-- 组件目录：`dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/`
+- 组件目录：`dataRoomFront/src/dataRoom/components/DrImageMetricCard/`
 - 组件类型：`DrImageMetricCard`
 - 组件库名称：`图片指标卡`
 - 组件库分类：`ComponentLibTagTypeConst.METRIC`
@@ -221,7 +221,7 @@ font-feature-settings: "tnum";
 
 - 根节点使用 `.dr-config-panel.dr-image-metric-card-config-panel`。
 - 根表单使用 `label-width="60px"`、`size="small"`、`label-position="left"`。
-- 引入 `@/dataroom-packages/assets/styles/chartConfigPanel.scss`。
+- 引入 `@/dataRoom/assets/styles/chartConfigPanel.scss`。
 - 所有 Element Plus 控件使用默认样式，通过 props 表达尺寸和状态。
 - 不使用 `:deep(.el-*)`、`!important` 或全局 `.el-*` 选择器。
 
@@ -249,15 +249,15 @@ font-feature-settings: "tnum";
 
 新增文件：
 
-- `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/install.ts`
-- `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/index.vue`
-- `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/panel/index.vue`
-- `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/plugin.ts`
-- `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/images/image-metric-card.svg`
+- `dataRoomFront/src/dataRoom/components/DrImageMetricCard/install.ts`
+- `dataRoomFront/src/dataRoom/components/DrImageMetricCard/index.vue`
+- `dataRoomFront/src/dataRoom/components/DrImageMetricCard/panel/index.vue`
+- `dataRoomFront/src/dataRoom/components/DrImageMetricCard/plugin.ts`
+- `dataRoomFront/src/dataRoom/components/DrImageMetricCard/images/image-metric-card.svg`
 
 修改文件：
 
-- `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`
+- `dataRoomFront/src/dataRoom/_components/PluginRegister.ts`
 
 ## 测试与验证
 

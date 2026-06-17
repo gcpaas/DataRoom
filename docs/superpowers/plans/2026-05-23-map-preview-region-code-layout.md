@@ -13,7 +13,7 @@
 ### Task 1: Update Map Preview Title Layout
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/map/index.vue`
+- Modify: `dataRoomFront/src/dataRoom/map/index.vue`
 - Test: `dataRoomFront` type check
 
 - [ ] **Step 1: Update the preview panel template**

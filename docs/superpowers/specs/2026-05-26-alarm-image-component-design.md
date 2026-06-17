@@ -4,7 +4,7 @@
 
 DataRoom 前端可视化组件遵循固定目录和自动注册约定：
 
-- 每个组件位于 `dataRoomFront/src/dataroom-packages/components/<ComponentName>/`。
+- 每个组件位于 `dataRoomFront/src/dataRoom/components/<ComponentName>/`。
 - `install.ts` 导出主组件、配置面板、默认实例工厂、交互定义和数据集字段定义。
 - `index.vue` 负责画布渲染。
 - `panel/index.vue` 负责右侧组件专属配置。
@@ -35,7 +35,7 @@ DataRoom 前端可视化组件遵循固定目录和自动注册约定：
 
 目录：
 
-`dataRoomFront/src/dataroom-packages/components/DrAlarmImage/`
+`dataRoomFront/src/dataRoom/components/DrAlarmImage/`
 
 文件：
 
@@ -51,7 +51,7 @@ DataRoom 前端可视化组件遵循固定目录和自动注册约定：
 - 组件标题：`告警图`
 - 组件库分类：`ComponentLibTagTypeConst.METRIC`
 - 搜索描述：`告警、图片、阈值、指标、状态、区间`
-- 在 `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts` 中手动加入组件库插件列表。
+- 在 `dataRoomFront/src/dataRoom/_components/PluginRegister.ts` 中手动加入组件库插件列表。
 
 ## 配置模型
 
@@ -74,7 +74,7 @@ DataRoom 前端可视化组件遵循固定目录和自动注册约定：
 - `fontWeight`: `normal | bold | bolder`。
 - `lineHeight`: 行高。
 
-数值格式化复用 `dataRoomFront/src/dataroom-packages/components/_shared/metric-table-utils.ts` 中的 `formatMetricValue()`。
+数值格式化复用 `dataRoomFront/src/dataRoom/components/_shared/metric-table-utils.ts` 中的 `formatMetricValue()`。
 
 ### 图片配置
 
@@ -210,7 +210,7 @@ DataRoom 前端可视化组件遵循固定目录和自动注册约定：
 配置面板使用共享结构：
 
 - 根节点：`.dr-config-panel.dr-alarm-image-config-panel`
-- 样式：第一行引入 `@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';`
+- 样式：第一行引入 `@use '@/dataRoom/assets/styles/chartConfigPanel.scss';`
 - 根表单：`label-width="60px"`、`size="small"`、`label-position="left"`
 - 所有一级分组放入同一个 `el-collapse.dr-config-panel__section`
 

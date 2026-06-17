@@ -12,27 +12,27 @@
 
 ## File Structure
 
-- Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/runtime.ts`: pure runtime helpers for value fallback, image background style, and text glow style.
-- Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/runtime.spec.ts`: Bun assertions for runtime helpers.
-- Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts`: static assertions for component files, exports, panel constraints, and registration.
-- Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/install.ts`: component contract, default props, behavior definition, and dataset field definition.
-- Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/index.vue`: render image, description, value, unit, animation, dataset value fallback, and click behavior.
-- Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/panel/index.vue`: Element Plus configuration panel bound directly to `chart.props`.
-- Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/plugin.ts`: component library metadata.
-- Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/images/image-metric-card.svg`: thumbnail asset.
-- Modify `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`: import and register `DrImageMetricCardPlugin` under `ComponentLibTagTypeConst.METRIC`.
+- Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/runtime.ts`: pure runtime helpers for value fallback, image background style, and text glow style.
+- Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/runtime.spec.ts`: Bun assertions for runtime helpers.
+- Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts`: static assertions for component files, exports, panel constraints, and registration.
+- Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/install.ts`: component contract, default props, behavior definition, and dataset field definition.
+- Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/index.vue`: render image, description, value, unit, animation, dataset value fallback, and click behavior.
+- Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/panel/index.vue`: Element Plus configuration panel bound directly to `chart.props`.
+- Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/plugin.ts`: component library metadata.
+- Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/images/image-metric-card.svg`: thumbnail asset.
+- Modify `dataRoomFront/src/dataRoom/_components/PluginRegister.ts`: import and register `DrImageMetricCardPlugin` under `ComponentLibTagTypeConst.METRIC`.
 
 Existing unrelated worktree changes must be preserved. Before editing `PluginRegister.ts`, read its current content and patch only the new import and the new `pluginList` entry.
 
 ## Task 1: Runtime Helper
 
 **Files:**
-- Create: `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/runtime.spec.ts`
-- Create: `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/runtime.ts`
+- Create: `dataRoomFront/src/dataRoom/components/DrImageMetricCard/runtime.spec.ts`
+- Create: `dataRoomFront/src/dataRoom/components/DrImageMetricCard/runtime.ts`
 
 - [ ] **Step 1: Write the failing runtime test**
 
-Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/runtime.spec.ts`:
+Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/runtime.spec.ts`:
 
 ```ts
 import {
@@ -105,14 +105,14 @@ assert(
 Run from `dataRoomFront`:
 
 ```bash
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/runtime.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/runtime.spec.ts
 ```
 
 Expected: command fails because `./runtime.ts` does not exist.
 
 - [ ] **Step 3: Implement the runtime helper**
 
-Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/runtime.ts`:
+Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/runtime.ts`:
 
 ```ts
 import { getFirstFieldValue, type DatasetRow } from '../_shared/metric-table-utils.ts'
@@ -198,7 +198,7 @@ export const getImageMetricTextShadow = (glow: ImageMetricGlowConfig): string | 
 Run from `dataRoomFront`:
 
 ```bash
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/runtime.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/runtime.spec.ts
 ```
 
 Expected: exit code `0`.
@@ -206,21 +206,21 @@ Expected: exit code `0`.
 - [ ] **Step 5: Commit runtime helper**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/runtime.ts dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/runtime.spec.ts
+git add dataRoomFront/src/dataRoom/components/DrImageMetricCard/runtime.ts dataRoomFront/src/dataRoom/components/DrImageMetricCard/runtime.spec.ts
 git commit -m "feat: add image metric card runtime helpers"
 ```
 
 ## Task 2: Component Contract and Plugin Metadata
 
 **Files:**
-- Create: `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts`
-- Create: `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/install.ts`
-- Create: `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/plugin.ts`
-- Create: `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/images/image-metric-card.svg`
+- Create: `dataRoomFront/src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts`
+- Create: `dataRoomFront/src/dataRoom/components/DrImageMetricCard/install.ts`
+- Create: `dataRoomFront/src/dataRoom/components/DrImageMetricCard/plugin.ts`
+- Create: `dataRoomFront/src/dataRoom/components/DrImageMetricCard/images/image-metric-card.svg`
 
 - [ ] **Step 1: Write the failing component contract test**
 
-Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts`:
+Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts`:
 
 ```ts
 declare const require: (id: string) => {
@@ -271,21 +271,21 @@ assert(!/!important/.test(panelSource), 'panel must not use !important')
 Run from `dataRoomFront`:
 
 ```bash
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 ```
 
 Expected: command fails because `install.ts`, `index.vue`, `panel/index.vue`, `plugin.ts`, and thumbnail are not present yet.
 
 - [ ] **Step 3: Implement `install.ts`**
 
-Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/install.ts`:
+Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/install.ts`:
 
 ```ts
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
-import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
-import type { Behavior } from '@/dataroom-packages/components/type/Behavior.ts'
-import type { ChartDatasetField } from '@/dataroom-packages/components/type/ChartDatasetField.ts'
+import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
+import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
+import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
 import type { ImageMetricRepeatMode } from './runtime.ts'
 
 const component = defineAsyncComponent(() => import('./index.vue'))
@@ -488,11 +488,11 @@ export { component, controlPanel, getInstance, behaviors, datasetFields }
 
 - [ ] **Step 4: Implement `plugin.ts` and thumbnail**
 
-Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/plugin.ts`:
+Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/plugin.ts`:
 
 ```ts
 import thumbnail from './images/image-metric-card.svg'
-import { ChartPlugin } from '@/dataroom-packages/components/type/ChartPlugin.ts'
+import { ChartPlugin } from '@/dataRoom/components/type/ChartPlugin.ts'
 
 export class DrImageMetricCardPlugin extends ChartPlugin {
   constructor(tags: string[]) {
@@ -501,7 +501,7 @@ export class DrImageMetricCardPlugin extends ChartPlugin {
 }
 ```
 
-Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/images/image-metric-card.svg`:
+Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/images/image-metric-card.svg`:
 
 ```svg
 <svg width="160" height="96" viewBox="0 0 160 96" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -518,7 +518,7 @@ Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/images/
 Run from `dataRoomFront`:
 
 ```bash
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 ```
 
 Expected: command still fails because `index.vue` and `panel/index.vue` are not present yet.
@@ -526,15 +526,15 @@ Expected: command still fails because `index.vue` and `panel/index.vue` are not 
 - [ ] **Step 6: Commit component contract files**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/install.ts dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/plugin.ts dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/images/image-metric-card.svg dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+git add dataRoomFront/src/dataRoom/components/DrImageMetricCard/install.ts dataRoomFront/src/dataRoom/components/DrImageMetricCard/plugin.ts dataRoomFront/src/dataRoom/components/DrImageMetricCard/images/image-metric-card.svg dataRoomFront/src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 git commit -m "feat: add image metric card contract"
 ```
 
 ## Task 3: Render Component
 
 **Files:**
-- Create: `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/index.vue`
-- Modify: `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts`
+- Create: `dataRoomFront/src/dataRoom/components/DrImageMetricCard/index.vue`
+- Modify: `dataRoomFront/src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts`
 
 - [ ] **Step 1: Extend the contract test for render requirements**
 
@@ -556,14 +556,14 @@ assert(indexSource.includes('font-feature-settings: \"tnum\"'), 'index.vue must 
 Run from `dataRoomFront`:
 
 ```bash
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 ```
 
 Expected: command fails because `index.vue` does not exist.
 
 - [ ] **Step 3: Implement `index.vue`**
 
-Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/index.vue`. The implementation must include these concrete structures:
+Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/index.vue`. The implementation must include these concrete structures:
 
 ```vue
 <script lang="ts">
@@ -577,14 +577,14 @@ export default defineComponent({
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
-import { getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
-import { useDrComponent } from '@/dataroom-packages/hooks/use-dr-component'
-import type { ComponentExpose } from '@/dataroom-packages/components/type/ComponentExpose.ts'
+import { getResourceUrl } from '@/dataRoom/_common/_utils.ts'
+import { useDrComponent } from '@/dataRoom/hooks/use-dr-component'
+import type { ComponentExpose } from '@/dataRoom/components/type/ComponentExpose.ts'
 import {
   formatMetricValue,
   normalizeRows,
   toFiniteNumber,
-} from '@/dataroom-packages/components/_shared/metric-table-utils.ts'
+} from '@/dataRoom/components/_shared/metric-table-utils.ts'
 import type { DrImageMetricCardConfig } from './install.ts'
 import {
   getImageMetricBackgroundStyle,
@@ -919,7 +919,7 @@ defineExpose<ComponentExpose>({
 Run from `dataRoomFront`:
 
 ```bash
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 ```
 
 Expected: command still fails because `panel/index.vue` is not present yet.
@@ -927,28 +927,28 @@ Expected: command still fails because `panel/index.vue` is not present yet.
 - [ ] **Step 5: Commit render component**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/index.vue dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+git add dataRoomFront/src/dataRoom/components/DrImageMetricCard/index.vue dataRoomFront/src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 git commit -m "feat: render image metric card"
 ```
 
 ## Task 4: Configuration Panel
 
 **Files:**
-- Create: `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/panel/index.vue`
+- Create: `dataRoomFront/src/dataRoom/components/DrImageMetricCard/panel/index.vue`
 
 - [ ] **Step 1: Re-run the contract test and verify the panel failure**
 
 Run from `dataRoomFront`:
 
 ```bash
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 ```
 
 Expected: command fails because `panel/index.vue` does not exist.
 
 - [ ] **Step 2: Implement panel script and option lists**
 
-Create `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/panel/index.vue` with this script:
+Create `dataRoomFront/src/dataRoom/components/DrImageMetricCard/panel/index.vue` with this script:
 
 ```vue
 <script lang="ts">
@@ -1205,7 +1205,7 @@ Add this style block to the same file:
 
 ```vue
 <style scoped lang="scss">
-@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-image-metric-card-config-panel {
   padding: 0;
@@ -1222,7 +1222,7 @@ Add this style block to the same file:
 Run from `dataRoomFront`:
 
 ```bash
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 ```
 
 Expected: command passes all assertions currently present in `componentContract.spec.ts`.
@@ -1230,15 +1230,15 @@ Expected: command passes all assertions currently present in `componentContract.
 - [ ] **Step 5: Commit panel**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/panel/index.vue
+git add dataRoomFront/src/dataRoom/components/DrImageMetricCard/panel/index.vue
 git commit -m "feat: add image metric card panel"
 ```
 
 ## Task 5: Register Component and Verify
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`
-- Modify: `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts`
+- Modify: `dataRoomFront/src/dataRoom/_components/PluginRegister.ts`
+- Modify: `dataRoomFront/src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts`
 
 - [ ] **Step 1: Add registration assertions**
 
@@ -1258,19 +1258,19 @@ assert(
 Run from `dataRoomFront`:
 
 ```bash
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 ```
 
 Expected: command fails with `PluginRegister must import DrImageMetricCardPlugin`.
 
 - [ ] **Step 3: Register the plugin**
 
-Modify `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`:
+Modify `dataRoomFront/src/dataRoom/_components/PluginRegister.ts`:
 
 1. Add this import near other metric component imports:
 
 ```ts
-import {DrImageMetricCardPlugin} from '@/dataroom-packages/components/DrImageMetricCard/plugin.ts'
+import {DrImageMetricCardPlugin} from '@/dataRoom/components/DrImageMetricCard/plugin.ts'
 ```
 
 2. Add this plugin entry immediately after `new DrPeriodCompareCardPlugin([ComponentLibTagTypeConst.METRIC]),`:
@@ -1284,8 +1284,8 @@ import {DrImageMetricCardPlugin} from '@/dataroom-packages/components/DrImageMet
 Run from `dataRoomFront`:
 
 ```bash
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/runtime.spec.ts
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/runtime.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 ```
 
 Expected: both commands exit `0`.
@@ -1305,7 +1305,7 @@ Expected: `vue-tsc --build` exits `0`.
 Run from `dataRoomFront`:
 
 ```bash
-npx eslint src/dataroom-packages/components/DrImageMetricCard src/dataroom-packages/_components/PluginRegister.ts
+npx eslint src/dataRoom/components/DrImageMetricCard src/dataRoom/_components/PluginRegister.ts
 ```
 
 Expected: exits `0`.
@@ -1315,7 +1315,7 @@ Expected: exits `0`.
 Run from repository root:
 
 ```bash
-rg -n ":deep\\(\\.el-|::v-deep|/deep/|>>>|!important|--dr-|letter-spacing" dataRoomFront/src/dataroom-packages/components/DrImageMetricCard
+rg -n ":deep\\(\\.el-|::v-deep|/deep/|>>>|!important|--dr-|letter-spacing" dataRoomFront/src/dataRoom/components/DrImageMetricCard
 ```
 
 Expected output contains only the intended `letter-spacing: 0` lines in `index.vue`; it must not contain `letter-spacing` in `panel/index.vue`, any deep selector, `!important`, or `--dr-*`.
@@ -1323,7 +1323,7 @@ Expected output contains only the intended `letter-spacing: 0` lines in `index.v
 - [ ] **Step 8: Commit registration and verification tests**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+git add dataRoomFront/src/dataRoom/_components/PluginRegister.ts dataRoomFront/src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 git commit -m "feat: register image metric card"
 ```
 
@@ -1337,7 +1337,7 @@ git commit -m "feat: register image metric card"
 Run from repository root:
 
 ```bash
-git diff HEAD~5..HEAD -- dataRoomFront/src/dataroom-packages/components/DrImageMetricCard dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts
+git diff HEAD~5..HEAD -- dataRoomFront/src/dataRoom/components/DrImageMetricCard dataRoomFront/src/dataRoom/_components/PluginRegister.ts
 ```
 
 Expected: diff contains only the new `DrImageMetricCard` component and the one registration change.
@@ -1357,10 +1357,10 @@ Expected: no output.
 Run from `dataRoomFront`:
 
 ```bash
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/runtime.spec.ts
-npx -y bun src/dataroom-packages/components/DrImageMetricCard/componentContract.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/runtime.spec.ts
+npx -y bun src/dataRoom/components/DrImageMetricCard/componentContract.spec.ts
 npm run type-check
-npx eslint src/dataroom-packages/components/DrImageMetricCard src/dataroom-packages/_components/PluginRegister.ts
+npx eslint src/dataRoom/components/DrImageMetricCard src/dataRoom/_components/PluginRegister.ts
 ```
 
 Expected: all commands exit `0`.
@@ -1369,7 +1369,7 @@ Expected: all commands exit `0`.
 
 Summarize:
 
-- Component directory created: `dataRoomFront/src/dataroom-packages/components/DrImageMetricCard/`
+- Component directory created: `dataRoomFront/src/dataRoom/components/DrImageMetricCard/`
 - Component registered under metric tag.
 - Runtime and contract scripts pass.
 - `npm run type-check` passes.

@@ -18,25 +18,25 @@
 
 ## File Structure
 
-- Create `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-condition.ts`: 解析 `100 > x > 90` 等表达式，并根据规则列表解析当前图片项。
-- Create `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-condition.spec.ts`: 轻量回归脚本，覆盖区间、单边、边界、非法表达式和图片匹配优先级。
-- Create `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/install.ts`: 组件配置类型、默认实例、交互定义和数据集字段定义。
-- Create `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/index.vue`: 画布运行时渲染、数据集取值、图片切换和点击行为。
-- Create `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/panel/index.vue`: 右侧专属配置面板。
-- Create `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/plugin.ts`: 组件库元数据。
-- Create `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/images/alarm-image.svg`: 组件库缩略图。
-- Create `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-image.static.spec.mjs`: 静态集成检查，验证文件、导出、注册和面板样式禁用项。
-- Modify `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`: 导入 `DrAlarmImagePlugin`，并加入 `pluginList` 的指标卡分类。
+- Create `dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-condition.ts`: 解析 `100 > x > 90` 等表达式，并根据规则列表解析当前图片项。
+- Create `dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-condition.spec.ts`: 轻量回归脚本，覆盖区间、单边、边界、非法表达式和图片匹配优先级。
+- Create `dataRoomFront/src/dataRoom/components/DrAlarmImage/install.ts`: 组件配置类型、默认实例、交互定义和数据集字段定义。
+- Create `dataRoomFront/src/dataRoom/components/DrAlarmImage/index.vue`: 画布运行时渲染、数据集取值、图片切换和点击行为。
+- Create `dataRoomFront/src/dataRoom/components/DrAlarmImage/panel/index.vue`: 右侧专属配置面板。
+- Create `dataRoomFront/src/dataRoom/components/DrAlarmImage/plugin.ts`: 组件库元数据。
+- Create `dataRoomFront/src/dataRoom/components/DrAlarmImage/images/alarm-image.svg`: 组件库缩略图。
+- Create `dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-image.static.spec.mjs`: 静态集成检查，验证文件、导出、注册和面板样式禁用项。
+- Modify `dataRoomFront/src/dataRoom/_components/PluginRegister.ts`: 导入 `DrAlarmImagePlugin`，并加入 `pluginList` 的指标卡分类。
 
 ## Task 1: 条件表达式与图片匹配工具
 
 **Files:**
-- Create: `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-condition.spec.ts`
-- Create: `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-condition.ts`
+- Create: `dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-condition.spec.ts`
+- Create: `dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-condition.ts`
 
 - [ ] **Step 1: 写失败测试**
 
-创建 `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-condition.spec.ts`：
+创建 `dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-condition.spec.ts`：
 
 ```ts
 import {
@@ -127,14 +127,14 @@ assert(
 Run from `dataRoomFront`:
 
 ```bash
-npx jiti src/dataroom-packages/components/DrAlarmImage/alarm-condition.spec.ts
+npx jiti src/dataRoom/components/DrAlarmImage/alarm-condition.spec.ts
 ```
 
 Expected: FAIL with module resolution error for `./alarm-condition`.
 
 - [ ] **Step 3: 实现条件工具**
 
-创建 `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-condition.ts`：
+创建 `dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-condition.ts`：
 
 ```ts
 import { toFiniteNumber } from '../_shared/metric-table-utils.ts'
@@ -266,7 +266,7 @@ export const resolveAlarmImageItem = (options: ResolveAlarmImageItemOptions): Al
 Run from `dataRoomFront`:
 
 ```bash
-npx jiti src/dataroom-packages/components/DrAlarmImage/alarm-condition.spec.ts
+npx jiti src/dataRoom/components/DrAlarmImage/alarm-condition.spec.ts
 ```
 
 Expected: PASS with exit code `0`.
@@ -274,27 +274,27 @@ Expected: PASS with exit code `0`.
 - [ ] **Step 5: 提交条件工具**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-condition.ts dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-condition.spec.ts
+git add dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-condition.ts dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-condition.spec.ts
 git commit -m "feat: add alarm image condition matcher"
 ```
 
 ## Task 2: 组件壳、配置类型和组件库元数据
 
 **Files:**
-- Create: `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/install.ts`
-- Create: `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/plugin.ts`
-- Create: `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/images/alarm-image.svg`
-- Create: `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/index.vue`
-- Create: `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/panel/index.vue`
+- Create: `dataRoomFront/src/dataRoom/components/DrAlarmImage/install.ts`
+- Create: `dataRoomFront/src/dataRoom/components/DrAlarmImage/plugin.ts`
+- Create: `dataRoomFront/src/dataRoom/components/DrAlarmImage/images/alarm-image.svg`
+- Create: `dataRoomFront/src/dataRoom/components/DrAlarmImage/index.vue`
+- Create: `dataRoomFront/src/dataRoom/components/DrAlarmImage/panel/index.vue`
 
 - [ ] **Step 1: 创建 `install.ts`**
 
 ```ts
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
-import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
-import type { Behavior } from '@/dataroom-packages/components/type/Behavior.ts'
-import type { ChartDatasetField } from '@/dataroom-packages/components/type/ChartDatasetField.ts'
+import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
+import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
+import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
 import type { AlarmImageItem } from './alarm-condition.ts'
 
 const component = defineAsyncComponent(() => import('./index.vue'))
@@ -433,7 +433,7 @@ export { component, controlPanel, getInstance, behaviors, datasetFields }
 
 ```ts
 import thumbnail from './images/alarm-image.svg'
-import { ChartPlugin } from '@/dataroom-packages/components/type/ChartPlugin.ts'
+import { ChartPlugin } from '@/dataRoom/components/type/ChartPlugin.ts'
 
 export class DrAlarmImagePlugin extends ChartPlugin {
   constructor(tags: string[]) {
@@ -444,7 +444,7 @@ export class DrAlarmImagePlugin extends ChartPlugin {
 
 - [ ] **Step 3: 创建缩略图**
 
-创建 `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/images/alarm-image.svg`：
+创建 `dataRoomFront/src/dataRoom/components/DrAlarmImage/images/alarm-image.svg`：
 
 ```svg
 <svg width="96" height="72" viewBox="0 0 96 72" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -525,7 +525,7 @@ const chartConfig = computed(() => chart)
 </template>
 
 <style scoped lang="scss">
-@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-alarm-image-config-panel {
   padding: 0;
@@ -550,14 +550,14 @@ Expected: PASS.
 - [ ] **Step 7: 提交组件壳**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrAlarmImage/install.ts dataRoomFront/src/dataroom-packages/components/DrAlarmImage/plugin.ts dataRoomFront/src/dataroom-packages/components/DrAlarmImage/images/alarm-image.svg dataRoomFront/src/dataroom-packages/components/DrAlarmImage/index.vue dataRoomFront/src/dataroom-packages/components/DrAlarmImage/panel/index.vue
+git add dataRoomFront/src/dataRoom/components/DrAlarmImage/install.ts dataRoomFront/src/dataRoom/components/DrAlarmImage/plugin.ts dataRoomFront/src/dataRoom/components/DrAlarmImage/images/alarm-image.svg dataRoomFront/src/dataRoom/components/DrAlarmImage/index.vue dataRoomFront/src/dataRoom/components/DrAlarmImage/panel/index.vue
 git commit -m "feat: add alarm image component shell"
 ```
 
 ## Task 3: 画布运行时渲染
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/index.vue`
+- Modify: `dataRoomFront/src/dataRoom/components/DrAlarmImage/index.vue`
 
 - [ ] **Step 1: 替换 `index.vue` 为运行时实现**
 
@@ -575,15 +575,15 @@ export default defineComponent({
 import type { CSSProperties } from 'vue'
 import { computed, ref } from 'vue'
 import type { DrAlarmImageConfig } from './install.ts'
-import { getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
-import { useDrComponent } from '@/dataroom-packages/hooks/use-dr-component'
-import type { ComponentExpose } from '@/dataroom-packages/components/type/ComponentExpose.ts'
+import { getResourceUrl } from '@/dataRoom/_common/_utils.ts'
+import { useDrComponent } from '@/dataRoom/hooks/use-dr-component'
+import type { ComponentExpose } from '@/dataRoom/components/type/ComponentExpose.ts'
 import {
   formatMetricValue,
   getFirstFieldValue,
   normalizeRows,
   toFiniteNumber,
-} from '@/dataroom-packages/components/_shared/metric-table-utils.ts'
+} from '@/dataRoom/components/_shared/metric-table-utils.ts'
 import { resolveAlarmImageItem } from './alarm-condition.ts'
 
 const { chart } = defineProps<{
@@ -768,7 +768,7 @@ defineExpose<ComponentExpose>({
 Run from `dataRoomFront`:
 
 ```bash
-npx jiti src/dataroom-packages/components/DrAlarmImage/alarm-condition.spec.ts
+npx jiti src/dataRoom/components/DrAlarmImage/alarm-condition.spec.ts
 ```
 
 Expected: PASS.
@@ -786,14 +786,14 @@ Expected: PASS.
 - [ ] **Step 4: 提交渲染实现**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrAlarmImage/index.vue
+git add dataRoomFront/src/dataRoom/components/DrAlarmImage/index.vue
 git commit -m "feat: render alarm image component"
 ```
 
 ## Task 4: 配置面板
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/panel/index.vue`
+- Modify: `dataRoomFront/src/dataRoom/components/DrAlarmImage/panel/index.vue`
 
 - [ ] **Step 1: 实现面板脚本逻辑**
 
@@ -802,7 +802,7 @@ git commit -m "feat: render alarm image component"
 ```ts
 import { computed } from 'vue'
 import type { DrAlarmImageConfig } from '../install.ts'
-import { getResourceUrl } from '@/dataroom-packages/_common/_utils.ts'
+import { getResourceUrl } from '@/dataRoom/_common/_utils.ts'
 
 const { chart } = defineProps<{
   chart: DrAlarmImageConfig
@@ -977,7 +977,7 @@ const setDefaultItem = (id: string) => {
 样式必须只控制外层布局，不覆盖 `.el-*` 内部结构：
 
 ```scss
-@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-alarm-image-config-panel {
   padding: 0;
@@ -1053,7 +1053,7 @@ const setDefaultItem = (id: string) => {
 Run from repo root:
 
 ```bash
-rg -n "#[0-9a-fA-F]{3,8}|rgb\\(|rgba\\(|hsl\\(|hsla\\(|--dr-|:deep\\(\\.el-|::v-deep|/deep/|>>>|!important|letter-spacing:\\s*-" dataRoomFront/src/dataroom-packages/components/DrAlarmImage
+rg -n "#[0-9a-fA-F]{3,8}|rgb\\(|rgba\\(|hsl\\(|hsla\\(|--dr-|:deep\\(\\.el-|::v-deep|/deep/|>>>|!important|letter-spacing:\\s*-" dataRoomFront/src/dataRoom/components/DrAlarmImage
 ```
 
 Expected: no output.
@@ -1071,22 +1071,22 @@ Expected: PASS.
 - [ ] **Step 6: 提交配置面板**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrAlarmImage/panel/index.vue
+git add dataRoomFront/src/dataRoom/components/DrAlarmImage/panel/index.vue
 git commit -m "feat: configure alarm image component"
 ```
 
 ## Task 5: 组件库注册与静态集成检查
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`
-- Create: `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-image.static.spec.mjs`
+- Modify: `dataRoomFront/src/dataRoom/_components/PluginRegister.ts`
+- Create: `dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-image.static.spec.mjs`
 
 - [ ] **Step 1: 注册组件库插件**
 
 先读取 `PluginRegister.ts` 当前内容，保留已有用户改动。追加导入：
 
 ```ts
-import { DrAlarmImagePlugin } from '@/dataroom-packages/components/DrAlarmImage/plugin.ts'
+import { DrAlarmImagePlugin } from '@/dataRoom/components/DrAlarmImage/plugin.ts'
 ```
 
 在 `pluginList` 的指标卡组件附近加入：
@@ -1097,7 +1097,7 @@ new DrAlarmImagePlugin([ComponentLibTagTypeConst.METRIC]),
 
 - [ ] **Step 2: 写静态集成检查**
 
-创建 `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-image.static.spec.mjs`：
+创建 `dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-image.static.spec.mjs`：
 
 ```js
 import { existsSync, readFileSync } from 'node:fs'
@@ -1151,7 +1151,7 @@ assert(
 Run from `dataRoomFront`:
 
 ```bash
-node src/dataroom-packages/components/DrAlarmImage/alarm-image.static.spec.mjs
+node src/dataRoom/components/DrAlarmImage/alarm-image.static.spec.mjs
 ```
 
 Expected: PASS.
@@ -1169,22 +1169,22 @@ Expected: PASS.
 - [ ] **Step 5: 提交注册**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts dataRoomFront/src/dataroom-packages/components/DrAlarmImage/alarm-image.static.spec.mjs
+git add dataRoomFront/src/dataRoom/_components/PluginRegister.ts dataRoomFront/src/dataRoom/components/DrAlarmImage/alarm-image.static.spec.mjs
 git commit -m "feat: register alarm image component"
 ```
 
 ## Task 6: 最终验证和交付检查
 
 **Files:**
-- Verify: `dataRoomFront/src/dataroom-packages/components/DrAlarmImage/**`
-- Verify: `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`
+- Verify: `dataRoomFront/src/dataRoom/components/DrAlarmImage/**`
+- Verify: `dataRoomFront/src/dataRoom/_components/PluginRegister.ts`
 
 - [ ] **Step 1: 运行条件工具回归**
 
 Run from `dataRoomFront`:
 
 ```bash
-npx jiti src/dataroom-packages/components/DrAlarmImage/alarm-condition.spec.ts
+npx jiti src/dataRoom/components/DrAlarmImage/alarm-condition.spec.ts
 ```
 
 Expected: PASS.
@@ -1194,7 +1194,7 @@ Expected: PASS.
 Run from `dataRoomFront`:
 
 ```bash
-node src/dataroom-packages/components/DrAlarmImage/alarm-image.static.spec.mjs
+node src/dataRoom/components/DrAlarmImage/alarm-image.static.spec.mjs
 ```
 
 Expected: PASS.
@@ -1224,7 +1224,7 @@ Expected: PASS. If ESLint formats files, review the diff and only keep changes r
 Run from repo root:
 
 ```bash
-rg -n "#[0-9a-fA-F]{3,8}|rgb\\(|rgba\\(|hsl\\(|hsla\\(|--dr-|:deep\\(\\.el-|::v-deep|/deep/|>>>|!important|letter-spacing:\\s*-" dataRoomFront/src/dataroom-packages/components/DrAlarmImage
+rg -n "#[0-9a-fA-F]{3,8}|rgb\\(|rgba\\(|hsl\\(|hsla\\(|--dr-|:deep\\(\\.el-|::v-deep|/deep/|>>>|!important|letter-spacing:\\s*-" dataRoomFront/src/dataRoom/components/DrAlarmImage
 ```
 
 Expected: no output.
@@ -1254,7 +1254,7 @@ Manual checks:
 If Step 4 produced additional formatting changes in task-owned files:
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrAlarmImage dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts
+git add dataRoomFront/src/dataRoom/components/DrAlarmImage dataRoomFront/src/dataRoom/_components/PluginRegister.ts
 git commit -m "chore: verify alarm image component"
 ```
 

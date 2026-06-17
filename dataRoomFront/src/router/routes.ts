@@ -9,58 +9,58 @@ export const appRoutes: RouteRecordRaw[] = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/dataroom-packages/login/Login.vue'),
+    component: () => import('@/dataRoom/login/Login.vue'),
   },
   {
     path: '/dataRoom',
     name: 'dataRoom',
-    component: () => import('@/dataroom-packages/layout/UpDownLayout.vue'),
+    component: () => import('@/dataRoom/layout/UpDownLayout.vue'),
     children: [
       {
         path: 'page/index',
         name: 'page',
-        component: () => import('@/dataroom-packages/page/index.vue'),
+        component: () => import('@/dataRoom/page/index.vue'),
       },
       {
         path: 'resource/index',
         name: 'resource',
-        component: () => import('@/dataroom-packages/resource/index.vue'),
+        component: () => import('@/dataRoom/resource/index.vue'),
       },
       {
         path: 'dataSource/index',
         name: 'dataSource',
-        component: () => import('@/dataroom-packages/dataSource/index.vue'),
+        component: () => import('@/dataRoom/dataSource/index.vue'),
       },
       {
         path: 'dataset/index',
         name: 'dataset',
-        component: () => import('@/dataroom-packages/dataset/index.vue'),
+        component: () => import('@/dataRoom/dataset/index.vue'),
       },
       {
         path: 'map/index',
         name: 'map',
-        component: () => import('@/dataroom-packages/map/index.vue'),
+        component: () => import('@/dataRoom/map/index.vue'),
       },
       {
         path: 'console',
         name: 'console',
-        component: () => import('@/dataroom-packages/console/ConsoleLayout.vue'),
+        component: () => import('@/dataRoom/console/ConsoleLayout.vue'),
         redirect: '/dataRoom/console/user',
         children: [
           {
             path: 'user',
             name: 'consoleUser',
-            component: () => import('@/dataroom-packages/user/index.vue'),
+            component: () => import('@/dataRoom/user/index.vue'),
           },
           {
             path: 'profile',
             name: 'consoleProfile',
-            component: () => import('@/dataroom-packages/profile/index.vue'),
+            component: () => import('@/dataRoom/profile/index.vue'),
           },
           {
             path: 'log',
             name: 'consoleAccessLog',
-            component: () => import('@/dataroom-packages/operationLog/index.vue'),
+            component: () => import('@/dataRoom/operationLog/index.vue'),
           },
           {
             path: 'access-log',
@@ -81,21 +81,21 @@ export const appRoutes: RouteRecordRaw[] = [
   {
     path: '/dataRoom/visualScreenDesigner/:pageCode',
     name: 'visualScreenDesigner',
-    component: () => import('@/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue'),
+    component: () => import('@/dataRoom/VisualScreenDesigner/VisualScreenDesigner.vue'),
   },
   {
     path: '/dataRoom/visualScreenPreview/:pageStatus/:pageCode',
     name: 'visualScreenPreview',
-    component: () => import('@/dataroom-packages/VisualScreenDesigner/preview/VisualScreenPreview.vue'),
+    component: () => import('@/dataRoom/VisualScreenDesigner/preview/VisualScreenPreview.vue'),
   },
   {
     path: '/dataRoom/pageDesigner/:pageCode',
     name: 'pageDesigner',
-    component: () => import('@/dataroom-packages/PageDesigner/PageDesigner.vue'),
+    component: () => import('@/dataRoom/PageDesigner/PageDesigner.vue'),
   },
   {
     path: '/dataRoom/pagePreviewer/:pageStatus/:pageCode',
     name: 'pagePreviewer',
-    component: () => import('@/dataroom-packages/PageDesigner/preview/PagePreviewer.vue'),
+    component: () => import('@/dataRoom/PageDesigner/preview/PagePreviewer.vue'),
   },
 ]

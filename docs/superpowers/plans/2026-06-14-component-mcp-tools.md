@@ -20,17 +20,17 @@
   - CLI 入口，调用导出器，把结果写入 `../dataRoomServer/src/main/resources/mcp/component-configs/`。
 - Modify: `dataRoomFront/package.json`
   - 新增 `export:component-configs` 脚本。
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/bean/ComponentSummary.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/bean/ComponentSummary.java`
   - 组件摘要 DTO。
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/bean/ComponentConfigField.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/bean/ComponentConfigField.java`
   - 单个扁平配置字段 DTO。
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/bean/ComponentConfig.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/bean/ComponentConfig.java`
   - 单个组件完整配置 DTO。
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/service/ComponentConfigResourceService.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/service/ComponentConfigResourceService.java`
   - 读取 classpath JSON 资源并解析为 DTO。
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/ComponentMcpTool.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/ComponentMcpTool.java`
   - MCP 工具对象，返回 `Resp<List<ComponentSummary>>` 和 `Resp<ComponentConfig>`。
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/DataRoomMcpConfiguration.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/DataRoomMcpConfiguration.java`
   - 注册 `ComponentMcpTool`。
 - Create: `dataRoomServer/src/test/resources/mcp/component-configs/index.json`
   - 后端测试用组件摘要资源。
@@ -106,14 +106,14 @@ try {
   ])
 
   const projectDir = path.join(rootDir, 'project')
-  const componentsDir = path.join(projectDir, 'src/dataroom-packages/components')
-  const registerDir = path.join(projectDir, 'src/dataroom-packages/_components')
+  const componentsDir = path.join(projectDir, 'src/dataRoom/components')
+  const registerDir = path.join(projectDir, 'src/dataRoom/_components')
   const outputDir = path.join(rootDir, 'output')
   await mkdir(path.join(componentsDir, 'DrText'), { recursive: true })
   await mkdir(registerDir, { recursive: true })
 
   await writeFile(path.join(registerDir, 'PluginRegister.ts'), `
-import {DrTextPlugin} from '@/dataroom-packages/components/DrText/plugin.ts'
+import {DrTextPlugin} from '@/dataRoom/components/DrText/plugin.ts'
 const pluginList = [
   new DrTextPlugin(['TEXT'])
 ]
@@ -122,7 +122,7 @@ export { pluginList }
 
   await writeFile(path.join(componentsDir, 'DrText/plugin.ts'), `
 import thumbnail from './images/text.png'
-import {ChartPlugin} from "@/dataroom-packages/components/type/ChartPlugin.ts";
+import {ChartPlugin} from "@/dataRoom/components/type/ChartPlugin.ts";
 export class DrTextPlugin extends ChartPlugin {
   constructor(tags: string[]) {
     super('DrText', '文本', '文字、文本、数字', thumbnail, tags)
@@ -224,8 +224,8 @@ import ts from 'typescript'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
-const registerPath = 'src/dataroom-packages/_components/PluginRegister.ts'
-const componentsPath = 'src/dataroom-packages/components'
+const registerPath = 'src/dataRoom/_components/PluginRegister.ts'
+const componentsPath = 'src/dataRoom/components'
 
 export function parseLiteralOptions(typeText) {
   const parts = typeText.split('|').map((part) => part.trim())
@@ -593,10 +593,10 @@ git commit -m "feat(frontend): export component mcp configs"
 - Create: `dataRoomServer/src/test/resources/mcp/component-configs/index.json`
 - Create: `dataRoomServer/src/test/resources/mcp/component-configs/DrText.config.json`
 - Create: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/component/service/ComponentConfigResourceServiceTest.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/bean/ComponentSummary.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/bean/ComponentConfigField.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/bean/ComponentConfig.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/service/ComponentConfigResourceService.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/bean/ComponentSummary.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/bean/ComponentConfigField.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/bean/ComponentConfig.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/service/ComponentConfigResourceService.java`
 
 - [ ] **Step 1: 创建后端测试资源**
 
@@ -642,11 +642,11 @@ git commit -m "feat(frontend): export component mcp configs"
 创建 `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/component/service/ComponentConfigResourceServiceTest.java`：
 
 ```java
-package com.gccloud.gcpaas.core.component.service;
+package com.gccloud.gcpaas.dataroom.core.component.service;
 
-import com.gccloud.gcpaas.core.component.bean.ComponentConfig;
-import com.gccloud.gcpaas.core.component.bean.ComponentSummary;
-import com.gccloud.gcpaas.core.exception.DataRoomException;
+import com.gccloud.gcpaas.dataroom.core.component.bean.ComponentConfig;
+import com.gccloud.gcpaas.dataroom.core.component.bean.ComponentSummary;
+import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -700,10 +700,10 @@ class ComponentConfigResourceServiceTest {
 
 - [ ] **Step 3: 创建最小 DTO 和 service 骨架**
 
-创建 `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/bean/ComponentSummary.java`：
+创建 `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/bean/ComponentSummary.java`：
 
 ```java
-package com.gccloud.gcpaas.core.component.bean;
+package com.gccloud.gcpaas.dataroom.core.component.bean;
 
 import lombok.Data;
 
@@ -715,10 +715,10 @@ public class ComponentSummary {
 }
 ```
 
-创建 `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/bean/ComponentConfigField.java`：
+创建 `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/bean/ComponentConfigField.java`：
 
 ```java
-package com.gccloud.gcpaas.core.component.bean;
+package com.gccloud.gcpaas.dataroom.core.component.bean;
 
 import lombok.Data;
 
@@ -734,10 +734,10 @@ public class ComponentConfigField {
 }
 ```
 
-创建 `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/bean/ComponentConfig.java`：
+创建 `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/bean/ComponentConfig.java`：
 
 ```java
-package com.gccloud.gcpaas.core.component.bean;
+package com.gccloud.gcpaas.dataroom.core.component.bean;
 
 import lombok.Data;
 
@@ -752,14 +752,14 @@ public class ComponentConfig {
 }
 ```
 
-创建 `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/service/ComponentConfigResourceService.java`：
+创建 `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/service/ComponentConfigResourceService.java`：
 
 ```java
-package com.gccloud.gcpaas.core.component.service;
+package com.gccloud.gcpaas.dataroom.core.component.service;
 
-import com.gccloud.gcpaas.core.component.bean.ComponentConfig;
-import com.gccloud.gcpaas.core.component.bean.ComponentSummary;
-import com.gccloud.gcpaas.core.exception.DataRoomException;
+import com.gccloud.gcpaas.dataroom.core.component.bean.ComponentConfig;
+import com.gccloud.gcpaas.dataroom.core.component.bean.ComponentSummary;
+import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -790,13 +790,13 @@ Expected: FAIL，错误包含 `组件配置资源读取未实现`。
 将 `ComponentConfigResourceService.java` 替换为：
 
 ```java
-package com.gccloud.gcpaas.core.component.service;
+package com.gccloud.gcpaas.dataroom.core.component.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gccloud.gcpaas.core.component.bean.ComponentConfig;
-import com.gccloud.gcpaas.core.component.bean.ComponentSummary;
-import com.gccloud.gcpaas.core.exception.DataRoomException;
+import com.gccloud.gcpaas.dataroom.core.component.bean.ComponentConfig;
+import com.gccloud.gcpaas.dataroom.core.component.bean.ComponentSummary;
+import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -874,7 +874,7 @@ Expected: PASS。
 - [ ] **Step 6: 提交后端 service**
 
 ```bash
-git add dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/bean dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/service dataRoomServer/src/test/java/com/gccloud/gcpaas/core/component/service dataRoomServer/src/test/resources/mcp/component-configs
+git add dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/bean dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/service dataRoomServer/src/test/java/com/gccloud/gcpaas/core/component/service dataRoomServer/src/test/resources/mcp/component-configs
 git commit -m "feat(server): read component config resources"
 ```
 
@@ -884,20 +884,20 @@ git commit -m "feat(server): read component config resources"
 
 **Files:**
 - Create: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/component/ComponentMcpToolTest.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/ComponentMcpTool.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/DataRoomMcpConfiguration.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/ComponentMcpTool.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/DataRoomMcpConfiguration.java`
 
 - [ ] **Step 1: 写 MCP 工具对象测试**
 
 创建 `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/component/ComponentMcpToolTest.java`：
 
 ```java
-package com.gccloud.gcpaas.core.component;
+package com.gccloud.gcpaas.dataroom.core.component;
 
-import com.gccloud.gcpaas.core.bean.Resp;
-import com.gccloud.gcpaas.core.component.bean.ComponentConfig;
-import com.gccloud.gcpaas.core.component.bean.ComponentSummary;
-import com.gccloud.gcpaas.core.component.service.ComponentConfigResourceService;
+import com.gccloud.gcpaas.dataroom.core.bean.Resp;
+import com.gccloud.gcpaas.dataroom.core.component.bean.ComponentConfig;
+import com.gccloud.gcpaas.dataroom.core.component.bean.ComponentSummary;
+import com.gccloud.gcpaas.dataroom.core.component.service.ComponentConfigResourceService;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.tool.annotation.Tool;
 
@@ -943,15 +943,15 @@ class ComponentMcpToolTest {
 
 - [ ] **Step 2: 创建 MCP 工具对象**
 
-创建 `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/ComponentMcpTool.java`：
+创建 `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/ComponentMcpTool.java`：
 
 ```java
-package com.gccloud.gcpaas.core.component;
+package com.gccloud.gcpaas.dataroom.core.component;
 
-import com.gccloud.gcpaas.core.bean.Resp;
-import com.gccloud.gcpaas.core.component.bean.ComponentConfig;
-import com.gccloud.gcpaas.core.component.bean.ComponentSummary;
-import com.gccloud.gcpaas.core.component.service.ComponentConfigResourceService;
+import com.gccloud.gcpaas.dataroom.core.bean.Resp;
+import com.gccloud.gcpaas.dataroom.core.component.bean.ComponentConfig;
+import com.gccloud.gcpaas.dataroom.core.component.bean.ComponentSummary;
+import com.gccloud.gcpaas.dataroom.core.component.service.ComponentConfigResourceService;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
 
@@ -980,14 +980,14 @@ public class ComponentMcpTool {
 
 - [ ] **Step 3: 注册 MCP 工具对象**
 
-修改 `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/DataRoomMcpConfiguration.java`：
+修改 `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/DataRoomMcpConfiguration.java`：
 
 ```java
-package com.gccloud.gcpaas.core.config;
+package com.gccloud.gcpaas.dataroom.core.config;
 
-import com.gccloud.gcpaas.core.component.ComponentMcpTool;
-import com.gccloud.gcpaas.core.dataset.DatasetController;
-import com.gccloud.gcpaas.core.page.PageController;
+import com.gccloud.gcpaas.dataroom.core.component.ComponentMcpTool;
+import com.gccloud.gcpaas.dataroom.core.dataset.DatasetController;
+import com.gccloud.gcpaas.dataroom.core.page.PageController;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.context.annotation.Bean;
@@ -1032,7 +1032,7 @@ Expected: PASS。
 - [ ] **Step 6: 提交 MCP 工具注册**
 
 ```bash
-git add dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/ComponentMcpTool.java dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/DataRoomMcpConfiguration.java dataRoomServer/src/test/java/com/gccloud/gcpaas/core/component/ComponentMcpToolTest.java
+git add dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/ComponentMcpTool.java dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/DataRoomMcpConfiguration.java dataRoomServer/src/test/java/com/gccloud/gcpaas/core/component/ComponentMcpToolTest.java
 git commit -m "feat(server): expose component config mcp tools"
 ```
 
@@ -1042,7 +1042,7 @@ git commit -m "feat(server): expose component config mcp tools"
 
 **Files:**
 - Verify: `dataRoomFront/scripts/component-config-exporter.mjs`
-- Verify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/component/service/ComponentConfigResourceService.java`
+- Verify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/component/service/ComponentConfigResourceService.java`
 - Verify: `dataRoomServer/src/main/resources/mcp/component-configs/`
 
 - [ ] **Step 1: 重新生成组件配置资源**
@@ -1095,7 +1095,7 @@ Expected: PASS。
 - [ ] **Step 6: 检查 MCP 工具注册点**
 
 ```bash
-rg -n "ComponentMcpTool|listComponents|getComponentConfig|toolObjects" dataRoomServer/src/main/java/com/gccloud/gcpaas/core
+rg -n "ComponentMcpTool|listComponents|getComponentConfig|toolObjects" dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core
 ```
 
 Expected:

@@ -14,12 +14,12 @@
 
 - Modify `pom.xml`: remove `minio.version` and `io.minio:minio`; add `software.amazon.awssdk:s3:2.25.27`.
 - Modify `dataRoomServer/src/main/resources/application-base.yml`: replace `storage.minio` sample config with `storage.s3` and update type comments.
-- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/bean/ResourceBean.java`: replace `Storage.minio` and `ResourceBean.Minio` with `Storage.s3` and `ResourceBean.S3`.
-- Rename `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceStorageService.java` to `IResourceStorageService.java`: keep method signatures unchanged.
-- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/LocalResourceStorageServiceImpl.java`: implement `IResourceStorageService`.
-- Replace `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/MinioResourceStorageServiceImpl.java` with `S3ResourceStorageServiceImpl.java`: implement S3 upload, load, delete, bucket auto-create, and config validation.
-- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/StoredResource.java`: update storage comment from `minio` to `s3`.
-- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/ResourceController.java`: inject `IResourceStorageService`, rename storage helpers to S3, keep all request behavior unchanged.
+- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/bean/ResourceBean.java`: replace `Storage.minio` and `ResourceBean.Minio` with `Storage.s3` and `ResourceBean.S3`.
+- Rename `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/ResourceStorageService.java` to `IResourceStorageService.java`: keep method signatures unchanged.
+- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/LocalResourceStorageServiceImpl.java`: implement `IResourceStorageService`.
+- Replace `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/MinioResourceStorageServiceImpl.java` with `S3ResourceStorageServiceImpl.java`: implement S3 upload, load, delete, bucket auto-create, and config validation.
+- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/StoredResource.java`: update storage comment from `minio` to `s3`.
+- Modify `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/ResourceController.java`: inject `IResourceStorageService`, rename storage helpers to S3, keep all request behavior unchanged.
 - Modify `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/resources/storage/IResourceStorageServiceConditionTest.java`: assert local and s3 conditional bean loading.
 - Replace `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/resources/storage/MinioResourceStorageServiceImplTest.java` with `S3ResourceStorageServiceImplTest.java`: cover bucket auto-create and S3 configuration.
 - Modify `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/resources/ResourceControllerTest.java`: use `IResourceStorageService` and `s3` storage type.
@@ -59,7 +59,7 @@ Expected: fail because production code still contains `ResourceStorageService` a
 **Files:**
 - Modify: `pom.xml`
 - Modify: `dataRoomServer/src/main/resources/application-base.yml`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/config/bean/ResourceBean.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/config/bean/ResourceBean.java`
 
 - [x] **Step 1: Replace Maven dependency**
 
@@ -100,9 +100,9 @@ and the nested config class must be named `S3` with fields `endpoint`, `bucket`,
 ## Task 3: Rename Storage SPI
 
 **Files:**
-- Rename: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/ResourceStorageService.java` to `IResourceStorageService.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/LocalResourceStorageServiceImpl.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/ResourceController.java`
+- Rename: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/ResourceStorageService.java` to `IResourceStorageService.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/LocalResourceStorageServiceImpl.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/ResourceController.java`
 - Modify: related tests
 
 - [x] **Step 1: Rename the interface file and type**
@@ -125,8 +125,8 @@ public interface IResourceStorageService {
 ## Task 4: Implement S3 Storage
 
 **Files:**
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/S3ResourceStorageServiceImpl.java`
-- Delete: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/MinioResourceStorageServiceImpl.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/S3ResourceStorageServiceImpl.java`
+- Delete: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/MinioResourceStorageServiceImpl.java`
 
 - [x] **Step 1: Implement conditional S3 service**
 
@@ -158,8 +158,8 @@ Every new or modified `catch` block must log the stack trace with `ExceptionUtil
 ## Task 5: Keep Controller Behavior Stable
 
 **Files:**
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/ResourceController.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/resources/storage/StoredResource.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/ResourceController.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/resources/storage/StoredResource.java`
 
 - [x] **Step 1: Rename storage type helper**
 

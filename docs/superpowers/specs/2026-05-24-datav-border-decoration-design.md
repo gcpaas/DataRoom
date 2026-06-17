@@ -7,11 +7,11 @@ DataRoom 需要复用 `/Users/liuchengbiao/Downloads/datav-vue3-master/packages/
 - `DrBorder`：边框组件，通过配置选择 `BorderBox1` 到 `BorderBox13`。
 - `DrDecoration`：装饰组件，通过配置选择 `Decoration1` 到 `Decoration12`。
 
-迁移后的 DataV 源码放在 `dataRoomFront/src/dataroom-packages/datav`。原始下载目录只作为来源，不在本次工作中修改。
+迁移后的 DataV 源码放在 `dataRoomFront/src/dataRoom/datav`。原始下载目录只作为来源，不在本次工作中修改。
 
 ## 目标
 
-1. 将 `packages/datav-vue3` 复制到 `dataRoomFront/src/dataroom-packages/datav`，作为 DataRoom 内部素材库。
+1. 将 `packages/datav-vue3` 复制到 `dataRoomFront/src/dataRoom/datav`，作为 DataRoom 内部素材库。
 2. 新增 `DrBorder` 和 `DrDecoration` 两个符合 DataRoom 组件规范的组件。
 3. 两个组件按当前配置异步加载 DataV 子组件，不全局注册 DataV 全量插件。
 4. 配置模型覆盖所有边框和装饰公开属性。
@@ -30,7 +30,7 @@ DataRoom 需要复用 `/Users/liuchengbiao/Downloads/datav-vue3-master/packages/
 采用“内部素材库 + DataRoom 包装组件”的结构：
 
 ```text
-dataRoomFront/src/dataroom-packages/
+dataRoomFront/src/dataRoom/
 ├── datav/
 │   ├── components/
 │   │   ├── BorderBox1/
@@ -55,7 +55,7 @@ dataRoomFront/src/dataroom-packages/
         └── plugin.ts
 ```
 
-`datav` 目录视为第三方可视化素材源码。实施时需要把内部导入路径从 `packages/datav-vue3/...` 改为 `@/dataroom-packages/datav/...`。
+`datav` 目录视为第三方可视化素材源码。实施时需要把内部导入路径从 `packages/datav-vue3/...` 改为 `@/dataRoom/datav/...`。
 
 `DrBorder` 和 `DrDecoration` 是 DataRoom 对外暴露的组件类型。它们负责读取 `chart.props`、选择对应的 DataV 子组件、过滤并传递该子组件支持的属性。
 
@@ -175,8 +175,8 @@ interface DrDecorationPropsInterface {
 
 ```ts
 const borderComponentMap = {
-  BorderBox1: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox1/src/BorderBox1')),
-  BorderBox2: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/BorderBox2/src/BorderBox2')),
+  BorderBox1: defineAsyncComponent(() => import('@/dataRoom/datav/components/BorderBox1/src/BorderBox1')),
+  BorderBox2: defineAsyncComponent(() => import('@/dataRoom/datav/components/BorderBox2/src/BorderBox2')),
 }
 ```
 
@@ -184,8 +184,8 @@ const borderComponentMap = {
 
 ```ts
 const decorationComponentMap = {
-  Decoration1: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration1/src/index.vue')),
-  Decoration2: defineAsyncComponent(() => import('@/dataroom-packages/datav/components/Decoration2/src/index.vue')),
+  Decoration1: defineAsyncComponent(() => import('@/dataRoom/datav/components/Decoration1/src/index.vue')),
+  Decoration2: defineAsyncComponent(() => import('@/dataRoom/datav/components/Decoration2/src/index.vue')),
 }
 ```
 
@@ -213,7 +213,7 @@ DataV 边框组件主要使用 TSX，样式使用 Less。当前 `dataRoomFront/p
 两个配置面板都使用现有配置面板结构：
 
 - 根节点使用 `.dr-config-panel` 和组件专属类。
-- 引入 `@/dataroom-packages/assets/styles/chartConfigPanel.scss`。
+- 引入 `@/dataRoom/assets/styles/chartConfigPanel.scss`。
 - 表单组件保持 Element Plus 默认样式。
 - 业务样式只处理布局、间距和预览容器，不覆盖 Element Plus 内部类。
 
@@ -232,13 +232,13 @@ DataV 边框组件主要使用 TSX，样式使用 Less。当前 `dataRoomFront/p
 
 ## 组件库注册
 
-更新 `dataRoomFront/src/dataroom-packages/constant/ComponentLibTagTypeConst.ts`：
+更新 `dataRoomFront/src/dataRoom/constant/ComponentLibTagTypeConst.ts`：
 
 ```ts
 DECORATION = 'decoration'
 ```
 
-更新 `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`：
+更新 `dataRoomFront/src/dataRoom/_components/PluginRegister.ts`：
 
 - 新增分类名称“装饰素材”。
 - 导入 `DrBorderPlugin` 和 `DrDecorationPlugin`。

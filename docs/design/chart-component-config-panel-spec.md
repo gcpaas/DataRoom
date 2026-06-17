@@ -2,7 +2,7 @@
 
 ## 1. 适用范围
 
-本规范用于 `dataRoomFront/src/dataroom-packages/components/*/panel/index.vue` 中的图表类组件配置面板。新增或改造图表组件时，应以 `DrBarChart/panel/index.vue` 的结构为基准，并根据图表类型裁剪轴、系列、标签等配置。
+本规范用于 `dataRoomFront/src/dataRoom/components/*/panel/index.vue` 中的图表类组件配置面板。新增或改造图表组件时，应以 `DrBarChart/panel/index.vue` 的结构为基准，并根据图表类型裁剪轴、系列、标签等配置。
 
 图表配置面板只负责组件视觉和图表行为配置，数据集绑定、数据处理脚本、交互动作等通用能力继续由设计器通用面板承载，除非该组件确实需要新增图表专属配置项。
 
@@ -27,7 +27,7 @@
 ```vue
 <script lang="ts">
 import { defineComponent } from "vue";
-import { DrConst } from "@/dataroom-packages/constant/DrConst.ts";
+import { DrConst } from "@/dataRoom/constant/DrConst.ts";
 
 export default defineComponent({
   name: DrConst.THIS_PLUGIN_TYPE + "ControlPanel",
@@ -64,7 +64,7 @@ const chartConfig = computed(() => chart);
 
 ```vue
 <style scoped lang="scss">
-@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-xxx-chart-config-panel {
   --el-collapse-border-color: var(--el-bg-color);
@@ -271,7 +271,7 @@ const chartConfig = computed(() => chart);
 </div>
 ```
 
-对应 SCSS 已抽取到配置面板共享样式中，文件在 `dataRoomFront/src/dataroom-packages/assets/styles/chartConfigPanel.scss`。每个使用这些类名的面板都必须通过 `@use` 引入该文件，不能假设其他组件已经全局加载：
+对应 SCSS 已抽取到配置面板共享样式中，文件在 `dataRoomFront/src/dataRoom/assets/styles/chartConfigPanel.scss`。每个使用这些类名的面板都必须通过 `@use` 引入该文件，不能假设其他组件已经全局加载：
 
 ```scss
 .dr-config-panel__sub-section {
@@ -525,7 +525,7 @@ animation: {
 配置面板样式必须同时遵循 `docs/design/DESIGN.md`。图表面板只定义外层布局，不覆盖 Element Plus 默认视觉。
 
 - 面板根节点使用 `.dr-config-panel` + 组件专属类，例如 `.dr-bar-chart-config-panel`。
-- 通用配置面板布局类优先放在 `dataRoomFront/src/dataroom-packages/assets/styles/chartConfigPanel.scss`，各图表面板必须在 `<style scoped lang="scss">` 顶部通过 `@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';` 引入并使用统一类名。
+- 通用配置面板布局类优先放在 `dataRoomFront/src/dataRoom/assets/styles/chartConfigPanel.scss`，各图表面板必须在 `<style scoped lang="scss">` 顶部通过 `@use '@/dataRoom/assets/styles/chartConfigPanel.scss';` 引入并使用统一类名。
 - 允许在业务样式中控制外层容器的 `display`、`grid-template-columns`、`gap`、`padding`、`margin`、`overflow`、`width` 等布局属性。
 - 允许使用 Element Plus CSS 变量设置项目自定义容器、说明文字、分割线和状态文本的颜色。
 - 禁止使用 `:deep(.el-*)`、`::v-deep`、`/deep/`、`>>>`、全局 `.el-*` 选择器或 `!important` 覆盖 Element Plus 内部样式。
@@ -535,7 +535,7 @@ animation: {
 
 ### 9.1 右侧公共配置面板约束
 
-图表专属面板渲染在 `dataRoomFront/src/dataroom-packages/_components/ControlPanel.vue` 的「样式」Tab 内。公共右侧面板应保持以下行为：
+图表专属面板渲染在 `dataRoomFront/src/dataRoom/_components/ControlPanel.vue` 的「样式」Tab 内。公共右侧面板应保持以下行为：
 
 - 「样式」「数据」「交互」三个 Tab 固定在顶部，不随内容滚动。
 - 只有当前 Tab 的 `.tab-content` 允许纵向滚动。
@@ -580,7 +580,7 @@ animation: {
 - `install.ts` 中已声明完整 `PropsInterface` 和默认值
 - `panel/index.vue` 的 `chart` prop 类型使用该组件的 `ChartConfig`
 - 面板根类、组件名、表单属性符合规范；根表单固定使用 `label-width="60px"`、`size="small"`、`label-position="left"`
-- 面板样式块使用 `<style scoped lang="scss">`，并在第一行引入 `@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';`
+- 面板样式块使用 `<style scoped lang="scss">`，并在第一行引入 `@use '@/dataRoom/assets/styles/chartConfigPanel.scss';`
 - 通用分组顺序一致，图表专属分组命名清晰
 - 一级配置项位于同一个 `el-collapse.dr-config-panel__section` 内，`el-collapse-item` 有稳定 `name`
 - 一级基础字段直接放在 `el-collapse-item` 下，例如「显示」「数据类型」「轴名称」，不要放进 `.dr-config-panel__sub-section`

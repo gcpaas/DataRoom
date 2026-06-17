@@ -1,0 +1,17 @@
+import type {PageBasicConfig} from "@/dataRoom/PageDesigner/type/PageBasicConfig.ts";
+import type {GlobalVariable} from "@/dataRoom/PageDesigner/type/GlobalVariable.ts";
+import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts";
+
+/**
+ * 页面配置
+ */
+export interface PageConfig {
+  // 页面类型
+  pageType: string
+  // 页面基础配置
+  basicConfig: PageBasicConfig
+  // 全局变量
+  globalVariableList: GlobalVariable[]
+  // 图表组件配置
+  chartList: ChartConfig<unknown>[]
+}

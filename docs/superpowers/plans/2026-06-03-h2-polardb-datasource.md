@@ -14,10 +14,10 @@
 
 **Files:**
 - Modify: `dataRoomServer/src/test/java/com/gccloud/gcpaas/core/datasource/bean/DataSourceJsonTest.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/constant/DataSourceType.java`
-- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/datasource/bean/BaseDataSource.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/datasource/bean/H2Datasource.java`
-- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/core/datasource/bean/PolarDbDatasource.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/constant/DataSourceType.java`
+- Modify: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/datasource/bean/BaseDataSource.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/datasource/bean/H2Datasource.java`
+- Create: `dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/datasource/bean/PolarDbDatasource.java`
 
 - [ ] Add failing parameterized JSON cases for `h2` and `polardb`.
 - [ ] Run `mvn -q -pl dataRoomServer -Dtest=DataSourceJsonTest test` and verify the new cases fail because the types are unknown.
@@ -27,13 +27,13 @@
 ### Task 2: Frontend Type And UI Support
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/constant/DataSourceType.ts`
-- Modify: `dataRoomFront/src/dataroom-packages/dataSource/api.ts`
-- Modify: `dataRoomFront/src/dataroom-packages/dataSource/index.vue`
-- Create: `dataRoomFront/src/dataroom-packages/dataSource/components/H2Editor.vue`
-- Create: `dataRoomFront/src/dataroom-packages/dataSource/components/PolarDbEditor.vue`
-- Create: `dataRoomFront/src/dataroom-packages/dataSource/assets/image/H2.svg`
-- Create: `dataRoomFront/src/dataroom-packages/dataSource/assets/image/PolarDB.svg`
+- Modify: `dataRoomFront/src/dataRoom/constant/DataSourceType.ts`
+- Modify: `dataRoomFront/src/dataRoom/dataSource/api.ts`
+- Modify: `dataRoomFront/src/dataRoom/dataSource/index.vue`
+- Create: `dataRoomFront/src/dataRoom/dataSource/components/H2Editor.vue`
+- Create: `dataRoomFront/src/dataRoom/dataSource/components/PolarDbEditor.vue`
+- Create: `dataRoomFront/src/dataRoom/dataSource/assets/image/H2.svg`
+- Create: `dataRoomFront/src/dataRoom/dataSource/assets/image/PolarDB.svg`
 
 - [ ] Copy the provided SVG icons into the datasource image directory.
 - [ ] Add TypeScript datasource values for `h2` and `polardb`.

@@ -12,7 +12,7 @@
 
 ## File Structure
 
-- Modify: `dataRoomFront/src/dataroom-packages/console/ConsoleLayout.vue`
+- Modify: `dataRoomFront/src/dataRoom/console/ConsoleLayout.vue`
   - Collapse the template to one left card and one transparent content outlet
   - Remove shell-level pane wrappers and shell-level white content card styling
   - Keep existing menu items and active-route logic intact
@@ -24,7 +24,7 @@
 ### Task 1: Remove Shared Pane Structure
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/console/ConsoleLayout.vue:45-71`
+- Modify: `dataRoomFront/src/dataRoom/console/ConsoleLayout.vue:45-71`
 - Verify: `dataRoomFront/src/router/routes.ts:45-69`
 
 - [ ] **Step 1: Confirm the current layout fails the approved visual spec**
@@ -40,7 +40,7 @@ Expected: FAIL against the approved spec because the pane wrappers create a shar
 
 - [ ] **Step 2: Replace the template with a direct sidebar card + direct content outlet**
 
-Update the template in `dataRoomFront/src/dataroom-packages/console/ConsoleLayout.vue` to this structure:
+Update the template in `dataRoomFront/src/dataRoom/console/ConsoleLayout.vue` to this structure:
 
 ```vue
 <template>
@@ -78,7 +78,7 @@ Expected: PASS. `vue-tsc` succeeds with no template or component type errors.
 - [ ] **Step 4: Commit the template-only structural cleanup**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/console/ConsoleLayout.vue
+git add dataRoomFront/src/dataRoom/console/ConsoleLayout.vue
 git commit -m "refactor: simplify console layout structure"
 ```
 
@@ -87,7 +87,7 @@ git commit -m "refactor: simplify console layout structure"
 ### Task 2: Make the Shell Transparent and Keep Only the Left Card
 
 **Files:**
-- Modify: `dataRoomFront/src/dataroom-packages/console/ConsoleLayout.vue:74-177`
+- Modify: `dataRoomFront/src/dataRoom/console/ConsoleLayout.vue:74-177`
 
 - [ ] **Step 1: Confirm the current shell styles violate the approved visual model**
 
@@ -101,7 +101,7 @@ Expected: FAIL against the approved spec because the right side is still visuall
 
 - [ ] **Step 2: Rewrite the shell SCSS so only the left side is a shell-owned card**
 
-Replace the scoped SCSS in `dataRoomFront/src/dataroom-packages/console/ConsoleLayout.vue` with this version:
+Replace the scoped SCSS in `dataRoomFront/src/dataRoom/console/ConsoleLayout.vue` with this version:
 
 ```scss
 <style scoped lang="scss">
@@ -196,7 +196,7 @@ Replace the scoped SCSS in `dataRoomFront/src/dataroom-packages/console/ConsoleL
 
 - [ ] **Step 3: Run lint on the updated shell file**
 
-Run: `npx eslint src/dataroom-packages/console/ConsoleLayout.vue`
+Run: `npx eslint src/dataRoom/console/ConsoleLayout.vue`
 
 Expected: PASS with no lint output.
 
@@ -222,7 +222,7 @@ Expected: PASS. The left and right regions look independent rather than belongin
 - [ ] **Step 6: Commit the final visual separation**
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/console/ConsoleLayout.vue
+git add dataRoomFront/src/dataRoom/console/ConsoleLayout.vue
 git commit -m "style: separate console sidebar from content area"
 ```
 

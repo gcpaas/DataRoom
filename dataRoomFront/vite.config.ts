@@ -33,16 +33,16 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@/dataroom-packages/assets/element.scss" as *;`,
+        additionalData: `@use "@/dataRoom/assets/element.scss" as *;`,
       },
     },
   },
   optimizeDeps: {
     entries: ['index.html'],
-    include: ['vue', 'vue-router', 'pinia', 'element-plus/es/**', 'sql-formatter', '@/dataroom-packages'],
+    include: ['vue', 'vue-router', 'pinia', 'element-plus/es/**', 'sql-formatter', '@/dataRoom'],
   },
   build: {
     // 自定义打包输出目录名称，默认是 dist，可以改为其他名称如 'build'、'output' 等
-    outDir: 'front',
+    outDir: 'dataRoomFront',
   },
 })

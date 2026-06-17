@@ -4,7 +4,7 @@
 
 **Goal:** 将 DataV 边框和装饰素材迁入 DataRoom 前端，并新增 `DrBorder`、`DrDecoration` 两个按需加载的组件。
 
-**Architecture:** `dataRoomFront/src/dataroom-packages/datav` 保存从 `packages/datav-vue3` 复制来的素材源码；`DrBorder` 和 `DrDecoration` 是 DataRoom 对外注册的包装组件。包装组件通过类型配置选择 DataV 子组件，并只传递该子组件支持的属性。
+**Architecture:** `dataRoomFront/src/dataRoom/datav` 保存从 `packages/datav-vue3` 复制来的素材源码；`DrBorder` 和 `DrDecoration` 是 DataRoom 对外注册的包装组件。包装组件通过类型配置选择 DataV 子组件，并只传递该子组件支持的属性。
 
 **Tech Stack:** Vue 3、TypeScript、Vite、Element Plus、DataRoom 组件自动注册、DataV Vue3 源码、Vue JSX、Less。
 
@@ -70,7 +70,7 @@ plugins: [
 修改 `dataRoomFront/eslint.config.ts`，让 `globalIgnores` 调用变为：
 
 ```ts
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', 'src/dataroom-packages/datav/**']),
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', 'src/dataRoom/datav/**']),
 ```
 
 这样可以让 `npm run lint` 聚焦 DataRoom 代码，避免自动改写复制进来的 DataV 第三方源码。
@@ -102,25 +102,25 @@ git commit -m "build: add datav rendering dependencies"
 ### Task 2: 复制并本地化 DataV 源码
 
 **文件：**
-- 新增：`dataRoomFront/src/dataroom-packages/datav/**`
+- 新增：`dataRoomFront/src/dataRoom/datav/**`
 
 - [ ] **步骤 1: 复制 DataV Vue3 包源码**
 
 运行：
 
 ```bash
-mkdir -p dataRoomFront/src/dataroom-packages/datav
-cp -R /Users/liuchengbiao/Downloads/datav-vue3-master/packages/datav-vue3/. dataRoomFront/src/dataroom-packages/datav/
+mkdir -p dataRoomFront/src/dataRoom/datav
+cp -R /Users/liuchengbiao/Downloads/datav-vue3-master/packages/datav-vue3/. dataRoomFront/src/dataRoom/datav/
 ```
 
-预期：`dataRoomFront/src/dataroom-packages/datav/components/BorderBox1`、`dataRoomFront/src/dataroom-packages/datav/components/BorderBox13`、`dataRoomFront/src/dataroom-packages/datav/components/Decoration1`、`dataRoomFront/src/dataroom-packages/datav/components/Decoration12` 存在。
+预期：`dataRoomFront/src/dataRoom/datav/components/BorderBox1`、`dataRoomFront/src/dataRoom/datav/components/BorderBox13`、`dataRoomFront/src/dataRoom/datav/components/Decoration1`、`dataRoomFront/src/dataRoom/datav/components/Decoration12` 存在。
 
 - [ ] **步骤 2: 替换 DataV 内部导入路径**
 
 运行：
 
 ```bash
-find dataRoomFront/src/dataroom-packages/datav -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.vue' \) -exec perl -pi -e 's#packages/datav-vue3#@/dataroom-packages/datav#g' {} +
+find dataRoomFront/src/dataRoom/datav -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.vue' \) -exec perl -pi -e 's#packages/datav-vue3#@/dataRoom/datav#g' {} +
 ```
 
 预期：DataV 内部导入改为 DataRoom 别名路径。
@@ -130,7 +130,7 @@ find dataRoomFront/src/dataroom-packages/datav -type f \( -name '*.ts' -o -name 
 运行：
 
 ```bash
-rg "packages/datav-vue3" dataRoomFront/src/dataroom-packages/datav
+rg "packages/datav-vue3" dataRoomFront/src/dataRoom/datav
 ```
 
 预期：无输出，命令退出码为 `1`。
@@ -140,8 +140,8 @@ rg "packages/datav-vue3" dataRoomFront/src/dataroom-packages/datav
 运行：
 
 ```bash
-find dataRoomFront/src/dataroom-packages/datav/components -maxdepth 1 -type d -name 'BorderBox*' | wc -l
-find dataRoomFront/src/dataroom-packages/datav/components -maxdepth 1 -type d -name 'Decoration*' | wc -l
+find dataRoomFront/src/dataRoom/datav/components -maxdepth 1 -type d -name 'BorderBox*' | wc -l
+find dataRoomFront/src/dataRoom/datav/components -maxdepth 1 -type d -name 'Decoration*' | wc -l
 ```
 
 预期：第一条输出 `13`，第二条输出 `12`。
@@ -151,7 +151,7 @@ find dataRoomFront/src/dataroom-packages/datav/components -maxdepth 1 -type d -n
 运行：
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/datav
+git add dataRoomFront/src/dataRoom/datav
 git commit -m "feat: import datav visual assets"
 ```
 
@@ -166,13 +166,13 @@ git commit -m "feat: import datav visual assets"
 
 - [ ] **步骤 1: 将 DataV 第三方素材目录排除出 vue-tsc 全量扫描**
 
-修改 `dataRoomFront/tsconfig.app.json`，让 `exclude` 包含 `src/dataroom-packages/datav/**`：
+修改 `dataRoomFront/tsconfig.app.json`，让 `exclude` 包含 `src/dataRoom/datav/**`：
 
 ```json
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
-  "exclude": ["src/**/__tests__/*", "src/dataroom-packages/datav/**"],
+  "exclude": ["src/**/__tests__/*", "src/dataRoom/datav/**"],
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 
@@ -212,11 +212,11 @@ git commit -m "build: exclude datav assets from type checking"
 ### Task 3: 创建边框配置元数据
 
 **文件：**
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrBorder/options.ts`
+- 新增：`dataRoomFront/src/dataRoom/components/DrBorder/options.ts`
 
 - [ ] **步骤 1: 新增边框类型、选项、支持属性和属性构建函数**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrBorder/options.ts`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrBorder/options.ts`，内容如下：
 
 ```ts
 export type DrBorderType =
@@ -321,7 +321,7 @@ export const buildBorderDatavProps = (props: DrBorderDatavPropsSource): Record<s
 运行：
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrBorder/options.ts
+git add dataRoomFront/src/dataRoom/components/DrBorder/options.ts
 git commit -m "feat: add border component metadata"
 ```
 
@@ -332,23 +332,23 @@ git commit -m "feat: add border component metadata"
 ### Task 4: 实现 DrBorder 组件
 
 **文件：**
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrBorder/install.ts`
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrBorder/index.vue`
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrBorder/panel/index.vue`
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrBorder/plugin.ts`
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrBorder/images/border.svg`
+- 新增：`dataRoomFront/src/dataRoom/components/DrBorder/install.ts`
+- 新增：`dataRoomFront/src/dataRoom/components/DrBorder/index.vue`
+- 新增：`dataRoomFront/src/dataRoom/components/DrBorder/panel/index.vue`
+- 新增：`dataRoomFront/src/dataRoom/components/DrBorder/plugin.ts`
+- 新增：`dataRoomFront/src/dataRoom/components/DrBorder/images/border.svg`
 
 - [ ] **步骤 1: 新增边框组件安装定义**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrBorder/install.ts`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrBorder/install.ts`，内容如下：
 
 ```ts
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
-import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
-import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
-import type { Behavior } from '@/dataroom-packages/components/type/Behavior.ts'
-import type { ChartDatasetField } from '@/dataroom-packages/components/type/ChartDatasetField.ts'
+import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
+import { DrConst } from '@/dataRoom/constant/DrConst.ts'
+import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
+import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
 import type { DrBorderType } from './options.ts'
 
 const component = defineAsyncComponent(() => import('./index.vue'))
@@ -397,12 +397,12 @@ export { component, controlPanel, getInstance, behaviors, datasetFields }
 
 - [ ] **步骤 2: 新增边框渲染组件**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrBorder/index.vue`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrBorder/index.vue`，内容如下：
 
 ```vue
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import { DrConst } from '@/dataRoom/constant/DrConst.ts'
 
 export default defineComponent({
   name: DrConst.THIS_PLUGIN_TYPE,
@@ -450,12 +450,12 @@ const currentDatavProps = computed(() => buildBorderDatavProps(chart.props))
 
 - [ ] **步骤 3: 新增边框配置面板**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrBorder/panel/index.vue`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrBorder/panel/index.vue`，内容如下：
 
 ```vue
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import { DrConst } from '@/dataRoom/constant/DrConst.ts'
 
 export default defineComponent({
   name: DrConst.THIS_PLUGIN_TYPE + 'ControlPanel',
@@ -586,7 +586,7 @@ const clearColors = () => {
 </template>
 
 <style scoped lang="scss">
-@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-border-config-panel {
   --el-collapse-border-color: var(--el-bg-color);
@@ -614,7 +614,7 @@ const clearColors = () => {
 
 - [ ] **步骤 4: 新增边框缩略图**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrBorder/images/border.svg`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrBorder/images/border.svg`，内容如下：
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" width="160" height="96" viewBox="0 0 160 96" fill="none">
@@ -626,12 +626,12 @@ const clearColors = () => {
 
 - [ ] **步骤 5: 新增边框组件库插件**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrBorder/plugin.ts`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrBorder/plugin.ts`，内容如下：
 
 ```ts
 import thumbnail from './images/border.svg'
-import { ChartPlugin } from '@/dataroom-packages/components/type/ChartPlugin.ts'
-import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import { ChartPlugin } from '@/dataRoom/components/type/ChartPlugin.ts'
+import { DrConst } from '@/dataRoom/constant/DrConst.ts'
 
 export class DrBorderPlugin extends ChartPlugin {
   constructor(tags: string[]) {
@@ -656,7 +656,7 @@ npm run type-check
 运行：
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrBorder
+git add dataRoomFront/src/dataRoom/components/DrBorder
 git commit -m "feat: add datav border component"
 ```
 
@@ -667,11 +667,11 @@ git commit -m "feat: add datav border component"
 ### Task 5: 创建装饰配置元数据
 
 **文件：**
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrDecoration/options.ts`
+- 新增：`dataRoomFront/src/dataRoom/components/DrDecoration/options.ts`
 
 - [ ] **步骤 1: 新增装饰类型、选项、支持属性和属性构建函数**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrDecoration/options.ts`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrDecoration/options.ts`，内容如下：
 
 ```ts
 export type DrDecorationType =
@@ -767,7 +767,7 @@ export const buildDecorationDatavProps = (props: DrDecorationDatavPropsSource): 
 运行：
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrDecoration/options.ts
+git add dataRoomFront/src/dataRoom/components/DrDecoration/options.ts
 git commit -m "feat: add decoration component metadata"
 ```
 
@@ -778,23 +778,23 @@ git commit -m "feat: add decoration component metadata"
 ### Task 6: 实现 DrDecoration 组件
 
 **文件：**
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrDecoration/install.ts`
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrDecoration/index.vue`
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrDecoration/panel/index.vue`
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrDecoration/plugin.ts`
-- 新增：`dataRoomFront/src/dataroom-packages/components/DrDecoration/images/decoration.svg`
+- 新增：`dataRoomFront/src/dataRoom/components/DrDecoration/install.ts`
+- 新增：`dataRoomFront/src/dataRoom/components/DrDecoration/index.vue`
+- 新增：`dataRoomFront/src/dataRoom/components/DrDecoration/panel/index.vue`
+- 新增：`dataRoomFront/src/dataRoom/components/DrDecoration/plugin.ts`
+- 新增：`dataRoomFront/src/dataRoom/components/DrDecoration/images/decoration.svg`
 
 - [ ] **步骤 1: 新增装饰组件安装定义**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrDecoration/install.ts`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrDecoration/install.ts`，内容如下：
 
 ```ts
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
-import type { ChartConfig } from '@/dataroom-packages/components/type/ChartConfig.ts'
-import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
-import type { Behavior } from '@/dataroom-packages/components/type/Behavior.ts'
-import type { ChartDatasetField } from '@/dataroom-packages/components/type/ChartDatasetField.ts'
+import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
+import { DrConst } from '@/dataRoom/constant/DrConst.ts'
+import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
+import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
 import type { DrDecorationType } from './options.ts'
 
 const component = defineAsyncComponent(() => import('./index.vue'))
@@ -839,12 +839,12 @@ export { component, controlPanel, getInstance, behaviors, datasetFields }
 
 - [ ] **步骤 2: 新增装饰渲染组件**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrDecoration/index.vue`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrDecoration/index.vue`，内容如下：
 
 ```vue
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import { DrConst } from '@/dataRoom/constant/DrConst.ts'
 
 export default defineComponent({
   name: DrConst.THIS_PLUGIN_TYPE,
@@ -892,12 +892,12 @@ const currentDatavProps = computed(() => buildDecorationDatavProps(chart.props))
 
 - [ ] **步骤 3: 新增装饰配置面板**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrDecoration/panel/index.vue`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrDecoration/panel/index.vue`，内容如下：
 
 ```vue
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import { DrConst } from '@/dataRoom/constant/DrConst.ts'
 
 export default defineComponent({
   name: DrConst.THIS_PLUGIN_TYPE + 'ControlPanel',
@@ -1005,7 +1005,7 @@ const clearColors = () => {
 </template>
 
 <style scoped lang="scss">
-@use '@/dataroom-packages/assets/styles/chartConfigPanel.scss';
+@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-decoration-config-panel {
   --el-collapse-border-color: var(--el-bg-color);
@@ -1033,7 +1033,7 @@ const clearColors = () => {
 
 - [ ] **步骤 4: 新增装饰缩略图**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrDecoration/images/decoration.svg`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrDecoration/images/decoration.svg`，内容如下：
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" width="160" height="96" viewBox="0 0 160 96" fill="none">
@@ -1047,12 +1047,12 @@ const clearColors = () => {
 
 - [ ] **步骤 5: 新增装饰组件库插件**
 
-新增 `dataRoomFront/src/dataroom-packages/components/DrDecoration/plugin.ts`，内容如下：
+新增 `dataRoomFront/src/dataRoom/components/DrDecoration/plugin.ts`，内容如下：
 
 ```ts
 import thumbnail from './images/decoration.svg'
-import { ChartPlugin } from '@/dataroom-packages/components/type/ChartPlugin.ts'
-import { DrConst } from '@/dataroom-packages/constant/DrConst.ts'
+import { ChartPlugin } from '@/dataRoom/components/type/ChartPlugin.ts'
+import { DrConst } from '@/dataRoom/constant/DrConst.ts'
 
 export class DrDecorationPlugin extends ChartPlugin {
   constructor(tags: string[]) {
@@ -1077,7 +1077,7 @@ npm run type-check
 运行：
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/components/DrDecoration
+git add dataRoomFront/src/dataRoom/components/DrDecoration
 git commit -m "feat: add datav decoration component"
 ```
 
@@ -1088,12 +1088,12 @@ git commit -m "feat: add datav decoration component"
 ### Task 7: 注册组件库分类与插件
 
 **文件：**
-- 修改：`dataRoomFront/src/dataroom-packages/constant/ComponentLibTagTypeConst.ts`
-- 修改：`dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts`
+- 修改：`dataRoomFront/src/dataRoom/constant/ComponentLibTagTypeConst.ts`
+- 修改：`dataRoomFront/src/dataRoom/_components/PluginRegister.ts`
 
 - [ ] **步骤 1: 新增装饰素材分类枚举**
 
-修改 `dataRoomFront/src/dataroom-packages/constant/ComponentLibTagTypeConst.ts`，让枚举结尾变为：
+修改 `dataRoomFront/src/dataRoom/constant/ComponentLibTagTypeConst.ts`，让枚举结尾变为：
 
 ```ts
   /**
@@ -1109,11 +1109,11 @@ git commit -m "feat: add datav decoration component"
 
 - [ ] **步骤 2: 导入两个新插件**
 
-在 `dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts` 中，与其他组件导入放在一起新增：
+在 `dataRoomFront/src/dataRoom/_components/PluginRegister.ts` 中，与其他组件导入放在一起新增：
 
 ```ts
-import {DrBorderPlugin} from '@/dataroom-packages/components/DrBorder/plugin.ts'
-import {DrDecorationPlugin} from '@/dataroom-packages/components/DrDecoration/plugin.ts'
+import {DrBorderPlugin} from '@/dataRoom/components/DrBorder/plugin.ts'
+import {DrDecorationPlugin} from '@/dataRoom/components/DrDecoration/plugin.ts'
 ```
 
 - [ ] **步骤 3: 添加组件库分类**
@@ -1152,7 +1152,7 @@ npm run type-check
 运行：
 
 ```bash
-git add dataRoomFront/src/dataroom-packages/constant/ComponentLibTagTypeConst.ts dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts
+git add dataRoomFront/src/dataRoom/constant/ComponentLibTagTypeConst.ts dataRoomFront/src/dataRoom/_components/PluginRegister.ts
 git commit -m "feat: register datav visual components"
 ```
 
@@ -1223,7 +1223,7 @@ npm run dev
 运行：
 
 ```bash
-rg --glob '!*datav*' --glob '*.vue' --glob '*.scss' --glob '*.css' --glob '*.ts' ":deep\\(|::v-deep|/deep/|>>>|!important|--dr-[a-zA-Z0-9-]*\\s*:" dataRoomFront/src/dataroom-packages/components/DrBorder dataRoomFront/src/dataroom-packages/components/DrDecoration dataRoomFront/src/dataroom-packages/_components/PluginRegister.ts dataRoomFront/src/dataroom-packages/constant/ComponentLibTagTypeConst.ts
+rg --glob '!*datav*' --glob '*.vue' --glob '*.scss' --glob '*.css' --glob '*.ts' ":deep\\(|::v-deep|/deep/|>>>|!important|--dr-[a-zA-Z0-9-]*\\s*:" dataRoomFront/src/dataRoom/components/DrBorder dataRoomFront/src/dataRoom/components/DrDecoration dataRoomFront/src/dataRoom/_components/PluginRegister.ts dataRoomFront/src/dataRoom/constant/ComponentLibTagTypeConst.ts
 ```
 
 预期：无输出，命令退出码为 `1`。此检查排除 `datav` 目录，因为迁移素材保留原视觉实现。

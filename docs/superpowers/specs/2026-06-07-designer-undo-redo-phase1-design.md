@@ -116,7 +116,7 @@ The current chart model is a tree:
 
 - root-level nodes are stored in `chartList`
 - container components may store child nodes in `children`
-- delete logic is recursive in [dataRoomFront/src/dataroom-packages/_common/_utils.ts](/Users/liuchengbiao/devWork/sts-works/idea-work/gcpaas开源/社区版/DataRoom/dataRoomFront/src/dataroom-packages/_common/_utils.ts:59)
+- delete logic is recursive in [dataRoomFront/src/dataRoom/_common/_utils.ts](/Users/liuchengbiao/devWork/sts-works/idea-work/gcpaas开源/社区版/DataRoom/dataRoomFront/src/dataRoom/_common/_utils.ts:59)
 
 Therefore delete history must record:
 
@@ -213,7 +213,7 @@ Phase 1 layer ordering must follow list order:
 - root layer order uses `chartList`
 - container layer order uses `chart.children`
 
-The current codebase defines a `z` field on `ChartConfig`, but it is not the active layer model used by the current editor flow. The current layer panel in [dataRoomFront/src/dataroom-packages/_components/ComponentLayer.vue](/Users/liuchengbiao/devWork/sts-works/idea-work/gcpaas开源/社区版/DataRoom/dataRoomFront/src/dataroom-packages/_components/ComponentLayer.vue:1) reads the chart tree from `canvasInst.chartList.value`.
+The current codebase defines a `z` field on `ChartConfig`, but it is not the active layer model used by the current editor flow. The current layer panel in [dataRoomFront/src/dataRoom/_components/ComponentLayer.vue](/Users/liuchengbiao/devWork/sts-works/idea-work/gcpaas开源/社区版/DataRoom/dataRoomFront/src/dataRoom/_components/ComponentLayer.vue:1) reads the chart tree from `canvasInst.chartList.value`.
 
 Therefore Phase 1 reorder history must treat list order as the source of truth.
 
@@ -345,7 +345,7 @@ The reorder operation must stay within the same parent list in Phase 1. Cross-pa
 
 ### `PageDesigner`
 
-Relevant file: [dataRoomFront/src/dataroom-packages/PageDesigner/PageDesigner.vue](/Users/liuchengbiao/devWork/sts-works/idea-work/gcpaas开源/社区版/DataRoom/dataRoomFront/src/dataroom-packages/PageDesigner/PageDesigner.vue)
+Relevant file: [dataRoomFront/src/dataRoom/PageDesigner/PageDesigner.vue](/Users/liuchengbiao/devWork/sts-works/idea-work/gcpaas开源/社区版/DataRoom/dataRoomFront/src/dataRoom/PageDesigner/PageDesigner.vue)
 
 Phase 1 integration points:
 
@@ -362,7 +362,7 @@ Behavior notes:
 
 ### `VisualScreenDesigner`
 
-Relevant file: [dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue](/Users/liuchengbiao/devWork/sts-works/idea-work/gcpaas开源/社区版/DataRoom/dataRoomFront/src/dataroom-packages/VisualScreenDesigner/VisualScreenDesigner.vue)
+Relevant file: [dataRoomFront/src/dataRoom/VisualScreenDesigner/VisualScreenDesigner.vue](/Users/liuchengbiao/devWork/sts-works/idea-work/gcpaas开源/社区版/DataRoom/dataRoomFront/src/dataRoom/VisualScreenDesigner/VisualScreenDesigner.vue)
 
 Phase 1 integration points:
 

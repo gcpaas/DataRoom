@@ -80,7 +80,7 @@
 
 ## 实现约束
 
-- 仅调整 `dataRoomFront/src/dataroom-packages/console/ConsoleLayout.vue`
+- 仅调整 `dataRoomFront/src/dataRoom/console/ConsoleLayout.vue`
 - 不改动控制台子路由逻辑
 - 不修改 `user / profile / operationLog` 三个页面内部业务逻辑
 - 样式必须继续遵循 `docs/design/DESIGN.md`
@@ -111,4 +111,4 @@
 - 左右之间间距为 `16px`
 - 右侧不再出现统一外层卡片
 - `npm run type-check`
-- `npx eslint src/dataroom-packages/console/ConsoleLayout.vue`
+- `npx eslint src/dataRoom/console/ConsoleLayout.vue`

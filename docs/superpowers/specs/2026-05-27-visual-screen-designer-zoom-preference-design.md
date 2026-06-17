@@ -141,8 +141,8 @@ basicConfig.zoom.value = currentDisplayedZoomPercent
 运行：
 
 ```bash
-npx tsx dataRoomFront/src/dataroom-packages/VisualScreenDesigner/viewport.spec.ts
-npx tsx dataRoomFront/src/dataroom-packages/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
+npx tsx dataRoomFront/src/dataRoom/VisualScreenDesigner/viewport.spec.ts
+npx tsx dataRoomFront/src/dataRoom/VisualScreenDesigner/visualScreenDesignerZoom.spec.ts
 cd dataRoomFront && npm run type-check
 ```
 
