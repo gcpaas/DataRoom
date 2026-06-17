@@ -6,12 +6,12 @@
     {
       "field": "id",
       "type": "string",
-      "description": "唯一标识"
+      "description": "唯一标识，必填"
     },
     {
       "field": "i",
       "type": "string",
-      "description": "唯一标识，仅仪表盘类型使用"
+      "description": "唯一标识，当pageType=page时必填，默认与id保持一致"
     },
     {
       "field": "type",

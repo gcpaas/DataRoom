@@ -23,7 +23,7 @@ public class PageEntity extends BaseEntity {
     /**
      * 页面编码
      */
-    @Schema(description = "页面编码")
+    @Schema(description = "页面编码，使用UUID生成32位字符串转大写格式")
     private String code;
     /**
      * 页面类型

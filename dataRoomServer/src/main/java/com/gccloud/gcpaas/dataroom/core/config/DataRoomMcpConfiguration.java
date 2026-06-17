@@ -1,7 +1,8 @@
 package com.gccloud.gcpaas.dataroom.core.config;
 
-import com.gccloud.gcpaas.dataroom.core.mcp.ChartComponentMcpToolService;
 import com.gccloud.gcpaas.dataroom.core.dataset.DatasetController;
+import com.gccloud.gcpaas.dataroom.core.mcp.ChartComponentMcpToolService;
+import com.gccloud.gcpaas.dataroom.core.mcp.PageConfigMcpToolService;
 import com.gccloud.gcpaas.dataroom.core.page.PageController;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
@@ -20,9 +21,9 @@ public class DataRoomMcpConfiguration {
      * @return ToolCallbackProvider
      */
     @Bean
-    public ToolCallbackProvider datasetTools(DatasetController datasetController, PageController pageController, ChartComponentMcpToolService componentMcpTool) {
+    public ToolCallbackProvider datasetTools(DatasetController datasetController, PageController pageController, ChartComponentMcpToolService componentMcpTool, PageConfigMcpToolService pageConfigMcpToolService) {
         return MethodToolCallbackProvider.builder()
-                .toolObjects(datasetController, pageController, componentMcpTool)
+                .toolObjects(datasetController, pageController, componentMcpTool,pageConfigMcpToolService)
                 .build();
     }
 }

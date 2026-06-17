@@ -1,13 +1,13 @@
-import type {ChartAction} from "@/dataRoom/components/type/ChartAction.ts";
-import type {ChartDatasetParam} from "@/dataRoom/components/type/ChartDatasetParam.ts";
+import type { ChartAction } from '@/dataRoom/components/type/ChartAction.ts'
+import type { ChartDatasetParam } from '@/dataRoom/components/type/ChartDatasetParam.ts'
 
 /**
  * 组件配置基础信息
  */
 export interface ChartConfig<T> {
-  // 唯一标识
+  // 唯一标识，必填
   id: string
-  // 唯一标识，仅仪表盘类型使用
+  // 唯一标识，当pageType=page时必填，默认与id保持一致
   i: string
   // 组件类型
   type: string
@@ -30,7 +30,7 @@ export interface ChartConfig<T> {
   // Z轴旋转角度
   rotateZ: number
   // 图表组件个性化配置
-  props: T,
+  props: T
   // 是否隐藏组件，true 时设计器与预览不渲染
   hide?: boolean
   // 子组件，仅在容器类组件有效
@@ -51,7 +51,7 @@ export interface ChartConfig<T> {
     fields: {
       // key为图表对应的指标、维度、属性值等字段，value 为多个数据集字段名
       [key: string]: string[]
-    },
+    }
     // 数据处理脚本
     script: string
     // 数据集入参、如果数据集需要入参的话

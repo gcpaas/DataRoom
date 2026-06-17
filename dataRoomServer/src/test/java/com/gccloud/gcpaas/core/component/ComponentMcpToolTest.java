@@ -2,6 +2,7 @@ package com.gccloud.gcpaas.core.component;
 
 import com.gccloud.gcpaas.dataroom.core.bean.Resp;
 import com.gccloud.gcpaas.dataroom.core.mcp.ChartComponentMcpToolService;
+import com.gccloud.gcpaas.dataroom.core.mcp.PageConfigMcpToolService;
 import com.gccloud.gcpaas.dataroom.core.mcp.bean.ComponentConfig;
 import com.gccloud.gcpaas.dataroom.core.mcp.bean.ComponentSummary;
 import com.gccloud.gcpaas.dataroom.core.mcp.service.ComponentConfigResourceService;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class ComponentMcpToolTest {
 
     private final ChartComponentMcpToolService tool = new ChartComponentMcpToolService(new ComponentConfigResourceService());
+    private final PageConfigMcpToolService pageTool = new PageConfigMcpToolService(new ComponentConfigResourceService());
 
     @Test
     void listComponentsReturnsResourceData() {
@@ -44,5 +46,34 @@ class ComponentMcpToolTest {
         assertEquals("listComponents", listMethod.getAnnotation(Tool.class).name());
         assertNotNull(detailMethod.getAnnotation(Tool.class));
         assertEquals("getComponentConfig", detailMethod.getAnnotation(Tool.class).name());
+    }
+
+    @Test
+    void getPageConfigReturnsResourceData() {
+        Resp<ComponentConfig> response = pageTool.getPageConfig();
+
+        assertEquals(200, response.getCode());
+        assertEquals("PageConfig", response.getData().getComponentName());
+        assertEquals("page", response.getData().getFields().get(0).getDefaultValue());
+    }
+
+    @Test
+    void getVisualScreenPageConfigReturnsResourceData() {
+        Resp<ComponentConfig> response = pageTool.getVisualScreenPageConfig();
+
+        assertEquals(200, response.getCode());
+        assertEquals("VisualScreenPageConfig", response.getData().getComponentName());
+        assertEquals("visualScreen", response.getData().getFields().get(0).getDefaultValue());
+    }
+
+    @Test
+    void pageConfigMethodsAreMcpTools() throws NoSuchMethodException {
+        Method pageMethod = PageConfigMcpToolService.class.getMethod("getPageConfig");
+        Method visualScreenMethod = PageConfigMcpToolService.class.getMethod("getVisualScreenPageConfig");
+
+        assertNotNull(pageMethod.getAnnotation(Tool.class));
+        assertEquals("getPageConfig", pageMethod.getAnnotation(Tool.class).name());
+        assertNotNull(visualScreenMethod.getAnnotation(Tool.class));
+        assertEquals("getVisualScreenPageConfig", visualScreenMethod.getAnnotation(Tool.class).name());
     }
 }

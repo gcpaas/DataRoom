@@ -37,11 +37,21 @@ public class ComponentConfigResourceService {
     private static final String EXPORT_COMMAND = "npm run export:component-configs";
 
     /**
+     * 网格化页面配置名称。
+     */
+    private static final String PAGE_CONFIG_NAME = "PageConfig";
+
+    /**
+     * 像素级大屏页面配置名称。
+     */
+    private static final String VISUAL_SCREEN_PAGE_CONFIG_NAME = "VisualScreenPageConfig";
+
+    /**
      * 页面配置类名称列表。
      * <p>
      * 这些配置不出现在组件索引中，但允许通过 {@link #getComponentConfig(String)} 直接读取。
      */
-    private static final List<String> PAGE_CONFIG_NAMES = List.of("PageConfig", "VisualScreenPageConfig");
+    private static final List<String> PAGE_CONFIG_NAMES = List.of(PAGE_CONFIG_NAME, VISUAL_SCREEN_PAGE_CONFIG_NAME);
 
     /**
      * 用于反序列化组件配置 JSON 的 Jackson 对象映射器。
@@ -92,6 +102,24 @@ public class ComponentConfigResourceService {
             throw new DataRoomException("组件不存在: " + normalizedName + availableComponentNamesMessage(components));
         }
         return readConfig(normalizedName);
+    }
+
+    /**
+     * 获取网格化页面设计器页面基础配置。
+     *
+     * @return 页面基础配置字段说明
+     */
+    public ComponentConfig getPageConfig() {
+        return readConfig(PAGE_CONFIG_NAME);
+    }
+
+    /**
+     * 获取像素级大屏设计器页面基础配置。
+     *
+     * @return 大屏页面基础配置字段说明
+     */
+    public ComponentConfig getVisualScreenPageConfig() {
+        return readConfig(VISUAL_SCREEN_PAGE_CONFIG_NAME);
     }
 
     /**
