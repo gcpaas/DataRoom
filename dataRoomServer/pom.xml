@@ -34,7 +34,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.gccloud.gcpaas.server.DataRoomApplication</mainClass>
+                    <mainClass>com.gccloud.gcpaas.dataroom.server.DataRoomApplication</mainClass>
                     <includeSystemScope>true</includeSystemScope>
                 </configuration>
             </plugin>

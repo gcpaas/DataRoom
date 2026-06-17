@@ -1,9 +1,10 @@
 package com.gccloud.gcpaas.core.resources.storage;
 
-import com.gccloud.gcpaas.core.config.DataRoomConfig;
-import com.gccloud.gcpaas.core.config.bean.ResourceBean;
-import com.gccloud.gcpaas.core.constant.ResourceType;
-import com.gccloud.gcpaas.core.entity.ResourceEntity;
+import com.gccloud.gcpaas.dataroom.core.config.DataRoomConfig;
+import com.gccloud.gcpaas.dataroom.core.config.bean.ResourceBean;
+import com.gccloud.gcpaas.dataroom.core.constant.ResourceType;
+import com.gccloud.gcpaas.dataroom.core.entity.ResourceEntity;
+import com.gccloud.gcpaas.dataroom.core.resources.storage.*;
 import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

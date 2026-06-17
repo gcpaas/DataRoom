@@ -1,14 +1,14 @@
 package com.gccloud.gcpaas.core.operationlog;
 
-import com.gccloud.gcpaas.core.captcha.CaptchaController;
-import com.gccloud.gcpaas.core.dataset.DatasetController;
-import com.gccloud.gcpaas.core.datasource.DataSourceController;
-import com.gccloud.gcpaas.core.datasource.ExcelDataSourceController;
-import com.gccloud.gcpaas.core.map.MapController;
-import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
-import com.gccloud.gcpaas.core.page.PageController;
-import com.gccloud.gcpaas.core.resources.ResourceController;
-import com.gccloud.gcpaas.core.user.UserController;
+import com.gccloud.gcpaas.dataroom.core.user.CaptchaController;
+import com.gccloud.gcpaas.dataroom.core.dataset.DatasetController;
+import com.gccloud.gcpaas.dataroom.core.datasource.DataSourceController;
+import com.gccloud.gcpaas.dataroom.core.datasource.ExcelDataSourceController;
+import com.gccloud.gcpaas.dataroom.core.map.MapController;
+import com.gccloud.gcpaas.dataroom.core.operationlog.annotation.OperationLogMeta;
+import com.gccloud.gcpaas.dataroom.core.page.PageController;
+import com.gccloud.gcpaas.dataroom.core.resources.ResourceController;
+import com.gccloud.gcpaas.dataroom.core.user.UserController;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;

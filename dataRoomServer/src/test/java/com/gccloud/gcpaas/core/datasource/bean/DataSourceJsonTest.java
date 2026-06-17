@@ -1,8 +1,11 @@
 package com.gccloud.gcpaas.core.datasource.bean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gccloud.gcpaas.core.constant.DataSourceType;
-import com.gccloud.gcpaas.core.entity.DataSourceEntity;
+import com.gccloud.gcpaas.dataroom.core.constant.DataSourceType;
+import com.gccloud.gcpaas.dataroom.core.datasource.bean.BaseDataSource;
+import com.gccloud.gcpaas.dataroom.core.datasource.bean.GreatDbDatasource;
+import com.gccloud.gcpaas.dataroom.core.datasource.bean.RelationalDatasource;
+import com.gccloud.gcpaas.dataroom.core.entity.DataSourceEntity;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

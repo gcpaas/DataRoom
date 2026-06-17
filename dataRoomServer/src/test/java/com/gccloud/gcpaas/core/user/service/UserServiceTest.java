@@ -1,6 +1,7 @@
 package com.gccloud.gcpaas.core.user.service;
 
-import com.gccloud.gcpaas.core.entity.UserEntity;
+import com.gccloud.gcpaas.dataroom.core.entity.UserEntity;
+import com.gccloud.gcpaas.dataroom.core.user.service.UserService;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;

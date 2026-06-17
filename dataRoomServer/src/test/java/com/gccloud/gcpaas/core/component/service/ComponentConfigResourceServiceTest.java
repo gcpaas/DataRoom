@@ -1,8 +1,9 @@
 package com.gccloud.gcpaas.core.component.service;
 
-import com.gccloud.gcpaas.core.component.bean.ComponentConfig;
-import com.gccloud.gcpaas.core.component.bean.ComponentSummary;
-import com.gccloud.gcpaas.core.exception.DataRoomException;
+import com.gccloud.gcpaas.dataroom.core.mcp.bean.ComponentConfig;
+import com.gccloud.gcpaas.dataroom.core.mcp.bean.ComponentSummary;
+import com.gccloud.gcpaas.dataroom.core.mcp.service.ComponentConfigResourceService;
+import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

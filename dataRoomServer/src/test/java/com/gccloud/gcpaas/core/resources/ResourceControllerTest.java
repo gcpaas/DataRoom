@@ -1,14 +1,15 @@
 package com.gccloud.gcpaas.core.resources;
 
-import com.gccloud.gcpaas.core.bean.Resp;
-import com.gccloud.gcpaas.core.constant.ResourceType;
-import com.gccloud.gcpaas.core.entity.ResourceEntity;
-import com.gccloud.gcpaas.core.mapper.ResourceMapper;
-import com.gccloud.gcpaas.core.resources.storage.IResourceStorageService;
-import com.gccloud.gcpaas.core.resources.storage.ResourceFileVariant;
-import com.gccloud.gcpaas.core.resources.storage.ResourceStoreRequest;
-import com.gccloud.gcpaas.core.resources.storage.ResourceStream;
-import com.gccloud.gcpaas.core.resources.storage.StoredResource;
+import com.gccloud.gcpaas.dataroom.core.bean.Resp;
+import com.gccloud.gcpaas.dataroom.core.constant.ResourceType;
+import com.gccloud.gcpaas.dataroom.core.entity.ResourceEntity;
+import com.gccloud.gcpaas.dataroom.core.mapper.ResourceMapper;
+import com.gccloud.gcpaas.dataroom.core.resources.ResourceController;
+import com.gccloud.gcpaas.dataroom.core.resources.storage.IResourceStorageService;
+import com.gccloud.gcpaas.dataroom.core.resources.storage.ResourceFileVariant;
+import com.gccloud.gcpaas.dataroom.core.resources.storage.ResourceStoreRequest;
+import com.gccloud.gcpaas.dataroom.core.resources.storage.ResourceStream;
+import com.gccloud.gcpaas.dataroom.core.resources.storage.StoredResource;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.mock.web.MockMultipartFile;

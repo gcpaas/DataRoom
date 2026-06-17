@@ -1,11 +1,13 @@
 package com.gccloud.gcpaas.core.shiro;
 
-import com.gccloud.gcpaas.core.config.DataRoomConfig;
-import com.gccloud.gcpaas.core.constant.UserStatus;
-import com.gccloud.gcpaas.core.entity.UserEntity;
-import com.gccloud.gcpaas.core.exception.DataRoomException;
-import com.gccloud.gcpaas.core.user.service.TokenService;
-import com.gccloud.gcpaas.core.user.service.UserService;
+import com.gccloud.gcpaas.dataroom.core.config.DataRoomConfig;
+import com.gccloud.gcpaas.dataroom.core.constant.UserStatus;
+import com.gccloud.gcpaas.dataroom.core.entity.UserEntity;
+import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
+import com.gccloud.gcpaas.dataroom.core.shiro.ShiroAuthRealm;
+import com.gccloud.gcpaas.dataroom.core.shiro.ShiroAuthToken;
+import com.gccloud.gcpaas.dataroom.core.user.service.TokenService;
+import com.gccloud.gcpaas.dataroom.core.user.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 

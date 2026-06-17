@@ -1,5 +1,6 @@
 package com.gccloud.gcpaas.core.constant;
 
+import com.gccloud.gcpaas.dataroom.core.constant.ResourceType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

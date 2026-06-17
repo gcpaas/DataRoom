@@ -1,9 +1,11 @@
 package com.gccloud.gcpaas.core.constant;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gccloud.gcpaas.core.dataset.DatasetRunRequest;
-import com.gccloud.gcpaas.core.dataset.bean.RelationalDataset;
-import com.gccloud.gcpaas.core.entity.DatasetEntity;
+import com.gccloud.gcpaas.dataroom.core.constant.DataRoomConstant;
+import com.gccloud.gcpaas.dataroom.core.constant.DatasetType;
+import com.gccloud.gcpaas.dataroom.core.dataset.DatasetRunRequest;
+import com.gccloud.gcpaas.dataroom.core.dataset.bean.RelationalDataset;
+import com.gccloud.gcpaas.dataroom.core.entity.DatasetEntity;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ class DatasetTypeSqlTest {
 
     @Test
     void sqlDatasetServiceBeanUsesSqlTypeName() throws Exception {
-        Class<?> serviceClass = Class.forName("com.gccloud.gcpaas.core.dataset.service.SqlDatasetService");
+        Class<?> serviceClass = Class.forName("com.gccloud.gcpaas.dataroom.core.dataset.service.SqlDatasetService");
 
         Service service = serviceClass.getAnnotation(Service.class);
 
@@ -42,7 +44,7 @@ class DatasetTypeSqlTest {
 
     @Test
     void esDatasetServiceBeanUsesEsTypeName() throws Exception {
-        Class<?> serviceClass = Class.forName("com.gccloud.gcpaas.core.dataset.service.EsDatasetService");
+        Class<?> serviceClass = Class.forName("com.gccloud.gcpaas.dataroom.core.dataset.service.EsDatasetService");
 
         Service service = serviceClass.getAnnotation(Service.class);
 
@@ -52,7 +54,7 @@ class DatasetTypeSqlTest {
 
     @Test
     void excelDatasetServiceBeanUsesExcelTypeName() throws Exception {
-        Class<?> serviceClass = Class.forName("com.gccloud.gcpaas.core.dataset.service.ExcelDatasetService");
+        Class<?> serviceClass = Class.forName("com.gccloud.gcpaas.dataroom.core.dataset.service.ExcelDatasetService");
 
         Service service = serviceClass.getAnnotation(Service.class);
 

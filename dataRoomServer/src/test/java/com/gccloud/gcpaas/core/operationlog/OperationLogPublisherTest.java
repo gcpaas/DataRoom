@@ -1,8 +1,8 @@
 package com.gccloud.gcpaas.core.operationlog;
 
-import com.gccloud.gcpaas.core.operationlog.model.OperationLogContext;
-import com.gccloud.gcpaas.core.operationlog.service.OperationLogPersistService;
-import com.gccloud.gcpaas.core.operationlog.service.OperationLogPublisher;
+import com.gccloud.gcpaas.dataroom.core.operationlog.model.OperationLogContext;
+import com.gccloud.gcpaas.dataroom.core.operationlog.service.OperationLogPersistService;
+import com.gccloud.gcpaas.dataroom.core.operationlog.service.OperationLogPublisher;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 

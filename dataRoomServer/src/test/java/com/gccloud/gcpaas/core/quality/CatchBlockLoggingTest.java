@@ -113,7 +113,7 @@ class CatchBlockLoggingTest {
     }
 
     private boolean isExcludedSource(Path path) {
-        return path.toString().replace('\\', '/').endsWith("com/gccloud/gcpaas/core/util/LoginUserUtils.java");
+        return path.toString().replace('\\', '/').endsWith("com/gccloud/gcpaas/dataroom/core/util/LoginUserUtils.java");
     }
 
     private int findMatchingBrace(String source, int openBrace) {

@@ -1,5 +1,6 @@
 package com.gccloud.gcpaas.server;
 
+import com.gccloud.gcpaas.dataroom.server.DataRoomApplication;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 

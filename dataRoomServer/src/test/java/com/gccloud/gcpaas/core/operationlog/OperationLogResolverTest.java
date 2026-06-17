@@ -1,9 +1,9 @@
 package com.gccloud.gcpaas.core.operationlog;
 
-import com.gccloud.gcpaas.core.operationlog.annotation.OperationLogMeta;
-import com.gccloud.gcpaas.core.operationlog.model.OperationLogDetailLevel;
-import com.gccloud.gcpaas.core.operationlog.model.OperationLogResolvedMeta;
-import com.gccloud.gcpaas.core.operationlog.service.OperationLogResolver;
+import com.gccloud.gcpaas.dataroom.core.operationlog.annotation.OperationLogMeta;
+import com.gccloud.gcpaas.dataroom.core.operationlog.model.OperationLogDetailLevel;
+import com.gccloud.gcpaas.dataroom.core.operationlog.model.OperationLogResolvedMeta;
+import com.gccloud.gcpaas.dataroom.core.operationlog.service.OperationLogResolver;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.bind.annotation.PostMapping;

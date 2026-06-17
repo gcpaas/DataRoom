@@ -1,9 +1,10 @@
 package com.gccloud.gcpaas.core.operationlog;
 
-import com.gccloud.gcpaas.core.bean.PageVo;
-import com.gccloud.gcpaas.core.entity.OperationLogEntity;
-import com.gccloud.gcpaas.core.operationlog.dto.OperationLogQueryDTO;
-import com.gccloud.gcpaas.core.operationlog.service.OperationLogService;
+import com.gccloud.gcpaas.dataroom.core.bean.PageVo;
+import com.gccloud.gcpaas.dataroom.core.entity.OperationLogEntity;
+import com.gccloud.gcpaas.dataroom.core.operationlog.OperationLogController;
+import com.gccloud.gcpaas.dataroom.core.operationlog.dto.OperationLogQueryDTO;
+import com.gccloud.gcpaas.dataroom.core.operationlog.service.OperationLogService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.test.web.servlet.MockMvc;

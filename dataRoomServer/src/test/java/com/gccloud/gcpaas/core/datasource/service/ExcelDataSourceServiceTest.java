@@ -1,6 +1,7 @@
 package com.gccloud.gcpaas.core.datasource.service;
 
-import com.gccloud.gcpaas.core.datasource.bean.ExcelColumn;
+import com.gccloud.gcpaas.dataroom.core.datasource.bean.ExcelColumn;
+import com.gccloud.gcpaas.dataroom.core.datasource.service.ExcelDataSourceService;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;

@@ -1,9 +1,10 @@
 package com.gccloud.gcpaas.core.component;
 
-import com.gccloud.gcpaas.core.bean.Resp;
-import com.gccloud.gcpaas.core.component.bean.ComponentConfig;
-import com.gccloud.gcpaas.core.component.bean.ComponentSummary;
-import com.gccloud.gcpaas.core.component.service.ComponentConfigResourceService;
+import com.gccloud.gcpaas.dataroom.core.bean.Resp;
+import com.gccloud.gcpaas.dataroom.core.mcp.ChartComponentMcpToolService;
+import com.gccloud.gcpaas.dataroom.core.mcp.bean.ComponentConfig;
+import com.gccloud.gcpaas.dataroom.core.mcp.bean.ComponentSummary;
+import com.gccloud.gcpaas.dataroom.core.mcp.service.ComponentConfigResourceService;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.tool.annotation.Tool;
 
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ComponentMcpToolTest {
 
-    private final ComponentMcpTool tool = new ComponentMcpTool(new ComponentConfigResourceService());
+    private final ChartComponentMcpToolService tool = new ChartComponentMcpToolService(new ComponentConfigResourceService());
 
     @Test
     void listComponentsReturnsResourceData() {
@@ -36,8 +37,8 @@ class ComponentMcpToolTest {
 
     @Test
     void methodsAreMcpTools() throws NoSuchMethodException {
-        Method listMethod = ComponentMcpTool.class.getMethod("listComponents");
-        Method detailMethod = ComponentMcpTool.class.getMethod("getComponentConfig", String.class);
+        Method listMethod = ChartComponentMcpToolService.class.getMethod("listComponents");
+        Method detailMethod = ChartComponentMcpToolService.class.getMethod("getComponentConfig", String.class);
 
         assertNotNull(listMethod.getAnnotation(Tool.class));
         assertEquals("listComponents", listMethod.getAnnotation(Tool.class).name());

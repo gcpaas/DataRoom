@@ -6,11 +6,11 @@ import com.baomidou.mybatisplus.core.MybatisMapperBuilderAssistant;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.gccloud.gcpaas.core.constant.PageStatus;
-import com.gccloud.gcpaas.core.entity.PageStageEntity;
-import com.gccloud.gcpaas.core.page.dto.PageStageSearchDto;
-import com.gccloud.gcpaas.core.page.service.PageStageService;
+import com.gccloud.gcpaas.dataroom.core.constant.PageStatus;
+import com.gccloud.gcpaas.dataroom.core.entity.PageStageEntity;
+import com.gccloud.gcpaas.dataroom.core.page.PageController;
+import com.gccloud.gcpaas.dataroom.core.page.dto.PageStageSearchDto;
+import com.gccloud.gcpaas.dataroom.core.page.service.PageStageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 

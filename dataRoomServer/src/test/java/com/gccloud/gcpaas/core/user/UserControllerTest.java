@@ -1,17 +1,18 @@
 package com.gccloud.gcpaas.core.user;
 
+import com.gccloud.gcpaas.dataroom.core.user.UserController;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.gccloud.gcpaas.core.bean.PageVo;
-import com.gccloud.gcpaas.core.bean.Rsa;
-import com.gccloud.gcpaas.core.bean.Resp;
-import com.gccloud.gcpaas.core.config.DataRoomConfig;
-import com.gccloud.gcpaas.core.constant.UserStatus;
-import com.gccloud.gcpaas.core.entity.UserEntity;
-import com.gccloud.gcpaas.core.user.dto.UserQueryDTO;
-import com.gccloud.gcpaas.core.user.service.TokenService;
-import com.gccloud.gcpaas.core.user.service.UserService;
-import com.gccloud.gcpaas.core.util.RsaUtils;
+import com.gccloud.gcpaas.dataroom.core.bean.PageVo;
+import com.gccloud.gcpaas.dataroom.core.bean.Rsa;
+import com.gccloud.gcpaas.dataroom.core.bean.Resp;
+import com.gccloud.gcpaas.dataroom.core.config.DataRoomConfig;
+import com.gccloud.gcpaas.dataroom.core.constant.UserStatus;
+import com.gccloud.gcpaas.dataroom.core.entity.UserEntity;
+import com.gccloud.gcpaas.dataroom.core.user.dto.UserQueryDTO;
+import com.gccloud.gcpaas.dataroom.core.user.service.TokenService;
+import com.gccloud.gcpaas.dataroom.core.user.service.UserService;
+import com.gccloud.gcpaas.dataroom.core.util.RsaUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 

@@ -1,6 +1,7 @@
 package com.gccloud.gcpaas.core.config;
 
-import com.gccloud.gcpaas.core.constant.PageStatus;
+import com.gccloud.gcpaas.dataroom.core.config.converter.PageStatusConverter;
+import com.gccloud.gcpaas.dataroom.core.constant.PageStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

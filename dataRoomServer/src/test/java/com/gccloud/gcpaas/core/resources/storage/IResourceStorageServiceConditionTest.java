@@ -1,6 +1,9 @@
 package com.gccloud.gcpaas.core.resources.storage;
 
-import com.gccloud.gcpaas.core.config.DataRoomConfig;
+import com.gccloud.gcpaas.dataroom.core.config.DataRoomConfig;
+import com.gccloud.gcpaas.dataroom.core.resources.storage.IResourceStorageService;
+import com.gccloud.gcpaas.dataroom.core.resources.storage.LocalResourceStorageServiceImpl;
+import com.gccloud.gcpaas.dataroom.core.resources.storage.S3ResourceStorageServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Configuration;
