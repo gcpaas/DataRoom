@@ -32,7 +32,7 @@ public class SuccessCommandLineRunner implements CommandLineRunner {
         log.info("DataRoom启动成功，启动耗时 {} 毫秒", System.currentTimeMillis() - startTimeMillis);
         log.info("接口文档地址: http://{}:{}{}/doc.html", ip, port, path);
         log.info("后端服务地址: http://{}:{}{}", ip, port, path);
-        log.info("部署后页面访问地址: http://{}:{}{}/static/front/index.html", ip, port, path);
+        log.info("部署后页面访问地址: http://{}:{}{}/static/dataRoomFront/index.html", ip, port, path);
         log.info("使用问题请反馈到 https://gitee.com/gcpaas/DataRoom/issues");
         log.info(LINE);
     }
