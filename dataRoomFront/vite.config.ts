@@ -42,7 +42,7 @@ export default defineConfig({
     include: ['vue', 'vue-router', 'pinia', 'element-plus/es/**', 'sql-formatter', '@/dataRoom'],
   },
   build: {
-    // 自定义打包输出目录名称，默认是 dist，可以改为其他名称如 'build'、'output' 等
-    outDir: 'dataRoomFront',
+    // 自定义打包输出目录名称，默认为 front
+    outDir: 'front',
   },
 })

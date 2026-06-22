@@ -6,7 +6,7 @@
 CLAUDE.md
 RELEASE
 .worktrees/
-dataRoomFront/dataRoomFront
+dataRoomFront/front
 dataRoomResource
 dataroom.mv.db
 dataroom.trace.db
