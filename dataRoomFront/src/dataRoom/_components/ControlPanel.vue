@@ -2,13 +2,19 @@
 <script setup lang="ts">
 import { computed, ref, watch, defineAsyncComponent, inject } from 'vue'
 import { Pointer, Setting } from '@element-plus/icons-vue'
-import { getComponentBehaviors, getComponentDatasetFields } from '@/dataRoom/components/AutoInstall.ts'
+import { Codemirror } from 'vue-codemirror'
+import { json } from '@codemirror/lang-json'
+import { eclipse } from '@uiw/codemirror-theme-eclipse'
+import { EditorState } from '@codemirror/state'
+import { EditorView } from '@codemirror/view'
+import { getComponentBehaviors, getComponentDatasetFields, getComponentMockDataset } from '@/dataRoom/components/AutoInstall.ts'
 import type { DatasetEntity, DatasetInputParam, DatasetOutputParam } from '@/dataRoom/dataset/api'
 import { datasetApi } from '@/dataRoom/dataset/api'
 import { DrConst } from '@/dataRoom/constant/DrConst.ts'
 import type { CanvasInst } from '@/dataRoom/PageDesigner/type/CanvasInst.ts'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
+import type { ChartMockDataset } from '@/dataRoom/components/type/ChartMockDataset.ts'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { GlobalVariable } from '@/dataRoom/PageDesigner/type/GlobalVariable.ts'
 
@@ -32,12 +38,20 @@ const activeTab = ref('style')
 // 默认展开所有数据折叠面板
 const activeDataCollapse = ref(['dataset', 'fields', 'params', 'script'])
 const chartConfig = computed(() => chart)
+const mockDatasetEditorExtensions = [
+  json(),
+  eclipse,
+  EditorState.readOnly.of(true),
+  EditorView.editable.of(false),
+]
 
 // 数据集选择对话框
 const datasetDialogVisible = ref(false)
 const selectedDataset = ref<DatasetEntity | null>(null)
 const datasetName = ref('')
 const datasetFields = ref<ChartDatasetField[]>([])
+const mockDataset = ref<ChartMockDataset | null>(null)
+const mockDatasetDialogVisible = ref(false)
 const behaviors = ref<Behavior[]>([])
 const behaviorConfigDialogVisible = ref(false)
 const currentBehavior = ref<Behavior | null>(null)
@@ -66,6 +80,25 @@ const dataFormRules = computed(() => {
   })
   return rules
 })
+const mockDatasetJson = computed(() => {
+  if (!mockDataset.value) {
+    return ''
+  }
+  return JSON.stringify(mockDataset.value.dataset, null, 2)
+})
+
+const mockDatasetFieldRows = computed(() => {
+  if (!mockDataset.value) {
+    return []
+  }
+  return mockDataset.value.fields.map((mockField) => {
+    const fieldMeta = datasetFields.value.find((field) => field.name === mockField.name)
+    return {
+      desc: fieldMeta?.desc || mockField.name,
+      bindName: mockField.bindName,
+    }
+  })
+})
 
 /**
  * 初始化组件相关数据
@@ -73,6 +106,7 @@ const dataFormRules = computed(() => {
  */
 const initComponentData = () => {
   datasetFields.value = getComponentDatasetFields(chart.type)
+  mockDataset.value = getComponentMockDataset(chart.type)
   behaviors.value = getComponentBehaviors(chart.type)
   // 加载数据集名称
   loadDatasetName()
@@ -136,6 +170,11 @@ const initDatasetFields = () => {
 // 打开数据集选择对话框
 const openDatasetDialog = () => {
   datasetDialogVisible.value = true
+}
+
+// 打开组件数据样例对话框
+const openMockDatasetDialog = () => {
+  mockDatasetDialogVisible.value = true
 }
 
 // 处理数据集选择
@@ -321,6 +360,9 @@ const triggerAutoRefresh = () => {
                   <el-form-item label="数据集">
                     <el-input v-model="datasetName" placeholder="请选择数据集" :suffix-icon="Pointer" readonly @click="openDatasetDialog" class="dataset-picker-input"></el-input>
                   </el-form-item>
+                  <el-form-item label=" ">
+                    <el-button size="small" @click="openMockDatasetDialog">数据样例</el-button>
+                  </el-form-item>
                 </el-form>
               </el-collapse-item>
 
@@ -449,6 +491,25 @@ const triggerAutoRefresh = () => {
         <el-button @click="handleCancelDataset">取消</el-button>
         <el-button type="primary" @click="handleConfirmDataset">确定</el-button>
       </template>
+    </el-dialog>
+
+    <!-- 组件数据样例对话框 -->
+    <el-dialog v-model="mockDatasetDialogVisible" title="数据样例" width="720px" :close-on-click-modal="false">
+      <template v-if="mockDataset">
+        <div class="mock-dataset-dialog">
+          <div class="mock-dataset-json">
+            <Codemirror
+              :model-value="mockDatasetJson"
+              :extensions="mockDatasetEditorExtensions"
+            />
+          </div>
+          <el-table class="mock-dataset-table" :data="mockDatasetFieldRows" border>
+            <el-table-column prop="desc" label="字段说明" min-width="220" />
+            <el-table-column prop="bindName" label="样例字段" min-width="140" />
+          </el-table>
+        </div>
+      </template>
+      <el-empty v-else description="该组件暂未提供数据样例" :image-size="120" />
     </el-dialog>
 
     <!-- 交互配置对话框 -->
@@ -664,6 +725,35 @@ const triggerAutoRefresh = () => {
     min-width: 0;
     overflow: hidden;
   }
+}
+
+.mock-dataset-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mock-dataset-json {
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 8px;
+  overflow: hidden;
+
+  :deep(.cm-editor) {
+    height: 320px;
+    max-width: 100%;
+    font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
+    font-size: 13px;
+  }
+
+  :deep(.cm-scroller) {
+    overflow: auto;
+  }
+}
+
+.mock-dataset-table {
+  width: 100%;
 }
 
 // 参数项样式

@@ -2,6 +2,7 @@ import {type Component} from 'vue'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts";
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts";
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts";
+import type {ChartMockDataset} from "@/dataRoom/components/type/ChartMockDataset.ts";
 
 type ComponentMap = {
   [key: string]: Component
@@ -23,10 +24,14 @@ type datasetFieldMap = {
   [key: string]: ChartDatasetField[]
 }
 
+type MockDatasetMap = {
+  [key: string]: ChartMockDataset
+}
+
 
 // 使用 Vite 的 import.meta.glob 自动导入所有组件目录下的 install.ts
 const installModules = import.meta.glob<{
-  [key: string]: Component | (() => ChartConfig<unknown>)
+  [key: string]: Component | (() => ChartConfig<unknown>) | Behavior[] | ChartDatasetField[] | ChartMockDataset
 }>('./**/install.ts', {eager: true})
 
 // 存储组件、控制面板组件、实例方法和交互定义
@@ -35,6 +40,7 @@ const panelComponents: PanelComponentMap = {}
 const componentInstances: ComponentInstanceMap = {}
 const behaviors: BehaviorMap = {}
 const datasetFields: datasetFieldMap = {}
+const mockDatasets: MockDatasetMap = {}
 
 // 组件自动注册
 Object.entries(installModules).forEach(([path, module]) => {
@@ -70,6 +76,12 @@ Object.entries(installModules).forEach(([path, module]) => {
   const datasetFieldDefineName = `datasetFields`
   if (module[datasetFieldDefineName]) {
     datasetFields[componentName] = module[datasetFieldDefineName] as ChartDatasetField[]
+  }
+
+  // 注册组件模拟数据集定义
+  const mockDatasetDefineName = `mockDataset`
+  if (module[mockDatasetDefineName]) {
+    mockDatasets[componentName] = module[mockDatasetDefineName] as ChartMockDataset
   }
 })
 
@@ -109,6 +121,10 @@ const getComponentDatasetFields = (name: string): ChartDatasetField[] => {
   return fields || [] as ChartDatasetField[]
 }
 
+const getComponentMockDataset = (name: string): ChartMockDataset | null => {
+  return mockDatasets[name] || null
+}
+
 export {
   components,
   panelComponents,
@@ -117,5 +133,7 @@ export {
   getComponent,
   getPanelComponent,
   getComponentInstance,
-  getComponentDatasetFields
+  getComponentDatasetFields,
+  getComponentMockDataset,
+  mockDatasets
 }
