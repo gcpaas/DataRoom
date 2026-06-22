@@ -1,7 +1,7 @@
 import type {Reactive, Ref} from "vue";
-import type {CanvasInst} from "@/dataRoom/PageDesigner/type/CanvasInst.ts";
-import type {PageBasicConfig} from "@/dataRoom/PageDesigner/type/PageBasicConfig.ts";
-import type {PageTimer} from "@/dataRoom/PageDesigner/type/PageTimer.ts";
+import type {CanvasInst} from "@/dataRoom/designer/types/CanvasInst.ts";
+import type {PageBasicConfig} from "@/dataRoom/page-designer/type/PageBasicConfig.ts";
+import type {PageTimer} from "@/dataRoom/page-designer/type/PageTimer.ts";
 import {ElMessage} from "element-plus";
 
 interface UseTimerManagerOptions {

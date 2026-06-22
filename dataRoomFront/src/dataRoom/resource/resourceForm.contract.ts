@@ -1,4 +1,4 @@
-import { ResourceType } from '../constant/ResourceType'
+import { ResourceType } from '../constants/ResourceType'
 import {
   applyResourceUploadResult,
   buildResourceUploadFormData,

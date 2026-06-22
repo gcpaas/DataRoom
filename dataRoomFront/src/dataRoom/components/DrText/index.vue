@@ -11,7 +11,7 @@ import type {DrTextConfig} from './install.ts'
 import {ref, computed} from "vue";
 import {useDrComponent} from "@/dataRoom/hooks/use-dr-component";
 import type {ComponentExpose} from "@/dataRoom/components/type/ComponentExpose.ts";
-import {getSingleDatasetValueByField} from "@/dataRoom/_common/_utils.ts";
+import {getSingleDatasetValueByField} from "@/dataRoom/utils/index.ts";
 
 const {chart} = defineProps<{
   chart: DrTextConfig

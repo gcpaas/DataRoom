@@ -1,5 +1,5 @@
-import request from '@/dataRoom/_common/_request'
-import type { PageHistoryRemark } from '@/dataRoom/_common/page-history-remark.ts'
+import request from '@/dataRoom/utils/request'
+import type { PageHistoryRemark } from '@/dataRoom/designer/utils/page-history-remark.ts'
 import type {PageStageEntity} from "@/dataRoom/page/type/PageStageEntity.ts";
 
 /**

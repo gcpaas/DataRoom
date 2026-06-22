@@ -3,7 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { ElMessage, type UploadProps } from 'element-plus'
 import { resourceApi, type ResourceEntity, type MaterialConfig, type LightingConfig, type BackgroundConfig, type ModelConfig } from '@/dataRoom/resource/api'
 import { buildResourceUploadFormData, getResourceModelFormat } from '@/dataRoom/resource/resourceForm'
-import { getResourceUrl } from '@/dataRoom/_common/_utils.ts'
+import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 import ThreeModelViewer from './ThreeModelViewer.vue'
 import modelLoadFailedPlaceholder from '@/dataRoom/resource/assets/image/模型加载失败占位符.svg'
 

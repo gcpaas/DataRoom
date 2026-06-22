@@ -8,8 +8,8 @@ import { sql } from '@codemirror/lang-sql'
 import { eclipse } from '@uiw/codemirror-theme-eclipse'
 import type { DatasetEntity } from '../api'
 import { datasetApi } from '../api'
-import { dataSourceApi, type DataSourceColumnMeta, type DataSourceTableMeta } from '@/dataRoom/dataSource/api'
-import { parseParams } from '@/dataRoom/_common/_utils'
+import { dataSourceApi, type DataSourceColumnMeta, type DataSourceTableMeta } from '@/dataRoom/data-source/api'
+import { parseParams } from '@/dataRoom/utils'
 import DatasetEditorLayout from './DatasetEditorLayout.vue'
 
 interface ExcelMetaTreeNode {

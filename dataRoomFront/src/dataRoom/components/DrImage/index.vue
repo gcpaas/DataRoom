@@ -8,7 +8,7 @@ export default defineComponent({
 </script>
 <script setup lang="ts">
 import type { DrImageConfig } from './install.ts'
-import { getResourceUrl, getSingleDatasetValueByField } from '@/dataRoom/_common/_utils.ts'
+import { getResourceUrl, getSingleDatasetValueByField } from '@/dataRoom/utils/index.ts'
 import { useDrComponent } from '@/dataRoom/hooks/use-dr-component'
 import type { ComponentExpose } from '@/dataRoom/components/type/ComponentExpose.ts'
 import { computed, ref } from 'vue'

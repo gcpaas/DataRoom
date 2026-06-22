@@ -3,7 +3,7 @@ import {computed, defineAsyncComponent, nextTick, onMounted, ref} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {Delete, Document, Edit, Folder, MoreFilled, Plus, Rank, Refresh, Search} from '@element-plus/icons-vue'
 import {datasetApi, type DatasetEntity, type DatasetTreeNode} from './api'
-import {dataSourceApi, type DataSourceEntity} from '../dataSource/api'
+import {dataSourceApi, type DataSourceEntity} from '../data-source/api'
 
 // 定义 props
 const props = defineProps<{

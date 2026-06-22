@@ -4,7 +4,7 @@ import type { CheckboxGroupValueType, FormInstance, FormRules } from 'element-pl
 import type { UserDTO, Role, UserStatus } from '../api'
 import { userApi } from '../api'
 import { ElMessage } from 'element-plus'
-import { encryptByRsa } from '@/dataRoom/_common/_encrypt'
+import { encryptByRsa } from '@/dataRoom/utils/encrypt'
 
 const props = defineProps<{
   modelValue: boolean

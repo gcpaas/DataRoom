@@ -1,8 +1,8 @@
 import {getCurrentInstance, inject, onMounted} from "vue";
 import {datasetApi} from "@/dataRoom/dataset/api.ts";
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts";
-import {DrConst} from "@/dataRoom/constant/DrConst.ts";
-import type {CanvasInst} from "@/dataRoom/PageDesigner/type/CanvasInst.ts";
+import {DrConst} from "@/dataRoom/constants/DrConst.ts";
+import type {CanvasInst} from "@/dataRoom/designer/types/CanvasInst.ts";
 import type {ChartAction} from "@/dataRoom/components/type/ChartAction.ts";
 import type {ComponentExpose} from "@/dataRoom/components/type/ComponentExpose.ts";
 

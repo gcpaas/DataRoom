@@ -8,7 +8,7 @@ export default defineComponent({
 </script>
 <script setup lang="ts">
 import type { DrIframeConfig } from './install.ts'
-import { getSingleDatasetValueByField } from '@/dataRoom/_common/_utils.ts'
+import { getSingleDatasetValueByField } from '@/dataRoom/utils/index.ts'
 import { useDrComponent } from '@/dataRoom/hooks/use-dr-component'
 import type { ComponentExpose } from '@/dataRoom/components/type/ComponentExpose.ts'
 import { computed, ref, watch, onBeforeUnmount } from 'vue'

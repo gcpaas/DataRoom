@@ -29,7 +29,7 @@ export const appRoutes: RouteRecordRaw[] = [
       {
         path: 'dataSource/index',
         name: 'dataSource',
-        component: () => import('@/dataRoom/dataSource/index.vue'),
+        component: () => import('@/dataRoom/data-source/index.vue'),
       },
       {
         path: 'dataset/index',
@@ -60,7 +60,7 @@ export const appRoutes: RouteRecordRaw[] = [
           {
             path: 'log',
             name: 'consoleAccessLog',
-            component: () => import('@/dataRoom/operationLog/index.vue'),
+            component: () => import('@/dataRoom/operation-log/index.vue'),
           },
           {
             path: 'access-log',
@@ -81,21 +81,21 @@ export const appRoutes: RouteRecordRaw[] = [
   {
     path: '/dataRoom/visualScreenDesigner/:pageCode',
     name: 'visualScreenDesigner',
-    component: () => import('@/dataRoom/VisualScreenDesigner/VisualScreenDesigner.vue'),
+    component: () => import('@/dataRoom/visual-screen-designer/VisualScreenDesigner.vue'),
   },
   {
     path: '/dataRoom/visualScreenPreview/:pageStatus/:pageCode',
     name: 'visualScreenPreview',
-    component: () => import('@/dataRoom/VisualScreenDesigner/preview/VisualScreenPreview.vue'),
+    component: () => import('@/dataRoom/visual-screen-designer/preview/VisualScreenPreview.vue'),
   },
   {
     path: '/dataRoom/pageDesigner/:pageCode',
     name: 'pageDesigner',
-    component: () => import('@/dataRoom/PageDesigner/PageDesigner.vue'),
+    component: () => import('@/dataRoom/page-designer/PageDesigner.vue'),
   },
   {
     path: '/dataRoom/pagePreviewer/:pageStatus/:pageCode',
     name: 'pagePreviewer',
-    component: () => import('@/dataRoom/PageDesigner/preview/PagePreviewer.vue'),
+    component: () => import('@/dataRoom/page-designer/preview/PagePreviewer.vue'),
   },
 ]

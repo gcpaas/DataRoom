@@ -4,7 +4,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import type { DatasetEntity, EsDataset } from '../api'
 import { datasetApi } from '../api'
-import { parseParams } from '@/dataRoom/_common/_utils'
+import { parseParams } from '@/dataRoom/utils'
 import DatasetEditorLayout from './DatasetEditorLayout.vue'
 
 interface DataSourceOption {

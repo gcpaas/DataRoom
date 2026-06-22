@@ -1,4 +1,4 @@
-import type {CanvasInst} from "@/dataRoom/PageDesigner/type/CanvasInst.ts";
+import type {CanvasInst} from "@/dataRoom/designer/types/CanvasInst.ts";
 import type {Reactive} from "vue";
 
 /**

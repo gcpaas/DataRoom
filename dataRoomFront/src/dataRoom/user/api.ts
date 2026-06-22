@@ -1,4 +1,4 @@
-import request from '@/dataRoom/_common/_request'
+import request from '@/dataRoom/utils/request'
 
 /**
  * 用户状态

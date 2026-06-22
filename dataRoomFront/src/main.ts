@@ -8,7 +8,7 @@ import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
-import { injectRouter } from '@/dataRoom/_common/_request.ts'
+import { injectRouter } from '@/dataRoom/utils/request.ts'
 // 注入路由实例，便于进行路由跳转
 injectRouter(router)
 

@@ -9,7 +9,7 @@ export default defineComponent({
 <script setup lang="ts">
 import type { DrImageConfig } from '../install.ts'
 import { computed } from 'vue'
-import { getResourceUrl } from '@/dataRoom/_common/_utils.ts'
+import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 
 const { chart } = defineProps<{
   chart: DrImageConfig

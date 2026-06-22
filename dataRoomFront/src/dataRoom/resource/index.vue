@@ -8,9 +8,9 @@ import directoryPlaceholder from '../page/assets/image/目录占位符.png'
 import imagePlaceholder from './assets/image/图片占位符.png'
 import videoPlaceholder from './assets/image/视频占位符.png'
 import modelLoadFailedPlaceholder from './assets/image/模型加载失败占位符.svg'
-import { ResourceType } from '@/dataRoom/constant/ResourceType.ts'
+import { ResourceType } from '@/dataRoom/constants/ResourceType.ts'
 import ModelPreview from '@/dataRoom/three/ModelPreview.vue'
-import { getResourceUrl } from '@/dataRoom/_common/_utils.ts'
+import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 
 interface Props {
   selectable?: boolean // 是否可选择模式

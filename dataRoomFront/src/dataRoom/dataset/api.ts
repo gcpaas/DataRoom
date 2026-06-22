@@ -1,4 +1,4 @@
-import request from '@/dataRoom/_common/_request.ts'
+import request from '@/dataRoom/utils/request.ts'
 
 /**
  * 入参

@@ -9,7 +9,7 @@ export default defineComponent({
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
-import { getResourceUrl } from '@/dataRoom/_common/_utils.ts'
+import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 import { useDrComponent } from '@/dataRoom/hooks/use-dr-component'
 import type { ComponentExpose } from '@/dataRoom/components/type/ComponentExpose.ts'
 import {

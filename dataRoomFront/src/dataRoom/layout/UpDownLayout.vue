@@ -2,8 +2,8 @@
 import logo from '@/dataRoom/assets/logo.png'
 import userAvatar from '@/dataRoom/layout/assets/image/user.png'
 import { useRoute, useRouter } from 'vue-router'
-import request from '@/dataRoom/_common/_request.ts'
-import { removeCookie } from '@/dataRoom/_common/_cookie'
+import request from '@/dataRoom/utils/request.ts'
+import { removeCookie } from '@/dataRoom/utils/cookie'
 import { onMounted, ref } from 'vue'
 import { ArrowDown } from '@element-plus/icons-vue'
 

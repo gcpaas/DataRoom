@@ -13,7 +13,7 @@ import type {ComponentExpose} from "@/dataRoom/components/type/ComponentExpose.t
 import {computed} from "vue";
 import { Box } from '@element-plus/icons-vue'
 import ThreeModelViewer from '@/dataRoom/three/ThreeModelViewer.vue'
-import { getResourceUrl } from '@/dataRoom/_common/_utils.ts'
+import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 
 const props = defineProps<{
   chart: DrModel3DConfig

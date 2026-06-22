@@ -7,8 +7,8 @@ import { pageApi, type PageEntity } from './api'
 import visualScreenPlaceholder from './assets/image/大屏占位符.png'
 import pagePlaceholder from './assets/image/仪表盘占位符.png'
 import directoryPlaceholder from './assets/image/目录占位符.png'
-import { PageStatus } from '@/dataRoom/constant/PageStatus.ts'
-import { PageType } from '@/dataRoom/constant/PageType.ts'
+import { PageStatus } from '@/dataRoom/constants/PageStatus.ts'
+import { PageType } from '@/dataRoom/constants/PageType.ts'
 
 interface AddTypeOption {
   type: string

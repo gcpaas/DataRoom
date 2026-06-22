@@ -9,7 +9,7 @@ export default defineComponent({
 import type { CSSProperties } from 'vue'
 import { computed, ref } from 'vue'
 import type { DrAlarmImageConfig } from './install.ts'
-import { getResourceUrl } from '@/dataRoom/_common/_utils.ts'
+import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 import { useDrComponent } from '@/dataRoom/hooks/use-dr-component'
 import type { ComponentExpose } from '@/dataRoom/components/type/ComponentExpose.ts'
 import {

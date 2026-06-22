@@ -1,13 +1,13 @@
 import {reactive, type Ref} from 'vue'
-import {getChartById} from '@/dataRoom/_common/_utils.ts'
+import {getChartById} from '@/dataRoom/utils/index.ts'
 import {type ComponentInternalInstance} from 'vue'
 import {ElMessage} from "element-plus";
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts";
-import type {GlobalVariable} from "@/dataRoom/PageDesigner/type/GlobalVariable.ts";
-import type {CanvasInst, ChartLayerMoveDirection} from "@/dataRoom/PageDesigner/type/CanvasInst.ts";
+import type {GlobalVariable} from "@/dataRoom/designer/types/GlobalVariable.ts";
+import type {CanvasInst, ChartLayerMoveDirection} from "@/dataRoom/designer/types/CanvasInst.ts";
 import type {ChartAction} from "@/dataRoom/components/type/ChartAction.ts";
 import type {BehaviorEventParam} from "@/dataRoom/components/type/BehaviorEvent.ts";
-import type {ChartParentRef} from '@/dataRoom/_common/editor-history.ts'
+import type {ChartParentRef} from '@/dataRoom/designer/utils/editor-history.ts'
 
 type ChartInstanceMap = Record<string, ComponentInternalInstance>
 

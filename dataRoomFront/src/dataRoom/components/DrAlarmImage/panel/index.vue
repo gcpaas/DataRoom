@@ -8,7 +8,7 @@ export default defineComponent({
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { DrAlarmImageConfig } from '../install.ts'
-import { getResourceUrl } from '@/dataRoom/_common/_utils.ts'
+import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 
 const { chart } = defineProps<{
   chart: DrAlarmImageConfig

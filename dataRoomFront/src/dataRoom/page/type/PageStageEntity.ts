@@ -1,5 +1,5 @@
-import type {PageConfig} from "@/dataRoom/PageDesigner/type/PageConfig.ts";
-import type {VisualScreenPageConfig} from "@/dataRoom/PageDesigner/type/VisualScreenPageConfig.ts";
+import type {PageConfig} from "@/dataRoom/page-designer/type/PageConfig.ts";
+import type {VisualScreenPageConfig} from "@/dataRoom/page-designer/type/VisualScreenPageConfig.ts";
 
 /**
  * 页面实体定义
