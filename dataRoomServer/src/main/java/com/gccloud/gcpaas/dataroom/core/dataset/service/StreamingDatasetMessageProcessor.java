@@ -2,6 +2,7 @@ package com.gccloud.gcpaas.dataroom.core.dataset.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gccloud.gcpaas.dataroom.core.config.DataRoomConfig;
 import com.gccloud.gcpaas.dataroom.core.constant.DatasetType;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.BaseDataset;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.StreamingDataset;
@@ -28,6 +29,7 @@ import java.util.Map;
 public class StreamingDatasetMessageProcessor {
 
     private final ObjectMapper objectMapper;
+    private final DataRoomConfig dataRoomConfig;
 
     public Object process(DatasetEntity datasetEntity, StreamingDataset streamingDataset, String message, Map<String, Object> params) {
         StreamingDatasetMessageContext context = new StreamingDatasetMessageContext();
@@ -63,6 +65,9 @@ public class StreamingDatasetMessageProcessor {
         if (StringUtils.isBlank(script)) {
             return context.getPayload();
         }
+        if (dataRoomConfig.getGroovy() == null || !Boolean.TRUE.equals(dataRoomConfig.getGroovy().getEnable())) {
+            throw new DataRoomException("为了安全,默认关闭Groovy执行权限");
+        }
 
         Binding binding = new Binding();
         binding.setVariable("context", context);
@@ -91,6 +96,7 @@ public class StreamingDatasetMessageProcessor {
         try {
             return objectMapper.readValue(message, Object.class);
         } catch (JsonProcessingException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
             return message;
         }
     }
@@ -104,6 +110,7 @@ public class StreamingDatasetMessageProcessor {
             try {
                 return objectMapper.readValue(value, Object.class);
             } catch (JsonProcessingException e) {
+                log.error(ExceptionUtils.getStackTrace(e));
                 return value;
             }
         }

@@ -1,5 +1,6 @@
 package com.gccloud.gcpaas.dataroom.core.config;
 
+import com.gccloud.gcpaas.dataroom.core.config.bean.Groovy;
 import com.gccloud.gcpaas.dataroom.core.config.bean.Jwt;
 import com.gccloud.gcpaas.dataroom.core.config.bean.ResourceBean;
 import com.gccloud.gcpaas.dataroom.core.config.bean.Sso;
@@ -27,6 +28,10 @@ public class DataRoomConfig {
      * 素材资源存储访问配置
      */
     private ResourceBean resource = new ResourceBean();
+    /**
+     * Groovy 脚本执行配置
+     */
+    private Groovy groovy = new Groovy();
     /**
      * 单点登录配置
      */

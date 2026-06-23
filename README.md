@@ -18,17 +18,11 @@
 
 ## 💯优势
 ✅ 一站式大屏解决方案，从数据源接入->数据清洗处理->大屏/页面设计->大屏/页面预览->大屏/页面发布上线
-
 ✅ 支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、万里、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV数据源接入
-
 ✅ 支持多种数据集制作与接入，如：JSON、HTTP、SQL、Excel/CSV、ElasticSearch、WebSocket，满足常见数据接入需求
-
 ✅ 支持MQTT、WebSocket实时数据集接入，适用于物联网场景
-
 ✅ 支持用户、角色、权限、日志管理，提供安全防护
-
 ✅ 支持AI能力，通过SKILL、MCP对话式创建大屏/页面
-
 ✅ 支持独立部署与若依单点登录，不对原有工程产生影响
 
 ## 系统截图

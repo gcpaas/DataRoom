@@ -25,6 +25,8 @@ spring:
           mcp-endpoint: /mcp/sse
 
 dataroom:
+  groovy:
+    enable: false
   resource:
     # 资源上传存储路径，可以使用绝对路径
     basePath: ./dataRoomResource
