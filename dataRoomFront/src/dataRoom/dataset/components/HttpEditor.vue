@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
-import type { DatasetEntity } from '../api'
+import type { DatasetEntity, HttpDataset } from '../api'
 import { datasetApi } from '../api'
 import { ElMessage } from 'element-plus'
 import { parseParams } from '@/dataRoom/utils'
@@ -20,6 +20,10 @@ const emit = defineEmits<{
 
 const formRef = ref<FormInstance>()
 const previewData = ref<unknown>([])
+
+const isHttpDataset = (dataset: DatasetEntity['dataset']): dataset is HttpDataset => {
+  return dataset?.datasetType === 'http'
+}
 
 const formData = reactive<DatasetEntity>({
   name: '',
@@ -52,7 +56,7 @@ watch(
           body: '',
           respJsonPath: ''
         }
-      } else if ('url' in formData.dataset) {
+      } else if (isHttpDataset(formData.dataset)) {
         // 确保dataset中包含所有必需字段
         if (!formData.dataset.body) {
           formData.dataset.body = ''
@@ -109,7 +113,7 @@ const getData = (): DatasetEntity => {
 const test = async () => {
   try {
     // 验证必填字段
-    if (!formData.dataset || !('url' in formData.dataset) || !formData.dataset.url) {
+    if (!isHttpDataset(formData.dataset) || !formData.dataset.url) {
       ElMessage.error('请先输入请求地址')
       return
     }
@@ -143,7 +147,7 @@ const test = async () => {
  * 匹配请求地址、请求头value、请求体中的 #{paramName} 格式
  */
 const parseInputParams = () => {
-  if (!formData.dataset || !('url' in formData.dataset)) {
+  if (!isHttpDataset(formData.dataset)) {
     ElMessage.warning('请先配置请求信息')
     return
   }

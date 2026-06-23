@@ -3,6 +3,7 @@ import {createChartConfig} from '../type/define'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
+import type {ChartMockDataset} from "@/dataRoom/components/type/ChartMockDataset.ts"
 
 // 注册组件
 const component = defineAsyncComponent(() => import('./index.vue'))
@@ -345,4 +346,49 @@ const datasetFields: ChartDatasetField[] = [
   }
 ]
 
-export {component, controlPanel, getInstance, behaviors, datasetFields}
+/**
+ * 组件内置模拟数据集。
+ *
+ * dataset 用于数据样例弹窗和未配置数据集时的设计态默认渲染。
+ * fields 表示组件字段默认绑定到模拟数据中的哪个字段。
+ */
+const mockDataset: ChartMockDataset = {
+  dataset: [
+    {
+      category: '华东',
+      value: 120,
+    },
+    {
+      category: '华北',
+      value: 200,
+    },
+    {
+      category: '华南',
+      value: 150,
+    },
+    {
+      category: '西南',
+      value: 80,
+    },
+    {
+      category: '西北',
+      value: 170,
+    },
+    {
+      category: '东北',
+      value: 110,
+    },
+  ],
+  fields: [
+    {
+      name: 'yField',
+      bindName: 'category',
+    },
+    {
+      name: 'xField',
+      bindName: 'value',
+    },
+  ],
+}
+
+export {component, controlPanel, getInstance, behaviors, datasetFields, mockDataset}

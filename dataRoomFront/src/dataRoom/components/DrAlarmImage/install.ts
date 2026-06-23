@@ -3,6 +3,7 @@ import { createChartConfig } from '../type/define'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
+import type { ChartMockDataset } from '@/dataRoom/components/type/ChartMockDataset.ts'
 import type { AlarmImageItem } from './alarm-condition.ts'
 
 const component = defineAsyncComponent(() => import('./index.vue'))
@@ -134,4 +135,18 @@ const datasetFields: ChartDatasetField[] = [
   },
 ]
 
-export { component, controlPanel, getInstance, behaviors, datasetFields }
+const mockDataset: ChartMockDataset = {
+  dataset: [
+    {
+      value: 3,
+    },
+  ],
+  fields: [
+    {
+      name: 'valueField',
+      bindName: 'value',
+    },
+  ],
+}
+
+export { component, controlPanel, getInstance, behaviors, datasetFields, mockDataset }

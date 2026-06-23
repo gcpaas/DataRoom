@@ -13,6 +13,7 @@ import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
 import { useTimerManager } from '@/dataRoom/hooks/use-timer-manager'
 import { filterVisibleCharts } from '@/dataRoom/designer/utils/chart-visibility.ts'
+import { useRealtimeDataset } from '@/dataRoom/hooks/use-realtime-dataset'
 
 const pageStageEntity = ref<PageStageEntity>()
 const chartList = ref<ChartConfig<unknown>[]>([])
@@ -44,6 +45,9 @@ const { timerManager } = useTimerManager({
   canvasInst,
   basicConfig: basicConfig as unknown as Ref<PageBasicConfig>,
 })
+const { realtimeDatasetManager } = useRealtimeDataset({
+  canvasInst,
+})
 
 onMounted(() => {
   // 获取路由参数
@@ -64,6 +68,7 @@ onMounted(() => {
     }
     nextTick(() => {
       timerManager.reloadAllTimers()
+      realtimeDatasetManager.reload()
     })
   })
   // 监听窗口大小变化
@@ -75,6 +80,7 @@ onMounted(() => {
  */
 onUnmounted(() => {
   timerManager.clearAllTimers()
+  realtimeDatasetManager.close()
   window.removeEventListener('resize', onResize)
 })
 

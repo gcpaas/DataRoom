@@ -7,7 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import type {DrBubbleChartConfig} from './install.ts'
+import {mockDataset, type DrBubbleChartConfig} from './install.ts'
 import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataRoom/hooks/use-dr-component"
@@ -66,8 +66,8 @@ const buildOption = () => {
   const xFieldNames = getChartDatasetFieldNames(chart, 'xField', ['x'])
   const yFieldNames = getChartDatasetFieldNames(chart, 'yField', ['y'])
   const sizeFieldNames = getChartDatasetFieldNames(chart, 'sizeField', ['size'])
-  const colorFieldNames = getChartDatasetFieldNames(chart, 'colorField')
-  const nameFieldNames = getChartDatasetFieldNames(chart, 'nameField')
+  const colorFieldNames = getChartDatasetFieldNames(chart, 'colorField', ['group'])
+  const nameFieldNames = getChartDatasetFieldNames(chart, 'nameField', ['name'])
 
   const xFieldName = xFieldNames[0] || 'x'
   const yFieldName = yFieldNames[0] || 'y'
@@ -377,18 +377,9 @@ const initChart = () => {
     })
   })
 
-  // 使用默认示例数据渲染
+  // 使用组件模拟数据集渲染设计态默认数据
   if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
-    chartData.value = [
-      {x: 10, y: 20, size: 30, name: 'A', group: '组1'},
-      {x: 25, y: 45, size: 60, name: 'B', group: '组1'},
-      {x: 40, y: 30, size: 45, name: 'C', group: '组1'},
-      {x: 55, y: 65, size: 80, name: 'D', group: '组2'},
-      {x: 70, y: 50, size: 25, name: 'E', group: '组2'},
-      {x: 85, y: 75, size: 55, name: 'F', group: '组2'},
-      {x: 30, y: 80, size: 40, name: 'G', group: '组3'},
-      {x: 60, y: 35, size: 70, name: 'H', group: '组3'},
-    ]
+    chartData.value = [...mockDataset.dataset]
   }
   updateChart()
 }

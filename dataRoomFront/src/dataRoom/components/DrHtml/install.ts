@@ -3,6 +3,7 @@ import { createChartConfig } from '../type/define'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
+import type { ChartMockDataset } from '@/dataRoom/components/type/ChartMockDataset.ts'
 
 const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
@@ -101,4 +102,13 @@ const datasetFields: ChartDatasetField[] = [
   },
 ]
 
-export { component, controlPanel, getInstance, behaviors, datasetFields }
+const mockDataset: ChartMockDataset = {
+  dataset: [
+    { templateContext: { title: '数据样例', value: 12860 } },
+  ],
+  fields: [
+    { name: 'templateContext', bindName: 'templateContext' },
+  ],
+}
+
+export { component, controlPanel, getInstance, behaviors, datasetFields, mockDataset }

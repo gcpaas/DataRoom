@@ -7,7 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import type {DrGaugeConfig} from './install.ts'
+import {mockDataset, type DrGaugeConfig} from './install.ts'
 import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataRoom/hooks/use-dr-component"
@@ -243,9 +243,9 @@ const initChart = () => {
     })
   })
 
-  // 使用默认示例数据渲染
+  // 使用组件模拟数据集渲染设计态默认数据
   if (shouldUseDefaultChartData(chart) && gaugeValue.value === 0) {
-    gaugeValue.value = 58.6
+    changeData(mockDataset.dataset)
   }
   updateChart()
 }

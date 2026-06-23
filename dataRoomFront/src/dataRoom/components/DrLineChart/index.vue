@@ -7,7 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import type {DrLineChartConfig} from './install.ts'
+import {mockDataset, type DrLineChartConfig} from './install.ts'
 import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataRoom/hooks/use-dr-component"
@@ -76,10 +76,10 @@ const buildOption = () => {
   const data = chartData.value
 
   // 解析数据集字段映射
-  const xFieldNames = getChartDatasetFieldNames(chart, 'xField', ['x'])
-  const yFieldNames = getChartDatasetFieldNames(chart, 'yField', ['y'])
+  const xFieldNames = getChartDatasetFieldNames(chart, 'xField', ['time'])
+  const yFieldNames = getChartDatasetFieldNames(chart, 'yField', ['value'])
   const seriesFieldNames = getChartDatasetFieldNames(chart, 'seriesField')
-  const xFieldName = xFieldNames[0] || 'x'
+  const xFieldName = xFieldNames[0] || 'time'
   const seriesFieldName = seriesFieldNames[0] || ''
 
   // 提取类目数据
@@ -91,7 +91,7 @@ const buildOption = () => {
   if (seriesFieldName && data.some((item: any) => item[seriesFieldName])) {
     // 有分组字段 - 按分组生成多个系列
     const seriesNames = [...new Set(data.map((item: any) => item[seriesFieldName]))]
-    const yFieldName = yFieldNames[0] || 'y'
+    const yFieldName = yFieldNames[0] || 'value'
 
     seriesList = seriesNames.map((sName, idx) => {
       const seriesData = categories.map(cat => {
@@ -351,16 +351,9 @@ const initChart = () => {
     })
   })
 
-  // 使用默认示例数据渲染
+  // 使用组件模拟数据集渲染设计态默认数据
   if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
-    chartData.value = [
-      {x: '一月', y: 120, s: '系列1'},
-      {x: '二月', y: 200, s: '系列1'},
-      {x: '三月', y: 150, s: '系列1'},
-      {x: '四月', y: 80, s: '系列1'},
-      {x: '五月', y: 170, s: '系列1'},
-      {x: '六月', y: 110, s: '系列1'},
-    ]
+    chartData.value = [...mockDataset.dataset]
   }
   updateChart()
 }

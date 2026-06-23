@@ -7,7 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import type {DrPieChartConfig} from './install.ts'
+import {mockDataset, type DrPieChartConfig} from './install.ts'
 import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataRoom/hooks/use-dr-component"
@@ -314,15 +314,9 @@ const initChart = () => {
     })
   })
 
-  // 使用默认示例数据渲染
+  // 使用组件模拟数据集渲染设计态默认数据
   if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
-    chartData.value = [
-      {name: '分类A', value: 335},
-      {name: '分类B', value: 310},
-      {name: '分类C', value: 234},
-      {name: '分类D', value: 135},
-      {name: '分类E', value: 148},
-    ]
+    chartData.value = [...mockDataset.dataset]
   }
   updateChart()
 }

@@ -122,6 +122,7 @@ const loadDatasetName = async () => {
   if (chartConfig.value.dataset?.code) {
     const detail = await datasetApi.detail(chartConfig.value.dataset?.code)
     datasetName.value = detail.name
+    chartConfig.value.dataset.datasetType = detail.datasetType || ''
     datasetOutputList.value = detail.outputList || []
     datasetInputList.value = detail.inputList || []
     // 初始化 params 结构
@@ -196,6 +197,7 @@ const handleConfirmDataset = () => {
     datasetName.value = selectedDataset.value.name
     // 保存数据集编码到chartConfig
     chartConfig.value.dataset.code = selectedDataset.value.code ?? ''
+    chartConfig.value.dataset.datasetType = selectedDataset.value.datasetType || ''
     // 更新输出字段列表
     datasetOutputList.value = selectedDataset.value.outputList || []
     // 更新输入参数列表

@@ -4,6 +4,7 @@ import {ElMessage, ElMessageBox} from 'element-plus'
 import {Delete, Document, Edit, Folder, MoreFilled, Plus, Rank, Refresh, Search} from '@element-plus/icons-vue'
 import {datasetApi, type DatasetEntity, type DatasetTreeNode} from './api'
 import {dataSourceApi, type DataSourceEntity} from '../data-source/api'
+import { isStreamingDatasetType } from './streaming-dataset'
 
 // 定义 props
 const props = defineProps<{
@@ -47,7 +48,7 @@ const currentDataset = ref<DatasetEntity>({
   parentCode: 'root'
 })
 const editorRef = ref()
-const wideEditorDatasetTypes = ['json', 'http', 'sql', 'excel', 'es'] as const
+const wideEditorDatasetTypes = ['json', 'http', 'sql', 'excel', 'es', 'websocket'] as const
 const datasetDialogWidth = computed(() =>
   wideEditorDatasetTypes.includes(currentDataset.value.datasetType as typeof wideEditorDatasetTypes[number])
     ? '90%'
@@ -92,6 +93,11 @@ const addTypeOptions = [
     key: 'es',
     name: 'ES数据集',
     description: '通过ES查询报文获取数据'
+  },
+  {
+    key: 'websocket',
+    name: 'WebSocket数据集',
+    description: '实时监听数据变化并通过脚本转换'
   }
 ]
 
@@ -149,6 +155,11 @@ const datasetTypeMap = {
     name: 'ES',
     icon: 'ES',
     component: defineAsyncComponent(() => import('./components/EsEditor.vue'))
+  },
+  websocket: {
+    name: 'WebSocket',
+    icon: 'WS',
+    component: defineAsyncComponent(() => import('./components/WebSocketEditor.vue'))
   }
 } as const
 
@@ -277,7 +288,7 @@ const handleTypeSelect = (type: string) => {
   if (type === 'directory') {
     handleAddFolder(typeSelectParentNode.value)
   } else {
-    handleAddDataset(type as 'json' | 'http' | 'sql' | 'excel' | 'es', typeSelectParentNode.value)
+    handleAddDataset(type as keyof typeof datasetTypeMap, typeSelectParentNode.value)
   }
 }
 
@@ -311,7 +322,7 @@ const handleAddFolder = (node?: DatasetTreeNode) => {
 /**
  * 新增数据集
  */
-const handleAddDataset = (datasetType: 'json' | 'http' | 'sql' | 'excel' | 'es', node?: DatasetTreeNode) => {
+const handleAddDataset = (datasetType: keyof typeof datasetTypeMap, node?: DatasetTreeNode) => {
   dialogTitle.value = `新增${datasetTypeMap[datasetType].name}数据集`
   currentDataset.value = {
     name: '',
@@ -329,7 +340,9 @@ const handleAddDataset = (datasetType: 'json' | 'http' | 'sql' | 'excel' | 'es',
             ? {datasetType: 'sql', sql: ''}
             : datasetType === 'excel'
               ? {datasetType: 'excel', sql: ''}
-              : {datasetType: 'es', path: '', method: 'POST', body: '', respJsonPath: ''}
+              : datasetType === 'es'
+                ? {datasetType: 'es', path: '', method: 'POST', body: '', respJsonPath: ''}
+                : {datasetType: 'websocket', url: '', script: '', sampleData: ''}
   }
   dialogVisible.value = true
 }
@@ -488,6 +501,26 @@ const handleCloseDialog = () => {
  */
 const handleRefresh = async () => {
   if (!selectedNode.value?.code) {
+    return
+  }
+  if (isStreamingDatasetType(selectedNode.value.datasetType)) {
+    previewLoading.value = true
+    try {
+      const res = await datasetApi.test({
+        dataset: selectedNode.value,
+      })
+      const data = res.data
+      previewData.value = Array.isArray(data) ? data : data ? [data] : []
+      const firstRow = previewData.value[0]
+      previewColumns.value = firstRow ? Object.keys(firstRow) : []
+    } catch (error) {
+      console.error('执行流式数据集样本失败:', error)
+      previewData.value = []
+      previewColumns.value = []
+      ElMessage.error('执行流式数据集样本失败')
+    } finally {
+      previewLoading.value = false
+    }
     return
   }
   previewLoading.value = true
@@ -727,7 +760,7 @@ const handleTestAndSave = async () => {
               数据预览
             </button>
             <button
-              v-if="selectedNode.datasetType !== 'json'"
+              v-if="selectedNode.datasetType !== 'json' && !isStreamingDatasetType(selectedNode.datasetType)"
               class="dataset-tab"
               :class="{ active: activeTab === 'inputParams' }"
               type="button"
@@ -859,6 +892,7 @@ const handleTestAndSave = async () => {
             <el-icon v-else-if="item.key === 'json'"><Document/></el-icon>
             <el-icon v-else-if="item.key === 'http'"><Document/></el-icon>
             <el-icon v-else-if="item.key === 'es'"><Search/></el-icon>
+            <el-icon v-else-if="item.key === 'websocket'"><Refresh/></el-icon>
             <el-icon v-else><Document/></el-icon>
           </div>
           <div class="type-card-info">

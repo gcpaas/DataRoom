@@ -6,7 +6,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import type { DrTrendMetricCardConfig } from './install.ts'
+import { mockDataset, type DrTrendMetricCardConfig } from './install.ts'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as echarts from 'echarts'
 import { useDrComponent } from '@/dataRoom/hooks/use-dr-component'
@@ -46,16 +46,7 @@ const resolveFieldName = (key: string, fallback: string): string => {
 }
 
 const buildFallbackData = (): TrendPoint[] => {
-  const base = toFiniteNumber(chart.props.value.defaultValue) ?? 0
-  return [
-    { time: '1', value: Math.round(base * 0.72) },
-    { time: '2', value: Math.round(base * 0.8) },
-    { time: '3', value: Math.round(base * 0.76) },
-    { time: '4', value: Math.round(base * 0.9) },
-    { time: '5', value: Math.round(base * 0.88) },
-    { time: '6', value: Math.round(base * 0.96) },
-    { time: '7', value: base },
-  ]
+  return resolveTrendData(mockDataset.dataset)
 }
 
 const resolveTrendData = (datasetValue: unknown): TrendPoint[] => {

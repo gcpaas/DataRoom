@@ -12,6 +12,7 @@ import type { PageBasicConfig } from '@/dataRoom/page-designer/type/PageBasicCon
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
 import { useTimerManager } from '@/dataRoom/hooks/use-timer-manager'
+import { useRealtimeDataset } from '@/dataRoom/hooks/use-realtime-dataset'
 
 const pageStageEntity = ref<PageStageEntity>()
 const chartList = ref<ChartConfig<unknown>[]>([])
@@ -33,6 +34,9 @@ const { timerManager } = useTimerManager({
   canvasInst,
   basicConfig,
 })
+const { realtimeDatasetManager } = useRealtimeDataset({
+  canvasInst,
+})
 
 onMounted(() => {
   // 获取路由参数
@@ -46,6 +50,7 @@ onMounted(() => {
     globalVariable.value = res.pageConfig?.globalVariableList || []
     nextTick(() => {
       timerManager.reloadAllTimers()
+      realtimeDatasetManager.reload()
     })
   })
 })
@@ -55,6 +60,7 @@ onMounted(() => {
  */
 onUnmounted(() => {
   timerManager.clearAllTimers()
+  realtimeDatasetManager.close()
 })
 
 /**

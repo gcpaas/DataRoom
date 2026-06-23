@@ -30,6 +30,7 @@ export function createChartConfig<T>(
     behaviors: {},
     dataset: {
       code: '',
+      datasetType: '',
       fields: {},
       script: '',
       params: {}

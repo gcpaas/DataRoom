@@ -7,7 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import type {DrWordCloudConfig} from './install.ts'
+import {mockDataset, type DrWordCloudConfig} from './install.ts'
 import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import 'echarts-wordcloud'
@@ -149,30 +149,9 @@ const initChart = () => {
     })
   })
 
-  // 使用默认示例数据渲染
+  // 使用组件模拟数据集渲染设计态默认数据
   if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
-    chartData.value = [
-      {word: '可视化', value: 100},
-      {word: '大数据', value: 80},
-      {word: '数据分析', value: 70},
-      {word: '人工智能', value: 65},
-      {word: '云计算', value: 60},
-      {word: '物联网', value: 55},
-      {word: '机器学习', value: 50},
-      {word: '深度学习', value: 45},
-      {word: '数据挖掘', value: 40},
-      {word: '区块链', value: 35},
-      {word: '自然语言', value: 30},
-      {word: '图数据库', value: 28},
-      {word: '微服务', value: 25},
-      {word: '容器化', value: 22},
-      {word: '边缘计算', value: 20},
-      {word: '数字孪生', value: 18},
-      {word: '知识图谱', value: 16},
-      {word: '联邦学习', value: 14},
-      {word: '低代码', value: 12},
-      {word: '数据治理', value: 10},
-    ]
+    chartData.value = [...mockDataset.dataset]
   }
   updateChart()
 }

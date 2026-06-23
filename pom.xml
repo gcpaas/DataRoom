@@ -42,6 +42,7 @@
         <poi.version>5.5.1</poi.version>
         <xmlbeans.version>5.3.0</xmlbeans.version>
         <spring-ai.version>1.1.8</spring-ai.version>
+        <groovy.version>4.0.29</groovy.version>
     </properties>
 
     <dependencyManagement>
@@ -80,6 +81,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.ai</groupId>
@@ -275,6 +280,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
             <version>4.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${groovy.version}</version>
         </dependency>
         <!-- JUnit 5 测试依赖 -->
         <dependency>

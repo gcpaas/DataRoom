@@ -8,6 +8,7 @@ export default defineComponent({
 </script>
 <script setup lang="ts">
 import type { DrMapConfig } from './install.ts'
+import { mockDataset } from './install.ts'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as echarts from 'echarts'
 import { mapApi } from '@/dataRoom/map/api.ts'
@@ -90,66 +91,13 @@ const mapDataset = ref<MapDatasetValue>({})
 let chartInstance: echarts.ECharts | null = null
 let registeredMapName = ''
 
-const defaultDataset: Required<Pick<MapDatasetValue, 'regions' | 'markers' | 'lines'>> = {
-  regions: [
-    { name: '合肥市', value: 920, regionCode: '340100' },
-    { name: '芜湖市', value: 680, regionCode: '340200' },
-    { name: '蚌埠市', value: 420, regionCode: '340300' },
-    { name: '淮南市', value: 360, regionCode: '340400' },
-    { name: '马鞍山市', value: 390, regionCode: '340500' },
-    { name: '淮北市', value: 280, regionCode: '340600' },
-    { name: '铜陵市', value: 260, regionCode: '340700' },
-    { name: '安庆市', value: 510, regionCode: '340800' },
-    { name: '黄山市', value: 330, regionCode: '341000' },
-    { name: '滁州市', value: 470, regionCode: '341100' },
-    { name: '阜阳市', value: 760, regionCode: '341200' },
-    { name: '宿州市', value: 430, regionCode: '341300' },
-    { name: '六安市', value: 520, regionCode: '341500' },
-    { name: '亳州市', value: 410, regionCode: '341600' },
-    { name: '池州市', value: 240, regionCode: '341700' },
-    { name: '宣城市', value: 350, regionCode: '341800' },
-  ],
-  markers: [
-    { name: '合肥', lng: 117.283042, lat: 31.86119, value: 920 },
-    { name: '芜湖', lng: 118.376451, lat: 31.326319, value: 680 },
-    { name: '阜阳', lng: 115.819729, lat: 32.896969, value: 760 },
-    { name: '黄山', lng: 118.317325, lat: 29.709239, value: 330 },
-  ],
-  lines: [
-    {
-      fromName: '合肥',
-      toName: '芜湖',
-      coords: [
-        [117.283042, 31.86119],
-        [118.376451, 31.326319],
-      ],
-      value: 680,
-    },
-    {
-      fromName: '合肥',
-      toName: '阜阳',
-      coords: [
-        [117.283042, 31.86119],
-        [115.819729, 32.896969],
-      ],
-      value: 760,
-    },
-    {
-      fromName: '合肥',
-      toName: '黄山',
-      coords: [
-        [117.283042, 31.86119],
-        [118.317325, 29.709239],
-      ],
-      value: 330,
-    },
-  ],
-}
-
 const onlineMode = computed(() => chart.props.source.mode === 'online')
 const canDrillUp = computed(() => regionStack.value.length > 0)
 
 const getFirstField = (name: string, fallback: string) => chart.dataset?.fields?.[name]?.[0] || fallback
+const getMockField = (name: string, fallback: string) => {
+  return mockDataset.fields.find(field => field.name === name)?.bindName || fallback
+}
 
 const toNumber = (value: unknown, fallback = 0) => {
   const parsed = Number(value)
@@ -238,6 +186,70 @@ const normalizeDataset = (datasetValue: unknown): MapDatasetValue => {
     lines,
   }
 }
+
+const getDefaultDataset = (): Required<Pick<MapDatasetValue, 'regions' | 'markers' | 'lines'>> => {
+  const regionNameField = getMockField('regionNameField', 'regionName')
+  const regionValueField = getMockField('regionValueField', 'regionValue')
+  const markerNameField = getMockField('markerNameField', 'markerName')
+  const longitudeField = getMockField('longitudeField', 'longitude')
+  const latitudeField = getMockField('latitudeField', 'latitude')
+  const markerValueField = getMockField('markerValueField', 'markerValue')
+  const lineFromLngField = getMockField('lineFromLngField', 'lineFromLng')
+  const lineFromLatField = getMockField('lineFromLatField', 'lineFromLat')
+  const lineToLngField = getMockField('lineToLngField', 'lineToLng')
+  const lineToLatField = getMockField('lineToLatField', 'lineToLat')
+  const regionMap = new Map<string, RegionDatum>()
+  const markers: MarkerDatum[] = []
+  const lines: LineDatum[] = []
+
+  mockDataset.dataset.forEach((row) => {
+    const item = row as Record<string, unknown>
+    const regionName = item[regionNameField] || item.name
+    if (regionName) {
+      const name = String(regionName)
+      regionMap.set(name, {
+        name,
+        value: toNumber(item[regionValueField] ?? item.value),
+        regionCode: String(item.regionCode || item.code || ''),
+      })
+    }
+
+    const lng = toNumber(item[longitudeField], Number.NaN)
+    const lat = toNumber(item[latitudeField], Number.NaN)
+    if (Number.isFinite(lng) && Number.isFinite(lat)) {
+      markers.push({
+        name: String(item[markerNameField] || item.name || ''),
+        lng,
+        lat,
+        value: toNumber(item[markerValueField] ?? item.value),
+      })
+    }
+
+    const fromLng = toNumber(item[lineFromLngField], Number.NaN)
+    const fromLat = toNumber(item[lineFromLatField], Number.NaN)
+    const toLng = toNumber(item[lineToLngField], Number.NaN)
+    const toLat = toNumber(item[lineToLatField], Number.NaN)
+    if ([fromLng, fromLat, toLng, toLat].every(Number.isFinite)) {
+      lines.push({
+        fromName: String(item.fromName || ''),
+        toName: String(item.toName || ''),
+        coords: [
+          [fromLng, fromLat],
+          [toLng, toLat],
+        ],
+        value: toNumber(item.value),
+      })
+    }
+  })
+
+  return {
+    regions: Array.from(regionMap.values()),
+    markers,
+    lines,
+  }
+}
+
+const defaultDataset = getDefaultDataset()
 
 const changeData = (datasetValue: unknown) => {
   mapDataset.value = normalizeDataset(datasetValue)

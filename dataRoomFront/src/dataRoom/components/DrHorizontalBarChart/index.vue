@@ -7,7 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import type {DrHorizontalBarChartConfig} from './install.ts'
+import {mockDataset, type DrHorizontalBarChartConfig} from './install.ts'
 import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataRoom/hooks/use-dr-component"
@@ -77,10 +77,10 @@ const buildOption = () => {
 
   // 解析数据集字段映射
   // 注意：对于横向条形图，xField 是数值字段，yField 是类目字段
-  const xFieldNames = getChartDatasetFieldNames(chart, 'xField', ['x'])
-  const yFieldNames = getChartDatasetFieldNames(chart, 'yField', ['y'])
+  const xFieldNames = getChartDatasetFieldNames(chart, 'xField', ['value'])
+  const yFieldNames = getChartDatasetFieldNames(chart, 'yField', ['category'])
   const seriesFieldNames = getChartDatasetFieldNames(chart, 'seriesField')
-  const yFieldName = yFieldNames[0] || 'y'
+  const yFieldName = yFieldNames[0] || 'category'
   const seriesFieldName = seriesFieldNames[0] || ''
 
   // 提取类目数据（Y轴类目）
@@ -92,7 +92,7 @@ const buildOption = () => {
   if (seriesFieldName && data.some((item: any) => item[seriesFieldName])) {
     // 有分组字段 - 按分组生成多个系列
     const seriesNames = [...new Set(data.map((item: any) => item[seriesFieldName]))]
-    const xFieldNameFirst = xFieldNames[0] || 'x'
+    const xFieldNameFirst = xFieldNames[0] || 'value'
 
     seriesList = seriesNames.map((sName, idx) => {
       const seriesData = categories.map(cat => {
@@ -344,16 +344,9 @@ const initChart = () => {
     })
   })
 
-  // 使用默认示例数据渲染
+  // 使用组件模拟数据集渲染设计态默认数据
   if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
-    chartData.value = [
-      {y: '产品A', x: 120},
-      {y: '产品B', x: 200},
-      {y: '产品C', x: 150},
-      {y: '产品D', x: 80},
-      {y: '产品E', x: 170},
-      {y: '产品F', x: 110},
-    ]
+    chartData.value = [...mockDataset.dataset]
   }
   updateChart()
 }

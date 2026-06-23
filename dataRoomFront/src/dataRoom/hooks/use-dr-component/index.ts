@@ -5,6 +5,7 @@ import {DrConst} from "@/dataRoom/constants/DrConst.ts";
 import type {CanvasInst} from "@/dataRoom/designer/types/CanvasInst.ts";
 import type {ChartAction} from "@/dataRoom/components/type/ChartAction.ts";
 import type {ComponentExpose} from "@/dataRoom/components/type/ComponentExpose.ts";
+import {isStreamingDatasetType} from "@/dataRoom/dataset/streaming-dataset.ts";
 
 interface UseDrComponentOptions {
   /**
@@ -39,6 +40,9 @@ export function useDrComponent(options: UseDrComponentOptions) {
   const autoRefreshData = () => {
     if (!chart.dataset?.code) {
       console.warn(`组件${chart.type}: ${chart.id} 未配置数据集`)
+      return
+    }
+    if (isStreamingDatasetType(chart.dataset.datasetType)) {
       return
     }
     // 生成参数 - 使用通用工具函数

@@ -7,7 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import type {DrRadarChartConfig} from './install.ts'
+import {mockDataset, type DrRadarChartConfig} from './install.ts'
 import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
 import {useDrComponent} from "@/dataRoom/hooks/use-dr-component"
@@ -78,7 +78,7 @@ const buildOption = () => {
   // 解析数据集字段映射
   const indicatorFieldNames = getChartDatasetFieldNames(chart, 'indicatorField', ['indicator'])
   const valueFieldNames = getChartDatasetFieldNames(chart, 'valueField', ['value'])
-  const seriesFieldNames = getChartDatasetFieldNames(chart, 'seriesField')
+  const seriesFieldNames = getChartDatasetFieldNames(chart, 'seriesField', ['series'])
   const indicatorFieldName = indicatorFieldNames[0] || 'indicator'
   const valueFieldName = valueFieldNames[0] || 'value'
   const seriesFieldName = seriesFieldNames[0] || ''
@@ -296,20 +296,9 @@ const initChart = () => {
     })
   })
 
-  // 使用默认示例数据渲染
+  // 使用组件模拟数据集渲染设计态默认数据
   if (shouldUseDefaultChartData(chart) && chartData.value.length === 0) {
-    chartData.value = [
-      {indicator: '攻击', value: 80, series: '战士'},
-      {indicator: '防御', value: 90, series: '战士'},
-      {indicator: '速度', value: 60, series: '战士'},
-      {indicator: '智力', value: 40, series: '战士'},
-      {indicator: '生命', value: 85, series: '战士'},
-      {indicator: '攻击', value: 50, series: '法师'},
-      {indicator: '防御', value: 40, series: '法师'},
-      {indicator: '速度', value: 70, series: '法师'},
-      {indicator: '智力', value: 95, series: '法师'},
-      {indicator: '生命', value: 55, series: '法师'},
-    ]
+    chartData.value = [...mockDataset.dataset]
   }
   updateChart()
 }

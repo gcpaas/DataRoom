@@ -1,5 +1,6 @@
 import type { ChartAction } from '@/dataRoom/components/type/ChartAction.ts'
 import type { ChartDatasetParam } from '@/dataRoom/components/type/ChartDatasetParam.ts'
+import type { DatasetType } from '@/dataRoom/dataset/api.ts'
 
 /**
  * 组件配置基础信息
@@ -47,6 +48,8 @@ export interface ChartConfig<T> {
   dataset: {
     // 数据集编码
     code: string
+    // 数据集类型，历史配置可为空
+    datasetType?: DatasetType
     // 字段绑定
     fields: {
       // key为图表对应的指标、维度、属性值等字段，value 为多个数据集字段名

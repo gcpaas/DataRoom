@@ -44,5 +44,21 @@ export default defineConfig({
   build: {
     // 自定义打包输出目录名称，默认为 front
     outDir: 'front',
+    rolldownOptions: {
+      onwarn(warning, warn) {
+        // Rolldown 对部分第三方包里位置不规范的 PURE 注释会输出 INVALID_ANNOTATION。
+        // 这些注释只影响 tree-shaking 提示，不影响运行逻辑；构建已成功时定向过滤日志噪音。
+        if (
+          warning.code === 'INVALID_ANNOTATION' &&
+          (
+            warning.id?.includes('@daybrush/utils') ||
+            warning.id?.includes('@vueuse/core')
+          )
+        ) {
+          return
+        }
+        warn(warning)
+      },
+    },
   },
 })

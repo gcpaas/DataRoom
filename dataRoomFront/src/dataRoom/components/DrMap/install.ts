@@ -3,6 +3,7 @@ import { createChartConfig } from '../type/define'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
+import type { ChartMockDataset } from '@/dataRoom/components/type/ChartMockDataset.ts'
 
 const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
@@ -339,4 +340,33 @@ const datasetFields: ChartDatasetField[] = [
   { name: 'lineToLatField', desc: '飞线终点纬度字段', required: false, multiple: false },
 ]
 
-export { component, controlPanel, getInstance, behaviors, datasetFields }
+const mockDataset: ChartMockDataset = {
+  dataset: [
+    {
+      regionName: '浙江省',
+      regionValue: 120,
+      markerName: '杭州',
+      longitude: 120.1551,
+      latitude: 30.2741,
+      markerValue: 88,
+      lineFromLng: 120.1551,
+      lineFromLat: 30.2741,
+      lineToLng: 121.4737,
+      lineToLat: 31.2304,
+    },
+  ],
+  fields: [
+    { name: 'regionNameField', bindName: 'regionName' },
+    { name: 'regionValueField', bindName: 'regionValue' },
+    { name: 'markerNameField', bindName: 'markerName' },
+    { name: 'longitudeField', bindName: 'longitude' },
+    { name: 'latitudeField', bindName: 'latitude' },
+    { name: 'markerValueField', bindName: 'markerValue' },
+    { name: 'lineFromLngField', bindName: 'lineFromLng' },
+    { name: 'lineFromLatField', bindName: 'lineFromLat' },
+    { name: 'lineToLngField', bindName: 'lineToLng' },
+    { name: 'lineToLatField', bindName: 'lineToLat' },
+  ],
+}
+
+export { component, controlPanel, getInstance, behaviors, datasetFields, mockDataset }

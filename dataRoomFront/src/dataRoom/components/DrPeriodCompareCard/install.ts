@@ -3,6 +3,7 @@ import {createChartConfig} from '../type/define'
 import type {ChartConfig} from '@/dataRoom/components/type/ChartConfig.ts'
 import type {Behavior} from '@/dataRoom/components/type/Behavior.ts'
 import type {ChartDatasetField} from '@/dataRoom/components/type/ChartDatasetField.ts'
+import type {ChartMockDataset} from '@/dataRoom/components/type/ChartMockDataset.ts'
 
 const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
@@ -218,4 +219,48 @@ const datasetFields: ChartDatasetField[] = [
   },
 ]
 
-export {component, controlPanel, getInstance, behaviors, datasetFields}
+const mockDataset: ChartMockDataset = {
+  dataset: [
+    {
+      currentValue: 12860,
+      previousValue: 10240,
+      changeValue: 2620,
+      changeRate: 25.59,
+      time: '2024-06-05',
+      value: 12860,
+      title: '访问量',
+    },
+  ],
+  fields: [
+    {
+      name: 'currentValueField',
+      bindName: 'currentValue',
+    },
+    {
+      name: 'previousValueField',
+      bindName: 'previousValue',
+    },
+    {
+      name: 'changeValueField',
+      bindName: 'changeValue',
+    },
+    {
+      name: 'changeRateField',
+      bindName: 'changeRate',
+    },
+    {
+      name: 'timeField',
+      bindName: 'time',
+    },
+    {
+      name: 'valueField',
+      bindName: 'value',
+    },
+    {
+      name: 'titleField',
+      bindName: 'title',
+    },
+  ],
+}
+
+export {component, controlPanel, getInstance, behaviors, datasetFields, mockDataset}
