@@ -2,8 +2,10 @@ package com.gccloud.gcpaas.dataroom.core.dataset.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gccloud.gcpaas.dataroom.core.constant.DatasetType;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.BaseDataset;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.StreamingDataset;
+import com.gccloud.gcpaas.dataroom.core.dataset.runtime.StreamingDatasetMessageContext;
 import com.gccloud.gcpaas.dataroom.core.entity.DatasetEntity;
 import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
 import groovy.lang.Binding;
@@ -28,23 +30,50 @@ public class StreamingDatasetMessageProcessor {
     private final ObjectMapper objectMapper;
 
     public Object process(DatasetEntity datasetEntity, StreamingDataset streamingDataset, String message, Map<String, Object> params) {
+        StreamingDatasetMessageContext context = new StreamingDatasetMessageContext();
+        context.setDatasetCode(datasetEntity == null ? "" : datasetEntity.getCode());
+        DatasetType datasetType = datasetEntity == null ? null : datasetEntity.getDatasetType();
+        context.setDatasetType(datasetType);
+        context.setMessage(message);
+        context.setPayload(parseMessage(message));
+        context.setParams(params == null ? Map.of() : params);
         String script = streamingDataset == null ? "" : streamingDataset.getScript();
-        return process(datasetEntity, message, script, params);
+        return process(datasetEntity, streamingDataset, context, script);
     }
 
     public Object process(DatasetEntity datasetEntity, String message, String script, Map<String, Object> params) {
-        Object payload = parseMessage(message);
+        StreamingDatasetMessageContext context = new StreamingDatasetMessageContext();
+        context.setDatasetCode(datasetEntity == null ? "" : datasetEntity.getCode());
+        context.setDatasetType(datasetEntity == null ? null : datasetEntity.getDatasetType());
+        context.setMessage(message);
+        context.setPayload(parseMessage(message));
+        context.setParams(params == null ? Map.of() : params);
+        return process(datasetEntity, null, context, script);
+    }
+
+    public Object process(DatasetEntity datasetEntity, StreamingDataset streamingDataset, StreamingDatasetMessageContext context) {
+        if (context.getPayload() == null) {
+            context.setPayload(parseMessage(context.getMessage()));
+        }
+        String script = streamingDataset == null ? "" : streamingDataset.getScript();
+        return process(datasetEntity, streamingDataset, context, script);
+    }
+
+    private Object process(DatasetEntity datasetEntity, StreamingDataset streamingDataset, StreamingDatasetMessageContext context, String script) {
         if (StringUtils.isBlank(script)) {
-            return payload;
+            return context.getPayload();
         }
 
         Binding binding = new Binding();
-        binding.setVariable("message", message);
-        binding.setVariable("payload", payload);
-        binding.setVariable("params", params);
+        binding.setVariable("context", context);
+        binding.setVariable("message", context.getMessage());
+        binding.setVariable("payload", context.getPayload());
+        binding.setVariable("metadata", context.getMetadata());
+        binding.setVariable("params", context.getParams());
         binding.setVariable("dataset", datasetEntity);
         BaseDataset datasetConfig = datasetEntity == null ? null : datasetEntity.getDataset();
         binding.setVariable("datasetConfig", datasetConfig);
+        binding.setVariable("streamingDataset", streamingDataset);
 
         try {
             Object result = new GroovyShell(binding).evaluate(script);

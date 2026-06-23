@@ -47,18 +47,24 @@ const getChartList = (canvasInst: RealtimeDatasetCanvasInst) => {
   return Array.isArray(canvasInst.chartList) ? canvasInst.chartList : canvasInst.chartList.value
 }
 
-const getApiOrigin = () => {
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
-  if (!apiBaseUrl) {
-    return window.location.origin
+const toWebSocketProtocol = (url: URL) => {
+  if (url.protocol === 'https:') {
+    url.protocol = 'wss:'
+    return
   }
-  return new URL(apiBaseUrl, window.location.origin).origin
+  if (url.protocol === 'http:') {
+    url.protocol = 'ws:'
+  }
+}
+
+const joinPath = (basePath: string, path: string) => {
+  return `${basePath.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`
 }
 
 const resolveRealtimeDatasetUrl = () => {
-  const configuredUrl = import.meta.env.VITE_REALTIME_DATASET_WS_URL
-  const httpUrl = new URL(configuredUrl || DEFAULT_REALTIME_DATASET_PATH, getApiOrigin())
-  httpUrl.protocol = httpUrl.protocol === 'https:' ? 'wss:' : 'ws:'
+  const httpUrl = new URL(import.meta.env.VITE_API_BASE_URL || '/', window.location.origin)
+  toWebSocketProtocol(httpUrl)
+  httpUrl.pathname = joinPath(httpUrl.pathname, DEFAULT_REALTIME_DATASET_PATH)
 
   const cookieName = getCookieName()
   const cookieValue = getCookie(cookieName)

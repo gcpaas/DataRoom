@@ -2,9 +2,10 @@ package com.gccloud.gcpaas.dataroom.core.dataset.ws;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import com.gccloud.gcpaas.dataroom.core.dataset.runtime.StreamingDatasetRuntimeManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -12,7 +13,6 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -23,17 +23,27 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class RealtimeDatasetWebSocketHandler extends TextWebSocketHandler {
 
     private final ObjectMapper objectMapper;
 
-    private final Map<String, Set<WebSocketSession>> datasetSessionMap = new ConcurrentHashMap<>();
+    private final RealtimeDatasetSessionRegistry sessionRegistry;
 
-    private final Map<String, Set<String>> sessionDatasetMap = new ConcurrentHashMap<>();
+    private final StreamingDatasetRuntimeManager streamingDatasetRuntimeManager;
+
+    @Autowired
+    public RealtimeDatasetWebSocketHandler(
+            ObjectMapper objectMapper,
+            RealtimeDatasetSessionRegistry sessionRegistry,
+            StreamingDatasetRuntimeManager streamingDatasetRuntimeManager
+    ) {
+        this.objectMapper = objectMapper;
+        this.sessionRegistry = sessionRegistry;
+        this.streamingDatasetRuntimeManager = streamingDatasetRuntimeManager;
+    }
 
     public RealtimeDatasetWebSocketHandler() {
-        this(new ObjectMapper());
+        this(new ObjectMapper(), new RealtimeDatasetSessionRegistry(new ObjectMapper()), null);
     }
 
     @Override
@@ -59,40 +69,13 @@ public class RealtimeDatasetWebSocketHandler extends TextWebSocketHandler {
     }
 
     public void publishDatasetData(String datasetCode, Object data) {
-        Set<WebSocketSession> sessions = datasetSessionMap.getOrDefault(datasetCode, Collections.emptySet());
-        if (sessions.isEmpty()) {
-            return;
-        }
-
-        TextMessage message;
-        try {
-            message = new TextMessage(objectMapper.writeValueAsString(Map.of(
-                    "type", "datasetData",
-                    "datasetCode", datasetCode,
-                    "data", data == null ? Collections.emptyList() : data
-            )));
-        } catch (JsonProcessingException e) {
-            log.error(ExceptionUtils.getStackTrace(e));
-            return;
-        }
-
-        for (WebSocketSession session : sessions) {
-            if (!session.isOpen()) {
-                removeSession(session);
-                continue;
-            }
-            try {
-                session.sendMessage(message);
-            } catch (IOException e) {
-                log.error(ExceptionUtils.getStackTrace(e));
-                removeSession(session);
-            }
-        }
+        sessionRegistry.publishDatasetData(datasetCode, data);
     }
 
     private void subscribe(WebSocketSession session, RealtimeDatasetSubscriptionMessage subscriptionMessage) {
         removeSession(session);
         Set<String> datasetCodes = ConcurrentHashMap.newKeySet();
+        Map<String, Map<String, Object>> paramMapByDatasetCode = new ConcurrentHashMap<>();
 
         if (subscriptionMessage.getDatasetCodes() != null) {
             subscriptionMessage.getDatasetCodes().stream()
@@ -102,36 +85,32 @@ public class RealtimeDatasetWebSocketHandler extends TextWebSocketHandler {
         }
 
         if (subscriptionMessage.getSubscriptions() != null) {
-            subscriptionMessage.getSubscriptions().stream()
-                    .map(RealtimeDatasetSubscriptionMessage.DatasetSubscription::getDatasetCode)
-                    .filter(Objects::nonNull)
-                    .filter(datasetCode -> !datasetCode.isBlank())
-                    .forEach(datasetCodes::add);
+            for (RealtimeDatasetSubscriptionMessage.DatasetSubscription subscription : subscriptionMessage.getSubscriptions()) {
+                if (subscription == null || subscription.getDatasetCode() == null || subscription.getDatasetCode().isBlank()) {
+                    continue;
+                }
+                datasetCodes.add(subscription.getDatasetCode());
+                paramMapByDatasetCode.put(subscription.getDatasetCode(), subscription.getParamMap());
+            }
         }
 
         if (datasetCodes.isEmpty()) {
             return;
         }
 
-        sessionDatasetMap.put(session.getId(), datasetCodes);
         for (String datasetCode : datasetCodes) {
-            datasetSessionMap.computeIfAbsent(datasetCode, key -> ConcurrentHashMap.newKeySet()).add(session);
+            if (streamingDatasetRuntimeManager != null) {
+                streamingDatasetRuntimeManager.subscribe(datasetCode, paramMapByDatasetCode.get(datasetCode));
+            }
         }
+        sessionRegistry.register(session, datasetCodes);
     }
 
     private void removeSession(WebSocketSession session) {
-        Set<String> datasetCodes = sessionDatasetMap.remove(session.getId());
-        if (datasetCodes == null) {
-            return;
-        }
+        Set<String> datasetCodes = sessionRegistry.remove(session);
         for (String datasetCode : datasetCodes) {
-            Set<WebSocketSession> sessions = datasetSessionMap.get(datasetCode);
-            if (sessions == null) {
-                continue;
-            }
-            sessions.remove(session);
-            if (sessions.isEmpty()) {
-                datasetSessionMap.remove(datasetCode);
+            if (streamingDatasetRuntimeManager != null) {
+                streamingDatasetRuntimeManager.unsubscribe(datasetCode);
             }
         }
     }

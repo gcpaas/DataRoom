@@ -9,13 +9,27 @@
     <img alt="Company" src="https://img.shields.io/badge/公司-科大国创云网科技有限公司-blue.svg">
     <a href="http://gcpaas.gccloud.com"><img src="https://img.shields.io/badge/%E9%A2%84%E8%A7%88-演示环境-yellow" alt="预览"></a>
 </p>
-🔥DataRoom是一款基于SpringBoot3.x、JDK17、Vue3.x、Vite8.x、Element-plus、Echarts6.x等技术栈的大屏设计器，具备大屏、仪表板设计、预览能力，支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV等20+数据源接入，支持AI生成页面，使用简单，完全免费，代码开源。<br/>
+🔥DataRoom是一款基于SpringBoot3.x、JDK17、Vue3.x、Vite8.x、Element-plus、Echarts6.x等技术栈的大屏设计器，具备大屏、仪表板设计、预览能力，支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、MQTT、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV等20+数据源接入，支持AI生成页面，使用简单，完全免费，代码开源。<br/>
 
 ## 🎉特别说明
 * 当前项目代码完全开源，暂时未提供演示环境
 * 我们也有商业版本，[点击立即体验](http://gcpaas.gccloud.com/dataRoom/login)、需要自己用邮箱注册，密码会发送到邮件中
 * 商业版功能介绍与定价[点击这里](http://gcpaas.gccloud.com/#/pricing)
-* 商业版与当前开源版本不是一个东西
+
+## 💯优势
+✅ 一站式大屏解决方案，从数据源接入->数据清洗处理->大屏/页面设计->大屏/页面预览->大屏/页面发布上线
+
+✅ 支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、万里、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV数据源接入
+
+✅ 支持多种数据集制作与接入，如：JSON、HTTP、SQL、Excel/CSV、ElasticSearch、WebSocket，满足常见数据接入需求
+
+✅ 支持MQTT、WebSocket实时数据集接入，适用于物联网场景
+
+✅ 支持用户、角色、权限、日志管理，提供安全防护
+
+✅ 支持AI能力，通过SKILL、MCP对话式创建大屏/页面
+
+✅ 支持独立部署与若依单点登录，不对原有工程产生影响
 
 ## 系统截图
 
@@ -59,7 +73,7 @@
 ![数据源页面.png](doc/image/%E6%95%B0%E6%8D%AE%E6%BA%90%E9%A1%B5%E9%9D%A2.png)
 
 ### 数据集
-> 支持目录树管理与JSON、SQL、HTTP、ES、Excel数据集制作和接入
+> 支持目录树管理与JSON、SQL、HTTP、ES、Excel、WebSocket数据集制作和接入
 
 ![数据集页面.png](doc/image/%E6%95%B0%E6%8D%AE%E9%9B%86%E9%A1%B5%E9%9D%A2.png)
 
