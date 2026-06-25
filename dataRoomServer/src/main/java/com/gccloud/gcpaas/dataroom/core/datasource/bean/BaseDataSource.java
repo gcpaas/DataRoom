@@ -29,7 +29,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
         @JsonSubTypes.Type(value = DruidDatasource.class, name = DataSourceType.DRUID_TYPE),
         @JsonSubTypes.Type(value = EsDatasource.class, name = DataSourceType.ES_TYPE),
         @JsonSubTypes.Type(value = ExcelDatasource.class, name = DataSourceType.EXCEL_TYPE),
-        @JsonSubTypes.Type(value = MqttDatasource.class, name = DataSourceType.MQTT_TYPE)
+        @JsonSubTypes.Type(value = MqttDatasource.class, name = DataSourceType.MQTT_TYPE),
+        @JsonSubTypes.Type(value = TiDbDatasource.class, name = DataSourceType.TIDB_TYPE),
+        @JsonSubTypes.Type(value = StarRocksDatasource.class, name = DataSourceType.STARROCKS_TYPE)
 })
 public abstract class BaseDataSource {
 

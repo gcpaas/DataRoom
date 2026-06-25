@@ -29,6 +29,8 @@ import druidImg from './assets/image/Druid.svg'
 import elasticsearchImg from './assets/image/Elasticsearch.svg'
 import excelImg from './assets/image/Excel占位符.png'
 import mqttImg from './assets/image/MQTT.svg'
+import tidbImg from './assets/image/TiDB.svg'
+import starrocksImg from './assets/image/StarRocks.svg'
 
 const searchName = ref('')
 const dataSourceList = ref<DataSourceEntity[]>([])
@@ -220,6 +222,20 @@ const dataSourceTypeMap = {
     description: '面向MQTT Broker的订阅型消息数据源',
     component: defineAsyncComponent(() => import('./components/MqttEditor.vue')),
   },
+  tidb: {
+    name: 'TiDB',
+    icon: 'TiDB',
+    image: tidbImg,
+    description: '兼容 MySQL 协议的分布式数据库',
+    component: defineAsyncComponent(() => import('./components/TiDbEditor.vue')),
+  },
+  starrocks: {
+    name: 'StarRocks',
+    icon: 'SR',
+    image: starrocksImg,
+    description: '兼容 MySQL 协议的实时分析数据库',
+    component: defineAsyncComponent(() => import('./components/StarRocksEditor.vue')),
+  },
 } as const
 
 type DataSourceTypeKey = keyof typeof dataSourceTypeMap
@@ -335,6 +351,10 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
       defaultDriverName = 'com.taosdata.jdbc.ws.WebSocketDriver'
     } else if (dataSourceType === 'druid') {
       defaultDriverName = 'org.apache.calcite.avatica.remote.Driver'
+    } else if (dataSourceType === 'tidb') {
+      defaultDriverName = 'com.mysql.cj.jdbc.Driver'
+    } else if (dataSourceType === 'starrocks') {
+      defaultDriverName = 'com.mysql.cj.jdbc.Driver'
     }
 
     currentDataSource.value = {

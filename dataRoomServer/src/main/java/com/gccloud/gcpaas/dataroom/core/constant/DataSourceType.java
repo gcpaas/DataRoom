@@ -29,7 +29,9 @@ public enum DataSourceType implements IEnum<String> {
     DRUID("druid"),
     ES("es"),
     EXCEL("excel"),
-    MQTT("mqtt");
+    MQTT("mqtt"),
+    TIDB("tidb"),
+    STARROCKS("starrocks");
 
     public static final String MYSQL_TYPE = "mysql";
     public static final String POSTGRESQL_TYPE = "postgresql";
@@ -54,6 +56,8 @@ public enum DataSourceType implements IEnum<String> {
     public static final String ES_TYPE = "es";
     public static final String EXCEL_TYPE = "excel";
     public static final String MQTT_TYPE = "mqtt";
+    public static final String TIDB_TYPE = "tidb";
+    public static final String STARROCKS_TYPE = "starrocks";
 
 
     private String type;

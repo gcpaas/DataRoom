@@ -26,6 +26,8 @@ export interface RelationalDataSource {
     | 'hive'
     | 'tdengine'
     | 'druid'
+    | 'tidb'
+    | 'starrocks'
   username: string
   password: string
   url: string
@@ -87,7 +89,7 @@ export interface MqttDataSource {
 /**
  * 数据源实体
  * dataSource 字段根据 dataSourceType 不同而具有不同的结构:
- * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/greatdb/sqlserver/mongodb/kingbase/clickhouse/mariadb/oceanbase/h2/polardb/hive/tdengine/druid): RelationalDataSource
+ * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/greatdb/sqlserver/mongodb/kingbase/clickhouse/mariadb/oceanbase/h2/polardb/hive/tdengine/druid/tidb/starrocks): RelationalDataSource
  * - excel: ExcelDataSource
  * - es: EsDataSource
  * - mqtt: MqttDataSource
@@ -117,6 +119,8 @@ export interface DataSourceEntity {
     | 'hive'
     | 'tdengine'
     | 'druid'
+    | 'tidb'
+    | 'starrocks'
     | 'es'
     | 'excel'
     | 'mqtt'

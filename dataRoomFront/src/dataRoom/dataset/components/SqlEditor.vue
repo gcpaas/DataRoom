@@ -70,6 +70,8 @@ const sqlDataSourceTypes = new Set([
   'hive',
   'tdengine',
   'druid',
+  'tidb',
+  'starrocks',
   'excel'
 ])
 const sqlDataSourceList = computed(() => (props.dataSourceList || []).filter(item => item.dataSourceType && sqlDataSourceTypes.has(item.dataSourceType)))

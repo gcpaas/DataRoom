@@ -9,7 +9,7 @@
     <img alt="Company" src="https://img.shields.io/badge/公司-科大国创云网科技有限公司-blue.svg">
     <a href="http://gcpaas.gccloud.com"><img src="https://img.shields.io/badge/%E9%A2%84%E8%A7%88-演示环境-yellow" alt="预览"></a>
 </p>
-🔥DataRoom是一款基于SpringBoot3.x、JDK17、Vue3.x、Vite8.x、Element-plus、Echarts6.x等技术栈的大屏设计器，具备大屏、仪表板设计、预览能力，支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、MQTT、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV等20+数据源接入，支持AI生成页面，使用简单，完全免费，代码开源。<br/>
+🔥DataRoom是一款基于SpringBoot3.x、JDK17、Vue3.x、Vite8.x、Element-plus、Echarts6.x等技术栈的大屏设计器，具备大屏、仪表板设计、预览能力，支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、MQTT、ClickHouse、MariaDB、OceanBase、Hive、TDengine、TiDB、StarRocks、Druid、ElasticSearch、Excel、CSV等20+数据源接入，支持AI生成页面，使用简单，完全免费，代码开源。<br/>
 
 ## 🎉特别说明
 * 当前项目代码完全开源，暂时未提供演示环境
@@ -62,7 +62,7 @@
 ![素材库页面.png](doc/image/%E7%B4%A0%E6%9D%90%E5%BA%93%E9%A1%B5%E9%9D%A2.png)
 
 ### 数据源
-> 支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、万里、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV数据源接入；密码采用非对称加密存储
+> 支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、MQTT、万里、ClickHouse、MariaDB、OceanBase、Hive、TDengine、TiDB、StarRocks、Druid、ElasticSearch、Excel、CSV数据源接入；密码采用非对称加密存储
 
 ![数据源页面.png](doc/image/%E6%95%B0%E6%8D%AE%E6%BA%90%E9%A1%B5%E9%9D%A2.png)
 

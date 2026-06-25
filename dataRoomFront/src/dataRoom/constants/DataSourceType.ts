@@ -25,4 +25,6 @@ export const DataSourceType = {
   ES: 'es',
   EXCEL: 'excel',
   MQTT: 'mqtt',
+  TIDB: 'tidb',
+  STARROCKS: 'starrocks',
 } as const
