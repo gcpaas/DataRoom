@@ -160,6 +160,11 @@ const datasetTypeMap = {
     name: 'WebSocket',
     icon: 'WS',
     component: defineAsyncComponent(() => import('./components/WebSocketEditor.vue'))
+  },
+  mqtt: {
+    name: 'MQTT',
+    icon: 'MQ',
+    component: defineAsyncComponent(() => import('./components/MqttEditor.vue'))
   }
 } as const
 

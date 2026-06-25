@@ -28,7 +28,7 @@ export interface BaseDataset {
   datasetType: DatasetType
 }
 
-export type DatasetType = '' | 'directory' | 'json' | 'http' | 'sql' | 'excel' | 'es' | 'websocket'
+export type DatasetType = '' | 'directory' | 'json' | 'http' | 'sql' | 'excel' | 'es' | 'websocket' | 'mqtt'
 
 /**
  * JSON数据集
@@ -88,6 +88,18 @@ export interface WebSocketDataset extends BaseDataset {
 }
 
 /**
+ * MQTT数据集
+ */
+export interface MqttDataset extends BaseDataset {
+  datasetType: 'mqtt'
+  topic: string
+  cacheSize: number
+  jsonFieldMappings: Array<{ field: string; jsonPath: string; type: string }>
+  emptyDataStrategy: string
+  sampleData?: string
+}
+
+/**
  * 数据集实体
  */
 export interface DatasetEntity {
@@ -97,7 +109,7 @@ export interface DatasetEntity {
   dataSourceCode?: string
   datasetType: DatasetType
   parentCode?: string
-  dataset?: JsonDataset | HttpDataset | SqlDataset | ExcelDataset | EsDataset | WebSocketDataset
+  dataset?: JsonDataset | HttpDataset | SqlDataset | ExcelDataset | EsDataset | WebSocketDataset | MqttDataset
   inputList?: DatasetInputParam[]
   outputList?: DatasetOutputParam[]
   createDate?: string

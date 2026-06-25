@@ -232,3 +232,9 @@ Vite 构建输出目录为 `dataRoom/`，`base` 为 `./`。项目使用 Element 
 | 后端 | Spring Boot 3.5.10、MyBatis-Plus 3.5.12、Shiro 2.0.6 Jakarta、JJWT 0.12.6、Knife4j 4.5.0、FastJSON 2、Caffeine |
 | 前端 | Vue 3.5、TypeScript 5.9、Vite 7、Element Plus、ECharts 6、Pinia 3、vue-grid-layout-v3、vue3-moveable、vue3-selecto |
 | 数据库 | H2、MySQL、PostgreSQL |
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+at specs/001-add-mqtt-datasource/plan.md
+<!-- SPECKIT END -->

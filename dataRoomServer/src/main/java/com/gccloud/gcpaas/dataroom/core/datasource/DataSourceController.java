@@ -6,7 +6,9 @@ import com.gccloud.gcpaas.dataroom.core.bean.Resp;
 import com.gccloud.gcpaas.dataroom.core.constant.DataRoomRole;
 import com.gccloud.gcpaas.dataroom.core.datasource.bean.DataSourceColumnMeta;
 import com.gccloud.gcpaas.dataroom.core.datasource.bean.DataSourceTableMeta;
+import com.gccloud.gcpaas.dataroom.core.datasource.bean.MqttDatasource;
 import com.gccloud.gcpaas.dataroom.core.datasource.service.DataSourceMetadataService;
+import com.gccloud.gcpaas.dataroom.core.datasource.service.MqttDatasourceConnectionService;
 import com.gccloud.gcpaas.dataroom.core.entity.DataSourceEntity;
 import com.gccloud.gcpaas.dataroom.core.mapper.DataSourceMapper;
 import com.gccloud.gcpaas.dataroom.core.operationlog.annotation.OperationLogMeta;
@@ -43,6 +45,20 @@ public class DataSourceController {
 
     @Resource
     private DataSourceMetadataService dataSourceMetadataService;
+
+    @Resource
+    private MqttDatasourceConnectionService mqttDatasourceConnectionService;
+
+    @PostMapping("/test")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "连接测试", description = "测试数据源连接")
+    public Resp<MqttDatasourceConnectionService.ConnectionTestResult> test(@RequestBody DataSourceEntity datasourceEntity) {
+        if (!(datasourceEntity.getDataSource() instanceof MqttDatasource mqtt)) {
+            return Resp.success(MqttDatasourceConnectionService.ConnectionTestResult.fail("configInvalid", "仅支持MQTT数据源连接测试"));
+        }
+        MqttDatasourceConnectionService.ConnectionTestResult result = mqttDatasourceConnectionService.test(mqtt);
+        return Resp.success(result);
+    }
 
     @GetMapping("/list")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
@@ -103,6 +119,9 @@ public class DataSourceController {
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "新增", description = "新增数据源")
     public Resp<String> insert(@RequestBody DataSourceEntity datasourceEntity) {
+        if (datasourceEntity.getDataSource() instanceof MqttDatasource mqtt) {
+            mqtt.validate(true);
+        }
         datasourceEntity.setCode(CodeWorker.generateCode(DataRoomConstant.Datasource.CODE_PREFIX));
         datasourceMapper.insert(datasourceEntity);
         return Resp.success(datasourceEntity.getId());
@@ -114,6 +133,9 @@ public class DataSourceController {
     public Resp<String> update(@RequestBody DataSourceEntity datasourceEntity) {
         DataSourceEntity dbDataSourceEntity = datasourceMapper.getByCode(datasourceEntity.getCode());
         datasourceEntity.getDataSource().updatedSensitive(dbDataSourceEntity.getDataSource());
+        if (datasourceEntity.getDataSource() instanceof MqttDatasource mqtt) {
+            mqtt.validate(false);
+        }
         datasourceEntity.setUpdateDate(new Date());
         datasourceMapper.updateById(datasourceEntity);
         return Resp.success(datasourceEntity.getId());

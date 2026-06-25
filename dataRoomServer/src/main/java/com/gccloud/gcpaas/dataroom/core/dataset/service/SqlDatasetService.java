@@ -130,7 +130,7 @@ public class SqlDatasetService extends AbstractDatasetService {
         return datasetRunResponse;
     }
 
-    static String resolveOutputType(int jdbcType, String typeName) {
+    public static String resolveOutputType(int jdbcType, String typeName) {
         return switch (jdbcType) {
             case Types.DATE, Types.TIME, Types.TIME_WITH_TIMEZONE,
                  Types.TIMESTAMP, Types.TIMESTAMP_WITH_TIMEZONE -> "Date";

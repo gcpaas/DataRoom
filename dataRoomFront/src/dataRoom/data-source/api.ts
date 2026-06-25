@@ -67,11 +67,30 @@ export interface EsDataSource {
 }
 
 /**
+ * MQTT数据源配置
+ */
+export interface MqttDataSource {
+  dataSourceType: 'mqtt'
+  protocol: 'tcp' | 'tls' | 'ws' | 'wss'
+  host: string
+  port: number
+  clientId?: string
+  caCertificate?: string
+  path?: string
+  authMode: 'none' | 'usernamePassword'
+  username?: string
+  password?: string
+  defaultTopic?: string
+  connectionTimeoutSeconds?: number
+}
+
+/**
  * 数据源实体
  * dataSource 字段根据 dataSourceType 不同而具有不同的结构:
  * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/greatdb/sqlserver/mongodb/kingbase/clickhouse/mariadb/oceanbase/h2/polardb/hive/tdengine/druid): RelationalDataSource
  * - excel: ExcelDataSource
  * - es: EsDataSource
+ * - mqtt: MqttDataSource
  */
 export interface DataSourceEntity {
   id?: string
@@ -100,6 +119,7 @@ export interface DataSourceEntity {
     | 'druid'
     | 'es'
     | 'excel'
+    | 'mqtt'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dataSource: any
   createDate?: string
@@ -171,6 +191,16 @@ export interface ExcelCreateResponse {
 }
 
 /**
+ * MQTT连接测试结果
+ */
+export interface MqttConnectionTestResult {
+  success: boolean
+  status: 'success' | 'timeout' | 'authFailed' | 'topicDenied' | 'configInvalid' | 'unreachable'
+  message: string
+  testedAt?: string
+}
+
+/**
  * 数据源API
  */
 export const dataSourceApi = {
@@ -207,6 +237,13 @@ export const dataSourceApi = {
    */
   delete(code: string) {
     return request.post<void>(`/dataRoom/dataSource/delete/${code}`)
+  },
+
+  /**
+   * 连接测试
+   */
+  test(data: DataSourceEntity) {
+    return request.post<MqttConnectionTestResult>('/dataRoom/dataSource/test', data)
   },
 
   /**

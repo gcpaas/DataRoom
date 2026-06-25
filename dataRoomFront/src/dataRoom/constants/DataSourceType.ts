@@ -24,4 +24,5 @@ export const DataSourceType = {
   DRUID: 'druid',
   ES: 'es',
   EXCEL: 'excel',
+  MQTT: 'mqtt',
 } as const

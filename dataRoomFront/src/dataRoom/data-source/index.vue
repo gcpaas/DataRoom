@@ -28,6 +28,7 @@ import tdengineImg from './assets/image/TDengine.svg'
 import druidImg from './assets/image/Druid.svg'
 import elasticsearchImg from './assets/image/Elasticsearch.svg'
 import excelImg from './assets/image/Excel占位符.png'
+import mqttImg from './assets/image/MQTT.svg'
 
 const searchName = ref('')
 const dataSourceList = ref<DataSourceEntity[]>([])
@@ -211,6 +212,13 @@ const dataSourceTypeMap = {
     image: excelImg,
     description: '支持 xlsx 和 csv 格式文件',
     component: defineAsyncComponent(() => import('./components/ExcelEditor.vue')),
+  },
+  mqtt: {
+    name: 'MQTT',
+    icon: 'MQ',
+    image: mqttImg,
+    description: '面向MQTT Broker的订阅型消息数据源',
+    component: defineAsyncComponent(() => import('./components/MqttEditor.vue')),
   },
 } as const
 

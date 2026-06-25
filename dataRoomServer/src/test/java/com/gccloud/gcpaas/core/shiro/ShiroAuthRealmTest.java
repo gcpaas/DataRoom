@@ -40,6 +40,6 @@ class ShiroAuthRealmTest {
         ReflectionTestUtils.setField(realm, "dataRoomConfig", dataRoomConfig);
         ReflectionTestUtils.setField(realm, "userService", userService);
 
-        assertThrows(DataRoomException.class, () -> realm.doGetAuthenticationInfo(new ShiroAuthToken(token)));
+        assertThrows(DataRoomException.class, () -> ReflectionTestUtils.invokeMethod(realm, "doGetAuthenticationInfo", new ShiroAuthToken(token)));
     }
 }

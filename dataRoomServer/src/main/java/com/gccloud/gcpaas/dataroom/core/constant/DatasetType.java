@@ -13,7 +13,8 @@ public enum DatasetType implements IEnum<String> {
     SQL("sql"),
     EXCEL("excel"),
     ES("es"),
-    WEBSOCKET("websocket");
+    WEBSOCKET("websocket"),
+    MQTT("mqtt");
 
     public static final String DIRECTORY_TYPE = "directory";
     public static final String JSON_TYPE = "json";
@@ -22,6 +23,7 @@ public enum DatasetType implements IEnum<String> {
     public static final String EXCEL_TYPE = "excel";
     public static final String ES_TYPE = "es";
     public static final String WEBSOCKET_TYPE = "websocket";
+    public static final String MQTT_TYPE = "mqtt";
 
 
     private String type;

@@ -8,5 +8,7 @@ export const DatasetType = {
   HTTP: 'http',
   SQL: 'sql',
   EXCEL: 'excel',
-  ES: 'es'
+  ES: 'es',
+  WEBSOCKET: 'websocket',
+  MQTT: 'mqtt',
 } as const;
