@@ -101,8 +101,16 @@
 ### 系统集成
 > 支持通过配置的方式与若依框架完成单点登录，可扩展其他框架单点登录
 
-## 快速开始
+## docker体验
+```shell
+# 访问地址、用户名、密码等参考用户手册说明
+
+docker run -d --name dataroom -p 8081:8081 gcpaas/dataroom:latest 
+```
+
+## 用户手册
 https://www.yuque.com/gc-starter/dataroom-plus/start
+
 
 ## 更新日志
 [版本区别、功能变更、安全变更日志](CHANGELOG.md)
