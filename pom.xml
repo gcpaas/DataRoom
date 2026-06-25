@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.14</version>
+        <version>3.5.15</version>
     </parent>
 
     <groupId>com.gccloud.gcpaas</groupId>
@@ -25,7 +25,7 @@
         <guava.version>33.4.0-jre</guava.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <commons-io.version>2.21.0</commons-io.version>
-        <jackson.core.version>2.21.2</jackson.core.version>
+        <jackson.core.version>2.21.4</jackson.core.version>
         <shiro.version>2.1.0</shiro.version>
         <jjwt.version>0.12.6</jjwt.version>
         <dameng.jdbc.version>8.1.5.45</dameng.jdbc.version>

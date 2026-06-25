@@ -33,7 +33,8 @@ public class SuccessCommandLineRunner implements CommandLineRunner {
         log.info("接口文档地址: http://{}:{}{}/doc.html", ip, port, path);
         log.info("后端服务地址: http://{}:{}{}", ip, port, path);
         log.info("部署后页面访问地址: http://{}:{}{}/static/front/index.html", ip, port, path);
-        log.info("使用问题请反馈到 https://gitee.com/gcpaas/DataRoom/issues");
+        log.info("使用问题请反馈 https://gitee.com/gcpaas/DataRoom/issues");
+        log.info("用户手册地址 https://www.yuque.com/gc-starter/dataroom-plus/index 访问密码: mkh6");
         log.info(LINE);
     }
 }

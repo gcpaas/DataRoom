@@ -109,8 +109,9 @@ docker run -d --name dataroom -p 8081:8081 gcpaas/dataroom:latest
 ```
 
 ## 用户手册
-https://www.yuque.com/gc-starter/dataroom-plus/start
+> 手册密码请加下方QQ群，看群公告
 
+https://www.yuque.com/gc-starter/dataroom-plus/start
 
 ## 更新日志
 [版本区别、功能变更、安全变更日志](CHANGELOG.md)
@@ -119,7 +120,7 @@ https://www.yuque.com/gc-starter/dataroom-plus/start
 [码云](https://gitee.com/gcpaas/DataRoom)、[GitHub](https://github.com/gcpaas/DataRoom)、[AtomGit](https://atomgit.com/gcpaas/DataRoom)
 
 ## QQ群
-> 关于使用手册、文档密码、部署包、使用等问题可以加以下QQ群，若群人数满了可加其他群，群验证密码：DataRoom是一个页面设计器
+> 关于使用手册、文档密码、部署包、使用等问题可以加以下QQ群，看群公告，若群人数满了可加其他群，群验证密码：DataRoom是一个页面设计器
 
 `QQ群1：322302395`、`QQ群2: 631457306`、`QQ群3: 637427928`、`QQ群4: 891384200`、`QQ群5:839047616`、`QQ群6：536999154`、`QQ群7：462514660`
 
