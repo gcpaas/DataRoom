@@ -8,6 +8,7 @@ import type {CanvasInst, ChartLayerMoveDirection} from "@/dataRoom/designer/type
 import type {ChartAction} from "@/dataRoom/components/type/ChartAction.ts";
 import type {BehaviorEventParam} from "@/dataRoom/components/type/BehaviorEvent.ts";
 import type {ChartParentRef} from '@/dataRoom/designer/utils/editor-history.ts'
+import {resolveDatasetParamValue} from '@/dataRoom/hooks/use-canvas-inst/dataset-params.ts'
 
 type ChartInstanceMap = Record<string, ComponentInternalInstance>
 
@@ -71,7 +72,7 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
             console.error(`组件${chart.type}: ${chart.id} 数据集参数 ${paramName} 对应的全局变量未绑定`)
             continue
           }
-          paramValue = canvasInst.getGlobalVariableValue(paramConfig.variableName)
+          paramValue = resolveDatasetParamValue(paramConfig, canvasInst.getGlobalVariableValue(paramConfig.variableName))
           paramMap[paramName] = paramValue
         }
       }
