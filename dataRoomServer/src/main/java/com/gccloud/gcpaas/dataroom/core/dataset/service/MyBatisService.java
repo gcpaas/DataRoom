@@ -18,6 +18,7 @@ import org.w3c.dom.Node;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class MyBatisService {
             String xml = "<script>" + dynamicSql + "</script>";
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(new ByteArrayInputStream(xml.getBytes()));
+            Document doc = builder.parse(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
             Node node = doc.getFirstChild();
             XPathParser xpathParser = new XPathParser(doc);
             XNode xNode = new XNode(xpathParser, node, null);
@@ -53,11 +54,7 @@ public class MyBatisService {
             Map<String, Object> additionalParameters = boundSql.getAdditionalParameters();
             for (ParameterMapping mapping : parameterMappings) {
                 String property = mapping.getProperty();
-                Object val = additionalParameters.get(property);
-                if (val == null) {
-                    Map<String, Object> map = (Map<String, Object>) additionalParameters.get("_parameter");
-                    val = map.get(property);
-                }
+                Object val = boundSql.hasAdditionalParameter(property) ? boundSql.getAdditionalParameter(property) : params.get(property);
                 String valueStr = val.toString().replace("'", "''");
                 parsedSql = parsedSql.replaceFirst("\\?", "" + valueStr + "");
             }

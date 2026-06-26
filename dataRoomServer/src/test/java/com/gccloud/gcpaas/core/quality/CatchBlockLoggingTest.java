@@ -16,7 +16,7 @@ class CatchBlockLoggingTest {
 
     @Test
     void loginUserUtilsIsExcludedFromCatchBlockLoggingRule() {
-        assertTrue(isExcludedSource(Path.of("dataRoomServer/src/main/java/com/gccloud/gcpaas/core/util/LoginUserUtils.java")));
+        assertTrue(isExcludedSource(Path.of("dataRoomServer/src/main/java/com/gccloud/gcpaas/dataroom/core/util/LoginUserUtils.java")));
     }
 
     @Test
