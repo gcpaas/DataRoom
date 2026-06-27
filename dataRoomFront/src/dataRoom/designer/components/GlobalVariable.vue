@@ -4,7 +4,20 @@ import { ref, computed, watch } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { Search } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
-import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
+import { Codemirror } from 'vue-codemirror'
+import { javascript } from '@codemirror/lang-javascript'
+import { eclipse } from '@uiw/codemirror-theme-eclipse'
+import {
+  GLOBAL_VARIABLE_SOURCE_OPTIONS,
+  asCodeGlobalVariableConfig,
+  asStaticGlobalVariableConfig,
+  asUrlGlobalVariableConfig,
+  createDefaultGlobalVariableConfig,
+  getGlobalVariableSourceLabel,
+  type GlobalVariable,
+  type GlobalVariableSource,
+  type StaticGlobalVariableConfig,
+} from '@/dataRoom/designer/types/GlobalVariable.ts'
 
 const props = defineProps<{
   globalVariable: GlobalVariable[]
@@ -13,6 +26,17 @@ const emit = defineEmits(['close'])
 
 const globalVariableVisible = ref(true)
 const activeGlobalVariable = ref<GlobalVariable>()
+const jsEditorExtensions = [javascript(), eclipse]
+
+const staticConfig = computed(() => {
+  return activeGlobalVariable.value?.source === 'static' ? asStaticGlobalVariableConfig(activeGlobalVariable.value) : undefined
+})
+const urlConfig = computed(() => {
+  return activeGlobalVariable.value?.source === 'url' ? asUrlGlobalVariableConfig(activeGlobalVariable.value) : undefined
+})
+const codeConfig = computed(() => {
+  return activeGlobalVariable.value?.source === 'code' ? asCodeGlobalVariableConfig(activeGlobalVariable.value) : undefined
+})
 
 /**
  * 默认激活第一个
@@ -60,15 +84,21 @@ const generateVarName = (): string => {
 const onAdd = () => {
   const inst: GlobalVariable = {
     id: uuidv4(),
-    from: 'static',
     name: generateVarName(),
-    urlName: '',
     remark: '',
-    defaultValue: '',
-    script: '',
+    source: 'static',
+    config: createDefaultGlobalVariableConfig('static') as StaticGlobalVariableConfig,
   }
+  // eslint-disable-next-line vue/no-mutating-props -- 全局变量弹窗实时编辑父级页面配置数组
   props.globalVariable.push(inst)
   activeGlobalVariable.value = inst
+}
+const onSourceChange = (source: GlobalVariableSource) => {
+  if (!activeGlobalVariable.value) {
+    return
+  }
+  activeGlobalVariable.value.source = source
+  activeGlobalVariable.value.config = createDefaultGlobalVariableConfig(source)
 }
 /**
  * 删除变量
@@ -83,6 +113,7 @@ const onDelete = (variable: GlobalVariable) => {
     // 根据id判断用filter过滤
     const index = props.globalVariable.findIndex((item) => item.id === variable.id)
     if (index > -1) {
+      // eslint-disable-next-line vue/no-mutating-props -- 全局变量弹窗实时编辑父级页面配置数组
       props.globalVariable.splice(index, 1)
     }
     if (props.globalVariable.length == 0) {
@@ -107,7 +138,10 @@ const onDelete = (variable: GlobalVariable) => {
         <el-scrollbar>
           <div :class="{ variable: true, active: item.id === activeGlobalVariable?.id }" v-for="item in filteredVariables" :key="item.id" @click="activeGlobalVariable = item">
             <div class="name">{{ item.name }}</div>
-            <div class="remark">{{ item.remark }}</div>
+            <div class="meta">
+              <el-tag size="small">{{ getGlobalVariableSourceLabel(item.source) }}</el-tag>
+              <span class="remark" v-if="item.remark">{{ item.remark }}</span>
+            </div>
             <span class="delete" @click.stop="onDelete(item)">删除</span>
           </div>
         </el-scrollbar>
@@ -118,19 +152,37 @@ const onDelete = (variable: GlobalVariable) => {
             <el-input v-model="activeGlobalVariable.name"></el-input>
           </el-form-item>
           <el-form-item label="来源">
-            <el-select v-model="activeGlobalVariable.from" placeholder="请选择">
-              <el-option label="静态" value="static"></el-option>
-              <el-option label="URL" value="url"></el-option>
+            <el-select :model-value="activeGlobalVariable.source" placeholder="请选择" @change="onSourceChange">
+              <el-option
+                v-for="item in GLOBAL_VARIABLE_SOURCE_OPTIONS"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="URL参数名称" v-if="activeGlobalVariable.from === 'url'">
-            <el-input v-model="activeGlobalVariable.urlName"></el-input>
-          </el-form-item>
-          <el-form-item label="默认值">
-            <el-input v-model="activeGlobalVariable.defaultValue"></el-input>
-          </el-form-item>
-          <el-form-item label="脚本">
-            <el-input v-model="activeGlobalVariable.script" type="textarea" :rows="6"></el-input>
+          <template v-if="staticConfig">
+            <el-form-item label="变量值">
+              <el-input v-model="staticConfig.value"></el-input>
+            </el-form-item>
+          </template>
+          <template v-if="urlConfig">
+            <el-form-item label="URL参数名称">
+              <el-input v-model="urlConfig.paramName"></el-input>
+            </el-form-item>
+            <el-form-item label="默认值">
+              <el-input v-model="urlConfig.defaultValue"></el-input>
+            </el-form-item>
+          </template>
+          <el-form-item label="JS脚本" v-if="codeConfig">
+            <div class="script-editor">
+              <Codemirror
+                v-model="codeConfig.code"
+                :extensions="jsEditorExtensions"
+                :indent-with-tab="true"
+                :tab-size="2"
+              />
+            </div>
           </el-form-item>
           <el-form-item label="变量描述">
             <el-input v-model="activeGlobalVariable.remark" type="textarea"></el-input>
@@ -191,10 +243,22 @@ const onDelete = (variable: GlobalVariable) => {
         font-variant-numeric: tabular-nums;
       }
 
+      & .meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 4px;
+        min-width: 0;
+      }
+
       & .remark {
+        flex: 1;
+        min-width: 0;
         font-size: 12px;
         color: var(--el-text-color-secondary);
-        margin-top: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       & .delete {
@@ -235,6 +299,17 @@ const onDelete = (variable: GlobalVariable) => {
     margin: 16px 16px 16px 0;
     border-radius: 0 8px 8px 0;
     border: 1px solid var(--el-border-color);
+
+    & .script-editor {
+      width: 100%;
+      border: 1px solid var(--el-border-color);
+      border-radius: 4px;
+      overflow: hidden;
+
+      :deep(.cm-editor) {
+        height: 240px;
+      }
+    }
   }
 }
 </style>

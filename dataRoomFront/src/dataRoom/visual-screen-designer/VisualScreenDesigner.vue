@@ -1631,7 +1631,7 @@ onBeforeUnmount(() => {
 
       & .canvas-zoom-control {
         position: fixed;
-        z-index: 9;
+        z-index: 4;
         display: flex;
         align-items: center;
         gap: 8px;

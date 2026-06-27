@@ -34,6 +34,7 @@ const emit = defineEmits<{
 
 const formRef = ref<FormInstance>()
 const previewData = ref<unknown>([])
+const layoutRef = ref<{ revealPreview: () => Promise<void> }>()
 const cmExtensions = [sql(), eclipse]
 const metadataPanelCollapsed = ref(false)
 const metadataTreeLoading = ref(false)
@@ -300,13 +301,14 @@ defineExpose({
   resetFields,
   getData,
   test,
-  testAndSave
+  testAndSave,
+  revealPreview: () => layoutRef.value?.revealPreview(),
 })
 </script>
 
 <template>
-  <DatasetEditorLayout :preview-data="previewData">
-    <template #before-panel>
+  <DatasetEditorLayout ref="layoutRef" :preview-data="previewData">
+    <template #metadata>
       <aside v-if="!metadataPanelCollapsed" class="excel-metadata-panel">
         <div class="excel-metadata-panel__header">
           <div class="excel-metadata-panel__title">
@@ -353,11 +355,11 @@ defineExpose({
       </div>
     </template>
 
-    <el-form class="dataset-editor-form" ref="formRef" :model="formData" :rules="rules" label-width="100px">
+    <el-form class="dataset-editor-form dataset-editor-form-grid" ref="formRef" :model="formData" :rules="rules" label-width="100px">
       <el-form-item label="数据集名称" prop="name">
         <el-input v-model="formData.name" placeholder="请输入数据集名称" clearable />
       </el-form-item>
-      <el-form-item label="SQL语句">
+      <el-form-item class="dataset-editor-form-grid__full" label="SQL语句">
         <div class="sql-editor-shell">
           <div
             v-if="formData.dataset && 'sql' in formData.dataset"
@@ -374,7 +376,7 @@ defineExpose({
           </div>
         </div>
       </el-form-item>
-      <el-form-item label="入参配置">
+      <el-form-item class="dataset-editor-form-grid__full" label="入参配置">
         <div class="dataset-form-section">
           <el-button size="small" @click="parseInputParams">
             入参解析
@@ -424,35 +426,36 @@ defineExpose({
           </el-table>
         </div>
       </el-form-item>
-      <el-form-item label="字段列表">
-        <div class="dataset-form-section">
-          <el-table class="dataset-form-table" :data="formData.outputList" border>
-            <el-table-column prop="name" label="字段名" width="200" />
-            <el-table-column label="类型" width="150">
-              <template #default="{ row }">
-                <el-select v-model="row.type" size="small" placeholder="类型">
-                  <el-option label="String" value="String" />
-                  <el-option label="Number" value="Number" />
-                  <el-option label="Boolean" value="Boolean" />
-                  <el-option label="Object" value="Object" />
-                  <el-option label="Array" value="Array" />
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column label="描述">
-              <template #default="{ row }">
-                <el-input v-model="row.desc" size="small" placeholder="描述" />
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-empty
-            v-if="!formData.outputList || formData.outputList.length === 0"
-            description="请点击测试按钮获取字段列表"
-            :image-size="100"
-          />
-        </div>
-      </el-form-item>
     </el-form>
+
+    <template #fields>
+      <div class="dataset-form-section">
+        <el-table class="dataset-form-table" :data="formData.outputList" border>
+          <el-table-column prop="name" label="字段名" width="200" />
+          <el-table-column label="类型" width="150">
+            <template #default="{ row }">
+              <el-select v-model="row.type" size="small" placeholder="类型">
+                <el-option label="String" value="String" />
+                <el-option label="Number" value="Number" />
+                <el-option label="Boolean" value="Boolean" />
+                <el-option label="Object" value="Object" />
+                <el-option label="Array" value="Array" />
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="描述">
+            <template #default="{ row }">
+              <el-input v-model="row.desc" size="small" placeholder="描述" />
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-empty
+          v-if="!formData.outputList || formData.outputList.length === 0"
+          description="请点击测试按钮获取字段列表"
+          :image-size="100"
+        />
+      </div>
+    </template>
   </DatasetEditorLayout>
 </template>
 
@@ -588,19 +591,6 @@ defineExpose({
 
 .dataset-editor-form {
   min-width: 0;
-}
-
-.dataset-form-section {
-  width: 100%;
-}
-
-.dataset-form-table {
-  width: 100%;
-  font-feature-settings: 'tnum';
-}
-
-.dataset-form-table--spaced {
-  margin-top: 8px;
 }
 
 .sql-editor-shell {

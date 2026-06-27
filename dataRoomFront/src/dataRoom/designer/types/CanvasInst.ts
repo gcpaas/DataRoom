@@ -39,14 +39,14 @@ export interface CanvasInst {
    * 触发组件行为
    * @param action
    */
-  triggerChartAction: (charId: string, action: ChartAction, data: unknown) => unknown
+  triggerChartAction: (charId: string, action: ChartAction, data: unknown) => Promise<void>
   /**
    * 触发图表行为
    * @param charId
    * @param behaviorName 触发的行为事件名称
    * @param triggerData 触发时额外的参数
    */
-  triggerChartBehavior: (charId: string, behaviorEventName: string, triggerData: unknown) => unknown
+  triggerChartBehavior: (charId: string, behaviorEventName: string, triggerData: unknown) => Promise<void>
   /**
    * 填充数据集参数
    * @param chart

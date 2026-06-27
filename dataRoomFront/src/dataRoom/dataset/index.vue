@@ -638,7 +638,11 @@ const testAndSaveLoading = ref(false)
 const handleTest = async () => {
   try {
     testLoading.value = true
-    await editorRef.value?.test()
+    const tested = await editorRef.value?.test()
+    if (tested) {
+      await nextTick()
+      await editorRef.value?.revealPreview?.()
+    }
   } finally {
     testLoading.value = false
   }

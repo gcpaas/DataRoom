@@ -41,21 +41,22 @@ export class TimerManager {
    * 执行定时器动作
    * @param timer 定时器配置
    */
-  private executeTimerActions(timer: PageTimer): void {
+  private async executeTimerActions(timer: PageTimer): Promise<void> {
     if (!timer.actions || timer.actions.length === 0) {
       return
     }
     // 依次执行所有动作
-    timer.actions.forEach((action: any, index: number) => {
+    for (const action of timer.actions) {
       try {
-        if (action.type === 'code' && action.code) {
-          this.canvasInst.triggerChartAction('', action, {})
+        const config = action.chartActionConfig
+        if (config.type === 'code' && config.code) {
+          await this.canvasInst.triggerChartAction('', action, {})
         }
       } catch (error) {
         console.error(`定时器 ${timer.name} 动作 [${action.name}] 执行失败:`, error)
         ElMessage.error(`定时器 ${timer.name} 动作 ${action.name} 执行失败: ${error}`)
       }
-    })
+    }
   }
 
   /**
@@ -70,7 +71,7 @@ export class TimerManager {
     this.stopTimer(timer.id)
     // 创建新的定时器
     const intervalId = window.setInterval(() => {
-      this.executeTimerActions(timer)
+      void this.executeTimerActions(timer)
     }, timer.interval)
     this.timerIntervalMap.set(timer.id, intervalId)
   }

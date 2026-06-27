@@ -875,9 +875,6 @@ onUnmounted(() => {
 :deep(.vue-grid-item > .vue-resizable-handle) {
   width: 8px;
   height: 8px;
-  background: var(--el-color-primary);
-  border: none;
-  border-radius: 0;
 }
 
 .dr-page-designer {

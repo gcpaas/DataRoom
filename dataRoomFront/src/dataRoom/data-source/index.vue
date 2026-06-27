@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, defineAsyncComponent } from 'vue'
+import { ref, onMounted, defineAsyncComponent, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Plus, MoreFilled, Edit, Delete, View } from '@element-plus/icons-vue'
 import { dataSourceApi, type DataSourceEntity, type ExcelDataSource, type ExcelColumn } from './api'
@@ -50,6 +50,8 @@ const currentDataSource = ref<DataSourceEntity>({
   },
 })
 const editorRef = ref()
+const typeSelectGroupRefs = ref<Partial<Record<string, HTMLElement>>>({})
+const activeDataSourceTypeGroup = ref('国产数据库')
 
 // Excel查看数据对话框状态
 const viewDataVisible = ref(false)
@@ -239,6 +241,44 @@ const dataSourceTypeMap = {
 } as const
 
 type DataSourceTypeKey = keyof typeof dataSourceTypeMap
+
+const dataSourceTypeGroups: Array<{ name: string; types: DataSourceTypeKey[] }> = [
+  {
+    name: '国产数据库',
+    types: ['dameng', 'gbase', 'goldendb', 'greatdb', 'kingbase', 'oceanbase', 'polardb', 'tidb'],
+  },
+  {
+    name: 'OLTP',
+    types: ['mysql', 'postgresql', 'oracle', 'sqlserver', 'db2', 'mariadb', 'h2', 'mongodb'],
+  },
+  {
+    name: 'OLAP',
+    types: ['doris', 'clickhouse', 'hive', 'tdengine', 'druid', 'starrocks', 'es'],
+  },
+  {
+    name: '文件',
+    types: ['excel'],
+  },
+  {
+    name: '队列',
+    types: ['mqtt'],
+  },
+]
+
+const setTypeSelectGroupRef = (name: string, el: Element | null) => {
+  if (el instanceof HTMLElement) {
+    typeSelectGroupRefs.value[name] = el
+  }
+}
+
+const scrollToDataSourceTypeGroup = async (name: string) => {
+  activeDataSourceTypeGroup.value = name
+  await nextTick()
+  typeSelectGroupRefs.value[name]?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+  })
+}
 
 /**
  * 查询数据源列表
@@ -624,20 +664,39 @@ onMounted(() => {
     </div>
 
     <!-- 数据源类型选择对话框 -->
-    <el-dialog v-model="typeSelectDialogVisible" title="选择数据源类型" width="800px" :close-on-click-modal="true">
-      <el-scrollbar class="type-select-scrollbar" max-height="60vh">
-        <div class="type-select-cards">
-          <div v-for="(item, key) in dataSourceTypeMap" :key="key" class="type-card" @click="handleSelectType(key as DataSourceTypeKey)">
-            <div class="type-card-image">
-              <img :src="item.image" :alt="item.name" />
-            </div>
-            <div class="type-card-content">
-              <div class="type-card-name">{{ item.name }}</div>
-              <div class="type-card-desc">{{ item.description }}</div>
-            </div>
+    <el-dialog v-model="typeSelectDialogVisible" title="选择数据源类型" width="1040px" :close-on-click-modal="true">
+      <div class="type-select-layout">
+        <aside class="type-select-nav">
+          <button
+            v-for="group in dataSourceTypeGroups"
+            :key="group.name"
+            type="button"
+            class="type-select-nav-item"
+            :class="{ 'is-active': activeDataSourceTypeGroup === group.name }"
+            @click="scrollToDataSourceTypeGroup(group.name)"
+          >
+            {{ group.name }}
+          </button>
+        </aside>
+        <el-scrollbar class="type-select-scrollbar" max-height="60vh">
+          <div class="type-select-groups">
+            <section v-for="group in dataSourceTypeGroups" :key="group.name" :ref="el => setTypeSelectGroupRef(group.name, el as Element | null)" class="type-select-group">
+              <div class="type-select-group-title">{{ group.name }}</div>
+              <div class="type-select-cards">
+                <div v-for="type in group.types" :key="type" class="type-card" @click="handleSelectType(type)">
+                  <div class="type-card-image">
+                    <img :src="dataSourceTypeMap[type].image" :alt="dataSourceTypeMap[type].name" />
+                  </div>
+                  <div class="type-card-content">
+                    <div class="type-card-name">{{ dataSourceTypeMap[type].name }}</div>
+                    <div class="type-card-desc">{{ dataSourceTypeMap[type].description }}</div>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
-        </div>
-      </el-scrollbar>
+        </el-scrollbar>
+      </div>
     </el-dialog>
 
     <!-- 编辑对话框 -->
@@ -777,11 +836,92 @@ onMounted(() => {
   }
 }
 
+.type-select-layout {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 16px;
+}
+
+.type-select-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 2px;
+}
+
+.type-select-nav-item {
+  position: relative;
+  width: 100%;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--el-text-color-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1;
+  padding: 10px 12px 10px 16px;
+  text-align: left;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+
+  &::before {
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 4px;
+    width: 2px;
+    border-radius: 9999px;
+    background: transparent;
+    content: '';
+    transition: background-color 0.2s ease;
+  }
+
+  &:hover {
+    color: var(--el-color-primary);
+    background-color: var(--el-fill-color-lighter);
+  }
+
+  &.is-active {
+    color: var(--el-color-primary);
+    background-color: var(--el-color-primary-light-9);
+
+    &::before {
+      background: var(--el-color-primary);
+    }
+  }
+}
+
+.type-select-scrollbar {
+  min-width: 0;
+}
+
+.type-select-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 2px;
+}
+
+.type-select-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.type-select-group-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+  letter-spacing: 0;
+}
+
 .type-select-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  padding: 2px;
 
   .type-card {
     background: var(--el-fill-color-blank);

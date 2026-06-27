@@ -15,7 +15,7 @@ interface UseDrComponentOptions {
   /**
    * 获取组件实例方法
    */
-  changeData?: (datasetValue: any) => void
+  changeData?: (datasetValue: unknown) => void | Promise<void>
 }
 
 
@@ -37,7 +37,7 @@ export function useDrComponent(options: UseDrComponentOptions) {
   /**
    * 自动更新组件数据
    */
-  const autoRefreshData = () => {
+  const autoRefreshData = async () => {
     if (!chart.dataset?.code) {
       console.warn(`组件${chart.type}: ${chart.id} 未配置数据集`)
       return
@@ -47,21 +47,19 @@ export function useDrComponent(options: UseDrComponentOptions) {
     }
     // 生成参数 - 使用通用工具函数
     const paramMap = canvasInst.fillDatasetParams(chart)
-    datasetApi.run4Chart({
+    const res = await datasetApi.run4Chart({
       datasetCode: chart.dataset.code,
       paramMap: paramMap
-    }).then((res) => {
-      changeData(res.data)
     })
+    await changeData(res.data)
   }
   /**
    * 修改组件数据
    * @param datasetValue
    */
-  const changeData = (datasetValue: any) => {
+  const changeData = (datasetValue: unknown) => {
     if (options.changeData) {
-      options.changeData(datasetValue)
-      return
+      return options.changeData(datasetValue)
     }
     console.warn(`组件${chart.type}: ${chart.id} 未实现changeData方法`)
   }
@@ -70,15 +68,13 @@ export function useDrComponent(options: UseDrComponentOptions) {
    * @param action 动作定义
    * @param data 关联数据
    */
-  const triggerAction = (action: ChartAction, data: any) => {
+  const triggerAction = (action: ChartAction, data: unknown) => {
     // 行为逻辑（可选）
     if (action.name == 'autoRefreshData') {
-      autoRefreshData()
-      return
+      return autoRefreshData()
     }
     if (action.name == 'changeData') {
-      changeData(data)
-      return
+      return changeData(data)
     }
     console.error(`组件${chart.type}: ${chart.id} 暂不支持 ${action.name} 方法调用`)
   }

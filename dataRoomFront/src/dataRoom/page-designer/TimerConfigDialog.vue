@@ -4,7 +4,8 @@ import { computed, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Plus, Rank } from '@element-plus/icons-vue'
 import type { PageTimer } from '@/dataRoom/page-designer/type/PageTimer.ts'
-import type { ChartAction } from '@/dataRoom/components/type/ChartAction.ts'
+import type { ChartAction, CodeBlockActionConfig } from '@/dataRoom/components/type/ChartAction.ts'
+import { getChartActionTypeLabel } from '@/dataRoom/components/type/ChartAction.ts'
 
 const props = defineProps<{
   modelValue: boolean
@@ -36,6 +37,18 @@ const currentAction = computed(() => {
   return null
 })
 
+const isCodeBlockActionConfig = (config: ChartAction['chartActionConfig']): config is CodeBlockActionConfig => {
+  return config.type === 'code'
+}
+
+const currentCodeActionConfig = computed(() => {
+  const action = currentAction.value
+  if (!action || !isCodeBlockActionConfig(action.chartActionConfig)) {
+    return null
+  }
+  return action.chartActionConfig
+})
+
 /**
  * 添加新的动作
  */
@@ -44,7 +57,10 @@ const addAction = () => {
   const newAction: ChartAction = {
     name: `动作${actionCount}`,
     type: 'code',
-    code: '// 请输入JS代码\n// 可以在这里执行定时任务，例如：\nconsole.log("定时器动作执行");\n',
+    chartActionConfig: {
+      type: 'code',
+      code: '// 请输入JS代码\n// 可以在这里执行定时任务，例如：\nconsole.log("定时器动作执行");\n',
+    },
   }
   props.timer.actions.push(newAction)
   activeActionIndex.value = props.timer.actions.length - 1
@@ -184,7 +200,7 @@ const onConfirm = () => {
                 </el-icon>
                 <div class="action-info">
                   <div class="action-name">{{ action.name || `动作${index + 1}` }}</div>
-                  <div class="action-type">{{ action.type === 'code' ? '代码' : action.type }}</div>
+                  <div class="action-type">{{ getChartActionTypeLabel(action.type) }}</div>
                 </div>
                 <el-icon class="delete-icon" @click.stop="deleteAction(index)">
                   <Delete />
@@ -203,11 +219,11 @@ const onConfirm = () => {
                 </el-form-item>
                 <el-form-item label="动作类型">
                   <el-select v-model="currentAction.type" disabled>
-                    <el-option label="代码" value="code"></el-option>
+                    <el-option label="代码块" value="code"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="JS代码">
-                  <el-input v-model="currentAction.code" type="textarea" :rows="15" placeholder="请输入JavaScript代码"></el-input>
+                <el-form-item v-if="currentCodeActionConfig" label="JS代码">
+                  <el-input v-model="currentCodeActionConfig.code" type="textarea" :rows="15" placeholder="请输入JavaScript代码"></el-input>
                 </el-form-item>
                 <el-form-item label="说明">
                   <el-alert type="info" :closable="false">

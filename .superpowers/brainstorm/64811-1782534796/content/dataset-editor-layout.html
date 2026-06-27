@@ -1,0 +1,73 @@
+<h2>数据集编辑页布局方向</h2>
+<p class="subtitle">对比 SQL/Excel 有表结构场景，以及 JSON/HTTP/ES/WebSocket/MQTT 无表结构场景。</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">SQL / Excel：左表结构 + 右侧上下</div>
+    <div class="mockup-body">
+      <div style="display:grid;grid-template-columns:220px minmax(0,1fr);gap:12px;height:420px;">
+        <div style="border:1px solid #dcdfe6;border-radius:8px;display:flex;flex-direction:column;overflow:hidden;">
+          <div style="padding:10px 12px;border-bottom:1px solid #ebeef5;font-weight:600;">表结构</div>
+          <div style="padding:10px 12px;font-size:12px;line-height:1.8;color:#606266;">
+            ▸ orders<br>
+            &nbsp;&nbsp;id bigint<br>
+            &nbsp;&nbsp;amount decimal<br>
+            ▸ users<br>
+            &nbsp;&nbsp;name varchar<br>
+            &nbsp;&nbsp;dept varchar
+          </div>
+        </div>
+        <div style="display:grid;grid-template-rows:minmax(0,1.15fr) minmax(170px,.85fr);gap:12px;min-width:0;">
+          <div style="border:1px solid #dcdfe6;border-radius:8px;padding:12px;overflow:hidden;">
+            <div style="font-weight:600;margin-bottom:10px;">基础设置</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;font-size:12px;color:#606266;">
+              <div class="placeholder">数据集名称</div>
+              <div class="placeholder">数据源</div>
+              <div class="placeholder" style="grid-column:1 / -1;height:120px;">SQL 语句（独占整行）</div>
+              <div class="placeholder" style="grid-column:1 / -1;height:84px;">入参配置（独占整行）</div>
+            </div>
+          </div>
+          <div style="border:1px solid #dcdfe6;border-radius:8px;overflow:hidden;">
+            <div style="display:flex;border-bottom:1px solid #ebeef5;">
+              <div style="padding:8px 12px;font-weight:600;border-bottom:2px solid #409eff;">数据</div>
+              <div style="padding:8px 12px;color:#606266;">字段</div>
+            </div>
+            <div style="padding:12px;">
+              <div class="placeholder" style="height:108px;">数据预览表，保持当前 DatasetPreviewTable 效果</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">JSON / HTTP / ES / WebSocket / MQTT：右侧上下占满</div>
+    <div class="mockup-body">
+      <div style="display:grid;grid-template-rows:minmax(0,1.15fr) minmax(170px,.85fr);gap:12px;height:420px;">
+        <div style="border:1px solid #dcdfe6;border-radius:8px;padding:12px;overflow:hidden;">
+          <div style="font-weight:600;margin-bottom:10px;">基础设置</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;font-size:12px;color:#606266;">
+            <div class="placeholder">数据集名称</div>
+            <div class="placeholder">请求方法 / 空数据策略</div>
+            <div class="placeholder">请求地址 / 主题 / 数据源</div>
+            <div class="placeholder">响应路径 / 缓存条数</div>
+            <div class="placeholder" style="grid-column:1 / -1;height:120px;">JSON / 请求体 / 脚本 / 字段映射（独占整行）</div>
+            <div class="placeholder" style="grid-column:1 / -1;height:84px;">入参配置类（独占整行）</div>
+          </div>
+        </div>
+        <div style="border:1px solid #dcdfe6;border-radius:8px;overflow:hidden;">
+          <div style="display:flex;border-bottom:1px solid #ebeef5;">
+            <div style="padding:8px 12px;font-weight:600;border-bottom:2px solid #409eff;">数据</div>
+            <div style="padding:8px 12px;color:#606266;">字段</div>
+          </div>
+          <div style="padding:12px;">
+            <div class="placeholder" style="height:108px;">数据预览表 / 字段列表表，按 Tab 切换</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle">请先看空间关系是否符合你的预期；具体每种数据集的字段排布我会在终端给出方案。</p>

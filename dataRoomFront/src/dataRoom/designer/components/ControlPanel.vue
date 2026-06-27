@@ -17,6 +17,7 @@ import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetF
 import type { ChartMockDataset } from '@/dataRoom/components/type/ChartMockDataset.ts'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
+import type { ChartAction } from '@/dataRoom/components/type/ChartAction.ts'
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
 /**
@@ -72,7 +73,7 @@ const validDatasetInputList = computed(() => {
 const dataFormRef = ref()
 // 表单校验规则
 const dataFormRules = computed(() => {
-  const rules: Record<string, any[]> = {}
+  const rules: Record<string, Array<{ required: boolean; message: string; trigger: string }>> = {}
   datasetFields.value.forEach((field) => {
     if (field.required) {
       rules[`fields.${field.name}`] = [{ required: true, message: `请选择${field.desc}`, trigger: 'change' }]
@@ -306,13 +307,17 @@ const triggerAutoRefresh = () => {
     return
   }
   try {
+    const autoRefreshAction: ChartAction = {
+      name: 'autoRefreshData',
+      type: 'refreshData',
+      chartActionConfig: {
+        type: 'refreshData',
+        targetChartIds: [chart.id],
+      },
+    }
     canvasInst.triggerChartAction(
       chart.id,
-      {
-        name: 'autoRefreshData',
-        type: 'autoRefreshData',
-        code: '',
-      },
+      autoRefreshAction,
       {},
     )
   } catch (error) {
@@ -515,7 +520,13 @@ const triggerAutoRefresh = () => {
     </el-dialog>
 
     <!-- 交互配置对话框 -->
-    <BehaviorConfigDialog v-if="behaviorConfigDialogVisible && currentBehavior" v-model="behaviorConfigDialogVisible" :behavior="currentBehavior" :chart="chartConfig" />
+    <BehaviorConfigDialog
+      v-if="behaviorConfigDialogVisible && currentBehavior"
+      v-model="behaviorConfigDialogVisible"
+      :behavior="currentBehavior"
+      :chart="chartConfig"
+      :global-variable-list="globalVariableList"
+    />
   </div>
 </template>
 

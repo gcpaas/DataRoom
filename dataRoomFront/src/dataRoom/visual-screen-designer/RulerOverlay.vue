@@ -311,7 +311,7 @@ onBeforeUnmount(() => {
 .ruler-overlay {
   position: absolute;
   inset: 0;
-  z-index: 8;
+  z-index: 4;
   pointer-events: none;
 }
 

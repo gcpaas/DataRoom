@@ -50,8 +50,7 @@ const formatPreviewCell = (_row: PreviewRow, _column: TableColumnCtx<PreviewRow>
 </script>
 
 <template>
-  <section class="dataset-preview-panel">
-    <div class="dataset-preview-panel__title">数据预览</div>
+  <section class="dataset-preview-table-panel">
     <div class="dataset-preview-table-wrap">
       <el-table
         v-if="previewColumns.length > 0"
@@ -81,25 +80,12 @@ const formatPreviewCell = (_row: PreviewRow, _column: TableColumnCtx<PreviewRow>
 </template>
 
 <style scoped lang="scss">
-.dataset-preview-panel {
+.dataset-preview-table-panel {
   display: flex;
   flex-direction: column;
   min-width: 0;
   min-height: 0;
   height: 100%;
-  padding: 16px;
-  background: var(--el-fill-color-blank);
-  border: 1px solid var(--el-border-color);
-  border-radius: 8px;
-  box-sizing: border-box;
-
-  &__title {
-    margin-bottom: 12px;
-    color: var(--el-text-color-primary);
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.57;
-  }
 }
 
 .dataset-preview-table-wrap {
