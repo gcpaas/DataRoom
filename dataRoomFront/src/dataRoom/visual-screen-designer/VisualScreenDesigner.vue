@@ -1236,9 +1236,6 @@ onBeforeUnmount(() => {
           </el-dropdown>
         </div>
         <div class="header-action">
-          <el-button @click="togglePageControlPanel" size="small">设置</el-button>
-        </div>
-        <div class="header-action">
           <el-button size="small" :disabled="!editorHistory.canUndo" aria-label="回退" title="回退" @click="onUndo">
             撤销
           </el-button>
@@ -1250,6 +1247,9 @@ onBeforeUnmount(() => {
         </div>
       </div>
       <div class="header-actions header-actions--secondary">
+        <div class="header-action">
+          <el-button @click="togglePageControlPanel" size="small">设置</el-button>
+        </div>
         <div class="header-action">
           <el-button @click="historyDialogVisible = true" size="small">历史</el-button>
         </div>
@@ -1585,10 +1585,8 @@ onBeforeUnmount(() => {
 
     & .canvas {
       display: grid;
-      background-color: var(--el-bg-color-page);
+      background-color: #f5f5f5;
       grid-template-rows: auto;
-      background-image: radial-gradient(circle, var(--el-border-color) 1px, var(--el-bg-color-page) 1px);
-      background-size: 16px 16px;
       min-width: 0;
       min-height: 0;
       overflow: hidden;

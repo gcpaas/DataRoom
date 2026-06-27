@@ -5,6 +5,8 @@ import type { DesignerViewportPoint, DesignerViewportState } from './viewport'
 import {
   clampVisualScreenGuidePositionToBounds,
   getCanvasCoordinateFromViewportPoint,
+  getGuideAxisFromRulerAxis,
+  getGuideDragOutRulerAxis,
   getRulerTicks,
   getVisibleCanvasCoordinateBounds,
   getViewportPointFromCanvasCoordinate,
@@ -12,6 +14,7 @@ import {
   RULER_SIZE_PX,
   type VisualScreenGuide,
   type VisualScreenGuideAxis,
+  type VisualScreenRulerAxis,
   type VisualScreenRulerConfig,
 } from './ruler'
 
@@ -126,7 +129,8 @@ const isPointerInsideVisibleGuideBounds = (event: PointerEvent, axis: VisualScre
   }
   const position = getRawGuidePositionFromPointer(event, axis)
   const bounds = getVisibleGuideBounds(axis)
-  const crossedRuler = axis === 'vertical' ? point.viewportY >= RULER_SIZE_PX : point.viewportX >= RULER_SIZE_PX
+  const dragOutAxis = getGuideDragOutRulerAxis(axis)
+  const crossedRuler = dragOutAxis === 'y' ? point.viewportY >= RULER_SIZE_PX : point.viewportX >= RULER_SIZE_PX
   return crossedRuler && position >= bounds.min && position <= bounds.max
 }
 
@@ -158,6 +162,10 @@ const onRulerPointerDown = (axis: VisualScreenGuideAxis, event: PointerEvent) =>
     return
   }
   startInteraction({ mode: 'create', axis, pointerId: event.pointerId }, event)
+}
+
+const onRulerAxisPointerDown = (axis: VisualScreenRulerAxis, event: PointerEvent) => {
+  onRulerPointerDown(getGuideAxisFromRulerAxis(axis), event)
 }
 
 const onGuidePointerDown = (axis: VisualScreenGuideAxis, guide: VisualScreenGuide, event: PointerEvent) => {
@@ -255,7 +263,7 @@ onBeforeUnmount(() => {
   <div ref="overlayRef" class="ruler-overlay">
     <template v-if="ruler.visible">
       <div class="ruler-corner" aria-hidden="true"></div>
-      <div class="ruler ruler--horizontal" @pointerdown="(event) => onRulerPointerDown('vertical', event)">
+      <div class="ruler ruler--horizontal" @pointerdown="(event) => onRulerAxisPointerDown('x', event)">
         <div
           v-for="tick in horizontalTicks"
           :key="tick.key"
@@ -266,7 +274,7 @@ onBeforeUnmount(() => {
           <span v-if="tick.label" class="ruler-label ruler-label--horizontal">{{ tick.label }}</span>
         </div>
       </div>
-      <div class="ruler ruler--vertical" @pointerdown="(event) => onRulerPointerDown('horizontal', event)">
+      <div class="ruler ruler--vertical" @pointerdown="(event) => onRulerAxisPointerDown('y', event)">
         <div
           v-for="tick in verticalTicks"
           :key="tick.key"
@@ -330,16 +338,14 @@ onBeforeUnmount(() => {
   width: 24px;
   height: 24px;
   box-sizing: border-box;
-  border-right: 1px solid var(--el-border-color);
-  border-bottom: 1px solid var(--el-border-color);
-  background-color: var(--el-fill-color-light);
+  background-color: var(--el-bg-color-page);
   pointer-events: auto;
 }
 
 .ruler {
   position: absolute;
   box-sizing: border-box;
-  background-color: var(--el-fill-color-light);
+  background-color: var(--el-bg-color-page);
   color: var(--el-text-color-secondary);
   overflow: hidden;
   pointer-events: auto;
@@ -351,7 +357,6 @@ onBeforeUnmount(() => {
   right: 0;
   left: 24px;
   height: 24px;
-  border-bottom: 1px solid var(--el-border-color);
   cursor: ns-resize;
 }
 
@@ -360,47 +365,52 @@ onBeforeUnmount(() => {
   bottom: 0;
   left: 0;
   width: 24px;
-  border-right: 1px solid var(--el-border-color);
   cursor: ew-resize;
 }
 
 .ruler-tick {
   position: absolute;
-  background-color: var(--el-border-color);
+  background-color: var(--el-text-color-placeholder);
 }
 
 .ruler-tick--horizontal {
-  bottom: 0;
+  top: 0;
   width: 1px;
 }
 
 .ruler-tick--vertical {
-  right: 0;
+  left: 0;
   height: 1px;
 }
 
 .ruler-label {
   position: absolute;
-  font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   font-size: 10px;
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0;
-  color: var(--el-text-color-secondary);
+  color: var(--el-text-color-placeholder);
   font-feature-settings: 'tnum';
   pointer-events: none;
 }
 
 .ruler-label--horizontal {
-  left: 3px;
-  bottom: 9px;
+  left: 7px;
+  top: 0;
 }
 
 .ruler-label--vertical {
-  top: 3px;
-  right: 9px;
+  top: -6px;
+  left: 0;
   transform: rotate(-90deg);
-  transform-origin: right top;
+  transform-origin: left top;
 }
 
 .ruler-pointer {

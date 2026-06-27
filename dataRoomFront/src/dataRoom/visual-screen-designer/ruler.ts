@@ -36,6 +36,14 @@ export interface VisualScreenGuideBounds {
   max: number
 }
 
+export const getGuideAxisFromRulerAxis = (axis: VisualScreenRulerAxis): VisualScreenGuideAxis => {
+  return axis === 'x' ? 'horizontal' : 'vertical'
+}
+
+export const getGuideDragOutRulerAxis = (axis: VisualScreenGuideAxis): VisualScreenRulerAxis => {
+  return axis === 'horizontal' ? 'y' : 'x'
+}
+
 export const DEFAULT_VISUAL_SCREEN_RULER_CONFIG: VisualScreenRulerConfig = {
   visible: true,
   guidesVisible: true,
@@ -180,13 +188,16 @@ export const getRulerTicks = (viewport: DesignerViewportState, axis: VisualScree
   for (let value = firstTick; value <= maxCoordinate + step; value += step) {
     const tickIndex = Math.round(value / step)
     const major = tickIndex % labelEvery === 0
+    if (!major) {
+      continue
+    }
     ticks.push({
       key: `${axis}-${value}`,
       value,
       viewportPosition: getViewportPointFromCanvasCoordinate(viewport, axis, value),
-      size: major ? 12 : 6,
+      size: 10,
       major,
-      label: major ? String(Math.round(value)) : '',
+      label: String(Math.round(value)),
     })
   }
   return ticks.filter((tick) => tick.viewportPosition >= rulerOffset && tick.viewportPosition <= safeViewportLength)
