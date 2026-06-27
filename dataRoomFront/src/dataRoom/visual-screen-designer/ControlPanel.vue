@@ -9,7 +9,7 @@ import type { VisualScreenPageBasicConfig } from '@/dataRoom/page-designer/type/
 import type { PageTimer } from '@/dataRoom/page-designer/type/PageTimer.ts'
 import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 import { v4 as uuidv4 } from 'uuid'
-import { clampVisualScreenGuidePosition, isVisualScreenGuideLocked, normalizeVisualScreenRulerConfig, type VisualScreenGuide, type VisualScreenGuideAxis } from './ruler'
+import { isVisualScreenGuideLocked, normalizeVisualScreenGuidePosition, normalizeVisualScreenRulerConfig, type VisualScreenGuide, type VisualScreenGuideAxis } from './ruler'
 
 const TimerConfigDialog = defineAsyncComponent(() => import('../page-designer/TimerConfigDialog.vue'))
 
@@ -180,11 +180,11 @@ const isGuideLocked = (guide: VisualScreenGuide) => {
   return isVisualScreenGuideLocked(guide, rulerConfig.value.guidesLocked)
 }
 
-const updateGuidePosition = (axis: VisualScreenGuideAxis, guide: VisualScreenGuide, value: number | undefined) => {
+const updateGuidePosition = (_axis: VisualScreenGuideAxis, guide: VisualScreenGuide, value: number | undefined) => {
   if (isGuideLocked(guide)) {
     return
   }
-  guide.position = clampVisualScreenGuidePosition(axis, Number(value), basicConfig.size?.width || 0, basicConfig.size?.height || 0)
+  guide.position = normalizeVisualScreenGuidePosition(Number(value))
 }
 
 const deleteGuide = (axis: VisualScreenGuideAxis, guide: VisualScreenGuide) => {
@@ -323,8 +323,6 @@ const clearUnlockedGuides = () => {
                 <span class="guide-axis-label">X</span>
                 <el-input-number
                   :model-value="guide.position"
-                  :min="0"
-                  :max="basicConfig.size.width"
                   :step="1"
                   size="small"
                   controls-position="right"
@@ -348,8 +346,6 @@ const clearUnlockedGuides = () => {
                 <span class="guide-axis-label">Y</span>
                 <el-input-number
                   :model-value="guide.position"
-                  :min="0"
-                  :max="basicConfig.size.height"
                   :step="1"
                   size="small"
                   controls-position="right"

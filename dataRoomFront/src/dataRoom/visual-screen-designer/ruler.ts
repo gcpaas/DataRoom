@@ -31,6 +31,11 @@ export interface VisualScreenRulerTick {
   label: string
 }
 
+export interface VisualScreenGuideBounds {
+  min: number
+  max: number
+}
+
 export const DEFAULT_VISUAL_SCREEN_RULER_CONFIG: VisualScreenRulerConfig = {
   visible: true,
   guidesVisible: true,
@@ -47,17 +52,27 @@ const normalizeBoolean = (value: unknown, fallback: boolean) => {
   return typeof value === 'boolean' ? value : fallback
 }
 
-const getCanvasLimitByAxis = (axis: VisualScreenGuideAxis, canvasWidth: number, canvasHeight: number) => {
-  return axis === 'vertical' ? Math.max(0, finiteOrFallback(canvasWidth, 0)) : Math.max(0, finiteOrFallback(canvasHeight, 0))
+const normalizeGuidePosition = (position: number, fallback: number = 0) => {
+  return Math.round(finiteOrFallback(position, fallback))
 }
 
-export const clampVisualScreenGuidePosition = (axis: VisualScreenGuideAxis, position: number, canvasWidth: number, canvasHeight: number) => {
-  const safePosition = finiteOrFallback(position, 0)
-  const limit = getCanvasLimitByAxis(axis, canvasWidth, canvasHeight)
-  return Math.min(limit, Math.max(0, Math.round(safePosition)))
+const normalizeGuideBounds = (bounds: VisualScreenGuideBounds): VisualScreenGuideBounds => {
+  const min = finiteOrFallback(bounds.min, 0)
+  const max = finiteOrFallback(bounds.max, min)
+  return min <= max ? { min, max } : { min: max, max: min }
 }
 
-const normalizeGuideList = (guides: unknown, axis: VisualScreenGuideAxis, canvasWidth: number, canvasHeight: number) => {
+export const normalizeVisualScreenGuidePosition = (position: number, fallback: number = 0) => {
+  return normalizeGuidePosition(position, fallback)
+}
+
+export const clampVisualScreenGuidePositionToBounds = (position: number, bounds: VisualScreenGuideBounds) => {
+  const safeBounds = normalizeGuideBounds(bounds)
+  const safePosition = normalizeGuidePosition(position, safeBounds.min)
+  return Math.min(safeBounds.max, Math.max(safeBounds.min, safePosition))
+}
+
+const normalizeGuideList = (guides: unknown) => {
   if (!Array.isArray(guides)) {
     return []
   }
@@ -73,7 +88,7 @@ const normalizeGuideList = (guides: unknown, axis: VisualScreenGuideAxis, canvas
     })
     .map((guide) => ({
       id: guide.id!,
-      position: clampVisualScreenGuidePosition(axis, Number(guide.position), canvasWidth, canvasHeight),
+      position: normalizeVisualScreenGuidePosition(Number(guide.position)),
       locked: Boolean(guide.locked),
     }))
 }
@@ -83,12 +98,14 @@ export const normalizeVisualScreenRulerConfig = (
   canvasWidth: number,
   canvasHeight: number,
 ): VisualScreenRulerConfig => {
+  void canvasWidth
+  void canvasHeight
   return {
     visible: normalizeBoolean(config?.visible, DEFAULT_VISUAL_SCREEN_RULER_CONFIG.visible),
     guidesVisible: normalizeBoolean(config?.guidesVisible, DEFAULT_VISUAL_SCREEN_RULER_CONFIG.guidesVisible),
     guidesLocked: normalizeBoolean(config?.guidesLocked, DEFAULT_VISUAL_SCREEN_RULER_CONFIG.guidesLocked),
-    verticalGuides: normalizeGuideList(config?.verticalGuides, 'vertical', canvasWidth, canvasHeight),
-    horizontalGuides: normalizeGuideList(config?.horizontalGuides, 'horizontal', canvasWidth, canvasHeight),
+    verticalGuides: normalizeGuideList(config?.verticalGuides),
+    horizontalGuides: normalizeGuideList(config?.horizontalGuides),
   }
 }
 
@@ -104,6 +121,17 @@ export const getCanvasCoordinateFromViewportPoint = (viewport: DesignerViewportS
 export const getViewportPointFromCanvasCoordinate = (viewport: DesignerViewportState, axis: VisualScreenRulerAxis, canvasCoordinate: number, rulerOffset: number = 0) => {
   const pan = axis === 'x' ? viewport.panX : viewport.panY
   return finiteOrFallback(canvasCoordinate, 0) * viewport.scale + pan + rulerOffset
+}
+
+export const getVisibleCanvasCoordinateBounds = (
+  viewport: DesignerViewportState,
+  axis: VisualScreenRulerAxis,
+  startViewportPosition: number,
+  endViewportPosition: number,
+): VisualScreenGuideBounds => {
+  const start = getCanvasCoordinateFromViewportPoint(viewport, axis, startViewportPosition)
+  const end = getCanvasCoordinateFromViewportPoint(viewport, axis, endViewportPosition)
+  return normalizeGuideBounds({ min: start, max: end })
 }
 
 const getBuiltInGuidelines = (limit: number) => {
@@ -143,14 +171,13 @@ export const getRulerTicks = (viewport: DesignerViewportState, axis: VisualScree
   const safeViewportLength = Math.max(0, finiteOrFallback(viewportLength, 0))
   const step = getNiceTickStep(viewport.scale)
   const labelEvery = Math.max(1, Math.ceil(RULER_MIN_LABEL_SPACING_PX / (step * viewport.scale)))
-  const startCoordinate = Math.max(0, getCanvasCoordinateFromViewportPoint(viewport, axis, rulerOffset))
-  const endCoordinate = Math.max(startCoordinate, getCanvasCoordinateFromViewportPoint(viewport, axis, safeViewportLength))
-  const firstTick = Math.floor(startCoordinate / step) * step
+  const startCoordinate = getCanvasCoordinateFromViewportPoint(viewport, axis, rulerOffset)
+  const endCoordinate = getCanvasCoordinateFromViewportPoint(viewport, axis, safeViewportLength)
+  const minCoordinate = Math.min(startCoordinate, endCoordinate)
+  const maxCoordinate = Math.max(startCoordinate, endCoordinate)
+  const firstTick = Math.floor(minCoordinate / step) * step
   const ticks: VisualScreenRulerTick[] = []
-  for (let value = firstTick; value <= endCoordinate + step; value += step) {
-    if (value < 0) {
-      continue
-    }
+  for (let value = firstTick; value <= maxCoordinate + step; value += step) {
     const tickIndex = Math.round(value / step)
     const major = tickIndex % labelEvery === 0
     ticks.push({

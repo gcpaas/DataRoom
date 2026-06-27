@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Document, Folder, Monitor, MoreFilled, Plus, Search } from '@element-plus/icons-vue'
+import { Document, EditPen, Folder, Monitor, MoreFilled, Plus, Search, View } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import { pageApi, type PageEntity } from './api'
 import visualScreenPlaceholder from './assets/image/大屏占位符.png'
@@ -9,6 +9,7 @@ import pagePlaceholder from './assets/image/仪表盘占位符.png'
 import directoryPlaceholder from './assets/image/目录占位符.png'
 import { PageStatus } from '@/dataRoom/constants/PageStatus.ts'
 import { PageType } from '@/dataRoom/constants/PageType.ts'
+import { getPageDesignPath, getPagePreviewPath } from './page-route.ts'
 
 interface AddTypeOption {
   type: string
@@ -62,6 +63,14 @@ const getTypeName = (pageType?: string) => {
 }
 
 const getDialogTitle = (action: string, pageType: string) => `${action}${getTypeName(pageType) || '页面'}`
+
+const openRouteInNewWindow = (path: string) => {
+  if (!path) {
+    return
+  }
+  const resolvedRoute = router.resolve({ path })
+  window.open(resolvedRoute.href, '_blank', 'noopener')
+}
 
 const getPageList = async () => {
   loading.value = true
@@ -135,17 +144,7 @@ const handleEdit = async (item: PageEntity) => {
 }
 
 const handleDesign = (item: PageEntity) => {
-  if (item.pageType === PageType.VISUAL_SCREEN) {
-    router.push({
-      path: `/dataRoom/visualScreenDesigner/${item.code}`,
-    })
-    return
-  }
-  if (item.pageType === PageType.PAGE) {
-    router.push({
-      path: `/dataRoom/pageDesigner/${item.code}`,
-    })
-  }
+  openRouteInNewWindow(getPageDesignPath(item))
 }
 
 const handlePublish = async (item: PageEntity) => {
@@ -206,12 +205,7 @@ const handleDelete = async (page: PageEntity) => {
 }
 
 const handlePreview = (page: PageEntity) => {
-  const path =
-    page.pageType === PageType.VISUAL_SCREEN
-      ? `/dataRoom/visualScreenPreview/${PageStatus.PREVIEW}/${page.code}`
-      : `/dataRoom/pagePreviewer/${PageStatus.PREVIEW}/${page.code}`
-
-  router.push({ path })
+  openRouteInNewWindow(getPagePreviewPath(page))
 }
 
 const handleCardClick = (item: PageEntity) => {
@@ -337,6 +331,12 @@ onMounted(() => {
                   </div>
                 </template>
               </el-image>
+              <div v-if="canOperatePage(item)" class="card-hover-overlay" @click.stop>
+                <div class="card-hover-actions">
+                  <el-button :icon="EditPen" @click="handleCardCommand('design', item)">设计</el-button>
+                  <el-button :icon="View" @click="handleCardCommand('preview', item)">预览</el-button>
+                </div>
+              </div>
             </div>
             <div class="card-footer">
               <div class="card-info">
@@ -453,6 +453,7 @@ onMounted(() => {
         }
 
         .card-thumbnail {
+          position: relative;
           width: 100%;
           height: 180px;
           background-color: var(--el-fill-color-extra-light);
@@ -484,6 +485,41 @@ onMounted(() => {
                 max-height: 100%;
                 object-fit: contain;
               }
+            }
+          }
+
+          .card-hover-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+
+            &::before {
+              content: '';
+              position: absolute;
+              inset: 0;
+              background: var(--el-color-primary-light-9);
+              opacity: 0.86;
+            }
+
+            .card-hover-actions {
+              position: relative;
+              z-index: 1;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+            }
+          }
+
+          &:hover,
+          &:focus-within {
+            .card-hover-overlay {
+              opacity: 1;
+              pointer-events: auto;
             }
           }
         }

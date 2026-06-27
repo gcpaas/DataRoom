@@ -4,6 +4,7 @@ import { ElMessage, ElMessageBox, ElUpload, genFileId, type UploadProps, type Up
 import { Box, Check, Folder, MoreFilled, Picture, Plus, Search, VideoCamera } from '@element-plus/icons-vue'
 import { resourceApi, type ResourceEntity } from './api'
 import { buildResourceUploadFormData, createResourceDraft, getResourceDisplayName } from './resourceForm'
+import { buildResourceListQueryParams } from './resourceQuery'
 import directoryPlaceholder from '../page/assets/image/目录占位符.png'
 import imagePlaceholder from './assets/image/图片占位符.png'
 import videoPlaceholder from './assets/image/视频占位符.png'
@@ -25,6 +26,7 @@ const emit = defineEmits<{
 }>()
 
 const searchName = ref('')
+const searchResourceType = ref('')
 const resourceList = ref<ResourceEntity[]>([])
 const loading = ref(false)
 const selectedResource = ref<ResourceEntity | null>(null)
@@ -74,6 +76,24 @@ const resourceTypeOptions = [
     icon: Box,
   },
 ]
+const resourceTypeFilterOptions = [
+  {
+    value: '',
+    label: '全部',
+  },
+  {
+    value: ResourceType.IMAGE,
+    label: '图片',
+  },
+  {
+    value: ResourceType.VIDEO,
+    label: '视频',
+  },
+  {
+    value: ResourceType.MODEL,
+    label: '3D模型',
+  },
+]
 
 // 图片详情弹框
 const imageDetailDialogVisible = ref(false)
@@ -117,13 +137,11 @@ const formatDateTime = (dateStr?: string) => {
 const getResourceList = async () => {
   loading.value = true
   try {
-    const params: { name?: string; parentCode?: string } = {
+    const params = buildResourceListQueryParams({
+      name: searchName.value,
       parentCode: currentParentCode.value,
-    }
-    const keyword = searchName.value.trim()
-    if (keyword) {
-      params.name = keyword
-    }
+      resourceType: searchResourceType.value,
+    })
     resourceList.value = (await resourceApi.list(params)) || []
   } catch (error) {
     console.error('查询失败:', error)
@@ -604,6 +622,16 @@ onMounted(() => {
           @keyup.enter="getResourceList"
         />
       </div>
+      <div class="resource-type-filter">
+        <el-select v-model="searchResourceType" placeholder="素材类型" @change="getResourceList">
+          <el-option
+            v-for="item in resourceTypeFilterOptions"
+            :key="item.value || 'all'"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
       <div class="button-group">
         <el-button :icon="Search" @click="getResourceList">查询</el-button>
         <el-button type="primary" :icon="Plus" @click="handleAdd">新增</el-button>
@@ -936,6 +964,10 @@ onMounted(() => {
 
     .search-box {
       width: 300px;
+    }
+
+    .resource-type-filter {
+      width: 140px;
     }
 
     .button-group {

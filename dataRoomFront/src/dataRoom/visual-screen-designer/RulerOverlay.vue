@@ -3,9 +3,10 @@ import { computed, onBeforeUnmount, ref } from 'vue'
 import type { CSSProperties } from 'vue'
 import type { DesignerViewportPoint, DesignerViewportState } from './viewport'
 import {
-  clampVisualScreenGuidePosition,
+  clampVisualScreenGuidePositionToBounds,
   getCanvasCoordinateFromViewportPoint,
   getRulerTicks,
+  getVisibleCanvasCoordinateBounds,
   getViewportPointFromCanvasCoordinate,
   isVisualScreenGuideLocked,
   RULER_SIZE_PX,
@@ -106,20 +107,27 @@ const getRawGuidePositionFromPointer = (event: PointerEvent, axis: VisualScreenG
     : getCanvasCoordinateFromViewportPoint(props.viewport, 'y', point.viewportY)
 }
 
-const getGuidePositionFromPointer = (event: PointerEvent, axis: VisualScreenGuideAxis) => {
-  const coordinate = getRawGuidePositionFromPointer(event, axis)
-  return clampVisualScreenGuidePosition(axis, coordinate, props.viewport.canvasWidth, props.viewport.canvasHeight)
+const getVisibleGuideBounds = (axis: VisualScreenGuideAxis) => {
+  if (axis === 'vertical') {
+    return getVisibleCanvasCoordinateBounds(props.viewport, 'x', RULER_SIZE_PX, props.viewport.viewportWidth)
+  }
+  return getVisibleCanvasCoordinateBounds(props.viewport, 'y', RULER_SIZE_PX, props.viewport.viewportHeight)
 }
 
-const isPointerInsideCanvasBounds = (event: PointerEvent, axis: VisualScreenGuideAxis) => {
+const getGuidePositionFromPointer = (event: PointerEvent, axis: VisualScreenGuideAxis) => {
+  const coordinate = getRawGuidePositionFromPointer(event, axis)
+  return clampVisualScreenGuidePositionToBounds(coordinate, getVisibleGuideBounds(axis))
+}
+
+const isPointerInsideVisibleGuideBounds = (event: PointerEvent, axis: VisualScreenGuideAxis) => {
   const point = getPointerViewportPoint(event)
   if (!point) {
     return false
   }
   const position = getRawGuidePositionFromPointer(event, axis)
-  const limit = axis === 'vertical' ? props.viewport.canvasWidth : props.viewport.canvasHeight
+  const bounds = getVisibleGuideBounds(axis)
   const crossedRuler = axis === 'vertical' ? point.viewportY >= RULER_SIZE_PX : point.viewportX >= RULER_SIZE_PX
-  return crossedRuler && position >= 0 && position <= limit
+  return crossedRuler && position >= bounds.min && position <= bounds.max
 }
 
 const startInteraction = (state: GuideDragState, event: PointerEvent) => {
@@ -212,7 +220,7 @@ const onWindowPointerUp = (event: PointerEvent) => {
   }
   event.preventDefault()
   const position = getGuidePositionFromPointer(event, state.axis)
-  if (state.mode === 'create' && isPointerInsideCanvasBounds(event, state.axis)) {
+  if (state.mode === 'create' && isPointerInsideVisibleGuideBounds(event, state.axis)) {
     createGuide(state.axis, position)
   }
   stopInteraction()
