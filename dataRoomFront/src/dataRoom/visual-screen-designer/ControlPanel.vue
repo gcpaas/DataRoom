@@ -9,23 +9,12 @@ import type { VisualScreenPageBasicConfig } from '@/dataRoom/page-designer/type/
 import type { PageTimer } from '@/dataRoom/page-designer/type/PageTimer.ts'
 import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 import { v4 as uuidv4 } from 'uuid'
-import { isVisualScreenGuideLocked, normalizeVisualScreenGuidePosition, normalizeVisualScreenRulerConfig, type VisualScreenGuide, type VisualScreenGuideAxis } from './ruler'
 
 const TimerConfigDialog = defineAsyncComponent(() => import('../page-designer/TimerConfigDialog.vue'))
 
 const { basicConfig } = defineProps<{
   basicConfig: VisualScreenPageBasicConfig
 }>()
-
-const normalizeRulerConfig = () => {
-  basicConfig.ruler = normalizeVisualScreenRulerConfig(basicConfig.ruler, basicConfig.size?.width || 0, basicConfig.size?.height || 0)
-}
-
-normalizeRulerConfig()
-
-const rulerConfig = computed(() => basicConfig.ruler!)
-
-watch([() => basicConfig.size?.width, () => basicConfig.size?.height], normalizeRulerConfig)
 
 if (!basicConfig.timers) {
   basicConfig.timers = []
@@ -97,7 +86,7 @@ const timers = computed(() => {
 const timerConfigDialogVisible = ref(false)
 const currentTimer = ref<PageTimer | null>(null)
 
-const activePanelNames = ref(['size', 'background', 'zoom', 'ruler', 'timer'])
+const activePanelNames = ref(['size', 'background', 'zoom', 'timer'])
 const currentZoomModeDesc = computed(() => {
   return ZOOM_MODES.find((mode) => mode.value === basicConfig.size.zoom)?.desc || ''
 })
@@ -170,39 +159,6 @@ const deleteTimer = (id: string) => {
     })
 }
 
-// ==================== 标尺与参考线 ====================
-
-const getGuideList = (axis: VisualScreenGuideAxis) => {
-  return axis === 'vertical' ? rulerConfig.value.verticalGuides : rulerConfig.value.horizontalGuides
-}
-
-const isGuideLocked = (guide: VisualScreenGuide) => {
-  return isVisualScreenGuideLocked(guide, rulerConfig.value.guidesLocked)
-}
-
-const updateGuidePosition = (_axis: VisualScreenGuideAxis, guide: VisualScreenGuide, value: number | undefined) => {
-  if (isGuideLocked(guide)) {
-    return
-  }
-  guide.position = normalizeVisualScreenGuidePosition(Number(value))
-}
-
-const deleteGuide = (axis: VisualScreenGuideAxis, guide: VisualScreenGuide) => {
-  if (isGuideLocked(guide)) {
-    return
-  }
-  const list = getGuideList(axis)
-  const index = list.findIndex((item) => item.id === guide.id)
-  if (index >= 0) {
-    list.splice(index, 1)
-  }
-}
-
-const clearUnlockedGuides = () => {
-  rulerConfig.value.verticalGuides = rulerConfig.value.verticalGuides.filter((guide) => isGuideLocked(guide))
-  rulerConfig.value.horizontalGuides = rulerConfig.value.horizontalGuides.filter((guide) => isGuideLocked(guide))
-  ElMessage.success('已清空未锁定参考线')
-}
 </script>
 
 <template>
@@ -299,70 +255,6 @@ const clearUnlockedGuides = () => {
           </div>
         </el-collapse-item>
 
-        <el-collapse-item title="标尺 / 参考线" name="ruler">
-          <el-form-item label="显示标尺">
-            <el-switch v-model="rulerConfig.visible" size="small" />
-          </el-form-item>
-
-          <el-form-item label="显示参考线">
-            <el-switch v-model="rulerConfig.guidesVisible" size="small" />
-          </el-form-item>
-
-          <el-form-item label="锁定全部">
-            <el-switch v-model="rulerConfig.guidesLocked" size="small" />
-          </el-form-item>
-
-          <el-form-item label="清空">
-            <el-button size="small" plain @click="clearUnlockedGuides">清空未锁定</el-button>
-          </el-form-item>
-
-          <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">纵向参考线</div>
-            <div v-if="rulerConfig.verticalGuides.length > 0" class="guide-list">
-              <div v-for="guide in rulerConfig.verticalGuides" :key="guide.id" class="guide-row">
-                <span class="guide-axis-label">X</span>
-                <el-input-number
-                  :model-value="guide.position"
-                  :step="1"
-                  size="small"
-                  controls-position="right"
-                  class="guide-position-input"
-                  :disabled="isGuideLocked(guide)"
-                  @update:model-value="(value: number | undefined) => updateGuidePosition('vertical', guide, value)"
-                />
-                <el-switch v-model="guide.locked" size="small" :disabled="rulerConfig.guidesLocked" />
-                <el-button size="small" text :disabled="isGuideLocked(guide)" @click="deleteGuide('vertical', guide)">
-                  <el-icon><Delete /></el-icon>
-                </el-button>
-              </div>
-            </div>
-            <div v-else class="panel-empty">暂无纵向参考线</div>
-          </div>
-
-          <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">横向参考线</div>
-            <div v-if="rulerConfig.horizontalGuides.length > 0" class="guide-list">
-              <div v-for="guide in rulerConfig.horizontalGuides" :key="guide.id" class="guide-row">
-                <span class="guide-axis-label">Y</span>
-                <el-input-number
-                  :model-value="guide.position"
-                  :step="1"
-                  size="small"
-                  controls-position="right"
-                  class="guide-position-input"
-                  :disabled="isGuideLocked(guide)"
-                  @update:model-value="(value: number | undefined) => updateGuidePosition('horizontal', guide, value)"
-                />
-                <el-switch v-model="guide.locked" size="small" :disabled="rulerConfig.guidesLocked" />
-                <el-button size="small" text :disabled="isGuideLocked(guide)" @click="deleteGuide('horizontal', guide)">
-                  <el-icon><Delete /></el-icon>
-                </el-button>
-              </div>
-            </div>
-            <div v-else class="panel-empty">暂无横向参考线</div>
-          </div>
-        </el-collapse-item>
-
         <el-collapse-item title="定时器" name="timer">
           <div class="dr-config-panel__sub-section">
             <div class="dr-config-panel__sub-title">
@@ -432,29 +324,9 @@ const clearUnlockedGuides = () => {
   letter-spacing: 0;
 }
 
-.guide-list,
 .timer-list {
   display: grid;
   gap: 8px;
-}
-
-.guide-row {
-  display: grid;
-  grid-template-columns: 18px minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: 8px;
-}
-
-.guide-axis-label {
-  color: var(--el-text-color-secondary);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0;
-  font-feature-settings: 'tnum';
-}
-
-.guide-position-input {
-  width: 100%;
 }
 
 .timer-item {

@@ -148,6 +148,23 @@ const rulerVisible = computed({
     })
   },
 })
+const guidesVisible = computed({
+  get: () => visualScreenRuler.value.guidesVisible,
+  set: (guidesVisible: boolean) => {
+    updateVisualScreenRulerConfig({
+      ...visualScreenRuler.value,
+      guidesVisible,
+    })
+  },
+})
+const clearVisualScreenGuides = () => {
+  updateVisualScreenRulerConfig({
+    ...visualScreenRuler.value,
+    verticalGuides: [],
+    horizontalGuides: [],
+  })
+  ElMessage.success('已清空参考线')
+}
 const designerZoomVisible = computed({
   get: () => normalizeDesignerZoomPreference(basicConfig.value.zoom).visiable,
   set: (visiable: boolean) => {
@@ -1257,6 +1274,18 @@ onBeforeUnmount(() => {
                 </el-dropdown-item>
                 <el-dropdown-item>
                   <div class="tool-menu-row" @click.stop>
+                    <span>参考线</span>
+                    <el-switch v-model="guidesVisible" size="small" />
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <div class="tool-menu-row" @click.stop>
+                    <span>参考线</span>
+                    <el-button size="small" text @click.stop="clearVisualScreenGuides">清空</el-button>
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <div class="tool-menu-row" @click.stop>
                     <span>缩放</span>
                     <el-switch v-model="designerZoomVisible" size="small" />
                   </div>
@@ -1617,7 +1646,7 @@ onBeforeUnmount(() => {
 
     & .canvas {
       display: grid;
-      background-color: #f5f5f5;
+      background-color: var(--el-bg-color-page);
       grid-template-rows: auto;
       min-width: 0;
       min-height: 0;

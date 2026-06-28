@@ -11,13 +11,11 @@ export type VisualScreenRulerAxis = 'x' | 'y'
 export interface VisualScreenGuide {
   id: string
   position: number
-  locked: boolean
 }
 
 export interface VisualScreenRulerConfig {
   visible: boolean
   guidesVisible: boolean
-  guidesLocked: boolean
   verticalGuides: VisualScreenGuide[]
   horizontalGuides: VisualScreenGuide[]
 }
@@ -47,7 +45,6 @@ export const getGuideDragOutRulerAxis = (axis: VisualScreenGuideAxis): VisualScr
 export const DEFAULT_VISUAL_SCREEN_RULER_CONFIG: VisualScreenRulerConfig = {
   visible: true,
   guidesVisible: true,
-  guidesLocked: false,
   verticalGuides: [],
   horizontalGuides: [],
 }
@@ -97,7 +94,6 @@ const normalizeGuideList = (guides: unknown) => {
     .map((guide) => ({
       id: guide.id!,
       position: normalizeVisualScreenGuidePosition(Number(guide.position)),
-      locked: Boolean(guide.locked),
     }))
 }
 
@@ -111,14 +107,9 @@ export const normalizeVisualScreenRulerConfig = (
   return {
     visible: normalizeBoolean(config?.visible, DEFAULT_VISUAL_SCREEN_RULER_CONFIG.visible),
     guidesVisible: normalizeBoolean(config?.guidesVisible, DEFAULT_VISUAL_SCREEN_RULER_CONFIG.guidesVisible),
-    guidesLocked: normalizeBoolean(config?.guidesLocked, DEFAULT_VISUAL_SCREEN_RULER_CONFIG.guidesLocked),
     verticalGuides: normalizeGuideList(config?.verticalGuides),
     horizontalGuides: normalizeGuideList(config?.horizontalGuides),
   }
-}
-
-export const isVisualScreenGuideLocked = (guide: Pick<VisualScreenGuide, 'locked'>, guidesLocked: boolean) => {
-  return guidesLocked || guide.locked
 }
 
 export const getCanvasCoordinateFromViewportPoint = (viewport: DesignerViewportState, axis: VisualScreenRulerAxis, viewportPosition: number, rulerOffset: number = 0) => {

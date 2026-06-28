@@ -10,7 +10,6 @@ import {
   getRulerTicks,
   getVisibleCanvasCoordinateBounds,
   getViewportPointFromCanvasCoordinate,
-  isVisualScreenGuideLocked,
   RULER_SIZE_PX,
   type VisualScreenGuide,
   type VisualScreenGuideAxis,
@@ -49,7 +48,7 @@ const previewGuide = ref<{ axis: VisualScreenGuideAxis; position: number } | nul
 
 const horizontalTicks = computed(() => getRulerTicks(props.viewport, 'x', RULER_SIZE_PX, props.viewport.viewportWidth))
 const verticalTicks = computed(() => getRulerTicks(props.viewport, 'y', RULER_SIZE_PX, props.viewport.viewportHeight))
-const canEditGuides = computed(() => props.ruler.guidesVisible && !props.ruler.guidesLocked)
+const canEditGuides = computed(() => props.ruler.guidesVisible)
 
 const pointerCanvasPosition = computed(() => {
   if (!props.pointerPosition) {
@@ -169,7 +168,7 @@ const onRulerAxisPointerDown = (axis: VisualScreenRulerAxis, event: PointerEvent
 }
 
 const onGuidePointerDown = (axis: VisualScreenGuideAxis, guide: VisualScreenGuide, event: PointerEvent) => {
-  if (!canEditGuides.value || event.button !== 0 || isVisualScreenGuideLocked(guide, props.ruler.guidesLocked)) {
+  if (!canEditGuides.value || event.button !== 0) {
     return
   }
   startInteraction({ mode: 'move', axis, guideId: guide.id, pointerId: event.pointerId }, event)
@@ -178,9 +177,6 @@ const onGuidePointerDown = (axis: VisualScreenGuideAxis, guide: VisualScreenGuid
 const onGuideDoubleClick = (axis: VisualScreenGuideAxis, guide: VisualScreenGuide, event: MouseEvent) => {
   event.preventDefault()
   event.stopPropagation()
-  if (isVisualScreenGuideLocked(guide, props.ruler.guidesLocked)) {
-    return
-  }
   const nextRuler = cloneRuler()
   const listKey = getGuideListKey(axis)
   nextRuler[listKey] = nextRuler[listKey].filter((item) => item.id !== guide.id)
@@ -191,7 +187,7 @@ const updateGuidePosition = (state: Extract<GuideDragState, { mode: 'move' }>, p
   const nextRuler = cloneRuler()
   const list = nextRuler[getGuideListKey(state.axis)]
   const guide = list.find((item) => item.id === state.guideId)
-  if (!guide || isVisualScreenGuideLocked(guide, nextRuler.guidesLocked)) {
+  if (!guide) {
     return
   }
   guide.position = position
@@ -203,7 +199,6 @@ const createGuide = (axis: VisualScreenGuideAxis, position: number) => {
   nextRuler[getGuideListKey(axis)].push({
     id: `guide_${axis}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     position,
-    locked: false,
   })
   emit('update:ruler', nextRuler)
 }
@@ -296,7 +291,6 @@ onBeforeUnmount(() => {
         v-for="guide in ruler.verticalGuides"
         :key="guide.id"
         class="guide-line guide-line--vertical"
-        :class="{ 'guide-line--locked': isVisualScreenGuideLocked(guide, ruler.guidesLocked) }"
         :style="getGuideStyle('vertical', guide.position)"
         @pointerdown="(event) => onGuidePointerDown('vertical', guide, event)"
         @dblclick="(event) => onGuideDoubleClick('vertical', guide, event)"
@@ -305,7 +299,6 @@ onBeforeUnmount(() => {
         v-for="guide in ruler.horizontalGuides"
         :key="guide.id"
         class="guide-line guide-line--horizontal"
-        :class="{ 'guide-line--locked': isVisualScreenGuideLocked(guide, ruler.guidesLocked) }"
         :style="getGuideStyle('horizontal', guide.position)"
         @pointerdown="(event) => onGuidePointerDown('horizontal', guide, event)"
         @dblclick="(event) => onGuideDoubleClick('horizontal', guide, event)"
@@ -451,11 +444,6 @@ onBeforeUnmount(() => {
   left: 0;
   height: 1px;
   cursor: ns-resize;
-}
-
-.guide-line--locked {
-  cursor: default;
-  opacity: 0.35;
 }
 
 .guide-line--preview {
