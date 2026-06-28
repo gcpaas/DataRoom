@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { computed, ref, reactive, watch } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { DatasetEntity, HttpDataset } from '../api'
 import { datasetApi } from '../api'
 import { ElMessage } from 'element-plus'
 import { parseParams } from '@/dataRoom/utils'
 import DatasetEditorLayout from './DatasetEditorLayout.vue'
+import { encryptByRsa } from '@/dataRoom/utils/encrypt'
 
 const props = defineProps<{
   modelValue: DatasetEntity
@@ -21,6 +22,12 @@ const emit = defineEmits<{
 const formRef = ref<FormInstance>()
 const previewData = ref<unknown>([])
 const layoutRef = ref<{ revealPreview: () => Promise<void> }>()
+const httpDataSourceList = computed(() =>
+  (props.dataSourceList || []).filter((item): item is { code: string; name: string; dataSourceType: string } => {
+    return typeof item === 'object' && item !== null && 'dataSourceType' in item && item.dataSourceType === 'http' && 'code' in item && typeof item.code === 'string'
+  })
+)
+const urlPlaceholder = computed(() => formData.dataSourceCode ? '请输入相对路径，例如：/users' : '请输入完整地址，例如：https://api.example.com/users')
 
 const isHttpDataset = (dataset: DatasetEntity['dataset']): dataset is HttpDataset => {
   return dataset?.datasetType === 'http'
@@ -68,6 +75,11 @@ watch(
         if (!formData.dataset.headerList) {
           formData.dataset.headerList = []
         }
+        formData.dataset.headerList.forEach(header => {
+          if (header.encrypted === undefined) {
+            header.encrypted = false
+          }
+        })
       }
     }
   },
@@ -105,7 +117,23 @@ const resetFields = () => {
  * 获取数据
  */
 const getData = (): DatasetEntity => {
-  return { ...formData }
+  return buildEncryptedDatasetEntity()
+}
+
+const buildEncryptedDatasetEntity = (): DatasetEntity => {
+  const dataset = isHttpDataset(formData.dataset)
+    ? {
+        ...formData.dataset,
+        headerList: (formData.dataset.headerList || []).map(header => ({
+          ...header,
+          val: header.encrypted && header.val && header.val !== '******' ? encryptByRsa(header.val) : header.val
+        }))
+      }
+    : formData.dataset
+  return {
+    ...formData,
+    dataset
+  }
 }
 
 /**
@@ -115,12 +143,12 @@ const test = async () => {
   try {
     // 验证必填字段
     if (!isHttpDataset(formData.dataset) || !formData.dataset.url) {
-      ElMessage.error('请先输入请求地址')
+      ElMessage.error('请先输入访问路径')
       return false
     }
 
     // 调用测试接口
-    const res = await datasetApi.test({ dataset: formData })
+    const res = await datasetApi.test({ dataset: buildEncryptedDatasetEntity() })
     previewData.value = res.data
     if (res.outputList && res.outputList.length > 0) {
       // 保存现有的用户配置
@@ -243,11 +271,21 @@ defineExpose({
       <el-form-item label="数据集名称" prop="name">
         <el-input v-model="formData.name" placeholder="请输入数据集名称" clearable />
       </el-form-item>
-      <el-form-item label="请求地址">
+      <el-form-item label="HTTP数据源">
+        <el-select v-model="formData.dataSourceCode" placeholder="请选择HTTP数据源" clearable>
+          <el-option
+            v-for="item in httpDataSourceList"
+            :key="item.code"
+            :label="item.name"
+            :value="item.code"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="访问路径">
         <el-input
           v-if="formData.dataset && 'url' in formData.dataset"
           v-model="formData.dataset.url"
-          placeholder="请输入请求地址"
+          :placeholder="urlPlaceholder"
           clearable
         />
       </el-form-item>
@@ -268,7 +306,7 @@ defineExpose({
             @click="
               formData.dataset &&
                 'headerList' in formData.dataset &&
-                formData.dataset.headerList?.push({ key: '', val: '' })
+                formData.dataset.headerList?.push({ key: '', val: '', encrypted: false })
             "
           >
             添加请求头
@@ -287,6 +325,11 @@ defineExpose({
             <el-table-column label="Value">
               <template #default="{ row }">
                 <el-input v-model="row.val" size="small" placeholder="Value" />
+              </template>
+            </el-table-column>
+            <el-table-column label="加密" width="80">
+              <template #default="{ row }">
+                <el-checkbox v-model="row.encrypted" />
               </template>
             </el-table-column>
             <el-table-column label="操作" width="80" fixed="right">

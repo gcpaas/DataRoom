@@ -6,4 +6,5 @@ import lombok.Data;
 public class KeyVal {
     private String key;
     private String val;
+    private Boolean encrypted;
 }

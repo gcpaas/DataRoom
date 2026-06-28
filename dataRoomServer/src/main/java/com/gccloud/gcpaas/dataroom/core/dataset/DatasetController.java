@@ -2,9 +2,11 @@ package com.gccloud.gcpaas.dataroom.core.dataset;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gccloud.gcpaas.dataroom.core.bean.Resp;
+import com.gccloud.gcpaas.dataroom.core.bean.KeyVal;
 import com.gccloud.gcpaas.dataroom.core.constant.DataRoomConstant;
 import com.gccloud.gcpaas.dataroom.core.constant.DataRoomRole;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.DatasetOutputParam;
+import com.gccloud.gcpaas.dataroom.core.dataset.bean.HttpDataset;
 import com.gccloud.gcpaas.dataroom.core.dataset.service.AbstractDatasetService;
 import com.gccloud.gcpaas.dataroom.core.dataset.service.DatasetServiceFactory;
 import com.gccloud.gcpaas.dataroom.core.entity.DatasetEntity;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -83,6 +86,7 @@ public class DatasetController {
     @Parameters({@Parameter(name = "code", description = "数据集编码", in = ParameterIn.PATH)})
     public Resp<DatasetEntity> detail(@PathVariable("code") String code) {
         DatasetEntity datasetEntity = datasetMapper.getByCode(code);
+        desensitizeHttpDatasetHeaders(datasetEntity);
         return Resp.success(datasetEntity);
     }
 
@@ -99,6 +103,7 @@ public class DatasetController {
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "更新", description = "更新数据集")
     public Resp<String> update(@RequestBody DatasetEntity datasetEntity) {
+        preserveHttpDatasetHeaderSensitive(datasetEntity);
         datasetEntity.setUpdateDate(new Date());
         datasetMapper.updateById(datasetEntity);
         return Resp.success(datasetEntity.getId());
@@ -168,5 +173,57 @@ public class DatasetController {
         datasetRunResponse.setOutputList(outputParamList);
         datasetRunResponse.setData(data);
         return Resp.success(datasetRunResponse);
+    }
+
+    private void desensitizeHttpDatasetHeaders(DatasetEntity datasetEntity) {
+        if (datasetEntity == null || !(datasetEntity.getDataset() instanceof HttpDataset httpDataset)) {
+            return;
+        }
+        List<KeyVal> headerList = httpDataset.getHeaderList();
+        if (headerList == null) {
+            return;
+        }
+        for (KeyVal header : headerList) {
+            if (header != null && Boolean.TRUE.equals(header.getEncrypted()) && StringUtils.isNotBlank(header.getVal())) {
+                header.setVal("******");
+            }
+        }
+    }
+
+    private void preserveHttpDatasetHeaderSensitive(DatasetEntity datasetEntity) {
+        if (datasetEntity == null || StringUtils.isBlank(datasetEntity.getCode()) || !(datasetEntity.getDataset() instanceof HttpDataset updateDataset)) {
+            return;
+        }
+        DatasetEntity dbEntity = datasetMapper.getByCode(datasetEntity.getCode());
+        if (dbEntity == null || !(dbEntity.getDataset() instanceof HttpDataset dbDataset)) {
+            return;
+        }
+        Map<String, KeyVal> oldHeaders = new java.util.HashMap<>();
+        if (dbDataset.getHeaderList() != null) {
+            for (KeyVal oldHeader : dbDataset.getHeaderList()) {
+                if (oldHeader != null && StringUtils.isNotBlank(oldHeader.getKey())) {
+                    oldHeaders.put(normalizeHeaderKey(oldHeader.getKey()), oldHeader);
+                }
+            }
+        }
+        if (updateDataset.getHeaderList() == null) {
+            return;
+        }
+        for (KeyVal updateHeader : updateDataset.getHeaderList()) {
+            if (updateHeader == null
+                    || !Boolean.TRUE.equals(updateHeader.getEncrypted())
+                    || StringUtils.isBlank(updateHeader.getKey())
+                    || (StringUtils.isNotBlank(updateHeader.getVal()) && !"******".equals(updateHeader.getVal()))) {
+                continue;
+            }
+            KeyVal oldHeader = oldHeaders.get(normalizeHeaderKey(updateHeader.getKey()));
+            if (oldHeader != null) {
+                updateHeader.setVal(oldHeader.getVal());
+            }
+        }
+    }
+
+    private static String normalizeHeaderKey(String key) {
+        return key.trim().toLowerCase(Locale.ROOT);
     }
 }

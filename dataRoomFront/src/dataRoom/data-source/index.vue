@@ -2,7 +2,7 @@
 import { ref, onMounted, defineAsyncComponent, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Plus, MoreFilled, Edit, Delete, View } from '@element-plus/icons-vue'
-import { dataSourceApi, type DataSourceEntity, type ExcelDataSource, type ExcelColumn } from './api'
+import { dataSourceApi, type DataSourceEntity, type ExcelDataSource, type ExcelColumn, type HttpDataSource } from './api'
 import { datasetApi } from '../dataset/api'
 import { buildExcelUpdatePayload } from './excelSave'
 import ExcelViewData from './components/ExcelViewData.vue'
@@ -27,6 +27,7 @@ import hiveImg from './assets/image/Hive.svg'
 import tdengineImg from './assets/image/TDengine.svg'
 import druidImg from './assets/image/Druid.svg'
 import elasticsearchImg from './assets/image/Elasticsearch.svg'
+import httpImg from './assets/image/http.svg'
 import excelImg from './assets/image/Excel占位符.png'
 import mqttImg from './assets/image/MQTT.svg'
 import tidbImg from './assets/image/TiDB.svg'
@@ -210,6 +211,13 @@ const dataSourceTypeMap = {
     description: '通过HTTP API连接Elasticsearch',
     component: defineAsyncComponent(() => import('./components/EsEditor.vue')),
   },
+  http: {
+    name: 'HTTP',
+    icon: 'HTTP',
+    image: httpImg,
+    description: '复用HTTP API基础地址和公共请求头',
+    component: defineAsyncComponent(() => import('./components/HttpEditor.vue')),
+  },
   excel: {
     name: 'Excel',
     icon: '📊',
@@ -261,14 +269,18 @@ const dataSourceTypeGroups: Array<{ name: string; types: DataSourceTypeKey[] }> 
   },
   {
     name: '时序数据库',
-    types: ['tdengine'],
+    types: ['tdengine']
   },
   {
     name: '消息数据源',
     types: ['mqtt'],
   },
   {
-    name: '文件数据源',
+    name: 'HTTP',
+    types: ['http']
+  },
+  {
+    name: '文件',
     types: ['excel'],
   },
 ]
@@ -372,6 +384,16 @@ const handleAdd = (dataSourceType: DataSourceTypeKey) => {
         bearerToken: '',
         apiKey: '',
       },
+    }
+  } else if (dataSourceType === 'http') {
+    currentDataSource.value = {
+      name: '',
+      dataSourceType: 'http',
+      dataSource: {
+        dataSourceType: 'http',
+        baseUrl: '',
+        headerList: [],
+      } as HttpDataSource,
     }
   } else {
     // 根据数据源类型设置默认驱动名称

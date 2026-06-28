@@ -45,7 +45,7 @@ export interface HttpDataset extends BaseDataset {
   datasetType: 'http'
   url: string
   method: string
-  headerList?: Array<{ key: string; val: string }>
+  headerList?: Array<{ key: string; val: string; encrypted?: boolean }>
   body?: string
   respJsonPath?: string
 }
