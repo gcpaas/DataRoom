@@ -1181,6 +1181,16 @@ const onHistoryRolledBack = () => {
   window.location.reload()
 }
 
+const onSaveBeforeHistoryRollback = async (done: (saved: boolean) => void) => {
+  try {
+    const saved = await savePageConfig({ updateThumbnail: true })
+    done(Boolean(saved && saved.status !== 'design_save_failed'))
+  } catch (error) {
+    console.error(error)
+    done(false)
+  }
+}
+
 onMounted(() => {
   window.addEventListener('keydown', onWindowKeyDown)
   window.addEventListener('keyup', onCanvasPanKeyUp)
@@ -1507,6 +1517,7 @@ onBeforeUnmount(() => {
     v-model="historyDialogVisible"
     :page-code="pageStageEntity?.pageCode || ''"
     :has-unsaved-changes="hasPageConfigUnsavedChanges"
+    @save-before-rollback="onSaveBeforeHistoryRollback"
     @rolled-back="onHistoryRolledBack"
   />
   <SaveBeforeLeaveDialog v-model="saveBeforeLeaveDialogVisible" @action="onSaveBeforeLeaveAction" />

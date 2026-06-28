@@ -2,6 +2,7 @@
 import { computed, nextTick, ref, type ComponentPublicInstance, watch } from 'vue'
 import { ElMessage, ElMessageBox, type InputInstance } from 'element-plus'
 import { pageApi, type PageHistoryItem } from '@/dataRoom/page/api'
+import { runPageHistoryRollbackFlow } from '@/dataRoom/designer/utils/page-history-rollback.ts'
 
 const props = defineProps<{
   modelValue: boolean
@@ -12,6 +13,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
   'rolled-back': [history: PageHistoryItem]
+  'save-before-rollback': [done: (saved: boolean) => void]
 }>()
 
 const pageSize = 20
@@ -146,11 +148,34 @@ const handlePageChange = (page: number) => {
   void loadHistory(page)
 }
 
-const handleRollback = async (history: PageHistoryItem) => {
-  if (props.hasUnsavedChanges) {
-    ElMessage.warning('请先保存后再回滚')
-    return
+const confirmSaveUnsavedChanges = async () => {
+  try {
+    await ElMessageBox.confirm(
+      '当前页面存在未保存的变更，是否先保存当前变更后再回滚？',
+      '未保存变更',
+      {
+        type: 'warning',
+        confirmButtonText: '保存并回滚',
+        cancelButtonText: '直接回滚',
+        distinguishCancelAndClose: true,
+      },
+    )
+    return true
+  } catch (action) {
+    if (action === 'cancel') {
+      return false
+    }
+    throw action
   }
+}
+
+const saveBeforeRollback = () => {
+  return new Promise<boolean>((resolve) => {
+    emit('save-before-rollback', resolve)
+  })
+}
+
+const handleRollback = async (history: PageHistoryItem) => {
   if (!history.id) {
     ElMessage.error('历史记录缺少标识，无法回滚')
     return
@@ -172,12 +197,25 @@ const handleRollback = async (history: PageHistoryItem) => {
 
   rollbackLoadingId.value = history.id
   try {
-    await pageApi.historyRollback(history.id)
+    const result = await runPageHistoryRollbackFlow({
+      hasUnsavedChanges: props.hasUnsavedChanges,
+      confirmSave: confirmSaveUnsavedChanges,
+      save: saveBeforeRollback,
+      rollback: async () => {
+        await pageApi.historyRollback(history.id!)
+      },
+    })
+    if (result === 'save_failed') {
+      ElMessage.error('保存失败，已取消回滚')
+      return
+    }
     ElMessage.success('回滚成功')
     visible.value = false
     emit('rolled-back', history)
-  } catch {
-    ElMessage.error('回滚失败，请稍后重试')
+  } catch (error) {
+    if (error !== 'close') {
+      ElMessage.error('回滚失败，请稍后重试')
+    }
   } finally {
     rollbackLoadingId.value = undefined
   }
