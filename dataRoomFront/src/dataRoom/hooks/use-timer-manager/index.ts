@@ -24,6 +24,7 @@ export function useTimerManager(options: UseTimerManagerOptions) {
 export class TimerManager {
   // 定时器实例映射表
   private timerIntervalMap: Map<string, number> = new Map()
+  private timerRunningMap: Map<string, boolean> = new Map()
   // 画布实例引用
   private canvasInst: Reactive<CanvasInst>
   // 基础配置引用
@@ -37,25 +38,26 @@ export class TimerManager {
     this.basicConfig = basicConfig
   }
 
-  /**
-   * 执行定时器动作
-   * @param timer 定时器配置
-   */
-  private async executeTimerActions(timer: PageTimer): Promise<void> {
-    if (!timer.actions || timer.actions.length === 0) {
+  private async triggerTimerTick(timer: PageTimer): Promise<void> {
+    if (this.timerRunningMap.get(timer.id)) {
+      console.warn(`定时器 ${timer.name} 上一次动作尚未执行完成，本次触发已跳过`)
       return
     }
-    // 依次执行所有动作
-    for (const action of timer.actions) {
-      try {
-        const config = action.chartActionConfig
-        if (config.type === 'code' && config.code) {
-          await this.canvasInst.triggerChartAction('', action, {})
-        }
-      } catch (error) {
-        console.error(`定时器 ${timer.name} 动作 [${action.name}] 执行失败:`, error)
-        ElMessage.error(`定时器 ${timer.name} 动作 ${action.name} 执行失败: ${error}`)
-      }
+    this.timerRunningMap.set(timer.id, true)
+    try {
+      await this.canvasInst.triggerBehavior({
+        sourceType: 'timer',
+        sourceId: timer.id,
+        behaviorName: 'tick',
+        triggerData: {
+          timerId: timer.id,
+          timerName: timer.name,
+          interval: timer.interval,
+          timestamp: Date.now(),
+        },
+      })
+    } finally {
+      this.timerRunningMap.set(timer.id, false)
     }
   }
 
@@ -71,7 +73,10 @@ export class TimerManager {
     this.stopTimer(timer.id)
     // 创建新的定时器
     const intervalId = window.setInterval(() => {
-      void this.executeTimerActions(timer)
+      void this.triggerTimerTick(timer).catch((error) => {
+        console.error(`定时器 ${timer.name} 触发失败:`, error)
+        ElMessage.error(`定时器 ${timer.name} 触发失败: ${error}`)
+      })
     }, timer.interval)
     this.timerIntervalMap.set(timer.id, intervalId)
   }
@@ -86,6 +91,7 @@ export class TimerManager {
       window.clearInterval(intervalId)
       this.timerIntervalMap.delete(timerId)
     }
+    this.timerRunningMap.delete(timerId)
   }
 
   /**
@@ -112,5 +118,6 @@ export class TimerManager {
       window.clearInterval(intervalId)
     })
     this.timerIntervalMap.clear()
+    this.timerRunningMap.clear()
   }
 }

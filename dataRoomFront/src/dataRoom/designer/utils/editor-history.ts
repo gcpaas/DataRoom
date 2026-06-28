@@ -46,6 +46,14 @@ export interface UpdateChartLayoutEntry extends BaseHistoryEntry {
   after: ChartLayoutState
 }
 
+export type ChartLayoutStateById = Record<string, ChartLayoutState>
+
+export interface UpdateChartsLayoutEntry extends BaseHistoryEntry {
+  type: 'update-charts-layout'
+  before: ChartLayoutStateById
+  after: ChartLayoutStateById
+}
+
 export interface ReorderChartEntry extends BaseHistoryEntry {
   type: 'reorder-chart'
   parent: ChartParentRef
@@ -54,7 +62,20 @@ export interface ReorderChartEntry extends BaseHistoryEntry {
   afterIndex: number
 }
 
-export type HistoryEntry = AddChartEntry | RemoveChartEntry | UpdateChartLayoutEntry | ReorderChartEntry
+export interface ReplaceChartChildrenEntry extends BaseHistoryEntry {
+  type: 'replace-chart-children'
+  parent: ChartParentRef
+  before: ChartConfig<unknown>[]
+  after: ChartConfig<unknown>[]
+}
+
+export type HistoryEntry =
+  | AddChartEntry
+  | RemoveChartEntry
+  | UpdateChartLayoutEntry
+  | UpdateChartsLayoutEntry
+  | ReorderChartEntry
+  | ReplaceChartChildrenEntry
 
 interface EditorHistoryManagerOptions {
   source: ChartHistorySource
@@ -99,6 +120,14 @@ export interface ReorderChartOptions {
 
 export const cloneChartConfig = <T>(chart: ChartConfig<T>): ChartConfig<T> => {
   return structuredClone(toRaw(chart))
+}
+
+const cloneChartList = (chartList: ChartConfig<unknown>[]) => {
+  return chartList.map((chart) => cloneChartConfig(chart))
+}
+
+const hasChartListChange = (before: ChartConfig<unknown>[], after: ChartConfig<unknown>[]) => {
+  return JSON.stringify(before.map((chart) => toRaw(chart))) !== JSON.stringify(after.map((chart) => toRaw(chart)))
 }
 
 export const captureChartLayoutState = (chart: Pick<ChartConfig<unknown>, 'x' | 'y' | 'w' | 'h' | 'rotateX' | 'rotateY' | 'rotateZ'>): ChartLayoutState => {
@@ -156,6 +185,45 @@ export const createChartLayoutHistoryEntry = (
     chartId,
     before: structuredClone(before),
     after: structuredClone(after),
+  }
+}
+
+const normalizeChartLayoutStateMap = (layouts: Map<string, ChartLayoutState> | ChartLayoutStateById): ChartLayoutStateById => {
+  if (layouts instanceof Map) {
+    return Object.fromEntries(Array.from(layouts.entries()).map(([chartId, layout]) => [chartId, structuredClone(layout)]))
+  }
+  return structuredClone(layouts)
+}
+
+export const createChartsLayoutHistoryEntry = (
+  label: string,
+  source: ChartHistorySource,
+  before: Map<string, ChartLayoutState> | ChartLayoutStateById,
+  after: Map<string, ChartLayoutState> | ChartLayoutStateById,
+): UpdateChartsLayoutEntry | null => {
+  const beforeState = normalizeChartLayoutStateMap(before)
+  const afterState = normalizeChartLayoutStateMap(after)
+  const chartIds = Object.keys(beforeState).filter((chartId) => {
+    const beforeLayout = beforeState[chartId]
+    const afterLayout = afterState[chartId]
+    return beforeLayout && afterLayout && hasChartLayoutChange(beforeLayout, afterLayout)
+  })
+
+  if (chartIds.length === 0) {
+    return null
+  }
+
+  const filteredBefore = Object.fromEntries(chartIds.map((chartId) => [chartId, beforeState[chartId]!]))
+  const filteredAfter = Object.fromEntries(chartIds.map((chartId) => [chartId, afterState[chartId]!]))
+
+  return {
+    type: 'update-charts-layout',
+    id: `charts-layout-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    label,
+    timestamp: Date.now(),
+    source,
+    before: structuredClone(filteredBefore),
+    after: structuredClone(filteredAfter),
   }
 }
 
@@ -219,6 +287,29 @@ export const createReorderChartHistoryEntry = (
     chartId,
     beforeIndex,
     afterIndex,
+  }
+}
+
+export const createReplaceChartChildrenHistoryEntry = (
+  label: string,
+  source: ChartHistorySource,
+  parent: ChartParentRef,
+  before: ChartConfig<unknown>[],
+  after: ChartConfig<unknown>[],
+): ReplaceChartChildrenEntry | null => {
+  if (!hasChartListChange(before, after)) {
+    return null
+  }
+
+  return {
+    type: 'replace-chart-children',
+    id: `replace-chart-children-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    label,
+    timestamp: Date.now(),
+    source,
+    parent: structuredClone(parent),
+    before: cloneChartList(before),
+    after: cloneChartList(after),
   }
 }
 
@@ -410,6 +501,20 @@ export const reorderChartWithinParent = (chartList: ChartConfig<unknown>[], opti
   return true
 }
 
+export const replaceChartChildrenByParent = (
+  chartList: ChartConfig<unknown>[],
+  parent: ChartParentRef,
+  children: ChartConfig<unknown>[],
+) => {
+  const resolved = resolveChartListByParent(chartList, parent)
+  if (!resolved) {
+    return false
+  }
+
+  resolved.list.splice(0, resolved.list.length, ...cloneChartList(children))
+  return true
+}
+
 const removeChartByEntry = (chartList: ChartConfig<unknown>[], entry: AddChartEntry | RemoveChartEntry) => {
   const location = findChartNodeLocation(entry.chart.id, chartList)
   if (!location) {
@@ -425,6 +530,25 @@ const restoreChartByEntry = (chartList: ChartConfig<unknown>[], entry: AddChartE
     index: entry.index,
     chart: cloneChartConfig(entry.chart),
   })
+}
+
+const applyChartsLayoutEntry = (chartList: ChartConfig<unknown>[], layouts: ChartLayoutStateById) => {
+  const locations = Object.entries(layouts).map(([chartId, layout]) => {
+    const location = findChartNodeLocation(chartId, chartList)
+    return {
+      location,
+      layout,
+    }
+  })
+
+  if (locations.some((item) => !item.location)) {
+    return false
+  }
+
+  locations.forEach((item) => {
+    applyChartLayoutState(item.location!.chart, item.layout)
+  })
+  return true
 }
 
 export class EditorHistoryManager {
@@ -517,12 +641,16 @@ export class EditorHistoryManager {
           applyChartLayoutState(location.chart, direction === 'undo' ? entry.before : entry.after)
           return true
         }
+        case 'update-charts-layout':
+          return applyChartsLayoutEntry(chartList, direction === 'undo' ? entry.before : entry.after)
         case 'reorder-chart':
           return reorderChartWithinParent(chartList, {
             parent: entry.parent,
             chartId: entry.chartId,
             toIndex: direction === 'undo' ? entry.beforeIndex : entry.afterIndex,
           })
+        case 'replace-chart-children':
+          return replaceChartChildrenByParent(chartList, entry.parent, direction === 'undo' ? entry.before : entry.after)
         default:
           return false
       }

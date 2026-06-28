@@ -6,6 +6,7 @@ import com.gccloud.gcpaas.dataroom.core.bean.Resp;
 import com.gccloud.gcpaas.dataroom.core.constant.DataRoomRole;
 import com.gccloud.gcpaas.dataroom.core.datasource.bean.DataSourceColumnMeta;
 import com.gccloud.gcpaas.dataroom.core.datasource.bean.DataSourceTableMeta;
+import com.gccloud.gcpaas.dataroom.core.datasource.bean.HttpDatasource;
 import com.gccloud.gcpaas.dataroom.core.datasource.bean.MqttDatasource;
 import com.gccloud.gcpaas.dataroom.core.datasource.service.DataSourceMetadataService;
 import com.gccloud.gcpaas.dataroom.core.datasource.service.MqttDatasourceConnectionService;
@@ -122,6 +123,9 @@ public class DataSourceController {
         if (datasourceEntity.getDataSource() instanceof MqttDatasource mqtt) {
             mqtt.validate(true);
         }
+        if (datasourceEntity.getDataSource() instanceof HttpDatasource http) {
+            http.validate();
+        }
         datasourceEntity.setCode(CodeWorker.generateCode(DataRoomConstant.Datasource.CODE_PREFIX));
         datasourceMapper.insert(datasourceEntity);
         return Resp.success(datasourceEntity.getId());
@@ -135,6 +139,9 @@ public class DataSourceController {
         datasourceEntity.getDataSource().updatedSensitive(dbDataSourceEntity.getDataSource());
         if (datasourceEntity.getDataSource() instanceof MqttDatasource mqtt) {
             mqtt.validate(false);
+        }
+        if (datasourceEntity.getDataSource() instanceof HttpDatasource http) {
+            http.validate();
         }
         datasourceEntity.setUpdateDate(new Date());
         datasourceMapper.updateById(datasourceEntity);

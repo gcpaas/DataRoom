@@ -21,4 +21,10 @@ class ResourceTypeTest {
         assertEquals(ResourceType.IMAGE, ResourceType.getByExtension(""));
         assertEquals(ResourceType.IMAGE, ResourceType.getByExtension("txt"));
     }
+
+    @Test
+    void getByExtensionDoesNotResolvePageCover() {
+        assertEquals(ResourceType.IMAGE, ResourceType.getByExtension("pageCover"));
+        assertEquals(ResourceType.IMAGE, ResourceType.getByExtension(".pageCover"));
+    }
 }

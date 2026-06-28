@@ -10,7 +10,7 @@ import {
   asUrlGlobalVariableConfig,
   type GlobalVariable
 } from "@/dataRoom/designer/types/GlobalVariable.ts";
-import type {CanvasInst, ChartLayerMoveDirection} from "@/dataRoom/designer/types/CanvasInst.ts";
+import type {CanvasInst, ChartLayerMoveDirection, TriggerBehaviorPayload} from "@/dataRoom/designer/types/CanvasInst.ts";
 import type {
   ChartAction,
   CodeBlockActionConfig,
@@ -22,12 +22,18 @@ import {isTargetChartActionConfig} from "@/dataRoom/components/type/ChartAction.
 import type {BehaviorEventParam} from "@/dataRoom/components/type/BehaviorEvent.ts";
 import type {ChartParentRef} from '@/dataRoom/designer/utils/editor-history.ts'
 import {resolveDatasetParamValue} from '@/dataRoom/hooks/use-canvas-inst/dataset-params.ts'
+import type {PageBasicConfig} from '@/dataRoom/page-designer/type/PageBasicConfig.ts'
 
 type ChartInstanceMap = Record<string, ComponentInternalInstance>
+type BehaviorActionConfig = {
+  disabled: boolean
+  actions: ChartAction[]
+}
 
 interface UseCanvasInstOptions {
   chartList: Ref<ChartConfig<unknown>[]>
   globalVariable: Ref<GlobalVariable[]>
+  basicConfig?: Ref<PageBasicConfig>
   addChart?: (type: string) => ChartConfig<unknown>
   activeChartById?: (id: string) => void
   commitChartAdd?: (chart: ChartConfig<unknown>, label?: string, parent?: ChartParentRef, index?: number) => void
@@ -46,7 +52,7 @@ interface UseCanvasInstOptions {
  * @param options
  */
 export function useCanvasInst(options: UseCanvasInstOptions) {
-  const {chartList, globalVariable, addChart, activeChartById, commitChartAdd, undo, redo, canUndo, canRedo, moveChartLayer, deleteChart, setChartHidden} = options
+  const {chartList, globalVariable, basicConfig, addChart, activeChartById, commitChartAdd, undo, redo, canUndo, canRedo, moveChartLayer, deleteChart, setChartHidden} = options
 
   const chartInstanceMap: ChartInstanceMap = {}
 
@@ -59,6 +65,7 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
       return getChartById(targetChartId, chartList.value)
     } catch (error) {
       console.warn(`动作 [${actionName}] 跳过不存在的目标组件 ${targetChartId}:`, error)
+      ElMessage.warning(`动作 [${actionName}] 的目标组件不存在，已跳过`)
       return null
     }
   }
@@ -90,6 +97,7 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
         await chartInstance.exposed?.autoRefreshData?.()
       } catch (error) {
         console.warn(`动作 [${actionName}] 刷新组件 ${targetChart.id} 数据失败:`, error)
+        ElMessage.warning(`动作 [${actionName}] 刷新组件数据失败，已跳过`)
       }
     }
   }
@@ -114,24 +122,29 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
   const handleUpdateGlobalVariableAction = (config: UpdateGlobalVariableActionConfig, data: unknown, actionName: string) => {
     if (!config.globalVariableName) {
       console.warn(`动作 [${actionName}] 未配置全局变量名称，已跳过`)
+      ElMessage.warning(`动作 [${actionName}] 未配置全局变量名称，已跳过`)
       return
     }
     if (!config.bepName) {
       console.warn(`动作 [${actionName}] 未配置参数名称，已跳过`)
+      ElMessage.warning(`动作 [${actionName}] 未配置参数名称，已跳过`)
       return
     }
     if (!data || typeof data !== 'object') {
       console.warn(`动作 [${actionName}] 缺少行为参数，已跳过`)
+      ElMessage.warning(`动作 [${actionName}] 缺少行为参数，已跳过`)
       return
     }
     const params = data as Record<string, unknown>
     if (!(config.bepName in params)) {
       console.warn(`动作 [${actionName}] 行为参数中不存在 ${config.bepName}，已跳过`)
+      ElMessage.warning(`动作 [${actionName}] 行为参数不存在，已跳过`)
       return
     }
     const value = params[config.bepName]
     if (value === undefined || value === null) {
       console.warn(`动作 [${actionName}] 行为参数 ${config.bepName} 为空，已跳过`)
+      ElMessage.warning(`动作 [${actionName}] 行为参数为空，已跳过`)
       return
     }
     canvasInst.updateGlobalVariableValue(config.globalVariableName, String(value))
@@ -144,6 +157,59 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
     }
     const func = new Function('bep', `${config.code}`)
     await func(behaviorEventParam)
+  }
+
+  const executeBehaviorActions = async (sourceId: string, behavior: BehaviorActionConfig | undefined, triggerData: unknown) => {
+    if (!behavior) {
+      console.warn(`触发源 ${sourceId} 未找到行为配置，已跳过`)
+      ElMessage.warning(`触发源 ${sourceId} 未找到行为配置，已跳过`)
+      return
+    }
+    if (behavior.disabled || !behavior.actions || behavior.actions.length === 0) {
+      return
+    }
+    for (let i = 0; i < behavior.actions.length; i++) {
+      const action = behavior.actions[i]
+      if (!action) {
+        continue
+      }
+      try {
+        await canvasInst.triggerChartAction(sourceId, action, triggerData)
+      } catch (error) {
+        console.error(`行为动作 [${action.name}] 执行失败:`, error)
+        ElMessage.error(`行为动作 [${action.name}] 执行失败: ${error}`)
+      }
+    }
+  }
+
+  const triggerBehavior = async (payload: TriggerBehaviorPayload) => {
+    if (payload.sourceType === 'chart') {
+      let chart: ChartConfig<unknown> | null = null
+      try {
+        chart = getChartById(payload.sourceId, chartList.value)
+      } catch (error) {
+        console.warn(`组件 ${payload.sourceId} 不存在，交互行为已跳过:`, error)
+        ElMessage.warning(`组件 ${payload.sourceId} 不存在，交互行为已跳过`)
+        return
+      }
+      if (!chart?.behaviors) {
+        console.warn(`组件 ${payload.sourceId} 未配置交互行为，已跳过`)
+        ElMessage.warning(`组件 ${payload.sourceId} 未配置交互行为，已跳过`)
+        return
+      }
+      await executeBehaviorActions(chart.id, chart.behaviors[payload.behaviorName], payload.triggerData)
+      return
+    }
+    if (payload.sourceType === 'timer') {
+      const timer = basicConfig?.value?.timers?.find((item) => item.id === payload.sourceId)
+      if (!timer) {
+        console.warn(`定时器 ${payload.sourceId} 不存在，已跳过`)
+        ElMessage.warning(`定时器 ${payload.sourceId} 不存在，已跳过`)
+        return
+      }
+      const behavior = timer?.behaviors?.[payload.behaviorName as 'tick']
+      await executeBehaviorActions(payload.sourceId, behavior, payload.triggerData)
+    }
   }
 
   const canvasInst = reactive<CanvasInst>({
@@ -241,36 +307,14 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
       }
     },
     triggerChartBehavior: async (charId: string, behaviorName: string, triggerData: unknown) => {
-      const chart = getChartById(charId, chartList.value)
-      if (!chart) {
-        return
-      }
-      if (!chart.behaviors) {
-        return
-      }
-      for (const key of Object.keys(chart.behaviors)) {
-        if (behaviorName !== key) {
-          continue
-        }
-        const behavior = chart.behaviors[key]
-        if (!behavior) {
-          continue
-        }
-        if (behavior.disabled) {
-          continue
-        }
-        if (!behavior.actions || behavior.actions.length == 0) {
-          continue
-        }
-        for (let i = 0; i < behavior.actions.length; i++) {
-          const action = behavior.actions[i]
-          if (!action) {
-            continue
-          }
-          await canvasInst.triggerChartAction(chart.id, action, triggerData)
-        }
-      }
+      await canvasInst.triggerBehavior({
+        sourceType: 'chart',
+        sourceId: charId,
+        behaviorName,
+        triggerData,
+      })
     },
+    triggerBehavior,
     getGlobalVariableValue: (globalVariableName: string) => {
       const globalVar = findGlobalVariable(globalVariableName)
       if (!globalVar) {

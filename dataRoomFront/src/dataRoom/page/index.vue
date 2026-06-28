@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Document, EditPen, Folder, Monitor, MoreFilled, Plus, Search, View } from '@element-plus/icons-vue'
+import { Cellphone, Cpu, Document, EditPen, Folder, Monitor, MoreFilled, Plus, Search, View } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import { pageApi, type PageEntity } from './api'
 import PageShareDialog from './components/PageShareDialog.vue'
@@ -10,7 +10,7 @@ import pagePlaceholder from './assets/image/仪表盘占位符.png'
 import directoryPlaceholder from './assets/image/目录占位符.png'
 import { PageStatus } from '@/dataRoom/constants/PageStatus.ts'
 import { PageType } from '@/dataRoom/constants/PageType.ts'
-import { getPageDesignPath, getPagePreviewPath } from './page-route.ts'
+import { getPageDesignPath, getPagePreviewPath, shouldPublishBeforePreview } from './page-route.ts'
 import { getPageThumbnailSrc, isDirectoryPageType } from './page-thumbnail.ts'
 
 interface AddTypeOption {
@@ -18,6 +18,8 @@ interface AddTypeOption {
   name: string
   description: string
   icon: typeof Folder
+  disabled?: boolean
+  targetPath?: string
 }
 
 interface BreadcrumbItem {
@@ -28,7 +30,21 @@ interface BreadcrumbItem {
 const addTypeOptions: AddTypeOption[] = [
   { type: PageType.DIRECTORY, name: '目录', description: '用于分组管理页面和大屏资源', icon: Folder },
   { type: PageType.VISUAL_SCREEN, name: '大屏', description: '可视化大屏数据展示设计', icon: Monitor },
-  { type: PageType.PAGE, name: '页面', description: '自定义仪表盘页面布局设计', icon: Document },
+  { type: PageType.PAGE, name: 'PC端看板', description: '自定义仪表盘页面布局设计', icon: Document },
+  {
+    type: 'aiGeneration',
+    name: 'AI生成',
+    description: '通过对话创建大屏、PC端看板',
+    icon: Cpu,
+    targetPath: '/dataRoom/console/ai-generation',
+  },
+  {
+    type: 'mobileDashboard',
+    name: '移动端看板',
+    description: '暂时不支持，功能开发中',
+    icon: Cellphone,
+    disabled: true,
+  },
 ]
 
 const router = useRouter()
@@ -60,7 +76,7 @@ const getTypeName = (pageType?: string) => {
     case PageType.VISUAL_SCREEN:
       return '大屏'
     case PageType.PAGE:
-      return '页面'
+      return 'PC端看板'
     default:
       return ''
   }
@@ -98,9 +114,16 @@ const handleShowAddDialog = () => {
   addDialogVisible.value = true
 }
 
-const handleSelectType = (pageType: string) => {
+const handleSelectType = (option: AddTypeOption) => {
+  if (option.disabled) {
+    return
+  }
   addDialogVisible.value = false
-  void handleAdd(pageType)
+  if (option.targetPath) {
+    void router.push(option.targetPath)
+    return
+  }
+  void handleAdd(option.type)
 }
 
 const handleAdd = async (pageType: string) => {
@@ -208,8 +231,53 @@ const handleDelete = async (page: PageEntity) => {
   }
 }
 
-const handlePreview = (page: PageEntity) => {
-  openRouteInNewWindow(getPagePreviewPath(page))
+const handleCopy = async (page: PageEntity) => {
+  try {
+    await ElMessageBox.confirm(`确定要复制${page.name}吗？`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+    await pageApi.copy(page.code)
+    ElMessage.success('复制成功')
+    await getPageList()
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('复制失败:', error)
+    }
+  }
+}
+
+const handlePreview = async (page: PageEntity) => {
+  const previewPath = getPagePreviewPath(page)
+  if (!previewPath) {
+    return
+  }
+
+  if (!shouldPublishBeforePreview(page)) {
+    openRouteInNewWindow(previewPath)
+    return
+  }
+
+  try {
+    await ElMessageBox.confirm(`页面「${page.name}」尚未发布，发布成功后才能访问。是否立即发布并访问？`, '页面未发布', {
+      confirmButtonText: '发布并访问',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+    await pageApi.publish({
+      pageCode: page.code,
+      remark: '访问前自动发布',
+    })
+    ElMessage.success('发布成功')
+    await getPageList()
+    openRouteInNewWindow(previewPath)
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('发布并访问失败:', error)
+      ElMessage.error('发布失败，暂不能访问')
+    }
+  }
 }
 
 const handleShare = (page: PageEntity) => {
@@ -249,7 +317,10 @@ const handleCardCommand = (command: string, item: PageEntity) => {
       void handleDelete(item)
       break
     case 'preview':
-      handlePreview(item)
+      void handlePreview(item)
+      break
+    case 'copy':
+      void handleCopy(item)
       break
     case 'share':
       handleShare(item)
@@ -343,7 +414,7 @@ onMounted(() => {
               <div v-if="canOperatePage(item)" class="card-hover-overlay" @click.stop>
                 <div class="card-hover-actions">
                   <el-button :icon="EditPen" @click="handleCardCommand('design', item)">设计</el-button>
-                  <el-button :icon="View" @click="handleCardCommand('preview', item)">预览</el-button>
+                  <el-button :icon="View" @click="handleCardCommand('preview', item)">访问</el-button>
                 </div>
               </div>
             </div>
@@ -366,7 +437,8 @@ onMounted(() => {
                       <el-dropdown-item command="design" v-if="canOperatePage(item)">设计</el-dropdown-item>
                       <el-dropdown-item command="publish" v-if="canPublishPage(item)">发布</el-dropdown-item>
                       <el-dropdown-item command="offline" v-if="canOfflinePage(item)">取消发布</el-dropdown-item>
-                      <el-dropdown-item command="preview" v-if="canOperatePage(item)">预览</el-dropdown-item>
+                      <el-dropdown-item command="preview" v-if="canOperatePage(item)">访问</el-dropdown-item>
+                      <el-dropdown-item command="copy" v-if="canOperatePage(item)">复制</el-dropdown-item>
                       <el-dropdown-item command="share" v-if="canOperatePage(item)">分享</el-dropdown-item>
                       <el-dropdown-item command="delete" divided>删除</el-dropdown-item>
                     </el-dropdown-menu>
@@ -381,13 +453,14 @@ onMounted(() => {
     </div>
 
     <!-- 新增类型选择对话框 -->
-    <el-dialog v-model="addDialogVisible" title="选择新增类型" width="560px" :close-on-click-modal="true">
+    <el-dialog v-model="addDialogVisible" title="选择新增类型" width="880px" :close-on-click-modal="true">
       <div class="add-type-cards">
         <div
           v-for="option in addTypeOptions"
           :key="option.type"
           class="add-type-card"
-          @click="handleSelectType(option.type)"
+          :class="{ 'add-type-card--disabled': option.disabled }"
+          @click="handleSelectType(option)"
         >
           <el-icon class="add-type-icon">
             <component :is="option.icon"/>
@@ -616,6 +689,23 @@ onMounted(() => {
     &:hover {
       border-color: var(--el-color-primary);
       background-color: var(--el-color-primary-light-9);
+    }
+
+    &.add-type-card--disabled {
+      cursor: not-allowed;
+      background: var(--el-fill-color-light);
+      border-color: var(--el-border-color-lighter);
+
+      &:hover {
+        background: var(--el-fill-color-light);
+        border-color: var(--el-border-color-lighter);
+      }
+
+      .add-type-icon,
+      .add-type-name,
+      .add-type-desc {
+        color: var(--el-text-color-disabled);
+      }
     }
 
     .add-type-icon {

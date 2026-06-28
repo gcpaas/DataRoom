@@ -27,6 +27,11 @@ const consoleMenus: ConsoleMenuItem[] = [
     label: '访问日志',
     path: '/dataRoom/console/log',
   },
+  {
+    key: 'ai-generation',
+    label: 'AI生成',
+    path: '/dataRoom/console/ai-generation',
+  },
 ]
 const defaultConsolePath = '/dataRoom/console/profile'
 

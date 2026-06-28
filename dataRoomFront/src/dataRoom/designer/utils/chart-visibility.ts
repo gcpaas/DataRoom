@@ -11,3 +11,7 @@ export const filterVisibleCharts = (charts: ChartConfig<unknown>[] | undefined) 
 
   return charts.filter((chart) => !isChartHidden(chart))
 }
+
+export const getVisibleChartChildren = (chart: Pick<ChartConfig<unknown>, 'children'> | undefined) => {
+  return filterVisibleCharts(chart?.children)
+}

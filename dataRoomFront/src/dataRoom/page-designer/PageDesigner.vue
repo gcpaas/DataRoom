@@ -5,7 +5,7 @@ import { GridItem, GridLayout } from 'vue-grid-layout-v3'
 import { v4 as uuidv4 } from 'uuid'
 import { getChartById, getResourceUrl } from '@/dataRoom/utils/index.ts'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { pageApi } from '@/dataRoom/page/api.ts'
 import { useCanvasInst } from '@/dataRoom/hooks/use-canvas-inst'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
@@ -13,7 +13,6 @@ import type { PageStageEntity } from '@/dataRoom/page/type/PageStageEntity.ts'
 import type { PageBasicConfig } from '@/dataRoom/page-designer/type/PageBasicConfig.ts'
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
-import { useTimerManager } from '@/dataRoom/hooks/use-timer-manager'
 import { handleSaveBeforeLeaveAction, type SaveBeforeLeaveAction } from '@/dataRoom/designer/utils/save-before-leave'
 import {
   createDesignerHistoryAutoBackupController,
@@ -262,6 +261,7 @@ const addChart = (type: string) => {
 const { canvasInst } = useCanvasInst({
   chartList,
   globalVariable,
+  basicConfig: pageBasicConfig,
   addChart,
   activeChartById,
   commitChartAdd,
@@ -270,11 +270,6 @@ const { canvasInst } = useCanvasInst({
   canUndo: () => editorHistory.canUndo,
   canRedo: () => editorHistory.canRedo,
   moveChartLayer,
-})
-
-const { timerManager } = useTimerManager({
-  canvasInst,
-  basicConfig: pageBasicConfig,
 })
 
 provide(DrConst.CANVAS_INST, canvasInst)
@@ -519,7 +514,8 @@ const hasPageConfigUnsavedChanges = computed(() => {
 /**
  * 保存
  */
-const savePageConfig = async (options: { updateThumbnail?: boolean } = {}) => {
+const savePageConfig = async (options: { updateThumbnail?: boolean; showMessage?: boolean } = {}) => {
+  const showMessage = options.showMessage !== false
   const payload = getPageConfigPayload()
   if (!payload) {
     return false
@@ -567,22 +563,54 @@ const savePageConfig = async (options: { updateThumbnail?: boolean } = {}) => {
 
   if (savedHash.status === 'saved_without_history') {
     console.error(savedHash.historyBackupError)
-    ElMessage({
-      message: '保存成功，但历史备份失败，请稍后重试',
-      type: 'warning',
-    })
+    if (showMessage) {
+      ElMessage({
+        message: '保存成功，但历史备份失败，请稍后重试',
+        type: 'warning',
+      })
+    }
     return savedHash
   }
 
-  ElMessage({
-    message: thumbnailFailure ? getPageThumbnailFailureMessage(thumbnailFailure) : '保存成功',
-    type: thumbnailFailure ? 'warning' : 'success',
-  })
+  if (showMessage) {
+    ElMessage({
+      message: thumbnailFailure ? getPageThumbnailFailureMessage(thumbnailFailure) : '保存成功',
+      type: thumbnailFailure ? 'warning' : 'success',
+    })
+  }
   return savedHash
 }
 
 const onSave = async () => {
   await savePageConfig({ updateThumbnail: true })
+}
+
+const isMessageBoxCancel = (error: unknown) => ['cancel', 'close'].includes(String(error))
+
+const onPublish = async () => {
+  try {
+    await ElMessageBox.confirm(`确定要保存并发布${pageStageEntity.value?.name || '当前页面'}吗？`, '发布确认', {
+      confirmButtonText: '保存并发布',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+
+    const saved = await savePageConfig({ updateThumbnail: true, showMessage: false })
+    if (!saved || saved.status === 'design_save_failed') {
+      ElMessage.error('保存失败，暂不能发布')
+      return
+    }
+
+    await pageApi.publish({
+      pageCode: pageStageEntity.value?.pageCode || '',
+      remark: '发布',
+    })
+    ElMessage.success('发布成功')
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('发布失败:', error)
+    }
+  }
 }
 
 const onUndo = () => {
@@ -684,26 +712,6 @@ const computedCanvasMainContainerStyle = computed(() => {
   return styles
 })
 
-/**
- * 监听定时器配置变化
- */
-watch(
-  () => pageBasicConfig.value.timers,
-  (newTimers) => {
-    if (!timerManager) {
-      return
-    }
-    if (!newTimers) {
-      // 如果定时器配置被清空，停止所有定时器
-      timerManager.clearAllTimers()
-      return
-    }
-    // 重新加载所有定时器
-    timerManager.reloadAllTimers()
-  },
-  { deep: true },
-)
-
 watch(
   [chartList, pageBasicConfig, globalVariable],
   () => {
@@ -745,7 +753,6 @@ onMounted(() => {
     if (!pageDesignerAliveGuard.isAlive()) {
       return
     }
-    timerManager.reloadAllTimers()
     const initialHash = await syncCurrentPageConfigHash()
     if (!pageDesignerAliveGuard.isAlive()) {
       return
@@ -758,16 +765,10 @@ onMounted(() => {
   })
 })
 
-/**
- * 组件卸载时清理所有定时器
- */
 onUnmounted(() => {
   pageDesignerAliveGuard.dispose()
   window.removeEventListener('keydown', onHistoryKeyDown)
   historyAutoBackupController.stop()
-  if (timerManager) {
-    timerManager.clearAllTimers()
-  }
 })
 </script>
 
@@ -810,6 +811,9 @@ onUnmounted(() => {
           <el-button @click="onPreview" size="small">预览</el-button>
         </div>
         <div class="header-action">
+          <el-button @click="onPublish" size="small">发布</el-button>
+        </div>
+        <div class="header-action">
           <el-button @click="onSave" size="small" type="primary">保存</el-button>
         </div>
       </div>
@@ -844,7 +848,7 @@ onUnmounted(() => {
       <div class="right-panel" :style="computedRightControlPanelStyle">
         <el-scrollbar class="right-panel-scrollbar" height="100%">
           <div class="right-panel-scroll-content">
-            <ControlPanel v-if="rightControlPanelSetting" :basicConfig="pageBasicConfig"></ControlPanel>
+            <ControlPanel v-if="rightControlPanelSetting" :basicConfig="pageBasicConfig" :global-variable-list="globalVariable"></ControlPanel>
             <ControlPanelWrapper v-else :chart="activeChart!" :global-variable-list="globalVariable">
               <component :is="getPanelComponent(activeChart?.type)" :chart="activeChart"></component>
             </ControlPanelWrapper>

@@ -63,6 +63,11 @@ export const appRoutes: RouteRecordRaw[] = [
             component: () => import('@/dataRoom/operation-log/index.vue'),
           },
           {
+            path: 'ai-generation',
+            name: 'consoleAiGeneration',
+            component: () => import('@/dataRoom/ai-generation/index.vue'),
+          },
+          {
             path: 'access-log',
             redirect: '/dataRoom/console/log',
           },

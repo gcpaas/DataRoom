@@ -214,9 +214,9 @@ onMounted(() => {
           </el-table-column>
           <el-table-column label="操作" width="220" fixed="right">
             <template #default="{ row }">
-              <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
-              <el-button v-if="row.status === 'LOCKED'" type="warning" link :icon="Unlock" @click="handleUnlock(row)">解锁</el-button>
-              <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
+              <el-button type="primary" link @click="handleEdit(row as UserEntity)">编辑</el-button>
+              <el-button v-if="row.status === 'LOCKED'" type="warning" link :icon="Unlock" @click="handleUnlock(row as UserEntity)">解锁</el-button>
+              <el-button type="danger" link @click="handleDelete(row as UserEntity)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

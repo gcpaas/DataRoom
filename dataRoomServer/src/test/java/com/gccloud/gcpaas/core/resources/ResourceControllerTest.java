@@ -1,6 +1,10 @@
 package com.gccloud.gcpaas.core.resources;
 
 import com.gccloud.gcpaas.dataroom.core.bean.Resp;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
+import com.baomidou.mybatisplus.core.MybatisMapperBuilderAssistant;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.gccloud.gcpaas.dataroom.core.constant.ResourceType;
 import com.gccloud.gcpaas.dataroom.core.entity.ResourceEntity;
 import com.gccloud.gcpaas.dataroom.core.mapper.ResourceMapper;
@@ -31,6 +35,26 @@ import static org.mockito.Mockito.when;
 class ResourceControllerTest {
 
     @Test
+    void listExcludesPageCoverResourcesByDefault() {
+        TableInfoHelper.initTableInfo(new MybatisMapperBuilderAssistant(new MybatisConfiguration(), ""), ResourceEntity.class);
+        ResourceMapper resourceMapper = mock(ResourceMapper.class);
+        RecordingStorageService storageService = new RecordingStorageService("local");
+        ResourceController controller = newController(resourceMapper, storageService);
+
+        when(resourceMapper.selectList(any())).thenReturn(List.of());
+
+        Resp<List<ResourceEntity>> response = controller.list(null, null, null);
+
+        assertEquals(200, response.getCode());
+        ArgumentCaptor<LambdaQueryWrapper<ResourceEntity>> wrapperCaptor = ArgumentCaptor.forClass(LambdaQueryWrapper.class);
+        verify(resourceMapper).selectList(wrapperCaptor.capture());
+        assertTrue(wrapperCaptor.getValue().getSqlSegment().contains("<>"));
+        assertTrue(wrapperCaptor.getValue().getParamNameValuePairs().values().stream()
+                .anyMatch(value -> ResourceType.PAGE_COVER.equals(value)
+                        || ResourceType.PAGE_COVER.getValue().equals(value)));
+    }
+
+    @Test
     void uploadCreatesResourceWithMainFileAndCoverThroughCurrentStorage() throws IOException {
         ResourceMapper resourceMapper = mock(ResourceMapper.class);
         RecordingStorageService storageService = new RecordingStorageService("s3");
@@ -58,6 +82,26 @@ class ResourceControllerTest {
         ResourceEntity inserted = insertedCaptor.getValue();
         assertTrue(inserted.getPath().startsWith("image/"));
         assertTrue(inserted.getThumbnail().startsWith("image/"));
+    }
+
+    @Test
+    void uploadCanCreatePageCoverResourceWhenExplicitlyRequested() throws IOException {
+        ResourceMapper resourceMapper = mock(ResourceMapper.class);
+        RecordingStorageService storageService = new RecordingStorageService("local");
+        ResourceController controller = newController(resourceMapper, storageService);
+
+        MockMultipartFile file = new MockMultipartFile("file", "sales_cover.png", "image/png", "cover".getBytes());
+
+        Resp<ResourceEntity> response = controller.upload(null, file, null, null, "pageCover", null, null);
+
+        assertEquals(200, response.getCode());
+        ResourceEntity data = response.getData();
+        assertEquals(ResourceType.PAGE_COVER, data.getResourceType());
+        assertTrue(data.getPath().startsWith("image/"));
+
+        ArgumentCaptor<ResourceEntity> insertedCaptor = ArgumentCaptor.forClass(ResourceEntity.class);
+        verify(resourceMapper).insert(insertedCaptor.capture());
+        assertEquals(ResourceType.PAGE_COVER, insertedCaptor.getValue().getResourceType());
     }
 
     @Test

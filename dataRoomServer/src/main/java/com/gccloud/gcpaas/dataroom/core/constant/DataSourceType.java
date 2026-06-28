@@ -28,6 +28,7 @@ public enum DataSourceType implements IEnum<String> {
     TDENGINE("tdengine"),
     DRUID("druid"),
     ES("es"),
+    HTTP("http"),
     EXCEL("excel"),
     MQTT("mqtt"),
     TIDB("tidb"),
@@ -54,6 +55,7 @@ public enum DataSourceType implements IEnum<String> {
     public static final String TDENGINE_TYPE = "tdengine";
     public static final String DRUID_TYPE = "druid";
     public static final String ES_TYPE = "es";
+    public static final String HTTP_TYPE = "http";
     public static final String EXCEL_TYPE = "excel";
     public static final String MQTT_TYPE = "mqtt";
     public static final String TIDB_TYPE = "tidb";

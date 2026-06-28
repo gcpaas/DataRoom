@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { getComponent } from '@/dataRoom/components/AutoInstall.ts'
 import { computed, type CSSProperties, type Ref, nextTick, onMounted, onUnmounted, provide, ref } from 'vue'
 import { pageApi } from '@/dataRoom/page/api.ts'
 import { useRoute } from 'vue-router'
@@ -12,8 +11,8 @@ import type { VisualScreenPageBasicConfig } from '@/dataRoom/page-designer/type/
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
 import { useTimerManager } from '@/dataRoom/hooks/use-timer-manager'
-import { filterVisibleCharts } from '@/dataRoom/designer/utils/chart-visibility.ts'
 import { useRealtimeDataset } from '@/dataRoom/hooks/use-realtime-dataset'
+import VisualScreenChartTree from '@/dataRoom/visual-screen-designer/components/VisualScreenChartTree.vue'
 
 const pageStageEntity = ref<PageStageEntity>()
 const chartList = ref<ChartConfig<unknown>[]>([])
@@ -29,7 +28,6 @@ const route = useRoute()
 // 视口尺寸响应式
 const viewportWidth = ref(window.innerWidth)
 const viewportHeight = ref(window.innerHeight)
-const visibleChartList = computed(() => filterVisibleCharts(chartList.value))
 
 /**
  * 创建画布实例供子组件使用
@@ -37,6 +35,7 @@ const visibleChartList = computed(() => filterVisibleCharts(chartList.value))
 const { canvasInst } = useCanvasInst({
   chartList,
   globalVariable,
+  basicConfig: basicConfig as unknown as Ref<PageBasicConfig>,
 })
 provide(DrConst.CANVAS_INST, canvasInst)
 
@@ -87,28 +86,6 @@ onUnmounted(() => {
 const onResize = () => {
   viewportWidth.value = window.innerWidth
   viewportHeight.value = window.innerHeight
-}
-
-/**
- * 计算组件坐标样式（与设计器一致）
- */
-const computedChartStyle = (chart: ChartConfig<unknown>): CSSProperties => {
-  let transform = `translate(${chart.x}px,${chart.y}px)`
-  if (chart.rotateX) {
-    transform += ` rotateX(${chart.rotateX}deg)`
-  }
-  if (chart.rotateY) {
-    transform += ` rotateY(${chart.rotateY}deg)`
-  }
-  if (chart.rotateZ) {
-    transform += ` rotateZ(${chart.rotateZ}deg)`
-  }
-  return {
-    position: 'absolute',
-    transform: transform,
-    width: `${chart.w}px`,
-    height: `${chart.h}px`,
-  }
 }
 
 /**
@@ -190,9 +167,7 @@ const computedScalerStyle = computed<CSSProperties>(() => {
   <div class="vs-preview-viewport">
     <div class="vs-preview-scaler" :style="computedScalerStyle">
       <div class="canvas-content" :style="computedCanvasContentStyle">
-        <div class="chart-wrapper" v-for="item in visibleChartList" :key="item.id" :id="item.id" :data-dr-id="item.id" :style="computedChartStyle(item)">
-          <component :is="getComponent(item.type)" :chart="item"></component>
-        </div>
+        <VisualScreenChartTree :charts="chartList" mode="preview" />
       </div>
     </div>
   </div>

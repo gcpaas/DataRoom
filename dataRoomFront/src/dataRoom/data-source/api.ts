@@ -68,6 +68,21 @@ export interface EsDataSource {
   apiKey?: string
 }
 
+export interface KeyVal {
+  key: string
+  val: string
+  encrypted?: boolean
+}
+
+/**
+ * HTTP API数据源配置
+ */
+export interface HttpDataSource {
+  dataSourceType: 'http'
+  baseUrl: string
+  headerList?: KeyVal[]
+}
+
 /**
  * MQTT数据源配置
  */
@@ -92,6 +107,7 @@ export interface MqttDataSource {
  * - 关系型(mysql/postgresql/oracle/doris/dameng/db2/gbase/goldendb/greatdb/sqlserver/mongodb/kingbase/clickhouse/mariadb/oceanbase/h2/polardb/hive/tdengine/druid/tidb/starrocks): RelationalDataSource
  * - excel: ExcelDataSource
  * - es: EsDataSource
+ * - http: HttpDataSource
  * - mqtt: MqttDataSource
  */
 export interface DataSourceEntity {
@@ -122,6 +138,7 @@ export interface DataSourceEntity {
     | 'tidb'
     | 'starrocks'
     | 'es'
+    | 'http'
     | 'excel'
     | 'mqtt'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

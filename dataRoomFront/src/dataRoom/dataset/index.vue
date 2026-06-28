@@ -333,7 +333,7 @@ const handleAddDataset = (datasetType: keyof typeof datasetTypeMap, node?: Datas
     name: '',
     datasetType,
     parentCode: node?.code || 'root',
-    dataSourceCode: datasetType === 'sql' || datasetType === 'es' ? '' : undefined,
+    dataSourceCode: datasetType === 'sql' || datasetType === 'es' || datasetType === 'http' ? '' : undefined,
     inputList: [],
     outputList: [],
     dataset:

@@ -167,6 +167,21 @@ public class PageController {
     }
 
     /**
+     * 复制页面，仅复制设计态
+     *
+     * @param code 页面编码
+     * @return 新页面编码
+     */
+    @PostMapping("/copy/{code}")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "复制页面", description = "根据编码复制页面设计态")
+    @Parameters({@Parameter(name = "code", description = "页面编码", in = ParameterIn.PATH)})
+    @OperationLogMeta(actionType = "复制页面", actionDesc = "复制页面设计态", businessType = "page_copy", businessName = "页面复制", targetIdKey = "code", detailLevel = OperationLogDetailLevel.SUMMARY)
+    public Resp<String> copy(@PathVariable("code") String code) {
+        return Resp.success(pageService.copyDesign(code));
+    }
+
+    /**
      * 修改页面名称
      *
      * @param pageRenameDto

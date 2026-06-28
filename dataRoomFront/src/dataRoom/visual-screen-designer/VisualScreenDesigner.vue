@@ -1,17 +1,28 @@
 <script setup lang="ts">
-import { getComponent, getComponentInstance, getPanelComponent } from '@/dataRoom/components/AutoInstall.ts'
-import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, watch } from 'vue'
-import Moveable, { type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd } from 'vue3-moveable'
+import { getComponentInstance, getPanelComponent } from '@/dataRoom/components/AutoInstall.ts'
+import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, type Ref, watch } from 'vue'
+import Moveable, {
+  type OnDrag,
+  type OnDragEnd,
+  type OnDragGroup,
+  type OnDragStart,
+  type OnEvent,
+  type OnResize,
+  type OnResizeEnd,
+  type OnRotate,
+  type OnRotateEnd,
+} from 'vue3-moveable'
 import { VueSelecto } from 'vue3-selecto'
-import { applyChartTransformState, getChartByElement, getChartById, getResourceUrl } from '@/dataRoom/utils/index.ts'
+import { applyChartTransformState, getChartByElement, getResourceUrl } from '@/dataRoom/utils/index.ts'
 import VanillaSelecto from 'selecto'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { Minus, Plus, ScaleToOriginal } from '@element-plus/icons-vue'
 import { pageApi } from '@/dataRoom/page/api.ts'
 import type { PageStageEntity } from '@/dataRoom/page/type/PageStageEntity.ts'
 import { useCanvasInst } from '@/dataRoom/hooks/use-canvas-inst'
+import type { PageBasicConfig } from '@/dataRoom/page-designer/type/PageBasicConfig.ts'
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
 import type { VisualScreenPageBasicConfig } from '@/dataRoom/page-designer/type/VisualScreenPageBasicConfig.ts'
@@ -19,9 +30,12 @@ import type { ChartLayerMoveDirection } from '@/dataRoom/designer/types/CanvasIn
 import {
   EditorHistoryManager,
   captureChartLayoutState,
+  cloneChartConfig,
   createAddChartHistoryEntry,
   createChartLayoutHistoryEntry,
+  createChartsLayoutHistoryEntry,
   createRemoveChartHistoryEntry,
+  createReplaceChartChildrenHistoryEntry,
   createReorderChartHistoryEntry,
   findChartReference,
   getChartListByParent,
@@ -29,6 +43,7 @@ import {
   isNativeTextEditingTarget,
   removeChartWithLocation,
   reorderChartWithinParent,
+  type ChartParentRef,
 } from '@/dataRoom/designer/utils/editor-history.ts'
 import RulerOverlay from './RulerOverlay.vue'
 import {
@@ -61,7 +76,6 @@ import {
   createDesignerHistoryHash,
   hasUnsavedChanges,
 } from '@/dataRoom/designer/utils/designer-history-backup.ts'
-import { filterVisibleCharts } from '@/dataRoom/designer/utils/chart-visibility.ts'
 import { PAGE_HISTORY_REMARKS } from '@/dataRoom/designer/utils/page-history-remark.ts'
 import {
   applySavedDesignerHistoryState,
@@ -77,6 +91,14 @@ import {
   type PageThumbnailSaveFailure,
 } from '@/dataRoom/designer/utils/page-thumbnail-save.ts'
 import { createVisualScreenPageConfigPayload } from './visual-screen-designer-history.ts'
+import {
+  applyVisualScreenAlignment,
+  getVisualScreenAlignmentItems,
+  getVisualScreenAlignmentLabel,
+  type VisualScreenAlignmentCommand,
+} from './alignment'
+import VisualScreenChartTree from './components/VisualScreenChartTree.vue'
+import { groupChartsInParent, isGroupChart, ungroupChartInParent } from './grouping'
 
 const router = useRouter()
 const route = useRoute()
@@ -85,6 +107,8 @@ const canvasCaptureTargetRef = ref<HTMLElement | null>(null)
 const moveableRef = ref<{ updateRect: () => void } | null>(null)
 const canvasViewportRef = ref<HTMLElement | null>(null)
 const activeChart = ref<ChartConfig<unknown>>()
+const selectedChartIds = ref<string[]>([])
+const editingScopeParentId = ref<string | undefined>(undefined)
 const chartList = ref<ChartConfig<unknown>[]>([])
 const pageStageEntity = ref<PageStageEntity>()
 const globalVariable = ref<GlobalVariable[]>([] as GlobalVariable[])
@@ -126,6 +150,7 @@ const editorHistory = reactive(
   }),
 )
 const gestureStartLayoutState = new Map<string, ReturnType<typeof captureChartLayoutState>>()
+const groupGestureStartLayoutState = new Map<string, ReturnType<typeof captureChartLayoutState>>()
 const visualScreenRuler = computed(() => normalizeVisualScreenRulerConfig(basicConfig.value.ruler, canvasWidth.value, canvasHeight.value))
 const moveableGuidelines = computed(() => getVisualScreenMoveableGuidelines(visualScreenRuler.value, canvasWidth.value, canvasHeight.value))
 const moveableVerticalGuidelines = computed(() => moveableGuidelines.value.verticalGuidelines)
@@ -177,16 +202,58 @@ const designerZoomVisible = computed({
 /**
  * 被框选中的组件、可以进行拖拽、旋转、缩放
  */
-const moveableTargets: ComputedRef<(HTMLElement | null)[]> = computed(() => {
-  if (!activeChart.value) {
-    return []
+const currentScopeParentRef = computed<ChartParentRef>(() => {
+  if (!editingScopeParentId.value) {
+    return { parentType: 'root-chart-list' }
   }
-  const dom = document.getElementById(activeChart.value.id)
-  return dom ? [dom] : []
+  return {
+    parentType: 'chart-children',
+    parentId: editingScopeParentId.value,
+  }
 })
-const visibleChartList = computed(() => filterVisibleCharts(chartList.value))
+const currentScopeCharts = computed(() => getChartListByParent(chartList.value, currentScopeParentRef.value) || [])
+const editingScopeBreadcrumb = computed<Array<{ id?: string; title: string }>>(() => {
+  const breadcrumb: Array<{ id?: string; title: string }> = [{ title: '画布' }]
+  let scopeId = editingScopeParentId.value
+  const ancestors: Array<{ id: string; title: string }> = []
+
+  while (scopeId) {
+    const reference = findChartReference(scopeId, chartList.value)
+    if (!reference) {
+      break
+    }
+
+    ancestors.unshift({
+      id: reference.chart.id,
+      title: reference.chart.title || '组合',
+    })
+    scopeId = reference.parent.parentType === 'chart-children' ? reference.parent.parentId : undefined
+  }
+
+  return [...breadcrumb, ...ancestors]
+})
+const moveableTargets: ComputedRef<(HTMLElement | null)[]> = computed(() => {
+  return selectedChartIds.value
+    .map((chartId) => document.querySelector<HTMLElement>(`.chart-wrapper[data-dr-id="${CSS.escape(chartId)}"][data-dr-scope-child="true"]`))
+    .filter((target): target is HTMLElement => Boolean(target))
+})
+const selectedCharts = computed(() => {
+  const chartById = new Map(currentScopeCharts.value.map((chart) => [chart.id, chart]))
+  return selectedChartIds.value.map((chartId) => chartById.get(chartId)).filter((chart): chart is ChartConfig<unknown> => Boolean(chart))
+})
+const selectedChartCount = computed(() => selectedCharts.value.length)
+const selectedGroupChart = computed(() => selectedCharts.value.length === 1 && isGroupChart(selectedCharts.value[0]!))
+const canGroupSelectedCharts = computed(() => selectedCharts.value.length >= 2)
+const canUngroupSelectedChart = computed(() => selectedGroupChart.value)
+const selectoScopeChildTargets = ['.chart-wrapper[data-dr-scope-child="true"]']
+const alignmentMenuItems = computed(() => getVisualScreenAlignmentItems(selectedChartCount.value))
+const canUseAlignmentMenu = computed(() => selectedChartCount.value >= 2)
 
 const syncActiveChartReference = () => {
+  if (editingScopeParentId.value && !findChartReference(editingScopeParentId.value, chartList.value)) {
+    editingScopeParentId.value = undefined
+  }
+  selectedChartIds.value = normalizeSelectedChartIds(selectedChartIds.value)
   if (!activeChart.value) {
     return
   }
@@ -199,6 +266,89 @@ const syncActiveChartReference = () => {
   }
 
   activeChart.value = reference.chart
+}
+
+const normalizeSelectedChartIds = (chartIds: string[]) => {
+  const uniqueIds = Array.from(new Set(chartIds))
+  const currentScopeChartIds = new Set(currentScopeCharts.value.map((chart) => chart.id))
+  return uniqueIds.filter((chartId) => currentScopeChartIds.has(chartId))
+}
+
+const syncActiveChartFromSelection = () => {
+  const validSelectedIds = normalizeSelectedChartIds(selectedChartIds.value)
+  if (validSelectedIds.length !== selectedChartIds.value.length || validSelectedIds.some((chartId, index) => chartId !== selectedChartIds.value[index])) {
+    selectedChartIds.value = validSelectedIds
+  }
+
+  if (validSelectedIds.length === 0) {
+    activeChart.value = undefined
+    return
+  }
+
+  const primaryChartId = validSelectedIds[validSelectedIds.length - 1]!
+  const reference = findChartReference(primaryChartId, chartList.value)
+  activeChart.value = reference?.chart
+}
+
+const setSelectedCharts = (chartIds: string[]) => {
+  const nextSelectedIds = normalizeSelectedChartIds(chartIds)
+  selectedChartIds.value = nextSelectedIds
+  syncActiveChartFromSelection()
+
+  if (nextSelectedIds.length === 1) {
+    rightControlPanelShow.value = true
+    rightControlPanelSetting.value = false
+  } else if (nextSelectedIds.length > 1) {
+    rightControlPanelSetting.value = false
+    rightControlPanelShow.value = false
+  }
+
+  updateMoveableRect()
+}
+
+const selectSingleChart = (chartId: string) => {
+  setSelectedCharts([chartId])
+}
+
+const makeChartPrimaryInSelection = (chartId: string) => {
+  if (!selectedChartIds.value.includes(chartId)) {
+    return
+  }
+  setSelectedCharts([...selectedChartIds.value.filter((selectedChartId) => selectedChartId !== chartId), chartId])
+}
+
+const clearChartSelection = () => {
+  selectedChartIds.value = []
+  activeChart.value = undefined
+  contextMenuVisible.value = false
+  if (!rightControlPanelSetting.value) {
+    rightControlPanelShow.value = false
+  }
+  updateMoveableRect()
+}
+
+const toggleChartSelection = (chartId: string) => {
+  const selectedSet = new Set(selectedChartIds.value)
+  if (selectedSet.has(chartId)) {
+    selectedSet.delete(chartId)
+  } else {
+    selectedSet.add(chartId)
+  }
+  setSelectedCharts(Array.from(selectedSet))
+}
+
+const getChartIdsByElements = (elements: Array<HTMLElement | SVGElement>) => {
+  return elements
+    .filter((target) => target.getAttribute('data-dr-scope-child') === 'true')
+    .map((target) => target.getAttribute('data-dr-id'))
+    .filter((chartId): chartId is string => Boolean(chartId))
+}
+
+const getChartIdByEventTarget = (target: EventTarget | null) => {
+  if (!(target instanceof Element)) {
+    return null
+  }
+  return target.closest<HTMLElement>('.chart-wrapper[data-dr-scope-child="true"]')?.getAttribute('data-dr-id') || null
 }
 
 const commitChartAdd = (chart: ChartConfig<unknown>, label: string = '新增组件') => {
@@ -217,6 +367,9 @@ const deleteChartWithHistory = (chartId: string, label: string = '删除组件')
   }
 
   editorHistory.record(createRemoveChartHistoryEntry(label, 'visual-screen-designer', removed.parent, removed.index, removed.chart))
+  if (editingScopeParentId.value === chartId) {
+    editingScopeParentId.value = removed.parent.parentType === 'chart-children' ? removed.parent.parentId : undefined
+  }
   syncActiveChartReference()
   return true
 }
@@ -288,8 +441,75 @@ const applyHistoryAction = (action: 'undo' | 'redo') => {
 
 const addChart = (type: string) => {
   const chartInst: ChartConfig<unknown> = getComponentInstance(type)
-  chartList.value.push(chartInst)
+  currentScopeCharts.value.push(chartInst)
   return chartInst
+}
+
+const enterGroupScope = (groupId: string) => {
+  const chart = selectedCharts.value.length === 1 && selectedCharts.value[0]?.id === groupId ? selectedCharts.value[0] : undefined
+  if (!chart || !isGroupChart(chart)) {
+    return
+  }
+  editingScopeParentId.value = groupId
+  clearChartSelection()
+}
+
+const exitGroupScope = () => {
+  const currentGroupId = editingScopeParentId.value
+  if (!currentGroupId) {
+    return
+  }
+
+  const currentGroupReference = findChartReference(currentGroupId, chartList.value)
+  editingScopeParentId.value = currentGroupReference?.parent.parentType === 'chart-children' ? currentGroupReference.parent.parentId : undefined
+
+  if (currentGroupReference) {
+    setSelectedCharts([currentGroupId])
+  } else {
+    clearChartSelection()
+  }
+}
+
+const setEditingScopeFromBreadcrumb = (scopeId?: string) => {
+  editingScopeParentId.value = scopeId
+  clearChartSelection()
+}
+
+const onGroupSelectedCharts = () => {
+  if (!canGroupSelectedCharts.value) {
+    return
+  }
+
+  const before = currentScopeCharts.value.map((chart) => cloneChartConfig(chart))
+  const result = groupChartsInParent(currentScopeCharts.value, selectedChartIds.value, '组合')
+  if (!result.changed) {
+    return
+  }
+
+  const after = currentScopeCharts.value.map((chart) => cloneChartConfig(chart))
+  editorHistory.record(createReplaceChartChildrenHistoryEntry('组合', 'visual-screen-designer', currentScopeParentRef.value, before, after))
+  setSelectedCharts(result.selectedIds)
+}
+
+const onUngroupSelectedChart = () => {
+  if (!canUngroupSelectedChart.value) {
+    return
+  }
+
+  const groupId = selectedChartIds.value[0]
+  if (!groupId) {
+    return
+  }
+
+  const before = currentScopeCharts.value.map((chart) => cloneChartConfig(chart))
+  const result = ungroupChartInParent(currentScopeCharts.value, groupId)
+  if (!result.changed) {
+    return
+  }
+
+  const after = currentScopeCharts.value.map((chart) => cloneChartConfig(chart))
+  editorHistory.record(createReplaceChartChildrenHistoryEntry('取消组合', 'visual-screen-designer', currentScopeParentRef.value, before, after))
+  setSelectedCharts(result.selectedIds)
 }
 
 /**
@@ -297,10 +517,12 @@ const addChart = (type: string) => {
  * @param id
  */
 const activeChartById = (id: string) => {
-  const chart: ChartConfig<unknown> = getChartById(id, chartList.value)
-  activeChart.value = chart
-  rightControlPanelShow.value = true
-  rightControlPanelSetting.value = false
+  const reference = findChartReference(id, chartList.value)
+  if (!reference) {
+    return
+  }
+  editingScopeParentId.value = reference.parent.parentType === 'chart-children' ? reference.parent.parentId : undefined
+  selectSingleChart(id)
 }
 
 /**
@@ -309,6 +531,7 @@ const activeChartById = (id: string) => {
 const { canvasInst } = useCanvasInst({
   chartList,
   globalVariable,
+  basicConfig: basicConfig as unknown as Ref<PageBasicConfig>,
   addChart,
   activeChartById,
   commitChartAdd,
@@ -422,10 +645,26 @@ const onRightClick = (e: MouseEvent, chart: ChartConfig<unknown>) => {
   e.preventDefault()
   contextMenuVisible.value = false
   contextMenuEvent.value = e
-  activeChartById(chart.id)
+  if (selectedChartIds.value.includes(chart.id)) {
+    makeChartPrimaryInSelection(chart.id)
+  } else {
+    selectSingleChart(chart.id)
+  }
   nextTick(() => {
     contextMenuVisible.value = true
   })
+}
+
+const onChartTreeClick = (_event: MouseEvent, chart: ChartConfig<unknown>) => {
+  selectSingleChart(chart.id)
+}
+
+const onChartTreeDoubleClick = (_event: MouseEvent, chart: ChartConfig<unknown>) => {
+  enterGroupScope(chart.id)
+}
+
+const onChartTreeContextmenu = (event: MouseEvent, chart: ChartConfig<unknown>) => {
+  onRightClick(event, chart)
 }
 
 /**
@@ -561,7 +800,8 @@ const hasPageConfigUnsavedChanges = computed(() => {
 /**
  * 保存页面配置
  */
-const savePageConfig = async (options: { updateThumbnail?: boolean } = {}) => {
+const savePageConfig = async (options: { updateThumbnail?: boolean; showMessage?: boolean } = {}) => {
+  const showMessage = options.showMessage !== false
   const payload = getPageConfigPayload()
   if (!payload) {
     return false
@@ -609,22 +849,54 @@ const savePageConfig = async (options: { updateThumbnail?: boolean } = {}) => {
 
   if (savedHash.status === 'saved_without_history') {
     console.error(savedHash.historyBackupError)
-    ElMessage({
-      message: '保存成功，但历史备份失败，请稍后重试',
-      type: 'warning',
-    })
+    if (showMessage) {
+      ElMessage({
+        message: '保存成功，但历史备份失败，请稍后重试',
+        type: 'warning',
+      })
+    }
     return savedHash
   }
 
-  ElMessage({
-    message: thumbnailFailure ? getPageThumbnailFailureMessage(thumbnailFailure) : '保存成功',
-    type: thumbnailFailure ? 'warning' : 'success',
-  })
+  if (showMessage) {
+    ElMessage({
+      message: thumbnailFailure ? getPageThumbnailFailureMessage(thumbnailFailure) : '保存成功',
+      type: thumbnailFailure ? 'warning' : 'success',
+    })
+  }
   return savedHash
 }
 
 const onSave = async () => {
   await savePageConfig({ updateThumbnail: true })
+}
+
+const isMessageBoxCancel = (error: unknown) => ['cancel', 'close'].includes(String(error))
+
+const onPublish = async () => {
+  try {
+    await ElMessageBox.confirm(`确定要保存并发布${pageStageEntity.value?.name || '当前页面'}吗？`, '发布确认', {
+      confirmButtonText: '保存并发布',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+
+    const saved = await savePageConfig({ updateThumbnail: true, showMessage: false })
+    if (!saved || saved.status === 'design_save_failed') {
+      ElMessage.error('保存失败，暂不能发布')
+      return
+    }
+
+    await pageApi.publish({
+      pageCode: pageStageEntity.value?.pageCode || '',
+      remark: '发布',
+    })
+    ElMessage.success('发布成功')
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('发布失败:', error)
+    }
+  }
 }
 
 /**
@@ -690,6 +962,44 @@ const finalizeGestureHistory = (chartId: string, label: string) => {
   editorHistory.record(createChartLayoutHistoryEntry(label, 'visual-screen-designer', chartId, before, captureChartLayoutState(reference.chart)))
 }
 
+const captureSelectedChartsLayoutState = () => {
+  return new Map(selectedCharts.value.map((chart) => [chart.id, captureChartLayoutState(chart)]))
+}
+
+const rememberGroupGestureStartLayout = () => {
+  groupGestureStartLayoutState.clear()
+  captureSelectedChartsLayoutState().forEach((layout, chartId) => {
+    groupGestureStartLayoutState.set(chartId, layout)
+  })
+}
+
+const finalizeGroupGestureHistory = (label: string) => {
+  if (groupGestureStartLayoutState.size === 0) {
+    return
+  }
+
+  const before = new Map(groupGestureStartLayoutState)
+  groupGestureStartLayoutState.clear()
+  const after = captureSelectedChartsLayoutState()
+  editorHistory.record(createChartsLayoutHistoryEntry(label, 'visual-screen-designer', before, after))
+}
+
+const onAlignmentCommand = (command: VisualScreenAlignmentCommand) => {
+  if (selectedCharts.value.length < 2) {
+    return
+  }
+
+  const before = captureSelectedChartsLayoutState()
+  const result = applyVisualScreenAlignment(selectedCharts.value, command)
+  if (!result.changed) {
+    return
+  }
+
+  const after = captureSelectedChartsLayoutState()
+  editorHistory.record(createChartsLayoutHistoryEntry(getVisualScreenAlignmentLabel(command), 'visual-screen-designer', before, after))
+  updateMoveableRect()
+}
+
 /**
  * 拖拽组件开始
  * @param e
@@ -715,6 +1025,20 @@ const onDrag = (e: OnDrag) => {
 const onDragEnd = (e: OnDragEnd) => {
   const chart = getChartByElement(e.target, chartList.value)
   finalizeGestureHistory(chart.id, '移动组件')
+}
+
+const onDragGroupStart = () => {
+  rememberGroupGestureStartLayout()
+}
+
+const onDragGroup = (e: OnDragGroup) => {
+  e.events.forEach((event) => {
+    onDrag(event)
+  })
+}
+
+const onDragGroupEnd = () => {
+  finalizeGroupGestureHistory('移动组件')
 }
 
 const updateTransform = (e: OnEvent, transform: string, width?: number, height?: number) => {
@@ -784,37 +1108,28 @@ const onSelectDragStart = (e: import('selecto').OnDragStart<VanillaSelecto>) => 
 const onSelectEnd = (e: import('selecto').OnSelectEnd<VanillaSelecto>) => {
   console.log('onSelectEnd', e)
   if (e.selected.length <= 0) {
+    if (e.isClick) {
+      clearChartSelection()
+    }
     return
   }
-  const target = e.selected[0]
-  if (target) {
-    const active = getChartByElement(target, chartList.value)
-    activeChartById(active.id)
-  }
-}
-/**
- * 计算组件坐标样式
- * @param chart
- */
-const computedChartStyle = (chart: ChartConfig<unknown>): CSSProperties => {
-  let transform = `translate(${chart.x}px,${chart.y}px)`
-  if (chart.rotateX) {
-    transform += ` rotateX(${chart.rotateX}deg)`
-  }
-  if (chart.rotateY) {
-    transform += ` rotateY(${chart.rotateY}deg)`
-  }
-  if (chart.rotateZ) {
-    transform += ` rotateZ(${chart.rotateZ}deg)`
-  }
-  return {
-    position: 'absolute',
-    transform: transform,
-    width: `${chart.w}px`,
-    height: `${chart.h}px`,
-  }
-}
 
+  if (e.isClick) {
+    const inputEvent = e.inputEvent as MouseEvent | PointerEvent | undefined
+    const chartId = getChartIdByEventTarget(inputEvent?.target || null)
+    if (!chartId) {
+      return
+    }
+    if (inputEvent?.metaKey || inputEvent?.ctrlKey) {
+      toggleChartSelection(chartId)
+      return
+    }
+    selectSingleChart(chartId)
+    return
+  }
+
+  setSelectedCharts(getChartIdsByElements(e.selected))
+}
 let canvasResizeObserver: ResizeObserver | undefined
 
 const updateMoveableRect = () => {
@@ -946,6 +1261,12 @@ const onWindowKeyDown = (event: KeyboardEvent) => {
       event.preventDefault()
       return
     }
+  }
+
+  if (event.key === 'Escape' && editingScopeParentId.value && !isNativeTextEditingTarget(event.target)) {
+    event.preventDefault()
+    exitGroupScope()
+    return
   }
 
   if (event.code !== 'Space' || isCanvasPanKeyIgnoredTarget(event.target)) {
@@ -1246,6 +1567,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('blur', resetCanvasPanState)
   historyAutoBackupController.stop()
   gestureStartLayoutState.clear()
+  groupGestureStartLayoutState.clear()
   resetCanvasPanState()
   canvasResizeObserver?.disconnect()
 })
@@ -1300,6 +1622,27 @@ onBeforeUnmount(() => {
                     <el-switch v-model="designerZoomVisible" size="small" />
                   </div>
                 </el-dropdown-item>
+                <el-dropdown-item v-if="canUseAlignmentMenu">
+                  <el-dropdown trigger="click" placement="right-start">
+                    <div class="tool-menu-row" @click.stop>
+                      <span>对齐</span>
+                      <span>›</span>
+                    </div>
+                    <template #dropdown>
+                      <el-dropdown-menu>
+                        <el-dropdown-item
+                          v-for="item in alignmentMenuItems"
+                          :key="item.command"
+                          @click="onAlignmentCommand(item.command)"
+                        >
+                          {{ item.label }}
+                        </el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
+                  </el-dropdown>
+                </el-dropdown-item>
+                <el-dropdown-item v-if="canGroupSelectedCharts" @click="onGroupSelectedCharts">组合</el-dropdown-item>
+                <el-dropdown-item v-if="canUngroupSelectedChart" @click="onUngroupSelectedChart">取消组合</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -1324,6 +1667,9 @@ onBeforeUnmount(() => {
         </div>
         <div class="header-action">
           <el-button @click="onPreview" size="small">预览</el-button>
+        </div>
+        <div class="header-action">
+          <el-button @click="onPublish" size="small">发布</el-button>
         </div>
         <div class="header-action">
           <el-button @click="onSave" size="small" type="primary">保存</el-button>
@@ -1368,26 +1714,31 @@ onBeforeUnmount(() => {
             @interaction-start="isRulerInteracting = true"
             @interaction-end="isRulerInteracting = false"
           />
+          <nav v-if="editingScopeBreadcrumb.length > 1" class="scope-breadcrumb" aria-label="编辑范围">
+            <template v-for="(item, index) in editingScopeBreadcrumb" :key="item.id || 'root'">
+              <button class="scope-breadcrumb__item" type="button" @click="setEditingScopeFromBreadcrumb(item.id)">
+                {{ item.title }}
+              </button>
+              <span v-if="index < editingScopeBreadcrumb.length - 1" class="scope-breadcrumb__separator">/</span>
+            </template>
+          </nav>
           <div class="canvas-viewport">
             <div ref="canvasContainer" class="canvas-content" :style="computedCanvasContentStyle">
               <div ref="canvasCaptureTargetRef" class="canvas-capture-content" :style="computedCanvasCaptureContentStyle">
-                <div
-                  class="chart-wrapper"
-                  v-for="item in visibleChartList"
-                  :key="item.id"
-                  :id="item.id"
-                  :data-dr-id="item.id"
-                  :style="computedChartStyle(item)"
-                  @contextmenu="(e: MouseEvent) => onRightClick(e, item)"
-                >
-                  <component :is="getComponent(item.type)" :chart="item"></component>
-                </div>
+                <VisualScreenChartTree
+                  :charts="chartList"
+                  :scope-parent-id="editingScopeParentId"
+                  mode="designer"
+                  @chart-click="onChartTreeClick"
+                  @chart-double-click="onChartTreeDoubleClick"
+                  @chart-contextmenu="onChartTreeContextmenu"
+                />
               </div>
               <Moveable
                 ref="moveableRef"
                 :draggable="!isCanvasInteractionBlocked"
-                :rotatable="!isCanvasInteractionBlocked"
-                :resizable="!isCanvasInteractionBlocked"
+                :rotatable="!isCanvasInteractionBlocked && selectedChartCount <= 1 && !selectedGroupChart"
+                :resizable="!isCanvasInteractionBlocked && selectedChartCount <= 1 && !selectedGroupChart"
                 :target="moveableTargets"
                 :zoom="designerZoomScale"
                 :bounds="{ left: 0, top: 0, right: 0, bottom: 0, position: 'css' }"
@@ -1417,6 +1768,9 @@ onBeforeUnmount(() => {
                 @rotate="onRotate"
                 @dragStart="onDragStart"
                 @dragEnd="onDragEnd"
+                @dragGroupStart="onDragGroupStart"
+                @dragGroup="onDragGroup"
+                @dragGroupEnd="onDragGroupEnd"
                 @resizeEnd="onResizeEnd"
                 @rotateEnd="onRotateEnd"
               />
@@ -1425,11 +1779,11 @@ onBeforeUnmount(() => {
               :container="canvasViewportRef"
               :dragContainer="canvasViewportRef"
               :rootContainer="canvasViewportRef"
-              :selectableTargets="['.chart-wrapper']"
+              :selectableTargets="selectoScopeChildTargets"
               :selectByClick="!isCanvasInteractionBlocked"
               :selectFromInside="false"
               :continueSelect="false"
-              :toggleContinueSelect="'shift'"
+              :toggleContinueSelect="[['meta'], ['ctrl']]"
               :hitRate="100"
               :ratio="0"
               :dragCondition="canStartSelectoDrag"
@@ -1473,7 +1827,7 @@ onBeforeUnmount(() => {
         <el-scrollbar class="right-panel-scrollbar" height="100%">
           <div class="right-panel-scroll-content">
             <template v-if="rightControlPanelSetting">
-              <VisualScreenControlPanel :basicConfig="basicConfig" />
+              <VisualScreenControlPanel :basicConfig="basicConfig" :global-variable-list="globalVariable" />
             </template>
             <template v-else>
               <ControlPanelWrapper v-if="activeChart" :chart="activeChart" :global-variable-list="globalVariable">
@@ -1682,6 +2036,38 @@ onBeforeUnmount(() => {
         &.canvas-main--pan-ready .canvas-content,
         &.canvas-main--panning .canvas-content {
           cursor: inherit;
+        }
+
+        & .scope-breadcrumb {
+          position: absolute;
+          top: 16px;
+          left: 16px;
+          z-index: 20;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          padding: 6px 8px;
+          background: var(--el-fill-color-blank);
+          border: 1px solid var(--el-border-color);
+          border-radius: 8px;
+          box-shadow: var(--el-box-shadow-light);
+        }
+
+        & .scope-breadcrumb__item {
+          border: 0;
+          color: var(--el-text-color-regular);
+          cursor: pointer;
+          letter-spacing: 0;
+          padding: 2px 6px;
+
+          &:hover {
+            color: var(--el-color-primary);
+          }
+        }
+
+        & .scope-breadcrumb__separator {
+          color: var(--el-text-color-placeholder);
+          letter-spacing: 0;
         }
       }
 

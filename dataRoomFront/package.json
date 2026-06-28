@@ -1,6 +1,6 @@
 {
-  "name": "dataRoomFront",
-  "version": "3.0.0",
+  "name": "data-room-front",
+  "version": "3.4.0",
   "private": true,
   "type": "module",
   "engines": {
