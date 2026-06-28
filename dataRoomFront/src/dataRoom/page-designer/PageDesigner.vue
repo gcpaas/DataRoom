@@ -45,6 +45,11 @@ import {
   createPageHistoryBackupPayload,
   savePageWithHistoryBackup,
 } from '@/dataRoom/designer/utils/designer-history-save.ts'
+import {
+  captureAndUpdatePageThumbnail,
+  getPageThumbnailFailureMessage,
+  type PageThumbnailSaveFailure,
+} from '@/dataRoom/designer/utils/page-thumbnail-save.ts'
 
 const router = useRouter()
 const route = useRoute()
@@ -76,6 +81,7 @@ const lastSavedHash = ref<string>()
 const lastAutoBackupHash = ref<string>()
 const currentPageConfigHash = ref<string>()
 const historyDialogVisible = ref(false)
+const canvasCaptureTargetRef = ref<HTMLElement | null>(null)
 
 const pageDesignerAliveGuard = createAliveGuard()
 const currentPageConfigHashSync = createLatestDesignerHashSync((hash) => {
@@ -513,10 +519,27 @@ const hasPageConfigUnsavedChanges = computed(() => {
 /**
  * 保存
  */
-const savePageConfig = async () => {
+const savePageConfig = async (options: { updateThumbnail?: boolean } = {}) => {
   const payload = getPageConfigPayload()
   if (!payload) {
     return false
+  }
+
+  let thumbnailFailure: PageThumbnailSaveFailure | undefined
+  if (options.updateThumbnail) {
+    try {
+      const thumbnailResult = await captureAndUpdatePageThumbnail({
+        pageCode: payload.pageCode,
+        target: canvasCaptureTargetRef.value,
+      })
+      if (!thumbnailResult.ok) {
+        thumbnailFailure = thumbnailResult
+        console.error(thumbnailResult.error)
+      }
+    } catch (error) {
+      thumbnailFailure = { ok: false, stage: 'capture', error }
+      console.error(error)
+    }
   }
 
   const savedHash = await savePageWithHistoryBackup({
@@ -552,14 +575,14 @@ const savePageConfig = async () => {
   }
 
   ElMessage({
-    message: '保存成功',
-    type: 'success',
+    message: thumbnailFailure ? getPageThumbnailFailureMessage(thumbnailFailure) : '保存成功',
+    type: thumbnailFailure ? 'warning' : 'success',
   })
   return savedHash
 }
 
 const onSave = async () => {
-  await savePageConfig()
+  await savePageConfig({ updateThumbnail: true })
 }
 
 const onUndo = () => {
@@ -611,7 +634,7 @@ const onSaveBeforeLeaveAction = async (action: SaveBeforeLeaveAction) => {
   try {
     await handleSaveBeforeLeaveAction(action, {
       save: async () => {
-        const saved = await savePageConfig()
+        const saved = await savePageConfig({ updateThumbnail: true })
         if (!saved || saved.status === 'design_save_failed') {
           throw new Error('page config is not ready')
         }
@@ -783,7 +806,7 @@ onUnmounted(() => {
     </div>
     <div class="main" :style="computedMainStyle">
       <div class="canvas">
-        <div class="canvas-main" id="canvas-main" :style="computedCanvasMainContainerStyle" @click="onCanvasClick">
+        <div ref="canvasCaptureTargetRef" class="canvas-main" id="canvas-main" :style="computedCanvasMainContainerStyle" @click="onCanvasClick">
           <el-scrollbar>
             <GridLayout v-model:layout="chartList" :col-num="48" :row-height="16" :is-draggable="true" :is-resizable="true" :vertical-compact="true" :use-css-transforms="true">
               <GridItem

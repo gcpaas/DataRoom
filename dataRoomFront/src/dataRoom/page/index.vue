@@ -10,6 +10,7 @@ import directoryPlaceholder from './assets/image/目录占位符.png'
 import { PageStatus } from '@/dataRoom/constants/PageStatus.ts'
 import { PageType } from '@/dataRoom/constants/PageType.ts'
 import { getPageDesignPath, getPagePreviewPath } from './page-route.ts'
+import { getPageThumbnailSrc, isDirectoryPageType } from './page-thumbnail.ts'
 
 interface AddTypeOption {
   type: string
@@ -37,7 +38,7 @@ const addDialogVisible = ref(false)
 const breadcrumbs = ref<BreadcrumbItem[]>([{ code: 'root', name: '全部' }])
 const currentParentCode = ref('root')
 
-const isDirectoryPage = (pageType?: string) => pageType === PageType.DIRECTORY
+const isDirectoryPage = isDirectoryPageType
 
 const isPublishedStatus = (status?: string) => status?.toLowerCase() === PageStatus.PUBLISHED
 
@@ -270,10 +271,7 @@ const getDefaultPlaceholder = (pageType?: string) => {
 }
 
 const getThumbnailSrc = (item: PageEntity) => {
-  if (isDirectoryPage(item.pageType)) {
-    return getDefaultPlaceholder(item.pageType)
-  }
-  return item.thumbnail || getDefaultPlaceholder(item.pageType)
+  return getPageThumbnailSrc(item, getDefaultPlaceholder)
 }
 
 const getPlaceholderAlt = (pageType?: string) => `${getTypeName(pageType) || '默认'}占位图`

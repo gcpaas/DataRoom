@@ -34,6 +34,11 @@ export interface PageOfflineDto {
   remark: string
 }
 
+export interface PageThumbnailUpdateDto {
+  code: string
+  thumbnail: string
+}
+
 export interface PageVo<T> {
   total: number
   size: number
@@ -146,6 +151,10 @@ export const pageApi = {
    */
   updateName(code: string, name: string) {
     return request.post<boolean>('/dataRoom/page/updateName', { code, name })
+  },
+
+  updateThumbnail(data: PageThumbnailUpdateDto) {
+    return request.post<boolean>('/dataRoom/page/updateThumbnail', data)
   },
 
   historyBackup(data: PageHistoryBackupDto) {

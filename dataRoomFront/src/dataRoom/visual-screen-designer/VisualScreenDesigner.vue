@@ -71,11 +71,17 @@ import {
   createPageHistoryBackupPayload,
   savePageWithHistoryBackup,
 } from '@/dataRoom/designer/utils/designer-history-save.ts'
+import {
+  captureAndUpdatePageThumbnail,
+  getPageThumbnailFailureMessage,
+  type PageThumbnailSaveFailure,
+} from '@/dataRoom/designer/utils/page-thumbnail-save.ts'
 import { createVisualScreenPageConfigPayload } from './visual-screen-designer-history.ts'
 
 const router = useRouter()
 const route = useRoute()
 const canvasContainer = ref<HTMLElement | null>(null)
+const canvasCaptureTargetRef = ref<HTMLElement | null>(null)
 const moveableRef = ref<{ updateRect: () => void } | null>(null)
 const canvasViewportRef = ref<HTMLElement | null>(null)
 const activeChart = ref<ChartConfig<unknown>>()
@@ -538,10 +544,27 @@ const hasPageConfigUnsavedChanges = computed(() => {
 /**
  * 保存页面配置
  */
-const savePageConfig = async () => {
+const savePageConfig = async (options: { updateThumbnail?: boolean } = {}) => {
   const payload = getPageConfigPayload()
   if (!payload) {
     return false
+  }
+
+  let thumbnailFailure: PageThumbnailSaveFailure | undefined
+  if (options.updateThumbnail) {
+    try {
+      const thumbnailResult = await captureAndUpdatePageThumbnail({
+        pageCode: payload.pageCode,
+        target: canvasCaptureTargetRef.value,
+      })
+      if (!thumbnailResult.ok) {
+        thumbnailFailure = thumbnailResult
+        console.error(thumbnailResult.error)
+      }
+    } catch (error) {
+      thumbnailFailure = { ok: false, stage: 'capture', error }
+      console.error(error)
+    }
   }
 
   const savedHash = await savePageWithHistoryBackup({
@@ -577,14 +600,14 @@ const savePageConfig = async () => {
   }
 
   ElMessage({
-    message: '保存成功',
-    type: 'success',
+    message: thumbnailFailure ? getPageThumbnailFailureMessage(thumbnailFailure) : '保存成功',
+    type: thumbnailFailure ? 'warning' : 'success',
   })
   return savedHash
 }
 
 const onSave = async () => {
-  await savePageConfig()
+  await savePageConfig({ updateThumbnail: true })
 }
 
 /**
@@ -1037,11 +1060,18 @@ const onDesignerZoomRangeInput = (event: Event) => {
  * 画布尺寸和背景动态样式
  */
 const computedCanvasContentStyle = computed<CSSProperties>(() => {
-  const styles: CSSProperties = {
+  return {
     width: `${canvasWidth.value}px`,
     height: `${canvasHeight.value}px`,
     transform: `translate(${designerViewport.value.panX}px, ${designerViewport.value.panY}px) scale(${designerZoomScale.value})`,
     transformOrigin: 'left top',
+  }
+})
+
+const computedCanvasCaptureContentStyle = computed<CSSProperties>(() => {
+  const styles: CSSProperties = {
+    width: `${canvasWidth.value}px`,
+    height: `${canvasHeight.value}px`,
   }
   const background = basicConfig.value.background
   if (!background) {
@@ -1118,7 +1148,7 @@ const onSaveBeforeLeaveAction = async (action: SaveBeforeLeaveAction) => {
   try {
     await handleSaveBeforeLeaveAction(action, {
       save: async () => {
-        const saved = await savePageConfig()
+        const saved = await savePageConfig({ updateThumbnail: true })
         if (!saved || saved.status === 'design_save_failed') {
           throw new Error('page config is not ready')
         }
@@ -1301,16 +1331,18 @@ onBeforeUnmount(() => {
           />
           <div class="canvas-viewport">
             <div ref="canvasContainer" class="canvas-content" :style="computedCanvasContentStyle">
-              <div
-                class="chart-wrapper"
-                v-for="item in visibleChartList"
-                :key="item.id"
-                :id="item.id"
-                :data-dr-id="item.id"
-                :style="computedChartStyle(item)"
-                @contextmenu="(e: MouseEvent) => onRightClick(e, item)"
-              >
-                <component :is="getComponent(item.type)" :chart="item"></component>
+              <div ref="canvasCaptureTargetRef" class="canvas-capture-content" :style="computedCanvasCaptureContentStyle">
+                <div
+                  class="chart-wrapper"
+                  v-for="item in visibleChartList"
+                  :key="item.id"
+                  :id="item.id"
+                  :data-dr-id="item.id"
+                  :style="computedChartStyle(item)"
+                  @contextmenu="(e: MouseEvent) => onRightClick(e, item)"
+                >
+                  <component :is="getComponent(item.type)" :chart="item"></component>
+                </div>
               </div>
               <Moveable
                 ref="moveableRef"
@@ -1625,6 +1657,12 @@ onBeforeUnmount(() => {
         top: 0;
         left: 0;
         will-change: transform;
+      }
+
+      & .canvas-capture-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
       }
 
       & .canvas-zoom-control {

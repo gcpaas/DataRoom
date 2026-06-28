@@ -24,6 +24,7 @@ import com.gccloud.gcpaas.dataroom.core.page.dto.PageRenameDto;
 import com.gccloud.gcpaas.dataroom.core.page.dto.PageHistoryBackupDto;
 import com.gccloud.gcpaas.dataroom.core.page.dto.PageHistoryRemarkDto;
 import com.gccloud.gcpaas.dataroom.core.page.dto.PageStageSearchDto;
+import com.gccloud.gcpaas.dataroom.core.page.dto.PageThumbnailUpdateDto;
 import com.gccloud.gcpaas.dataroom.core.page.service.PageService;
 import com.gccloud.gcpaas.dataroom.core.page.service.PageStageService;
 import com.gccloud.gcpaas.dataroom.core.util.CodeWorker;
@@ -178,6 +179,34 @@ public class PageController {
         updateWrapper.set(PageEntity::getName, pageRenameDto.getName());
         updateWrapper.set(PageEntity::getUpdateDate, new Date());
         pageService.update(updateWrapper);
+        return Resp.success(true);
+    }
+
+    /**
+     * 修改页面封面
+     *
+     * @param dto
+     * @return
+     */
+    @PostMapping("/updateThumbnail")
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Operation(summary = "修改页面封面", description = "根据编码修改页面封面")
+    @OperationLogMeta(actionType = "修改页面封面", actionDesc = "修改页面封面", businessType = "page_thumbnail", businessName = "页面封面", targetIdKey = "code", detailLevel = OperationLogDetailLevel.SUMMARY)
+    public Resp<Boolean> updateThumbnail(@RequestBody PageThumbnailUpdateDto dto) {
+        if (dto == null || StringUtils.isBlank(dto.getCode())) {
+            throw new DataRoomException("页面编码不能为空");
+        }
+        if (StringUtils.isBlank(dto.getThumbnail())) {
+            throw new DataRoomException("封面地址不能为空");
+        }
+        LambdaUpdateWrapper<PageEntity> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(PageEntity::getCode, dto.getCode());
+        updateWrapper.set(PageEntity::getThumbnail, dto.getThumbnail());
+        updateWrapper.set(PageEntity::getUpdateDate, new Date());
+        boolean updated = pageService.update(updateWrapper);
+        if (!updated) {
+            throw new DataRoomException("页面不存在");
+        }
         return Resp.success(true);
     }
 

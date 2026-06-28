@@ -260,7 +260,7 @@ const dataSourceTypeGroups: Array<{ name: string; types: DataSourceTypeKey[] }> 
     types: ['excel'],
   },
   {
-    name: '队列',
+    name: '物联网',
     types: ['mqtt'],
   },
 ]
