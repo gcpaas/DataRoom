@@ -86,7 +86,8 @@ const timers = computed(() => {
 const timerConfigDialogVisible = ref(false)
 const currentTimer = ref<PageTimer | null>(null)
 
-const activePanelNames = ref(['size', 'background', 'zoom', 'timer'])
+const activeTab = ref('config')
+const activePanelNames = ref(['size', 'background', 'zoom'])
 const currentZoomModeDesc = computed(() => {
   return ZOOM_MODES.find((mode) => mode.value === basicConfig.size.zoom)?.desc || ''
 })
@@ -163,102 +164,125 @@ const deleteTimer = (id: string) => {
 
 <template>
   <div class="dr-config-panel dr-visual-screen-config-panel">
-    <el-form class="dr-config-panel__form" :model="basicConfig" label-width="72px" size="small" label-position="left">
-      <el-collapse v-model="activePanelNames" class="dr-config-panel__section">
-        <el-collapse-item title="画布尺寸" name="size">
-          <el-form-item label="分辨率">
-            <el-select v-model="selectedPreset" class="dr-config-panel__control" placeholder="请选择分辨率">
-              <el-option v-for="preset in RESOLUTION_PRESETS" :key="preset.value" :label="preset.label" :value="preset.value" />
-            </el-select>
-          </el-form-item>
+    <div class="control-tabs">
+      <div class="control-tabs-header" role="tablist" aria-label="大屏配置">
+        <button type="button" class="control-tab" :class="{ active: activeTab === 'config' }" role="tab" :aria-selected="activeTab === 'config'" @click="activeTab = 'config'">
+          配置
+        </button>
+        <button
+          type="button"
+          class="control-tab"
+          :class="{ active: activeTab === 'interaction' }"
+          role="tab"
+          :aria-selected="activeTab === 'interaction'"
+          @click="activeTab = 'interaction'"
+        >
+          交互
+        </button>
+      </div>
+      <div class="control-tabs-content">
+        <section v-show="activeTab === 'config'" class="control-tab-pane" role="tabpanel">
+          <div class="tab-content">
+            <el-form class="dr-config-panel__form" :model="basicConfig" label-width="72px" size="small" label-position="left">
+              <el-collapse v-model="activePanelNames" class="dr-config-panel__section">
+                <el-collapse-item title="画布尺寸" name="size">
+                  <el-form-item label="分辨率">
+                    <el-select v-model="selectedPreset" class="dr-config-panel__control" placeholder="请选择分辨率">
+                      <el-option v-for="preset in RESOLUTION_PRESETS" :key="preset.value" :label="preset.label" :value="preset.value" />
+                    </el-select>
+                  </el-form-item>
 
-          <el-form-item label="宽度">
-            <el-input-number v-model="basicConfig.size.width" class="dr-config-panel__control" :min="320" :step="10" controls-position="right" />
-          </el-form-item>
+                  <el-form-item label="宽度">
+                    <el-input-number v-model="basicConfig.size.width" class="dr-config-panel__control" :min="320" :step="10" controls-position="right" />
+                  </el-form-item>
 
-          <el-form-item label="高度">
-            <el-input-number v-model="basicConfig.size.height" class="dr-config-panel__control" :min="320" :step="10" controls-position="right" />
-          </el-form-item>
-        </el-collapse-item>
+                  <el-form-item label="高度">
+                    <el-input-number v-model="basicConfig.size.height" class="dr-config-panel__control" :min="320" :step="10" controls-position="right" />
+                  </el-form-item>
+                </el-collapse-item>
 
-        <el-collapse-item title="背景" name="background">
-          <el-form-item label="背景填充">
-            <el-radio-group v-model="basicConfig.background.fill">
-              <el-radio value="color">颜色</el-radio>
-              <el-radio value="image">图片</el-radio>
-            </el-radio-group>
-          </el-form-item>
+                <el-collapse-item title="背景" name="background">
+                  <el-form-item label="背景填充">
+                    <el-radio-group v-model="basicConfig.background.fill">
+                      <el-radio value="color">颜色</el-radio>
+                      <el-radio value="image">图片</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
 
-          <el-form-item v-if="basicConfig.background.fill === 'color'" label="背景颜色">
-            <el-color-picker v-model="basicConfig.background.color" show-alpha />
-          </el-form-item>
+                  <el-form-item v-if="basicConfig.background.fill === 'color'" label="背景颜色">
+                    <el-color-picker v-model="basicConfig.background.color" show-alpha />
+                  </el-form-item>
 
-          <template v-if="basicConfig.background.fill === 'image'">
-            <el-form-item label="背景图片">
-              <div class="bg-upload-section">
-                <el-upload
-                  :action="uploadUrl"
-                  :headers="uploadHeaders"
-                  :on-success="handleBgUploadSuccess"
-                  :on-error="handleUploadError"
-                  :show-file-list="false"
-                  accept="image/*"
-                  class="bg-uploader"
-                >
-                  <div class="bg-preview-box">
-                    <el-image v-if="basicConfig.background.url" :src="getResourceUrl(basicConfig.background.url)" fit="contain" class="bg-image" lazy>
-                      <template #error>
-                        <div class="bg-placeholder">
-                          <el-icon class="bg-placeholder-icon">
-                            <Picture />
-                          </el-icon>
-                          <span>加载失败</span>
-                        </div>
-                      </template>
-                    </el-image>
-                    <div v-else class="bg-placeholder">
-                      <el-icon class="bg-placeholder-icon">
-                        <Picture />
-                      </el-icon>
-                      <span>点击上传背景图</span>
-                    </div>
+                  <template v-if="basicConfig.background.fill === 'image'">
+                    <el-form-item label="背景图片">
+                      <div class="bg-upload-section">
+                        <el-upload
+                          :action="uploadUrl"
+                          :headers="uploadHeaders"
+                          :on-success="handleBgUploadSuccess"
+                          :on-error="handleUploadError"
+                          :show-file-list="false"
+                          accept="image/*"
+                          class="bg-uploader"
+                        >
+                          <div class="bg-preview-box">
+                            <el-image v-if="basicConfig.background.url" :src="getResourceUrl(basicConfig.background.url)" fit="contain" class="bg-image" lazy>
+                              <template #error>
+                                <div class="bg-placeholder">
+                                  <el-icon class="bg-placeholder-icon">
+                                    <Picture />
+                                  </el-icon>
+                                  <span>加载失败</span>
+                                </div>
+                              </template>
+                            </el-image>
+                            <div v-else class="bg-placeholder">
+                              <el-icon class="bg-placeholder-icon">
+                                <Picture />
+                              </el-icon>
+                              <span>点击上传背景图</span>
+                            </div>
+                          </div>
+                        </el-upload>
+                      </div>
+                    </el-form-item>
+
+                    <el-form-item label="透明度">
+                      <el-input-number v-model="basicConfig.background.opacity" class="dr-config-panel__control" :min="0" :max="100" :step="1" controls-position="right" />
+                    </el-form-item>
+
+                    <el-form-item label="填充方式">
+                      <el-select v-model="basicConfig.background.repeat" class="dr-config-panel__control" placeholder="请选择填充方式">
+                        <el-option label="不重复" value="no-repeat" />
+                        <el-option label="重复" value="repeat" />
+                        <el-option label="水平重复" value="repeat-x" />
+                        <el-option label="垂直重复" value="repeat-y" />
+                      </el-select>
+                    </el-form-item>
+                  </template>
+                </el-collapse-item>
+
+                <el-collapse-item title="预览缩放" name="zoom">
+                  <el-form-item label="缩放模式">
+                    <el-select v-model="basicConfig.size.zoom" class="dr-config-panel__control" placeholder="请选择缩放模式">
+                      <el-option v-for="mode in ZOOM_MODES" :key="mode.value" :label="mode.label" :value="mode.value" />
+                    </el-select>
+                  </el-form-item>
+
+                  <div v-if="currentZoomModeDesc" class="dr-config-panel__sub-section">
+                    <div class="dr-config-panel__sub-title">缩放说明</div>
+                    <div class="panel-desc">{{ currentZoomModeDesc }}</div>
                   </div>
-                </el-upload>
-              </div>
-            </el-form-item>
-
-            <el-form-item label="透明度">
-              <el-input-number v-model="basicConfig.background.opacity" class="dr-config-panel__control" :min="0" :max="100" :step="1" controls-position="right" />
-            </el-form-item>
-
-            <el-form-item label="填充方式">
-              <el-select v-model="basicConfig.background.repeat" class="dr-config-panel__control" placeholder="请选择填充方式">
-                <el-option label="不重复" value="no-repeat" />
-                <el-option label="重复" value="repeat" />
-                <el-option label="水平重复" value="repeat-x" />
-                <el-option label="垂直重复" value="repeat-y" />
-              </el-select>
-            </el-form-item>
-          </template>
-        </el-collapse-item>
-
-        <el-collapse-item title="预览缩放" name="zoom">
-          <el-form-item label="缩放模式">
-            <el-select v-model="basicConfig.size.zoom" class="dr-config-panel__control" placeholder="请选择缩放模式">
-              <el-option v-for="mode in ZOOM_MODES" :key="mode.value" :label="mode.label" :value="mode.value" />
-            </el-select>
-          </el-form-item>
-
-          <div v-if="currentZoomModeDesc" class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">缩放说明</div>
-            <div class="panel-desc">{{ currentZoomModeDesc }}</div>
+                </el-collapse-item>
+              </el-collapse>
+            </el-form>
           </div>
-        </el-collapse-item>
+        </section>
 
-        <el-collapse-item title="定时器" name="timer">
-          <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>定时器列表</span>
+        <section v-show="activeTab === 'interaction'" class="control-tab-pane" role="tabpanel">
+          <div class="tab-content">
+            <div class="timer-header">
+              <span class="timer-title">定时器</span>
               <el-button type="primary" size="small" plain @click="addTimer">添加定时器</el-button>
             </div>
             <div class="timer-list">
@@ -282,9 +306,9 @@ const deleteTimer = (id: string) => {
               </div>
             </div>
           </div>
-        </el-collapse-item>
-      </el-collapse>
-    </el-form>
+        </section>
+      </div>
+    </div>
 
     <TimerConfigDialog v-if="timerConfigDialogVisible && currentTimer" v-model="timerConfigDialogVisible" :timer="currentTimer" />
   </div>
@@ -303,17 +327,102 @@ const deleteTimer = (id: string) => {
   min-height: 0;
   padding: 0;
   overflow: hidden;
+  background: var(--el-bg-color);
+}
+
+.control-tabs {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.control-tabs-header {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 4px;
+  padding-left: 16px;
+  background: var(--el-fill-color-light);
+  border-bottom: 1px solid var(--el-border-color-light);
+}
+
+.control-tab {
+  position: relative;
+  min-width: 56px;
+  height: 40px;
+  padding: 0 12px;
+  border: 0;
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-secondary);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.control-tab:hover {
+  color: var(--el-text-color-regular);
+}
+
+.control-tab.active {
+  color: var(--el-text-color-primary);
+}
+
+.control-tab.active::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  bottom: 0;
+  left: 12px;
+  height: 2px;
+  background-color: var(--el-color-primary);
+}
+
+.control-tabs-content {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.control-tab-pane {
+  height: 100%;
+  min-height: 0;
+}
+
+.tab-content {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  padding: 16px;
+  overflow-y: auto;
 }
 
 .dr-visual-screen-config-panel .dr-config-panel__form {
   box-sizing: border-box;
   min-height: 0;
-  padding: 12px;
-  overflow-y: auto;
 }
 
 .dr-visual-screen-config-panel .dr-config-panel__section {
   margin-bottom: 0;
+}
+
+.timer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--el-border-color-light);
+}
+
+.timer-title {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .panel-desc,
