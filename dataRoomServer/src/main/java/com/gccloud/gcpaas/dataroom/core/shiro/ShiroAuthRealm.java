@@ -8,12 +8,14 @@ import com.gccloud.gcpaas.dataroom.core.config.bean.Sso;
 import com.gccloud.gcpaas.dataroom.core.constant.UserStatus;
 import com.gccloud.gcpaas.dataroom.core.entity.UserEntity;
 import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
+import com.gccloud.gcpaas.dataroom.core.page.service.PageShareService;
 import com.gccloud.gcpaas.dataroom.core.shiro.sso.ISsoAdapterService;
 import com.gccloud.gcpaas.dataroom.core.user.service.UserService;
 import com.gccloud.gcpaas.dataroom.core.util.TokenUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -32,6 +34,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.stream.Collectors;
 
@@ -50,6 +55,8 @@ public class ShiroAuthRealm extends AuthorizingRealm {
     private UserService userService;
     @Resource
     private ISsoAdapterService ssoAdapterService;
+    @Resource
+    private PageShareService pageShareService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -78,6 +85,15 @@ public class ShiroAuthRealm extends AuthorizingRealm {
         }
         if (StringUtils.isBlank(accessToken)) {
             throw new DataRoomException("未登录或token已过期或认证异常", 401);
+        }
+        if (PageShareService.isShareToken(accessToken)) {
+            try {
+                LoginUser shareUser = pageShareService.authenticateShareToken(accessToken, currentRequestOrNull());
+                return new SimpleAuthenticationInfo(shareUser, token.getPrincipal(), getName());
+            } catch (DataRoomException e) {
+                log.error(ExceptionUtils.getStackTrace(e));
+                throw new AuthenticationException(e);
+            }
         }
         String tokenIssuer = null;
         JSONObject jwtObj = TokenUtils.parseWithOutValidate(accessToken);
@@ -133,5 +149,13 @@ public class ShiroAuthRealm extends AuthorizingRealm {
         }
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(loginUser, token.getPrincipal(), getName());
         return info;
+    }
+
+    private HttpServletRequest currentRequestOrNull() {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes instanceof ServletRequestAttributes servletRequestAttributes) {
+            return servletRequestAttributes.getRequest();
+        }
+        return null;
     }
 }

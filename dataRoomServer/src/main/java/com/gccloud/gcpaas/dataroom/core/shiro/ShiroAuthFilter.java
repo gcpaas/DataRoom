@@ -2,6 +2,7 @@ package com.gccloud.gcpaas.dataroom.core.shiro;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gccloud.gcpaas.dataroom.core.bean.Resp;
+import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
 import com.gccloud.gcpaas.dataroom.core.operationlog.web.OperationLogExceptionBridge;
 import com.gccloud.gcpaas.dataroom.core.util.TokenUtils;
 import jakarta.servlet.ServletRequest;
@@ -74,7 +75,7 @@ public class ShiroAuthFilter extends AuthenticatingFilter {
             // 处理登录失败的异常
             log.error(ExceptionUtils.getStackTrace(e));
             HttpServletRequest req = (HttpServletRequest) request;
-            Resp<String> authError = Resp.authError();
+            Resp<String> authError = getAuthError(e);
             OperationLogExceptionBridge.markFailure(req, authError.getCode(), authError.getMessage(), e);
             String body = OBJECT_MAPPER.writeValueAsString(authError);
             httpResponse.getWriter().print(body);
@@ -91,5 +92,24 @@ public class ShiroAuthFilter extends AuthenticatingFilter {
     public String getOrigin() {
         HttpServletRequest request = getHttpServletRequest();
         return request.getHeader("Origin");
+    }
+
+    private Resp<String> getAuthError(AuthenticationException e) {
+        DataRoomException dataRoomException = findDataRoomException(e);
+        if (dataRoomException != null) {
+            return Resp.error(dataRoomException.getCode(), dataRoomException.getMessage());
+        }
+        return Resp.authError();
+    }
+
+    private DataRoomException findDataRoomException(Throwable throwable) {
+        Throwable current = throwable;
+        while (current != null) {
+            if (current instanceof DataRoomException dataRoomException) {
+                return dataRoomException;
+            }
+            current = current.getCause();
+        }
+        return null;
     }
 }

@@ -95,6 +95,29 @@ CREATE TABLE IF NOT EXISTS `dr_page`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='页面表';
 
 -- ----------------------------
+-- 页面分享表
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `dr_page_share`
+(
+    `id`           VARCHAR(50)  NOT NULL COMMENT '主键',
+    `page_code`    VARCHAR(100) DEFAULT NULL COMMENT '页面编码',
+    `page_type`    VARCHAR(50)  DEFAULT 'page' COMMENT '页面类型',
+    `token`        VARCHAR(200) DEFAULT NULL COMMENT '分享token',
+    `enabled`      TINYINT(1)   DEFAULT 1 COMMENT '是否启用',
+    `expire_time`  DATETIME     DEFAULT NULL COMMENT '过期时间',
+    `ip_whitelist` LONGTEXT     DEFAULT NULL COMMENT 'IP白名单',
+    `create_date`  DATETIME     DEFAULT NULL COMMENT '创建时间',
+    `create_user`  VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
+    `update_date`  DATETIME     DEFAULT NULL COMMENT '更新时间',
+    `update_user`  VARCHAR(50)  DEFAULT NULL COMMENT '更新人',
+    `tenant_code`  VARCHAR(50)  DEFAULT NULL COMMENT '租户编码',
+    `del_flag`     VARCHAR(1)   DEFAULT '0' COMMENT '删除标识(0：正常，1：删除)',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_page_share_page_code` (`page_code`),
+    KEY `idx_page_share_token` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='页面分享表';
+
+-- ----------------------------
 -- 中转态页面表（历史记录、快照）
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS `dr_page_stage`

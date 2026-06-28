@@ -4,6 +4,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Document, EditPen, Folder, Monitor, MoreFilled, Plus, Search, View } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import { pageApi, type PageEntity } from './api'
+import PageShareDialog from './components/PageShareDialog.vue'
 import visualScreenPlaceholder from './assets/image/大屏占位符.png'
 import pagePlaceholder from './assets/image/仪表盘占位符.png'
 import directoryPlaceholder from './assets/image/目录占位符.png'
@@ -35,6 +36,8 @@ const searchName = ref('')
 const pageList = ref<PageEntity[]>([])
 const loading = ref(false)
 const addDialogVisible = ref(false)
+const shareDialogVisible = ref(false)
+const currentSharePage = ref<PageEntity | null>(null)
 const breadcrumbs = ref<BreadcrumbItem[]>([{ code: 'root', name: '全部' }])
 const currentParentCode = ref('root')
 
@@ -209,6 +212,11 @@ const handlePreview = (page: PageEntity) => {
   openRouteInNewWindow(getPagePreviewPath(page))
 }
 
+const handleShare = (page: PageEntity) => {
+  currentSharePage.value = page
+  shareDialogVisible.value = true
+}
+
 const handleCardClick = (item: PageEntity) => {
   if (isDirectoryPage(item.pageType)) {
     currentParentCode.value = item.code
@@ -242,6 +250,9 @@ const handleCardCommand = (command: string, item: PageEntity) => {
       break
     case 'preview':
       handlePreview(item)
+      break
+    case 'share':
+      handleShare(item)
       break
   }
 }
@@ -356,6 +367,7 @@ onMounted(() => {
                       <el-dropdown-item command="publish" v-if="canPublishPage(item)">发布</el-dropdown-item>
                       <el-dropdown-item command="offline" v-if="canOfflinePage(item)">取消发布</el-dropdown-item>
                       <el-dropdown-item command="preview" v-if="canOperatePage(item)">预览</el-dropdown-item>
+                      <el-dropdown-item command="share" v-if="canOperatePage(item)">分享</el-dropdown-item>
                       <el-dropdown-item command="delete" divided>删除</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
@@ -385,6 +397,8 @@ onMounted(() => {
         </div>
       </div>
     </el-dialog>
+
+    <PageShareDialog v-model="shareDialogVisible" :page="currentSharePage" />
   </div>
 </template>
 

@@ -71,6 +71,25 @@ export type PageHistoryItem = Omit<PageStageEntity, 'pageConfig'> & {
   pageConfig?: PageStageEntity['pageConfig']
 }
 
+export interface PageShareVo {
+  pageCode: string
+  pageType?: string
+  enabled: boolean
+  expireTime?: string | null
+  ipWhitelist?: string
+  token?: string
+  shareUrl?: string
+  created?: boolean
+}
+
+export interface PageShareSaveDto {
+  pageCode: string
+  enabled: boolean
+  expireTime?: string | null
+  ipWhitelist?: string
+  refreshToken: boolean
+}
+
 /**
  * 页面管理 API
  */
@@ -175,5 +194,13 @@ export const pageApi = {
 
   historyRemark(data: PageHistoryRemarkDto) {
     return request.post<string>('/dataRoom/page/history/remark', data)
+  },
+
+  shareDetail(pageCode: string) {
+    return request.get<PageShareVo>(`/dataRoom/page/share/detail/${encodeURIComponent(pageCode)}`)
+  },
+
+  shareSave(data: PageShareSaveDto) {
+    return request.post<PageShareVo>('/dataRoom/page/share/save', data)
   },
 }

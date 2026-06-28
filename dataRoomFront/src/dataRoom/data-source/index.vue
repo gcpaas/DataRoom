@@ -248,20 +248,28 @@ const dataSourceTypeGroups: Array<{ name: string; types: DataSourceTypeKey[] }> 
     types: ['dameng', 'gbase', 'goldendb', 'greatdb', 'kingbase', 'oceanbase', 'polardb', 'tidb'],
   },
   {
-    name: 'OLTP',
-    types: ['mysql', 'postgresql', 'oracle', 'sqlserver', 'db2', 'mariadb', 'h2', 'mongodb'],
+    name: '关系型数据库',
+    types: ['mysql', 'postgresql', 'oracle', 'sqlserver', 'db2', 'mariadb'],
   },
   {
-    name: 'OLAP',
-    types: ['doris', 'clickhouse', 'hive', 'tdengine', 'druid', 'starrocks', 'es'],
+    name: '分析型数据库',
+    types: ['doris', 'clickhouse', 'hive', 'druid', 'starrocks'],
   },
   {
-    name: '文件',
-    types: ['excel'],
+    name: 'NoSQL数据源',
+    types: ['mongodb', 'es'],
   },
   {
-    name: '物联网',
+    name: '时序数据库',
+    types: ['tdengine'],
+  },
+  {
+    name: '消息数据源',
     types: ['mqtt'],
+  },
+  {
+    name: '文件数据源',
+    types: ['excel'],
   },
 ]
 
@@ -278,6 +286,23 @@ const scrollToDataSourceTypeGroup = async (name: string) => {
     behavior: 'smooth',
     block: 'start',
   })
+}
+
+const handleTypeSelectScroll = ({ scrollTop }: { scrollTop: number }) => {
+  const threshold = 16
+  let activeGroupName = dataSourceTypeGroups[0]?.name || ''
+
+  for (const group of dataSourceTypeGroups) {
+    const groupEl = typeSelectGroupRefs.value[group.name]
+    if (!groupEl) {
+      continue
+    }
+    if (groupEl.offsetTop <= scrollTop + threshold) {
+      activeGroupName = group.name
+    }
+  }
+
+  activeDataSourceTypeGroup.value = activeGroupName
 }
 
 /**
@@ -678,7 +703,7 @@ onMounted(() => {
             {{ group.name }}
           </button>
         </aside>
-        <el-scrollbar class="type-select-scrollbar" max-height="60vh">
+        <el-scrollbar class="type-select-scrollbar" max-height="60vh" @scroll="handleTypeSelectScroll">
           <div class="type-select-groups">
             <section v-for="group in dataSourceTypeGroups" :key="group.name" :ref="el => setTypeSelectGroupRef(group.name, el as Element | null)" class="type-select-group">
               <div class="type-select-group-title">{{ group.name }}</div>

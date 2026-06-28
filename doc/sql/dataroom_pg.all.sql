@@ -152,6 +152,43 @@ CREATE INDEX IF NOT EXISTS idx_page_type ON dr_page(page_type);
 CREATE INDEX IF NOT EXISTS idx_page_parent_code ON dr_page(parent_code);
 
 -- ----------------------------
+-- 页面分享表
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS dr_page_share
+(
+    id           VARCHAR(50)  NOT NULL,
+    page_code    VARCHAR(100) DEFAULT NULL,
+    page_type    VARCHAR(50)  DEFAULT 'page',
+    token        VARCHAR(200) DEFAULT NULL,
+    enabled      BOOLEAN      DEFAULT TRUE,
+    expire_time  TIMESTAMP    DEFAULT NULL,
+    ip_whitelist TEXT         DEFAULT NULL,
+    create_date  TIMESTAMP    DEFAULT NULL,
+    create_user  VARCHAR(50)  DEFAULT NULL,
+    update_date  TIMESTAMP    DEFAULT NULL,
+    update_user  VARCHAR(50)  DEFAULT NULL,
+    tenant_code  VARCHAR(50)  DEFAULT NULL,
+    del_flag     VARCHAR(1)   DEFAULT '0',
+    PRIMARY KEY (id),
+    CONSTRAINT uk_page_share_page_code UNIQUE (page_code)
+);
+COMMENT ON TABLE dr_page_share IS '页面分享表';
+COMMENT ON COLUMN dr_page_share.id IS '主键';
+COMMENT ON COLUMN dr_page_share.page_code IS '页面编码';
+COMMENT ON COLUMN dr_page_share.page_type IS '页面类型';
+COMMENT ON COLUMN dr_page_share.token IS '分享token';
+COMMENT ON COLUMN dr_page_share.enabled IS '是否启用';
+COMMENT ON COLUMN dr_page_share.expire_time IS '过期时间';
+COMMENT ON COLUMN dr_page_share.ip_whitelist IS 'IP白名单';
+COMMENT ON COLUMN dr_page_share.create_date IS '创建时间';
+COMMENT ON COLUMN dr_page_share.create_user IS '创建人';
+COMMENT ON COLUMN dr_page_share.update_date IS '更新时间';
+COMMENT ON COLUMN dr_page_share.update_user IS '更新人';
+COMMENT ON COLUMN dr_page_share.tenant_code IS '租户编码';
+COMMENT ON COLUMN dr_page_share.del_flag IS '删除标识(0：正常，1：删除)';
+CREATE INDEX IF NOT EXISTS idx_page_share_token ON dr_page_share(token);
+
+-- ----------------------------
 -- 中转态页面表（历史记录、快照）
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS dr_page_stage

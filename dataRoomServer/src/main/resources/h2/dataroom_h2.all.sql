@@ -95,6 +95,29 @@ CREATE INDEX IF NOT EXISTS idx_page_type ON dr_page(page_type);
 CREATE INDEX IF NOT EXISTS idx_page_parent_code ON dr_page(parent_code);
 
 -- ----------------------------
+-- 页面分享表
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS dr_page_share
+(
+    id           VARCHAR(50)  NOT NULL COMMENT '主键',
+    page_code    VARCHAR(100) DEFAULT NULL COMMENT '页面编码',
+    page_type    VARCHAR(50)  DEFAULT 'page' COMMENT '页面类型',
+    token        VARCHAR(200) DEFAULT NULL COMMENT '分享token',
+    enabled      BOOLEAN      DEFAULT TRUE COMMENT '是否启用',
+    expire_time  TIMESTAMP    DEFAULT NULL COMMENT '过期时间',
+    ip_whitelist TEXT         DEFAULT NULL COMMENT 'IP白名单',
+    create_date  TIMESTAMP    DEFAULT NULL COMMENT '创建时间',
+    create_user  VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
+    update_date  TIMESTAMP    DEFAULT NULL COMMENT '更新时间',
+    update_user  VARCHAR(50)  DEFAULT NULL COMMENT '更新人',
+    tenant_code  VARCHAR(50)  DEFAULT NULL COMMENT '租户编码',
+    del_flag     VARCHAR(1)   DEFAULT '0' COMMENT '删除标识(0：正常，1：删除)',
+    PRIMARY KEY (id),
+    CONSTRAINT uk_page_share_page_code UNIQUE (page_code)
+);
+CREATE INDEX IF NOT EXISTS idx_page_share_token ON dr_page_share(token);
+
+-- ----------------------------
 -- 中转态页面表（历史记录、快照）
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS dr_page_stage

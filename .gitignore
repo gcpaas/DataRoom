@@ -7,6 +7,7 @@
 CLAUDE.md
 RELEASE
 .worktrees/
+.superpowers/
 dataRoomFront/front
 dataRoomResource
 dataroom.mv.db

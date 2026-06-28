@@ -127,7 +127,7 @@ public class DatasetController {
     }
 
     @PostMapping("/run/test")
-    @RequiresRoles(value = DataRoomRole.SHARER)
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Operation(summary = "测试执行", description = "测试数据集")
     @OperationLogMeta(actionType = "执行", actionDesc = "数据集测试执行", businessType = "dataset_runtime", businessName = "数据集运行", targetIdKey = "dataset", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<DatasetRunResponse> runTest(@RequestBody DatasetTestRequest datasetTestRequest) {

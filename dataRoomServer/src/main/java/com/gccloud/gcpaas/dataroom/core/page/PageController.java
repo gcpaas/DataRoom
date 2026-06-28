@@ -26,8 +26,11 @@ import com.gccloud.gcpaas.dataroom.core.page.dto.PageHistoryRemarkDto;
 import com.gccloud.gcpaas.dataroom.core.page.dto.PageStageSearchDto;
 import com.gccloud.gcpaas.dataroom.core.page.dto.PageThumbnailUpdateDto;
 import com.gccloud.gcpaas.dataroom.core.page.service.PageService;
+import com.gccloud.gcpaas.dataroom.core.page.service.PageShareService;
 import com.gccloud.gcpaas.dataroom.core.page.service.PageStageService;
+import com.gccloud.gcpaas.dataroom.core.shiro.LoginUser;
 import com.gccloud.gcpaas.dataroom.core.util.CodeWorker;
+import com.gccloud.gcpaas.dataroom.core.util.LoginUserUtils;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,6 +69,8 @@ public class PageController {
     private PageMapper pageMapper;
     @Resource
     private PageStageService pageStageService;
+    @Resource
+    private PageShareService pageShareService;
 
     /**
      * 列表查询
@@ -103,6 +108,9 @@ public class PageController {
     @Parameters({@Parameter(name = "code", description = "页面编码", in = ParameterIn.PATH)})
     public Resp<PageEntity> detail(@PathVariable("code") String code) {
         PageEntity pageDesignEntity = pageMapper.getByCode(code);
+        LoginUser loginUser = LoginUserUtils.getCurrentUser();
+        PageStatus pageStatus = pageDesignEntity == null ? null : pageDesignEntity.getPageStatus();
+        pageShareService.assertShareAccessToPage(loginUser, code, pageStatus);
         return Resp.success(pageDesignEntity);
     }
 
@@ -298,6 +306,8 @@ public class PageController {
         deleteDesignWrapper.eq(PageEntity::getCode, pageCode);
         pageService.remove(deleteDesignWrapper);
 
+        pageShareService.deleteByPageCode(pageCode);
+
         return Resp.success(null);
     }
 
@@ -373,6 +383,7 @@ public class PageController {
     @OperationLogMeta(actionType = "查询", actionDesc = "获取页面配置", businessType = "page_preview", businessName = "页面预览", targetIdKey = "pageCode", detailLevel = OperationLogDetailLevel.SUMMARY)
     public Resp<PageStageVo> getPageConfig(@PathVariable("pageCode") String pageCode, @PathVariable("pageStatus") String pageStatusStr) {
         PageStatus pageStatus = PageStatus.valueOf(pageStatusStr.toUpperCase());
+        pageShareService.assertShareAccessToPage(LoginUserUtils.getCurrentUser(), pageCode, pageStatus);
         LambdaQueryWrapper<PageStageEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PageStageEntity::getPageCode, pageCode);
         queryWrapper.eq(PageStageEntity::getPageStatus, pageStatus);
