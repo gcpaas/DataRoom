@@ -59,7 +59,7 @@ public class DataRoomWebMvcConfigurer implements WebMvcConfigurer {
         return new OperationLogPublisher(operationLogExecutor, operationLogPersistService);
     }
 
-    @Bean
+//    @Bean
     public FilterRegistrationBean<OperationLogFilter> operationLogFilterRegistration(OperationLogPolicy operationLogPolicy,
                                                                                      OperationLogResolver operationLogResolver,
                                                                                      OperationLogPublisher operationLogPublisher) {

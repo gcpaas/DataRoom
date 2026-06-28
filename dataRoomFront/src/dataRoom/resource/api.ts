@@ -64,6 +64,14 @@ export interface ResourceEntity {
 }
 
 /**
+ * 系统素材分类
+ */
+export interface SystemResourceCategory {
+  code: string
+  name: string
+}
+
+/**
  * 资源管理 API
  */
 export const resourceApi = {
@@ -72,6 +80,20 @@ export const resourceApi = {
    */
   list(params?: { name?: string; parentCode?: string; resourceType?: string }) {
     return request.get<ResourceEntity[]>('/dataRoom/resource/list', params)
+  },
+
+  /**
+   * 获取系统素材列表
+   */
+  systemResourceList(params?: { category?: string }) {
+    return request.get<ResourceEntity[]>('/dataRoom/resource/systemResource/list', params)
+  },
+
+  /**
+   * 获取系统素材分类
+   */
+  systemResourceCategories() {
+    return request.get<SystemResourceCategory[]>('/dataRoom/resource/systemResource/categories')
   },
 
   /**

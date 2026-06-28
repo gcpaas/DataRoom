@@ -61,6 +61,10 @@
 
 ![素材库页面.png](doc/image/%E7%B4%A0%E6%9D%90%E5%BA%93%E9%A1%B5%E9%9D%A2.png)
 
+> 内置多类型素材，覆盖背景、图标、边框、标题、装饰等场景，素材源自网络，版权归原作者所有，仅用于学习研究
+
+![系统素材.png](doc/image/%E7%B3%BB%E7%BB%9F%E7%B4%A0%E6%9D%90.png)
+
 ### 数据源
 > 支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、MQTT、万里、ClickHouse、MariaDB、OceanBase、Hive、TDengine、TiDB、StarRocks、Druid、ElasticSearch、Excel、CSV数据源接入；密码采用非对称加密存储
 
