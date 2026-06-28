@@ -10,6 +10,7 @@ export default defineComponent({
 import type { CSSProperties } from 'vue'
 import { computed, ref, watch } from 'vue'
 import type { TableColumnCtx } from 'element-plus'
+import type { TableSortOrder } from 'element-plus/es/components/table/src/table/defaults'
 import type { DrDataTableConfig } from './install.ts'
 import type {
   DatasetRow,
@@ -218,10 +219,10 @@ const handleCellClick = (row: DatasetRow, column: TableColumnCtx<DatasetRow>) =>
   })
 }
 
-const handleSortChange = ({ prop, order }: { prop: string; order: SortOrder }) => {
+const handleSortChange = ({ prop, order }: { prop: string | null; order: TableSortOrder | null }) => {
   sortState.value = {
     field: prop || '',
-    order: order || 'none',
+    order: (order || 'none') as SortOrder,
   }
   currentPage.value = 1
   canvasInst.triggerChartBehavior(chart.id, 'sortChange', {

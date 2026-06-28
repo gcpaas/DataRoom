@@ -295,13 +295,13 @@ watch(
               size="small"
               clearable
               :disabled="remarkSavingId === row.id"
-              @keyup.enter="finishRemarkEdit(row)"
-              @blur="finishRemarkEdit(row)"
+              @keyup.enter="finishRemarkEdit(row as PageHistoryItem)"
+              @blur="finishRemarkEdit(row as PageHistoryItem)"
             />
             <span
               v-else
               class="page-history-dialog__remark"
-              @click="startRemarkEdit(row)"
+              @click="startRemarkEdit(row as PageHistoryItem)"
             >
               {{ row.remark || '-' }}
             </span>
@@ -314,7 +314,7 @@ watch(
                 type="primary"
                 link
                 :loading="rollbackLoadingId === row.id"
-                @click="handleRollback(row)"
+                @click="handleRollback(row as PageHistoryItem)"
               >
                 回滚
               </el-button>
@@ -323,7 +323,7 @@ watch(
                 confirm-button-text="删除"
                 cancel-button-text="取消"
                 width="200"
-                @confirm="handleDelete(row)"
+                @confirm="handleDelete(row as PageHistoryItem)"
               >
                 <template #reference>
                   <el-button

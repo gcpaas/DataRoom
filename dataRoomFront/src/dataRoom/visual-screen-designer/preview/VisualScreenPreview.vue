@@ -37,6 +37,7 @@ const visibleChartList = computed(() => filterVisibleCharts(chartList.value))
 const { canvasInst } = useCanvasInst({
   chartList,
   globalVariable,
+  basicConfig: basicConfig as unknown as Ref<PageBasicConfig>,
 })
 provide(DrConst.CANVAS_INST, canvasInst)
 

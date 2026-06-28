@@ -7,13 +7,16 @@ import { getCookie, getCookieName } from '@/dataRoom/utils/cookie'
 import { Delete, Picture, Setting } from '@element-plus/icons-vue'
 import type { VisualScreenPageBasicConfig } from '@/dataRoom/page-designer/type/VisualScreenPageBasicConfig.ts'
 import type { PageTimer } from '@/dataRoom/page-designer/type/PageTimer.ts'
+import { createDefaultTimerBehaviors } from '@/dataRoom/page-designer/type/PageTimer.ts'
+import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 import { v4 as uuidv4 } from 'uuid'
 
 const TimerConfigDialog = defineAsyncComponent(() => import('../page-designer/TimerConfigDialog.vue'))
 
-const { basicConfig } = defineProps<{
+const { basicConfig, globalVariableList = [] } = defineProps<{
   basicConfig: VisualScreenPageBasicConfig
+  globalVariableList?: GlobalVariable[]
 }>()
 
 if (!basicConfig.timers) {
@@ -128,7 +131,7 @@ const addTimer = () => {
     name: `定时器${timerCount}`,
     enabled: false,
     interval: 5000,
-    actions: [],
+    behaviors: createDefaultTimerBehaviors(),
   }
   timers.value.push(newTimer)
 }
@@ -310,7 +313,7 @@ const deleteTimer = (id: string) => {
       </div>
     </div>
 
-    <TimerConfigDialog v-if="timerConfigDialogVisible && currentTimer" v-model="timerConfigDialogVisible" :timer="currentTimer" />
+    <TimerConfigDialog v-if="timerConfigDialogVisible && currentTimer" v-model="timerConfigDialogVisible" :timer="currentTimer" :global-variable-list="globalVariableList" />
   </div>
 </template>
 

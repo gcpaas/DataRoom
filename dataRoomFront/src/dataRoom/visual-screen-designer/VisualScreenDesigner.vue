@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getComponent, getComponentInstance, getPanelComponent } from '@/dataRoom/components/AutoInstall.ts'
-import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, watch } from 'vue'
+import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, type Ref, watch } from 'vue'
 import Moveable, { type OnDrag, type OnDragEnd, type OnDragStart, type OnEvent, type OnResize, type OnResizeEnd, type OnRotate, type OnRotateEnd } from 'vue3-moveable'
 import { VueSelecto } from 'vue3-selecto'
 import { applyChartTransformState, getChartByElement, getChartById, getResourceUrl } from '@/dataRoom/utils/index.ts'
@@ -12,6 +12,7 @@ import { Minus, Plus, ScaleToOriginal } from '@element-plus/icons-vue'
 import { pageApi } from '@/dataRoom/page/api.ts'
 import type { PageStageEntity } from '@/dataRoom/page/type/PageStageEntity.ts'
 import { useCanvasInst } from '@/dataRoom/hooks/use-canvas-inst'
+import type { PageBasicConfig } from '@/dataRoom/page-designer/type/PageBasicConfig.ts'
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
 import type { VisualScreenPageBasicConfig } from '@/dataRoom/page-designer/type/VisualScreenPageBasicConfig.ts'
@@ -309,6 +310,7 @@ const activeChartById = (id: string) => {
 const { canvasInst } = useCanvasInst({
   chartList,
   globalVariable,
+  basicConfig: basicConfig as unknown as Ref<PageBasicConfig>,
   addChart,
   activeChartById,
   commitChartAdd,
@@ -1473,7 +1475,7 @@ onBeforeUnmount(() => {
         <el-scrollbar class="right-panel-scrollbar" height="100%">
           <div class="right-panel-scroll-content">
             <template v-if="rightControlPanelSetting">
-              <VisualScreenControlPanel :basicConfig="basicConfig" />
+              <VisualScreenControlPanel :basicConfig="basicConfig" :global-variable-list="globalVariable" />
             </template>
             <template v-else>
               <ControlPanelWrapper v-if="activeChart" :chart="activeChart" :global-variable-list="globalVariable">

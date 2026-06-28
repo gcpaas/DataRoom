@@ -6,6 +6,15 @@ import type {ChartParentRef} from "@/dataRoom/designer/utils/editor-history.ts";
 
 export type ChartLayerMoveDirection = 'up' | 'down' | 'top' | 'bottom'
 
+export type BehaviorSourceType = 'chart' | 'timer'
+
+export interface TriggerBehaviorPayload {
+  sourceType: BehaviorSourceType
+  sourceId: string
+  behaviorName: string
+  triggerData: unknown
+}
+
 /**
  * 画布实例
  */
@@ -47,6 +56,11 @@ export interface CanvasInst {
    * @param triggerData 触发时额外的参数
    */
   triggerChartBehavior: (charId: string, behaviorEventName: string, triggerData: unknown) => Promise<void>
+  /**
+   * 触发统一行为事件
+   * @param payload 触发源、行为名称与参数
+   */
+  triggerBehavior: (payload: TriggerBehaviorPayload) => Promise<void>
   /**
    * 填充数据集参数
    * @param chart

@@ -26,6 +26,7 @@ const route = useRoute()
 const { canvasInst } = useCanvasInst({
   chartList,
   globalVariable,
+  basicConfig,
 })
 provide(DrConst.CANVAS_INST, canvasInst)
 

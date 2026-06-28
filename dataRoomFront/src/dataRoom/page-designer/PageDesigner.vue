@@ -13,7 +13,6 @@ import type { PageStageEntity } from '@/dataRoom/page/type/PageStageEntity.ts'
 import type { PageBasicConfig } from '@/dataRoom/page-designer/type/PageBasicConfig.ts'
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
-import { useTimerManager } from '@/dataRoom/hooks/use-timer-manager'
 import { handleSaveBeforeLeaveAction, type SaveBeforeLeaveAction } from '@/dataRoom/designer/utils/save-before-leave'
 import {
   createDesignerHistoryAutoBackupController,
@@ -262,6 +261,7 @@ const addChart = (type: string) => {
 const { canvasInst } = useCanvasInst({
   chartList,
   globalVariable,
+  basicConfig: pageBasicConfig,
   addChart,
   activeChartById,
   commitChartAdd,
@@ -270,11 +270,6 @@ const { canvasInst } = useCanvasInst({
   canUndo: () => editorHistory.canUndo,
   canRedo: () => editorHistory.canRedo,
   moveChartLayer,
-})
-
-const { timerManager } = useTimerManager({
-  canvasInst,
-  basicConfig: pageBasicConfig,
 })
 
 provide(DrConst.CANVAS_INST, canvasInst)
@@ -684,26 +679,6 @@ const computedCanvasMainContainerStyle = computed(() => {
   return styles
 })
 
-/**
- * 监听定时器配置变化
- */
-watch(
-  () => pageBasicConfig.value.timers,
-  (newTimers) => {
-    if (!timerManager) {
-      return
-    }
-    if (!newTimers) {
-      // 如果定时器配置被清空，停止所有定时器
-      timerManager.clearAllTimers()
-      return
-    }
-    // 重新加载所有定时器
-    timerManager.reloadAllTimers()
-  },
-  { deep: true },
-)
-
 watch(
   [chartList, pageBasicConfig, globalVariable],
   () => {
@@ -745,7 +720,6 @@ onMounted(() => {
     if (!pageDesignerAliveGuard.isAlive()) {
       return
     }
-    timerManager.reloadAllTimers()
     const initialHash = await syncCurrentPageConfigHash()
     if (!pageDesignerAliveGuard.isAlive()) {
       return
@@ -758,16 +732,10 @@ onMounted(() => {
   })
 })
 
-/**
- * 组件卸载时清理所有定时器
- */
 onUnmounted(() => {
   pageDesignerAliveGuard.dispose()
   window.removeEventListener('keydown', onHistoryKeyDown)
   historyAutoBackupController.stop()
-  if (timerManager) {
-    timerManager.clearAllTimers()
-  }
 })
 </script>
 
@@ -844,7 +812,7 @@ onUnmounted(() => {
       <div class="right-panel" :style="computedRightControlPanelStyle">
         <el-scrollbar class="right-panel-scrollbar" height="100%">
           <div class="right-panel-scroll-content">
-            <ControlPanel v-if="rightControlPanelSetting" :basicConfig="pageBasicConfig"></ControlPanel>
+            <ControlPanel v-if="rightControlPanelSetting" :basicConfig="pageBasicConfig" :global-variable-list="globalVariable"></ControlPanel>
             <ControlPanelWrapper v-else :chart="activeChart!" :global-variable-list="globalVariable">
               <component :is="getPanelComponent(activeChart?.type)" :chart="activeChart"></component>
             </ControlPanelWrapper>

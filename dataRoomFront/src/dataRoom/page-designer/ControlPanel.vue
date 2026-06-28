@@ -1,11 +1,14 @@
 <!-- 控制面板 -->
 <script setup lang="ts">
+/* eslint-disable vue/no-mutating-props */
 import { computed, defineAsyncComponent, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getCookie, getCookieName } from '@/dataRoom/utils/cookie'
 import { Delete, Picture, Setting } from '@element-plus/icons-vue'
 import type { PageBasicConfig } from '@/dataRoom/page-designer/type/PageBasicConfig.ts'
 import type { PageTimer } from '@/dataRoom/page-designer/type/PageTimer.ts'
+import { createDefaultTimerBehaviors } from '@/dataRoom/page-designer/type/PageTimer.ts'
+import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -14,15 +17,17 @@ import { v4 as uuidv4 } from 'uuid'
  */
 const TimerConfigDialog = defineAsyncComponent(() => import('./TimerConfigDialog.vue'))
 
-const { basicConfig } = defineProps<{
+const { basicConfig, globalVariableList = [] } = defineProps<{
   basicConfig: PageBasicConfig
+  globalVariableList?: GlobalVariable[]
 }>()
 
+if (!basicConfig.timers) {
+  basicConfig.timers = []
+}
+
 const timers = computed(() => {
-  if (!basicConfig.timers) {
-    basicConfig.timers = []
-  }
-  return basicConfig.timers
+  return basicConfig.timers || []
 })
 
 const timerConfigDialogVisible = ref(false)
@@ -44,7 +49,7 @@ const uploadHeaders = reactive({
  * 背景图上传成功回调
  * @param response
  */
-const handleBgUploadSuccess = (response: any) => {
+const handleBgUploadSuccess = (response: { data?: { url?: string } }) => {
   if (response && response.data) {
     basicConfig.background.url = response.data.url || ''
     ElMessage.success('背景图上传成功')
@@ -68,7 +73,7 @@ const addTimer = () => {
     name: `定时器${timerCount}`,
     enabled: false,
     interval: 5000,
-    actions: [],
+    behaviors: createDefaultTimerBehaviors(),
   }
   timers.value.push(newTimer)
 }
@@ -228,7 +233,7 @@ const deleteTimer = (id: string) => {
     </div>
 
     <!-- 定时器配置对话框 -->
-    <TimerConfigDialog v-if="timerConfigDialogVisible && currentTimer" v-model="timerConfigDialogVisible" :timer="currentTimer" />
+    <TimerConfigDialog v-if="timerConfigDialogVisible && currentTimer" v-model="timerConfigDialogVisible" :timer="currentTimer" :global-variable-list="globalVariableList" />
   </div>
 </template>
 
