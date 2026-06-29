@@ -208,6 +208,23 @@ const handleDelete = async (page: PageEntity) => {
   }
 }
 
+const handleCopy = async (page: PageEntity) => {
+  try {
+    await ElMessageBox.confirm(`确定要复制${page.name}吗？`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+    await pageApi.copy(page.code)
+    ElMessage.success('复制成功')
+    await getPageList()
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('复制失败:', error)
+    }
+  }
+}
+
 const handlePreview = (page: PageEntity) => {
   openRouteInNewWindow(getPagePreviewPath(page))
 }
@@ -250,6 +267,9 @@ const handleCardCommand = (command: string, item: PageEntity) => {
       break
     case 'preview':
       handlePreview(item)
+      break
+    case 'copy':
+      void handleCopy(item)
       break
     case 'share':
       handleShare(item)
@@ -343,7 +363,7 @@ onMounted(() => {
               <div v-if="canOperatePage(item)" class="card-hover-overlay" @click.stop>
                 <div class="card-hover-actions">
                   <el-button :icon="EditPen" @click="handleCardCommand('design', item)">设计</el-button>
-                  <el-button :icon="View" @click="handleCardCommand('preview', item)">预览</el-button>
+                  <el-button :icon="View" @click="handleCardCommand('preview', item)">访问</el-button>
                 </div>
               </div>
             </div>
@@ -366,7 +386,8 @@ onMounted(() => {
                       <el-dropdown-item command="design" v-if="canOperatePage(item)">设计</el-dropdown-item>
                       <el-dropdown-item command="publish" v-if="canPublishPage(item)">发布</el-dropdown-item>
                       <el-dropdown-item command="offline" v-if="canOfflinePage(item)">取消发布</el-dropdown-item>
-                      <el-dropdown-item command="preview" v-if="canOperatePage(item)">预览</el-dropdown-item>
+                      <el-dropdown-item command="preview" v-if="canOperatePage(item)">访问</el-dropdown-item>
+                      <el-dropdown-item command="copy" v-if="canOperatePage(item)">复制</el-dropdown-item>
                       <el-dropdown-item command="share" v-if="canOperatePage(item)">分享</el-dropdown-item>
                       <el-dropdown-item command="delete" divided>删除</el-dropdown-item>
                     </el-dropdown-menu>

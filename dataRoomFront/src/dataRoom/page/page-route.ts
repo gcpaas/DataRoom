@@ -18,10 +18,10 @@ export const getPageDesignPath = (page: PageRouteSource) => {
 
 export const getPagePreviewPath = (page: PageRouteSource) => {
   if (page.pageType === PageType.VISUAL_SCREEN) {
-    return `/dataRoom/visualScreenPreview/${PageStatus.PREVIEW}/${page.code}`
+    return `/dataRoom/visualScreenPreview/${PageStatus.PUBLISHED}/${page.code}`
   }
   if (page.pageType === PageType.PAGE) {
-    return `/dataRoom/pagePreviewer/${PageStatus.PREVIEW}/${page.code}`
+    return `/dataRoom/pagePreviewer/${PageStatus.PUBLISHED}/${page.code}`
   }
   return ''
 }

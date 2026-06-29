@@ -144,6 +144,13 @@ export const pageApi = {
   },
 
   /**
+   * 复制页面设计态
+   */
+  copy(code: string) {
+    return request.post<string>(`/dataRoom/page/copy/${code}`)
+  },
+
+  /**
    * 获取页面详情
    */
   getPageConfig(code: string, pageStatus: string) {

@@ -16,8 +16,8 @@ test('builds designer paths for page cards', () => {
 test('builds preview paths for page cards', () => {
   assert.equal(
     getPagePreviewPath({ code: 'screen-1', pageType: PageType.VISUAL_SCREEN }),
-    `/dataRoom/visualScreenPreview/${PageStatus.PREVIEW}/screen-1`,
+    `/dataRoom/visualScreenPreview/${PageStatus.PUBLISHED}/screen-1`,
   )
-  assert.equal(getPagePreviewPath({ code: 'page-1', pageType: PageType.PAGE }), `/dataRoom/pagePreviewer/${PageStatus.PREVIEW}/page-1`)
+  assert.equal(getPagePreviewPath({ code: 'page-1', pageType: PageType.PAGE }), `/dataRoom/pagePreviewer/${PageStatus.PUBLISHED}/page-1`)
   assert.equal(getPagePreviewPath({ code: 'dir-1', pageType: PageType.DIRECTORY }), '')
 })
