@@ -17,12 +17,12 @@ export default defineConfig({
     AutoImport({
       imports: ['vue', 'vue-router', 'pinia'],
       dts: 'auto-imports.d.ts', // 必须加，固定类型文件
-      resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
+      resolvers: [ElementPlusResolver({ importStyle: false })],
       eslintrc: { enabled: false }, // 关闭 eslint 自动生成，避免反复刷新
     }),
     Components({
       dts: 'components.d.ts',
-      resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
+      resolvers: [ElementPlusResolver({ importStyle: false })],
     }),
   ],
   resolve: {
