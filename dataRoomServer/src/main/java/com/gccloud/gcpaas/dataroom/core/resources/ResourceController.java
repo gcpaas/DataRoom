@@ -80,9 +80,10 @@ public class ResourceController {
         LambdaQueryWrapper<ResourceEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(parentCode), ResourceEntity::getParentCode, parentCode);
         queryWrapper.like(StringUtils.isNotBlank(name), ResourceEntity::getName, name);
+        queryWrapper.ne(ResourceEntity::getResourceType, ResourceType.PAGE_COVER);
         if (StringUtils.isNotBlank(resourceType)) {
             try {
-                queryWrapper.eq(ResourceEntity::getResourceType, ResourceType.valueOf(resourceType.toUpperCase()));
+                queryWrapper.eq(ResourceEntity::getResourceType, ResourceType.getByType(resourceType));
             } catch (IllegalArgumentException ignored) {
                 log.error(ExceptionUtils.getStackTrace(ignored));
             }
@@ -268,7 +269,7 @@ public class ResourceController {
         }
         if (StringUtils.isNotBlank(resourceType)) {
             try {
-                resourceEntity.setResourceType(ResourceType.valueOf(resourceType.toUpperCase()));
+                resourceEntity.setResourceType(ResourceType.getByType(resourceType));
             } catch (IllegalArgumentException ignored) {
                 log.error(ExceptionUtils.getStackTrace(ignored));
             }
@@ -459,7 +460,7 @@ public class ResourceController {
     private ResourceType resolveResourceType(String resourceType, String extension) {
         if (StringUtils.isNotBlank(resourceType)) {
             try {
-                return ResourceType.valueOf(resourceType.toUpperCase());
+                return ResourceType.getByType(resourceType);
             } catch (IllegalArgumentException ignored) {
                 log.error(ExceptionUtils.getStackTrace(ignored));
             }

@@ -13,7 +13,8 @@ public enum ResourceType implements IEnum<String> {
     DIRECTORY("directory", "目录或文件夹"),
     IMAGE("image", "图片", "jpg", "jpeg", "png", "gif", "bmp", "svg", "webp"),
     VIDEO("video", "视频", "mp4", "avi", "mov", "wmv", "flv", "webm", "m3u8", "m4v"),
-    MODEL("model", "3D模型", "glb", "gltf", "obj", "stl");
+    MODEL("model", "3D模型", "glb", "gltf", "obj", "stl"),
+    PAGE_COVER("pageCover", "页面封面");
 
     private final String type;
     private final String desc;
@@ -43,15 +44,28 @@ public enum ResourceType implements IEnum<String> {
         return extensions.clone();
     }
 
+    public static ResourceType getByType(String type) {
+        String normalizedType = StringUtils.defaultString(type).trim();
+        return Arrays.stream(values())
+                .filter(resourceType -> resourceType.type.equalsIgnoreCase(normalizedType))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No enum constant for resource type: " + type));
+    }
+
     public static ResourceType getByExtension(String extension) {
         String normalizedExtension = normalizeExtension(extension);
         if (StringUtils.isBlank(normalizedExtension)) {
             return IMAGE;
         }
         return Arrays.stream(values())
+                .filter(ResourceType::isExtensionResolvable)
                 .filter(type -> type.supportsExtension(normalizedExtension))
                 .findFirst()
                 .orElse(IMAGE);
+    }
+
+    private boolean isExtensionResolvable() {
+        return this != PAGE_COVER;
     }
 
     private boolean supportsExtension(String extension) {

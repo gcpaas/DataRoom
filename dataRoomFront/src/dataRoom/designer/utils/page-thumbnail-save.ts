@@ -79,7 +79,7 @@ export const captureAndUpdatePageThumbnail = async ({
     const file = createPageThumbnailUploadFile(blob, pageCode, now())
     formData.append('file', file, file.name)
     formData.append('name', file.name.replace(/\.png$/i, ''))
-    formData.append('resourceType', ResourceType.IMAGE)
+    formData.append('resourceType', ResourceType.PAGE_COVER)
     const resource = await resourceApi.upload(formData)
     thumbnail = resolveUploadedThumbnail(resource)
     if (!thumbnail) {

@@ -5,5 +5,6 @@ export const ResourceType = {
   DIRECTORY: 'directory',
   IMAGE: 'image',
   VIDEO: 'video',
-  MODEL: 'model'
+  MODEL: 'model',
+  PAGE_COVER: 'pageCover',
 } as const;
