@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Document, EditPen, Folder, Monitor, MoreFilled, Plus, Search, View } from '@element-plus/icons-vue'
+import { Cellphone, Cpu, Document, EditPen, Folder, Monitor, MoreFilled, Plus, Search, View } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import { pageApi, type PageEntity } from './api'
 import PageShareDialog from './components/PageShareDialog.vue'
@@ -18,6 +18,8 @@ interface AddTypeOption {
   name: string
   description: string
   icon: typeof Folder
+  disabled?: boolean
+  targetPath?: string
 }
 
 interface BreadcrumbItem {
@@ -28,7 +30,21 @@ interface BreadcrumbItem {
 const addTypeOptions: AddTypeOption[] = [
   { type: PageType.DIRECTORY, name: '目录', description: '用于分组管理页面和大屏资源', icon: Folder },
   { type: PageType.VISUAL_SCREEN, name: '大屏', description: '可视化大屏数据展示设计', icon: Monitor },
-  { type: PageType.PAGE, name: '页面', description: '自定义仪表盘页面布局设计', icon: Document },
+  { type: PageType.PAGE, name: 'PC端看板', description: '自定义仪表盘页面布局设计', icon: Document },
+  {
+    type: 'aiGeneration',
+    name: 'AI生成',
+    description: '通过对话创建大屏、PC端看板',
+    icon: Cpu,
+    targetPath: '/dataRoom/console/ai-generation',
+  },
+  {
+    type: 'mobileDashboard',
+    name: '移动端看板',
+    description: '暂时不支持，功能开发中',
+    icon: Cellphone,
+    disabled: true,
+  },
 ]
 
 const router = useRouter()
@@ -60,7 +76,7 @@ const getTypeName = (pageType?: string) => {
     case PageType.VISUAL_SCREEN:
       return '大屏'
     case PageType.PAGE:
-      return '页面'
+      return 'PC端看板'
     default:
       return ''
   }
@@ -98,9 +114,16 @@ const handleShowAddDialog = () => {
   addDialogVisible.value = true
 }
 
-const handleSelectType = (pageType: string) => {
+const handleSelectType = (option: AddTypeOption) => {
+  if (option.disabled) {
+    return
+  }
   addDialogVisible.value = false
-  void handleAdd(pageType)
+  if (option.targetPath) {
+    void router.push(option.targetPath)
+    return
+  }
+  void handleAdd(option.type)
 }
 
 const handleAdd = async (pageType: string) => {
@@ -430,13 +453,14 @@ onMounted(() => {
     </div>
 
     <!-- 新增类型选择对话框 -->
-    <el-dialog v-model="addDialogVisible" title="选择新增类型" width="560px" :close-on-click-modal="true">
+    <el-dialog v-model="addDialogVisible" title="选择新增类型" width="880px" :close-on-click-modal="true">
       <div class="add-type-cards">
         <div
           v-for="option in addTypeOptions"
           :key="option.type"
           class="add-type-card"
-          @click="handleSelectType(option.type)"
+          :class="{ 'add-type-card--disabled': option.disabled }"
+          @click="handleSelectType(option)"
         >
           <el-icon class="add-type-icon">
             <component :is="option.icon"/>
@@ -665,6 +689,23 @@ onMounted(() => {
     &:hover {
       border-color: var(--el-color-primary);
       background-color: var(--el-color-primary-light-9);
+    }
+
+    &.add-type-card--disabled {
+      cursor: not-allowed;
+      background: var(--el-fill-color-light);
+      border-color: var(--el-border-color-lighter);
+
+      &:hover {
+        background: var(--el-fill-color-light);
+        border-color: var(--el-border-color-lighter);
+      }
+
+      .add-type-icon,
+      .add-type-name,
+      .add-type-desc {
+        color: var(--el-text-color-disabled);
+      }
     }
 
     .add-type-icon {
