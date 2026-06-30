@@ -4,6 +4,7 @@ import { PageType } from '../constants/PageType.ts'
 interface PageRouteSource {
   code: string
   pageType?: string
+  pageStatus?: string
 }
 
 export const getPageDesignPath = (page: PageRouteSource) => {
@@ -24,4 +25,11 @@ export const getPagePreviewPath = (page: PageRouteSource) => {
     return `/dataRoom/pagePreviewer/${PageStatus.PUBLISHED}/${page.code}`
   }
   return ''
+}
+
+export const shouldPublishBeforePreview = (page: PageRouteSource) => {
+  if (page.pageType !== PageType.VISUAL_SCREEN && page.pageType !== PageType.PAGE) {
+    return false
+  }
+  return page.pageStatus?.toLowerCase() !== PageStatus.PUBLISHED
 }

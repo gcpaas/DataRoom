@@ -10,7 +10,7 @@ import pagePlaceholder from './assets/image/仪表盘占位符.png'
 import directoryPlaceholder from './assets/image/目录占位符.png'
 import { PageStatus } from '@/dataRoom/constants/PageStatus.ts'
 import { PageType } from '@/dataRoom/constants/PageType.ts'
-import { getPageDesignPath, getPagePreviewPath } from './page-route.ts'
+import { getPageDesignPath, getPagePreviewPath, shouldPublishBeforePreview } from './page-route.ts'
 import { getPageThumbnailSrc, isDirectoryPageType } from './page-thumbnail.ts'
 
 interface AddTypeOption {
@@ -225,8 +225,36 @@ const handleCopy = async (page: PageEntity) => {
   }
 }
 
-const handlePreview = (page: PageEntity) => {
-  openRouteInNewWindow(getPagePreviewPath(page))
+const handlePreview = async (page: PageEntity) => {
+  const previewPath = getPagePreviewPath(page)
+  if (!previewPath) {
+    return
+  }
+
+  if (!shouldPublishBeforePreview(page)) {
+    openRouteInNewWindow(previewPath)
+    return
+  }
+
+  try {
+    await ElMessageBox.confirm(`页面「${page.name}」尚未发布，发布成功后才能访问。是否立即发布并访问？`, '页面未发布', {
+      confirmButtonText: '发布并访问',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+    await pageApi.publish({
+      pageCode: page.code,
+      remark: '访问前自动发布',
+    })
+    ElMessage.success('发布成功')
+    await getPageList()
+    openRouteInNewWindow(previewPath)
+  } catch (error) {
+    if (!isMessageBoxCancel(error)) {
+      console.error('发布并访问失败:', error)
+      ElMessage.error('发布失败，暂不能访问')
+    }
+  }
 }
 
 const handleShare = (page: PageEntity) => {
@@ -266,7 +294,7 @@ const handleCardCommand = (command: string, item: PageEntity) => {
       void handleDelete(item)
       break
     case 'preview':
-      handlePreview(item)
+      void handlePreview(item)
       break
     case 'copy':
       void handleCopy(item)
