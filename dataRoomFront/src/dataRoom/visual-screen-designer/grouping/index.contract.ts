@@ -8,6 +8,7 @@ import {
   createGroupChart,
   groupChartsInParent,
   isGroupChart,
+  normalizeGroupBounds,
   ungroupChartInParent,
 } from './index.ts'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
@@ -152,4 +153,50 @@ test('recognizes persisted group without children but refuses to ungroup it', ()
   assert.deepEqual(result.insertedCharts, [])
   assert.deepEqual(result.selectedIds, [])
   assert.deepEqual(siblings, originalSiblings)
+})
+
+test('normalizes group bounds after direct children move outside current group box', () => {
+  const group = createGroupChart({
+    title: '组合',
+    x: 100,
+    y: 80,
+    w: 200,
+    h: 120,
+    children: [
+      chart('a', { x: -30, y: 20, w: 80, h: 40 }),
+      chart('b', { x: 150, y: -10, w: 100, h: 90 }),
+    ],
+  })
+
+  const result = normalizeGroupBounds(group)
+
+  assert.equal(result.changed, true)
+  assert.deepEqual([group.x, group.y, group.w, group.h], [70, 70, 280, 90])
+  assert.deepEqual(group.children.map((item) => [item.id, item.x, item.y]), [
+    ['a', 0, 30],
+    ['b', 180, 0],
+  ])
+})
+
+test('normalizing group bounds is a no-op when children already fill the box', () => {
+  const group = createGroupChart({
+    title: '组合',
+    x: 100,
+    y: 80,
+    w: 200,
+    h: 120,
+    children: [
+      chart('a', { x: 0, y: 0, w: 80, h: 40 }),
+      chart('b', { x: 150, y: 60, w: 50, h: 60 }),
+    ],
+  })
+
+  const result = normalizeGroupBounds(group)
+
+  assert.equal(result.changed, false)
+  assert.deepEqual([group.x, group.y, group.w, group.h], [100, 80, 200, 120])
+  assert.deepEqual(group.children.map((item) => [item.id, item.x, item.y]), [
+    ['a', 0, 0],
+    ['b', 150, 60],
+  ])
 })

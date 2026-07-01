@@ -32,7 +32,6 @@ import {
   captureChartLayoutState,
   cloneChartConfig,
   createAddChartHistoryEntry,
-  createChartLayoutHistoryEntry,
   createChartsLayoutHistoryEntry,
   createRemoveChartHistoryEntry,
   createReplaceChartChildrenHistoryEntry,
@@ -98,7 +97,7 @@ import {
   type VisualScreenAlignmentCommand,
 } from './alignment'
 import VisualScreenChartTree from './components/VisualScreenChartTree.vue'
-import { groupChartsInParent, isGroupChart, ungroupChartInParent } from './grouping'
+import { groupChartsInParent, isGroupChart, normalizeGroupBounds, ungroupChartInParent } from './grouping'
 
 const router = useRouter()
 const route = useRoute()
@@ -310,6 +309,15 @@ const selectSingleChart = (chartId: string) => {
   setSelectedCharts([chartId])
 }
 
+const selectChartInScope = (chart: ChartConfig<unknown>, parentId: string | undefined) => {
+  if (chart.id === editingScopeParentId.value) {
+    return false
+  }
+  editingScopeParentId.value = parentId
+  selectSingleChart(chart.id)
+  return true
+}
+
 const makeChartPrimaryInSelection = (chartId: string) => {
   if (!selectedChartIds.value.includes(chartId)) {
     return
@@ -321,9 +329,7 @@ const clearChartSelection = () => {
   selectedChartIds.value = []
   activeChart.value = undefined
   contextMenuVisible.value = false
-  if (!rightControlPanelSetting.value) {
-    rightControlPanelShow.value = false
-  }
+  rightControlPanelSetting.value = true
   updateMoveableRect()
 }
 
@@ -349,6 +355,14 @@ const getChartIdByEventTarget = (target: EventTarget | null) => {
     return null
   }
   return target.closest<HTMLElement>('.chart-wrapper[data-dr-scope-child="true"]')?.getAttribute('data-dr-id') || null
+}
+
+const getChartIdFromEventPathByParent = (event: MouseEvent, parentId: string) => {
+  return event
+    .composedPath()
+    .filter((target): target is HTMLElement => target instanceof HTMLElement && target.classList.contains('chart-wrapper'))
+    .find((target) => target.getAttribute('data-dr-parent-id') === parentId)
+    ?.getAttribute('data-dr-id') || null
 }
 
 const commitChartAdd = (chart: ChartConfig<unknown>, label: string = '新增组件') => {
@@ -445,13 +459,20 @@ const addChart = (type: string) => {
   return chartInst
 }
 
-const enterGroupScope = (groupId: string) => {
+const enterGroupScope = (groupId: string, initialSelectedChartId?: string | null) => {
   const chart = selectedCharts.value.length === 1 && selectedCharts.value[0]?.id === groupId ? selectedCharts.value[0] : undefined
   if (!chart || !isGroupChart(chart)) {
     return
   }
+  if (!initialSelectedChartId) {
+    clearChartSelection()
+  }
   editingScopeParentId.value = groupId
-  clearChartSelection()
+  if (initialSelectedChartId) {
+    nextTick(() => {
+      setSelectedCharts([initialSelectedChartId])
+    })
+  }
 }
 
 const exitGroupScope = () => {
@@ -655,15 +676,24 @@ const onRightClick = (e: MouseEvent, chart: ChartConfig<unknown>) => {
   })
 }
 
-const onChartTreeClick = (_event: MouseEvent, chart: ChartConfig<unknown>) => {
-  selectSingleChart(chart.id)
+const onChartTreeClick = (_event: MouseEvent, chart: ChartConfig<unknown>, parentId: string | undefined) => {
+  selectChartInScope(chart, parentId)
 }
 
-const onChartTreeDoubleClick = (_event: MouseEvent, chart: ChartConfig<unknown>) => {
-  enterGroupScope(chart.id)
+const onChartTreeDoubleClick = (event: MouseEvent, chart: ChartConfig<unknown>, parentId: string | undefined) => {
+  if (editingScopeParentId.value !== parentId) {
+    selectChartInScope(chart, parentId)
+    return
+  }
+  enterGroupScope(chart.id, getChartIdFromEventPathByParent(event, chart.id))
 }
 
-const onChartTreeContextmenu = (event: MouseEvent, chart: ChartConfig<unknown>) => {
+const onChartTreeContextmenu = (event: MouseEvent, chart: ChartConfig<unknown>, parentId: string | undefined) => {
+  if (editingScopeParentId.value !== parentId) {
+    if (!selectChartInScope(chart, parentId)) {
+      return
+    }
+  }
   onRightClick(event, chart)
 }
 
@@ -945,21 +975,46 @@ const rememberGestureStartLayout = (chartId: string) => {
     return
   }
   gestureStartLayoutState.set(chartId, captureChartLayoutState(reference.chart))
+  if (editingScopeParentId.value) {
+    const groupReference = findChartReference(editingScopeParentId.value, chartList.value)
+    if (groupReference) {
+      gestureStartLayoutState.set(groupReference.chart.id, captureChartLayoutState(groupReference.chart))
+    }
+  }
 }
 
 const finalizeGestureHistory = (chartId: string, label: string) => {
   const before = gestureStartLayoutState.get(chartId)
+  const beforeState = new Map(gestureStartLayoutState)
   gestureStartLayoutState.delete(chartId)
   if (!before) {
+    gestureStartLayoutState.clear()
     return
   }
 
   const reference = findChartReference(chartId, chartList.value)
   if (!reference) {
+    gestureStartLayoutState.clear()
     return
   }
 
-  editorHistory.record(createChartLayoutHistoryEntry(label, 'visual-screen-designer', chartId, before, captureChartLayoutState(reference.chart)))
+  if (editingScopeParentId.value) {
+    const groupReference = findChartReference(editingScopeParentId.value, chartList.value)
+    if (groupReference) {
+      normalizeGroupBounds(groupReference.chart)
+    }
+  }
+
+  const afterState = new Map<string, ReturnType<typeof captureChartLayoutState>>()
+  beforeState.forEach((_, layoutChartId) => {
+    const layoutReference = findChartReference(layoutChartId, chartList.value)
+    if (layoutReference) {
+      afterState.set(layoutChartId, captureChartLayoutState(layoutReference.chart))
+    }
+  })
+  gestureStartLayoutState.clear()
+  editorHistory.record(createChartsLayoutHistoryEntry(label, 'visual-screen-designer', beforeState, afterState))
+  updateMoveableRect()
 }
 
 const captureSelectedChartsLayoutState = () => {
@@ -1109,7 +1164,11 @@ const onSelectEnd = (e: import('selecto').OnSelectEnd<VanillaSelecto>) => {
   console.log('onSelectEnd', e)
   if (e.selected.length <= 0) {
     if (e.isClick) {
-      clearChartSelection()
+      if (editingScopeParentId.value) {
+        exitGroupScope()
+      } else {
+        clearChartSelection()
+      }
     }
     return
   }
@@ -1715,10 +1774,19 @@ onBeforeUnmount(() => {
             @interaction-end="isRulerInteracting = false"
           />
           <nav v-if="editingScopeBreadcrumb.length > 1" class="scope-breadcrumb" aria-label="编辑范围">
+            <span class="scope-breadcrumb__label">编辑范围</span>
             <template v-for="(item, index) in editingScopeBreadcrumb" :key="item.id || 'root'">
-              <button class="scope-breadcrumb__item" type="button" @click="setEditingScopeFromBreadcrumb(item.id)">
+              <button
+                v-if="index < editingScopeBreadcrumb.length - 1"
+                class="scope-breadcrumb__item scope-breadcrumb__item--link"
+                type="button"
+                @click="setEditingScopeFromBreadcrumb(item.id)"
+              >
                 {{ item.title }}
               </button>
+              <span v-else class="scope-breadcrumb__item scope-breadcrumb__item--current" aria-current="page">
+                {{ item.title }}
+              </span>
               <span v-if="index < editingScopeBreadcrumb.length - 1" class="scope-breadcrumb__separator">/</span>
             </template>
           </nav>
@@ -2053,16 +2121,34 @@ onBeforeUnmount(() => {
           box-shadow: var(--el-box-shadow-light);
         }
 
+        & .scope-breadcrumb__label {
+          color: var(--el-text-color-secondary);
+          font-size: 12px;
+          font-weight: 500;
+          letter-spacing: 0;
+          padding: 2px 4px;
+        }
+
         & .scope-breadcrumb__item {
-          border: 0;
           color: var(--el-text-color-regular);
-          cursor: pointer;
+          font-size: 12px;
+          font-weight: 500;
           letter-spacing: 0;
           padding: 2px 6px;
+        }
+
+        & .scope-breadcrumb__item--link {
+          background: none;
+          border: 0;
+          cursor: pointer;
 
           &:hover {
             color: var(--el-color-primary);
           }
+        }
+
+        & .scope-breadcrumb__item--current {
+          color: var(--el-text-color-primary);
         }
 
         & .scope-breadcrumb__separator {
@@ -2257,8 +2343,8 @@ onBeforeUnmount(() => {
 
   .moveable-line {
     background: var(--el-color-primary);
-    height: 1px;
-    width: 1px;
+    height: 2px;
+    width: 2px;
   }
 
   .moveable-guideline {
@@ -2283,5 +2369,18 @@ onBeforeUnmount(() => {
 
 .chart-wrapper:hover:not(.moveable-target) {
   outline: 1px dashed var(--el-border-color);
+}
+
+.chart-wrapper--editing-scope {
+  outline: 1px dashed var(--el-color-primary);
+  outline-offset: 2px;
+}
+
+.chart-wrapper--editing-scope::after {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--el-color-primary-light-8);
+  content: '';
+  pointer-events: none;
 }
 </style>

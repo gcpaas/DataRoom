@@ -1,6 +1,6 @@
 *.test.ts
 *spec.ts
-
+docs
 .superpowers
 !dataRoomFront/src/dataRoom/_common/save-before-leave.spec.ts
 *.mjs

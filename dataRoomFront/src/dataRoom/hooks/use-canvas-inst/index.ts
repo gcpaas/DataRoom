@@ -161,8 +161,6 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
 
   const executeBehaviorActions = async (sourceId: string, behavior: BehaviorActionConfig | undefined, triggerData: unknown) => {
     if (!behavior) {
-      console.warn(`触发源 ${sourceId} 未找到行为配置，已跳过`)
-      ElMessage.warning(`触发源 ${sourceId} 未找到行为配置，已跳过`)
       return
     }
     if (behavior.disabled || !behavior.actions || behavior.actions.length === 0) {
@@ -193,8 +191,6 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
         return
       }
       if (!chart?.behaviors) {
-        console.warn(`组件 ${payload.sourceId} 未配置交互行为，已跳过`)
-        ElMessage.warning(`组件 ${payload.sourceId} 未配置交互行为，已跳过`)
         return
       }
       await executeBehaviorActions(chart.id, chart.behaviors[payload.behaviorName], payload.triggerData)

@@ -30,6 +30,10 @@ export interface UngroupChartResult {
   selectedIds: string[]
 }
 
+export interface NormalizeGroupBoundsResult {
+  changed: boolean
+}
+
 interface IndexedChart {
   chart: ChartConfig<unknown>
   index: number
@@ -87,6 +91,31 @@ const getBounds = (charts: ChartConfig<unknown>[]) => {
     w: right - left,
     h: bottom - top,
   }
+}
+
+export const normalizeGroupBounds = (group: ChartConfig<unknown>): NormalizeGroupBoundsResult => {
+  if (!isGroupChart(group) || !Array.isArray(group.children) || group.children.length === 0) {
+    return { changed: false }
+  }
+
+  const bounds = getBounds(group.children)
+  const nextX = group.x + bounds.x
+  const nextY = group.y + bounds.y
+  const changed = nextX !== group.x || nextY !== group.y || bounds.w !== group.w || bounds.h !== group.h
+  if (!changed) {
+    return { changed: false }
+  }
+
+  group.x = nextX
+  group.y = nextY
+  group.w = bounds.w
+  group.h = bounds.h
+  group.children.forEach((child) => {
+    child.x -= bounds.x
+    child.y -= bounds.y
+  })
+
+  return { changed: true }
 }
 
 export const groupChartsInParent = (

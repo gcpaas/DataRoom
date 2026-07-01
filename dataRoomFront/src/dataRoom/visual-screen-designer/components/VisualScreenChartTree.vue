@@ -48,10 +48,20 @@ const computedChartStyle = (chart: ChartConfig<unknown>): CSSProperties => {
 
 const isDirectScopeChild = (parentId: string | undefined) => parentId === props.scopeParentId
 
-const shouldEmitDesignerEvent = () => props.mode === 'designer' && isDirectScopeChild(props.parentId)
+const isEditingScopeChart = (chart: ChartConfig<unknown>) => props.mode === 'designer' && chart.id === props.scopeParentId
+
+const canEmitDesignerEvent = (parentId: string | undefined) => {
+  if (props.mode !== 'designer') {
+    return false
+  }
+  if (isDirectScopeChild(parentId)) {
+    return true
+  }
+  return Boolean(props.scopeParentId) && parentId === undefined
+}
 
 const onChartClick = (event: MouseEvent, chart: ChartConfig<unknown>) => {
-  if (!shouldEmitDesignerEvent()) {
+  if (!canEmitDesignerEvent(props.parentId)) {
     return
   }
   event.stopPropagation()
@@ -59,7 +69,7 @@ const onChartClick = (event: MouseEvent, chart: ChartConfig<unknown>) => {
 }
 
 const onChartDoubleClick = (event: MouseEvent, chart: ChartConfig<unknown>) => {
-  if (!shouldEmitDesignerEvent()) {
+  if (!canEmitDesignerEvent(props.parentId)) {
     return
   }
   event.stopPropagation()
@@ -67,7 +77,7 @@ const onChartDoubleClick = (event: MouseEvent, chart: ChartConfig<unknown>) => {
 }
 
 const onChartContextmenu = (event: MouseEvent, chart: ChartConfig<unknown>) => {
-  if (!shouldEmitDesignerEvent()) {
+  if (!canEmitDesignerEvent(props.parentId)) {
     return
   }
   event.preventDefault()
@@ -92,6 +102,7 @@ const forwardChartContextmenu = (event: MouseEvent, chart: ChartConfig<unknown>,
   <template v-if="mode === 'designer'">
     <div
       class="chart-wrapper"
+      :class="{ 'chart-wrapper--editing-scope': isEditingScopeChart(chart) }"
       v-for="chart in visibleCharts"
       :key="chart.id"
       :id="chart.id"
@@ -119,6 +130,7 @@ const forwardChartContextmenu = (event: MouseEvent, chart: ChartConfig<unknown>,
   <template v-else>
     <div
       class="chart-wrapper"
+      :class="{ 'chart-wrapper--editing-scope': isEditingScopeChart(chart) }"
       v-for="chart in visibleCharts"
       :key="chart.id"
       :id="chart.id"
