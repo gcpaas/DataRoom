@@ -3,26 +3,21 @@ import { computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { CopyDocument } from '@element-plus/icons-vue'
 import { getCookie } from '@/dataRoom/utils/cookie'
-
-const skillInstallCommand = 'npx skills add https://gitee.com/gcpaas/DataRoom.git --skill dataroom-page'
+import { aiGenerationActions, formatMcpConfig } from './ai-generation-content'
 
 const mcpServerUrl = computed(() => {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || ''
   return `${apiBaseUrl.replace(/\/$/, '')}/mcp/sse`
 })
 
-const mcpConfig = computed(() => ({
-  mcpServers: {
-    'dataroom-mcp-server': {
-      url: mcpServerUrl.value,
-      headers: {
-        dataRoomToken: getCookie() || '登录后的Token',
-      },
-    },
-  },
-}))
+const formattedMcpConfig = computed(() => formatMcpConfig(mcpServerUrl.value, getCookie() || '登录后的Token'))
 
-const formattedMcpConfig = computed(() => JSON.stringify(mcpConfig.value, null, 2))
+const actions = computed(() =>
+  aiGenerationActions.map((action) => ({
+    ...action,
+    content: action.title === '配置 MCP Server' ? formattedMcpConfig.value : action.content,
+  })),
+)
 
 const copyText = async (text: string) => {
   try {
@@ -42,26 +37,15 @@ const copyText = async (text: string) => {
       <p class="dr-ai-generation__desc">按以下配置安装 DataRoom 页面生成 Skill，并把当前服务接入到 MCP Server</p>
     </header>
 
-    <section class="dr-ai-generation__section">
+    <section v-for="action in actions" :key="action.title" class="dr-ai-generation__section">
       <div class="dr-ai-generation__section-header">
         <div>
-          <h3 class="dr-ai-generation__section-title">安装 Skill</h3>
-          <p class="dr-ai-generation__section-desc">在终端中执行如下命令</p>
+          <h3 class="dr-ai-generation__section-title">{{ action.title }}</h3>
+          <p class="dr-ai-generation__section-desc">{{ action.desc }}</p>
         </div>
-        <el-button :icon="CopyDocument" @click="copyText(skillInstallCommand)">复制</el-button>
+        <el-button :icon="CopyDocument" @click="copyText(action.content)">复制</el-button>
       </div>
-      <pre class="dr-ai-generation__code"><code>{{ skillInstallCommand }}</code></pre>
-    </section>
-
-    <section class="dr-ai-generation__section">
-      <div class="dr-ai-generation__section-header">
-        <div>
-          <h3 class="dr-ai-generation__section-title">配置 MCP Server</h3>
-          <p class="dr-ai-generation__section-desc">将以下 JSON 添加到AI工具的MCP配置中</p>
-        </div>
-        <el-button :icon="CopyDocument" @click="copyText(formattedMcpConfig)">复制</el-button>
-      </div>
-      <pre class="dr-ai-generation__code"><code>{{ formattedMcpConfig }}</code></pre>
+      <pre class="dr-ai-generation__code"><code>{{ action.content }}</code></pre>
     </section>
   </div>
 </template>

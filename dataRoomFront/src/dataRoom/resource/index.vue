@@ -209,6 +209,14 @@ const handleSystemCategoryChange = () => {
   void getSystemResourceList()
 }
 
+const switchSystemCategory = (categoryCode: string) => {
+  if (systemResourceCategory.value === categoryCode) {
+    return
+  }
+  systemResourceCategory.value = categoryCode
+  handleSystemCategoryChange()
+}
+
 // 打开新增类型选择对话框
 const handleAdd = () => {
   typeSelectDialogVisible.value = true
@@ -814,15 +822,20 @@ onMounted(() => {
 
     <div v-show="activeResourceTab === 'system'" class="resource-tab-panel" role="tabpanel">
         <div class="system-resource-toolbar">
-          <el-radio-group v-model="systemResourceCategory" @change="handleSystemCategoryChange">
-            <el-radio-button
+          <div class="system-category-tabs" role="tablist" aria-label="系统素材分类">
+            <button
               v-for="category in systemResourceCategories"
               :key="category.code"
-              :value="category.code"
+              type="button"
+              class="system-category-tab"
+              :class="{ 'is-active': systemResourceCategory === category.code }"
+              role="tab"
+              :aria-selected="systemResourceCategory === category.code"
+              @click="switchSystemCategory(category.code)"
             >
               {{ category.name }}
-            </el-radio-button>
-          </el-radio-group>
+            </button>
+          </div>
           <span class="system-resource-note">素材源自网络，版权归原作者所有</span>
         </div>
 
@@ -1214,9 +1227,40 @@ onMounted(() => {
     display: flex;
     align-items: center;
     gap: 16px;
-    padding-top: 1px;
-    padding-left: 1px;
     margin-bottom: 16px;
+
+    .system-category-tabs {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .system-category-tab {
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      padding: 6px 10px;
+      color: var(--el-text-color-secondary);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.57;
+      letter-spacing: 0;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+
+      &:hover {
+        background: var(--el-fill-color-lighter);
+        color: var(--el-text-color-primary);
+      }
+
+      &.is-active {
+        background: var(--el-color-primary-light-9);
+        color: var(--el-color-primary);
+      }
+    }
 
     .system-resource-note {
       margin-left: auto;
