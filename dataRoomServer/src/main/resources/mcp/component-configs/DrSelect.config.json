@@ -115,7 +115,7 @@
     {
       "field": "dataset.fields",
       "type": "object",
-      "description": "字段绑定",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
       "defaultValue": {}
     },
     {
@@ -297,6 +297,20 @@
       "type": "string",
       "description": "绑定的全局变量名称",
       "defaultValue": ""
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "labelField",
+      "desc": "选项文本",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "valueField",
+      "desc": "选项值",
+      "required": false,
+      "multiple": false
     }
   ]
 }

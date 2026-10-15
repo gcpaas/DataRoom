@@ -115,7 +115,7 @@
     {
       "field": "dataset.fields",
       "type": "object",
-      "description": "字段绑定",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
       "defaultValue": {}
     },
     {
@@ -347,6 +347,20 @@
         "ease-in-out"
       ],
       "defaultValue": "ease-out"
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "valueField",
+      "desc": "当前值字段（指标，用于计算进度百分比）",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "maxField",
+      "desc": "最大值字段（指标，可选，未绑定时使用props中的max配置）",
+      "required": false,
+      "multiple": false
     }
   ]
 }

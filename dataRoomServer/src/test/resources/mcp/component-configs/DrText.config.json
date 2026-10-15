@@ -16,5 +16,13 @@
       "description": "对齐方式",
       "defaultValue": "left"
     }
+  ],
+  "datasetFields": [
+    {
+      "name": "text",
+      "desc": "文本值",
+      "required": false,
+      "multiple": true
+    }
   ]
 }

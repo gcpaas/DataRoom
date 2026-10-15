@@ -4,6 +4,7 @@ import com.gccloud.gcpaas.dataroom.core.bean.Resp;
 import com.gccloud.gcpaas.dataroom.core.mcp.ChartComponentMcpToolService;
 import com.gccloud.gcpaas.dataroom.core.mcp.PageConfigMcpToolService;
 import com.gccloud.gcpaas.dataroom.core.mcp.bean.ComponentConfig;
+import com.gccloud.gcpaas.dataroom.core.mcp.bean.ComponentDatasetField;
 import com.gccloud.gcpaas.dataroom.core.mcp.bean.ComponentSummary;
 import com.gccloud.gcpaas.dataroom.core.mcp.service.ComponentConfigResourceService;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ComponentMcpToolTest {
 
@@ -35,6 +38,20 @@ class ComponentMcpToolTest {
         assertEquals(200, response.getCode());
         assertEquals("DrText", response.getData().getComponentName());
         assertEquals("align", response.getData().getFields().get(1).getField());
+    }
+
+    @Test
+    void getComponentConfigReturnsDatasetFields() {
+        Resp<ComponentConfig> response = tool.getComponentConfig("DrText");
+
+        assertEquals(200, response.getCode());
+        List<ComponentDatasetField> datasetFields = response.getData().getDatasetFields();
+        assertNotNull(datasetFields);
+        assertEquals(1, datasetFields.size());
+        assertEquals("text", datasetFields.get(0).getName());
+        assertEquals("文本值", datasetFields.get(0).getDesc());
+        assertFalse(datasetFields.get(0).isRequired());
+        assertTrue(datasetFields.get(0).isMultiple());
     }
 
     @Test

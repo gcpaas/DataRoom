@@ -115,7 +115,7 @@
     {
       "field": "dataset.fields",
       "type": "object",
-      "description": "字段绑定",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
       "defaultValue": {}
     },
     {
@@ -644,6 +644,26 @@
         "bounceOut"
       ],
       "defaultValue": "cubicOut"
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "xField",
+      "desc": "数值字段（指标，对应水平方向）",
+      "required": true,
+      "multiple": true
+    },
+    {
+      "name": "yField",
+      "desc": "类目字段（维度，对应垂直方向）",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "seriesField",
+      "desc": "系列分组字段",
+      "required": false,
+      "multiple": false
     }
   ]
 }

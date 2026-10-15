@@ -115,7 +115,7 @@
     {
       "field": "dataset.fields",
       "type": "object",
-      "description": "字段绑定",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
       "defaultValue": {}
     },
     {
@@ -619,6 +619,38 @@
         "bounceOut"
       ],
       "defaultValue": "cubicOut"
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "xField",
+      "desc": "X轴数值字段",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "yField",
+      "desc": "Y轴数值字段",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "sizeField",
+      "desc": "气泡大小映射字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "colorField",
+      "desc": "颜色分组/映射字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "nameField",
+      "desc": "数据项名称字段",
+      "required": false,
+      "multiple": false
     }
   ]
 }

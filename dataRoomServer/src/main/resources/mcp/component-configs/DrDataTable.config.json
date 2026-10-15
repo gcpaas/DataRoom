@@ -115,7 +115,7 @@
     {
       "field": "dataset.fields",
       "type": "object",
-      "description": "字段绑定",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
       "defaultValue": {}
     },
     {
@@ -500,6 +500,20 @@
       "type": "string",
       "description": "nullText",
       "defaultValue": "--"
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "displayFields",
+      "desc": "显示字段列表，未配置时使用数据集返回的全部字段",
+      "required": false,
+      "multiple": true
+    },
+    {
+      "name": "rowKeyField",
+      "desc": "行唯一键字段",
+      "required": false,
+      "multiple": false
     }
   ]
 }

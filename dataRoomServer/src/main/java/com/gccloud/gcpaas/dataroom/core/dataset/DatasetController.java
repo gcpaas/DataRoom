@@ -79,6 +79,9 @@ public class DatasetController {
 
     @GetMapping("/detail/{code}")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Tool(name = "getDatasetDetail", description = "根据数据集编码查询数据集详情。参数code为数据集编码；" +
+            "返回数据集完整配置，包含id、code、name、datasetType、dataset数据集配置、入参列表inputList、出参列表outputList；" +
+            "outputList中的字段名可作为组件dataset.fields字段绑定的value；修改数据集前建议先调用此工具获取现有配置")
     @Operation(summary = "详情", description = "根据编码查询")
     @Parameters({@Parameter(name = "code", description = "数据集编码", in = ParameterIn.PATH)})
     public Resp<DatasetEntity> detail(@PathVariable("code") String code) {
@@ -89,6 +92,11 @@ public class DatasetController {
 
     @PostMapping("/insert")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Tool(name = "insertDataset", description = "新增数据集或目录。参数datasetEntity为配置：name为名称；" +
+            "datasetType为类型，创建目录传directory，新增JSON数据集传json；parentCode为所属目录编码，根级传root；" +
+            "创建目录只需name、datasetType=directory、parentCode，如{name:\"目录名\",datasetType:\"directory\",parentCode:\"root\"}；" +
+            "新增JSON数据集还需传dataset为数据集具体配置，如{\"datasetType\":\"json\",\"json\":\"数据JSON数组文本\"}；" +
+            "返回数据集ID，后续执行数据集需要的数据集编码code可通过getDatasetDetail查询")
     @Operation(summary = "新增", description = "新增数据集")
     public Resp<String> insert(@RequestBody DatasetEntity datasetEntity) {
         datasetEntity.setCode(CodeWorker.generateCode(DataRoomConstant.Dataset.CODE_PREFIX));
@@ -98,6 +106,9 @@ public class DatasetController {
 
     @PostMapping("/update")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Tool(name = "updateDataset", description = "修改数据集。参数datasetEntity为修改后的数据集配置：" +
+            "id为数据集ID，必传，按ID更新，可通过getDatasetDetail查询获取；code不可修改，可不传；" +
+            "name、datasetType、dataset等其余字段含义同insertDataset；返回数据集ID")
     @Operation(summary = "更新", description = "更新数据集")
     public Resp<String> update(@RequestBody DatasetEntity datasetEntity) {
         preserveHttpDatasetHeaderSensitive(datasetEntity);
@@ -118,7 +129,7 @@ public class DatasetController {
     @PostMapping("/run")
     @RequiresRoles(value = DataRoomRole.SHARER)
     @Operation(summary = "执行", description = "执行数据集")
-    @Tool(name = "runDataset", description = "执行DataRoom数据集。参数datasetCode为数据集编码，inputParam为数据集入参键值对；返回数据集执行结果、输出字段和执行状态。")
+    @Tool(name = "runDataset", description = "执行DataRoom数据集。参数datasetCode为数据集编码，inputParam为数据集入参键值对；返回数据集执行结果、输出字段和执行状态；输出字段名可作为组件dataset.fields字段绑定的value。")
     
     public Resp<DatasetRunResponse> run(@RequestBody DatasetRunRequest datasetRunRequest) {
         DatasetEntity datasetEntity = datasetMapper.getByCode(datasetRunRequest.getDatasetCode());

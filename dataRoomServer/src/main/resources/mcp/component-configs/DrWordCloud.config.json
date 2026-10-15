@@ -115,7 +115,7 @@
     {
       "field": "dataset.fields",
       "type": "object",
-      "description": "字段绑定",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
       "defaultValue": {}
     },
     {
@@ -275,6 +275,20 @@
       "type": "string",
       "description": "动画缓动函数",
       "defaultValue": "cubicOut"
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "wordField",
+      "desc": "词语文本字段（维度）",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "valueField",
+      "desc": "权重/频次字段（指标）",
+      "required": true,
+      "multiple": false
     }
   ]
 }

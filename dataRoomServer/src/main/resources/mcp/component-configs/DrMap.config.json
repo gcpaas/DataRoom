@@ -115,7 +115,7 @@
     {
       "field": "dataset.fields",
       "type": "object",
-      "description": "字段绑定",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
       "defaultValue": {}
     },
     {
@@ -715,6 +715,68 @@
         3,
         18
       ]
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "regionNameField",
+      "desc": "行政区名称字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "regionValueField",
+      "desc": "行政区数值字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "markerNameField",
+      "desc": "标记点名称字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "longitudeField",
+      "desc": "经度字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "latitudeField",
+      "desc": "纬度字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "markerValueField",
+      "desc": "标记点数值字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "lineFromLngField",
+      "desc": "飞线起点经度字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "lineFromLatField",
+      "desc": "飞线起点纬度字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "lineToLngField",
+      "desc": "飞线终点经度字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "lineToLatField",
+      "desc": "飞线终点纬度字段",
+      "required": false,
+      "multiple": false
     }
   ]
 }

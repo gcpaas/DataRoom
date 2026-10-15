@@ -55,7 +55,10 @@ public class ChartComponentMcpToolService {
      */
     @Operation(summary = "组件配置查询", description = "根据组件名称获取组件详细配置，参数componentName为组件名称，例如DrText；返回组件扁平化配置字段列表，初始化组件时需要将fields直接转为JSON树的结构，只需要fields字段信息")
     @Tool(name = "getComponentConfig", description = "根据组件名称获取组件详细配置，参数componentName为组件名称，例如DrText；" +
-            "返回组件扁平化配置字段列表，初始化组件时需要将fields直接转为JSON树的结构，只需要fields字段信息")
+            "返回组件扁平化配置字段列表fields和数据集字段绑定定义datasetFields，初始化组件时需要将fields直接转为JSON树的结构，只需要fields字段信息；" +
+            "为组件绑定数据集时，通过dataset.code绑定数据集编码，还必须通过dataset.fields完成字段绑定：" +
+            "key必须取自datasetFields中的name（required为true的必须绑定），value为绑定的数据集字段名数组（multiple为true时可绑定多个），" +
+            "数据集字段名可通过getDatasetDetail返回的outputList或runDataset的执行结果获取，只绑定数据集不绑定字段组件无法正常展示数据")
     public Resp<ComponentConfig> getComponentConfig(String componentName) {
         return Resp.success(componentConfigResourceService.getComponentConfig(componentName));
     }

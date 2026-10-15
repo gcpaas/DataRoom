@@ -50,7 +50,7 @@ export interface ChartConfig<T> {
     code: string
     // 数据集类型，历史配置可为空
     datasetType?: DatasetType
-    // 字段绑定
+    // 字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组
     fields: {
       // key为图表对应的指标、维度、属性值等字段，value 为多个数据集字段名
       [key: string]: string[]

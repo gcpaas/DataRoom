@@ -115,7 +115,7 @@
     {
       "field": "dataset.fields",
       "type": "object",
-      "description": "字段绑定",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
       "defaultValue": {}
     },
     {
@@ -487,6 +487,50 @@
         "bounceOut"
       ],
       "defaultValue": "cubicOut"
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "currentValueField",
+      "desc": "当前值字段，字段直传模式下必填",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "previousValueField",
+      "desc": "对比值字段，字段直传模式下必填",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "changeValueField",
+      "desc": "变化值字段，可由数据集直接返回",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "changeRateField",
+      "desc": "变化率字段，可由数据集直接返回",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "timeField",
+      "desc": "时间字段，序列自动计算模式下使用",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "valueField",
+      "desc": "序列数值字段，序列自动计算模式下使用",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "titleField",
+      "desc": "标题字段",
+      "required": false,
+      "multiple": false
     }
   ]
 }

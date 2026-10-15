@@ -34,4 +34,12 @@ public class ComponentConfig {
      * 字段路径使用点号表示嵌套结构，例如 {@code props.textStyle.fontSize}。
      */
     private List<ComponentConfigField> fields;
+
+    /**
+     * 组件可绑定的数据集字段定义列表。
+     * <p>
+     * 组件绑定数据集时，dataset.fields 的 key 必须取自该列表的 name，
+     * value 为绑定的数据集字段名数组。
+     */
+    private List<ComponentDatasetField> datasetFields;
 }

@@ -115,7 +115,7 @@
     {
       "field": "dataset.fields",
       "type": "object",
-      "description": "字段绑定",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
       "defaultValue": {}
     },
     {
@@ -507,6 +507,26 @@
         "bounceOut"
       ],
       "defaultValue": "cubicOut"
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "indicatorField",
+      "desc": "维度/指示器名称字段（角度轴类目）",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "valueField",
+      "desc": "数值字段（半径轴数值）",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "seriesField",
+      "desc": "系列分组字段（多组数据对比）",
+      "required": false,
+      "multiple": false
     }
   ]
 }

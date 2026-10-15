@@ -115,7 +115,7 @@
     {
       "field": "dataset.fields",
       "type": "object",
-      "description": "字段绑定",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
       "defaultValue": {}
     },
     {
@@ -225,6 +225,20 @@
         1.5,
         2
       ]
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "urlField",
+      "desc": "视频地址",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "posterField",
+      "desc": "封面图地址",
+      "required": false,
+      "multiple": false
     }
   ]
 }

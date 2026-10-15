@@ -120,7 +120,9 @@ public class PageController {
      */
     @PostMapping("/insert")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
-    @Tool(name = "newPage", description = "新增页面。参数pageEntity为页面配置信息，返回页面ID")
+    @Tool(name = "newPage", description = "新增页面。参数pageEntity为页面配置信息，返回页面ID；" +
+            "chartList中组件绑定数据集时需同时设置dataset.code和dataset.fields字段绑定，" +
+            "字段绑定的key取自getComponentConfig返回的datasetFields中的name，value为getDatasetDetail返回的数据集字段名（outputList）数组")
     
     @Operation(summary = "新增", description = "新增页面")
     public Resp<String> newPage(@RequestBody PageEntity pageEntity) {
@@ -332,7 +334,10 @@ public class PageController {
      */
     @PostMapping("/updatePageConfig")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
-    @Tool(name = "updatePageConfig", description = "更新页面配置。参数pageStage为页面配置信息")
+    @Tool(name = "updatePageConfig", description = "更新页面配置。参数pageStage为页面配置信息，其中chartList为组件列表；" +
+            "为组件绑定数据集时，除设置dataset.code外，还必须通过dataset.fields完成字段绑定，" +
+            "key取自getComponentConfig返回的datasetFields中的name，value为getDatasetDetail返回的数据集字段名（outputList）数组，" +
+            "只绑定数据集不绑定字段组件无法正常展示数据")
     @Operation(summary = "更新页面配置", description = "更新页面配置")
     
     public Resp<Boolean> updatePageConfig(@RequestBody PageStageEntity pageStage) {

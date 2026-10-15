@@ -194,12 +194,13 @@ export async function exportComponentConfigs({ projectRoot, outputDir }) {
     const interfaceInfo = parsePropsInterface(installSource, componentName, typeAliases)
     const defaults = parseCreateChartConfigDefaults(installSource, componentName)
     const fields = buildComponentConfigFields(chartConfigInterface, interfaceInfo, defaults)
+    const datasetFields = parseDatasetFields(installSource, componentName)
     const summary = {
       componentName: pluginMeta.componentName,
       displayName: pluginMeta.displayName,
       description: pluginMeta.description,
     }
-    const detail = { ...summary, fields }
+    const detail = { ...summary, fields, datasetFields }
     summaries.push(summary)
     details.push(detail)
   }
@@ -625,6 +626,41 @@ function findCreateChartConfigCall(sourceFile) {
   }
   visit(sourceFile)
   return found
+}
+
+function parseDatasetFields(source, componentName) {
+  const sourceFile = ts.createSourceFile(`${componentName}.datasetFields.ts`, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
+  let datasetFieldsNode
+  const visit = (node) => {
+    if (datasetFieldsNode) {
+      return
+    }
+    if (ts.isVariableStatement(node)) {
+      for (const declaration of node.declarationList.declarations) {
+        if (ts.isIdentifier(declaration.name) && declaration.name.text === 'datasetFields' && declaration.initializer && ts.isArrayLiteralExpression(declaration.initializer)) {
+          datasetFieldsNode = declaration.initializer
+          return
+        }
+      }
+    }
+    ts.forEachChild(node, visit)
+  }
+  visit(sourceFile)
+  if (!datasetFieldsNode) {
+    throw new Error(`${componentName}/install.ts 中未找到 datasetFields 定义`)
+  }
+  return datasetFieldsNode.elements
+    .filter((element) => ts.isObjectLiteralExpression(element))
+    .map((element) => {
+      const value = objectLiteralToValue(element, sourceFile)
+      return {
+        name: value.name,
+        desc: value.desc,
+        required: value.required === true,
+        multiple: value.multiple === true,
+      }
+    })
+    .filter((field) => typeof field.name === 'string' && field.name.length > 0)
 }
 
 function objectLiteralToValue(node, sourceFile) {
