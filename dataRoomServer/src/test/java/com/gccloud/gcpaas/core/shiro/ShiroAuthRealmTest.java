@@ -29,6 +29,9 @@ class ShiroAuthRealmTest {
     @Test
     void authenticationRejectsExpiredLocalUserToken() {
         DataRoomConfig dataRoomConfig = new DataRoomConfig();
+        // 单测环境下无 yml 配置，需手动补齐 jwt 配置（secret 为 32 字节的 Base64 编码，满足 HS256 密钥长度要求）
+        dataRoomConfig.getJwt().setIssuer("dataroom-test");
+        dataRoomConfig.getJwt().setSecret("MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE=");
         UserService userService = mock(UserService.class);
 
         UserEntity user = new UserEntity();
@@ -41,11 +44,14 @@ class ShiroAuthRealmTest {
 
         TokenService tokenService = new TokenService();
         ReflectionTestUtils.setField(tokenService, "dataRoomConfig", dataRoomConfig);
+        // TOKEN_CACHE 在 @PostConstruct 中初始化，单测直跑需手动触发
+        tokenService.init();
         String token = tokenService.createToken("expired");
 
         ShiroAuthRealm realm = new ShiroAuthRealm();
         ReflectionTestUtils.setField(realm, "dataRoomConfig", dataRoomConfig);
         ReflectionTestUtils.setField(realm, "userService", userService);
+        ReflectionTestUtils.setField(realm, "tokenService", tokenService);
 
         assertThrows(DataRoomException.class, () -> ReflectionTestUtils.invokeMethod(realm, "doGetAuthenticationInfo", new ShiroAuthToken(token)));
     }

@@ -1,5 +1,6 @@
 package com.gccloud.gcpaas.core.user.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.gccloud.gcpaas.dataroom.core.constant.UserStatus;
 import com.gccloud.gcpaas.dataroom.core.entity.UserEntity;
 import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
@@ -218,6 +219,12 @@ class UserServiceLoginSecurityTest {
         @Override
         public UserEntity getByAccount(String account) {
             return user;
+        }
+
+        @Override
+        public long count(Wrapper<UserEntity> queryWrapper) {
+            // add() 中的账号唯一性校验会调用 count（依赖 baseMapper），单测环境无数据库，直接返回无重复
+            return 0;
         }
     }
 }

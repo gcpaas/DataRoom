@@ -13,7 +13,7 @@ class DataRoomApplicationMapperScanTest {
         MapperScan mapperScan = DataRoomApplication.class.getAnnotation(MapperScan.class);
 
         assertThat(mapperScan).isNotNull();
-        assertThat(getMapperScanPackages(mapperScan)).containsExactly("com.gccloud.gcpaas.core.mapper");
+        assertThat(getMapperScanPackages(mapperScan)).containsExactly("com.gccloud.gcpaas.dataroom.core.mapper");
     }
 
     private String[] getMapperScanPackages(MapperScan mapperScan) {

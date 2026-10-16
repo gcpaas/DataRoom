@@ -28,15 +28,9 @@ class OperationLogSchemaTest {
         assertFalse(h2.contains("handler_duration_ms"), "不应再包含已废弃的 handler_duration_ms 列");
     }
 
-    @Test
-    void migrationSqlAddsNewColumnsAndRemovesOld() throws Exception {
-        String migration = Files.readString(resolvePath("../doc/operation_log_migration.sql", "doc/operation_log_migration.sql"));
-        assertTrue(migration.contains("operation_summary"), "迁移脚本应新增 operation_summary");
-        assertTrue(migration.contains("operation_description"), "迁移脚本应新增 operation_description");
-        assertTrue(migration.contains("business_module"), "迁移脚本应新增 business_module");
-        assertTrue(migration.contains("target_type"), "迁移脚本应删除 target_type");
-        assertTrue(migration.contains("action_desc"), "迁移脚本应删除 action_desc");
-    }
+    // 升级迁移逻辑已内嵌于全量脚本（dataroom_mysql.all.sql / dataroom_pg.all.sql
+    // / dataroom_h2.all.sql 中的标记列条件重建），由下方 mysql/postgres 文本断言
+    // 及两个 H2 执行用例覆盖；仓库中不存在也不再需要独立迁移脚本，勿再引用。
 
     @Test
     void mysqlDdlUsesMarkerColumnToRebuildOnlyLegacyOperationLogTable() throws Exception {
