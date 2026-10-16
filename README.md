@@ -113,7 +113,7 @@
 
 ## docker体验
 ```shell
-# 访问地址、用户名、密码等参考用户手册说明
+# 访问地址、用户名、密码等参考用户手册说明，仅支持 linux/arm64 系统与架构
 
 docker run -d --name dataroom -p 8081:8081 gcpaas/dataroom:latest 
 ```
