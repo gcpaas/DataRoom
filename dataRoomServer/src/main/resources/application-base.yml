@@ -122,7 +122,8 @@ springdoc:
   group-configs:
     # 项目上自定义的包名可以配置多个
     - group: 'DataRoom'
-      paths-to-match: '/**'
+      paths-to-match:
+        - '/**'
       # 扫描的包、可以配置多个
       packages-to-scan:
         - com.gccloud.gcpaas
