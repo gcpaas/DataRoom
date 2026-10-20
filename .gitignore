@@ -1,5 +1,7 @@
 *.test.ts
 *spec.ts
+outputs
+.workbuddy
 docs
 .superpowers
 !dataRoomFront/src/dataRoom/_common/save-before-leave.spec.ts

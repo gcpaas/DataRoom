@@ -164,8 +164,10 @@ const positiveFiniteOrFallback = (value: number, fallback: number) => {
 }
 
 const normalizeDesignerScale = (scale: number) => {
-  return getDesignerZoomScale(
-    getDesignerZoomPercent(positiveFiniteOrFallback(scale, getDesignerZoomScale(ZOOM_DEFAULT_PERCENT))),
+  // 百分比取整仅用于控件显示，视口计算必须保留最佳适配的精度。
+  return Math.min(
+    ZOOM_MAX_PERCENT / 100,
+    Math.max(ZOOM_MIN_PERCENT / 100, positiveFiniteOrFallback(scale, ZOOM_DEFAULT_PERCENT / 100)),
   )
 }
 
@@ -308,11 +310,19 @@ export const panDesignerViewport = (
 ) => {
   const safeDeltaX = finiteOrFallback(deltaX, 0)
   const safeDeltaY = finiteOrFallback(deltaY, 0)
-  return normalizeDesignerViewport({
+  const nextViewport = normalizeDesignerViewport({
     ...viewport,
     panX: viewport.panX - safeDeltaX,
     panY: viewport.panY - safeDeltaY,
   })
+  // 无溢出的轴无需平移，保留最佳适配时为标尺预留的偏移，避免首次滚动重新居中。
+  if (nextViewport.canvasWidth * nextViewport.scale <= nextViewport.viewportWidth) {
+    nextViewport.panX = finiteOrFallback(viewport.panX, nextViewport.panX)
+  }
+  if (nextViewport.canvasHeight * nextViewport.scale <= nextViewport.viewportHeight) {
+    nextViewport.panY = finiteOrFallback(viewport.panY, nextViewport.panY)
+  }
+  return nextViewport
 }
 
 export const panDesignerViewportByPointerDelta = (
@@ -320,11 +330,5 @@ export const panDesignerViewportByPointerDelta = (
   deltaX: number,
   deltaY: number,
 ) => {
-  const safeDeltaX = finiteOrFallback(deltaX, 0)
-  const safeDeltaY = finiteOrFallback(deltaY, 0)
-  return normalizeDesignerViewport({
-    ...viewport,
-    panX: viewport.panX + safeDeltaX,
-    panY: viewport.panY + safeDeltaY,
-  })
+  return panDesignerViewport(viewport, -deltaX, -deltaY)
 }
