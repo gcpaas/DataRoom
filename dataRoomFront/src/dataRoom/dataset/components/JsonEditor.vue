@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance, FormRules, UploadInstance, UploadProps } from 'element-plus'
 import type { DatasetEntity } from '../api'
 import { datasetApi } from '../api'
 import { ElMessage } from 'element-plus'
@@ -22,6 +22,8 @@ const emit = defineEmits<{
 
 const formRef = ref<FormInstance>()
 const previewData = ref<unknown>([])
+const uploadRef = ref<UploadInstance>()
+const importingJson = ref(false)
 const layoutRef = ref<{ revealPreview: () => Promise<void> }>()
 
 // CodeMirror 扩展配置：JSON语言 + Eclipse主题
@@ -227,6 +229,41 @@ const parseFields = () => {
 }
 
 /**
+ * 仅在浏览器读取 JSON 文件，校验成功后替换编辑器内容。
+ */
+const importJsonFile: UploadProps['onChange'] = async (uploadFile) => {
+  if (importingJson.value) return
+
+  try {
+    const file = uploadFile.raw
+    if (!file || !/\.json$/i.test(file.name)) {
+      ElMessage.error('请选择 .json 文件')
+      return
+    }
+
+    importingJson.value = true
+    const content = (await file.text()).replace(/^\uFEFF/, '')
+    JSON.parse(content)
+
+    if (formData.dataset && 'json' in formData.dataset) {
+      // 保留原始文本，避免重新序列化导致大整数精度丢失。
+      formData.dataset.json = content
+      ElMessage.success('JSON文件导入成功')
+    }
+  } catch (error) {
+    console.error('导入JSON文件失败:', error)
+    ElMessage.error(
+      error instanceof SyntaxError
+        ? 'JSON文件格式错误，原有内容未修改'
+        : 'JSON文件读取失败，原有内容未修改'
+    )
+  } finally {
+    importingJson.value = false
+    uploadRef.value?.clearFiles()
+  }
+}
+
+/**
  * 格式化JSON
  */
 const formatJson = () => {
@@ -259,6 +296,20 @@ defineExpose({
       </el-form-item>
       <el-form-item class="dataset-editor-form-grid__full" label="JSON数据">
         <div class="json-editor-shell">
+          <div class="dataset-form-toolbar">
+            <el-upload
+              ref="uploadRef"
+              accept=".json"
+              :auto-upload="false"
+              :show-file-list="false"
+              :disabled="importingJson"
+              :on-change="importJsonFile"
+            >
+              <el-button :loading="importingJson" :disabled="importingJson">
+                上传 JSON 文件
+              </el-button>
+            </el-upload>
+          </div>
           <div
             v-if="formData.dataset && 'json' in formData.dataset"
             class="codemirror-wrapper"

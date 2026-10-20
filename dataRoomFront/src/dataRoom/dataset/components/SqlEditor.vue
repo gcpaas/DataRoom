@@ -52,6 +52,22 @@ const metadataTreeProps = {
 
 // CodeMirror 扩展配置：SQL语言 + Eclipse主题，与JSON数据集保持一致
 const cmExtensions = [sql(), eclipse]
+const builtinVariables = [
+  { label: '用户账号', value: 'user.account' },
+  { label: '用户名', value: 'user.username' },
+  { label: '用户ID', value: 'user.id' }
+]
+
+const copyBuiltinVariable = async (variable: string) => {
+  const text = `#{${variable}}`
+  try {
+    await navigator.clipboard.writeText(text)
+    ElMessage.success(`已复制：${text}`)
+  } catch (error) {
+    console.error('复制内置变量失败:', error)
+    ElMessage.error(`复制失败，请手动复制：${text}`)
+  }
+}
 const sqlDataSourceTypes = new Set([
   'mysql',
   'postgresql',
@@ -470,6 +486,20 @@ defineExpose({
             <el-button size="small" @click="formatSql">格式化</el-button>
           </div>
         </div>
+        <div class="sql-builtin-variables">
+          <el-text type="info" size="small">内置变量（点击复制）</el-text>
+          <el-space wrap>
+            <el-button
+              v-for="variable in builtinVariables"
+              :key="variable.value"
+              size="small"
+              :title="`复制 #{${variable.value}}`"
+              @click="copyBuiltinVariable(variable.value)"
+            >
+              {{ variable.label }}
+            </el-button>
+          </el-space>
+        </div>
       </el-form-item>
       <el-form-item class="dataset-editor-form-grid__full" label="入参配置">
         <div class="dataset-form-section">
@@ -692,6 +722,15 @@ defineExpose({
   position: relative;
   width: 100%;
   overflow: hidden;
+}
+
+.sql-builtin-variables {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  margin-top: 8px;
 }
 
 .sql-format-action {

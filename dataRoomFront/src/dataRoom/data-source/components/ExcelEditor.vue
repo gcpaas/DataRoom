@@ -25,6 +25,17 @@ const columns = ref<ExcelColumn[]>([])
 const uploadedFileName = ref('')
 const selectedFile = ref<File | null>(null)
 
+const currentDate = new Date()
+const sampleMonth = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`
+const sampleData = [
+  { month: sampleMonth, username: '张伟', stationery: 1200, household: 860, food: 1500, digital: 2000 },
+  { month: sampleMonth, username: '李娜', stationery: 980, household: 1340, food: 760, digital: 1680 },
+  { month: sampleMonth, username: '王强', stationery: 1560, household: 100, food: 1120, digital: 890 },
+  { month: sampleMonth, username: '刘芳', stationery: 670, household: 1820, food: 1430, digital: 1250 },
+  { month: sampleMonth, username: '陈明', stationery: 1890, household: 950, food: 580, digital: 1740 },
+  { month: sampleMonth, username: '赵敏', stationery: 1050, household: 1470, food: 1960, digital: 320 },
+]
+
 // 是否为编辑模式
 const isEditMode = computed(() => !!props.modelValue.code)
 
@@ -234,6 +245,17 @@ defineExpose({
             </div>
           </template>
         </el-upload>
+      </el-form-item>
+
+      <el-form-item label="样例">
+        <el-table :data="sampleData" border size="small">
+          <el-table-column prop="month" label="月份" min-width="100" />
+          <el-table-column prop="username" label="销售人员" min-width="100" />
+          <el-table-column prop="stationery" label="文具销售额" min-width="110" align="right" />
+          <el-table-column prop="household" label="日用品销售额" min-width="120" align="right" />
+          <el-table-column prop="food" label="食品销售额" min-width="110" align="right" />
+          <el-table-column prop="digital" label="数码销售额" min-width="110" align="right" />
+        </el-table>
       </el-form-item>
     </el-form>
 
