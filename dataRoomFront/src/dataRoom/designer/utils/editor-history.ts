@@ -593,6 +593,11 @@ export class EditorHistoryManager {
     this.maxEntries = options.maxEntries ?? 100
   }
 
+  clear() {
+    this.undoStack.length = 0
+    this.redoStack.length = 0
+  }
+
   get canUndo() {
     return this.undoStack.length > 0
   }

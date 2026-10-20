@@ -746,7 +746,7 @@ const activeChartById = (id: string) => {
 /**
  * 子组件注入使用
  */
-const { canvasInst } = useCanvasInst({
+const { canvasInst, chartInstanceMap } = useCanvasInst({
   chartList,
   globalVariable,
   basicConfig: basicConfig as unknown as Ref<PageBasicConfig>,
@@ -790,6 +790,49 @@ const rightControlPanelShow = ref(true)
 const componentLibVisible = ref(false)
 const resourceLibDialogVisible = ref(false)
 const globalVariableDialogVisible = ref(false)
+const canvasResetVersion = ref(0)
+const clearCanvasPending = ref(false)
+
+const onClearCanvas = async () => {
+  if (clearCanvasPending.value) return
+  clearCanvasPending.value = true
+  try {
+    await ElMessageBox.confirm(
+      '将清空全部组件、全局变量、定时器、参考线及关联交互，并清除撤销/恢复记录；保留页面名称、画布尺寸和背景等基础设置。此操作无法通过撤销恢复，清空后需保存。是否继续？',
+      '清空画布',
+      { type: 'warning', confirmButtonText: '确认清空', cancelButtonText: '取消', closeOnClickModal: false },
+    )
+    if (!visualScreenDesignerAliveGuard.isAlive()) return
+
+    chartList.value = []
+    globalVariable.value = []
+    basicConfig.value.timers = []
+    updateVisualScreenRulerConfig({ ...visualScreenRuler.value, verticalGuides: [], horizontalGuides: [] })
+    setEditingScopeFromBreadcrumb()
+    contextMenuEvent.value = undefined
+    globalVariableDialogVisible.value = false
+    componentLibVisible.value = false
+    resourceLibDialogVisible.value = false
+    gestureStartLayoutState.clear()
+    groupGestureStartLayoutState.clear()
+    resetCanvasPanState()
+    clearRulerPointerPosition()
+    isRulerInteracting.value = false
+    suppressNextCanvasSelectionClick.value = false
+    pendingSelectedChartTogglePointer.value = null
+    editorHistory.clear()
+    Object.keys(chartInstanceMap).forEach((id) => delete chartInstanceMap[id])
+    canvasResetVersion.value += 1
+    ElMessage.success('画布已清空，请保存')
+  } catch (error) {
+    if (error !== 'cancel' && error !== 'close') {
+      console.error('清空画布失败', error)
+      ElMessage.error('清空画布失败')
+    }
+  } finally {
+    clearCanvasPending.value = false
+  }
+}
 
 // 核心：使用计算属性生成main区域的样式对象
 const mainStyle = computed(() => {
@@ -2006,6 +2049,12 @@ onBeforeUnmount(() => {
               <el-dropdown-menu>
                 <el-dropdown-item>
                   <div class="tool-menu-row" @click.stop>
+                    <span>画布</span>
+                    <el-button size="small" text :disabled="clearCanvasPending" @click.stop="onClearCanvas">清空</el-button>
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <div class="tool-menu-row" @click.stop>
                     <span>标尺</span>
                     <el-switch v-model="rulerVisible" size="small" />
                   </div>
@@ -2293,7 +2342,7 @@ onBeforeUnmount(() => {
         <el-scrollbar class="right-panel-scrollbar" height="100%">
           <div class="right-panel-scroll-content">
             <template v-if="rightControlPanelSetting">
-              <VisualScreenControlPanel :basicConfig="basicConfig" :global-variable-list="globalVariable" />
+              <VisualScreenControlPanel :key="canvasResetVersion" :basicConfig="basicConfig" :global-variable-list="globalVariable" />
             </template>
             <template v-else>
               <ControlPanelWrapper v-if="activeChart" :chart="activeChart" :global-variable-list="globalVariable">

@@ -258,7 +258,7 @@ const addChart = (type: string) => {
   return chartInst
 }
 
-const { canvasInst } = useCanvasInst({
+const { canvasInst, chartInstanceMap } = useCanvasInst({
   chartList,
   globalVariable,
   basicConfig: pageBasicConfig,
@@ -290,6 +290,44 @@ const componentLibVisible = ref(false)
 const resourceLibVisible = ref(false)
 const globalVariableVisible = ref(false)
 const contextMenuVisible = ref(false)
+const canvasResetVersion = ref(0)
+const clearCanvasPending = ref(false)
+
+const onClearCanvas = async () => {
+  if (clearCanvasPending.value) return
+  clearCanvasPending.value = true
+  try {
+    await ElMessageBox.confirm(
+      '将清空全部组件、全局变量、定时器及关联交互，并清除撤销/恢复记录；保留页面名称、画布尺寸和背景等基础设置。此操作无法通过撤销恢复，清空后需保存。是否继续？',
+      '清空画布',
+      { type: 'warning', confirmButtonText: '确认清空', cancelButtonText: '取消', closeOnClickModal: false },
+    )
+    if (!pageDesignerAliveGuard.isAlive()) return
+
+    chartList.value = []
+    globalVariable.value = []
+    pageBasicConfig.value.timers = []
+    activeChart.value = undefined
+    rightControlPanelSetting.value = true
+    contextMenuVisible.value = false
+    contextMenuEvent.value = undefined
+    globalVariableVisible.value = false
+    componentLibVisible.value = false
+    resourceLibVisible.value = false
+    editorHistory.clear()
+    rebuildChartLayoutBaselines()
+    Object.keys(chartInstanceMap).forEach((id) => delete chartInstanceMap[id])
+    canvasResetVersion.value += 1
+    ElMessage.success('画布已清空，请保存')
+  } catch (error) {
+    if (error !== 'cancel' && error !== 'close') {
+      console.error('清空画布失败', error)
+      ElMessage.error('清空画布失败')
+    }
+  } finally {
+    clearCanvasPending.value = false
+  }
+}
 /**
  * 打开组件库弹框
  */
@@ -790,6 +828,21 @@ onUnmounted(() => {
           <el-button @click="openGlobalVariable" size="small">变量</el-button>
         </div>
         <div class="header-action">
+          <el-dropdown trigger="click" :hide-on-click="false">
+            <el-button size="small">工具</el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>
+                  <div class="tool-menu-row" @click.stop>
+                    <span>画布</span>
+                    <el-button size="small" text :disabled="clearCanvasPending" @click.stop="onClearCanvas">清空</el-button>
+                  </div>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <div class="header-action">
           <el-button size="small" :disabled="!editorHistory.canUndo" aria-label="回退" title="回退" @click="onUndo">
             撤销
           </el-button>
@@ -848,7 +901,7 @@ onUnmounted(() => {
       <div class="right-panel" :style="computedRightControlPanelStyle">
         <el-scrollbar class="right-panel-scrollbar" height="100%">
           <div class="right-panel-scroll-content">
-            <ControlPanel v-if="rightControlPanelSetting" :basicConfig="pageBasicConfig" :global-variable-list="globalVariable"></ControlPanel>
+            <ControlPanel v-if="rightControlPanelSetting" :key="canvasResetVersion" :basicConfig="pageBasicConfig" :global-variable-list="globalVariable"></ControlPanel>
             <ControlPanelWrapper v-else :chart="activeChart!" :global-variable-list="globalVariable">
               <component :is="getPanelComponent(activeChart?.type)" :chart="activeChart"></component>
             </ControlPanelWrapper>
@@ -891,6 +944,17 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 @use './assets/index.scss';
+
+.tool-menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-width: 120px;
+  width: 100%;
+  color: var(--el-text-color-primary);
+  letter-spacing: 0;
+}
 
 :deep(.vue-grid-item.vue-grid-placeholder) {
   background: var(--el-color-primary-light-9);
