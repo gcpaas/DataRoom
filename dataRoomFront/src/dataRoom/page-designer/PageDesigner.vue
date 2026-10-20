@@ -21,6 +21,7 @@ import {
 } from '@/dataRoom/designer/utils/designer-history-backup.ts'
 import type { ChartLayerMoveDirection } from '@/dataRoom/designer/types/CanvasInst.ts'
 import { PAGE_HISTORY_REMARKS } from '@/dataRoom/designer/utils/page-history-remark.ts'
+import { filterVisibleCharts } from '@/dataRoom/designer/utils/chart-visibility.ts'
 import {
   ChartLayoutBaselineTracker,
   EditorHistoryManager,
@@ -55,6 +56,8 @@ const route = useRoute()
 const activeChart = ref<ChartConfig<unknown>>()
 const pageStageEntity = ref<PageStageEntity>()
 const chartList = ref<ChartConfig<unknown>[]>([])
+// 仅过滤渲染项，完整布局保留隐藏组件，供后续显示、保存和交互查找。
+const visibleCharts = computed(() => filterVisibleCharts(chartList.value))
 const pageBasicConfig = ref<PageBasicConfig>({} as PageBasicConfig)
 const globalVariable = ref<GlobalVariable[]>([] as GlobalVariable[])
 const rightControlPanelShow = ref(true)
@@ -877,7 +880,7 @@ onUnmounted(() => {
           <el-scrollbar>
             <GridLayout v-model:layout="chartList" :col-num="48" :row-height="16" :is-draggable="true" :is-resizable="true" :vertical-compact="true" :use-css-transforms="true">
               <GridItem
-                v-for="item in chartList"
+                v-for="item in visibleCharts"
                 :key="item.id"
                 :static="false"
                 :x="item.x"

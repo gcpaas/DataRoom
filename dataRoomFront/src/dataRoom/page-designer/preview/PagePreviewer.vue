@@ -13,9 +13,12 @@ import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
 import { useTimerManager } from '@/dataRoom/hooks/use-timer-manager'
 import { useRealtimeDataset } from '@/dataRoom/hooks/use-realtime-dataset'
+import { filterVisibleCharts } from '@/dataRoom/designer/utils/chart-visibility.ts'
 
 const pageStageEntity = ref<PageStageEntity>()
 const chartList = ref<ChartConfig<unknown>[]>([])
+// 仅过滤渲染项，完整布局保留隐藏组件，供后续显示和交互查找。
+const visibleCharts = computed(() => filterVisibleCharts(chartList.value))
 const basicConfig = ref<PageBasicConfig>({} as PageBasicConfig)
 const globalVariable = ref<GlobalVariable[]>([] as GlobalVariable[])
 const route = useRoute()
@@ -98,7 +101,7 @@ const computedCanvasMainContainerStyle = computed(() => {
 <template>
   <div class="dr-page-preview" :style="computedCanvasMainContainerStyle">
     <GridLayout v-model:layout="chartList" :col-num="48" :row-height="16" :is-draggable="false" :is-resizable="false" :vertical-compact="true" :use-css-transforms="true">
-      <GridItem v-for="(item, index) in chartList" :key="index" :static="false" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.id">
+      <GridItem v-for="item in visibleCharts" :key="item.id" :static="false" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.id">
         <div class="chart-wrapper" :key="item.id" :id="item.id" :data-dr-id="item.id">
           <component :is="getComponent(item.type)" :chart="item"></component>
         </div>
