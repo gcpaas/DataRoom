@@ -1,4 +1,4 @@
-import thumbnail from './images/decoration.svg'
+import thumbnail from './images/decoration.png'
 import {ChartPlugin} from '@/dataRoom/components/type/ChartPlugin.ts'
 
 export class DrDecorationPlugin extends ChartPlugin {
