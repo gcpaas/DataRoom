@@ -200,7 +200,8 @@ const onDelete = (variable: GlobalVariable) => {
 <style scoped lang="scss">
 .global-variable-wrapper {
   display: grid;
-  grid-template-columns: 400px auto;
+  // 右栏随剩余空间收缩，长行代码由编辑器内部滚动。
+  grid-template-columns: 400px minmax(0, 1fr);
   background-color: var(--el-fill-color-light);
   gap: 0;
   font-family:
@@ -294,6 +295,7 @@ const onDelete = (variable: GlobalVariable) => {
   }
 
   & .variable-form-wrapper {
+    min-width: 0;
     background: var(--el-fill-color-blank);
     padding: 16px;
     margin: 16px 16px 16px 0;
@@ -302,6 +304,8 @@ const onDelete = (variable: GlobalVariable) => {
 
     & .script-editor {
       width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
       border: 1px solid var(--el-border-color);
       border-radius: 4px;
       overflow: hidden;
