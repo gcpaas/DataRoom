@@ -215,7 +215,7 @@ const dataSourceTypeMap = {
     name: 'HTTP',
     icon: 'HTTP',
     image: httpImg,
-    description: '复用HTTP API基础地址和公共请求头',
+    description: '通过HTTP请求获取数据，定义HTTP服务前缀',
     component: defineAsyncComponent(() => import('./components/HttpEditor.vue')),
   },
   excel: {
@@ -252,32 +252,36 @@ type DataSourceTypeKey = keyof typeof dataSourceTypeMap
 
 const dataSourceTypeGroups: Array<{ name: string; types: DataSourceTypeKey[] }> = [
   {
-    name: '国产数据库',
-    types: ['dameng', 'gbase', 'goldendb', 'greatdb', 'kingbase', 'oceanbase', 'polardb', 'tidb'],
-  },
-  {
-    name: '关系型数据库',
-    types: ['mysql', 'postgresql', 'oracle', 'sqlserver', 'db2', 'mariadb'],
-  },
-  {
-    name: '分析型数据库',
-    types: ['doris', 'clickhouse', 'hive', 'druid', 'starrocks'],
-  },
-  {
-    name: 'NoSQL数据源',
-    types: ['mongodb', 'es'],
+    name: '常用',
+    types: ['mysql', 'postgresql', 'http', 'excel'],
   },
   {
     name: '时序数据库',
-    types: ['tdengine']
+    types: ['tdengine'],
   },
   {
-    name: '消息数据源',
+    name: '国产化',
+    types: ['dameng', 'gbase', 'goldendb', 'greatdb', 'kingbase', 'oceanbase', 'polardb', 'tidb'],
+  },
+  {
+    name: '关系型',
+    types: ['mysql', 'postgresql', 'oracle', 'sqlserver', 'db2', 'mariadb'],
+  },
+  {
+    name: '分析型',
+    types: ['doris', 'clickhouse', 'hive', 'druid', 'starrocks'],
+  },
+  {
+    name: 'NoSQL',
+    types: ['mongodb', 'es'],
+  },
+  {
+    name: '队列',
     types: ['mqtt'],
   },
   {
     name: 'HTTP',
-    types: ['http']
+    types: ['http'],
   },
   {
     name: '文件',
@@ -727,7 +731,7 @@ onMounted(() => {
         </aside>
         <el-scrollbar class="type-select-scrollbar" max-height="60vh" @scroll="handleTypeSelectScroll">
           <div class="type-select-groups">
-            <section v-for="group in dataSourceTypeGroups" :key="group.name" :ref="el => setTypeSelectGroupRef(group.name, el as Element | null)" class="type-select-group">
+            <section v-for="group in dataSourceTypeGroups" :key="group.name" :ref="(el) => setTypeSelectGroupRef(group.name, el as Element | null)" class="type-select-group">
               <div class="type-select-group-title">{{ group.name }}</div>
               <div class="type-select-cards">
                 <div v-for="type in group.types" :key="type" class="type-card" @click="handleSelectType(type)">

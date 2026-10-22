@@ -46,8 +46,6 @@ const handleCommand = async (command: string) => {
     }
   } else if (command === 'profile') {
     await router.push('/dataRoom/console/profile')
-  } else if (command === 'console') {
-    await router.push('/dataRoom/console/user')
   }
 }
 
@@ -69,6 +67,7 @@ onMounted(() => {
         <div class="item" :class="{ active: isMenuActive('/dataRoom/dataSource') }" @click="jumpMenu('/dataRoom/dataSource/index')">数据源</div>
         <div class="item" :class="{ active: isMenuActive('/dataRoom/dataset') }" @click="jumpMenu('/dataRoom/dataset/index')">数据集</div>
         <div class="item" :class="{ active: isMenuActive('/dataRoom/map') }" @click="jumpMenu('/dataRoom/map/index')">地图</div>
+        <div class="item" :class="{ active: isMenuActive('/dataRoom/console') }" @click="jumpMenu('/dataRoom/console/user')">控制台</div>
       </div>
       <a class="help-link" href="https://www.yuque.com/gc-starter/dataroom-plus/start" target="_blank" rel="noopener noreferrer">帮助</a>
       <div class="user">
@@ -82,8 +81,7 @@ onMounted(() => {
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="console">控制台</el-dropdown-item>
-              <el-dropdown-item command="profile" divided>个人信息</el-dropdown-item>
+              <el-dropdown-item command="profile">个人信息</el-dropdown-item>
               <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>

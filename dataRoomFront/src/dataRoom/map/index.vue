@@ -517,7 +517,7 @@ onUnmounted(() => {
         <el-form-item label="地图名称" required>
           <el-input v-model="addForm.name" placeholder="请输入地图名称" />
         </el-form-item>
-        <el-form-item label="GeoJSON文件" required>
+        <el-form-item label="地图数据" required>
           <div class="upload-area">
             <input
               ref="fileInputRef"
@@ -531,6 +531,16 @@ onUnmounted(() => {
             </el-button>
             <span class="upload-file-name" v-if="uploadFileName">{{ uploadFileName }}</span>
             <span class="upload-tip" v-else>支持 .json / .geojson 格式</span>
+          </div>
+          <div class="map-download-link">
+            <el-link
+              type="primary"
+              href="https://datav.aliyun.com/portal/school/atlas/area_selector"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              地图数据下载
+            </el-link>
           </div>
         </el-form-item>
       </el-form>
@@ -546,7 +556,7 @@ onUnmounted(() => {
         <el-form-item label="地图名称" required>
           <el-input v-model="editForm.name" placeholder="请输入地图名称" />
         </el-form-item>
-        <el-form-item label="GeoJSON文件">
+        <el-form-item label="地图数据">
           <div class="upload-area">
             <input
               ref="editFileInputRef"
@@ -560,6 +570,16 @@ onUnmounted(() => {
             </el-button>
             <span class="upload-file-name" v-if="editUploadFileName">{{ editUploadFileName }}</span>
             <span class="upload-tip" v-else>不上传则保留原有地图数据</span>
+          </div>
+          <div class="map-download-link">
+            <el-link
+              type="primary"
+              href="https://datav.aliyun.com/portal/school/atlas/area_selector"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              地图数据下载
+            </el-link>
           </div>
         </el-form-item>
       </el-form>
@@ -764,6 +784,11 @@ onUnmounted(() => {
     font-size: 12px;
     color: var(--el-text-color-secondary);
   }
+}
+
+.map-download-link {
+  width: 100%;
+  margin-top: 8px;
 }
 
 .file-input {
