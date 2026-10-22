@@ -166,7 +166,11 @@ useResizeObserver([componentScroller, groupContainer], refreshScrollLayout)
                       <img class="thumbnail-image" :src="plugin.thumbnail" alt="" loading="lazy" />
                     </span>
                     <span class="card-footer">
-                      <span class="card-name" :title="plugin.name">{{ plugin.name }}</span>
+                      <span class="card-heading">
+                        <span class="card-name" :title="plugin.name">{{ plugin.name }}</span>
+                        <span class="card-type" :title="plugin.type">{{ plugin.type }}</span>
+                      </span>
+                      <span class="card-desc" :title="plugin.desc">{{ plugin.desc }}</span>
                     </span>
                   </button>
                 </div>
@@ -355,7 +359,7 @@ useResizeObserver([componentScroller, groupContainer], refreshScrollLayout)
         align-items: center;
         justify-content: center;
         padding: 12px;
-        background: white;
+        background: var(--el-fill-color-blank);
         box-sizing: border-box;
 
         & .thumbnail-image {
@@ -370,14 +374,47 @@ useResizeObserver([componentScroller, groupContainer], refreshScrollLayout)
 
       & .card-footer {
         display: flex;
-        align-items: center;
-        min-height: 48px;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
         padding: 12px 16px;
         border-top: 1px solid var(--el-border-color-lighter);
         box-sizing: border-box;
       }
 
+      & .card-heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      & .card-type,
+      & .card-desc {
+        min-width: 0;
+        font-size: 12px;
+        line-height: 1.5;
+        color: var(--el-text-color-secondary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      & .card-type {
+        flex: 0 1 auto;
+        max-width: 50%;
+        margin-left: auto;
+        text-align: right;
+      }
+
+      & .card-desc {
+        display: block;
+        min-height: 18px;
+      }
+
       & .card-name {
+        flex: 1 1 0;
         min-width: 0;
         font-size: 14px;
         font-weight: 400;

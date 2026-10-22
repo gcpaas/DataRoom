@@ -1,4 +1,4 @@
-import thumbnail from './images/image-metric-card.svg'
+import thumbnail from './images/image-metric-card.png'
 import { ChartPlugin } from '@/dataRoom/components/type/ChartPlugin.ts'
 
 export class DrImageMetricCardPlugin extends ChartPlugin {

@@ -52,7 +52,6 @@ import {
   fitDesignerViewportToVisibleArea,
   getDesignerViewportCenterPoint,
   getDesignerZoomByStep,
-  getDesignerZoomControlRightOffset,
   getDesignerZoomFromWheel,
   getDesignerZoomPercent,
   getDesignerZoomScale,
@@ -1808,13 +1807,6 @@ const onCanvasWheel = (event: WheelEvent) => {
   updateMoveableRect()
 }
 
-const computedZoomControlStyle = computed<CSSProperties>(() => {
-  return {
-    bottom: '16px',
-    right: `${getDesignerZoomControlRightOffset(rightControlPanelShow.value)}px`,
-  }
-})
-
 const computedFloatingToolbarStyle = computed<CSSProperties>(() => {
   return {
     left: `${floatingToolbarState.value.left}px`,
@@ -2031,10 +2023,14 @@ onBeforeUnmount(() => {
       </div>
       <div class="header-actions header-actions--primary">
         <div class="header-action">
-          <el-button size="small" type="primary" @click="openComponentLib">组件</el-button>
+          <el-tooltip content="插入组件" placement="bottom">
+            <el-button size="small" type="primary" :icon="Plus" @click="openComponentLib">组件</el-button>
+          </el-tooltip>
         </div>
         <div class="header-action">
-          <el-button size="small" @click="openResourceLib">素材</el-button>
+          <el-tooltip content="插入素材" placement="bottom">
+            <el-button size="small" :icon="Plus" @click="openResourceLib">素材</el-button>
+          </el-tooltip>
         </div>
         <div class="header-action">
           <el-button @click="openGlobalVariable" size="small">变量</el-button>
@@ -2306,7 +2302,7 @@ onBeforeUnmount(() => {
               @selectEnd="onSelectEnd"
             />
           </div>
-          <div v-if="designerZoomVisible" class="canvas-zoom-control" :style="computedZoomControlStyle" role="group" aria-label="画布缩放">
+          <div v-if="designerZoomVisible" class="canvas-zoom-control" role="group" aria-label="画布缩放">
             <button
               class="zoom-step-button"
               :class="{ 'zoom-step-button--active': basicConfig.zoom?.mode === 'best' }"
@@ -2638,17 +2634,21 @@ onBeforeUnmount(() => {
       }
 
       & .canvas-zoom-control {
-        position: fixed;
+        position: absolute;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
         z-index: 4;
         display: flex;
         align-items: center;
         gap: 8px;
         box-sizing: border-box;
         width: 280px;
+        max-width: calc(100% - 32px);
         padding: 8px 12px;
         border: 1px solid var(--el-border-color);
         border-radius: 8px;
-        background-color: var(--el-fill-color-blank);
+        background-color: color-mix(in srgb, var(--el-fill-color-blank) 40%, transparent);
         box-shadow: var(--el-box-shadow-light);
 
         & .zoom-step-button {

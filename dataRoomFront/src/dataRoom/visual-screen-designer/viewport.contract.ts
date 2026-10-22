@@ -2,6 +2,8 @@
 
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import { parse } from '@vue/compiler-sfc'
 
 import {
   createDesignerViewport,
@@ -15,6 +17,28 @@ import {
   updateDesignerViewportSize,
   zoomDesignerViewportAroundPoint,
 } from './viewport.ts'
+
+const designerSource = readFileSync(new URL('./VisualScreenDesigner.vue', import.meta.url), 'utf8')
+const { descriptor } = parse(designerSource)
+const designerStyles = descriptor.styles.map((style) => style.content).join('\n')
+
+test('zoom control stays centered in the available canvas rather than the page edge', () => {
+  const controlStyles = designerStyles.match(/& \.canvas-zoom-control\s*\{([^{}]+)/)?.[1] ?? ''
+  assert.match(designerStyles, /& \.canvas-main\s*\{[^{}]*position: relative;/)
+  assert.match(controlStyles, /position: absolute;/)
+  assert.match(controlStyles, /left: 50%;/)
+  assert.match(controlStyles, /transform: translateX\(-50%\);/)
+  assert.match(controlStyles, /bottom: 16px;/)
+  assert.match(controlStyles, /max-width: calc\(100% - 32px\);/)
+  assert.doesNotMatch(controlStyles, /(?:right|opacity):/)
+  assert.doesNotMatch(designerSource, /computedZoomControlStyle|getDesignerZoomControlRightOffset/)
+})
+
+test('zoom background is sixty percent transparent without fading its contents', () => {
+  const controlStyles = designerStyles.match(/& \.canvas-zoom-control\s*\{([^{}]+)/)?.[1] ?? ''
+  assert.match(controlStyles, /background-color: color-mix\(in srgb, var\(--el-fill-color-blank\) 40%, transparent\);/)
+  assert.doesNotMatch(controlStyles, /opacity:/)
+})
 
 const size = { canvasWidth: 1920, canvasHeight: 1080, viewportWidth: 1270, viewportHeight: 800 }
 const rulerInsets = { top: 40, right: 16, bottom: 16, left: 40 }

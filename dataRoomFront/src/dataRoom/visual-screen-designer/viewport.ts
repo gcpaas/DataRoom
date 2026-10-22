@@ -3,9 +3,7 @@ export const ZOOM_MAX_PERCENT = 400
 export const ZOOM_DEFAULT_PERCENT = 100
 export const ZOOM_STEP_PERCENT = 1
 export const ZOOM_WHEEL_STEP_PERCENT = 5
-export const ZOOM_CONTROL_OFFSET_PX = 16
 export const ZOOM_FIT_PADDING_PX = 16
-export const RIGHT_PANEL_WIDTH_PX = 300
 
 export type DesignerZoomDirection = 'in' | 'out'
 export type DesignerZoomPreferenceMode = 'best' | 'fixed'
@@ -89,10 +87,6 @@ export const isDesignerZoomWheelEvent = (
   platform: string = '',
 ) => {
   return getDesignerZoomWheelModifier(platform) === 'meta' ? event.metaKey : event.ctrlKey
-}
-
-export const getDesignerZoomControlRightOffset = (rightPanelVisible: boolean) => {
-  return rightPanelVisible ? RIGHT_PANEL_WIDTH_PX + ZOOM_CONTROL_OFFSET_PX : ZOOM_CONTROL_OFFSET_PX
 }
 
 export const normalizeDesignerZoomPreference = (

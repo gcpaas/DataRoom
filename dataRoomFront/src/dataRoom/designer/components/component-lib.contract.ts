@@ -79,6 +79,14 @@ test('两个设计器共用组件库，保留按唯一标识多选、按选中�
   assert.doesNotMatch(source, /selectedPluginTypes\.value\s*=/)
 })
 
+test('卡片名称与类型同行，描述单行省略并使用次级文本色', () => {
+  const source = readFileSync(new URL('./ComponentLib.vue', import.meta.url), 'utf8')
+  assert.match(source, /class="card-heading">\s*<span class="card-name"[^>]*>\{\{ plugin.name \}\}<\/span>\s*<span class="card-type" :title="plugin.type">\{\{ plugin.type \}\}<\/span>\s*<\/span>\s*<span class="card-desc" :title="plugin.desc">\{\{ plugin.desc \}\}<\/span>/)
+  assert.match(source, /& \.card-type,\s*& \.card-desc\s*\{[^}]*color: var\(--el-text-color-secondary\);[^}]*overflow: hidden;[^}]*text-overflow: ellipsis;[^}]*white-space: nowrap;/)
+  assert.match(source, /& \.card-type\s*\{[^}]*max-width: 50%;[^}]*margin-left: auto;[^}]*text-align: right;/)
+  assert.match(source, /& \.card-footer\s*\{[^}]*flex-direction: column;/)
+})
+
 test('左右区域使用Element Plus滚动条及公开API保持分类联动', () => {
   const source = readFileSync(new URL('./ComponentLib.vue', import.meta.url), 'utf8')
   assert.equal((source.match(/<el-scrollbar\b/g) ?? []).length, 2)

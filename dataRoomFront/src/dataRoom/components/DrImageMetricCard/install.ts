@@ -116,7 +116,7 @@ const getInstance = (): DrImageMetricCardConfig => {
         verticalAlign: 'center',
       },
       image: {
-        url: '/dataRoom/resource/image/placeholder.png',
+        url: '/dataRoom/resource/image/base/蓝色手持卡片支付图标.png',
         width: 120,
         height: 96,
         repeatMode: 'no-repeat-contain',

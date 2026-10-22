@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getChartById, getResourceUrl } from '@/dataRoom/utils/index.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
 import { pageApi } from '@/dataRoom/page/api.ts'
 import { useCanvasInst } from '@/dataRoom/hooks/use-canvas-inst'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
@@ -822,10 +823,14 @@ onUnmounted(() => {
       </div>
       <div class="header-actions header-actions--primary">
         <div class="header-action">
-          <el-button size="small" type="primary" @click="openComponentLib">组件</el-button>
+          <el-tooltip content="插入组件" placement="bottom">
+            <el-button size="small" type="primary" :icon="Plus" @click="openComponentLib">组件</el-button>
+          </el-tooltip>
         </div>
         <div class="header-action">
-          <el-button size="small" @click="openResourceLib">素材</el-button>
+          <el-tooltip content="插入素材" placement="bottom">
+            <el-button size="small" :icon="Plus" @click="openResourceLib">素材</el-button>
+          </el-tooltip>
         </div>
         <div class="header-action">
           <el-button @click="openGlobalVariable" size="small">变量</el-button>
