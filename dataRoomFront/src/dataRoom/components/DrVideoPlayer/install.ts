@@ -65,7 +65,7 @@ const getInstance = (): DrVideoPlayerConfig => {
     'DrVideoPlayer',
     {
       basic: {
-        url: '',
+        url: 'https://sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-360p.mp4',
         poster: '',
         autoplay: false,
         loop: false,

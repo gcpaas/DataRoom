@@ -11,11 +11,16 @@ import type {DrVideoPlayerConfig} from './install.ts'
 import {getSingleDatasetValueByField} from "@/dataRoom/utils/index.ts";
 import {useDrComponent} from "@/dataRoom/hooks/use-dr-component";
 import type {ComponentExpose} from "@/dataRoom/components/type/ComponentExpose.ts";
-import {computed, ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue";
+import {computed, ref, watch, onMounted, nextTick} from "vue";
 
-const {chart} = defineProps<{
+const {chart, mode = 'preview'} = defineProps<{
   chart: DrVideoPlayerConfig
+  mode?: 'designer' | 'preview'
 }>()
+
+// 设计态只允许外层容器响应选中、拖拽，不修改持久化的播放配置。
+const isDesigner = computed(() => mode === 'designer')
+const videoControls = computed(() => !isDesigner.value && chart.props.basic.controls)
 
 const videoRef = ref<HTMLVideoElement | null>(null)
 const datasetUrl = ref('')
@@ -52,13 +57,14 @@ const videoStyle = computed(() => {
   return {
     objectFit: styleProps.objectFit,
     borderRadius: `${styleProps.borderRadius}px`,
+    pointerEvents: isDesigner.value ? 'none' as const : 'auto' as const,
   }
 })
 
 /**
  * 定义改变数据的逻辑
  */
-const changeData = (datasetValue: any) => {
+const changeData = (datasetValue: unknown) => {
   const url = getSingleDatasetValueByField(chart, 'urlField', datasetValue)
   if (url) {
     datasetUrl.value = url
@@ -164,7 +170,7 @@ defineExpose<ComponentExpose>({
       :autoplay="chart.props.basic.autoplay"
       :loop="chart.props.basic.loop"
       :muted="chart.props.basic.muted"
-      :controls="chart.props.basic.controls"
+      :controls="videoControls"
       :preload="chart.props.basic.preload"
       @play="onPlay"
       @pause="onPause"

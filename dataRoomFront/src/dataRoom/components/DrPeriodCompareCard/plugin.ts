@@ -1,4 +1,4 @@
-import thumbnail from './images/period-compare-card.svg'
+import thumbnail from './images/period-compare-card.png'
 import {ChartPlugin} from "@/dataRoom/components/type/ChartPlugin.ts"
 
 export class DrPeriodCompareCardPlugin extends ChartPlugin {

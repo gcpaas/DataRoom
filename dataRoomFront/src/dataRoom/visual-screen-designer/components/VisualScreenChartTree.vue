@@ -102,7 +102,7 @@ const forwardChartContextmenu = (event: MouseEvent, chart: ChartConfig<unknown>,
       @contextmenu="onChartContextmenu($event, chart)"
     >
       <template v-if="!isGroupChart(chart)">
-        <component :is="getComponent(chart.type)" :chart="chart" />
+        <component :is="getComponent(chart.type)" :chart="chart" v-bind="chart.type === 'DrVideoPlayer' ? { mode } : {}" />
         <div v-if="shouldBlockIframeInteraction(chart)" class="iframe-interaction-shield" aria-hidden="true" />
       </template>
       <VisualScreenChartTree
@@ -131,7 +131,7 @@ const forwardChartContextmenu = (event: MouseEvent, chart: ChartConfig<unknown>,
       :style="getVisualScreenChartWrapperStyle(chart)"
     >
       <template v-if="!isGroupChart(chart)">
-        <component :is="getComponent(chart.type)" :chart="chart" />
+        <component :is="getComponent(chart.type)" :chart="chart" v-bind="chart.type === 'DrVideoPlayer' ? { mode } : {}" />
       </template>
       <VisualScreenChartTree
         v-else

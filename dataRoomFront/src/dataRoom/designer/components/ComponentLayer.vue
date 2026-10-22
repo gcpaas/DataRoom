@@ -7,6 +7,10 @@ import { DrConst } from '@/dataRoom/constants/DrConst.ts'
 import type { CanvasInst } from '@/dataRoom/designer/types/CanvasInst.ts'
 import { createLayerNodes, type LayerNode } from '@/dataRoom/designer/components/component-layer.ts'
 
+const props = defineProps<{
+  activeChartId?: string
+}>()
+
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
 
 const layerTreeProps: TreeOptionProps = {
@@ -39,6 +43,19 @@ const filterLayer: FilterNodeMethodFunction = (value, data) => {
 watch(layerName, (val) => {
   layerTreeRef.value?.filter(val)
 })
+
+// 只镜像画布主激活状态；不调用 activeChartById，避免反向激活或破坏多选。
+watch(
+  [() => props.activeChartId, layerTreeRef, layerList],
+  ([activeChartId, tree]) => {
+    if (!tree) return
+    const nextKey = activeChartId && tree.getNode(activeChartId) ? activeChartId : null
+    if (tree.getCurrentKey() !== nextKey) {
+      tree.setCurrentKey(nextKey)
+    }
+  },
+  { immediate: true, flush: 'post' },
+)
 
 const closeLayerContextMenu = () => {
   layerContextMenuVisible.value = false
@@ -121,29 +138,35 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="component-layer-wrapper">
-    <el-input v-model="layerName" size="small" placeholder="请输入组件标题" />
-    <el-tree
-      class="dr-layer-tree"
-      ref="layerTreeRef"
-      :data="layerList"
-      :props="layerTreeProps"
-      empty-text="未找到组件"
-      node-key="id"
-      :indent="12"
-      highlight-current
-      default-expand-all
-      :expand-on-click-node="true"
-      :filter-node-method="filterLayer"
-      @node-click="onLayerClick"
-    >
-      <template #default="{ data }">
-        <div class="layer-node" :class="{ 'layer-node--hidden': data.hidden }" @contextmenu="(event: MouseEvent) => onLayerContextMenu(event, data)">
-          <div class="layer-node__info">
-            <span class="layer-node__title">{{ data.title }}</span>
-          </div>
-        </div>
-      </template>
-    </el-tree>
+    <div class="layer-search">
+      <el-input v-model="layerName" size="small" placeholder="请输入组件标题" />
+    </div>
+    <div class="layer-list">
+      <el-scrollbar height="100%">
+        <el-tree
+          ref="layerTreeRef"
+          :data="layerList"
+          :props="layerTreeProps"
+          empty-text="未找到组件"
+          node-key="id"
+          :indent="12"
+          highlight-current
+          default-expand-all
+          :expand-on-click-node="true"
+          :filter-node-method="filterLayer"
+          @node-click="onLayerClick"
+        >
+          <template #default="{ data }">
+            <div class="layer-node" :class="{ 'layer-node--hidden': data.hidden }" @contextmenu="(event: MouseEvent) => onLayerContextMenu(event, data)">
+              <div class="layer-node__info">
+                <span class="layer-node__title" :title="data.title">{{ data.title }}</span>
+              </div>
+              <span v-if="data.hidden" class="layer-node__status">已隐藏</span>
+            </div>
+          </template>
+        </el-tree>
+      </el-scrollbar>
+    </div>
     <div v-if="layerContextMenuVisible" ref="layerContextMenuRef" class="layer-context-menu" :style="computedLayerContextMenuStyle">
       <button class="layer-context-menu__item" type="button" @click="deleteLayerChart">删除</button>
       <button v-if="layerContextMenuNode?.hidden" class="layer-context-menu__item" type="button" @click="updateLayerChartHidden(false)">显示</button>
@@ -154,18 +177,22 @@ onBeforeUnmount(() => {
 
 <style scoped lang="scss">
 .component-layer-wrapper {
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
 }
 
-.dr-layer-tree {
-  margin-top: 8px;
-  background: var(--el-fill-color-light);
+.layer-search {
+  flex: none;
+}
+
+.layer-list {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
 }
 
 .layer-node {
@@ -173,15 +200,22 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 .layer-node--hidden {
-  opacity: 0.6;
+  color: var(--el-text-color-secondary);
+}
+
+.layer-node__status {
+  flex: none;
+  font-size: var(--el-font-size-extra-small);
 }
 
 .layer-node__info {
   display: flex;
+  flex: 1;
   flex-direction: column;
   min-width: 0;
 }

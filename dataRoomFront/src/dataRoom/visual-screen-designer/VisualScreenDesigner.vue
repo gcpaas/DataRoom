@@ -2149,9 +2149,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div class="panel-body">
-          <el-scrollbar>
-            <ComponentLayer />
-          </el-scrollbar>
+          <ComponentLayer :active-chart-id="activeChart?.id" />
         </div>
       </div>
       <div class="canvas">
@@ -2480,7 +2478,9 @@ onBeforeUnmount(() => {
     & .left-tool-panel {
       background-color: var(--el-bg-color);
       display: grid;
-      grid-template-rows: 40px auto;
+      grid-template-rows: 40px minmax(0, 1fr);
+      min-width: 0;
+      min-height: 0;
       height: calc(100vh - 48px);
       box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
 
@@ -2488,9 +2488,8 @@ onBeforeUnmount(() => {
         background-color: var(--el-fill-color-light);
         box-sizing: border-box;
         box-shadow: inset 0 -1px 0 0 var(--el-border-color-light);
-        font-size: 12px;
+        font-size: 14px;
         font-weight: 500;
-        text-transform: uppercase;
         color: var(--el-text-color-secondary);
         line-height: 40px;
         height: 40px;
@@ -2522,8 +2521,10 @@ onBeforeUnmount(() => {
 
       & .panel-body {
         background-color: var(--el-bg-color);
-        overflow-y: hidden;
-        padding: 8px 4px 16px 4px;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        padding: 8px 12px 16px;
       }
     }
 
