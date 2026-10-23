@@ -5,6 +5,15 @@ import { resourceApi, type ResourceEntity, type MaterialConfig, type LightingCon
 import { buildResourceUploadFormData, getResourceModelFormat } from '@/dataRoom/resource/resourceForm'
 import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 import ThreeModelViewer from './ThreeModelViewer.vue'
+import {
+  normalizeBackgroundConfig,
+  normalizeLightingConfig,
+  normalizeMaterialConfig,
+  normalizeModelTransformConfig,
+  parseModelAppearanceConfig,
+  MODEL_SCALE_MIN,
+  MODEL_SCALE_MAX,
+} from './modelConfig'
 import modelLoadFailedPlaceholder from '@/dataRoom/resource/assets/image/模型加载失败占位符.svg'
 
 interface Props {
@@ -20,32 +29,16 @@ const emit = defineEmits<{
 
 const activeTab = ref('info')
 
-// Default configs
-const defaultMaterialConfig: MaterialConfig = {
-  color: '#4a90e2',
-  roughness: 0.5,
-  metalness: 0.3,
-  opacity: 1.0,
-  transparent: false,
-  wireframe: false
-}
-
-const defaultLightingConfig: LightingConfig = {
-  ambient: { enabled: true, color: '#ffffff', intensity: 0.6 },
-  directional: { enabled: true, color: '#ffffff', intensity: 0.8 },
-  point: { enabled: false, color: '#ff9900', intensity: 1.0 }
-}
-
-const defaultBackgroundConfig: BackgroundConfig = {
-  type: 'color',
-  value: '#1a1a2e'
-}
-
 // Local config state
-const localMaterialConfig = ref<MaterialConfig>({ ...defaultMaterialConfig })
-const localLightingConfig = ref<LightingConfig>({ ...defaultLightingConfig })
-const localBackgroundConfig = ref<BackgroundConfig>({ ...defaultBackgroundConfig })
+const localMaterialConfig = ref<MaterialConfig>(normalizeMaterialConfig(null))
+const localLightingConfig = ref<LightingConfig>(normalizeLightingConfig(null))
+const localBackgroundConfig = ref<BackgroundConfig>(normalizeBackgroundConfig(null))
 const localModelFormat = ref<string>('')
+const localTransform = ref(normalizeModelTransformConfig(null))
+const positionAxes = ['x', 'y', 'z'] as const
+const resetTransform = () => {
+  localTransform.value = normalizeModelTransformConfig(null)
+}
 
 // Three.js viewer ref
 const viewerRef = ref<InstanceType<typeof ThreeModelViewer>>()
@@ -54,29 +47,11 @@ const capturingCover = ref(false)
 // Load config from resource
 const loadConfig = () => {
   localModelFormat.value = getResourceModelFormat(props.resource).toUpperCase()
-  if (props.resource?.config) {
-    try {
-      const config = JSON.parse(props.resource.config) as ModelConfig
-      if (config.format) {
-        localModelFormat.value = config.format.toUpperCase()
-      }
-      if (config.material) {
-        localMaterialConfig.value = { ...defaultMaterialConfig, ...config.material }
-      }
-      if (config.lighting) {
-        localLightingConfig.value = {
-          ambient: { ...defaultLightingConfig.ambient, ...config.lighting.ambient },
-          directional: { ...defaultLightingConfig.directional, ...config.lighting.directional },
-          point: { ...defaultLightingConfig.point, ...config.lighting.point }
-        }
-      }
-      if (config.background) {
-        localBackgroundConfig.value = { ...defaultBackgroundConfig, ...config.background }
-      }
-    } catch (e) {
-      console.error('Failed to parse config:', e)
-    }
-  }
+  const config = parseModelAppearanceConfig(props.resource?.config)
+  localTransform.value = normalizeModelTransformConfig(config)
+  localMaterialConfig.value = config.material
+  localLightingConfig.value = config.lighting
+  localBackgroundConfig.value = config.background
 }
 
 // Watch resource change
@@ -183,7 +158,12 @@ const handleLoadError = (error: unknown) => {
 const handleSaveConfig = async () => {
   if (!props.resource?.id) return
 
+  // 保留模型格式，避免保存配置时覆盖上传阶段写入的格式信息
+  const format = getResourceModelFormat(props.resource) || localModelFormat.value.trim().toLowerCase()
+
   const config: ModelConfig = {
+    ...normalizeModelTransformConfig(localTransform.value),
+    format: format || undefined,
     material: localMaterialConfig.value,
     lighting: localLightingConfig.value,
     background: localBackgroundConfig.value
@@ -203,9 +183,10 @@ const handleSaveConfig = async () => {
 
 // Reset config
 const handleResetConfig = () => {
-  localMaterialConfig.value = { ...defaultMaterialConfig }
-  localLightingConfig.value = { ...defaultLightingConfig }
-  localBackgroundConfig.value = { ...defaultBackgroundConfig }
+  resetTransform()
+  localMaterialConfig.value = normalizeMaterialConfig(null)
+  localLightingConfig.value = normalizeLightingConfig(null)
+  localBackgroundConfig.value = normalizeBackgroundConfig(null)
 }
 
 // Download model
@@ -266,6 +247,8 @@ const handleBackgroundChange = (color: string | null) => {
             ref="viewerRef"
             :model-url="modelUrl"
             :model-format="modelFormat"
+            :model-scale="localTransform.modelScale"
+            :model-position="localTransform.modelPosition"
             :cover-image="coverImage"
             :error-placeholder-image="modelLoadFailedPlaceholder"
             :material-config="localMaterialConfig"
@@ -339,6 +322,21 @@ const handleBackgroundChange = (color: string | null) => {
           </el-tab-pane>
           <el-tab-pane label="参数配置" name="config">
             <div class="config-section">
+              <div class="config-group">
+                <h4>模型变换</h4>
+                <el-form label-width="80px" size="small">
+                  <el-form-item label="缩放倍率">
+                    <el-input-number v-model="localTransform.modelScale" :min="MODEL_SCALE_MIN" :max="MODEL_SCALE_MAX" :step="0.1" :value-on-clear="1" controls-position="right" />
+                  </el-form-item>
+                  <el-form-item v-for="axis in positionAxes" :key="axis" :label="`${axis.toUpperCase()} 偏移`">
+                    <el-input-number v-model="localTransform.modelPosition[axis]" :step="0.1" :value-on-clear="0" controls-position="right" />
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button @click="resetTransform">重置变换</el-button>
+                  </el-form-item>
+                </el-form>
+                <el-text size="small" type="info">偏移使用场景单位，非像素；超出视野时可重置。</el-text>
+              </div>
               <!-- Material Config -->
               <div class="config-group">
                 <h4>材质设置</h4>

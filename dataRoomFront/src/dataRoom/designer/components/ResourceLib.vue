@@ -4,9 +4,9 @@ import { inject, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import ResourceManage from '@/dataRoom/resource/index.vue'
 import type { ResourceEntity } from '@/dataRoom/resource/api'
-import type { DrImageConfig } from '@/dataRoom/components/DrImage/install.ts'
 import type { CanvasInst } from '@/dataRoom/designer/types/CanvasInst.ts'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
+import { applyResourceToChart, getResourceChartType } from '@/dataRoom/designer/utils/resourceChart.ts'
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
 const emit = defineEmits(['close'])
@@ -33,12 +33,22 @@ const onClose = () => {
  * 确定添加素材到画布
  */
 const onConfirm = () => {
-  if (!selectedResource.value) {
+  const resource = selectedResource.value
+  if (!resource) {
     return
   }
-  // 添加选中的素材到画布
-  const chartInst = canvasInst.addChart('DrImage') as DrImageConfig
-  chartInst.props.url = selectedResource.value.url!
+  const chartType = getResourceChartType(resource)
+  if (!chartType) {
+    ElMessage.warning('该素材类型暂不支持添加到画布')
+    return
+  }
+  if (!resource.url) {
+    ElMessage.error('该素材没有地址信息')
+    return
+  }
+  // 按素材类型创建对应组件，配置需在提交历史记录前写入完整
+  const chartInst = canvasInst.addChart(chartType)
+  applyResourceToChart(chartInst, resource)
   canvasInst.commitChartAdd(chartInst, '新增素材')
   resourceLibVisible.value = false
 }

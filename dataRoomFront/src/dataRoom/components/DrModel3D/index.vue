@@ -46,6 +46,9 @@ defineExpose<ComponentExpose>({
     <ThreeModelViewer
       v-if="modelUrl"
       :model-url="modelUrl"
+      :model-format="chart.props.modelFormat"
+      :model-scale="chart.props.modelScale"
+      :model-position="chart.props.modelPosition"
       :cover-image="coverImage"
       :auto-rotate="chart.props.autoRotate"
       :interaction-enabled="chart.props.interactionEnabled"

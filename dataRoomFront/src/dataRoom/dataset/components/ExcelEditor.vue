@@ -390,9 +390,9 @@ defineExpose({
             <el-table-column label="类型" width="100">
               <template #default="{ row }">
                 <el-select v-model="row.type" size="small" placeholder="类型">
-                  <el-option label="String" value="String" />
-                  <el-option label="Number" value="Number" />
-                  <el-option label="Boolean" value="Boolean" />
+                  <el-option label="字符串" value="String" />
+                  <el-option label="数值" value="Number" />
+                  <el-option label="布尔" value="Boolean" />
                 </el-select>
               </template>
             </el-table-column>
@@ -435,11 +435,11 @@ defineExpose({
           <el-table-column label="类型" width="150">
             <template #default="{ row }">
               <el-select v-model="row.type" size="small" placeholder="类型">
-                <el-option label="String" value="String" />
-                <el-option label="Number" value="Number" />
-                <el-option label="Boolean" value="Boolean" />
-                <el-option label="Object" value="Object" />
-                <el-option label="Array" value="Array" />
+                <el-option label="字符串" value="String" />
+                <el-option label="数值" value="Number" />
+                <el-option label="布尔" value="Boolean" />
+                <el-option label="对象" value="Object" />
+                <el-option label="数组" value="Array" />
               </el-select>
             </template>
           </el-table-column>

@@ -9,12 +9,17 @@ export default defineComponent({
 <script setup lang="ts">
 import type { DrModel3DConfig } from '../install.ts'
 import { computed } from 'vue'
+import { MODEL_SCALE_MIN, MODEL_SCALE_MAX, normalizeModelTransformConfig } from '@/dataRoom/three/modelConfig'
 import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 
 const { chart } = defineProps<{
   chart: DrModel3DConfig
 }>()
 const chartConfig = computed(() => chart)
+const positionAxes = ['x', 'y', 'z'] as const
+const resetTransform = () => {
+  Object.assign(chartConfig.value.props, normalizeModelTransformConfig(null))
+}
 </script>
 
 <template>
@@ -24,6 +29,15 @@ const chartConfig = computed(() => chart)
         <el-collapse-item title="基础配置" name="basic">
           <el-form-item label="模型地址">
             <el-input v-model="chartConfig.props.modelUrl" placeholder="请输入模型地址或选择素材" />
+          </el-form-item>
+          <el-form-item label="模型格式">
+            <el-select v-model="chartConfig.props.modelFormat" placeholder="自动识别" clearable>
+              <el-option label="自动识别" value="" />
+              <el-option label="GLB" value="glb" />
+              <el-option label="GLTF" value="gltf" />
+              <el-option label="OBJ" value="obj" />
+              <el-option label="STL" value="stl" />
+            </el-select>
           </el-form-item>
           <el-form-item label="封面图片">
             <el-input v-model="chartConfig.props.coverImage" placeholder="请输入封面图片地址" />
@@ -47,6 +61,19 @@ const chartConfig = computed(() => chart)
               </el-image>
             </div>
           </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="模型变换" name="transform">
+          <el-form-item label="缩放倍率">
+            <el-input-number v-model="chartConfig.props.modelScale" :min="MODEL_SCALE_MIN" :max="MODEL_SCALE_MAX" :step="0.1" :value-on-clear="1" controls-position="right" />
+          </el-form-item>
+          <el-form-item v-for="axis in positionAxes" :key="axis" :label="`${axis.toUpperCase()} 偏移`">
+            <el-input-number v-model="chartConfig.props.modelPosition[axis]" :step="0.1" :value-on-clear="0" controls-position="right" />
+          </el-form-item>
+          <el-text size="small" type="info">偏移使用场景单位，非像素；超出视野时可重置。</el-text>
+          <el-form-item>
+            <el-button @click="resetTransform">重置变换</el-button>
+          </el-form-item>
         </el-collapse-item>
 
         <el-collapse-item title="材质配置" name="material">

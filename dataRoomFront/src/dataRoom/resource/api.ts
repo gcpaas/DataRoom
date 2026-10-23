@@ -38,6 +38,8 @@ export interface BackgroundConfig {
  * 模型完整配置
  */
 export interface ModelConfig {
+  modelScale?: number
+  modelPosition?: { x: number; y: number; z: number }
   format?: string
   material: MaterialConfig
   lighting: LightingConfig

@@ -8,25 +8,10 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js'
 import { Loading, Box } from '@element-plus/icons-vue'
 
-interface MaterialConfig {
-  color: string
-  roughness: number
-  metalness: number
-  opacity: number
-  transparent: boolean
-  wireframe: boolean
-}
-
-interface LightingConfig {
-  ambient: { enabled: boolean; color: string; intensity: number }
-  directional: { enabled: boolean; color: string; intensity: number }
-  point: { enabled: boolean; color: string; intensity: number }
-}
-
-interface BackgroundConfig {
-  type: 'color'
-  value: string
-}
+import type { MaterialConfig, LightingConfig, BackgroundConfig } from './modelConfig'
+import { defaultMaterialConfig, defaultLightingConfig, defaultBackgroundConfig, normalizeModelTransformConfig } from './modelConfig'
+import { createModelTransform, updateModelTransform } from './modelTransform'
+import type { ModelTransform } from './modelTransform'
 
 interface ConfigChangePayload {
   material?: MaterialConfig
@@ -37,6 +22,8 @@ interface ConfigChangePayload {
 const props = withDefaults(defineProps<{
   modelUrl?: string
   modelFormat?: string
+  modelScale?: number
+  modelPosition?: { x: number; y: number; z: number }
   coverImage?: string
   errorPlaceholderImage?: string
   autoRotate?: boolean
@@ -69,6 +56,7 @@ let camera: THREE.PerspectiveCamera
 let renderer: THREE.WebGLRenderer
 let controls: OrbitControls
 let currentModel: THREE.Object3D | null = null
+let modelTransform: ModelTransform | null = null
 let animationId: number
 
 // Lights
@@ -76,26 +64,6 @@ let ambientLight: THREE.AmbientLight
 let directionalLight: THREE.DirectionalLight
 let pointLight: THREE.PointLight
 let dracoLoader: DRACOLoader | null = null
-
-const defaultMaterialConfig: MaterialConfig = {
-  color: '#4a90e2',
-  roughness: 0.5,
-  metalness: 0.3,
-  opacity: 1.0,
-  transparent: false,
-  wireframe: false
-}
-
-const defaultLightingConfig: LightingConfig = {
-  ambient: { enabled: true, color: '#ffffff', intensity: 0.6 },
-  directional: { enabled: true, color: '#ffffff', intensity: 0.8 },
-  point: { enabled: false, color: '#ff9900', intensity: 1.0 }
-}
-
-const defaultBackgroundConfig: BackgroundConfig = {
-  type: 'color',
-  value: '#1a1a2e'
-}
 
 const getEffectiveMaterialConfig = (): MaterialConfig => {
   return props.materialConfig || defaultMaterialConfig
@@ -144,8 +112,8 @@ const initScene = () => {
   // Animation loop
   const animate = () => {
     animationId = requestAnimationFrame(animate)
-    if (props.autoRotate && currentModel) {
-      currentModel.rotation.y += 0.005
+    if (props.autoRotate && modelTransform) {
+      modelTransform.rotationGroup.rotation.y += 0.005
     }
     controls.update()
     renderer.render(scene, camera)
@@ -190,22 +158,44 @@ const updateBackground = () => {
   }
 }
 
-const updateMaterial = (config: MaterialConfig) => {
+/**
+ * 按配置覆盖模型材质
+ * GLTF/OBJ/STL 统一生效，保留模型自带贴图，其余参数以配置为准
+ */
+const applyMaterial = (config: MaterialConfig) => {
   if (!currentModel) return
 
   currentModel.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
-      const material = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(config.color),
-        roughness: config.roughness,
-        metalness: config.metalness,
-        opacity: config.opacity,
-        transparent: config.transparent,
-        wireframe: config.wireframe
-      })
-      child.material = material
+    if (!(child instanceof THREE.Mesh)) {
+      return
     }
+    const material = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(config.color),
+      roughness: config.roughness,
+      metalness: config.metalness,
+      opacity: config.opacity,
+      transparent: config.transparent,
+      wireframe: config.wireframe
+    })
+    const previous = Array.isArray(child.material) ? child.material[0] : child.material
+    if (previous instanceof THREE.MeshStandardMaterial) {
+      material.map = previous.map
+      material.normalMap = previous.normalMap
+      material.emissiveMap = previous.emissiveMap
+    }
+    child.material = material
+    material.needsUpdate = true
   })
+}
+
+const updateMaterial = (config: MaterialConfig) => {
+  if (!currentModel) return
+
+  applyMaterial(config)
+}
+
+const applyEffectiveMaterial = () => {
+  applyMaterial(getEffectiveMaterialConfig())
 }
 
 const updateLighting = (config: LightingConfig) => {
@@ -249,9 +239,10 @@ const loadModel = (url: string) => {
   showCover.value = false
   loadFailed.value = false
 
-  // Remove existing model
-  if (currentModel) {
-    scene.remove(currentModel)
+  // 换模型时移除整个变换容器，避免留下旧模型的父组。
+  if (modelTransform) {
+    scene.remove(modelTransform.container)
+    modelTransform = null
     currentModel = null
   }
 
@@ -293,9 +284,8 @@ const loadGLTF = (url: string) => {
     url,
     (gltf) => {
       currentModel = gltf.scene
-      applyDefaultMaterial()
+      applyEffectiveMaterial()
       centerAndScaleModel()
-      scene.add(currentModel)
       handleModelLoadSuccess()
 
       // 如果 canvas 尺寸为 0，说明容器尚未布局，强制触发 resize
@@ -322,9 +312,8 @@ const loadOBJ = (url: string) => {
     url,
     (obj) => {
       currentModel = obj
-      applyDefaultMaterial()
+      applyEffectiveMaterial()
       centerAndScaleModel()
-      scene.add(currentModel)
       handleModelLoadSuccess()
 
       // 立即渲染一帧确保显示
@@ -344,14 +333,9 @@ const loadSTL = (url: string) => {
   loader.load(
     url,
     (geometry) => {
-      const material = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(getEffectiveMaterialConfig().color),
-        roughness: getEffectiveMaterialConfig().roughness,
-        metalness: getEffectiveMaterialConfig().metalness
-      })
-      currentModel = new THREE.Mesh(geometry, material)
+      currentModel = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial())
+      applyEffectiveMaterial()
       centerAndScaleModel()
-      scene.add(currentModel)
       handleModelLoadSuccess()
     },
     undefined,
@@ -361,62 +345,25 @@ const loadSTL = (url: string) => {
   )
 }
 
-const applyDefaultMaterial = () => {
-  if (!currentModel) return
-
-  // 检查模型是否已有有效材质（GLTF/GLB 模型通常自带材质）
-  let hasValidMaterial = false
-  currentModel.traverse((child) => {
-    if (child instanceof THREE.Mesh && child.material) {
-      const mat = child.material as THREE.MeshStandardMaterial
-      // 如果材质有颜色且不是默认的黑色，则认为有有效材质
-      if (mat.color && !(mat.color.r === 0 && mat.color.g === 0 && mat.color.b === 0)) {
-        hasValidMaterial = true
-      }
-    }
-  })
-
-  // 如果模型已有有效材质，保留原始颜色
-  if (hasValidMaterial) {
-    return
-  }
-
-  // 否则应用默认材质（OBJ、STL 等格式本身不存储材质）
-  const materialConfig = getEffectiveMaterialConfig()
-  currentModel.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
-      const material = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(materialConfig.color),
-        roughness: materialConfig.roughness,
-        metalness: materialConfig.metalness,
-        opacity: materialConfig.opacity,
-        transparent: materialConfig.transparent,
-        wireframe: materialConfig.wireframe
-      })
-      child.material = material
-    }
-  })
+const updateTransformFromProps = () => {
+  if (!modelTransform) return
+  updateModelTransform(modelTransform, normalizeModelTransformConfig({
+    modelScale: props.modelScale,
+    modelPosition: props.modelPosition
+  }))
 }
 
 const centerAndScaleModel = () => {
   if (!currentModel) return
 
-  // Compute bounding box
-  const box = new THREE.Box3().setFromObject(currentModel)
-  const center = box.getCenter(new THREE.Vector3())
-  const size = box.getSize(new THREE.Vector3())
-
-  // Center the model
-  currentModel.position.sub(center)
-
-  // Scale to fit in view
-  const maxDim = Math.max(size.x, size.y, size.z)
-  if (maxDim > 2) {
-    const scale = 2 / maxDim
-    currentModel.scale.setScalar(scale)
+  if (modelTransform) {
+    scene.remove(modelTransform.container)
   }
+  modelTransform = createModelTransform(currentModel)
+  updateTransformFromProps()
+  scene.add(modelTransform.container)
 
-  // Reset camera
+  // 仅加载模型时重置相机，配置变换更新不改变视角。
   camera.position.set(0, 0, 5)
   controls.target.set(0, 0, 0)
   controls.update()
@@ -468,6 +415,12 @@ defineExpose({
 })
 
 // Watchers
+watch(
+  [() => props.modelScale, () => props.modelPosition],
+  updateTransformFromProps,
+  { deep: true }
+)
+
 watch([() => props.modelUrl, () => props.modelFormat], ([newUrl]) => {
   if (newUrl) {
     loadModel(newUrl)

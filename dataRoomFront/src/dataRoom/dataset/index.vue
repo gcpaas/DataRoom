@@ -5,6 +5,7 @@ import {Delete, Document, Edit, Folder, MoreFilled, Plus, Rank, Refresh, Search}
 import {datasetApi, type DatasetEntity, type DatasetTreeNode} from './api'
 import {dataSourceApi, type DataSourceEntity} from '../data-source/api'
 import { isStreamingDatasetType } from './streaming-dataset'
+import { fieldTypeLabel } from './field-type'
 
 // 定义 props
 const props = defineProps<{
@@ -37,6 +38,9 @@ const activeTab = ref('preview')
 const previewLoading = ref(false)
 const previewData = ref<Record<string, unknown>[]>([])
 const previewColumns = ref<string[]>([])
+
+// 字段类型列显示中文，原始存储值保持英文
+const formatFieldType = (row: { type?: string }) => fieldTypeLabel(row.type)
 
 // 编辑对话框
 const dialogVisible = ref(false)
@@ -816,7 +820,7 @@ const handleTestAndSave = async () => {
             <div v-show="activeTab === 'inputParams'" class="params-container">
               <el-table class="dataset-table" :data="selectedNode.inputList || []" border>
                 <el-table-column prop="name" label="参数名" min-width="120"/>
-                <el-table-column prop="type" label="类型" min-width="100"/>
+                <el-table-column prop="type" label="类型" min-width="100" :formatter="formatFieldType"/>
                 <el-table-column prop="required" label="必填" width="80">
                   <template #default="{ row }">
                     <el-tag :type="row.required ? 'danger' : 'info'" size="small">
@@ -838,7 +842,7 @@ const handleTestAndSave = async () => {
             <div v-show="activeTab === 'outputParams'" class="params-container">
               <el-table class="dataset-table" :data="selectedNode.outputList || []" border>
                 <el-table-column prop="name" label="参数名" min-width="120"/>
-                <el-table-column prop="type" label="类型" min-width="100"/>
+                <el-table-column prop="type" label="类型" min-width="100" :formatter="formatFieldType"/>
                 <el-table-column prop="desc" label="描述" min-width="150"/>
               </el-table>
               <el-empty
