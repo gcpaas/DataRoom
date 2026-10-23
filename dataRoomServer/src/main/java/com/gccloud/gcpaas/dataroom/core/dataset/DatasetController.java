@@ -96,25 +96,36 @@ public class DatasetController {
             "datasetType为类型，创建目录传directory，新增JSON数据集传json；parentCode为所属目录编码，根级传root；" +
             "创建目录只需name、datasetType=directory、parentCode，如{name:\"目录名\",datasetType:\"directory\",parentCode:\"root\"}；" +
             "新增JSON数据集还需传dataset为数据集具体配置，如{\"datasetType\":\"json\",\"json\":\"数据JSON数组文本\"}；" +
-            "返回数据集ID，后续执行数据集需要的数据集编码code可通过getDatasetDetail查询")
-    @Operation(summary = "新增", description = "新增数据集")
+            "返回数据集或目录编码code（响应data字段），不是ID；目录编码可用于子节点parentCode；" +
+            "数据集编码可用于详情查询、执行数据集和组件绑定；需要ID时可用此编码调用getDatasetDetail获取")
+    @Operation(summary = "新增数据集或目录", description = "新增数据集或目录，响应data返回生成的编码code，不是主键ID")
     public Resp<String> insert(@RequestBody DatasetEntity datasetEntity) {
         datasetEntity.setCode(CodeWorker.generateCode(DataRoomConstant.Dataset.CODE_PREFIX));
-        datasetMapper.insert(datasetEntity);
-        return Resp.success(datasetEntity.getId());
+        if (datasetMapper.insert(datasetEntity) != 1) {
+            throw new DataRoomException("新增数据集或目录失败");
+        }
+        return Resp.success(datasetEntity.getCode());
     }
 
     @PostMapping("/update")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
-    @Tool(name = "updateDataset", description = "修改数据集。参数datasetEntity为修改后的数据集配置：" +
-            "id为数据集ID，必传，按ID更新，可通过getDatasetDetail查询获取；code不可修改，可不传；" +
-            "name、datasetType、dataset等其余字段含义同insertDataset；返回数据集ID")
-    @Operation(summary = "更新", description = "更新数据集")
+    @Tool(name = "updateDataset", description = "修改数据集或目录。参数datasetEntity为修改后的配置：" +
+            "id为数据集或目录ID，必传，按ID更新，可通过getDatasetDetail查询获取；code不可修改，可不传，以数据库原编码为准；" +
+            "name、datasetType、dataset等其余字段含义同insertDataset；返回数据集或目录编码code（响应data字段），不是ID")
+    @Operation(summary = "更新数据集或目录", description = "按ID更新数据集或目录，响应data返回数据库原有编码code，不是主键ID；code不可修改")
     public Resp<String> update(@RequestBody DatasetEntity datasetEntity) {
-        preserveHttpDatasetHeaderSensitive(datasetEntity);
+        Assert.hasText(datasetEntity.getId(), "数据集或目录ID不能为空");
+        DatasetEntity dbEntity = datasetMapper.selectById(datasetEntity.getId());
+        if (dbEntity == null) {
+            throw new DataRoomException("数据集或目录不存在");
+        }
+        datasetEntity.setCode(dbEntity.getCode());
+        preserveHttpDatasetHeaderSensitive(datasetEntity, dbEntity);
         datasetEntity.setUpdateDate(new Date());
-        datasetMapper.updateById(datasetEntity);
-        return Resp.success(datasetEntity.getId());
+        if (datasetMapper.updateById(datasetEntity) != 1) {
+            throw new DataRoomException("更新数据集或目录失败");
+        }
+        return Resp.success(dbEntity.getCode());
     }
 
     @PostMapping("/delete/{code}")
@@ -198,11 +209,10 @@ public class DatasetController {
         }
     }
 
-    private void preserveHttpDatasetHeaderSensitive(DatasetEntity datasetEntity) {
-        if (datasetEntity == null || StringUtils.isBlank(datasetEntity.getCode()) || !(datasetEntity.getDataset() instanceof HttpDataset updateDataset)) {
+    private void preserveHttpDatasetHeaderSensitive(DatasetEntity datasetEntity, DatasetEntity dbEntity) {
+        if (datasetEntity == null || !(datasetEntity.getDataset() instanceof HttpDataset updateDataset)) {
             return;
         }
-        DatasetEntity dbEntity = datasetMapper.getByCode(datasetEntity.getCode());
         if (dbEntity == null || !(dbEntity.getDataset() instanceof HttpDataset dbDataset)) {
             return;
         }

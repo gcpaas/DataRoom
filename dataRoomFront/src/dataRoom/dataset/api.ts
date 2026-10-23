@@ -191,14 +191,14 @@ export const datasetApi = {
   },
 
   /**
-   * 新增
+   * 新增数据集或目录，返回业务编码 code（不是 ID）
    */
   insert(data: DatasetEntity) {
     return request.post<string>('/dataRoom/dataset/insert', data)
   },
 
   /**
-   * 更新
+   * 按 ID 更新数据集或目录，返回原有业务编码 code（不是 ID）
    */
   update(data: DatasetEntity) {
     return request.post<string>('/dataRoom/dataset/update', data)
