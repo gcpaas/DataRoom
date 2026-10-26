@@ -12,14 +12,13 @@ import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
 import com.gccloud.gcpaas.dataroom.core.util.TypeUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jsqlparser.JSQLParserException;
-import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.select.WithItem;
 import net.sf.jsqlparser.util.TablesNamesFinder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.ibatis.mapping.BoundSql;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -52,9 +51,11 @@ public class ExcelDatasetService extends AbstractDatasetService {
             RelationalDataset relationalDataset = (RelationalDataset) datasetEntity.getDataset();
             String sql = relationalDataset.getSql();
             Map<String, Object> params = buildParams(datasetRunRequest, datasetEntity);
-            sql = myBatisService.generateSql(sql, params);
+            // 动态SQL解析，参数值通过PreparedStatement绑定，不做文本替换
+            BoundSql boundSql = myBatisService.parse(sql, params);
+            sql = boundSql.getSql();
             validateExcelSql(sql);
-            return executeSql(sql);
+            return executeSql(sql, boundSql);
         } catch (DataRoomException e) {
             log.error(ExceptionUtils.getStackTrace(e));
             throw e;
@@ -65,22 +66,9 @@ public class ExcelDatasetService extends AbstractDatasetService {
     }
 
     public static void validateExcelSql(String sql) {
-        if (StringUtils.isBlank(sql)) {
-            throw new DataRoomException("SQL不能为空");
-        }
-        Statement statement;
-        try {
-            statement = CCJSqlParserUtil.parse(sql);
-        } catch (JSQLParserException e) {
-            log.error(ExceptionUtils.getStackTrace(e));
-            throw new DataRoomException("Excel数据集SQL解析失败：" + e.getMessage(), e);
-        }
-        if (!(statement instanceof Select select)) {
-            throw new DataRoomException("仅允许执行select操作");
-        }
-
+        Select select = SqlValidateUtils.validateSelectOnly(sql, "Excel数据集");
         Set<String> cteNames = resolveCteNames(select);
-        Set<String> tableNames = new TablesNamesFinder<>().getTables(statement);
+        Set<String> tableNames = new TablesNamesFinder<>().getTables((Statement) select);
         for (String tableName : tableNames) {
             String normalizedTableName = normalizeTableName(tableName);
             if (cteNames.contains(normalizedTableName.toLowerCase(Locale.ROOT))) {
@@ -116,35 +104,37 @@ public class ExcelDatasetService extends AbstractDatasetService {
         return params;
     }
 
-    private DatasetRunResponse executeSql(String sql) throws Exception {
+    private DatasetRunResponse executeSql(String sql, BoundSql boundSql) throws Exception {
         DatasetRunResponse datasetRunResponse = new DatasetRunResponse();
         try (Connection connection = appDataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            ResultSetMetaData metaData = resultSet.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            List<DatasetOutputParam> outputParamList = new ArrayList<>();
-            for (int i = 1; i <= columnCount; i++) {
-                DatasetOutputParam outputParam = new DatasetOutputParam();
-                outputParam.setName(metaData.getColumnName(i));
-                outputParam.setType(SqlDatasetService.resolveOutputType(
-                        metaData.getColumnType(i),
-                        metaData.getColumnTypeName(i)
-                ));
-                outputParam.setDesc(outputParam.getName());
-                outputParamList.add(outputParam);
-            }
-            datasetRunResponse.setOutputList(outputParamList);
-
-            List<Map<String, Object>> resultList = new ArrayList<>();
-            while (resultSet.next()) {
-                Map<String, Object> row = new HashMap<>(columnCount);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            myBatisService.bind(preparedStatement, boundSql);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                ResultSetMetaData metaData = resultSet.getMetaData();
+                int columnCount = metaData.getColumnCount();
+                List<DatasetOutputParam> outputParamList = new ArrayList<>();
                 for (int i = 1; i <= columnCount; i++) {
-                    row.put(metaData.getColumnName(i), resultSet.getObject(i));
+                    DatasetOutputParam outputParam = new DatasetOutputParam();
+                    outputParam.setName(metaData.getColumnName(i));
+                    outputParam.setType(SqlDatasetService.resolveOutputType(
+                            metaData.getColumnType(i),
+                            metaData.getColumnTypeName(i)
+                    ));
+                    outputParam.setDesc(outputParam.getName());
+                    outputParamList.add(outputParam);
                 }
-                resultList.add(row);
+                datasetRunResponse.setOutputList(outputParamList);
+
+                List<Map<String, Object>> resultList = new ArrayList<>();
+                while (resultSet.next()) {
+                    Map<String, Object> row = new HashMap<>(columnCount);
+                    for (int i = 1; i <= columnCount; i++) {
+                        row.put(metaData.getColumnName(i), resultSet.getObject(i));
+                    }
+                    resultList.add(row);
+                }
+                datasetRunResponse.setData(resultList);
             }
-            datasetRunResponse.setData(resultList);
         }
         return datasetRunResponse;
     }

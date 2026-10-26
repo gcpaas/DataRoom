@@ -25,4 +25,9 @@ public class DataRoomException extends RuntimeException {
         super(msg, e);
         this.setCode(code);
     }
+
+    @Override
+    public String toString(){
+        return "异常码: "+code+" , 异常: "+ getMessage();
+    }
 }

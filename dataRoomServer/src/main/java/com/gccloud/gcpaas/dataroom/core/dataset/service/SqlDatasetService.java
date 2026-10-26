@@ -20,6 +20,7 @@ import com.gccloud.gcpaas.dataroom.core.util.TypeUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.ibatis.mapping.BoundSql;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -63,6 +64,9 @@ public class SqlDatasetService extends AbstractDatasetService {
                 params.put(inputParam.getName(), TypeUtils.transType(inputParam.getDefaultVal(), inputParam.getType()));
             }
             Map<String, Object> realInputParam = datasetRunRequest.getInputParam();
+            if (realInputParam == null) {
+                realInputParam = new HashMap<>();
+            }
             // 组合实际传入参数
             realInputParam.entrySet().forEach((entry) -> {
                 DatasetInputParam defInputParam = inputParamMap.get(entry.getKey());
@@ -74,12 +78,11 @@ public class SqlDatasetService extends AbstractDatasetService {
             });
             // 参数替换
             String sql = relationalDataset.getSql();
-            // 动态替换SQL
-            sql = myBatisService.generateSql(sql, params);
-            // 仅允许执行查询操作
-            if (!sql.toLowerCase().startsWith("select")) {
-                throw new DataRoomException("仅允许执行select操作");
-            }
+            // 动态SQL解析，参数值通过PreparedStatement绑定，不做文本替换
+            BoundSql boundSql = myBatisService.parse(sql, params);
+            sql = boundSql.getSql();
+            // 仅允许执行单条select查询：基于JSqlParser语法树校验，CTE合法、多语句和非select拒绝
+            SqlValidateUtils.validateSelectOnly(sql, "数据集");
             // 根据数据源类型获取连接
             Connection connection;
             if (baseDataSource instanceof ExcelDatasource) {
@@ -96,6 +99,7 @@ public class SqlDatasetService extends AbstractDatasetService {
             }
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                myBatisService.bind(preparedStatement, boundSql);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 ResultSetMetaData metaData = resultSet.getMetaData();
                 int columnCount = metaData.getColumnCount();

@@ -13,17 +13,11 @@ const previewExpanded = ref(true)
 const activePreviewTab = ref<'data' | 'fields'>('data')
 const previewPanelRef = ref<HTMLElement>()
 const hasMetadata = computed(() => Boolean(slots.metadata || slots['before-panel']))
+// 外层使用滚动容器且高度不固定，避免 fr 轨道让预览内容反向撑高基础设置。
 const workspaceRows = computed(() => {
-  if (settingsExpanded.value && previewExpanded.value) {
-    return 'minmax(280px, 1.1fr) minmax(220px, 0.9fr)'
-  }
-  if (!settingsExpanded.value && previewExpanded.value) {
-    return '48px minmax(220px, 1fr)'
-  }
-  if (settingsExpanded.value && !previewExpanded.value) {
-    return 'minmax(280px, 1fr) 48px'
-  }
-  return '48px 48px'
+  const settingsRow = settingsExpanded.value ? 'minmax(280px, max-content)' : '48px'
+  const previewRow = previewExpanded.value ? 'max-content' : '48px'
+  return `${settingsRow} ${previewRow}`
 })
 
 const toggleSettings = () => {
@@ -154,6 +148,7 @@ defineExpose({
 
 .dataset-editor-layout__workspace {
   display: grid;
+  align-content: start;
   row-gap: var(--dataset-editor-layout-gap);
 }
 
@@ -295,7 +290,7 @@ defineExpose({
 }
 
 .dataset-editor-preview__tab-content {
-  flex: 1;
+  flex: 0 0 360px;
   height: 360px;
   min-height: 0;
   overflow: auto;
