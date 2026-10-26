@@ -37,7 +37,7 @@ CallMcpTool:
 
 ### 第三步：创建页面实体
 
-调用 `dataroom-mcp-server`的`newPage` 创建页面实体，除了id、createDate、createUser、updateDate、updateUser、tenantCode、delFlag字段不需要填写外，其他字段都必须填写。工具调用成功后返回页面ID。 记录返回的页面 ID，后续步骤需要用到。
+调用 `dataroom-mcp-server`的`newPage` 创建页面实体，除了id、createDate、createUser、updateDate、updateUser、tenantCode、delFlag字段不需要填写外，其他字段都必须填写。其中 `pageType` 决定后端自动生成的默认 pageConfig 结构，必须与后续设计器类型一致（页面传 `page`，大屏传 `visualScreen`），传错会导致默认配置与设计器不匹配。工具调用成功后返回页面ID。 记录返回的页面 ID，后续步骤需要用到。
 
 ### 第四步：设计页面
 思考用户想要的页面或大屏需要用到哪些组件，从`listComponents` 返回的组件列表中选择合适的；
@@ -81,12 +81,26 @@ CallMcpTool:
 - 数据源绑定信息
 - 组件的配置信息要全量的，不能遗漏
 
+涉及数据集的创建、修改、执行或组件数据绑定时，先阅读参考资源 `refrence/dataset.md`，按其中的数据集类型、MCP 工具契约与绑定规范执行。
+
 ## 关键注意事项
 
-### 枚举值大小写
+### 页面类型与状态的固定传参格式
 
-- `pageStatus` 和 `pageType`（在 pageEntity / pageStage 层级）：必须使用**小写驼峰**格式
-- `pageConfig.pageType`（页面配置内部）：必须使用**小写驼峰**格式，即 `directory`、`visualScreen`、`page`。
+MCP 工具入参 schema 由后端方法签名生成，HTTP API 文档中声明的枚举类型与 `BasePageConfig` 多态结构（`@JsonTypeInfo`）不会传导到 MCP 调用方。以下字段必须按固定格式传字符串值：
+
+| 字段位置 | 字段 | 固定取值（小写驼峰） | 说明 |
+|----------|------|----------------------|------|
+| pageEntity / pageStage | `pageType` | `directory` / `page` / `visualScreen` | 页面类型，`newPage` 据此生成对应的默认配置 |
+| pageEntity / pageStage | `pageStatus` | `design` / `preview` / `published` / `history` / `snapshot` | 由后端接管，设计流程固定传 `design` |
+| pageStage 的 `pageConfig` 内部 | `pageType` | `page` / `visualScreen` | 多态反序列化的类型判别字段 |
+
+硬性约束：
+
+- **两个层级的 `pageType` 必须同时存在且取值一致**（如外层 `visualScreen`、内层 `page` 会导致类型冲突）。
+- `pageConfig.pageType` 不会出现在工具 schema 的字段列表中，但它是**必需字段**，必须显式携带，缺失即多态反序列化失败。
+- 取值统一使用小写驼峰：`visualScreen` 不要写成 `visual_screen` 或 `visualscreen`。
+- `pageType` 为 `directory`（目录）时不会产生 pageStage 配置，后续设计流程不适用。
 
 ### 组件属性完整性
 
@@ -105,10 +119,6 @@ CallMcpTool:
 - `chartList`：组件实例数组
 - `globalVariableList`：全局变量数组（可为空数组）
 - `pageType`：页面类型标识（小写）
-
-### 设计态与发布态
-
-- 设计阶段 `pageStatus` 设为 `design`
 
 ## 禁止事项
 

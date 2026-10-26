@@ -35,7 +35,12 @@ public class ShiroAuthFilter extends AuthenticatingFilter {
 
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
-        String token = TokenUtils.getToken((HttpServletRequest) request, tokenKey);
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        ShiroAuthToken mcpToken = createMcpToken(httpRequest);
+        if (mcpToken != null) {
+            return mcpToken;
+        }
+        String token = TokenUtils.getToken(httpRequest, tokenKey);
         if (StringUtils.isBlank(token)) {
             return new ShiroAuthToken("");
         }
@@ -53,16 +58,16 @@ public class ShiroAuthFilter extends AuthenticatingFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest req = (HttpServletRequest) request;
+        if (isMcpRequest(req)) {
+            ShiroAuthToken mcpToken = createMcpToken(req);
+            if (mcpToken != null) {
+                return executeLogin(request, response);
+            }
+        }
         // 获取请求token，如果token不存在，直接返回401
-        String token = TokenUtils.getToken((HttpServletRequest) request, tokenKey);
+        String token = TokenUtils.getToken(req, tokenKey);
         if (StringUtils.isBlank(token)) {
-            HttpServletResponse httpResponse = (HttpServletResponse) response;
-            httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
-            httpResponse.setHeader("Access-Control-Allow-Origin", getOrigin());
-            httpResponse.setContentType("application/json;charset=utf-8");
-            Resp<String> authError = Resp.authError();
-            String body = OBJECT_MAPPER.writeValueAsString(authError);
-            httpResponse.getWriter().print(body);
+            writeAuthError((HttpServletResponse) response, Resp.authError(), isMcpRequest(req));
             return false;
         }
         return executeLogin(request, response);
@@ -71,16 +76,11 @@ public class ShiroAuthFilter extends AuthenticatingFilter {
     @Override
     protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        httpResponse.setContentType("application/json;charset=utf-8");
-        httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
-        httpResponse.setHeader("Access-Control-Allow-Origin", getOrigin());
         try {
             // 处理登录失败的异常
             log.error(ExceptionUtils.getStackTrace(e));
             HttpServletRequest req = (HttpServletRequest) request;
-            Resp<String> authError = getAuthError(e);
-            String body = OBJECT_MAPPER.writeValueAsString(authError);
-            httpResponse.getWriter().print(body);
+            writeAuthError(httpResponse, getAuthError(e), isMcpRequest(req));
         } catch (IOException e1) {
             log.error(ExceptionUtils.getStackTrace(e1));
         }
@@ -113,5 +113,40 @@ public class ShiroAuthFilter extends AuthenticatingFilter {
             current = current.getCause();
         }
         return null;
+    }
+
+    private ShiroAuthToken createMcpToken(HttpServletRequest request) {
+        if (!isMcpRequest(request)) {
+            return null;
+        }
+        String authorization = request.getHeader("Authorization");
+        if (authorization == null) {
+            return null;
+        }
+        // 显式携带错误凭证时必须失败，不能回退到浏览器Cookie/JWT。
+        String token = authorization.regionMatches(true, 0, "Bearer ", 0, 7)
+                ? authorization.substring(7).trim() : "";
+        return new ShiroAuthToken(token, true);
+    }
+
+    private boolean isMcpRequest(HttpServletRequest request) {
+        String contextPath = request.getContextPath();
+        String requestUri = request.getRequestURI();
+        String path = requestUri.startsWith(contextPath)
+                ? requestUri.substring(contextPath.length()) : requestUri;
+        return "/mcp".equals(path);
+    }
+
+    private void writeAuthError(HttpServletResponse response, Resp<String> authError, boolean mcpRequest)
+            throws IOException {
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", getOrigin());
+        response.setContentType("application/json;charset=utf-8");
+        if (mcpRequest) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setHeader("WWW-Authenticate", "Bearer");
+        }
+        String body = OBJECT_MAPPER.writeValueAsString(authError);
+        response.getWriter().print(body);
     }
 }

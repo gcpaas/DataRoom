@@ -87,7 +87,7 @@ defineExpose<ComponentExpose>({
       class="dr-html__click-capture"
       type="button"
       aria-label="HTML组件点击区域"
-      @click.stop="onClick"
+      @click="onClick"
     />
   </div>
 </template>

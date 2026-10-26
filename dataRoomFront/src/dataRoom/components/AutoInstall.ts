@@ -28,6 +28,10 @@ type MockDatasetMap = {
   [key: string]: ChartMockDataset
 }
 
+type CustomBehaviorsMap = {
+  [key: string]: boolean
+}
+
 
 // 使用 Vite 的 import.meta.glob 自动导入所有组件目录下的 install.ts
 const installModules = import.meta.glob<{
@@ -41,6 +45,7 @@ const componentInstances: ComponentInstanceMap = {}
 const behaviors: BehaviorMap = {}
 const datasetFields: datasetFieldMap = {}
 const mockDatasets: MockDatasetMap = {}
+const customBehaviors: CustomBehaviorsMap = {}
 
 // 组件自动注册
 Object.entries(installModules).forEach(([path, module]) => {
@@ -82,6 +87,12 @@ Object.entries(installModules).forEach(([path, module]) => {
   const mockDatasetDefineName = `mockDataset`
   if (module[mockDatasetDefineName]) {
     mockDatasets[componentName] = module[mockDatasetDefineName] as ChartMockDataset
+  }
+
+  // 注册自定义交互事件标识：命中后交互事件名由用户在页面上自行添加
+  const customBehaviorsDefineName = `customBehaviors`
+  if (module[customBehaviorsDefineName]) {
+    customBehaviors[componentName] = true
   }
 })
 
@@ -125,6 +136,10 @@ const getComponentMockDataset = (name: string): ChartMockDataset | null => {
   return mockDatasets[name] || null
 }
 
+const isCustomBehaviorsComponent = (name: string): boolean => {
+  return Boolean(customBehaviors[name])
+}
+
 export {
   components,
   panelComponents,
@@ -135,5 +150,6 @@ export {
   getComponentInstance,
   getComponentDatasetFields,
   getComponentMockDataset,
+  isCustomBehaviorsComponent,
   mockDatasets
 }

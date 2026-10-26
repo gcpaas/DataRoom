@@ -1,0 +1,141 @@
+{
+  "componentName": "DrEcharts",
+  "displayName": "自定义图表",
+  "description": "自定义图表、echarts、option、任意图表",
+  "fields": [
+    {
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识，必填"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，当pageType=page时必填，默认与id保持一致"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型",
+      "defaultValue": "DrEcharts"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "自定义图表"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数",
+      "defaultValue": 400
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数",
+      "defaultValue": 300
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.datasetType",
+      "type": "enum",
+      "description": "数据集类型，历史配置可为空",
+      "options": [
+        "",
+        "directory",
+        "json",
+        "http",
+        "sql",
+        "excel",
+        "es",
+        "websocket",
+        "mqtt"
+      ],
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.option",
+      "type": "string",
+      "description": "ECharts option 代码（JS 代码字符串，最后 return option 对象）。\n存字符串而非对象：页面配置需要 JSON 序列化，option 中的 formatter 等函数无法被 JSON 表达。",
+      "defaultValue": "// 可直接粘贴 ECharts 官网示例代码，最后 return option 对象即可\n// ctx.data 为数据集返回数据（已经过数据处理脚本），未配置数据集时为下方内置样例\nconst list = Array.isArray(ctx.data) && ctx.data.length\n  ? ctx.data\n  : [\n      { name: '周一', value: 120 },\n      { name: '周二', value: 200 },\n      { name: '周三', value: 150 },\n      { name: '周四', value: 80 },\n      { name: '周五', value: 70 },\n      { name: '周六', value: 110 },\n      { name: '周日', value: 130 },\n    ]\n\nreturn {\n  tooltip: { trigger: 'axis' },\n  grid: { top: 40, right: 20, bottom: 30, left: 40, containLabel: true },\n  xAxis: { type: 'category', data: list.map((item) => item.name) },\n  yAxis: { type: 'value' },\n  series: [\n    {\n      name: '数值',\n      type: 'bar',\n      barMaxWidth: 40,\n      data: list.map((item) => Number(item.value) || 0),\n    },\n  ],\n}\n"
+    }
+  ],
+  "datasetFields": []
+}

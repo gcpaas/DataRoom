@@ -138,8 +138,11 @@ test('blocks iframe content only while designer iframe interaction is disabled',
 
   assert.equal(shouldBlock('designer', 'DrIframe', false), true)
   assert.equal(shouldBlock('designer', 'DrIframe', true), false)
+  assert.equal(shouldBlock('designer', 'DrHtml', false), true)
+  assert.equal(shouldBlock('designer', 'DrHtml', true), false)
   assert.equal(shouldBlock('designer', 'DrText', false), false)
   assert.equal(shouldBlock('preview', 'DrIframe', false), false)
+  assert.equal(shouldBlock('preview', 'DrHtml', false), false)
 })
 
 test('treats Moveable control layers as Moveable-owned interaction targets', () => {

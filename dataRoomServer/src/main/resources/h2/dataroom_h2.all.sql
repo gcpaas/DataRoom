@@ -258,3 +258,18 @@ WHERE NOT EXISTS (SELECT 1 FROM dr_user WHERE account = 'developer');
 INSERT INTO dr_user (id, account, username, password, role, status, tenant_code, del_flag)
 SELECT '3', 'sharer', '分享者', 'MQhucQR4QZwvLQHmOEbWeVP5hR+oJMZTBHLKcvksa5xsaGc+X6WAhvc4qctWvXdfKyRt1tUJaC5FArc4Q74+TVPaQhhn8a4K2UWb+Mm+35xPfiO7ZfWVRu9JoEDkxqnO92o0Bw/FDTfYz9OL0xdeYDYD8PN9x9DSlTNDuGE0bpyJqv6ZlgT79vzEG/iTUJN7u6QS71kV/7yJFJ0hm1CgSBvaa9X3q+5N0eD+P7q4UFNaFqTmuytc/5/OnHUDQJq6bvEsM+mV6HIEp+LXF2hqw7GJtoFc+5VZTiKn4PVGG7DBxh9rR7GbdS+Uhdnta6QO9sGbl3rQclUk+ObgiwUTnA==', 'sharer', 'NORMAL', 'default', '0'
 WHERE NOT EXISTS (SELECT 1 FROM dr_user WHERE account = 'sharer');
+
+-- 个人MCP令牌，仅保存SHA-256摘要，不保存明文。
+CREATE TABLE IF NOT EXISTS dr_mcp_token (
+    id VARCHAR(64) NOT NULL PRIMARY KEY,
+    user_id VARCHAR(64) NOT NULL,
+    tenant_code VARCHAR(64),
+    name VARCHAR(100) NOT NULL,
+    token_hash VARCHAR(64) NOT NULL,
+    token_prefix VARCHAR(14) NOT NULL,
+    expire_time TIMESTAMP NOT NULL,
+    create_date TIMESTAMP NOT NULL,
+    del_flag CHAR(1) NOT NULL DEFAULT '0',
+    CONSTRAINT uk_mcp_token_hash UNIQUE (token_hash)
+);
+CREATE INDEX IF NOT EXISTS idx_mcp_token_owner ON dr_mcp_token(user_id, tenant_code, del_flag);

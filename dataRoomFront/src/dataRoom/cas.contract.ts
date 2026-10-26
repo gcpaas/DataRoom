@@ -54,13 +54,13 @@ test('resolveLogoutTarget uses cas logout only when cas is enabled and configure
   assert.equal(resolveLogoutTarget({ enabled: false, loginUrl: '', logoutUrl: 'https://cas.example.com/logout' }), '/login')
 })
 
-test('createMcpConfig uses the configured token key', () => {
-  assert.deepEqual(createMcpConfig('https://app.example.com/mcp', 'jwt-token', 'customToken'), {
+test('createMcpConfig uses a dedicated MCP bearer token', () => {
+  assert.deepEqual(createMcpConfig('https://app.example.com/mcp', 'mcp-token'), {
     mcpServers: {
       'dataroom-mcp-server': {
         url: 'https://app.example.com/mcp',
         headers: {
-          customToken: 'jwt-token',
+          Authorization: 'Bearer mcp-token',
         },
       },
     },

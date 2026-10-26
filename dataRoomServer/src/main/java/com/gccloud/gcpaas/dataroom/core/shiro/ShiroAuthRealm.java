@@ -10,6 +10,7 @@ import com.gccloud.gcpaas.dataroom.core.entity.UserEntity;
 import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
 import com.gccloud.gcpaas.dataroom.core.page.service.PageShareService;
 import com.gccloud.gcpaas.dataroom.core.shiro.sso.ISsoAdapterService;
+import com.gccloud.gcpaas.dataroom.core.mcp.service.McpTokenService;
 import com.gccloud.gcpaas.dataroom.core.user.service.TokenService;
 import com.gccloud.gcpaas.dataroom.core.user.service.UserService;
 import com.gccloud.gcpaas.dataroom.core.util.TokenUtils;
@@ -58,6 +59,8 @@ public class ShiroAuthRealm extends AuthorizingRealm {
     private PageShareService pageShareService;
     @Resource
     private TokenService tokenService;
+    @Resource
+    private McpTokenService mcpTokenService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -81,6 +84,15 @@ public class ShiroAuthRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String accessToken = (String) token.getPrincipal();
+        if (token instanceof ShiroAuthToken shiroAuthToken && shiroAuthToken.isMcpToken()) {
+            try {
+                LoginUser mcpUser = mcpTokenService.authenticate(accessToken);
+                return new SimpleAuthenticationInfo(mcpUser, token.getPrincipal(), getName());
+            } catch (DataRoomException e) {
+                log.error(ExceptionUtils.getStackTrace(e));
+                throw new AuthenticationException(e);
+            }
+        }
         if ("null".equals(accessToken)) {
             throw new DataRoomException("未登录或token已过期或认证异常", 401);
         }

@@ -58,4 +58,8 @@ export enum ComponentLibTagTypeConst {
    * 装饰素材、边框
    */
   DECORATION = 'decoration',
+  /**
+   * 自定义、用户自行编写配置
+   */
+  CUSTOM = 'custom',
 }

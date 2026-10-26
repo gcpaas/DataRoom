@@ -32,6 +32,7 @@ dataroom:
     exclude-paths:
       - /dataRoom/operationLog/page
       - /dataRoom/user/current
+      - /dataRoom/mcpToken/add
       - /dataRoom/resource/file/**
   outboundHttp:
     # 允许内网转发的目标地址和端口
@@ -130,4 +131,9 @@ springdoc:
 
 mybatis-plus:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 使用可按Mapper控制的日志，避免MCP令牌hash被SQL参数日志输出。
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+logging:
+  level:
+    com.gccloud.gcpaas.dataroom.core.mapper.McpTokenMapper: 'OFF'

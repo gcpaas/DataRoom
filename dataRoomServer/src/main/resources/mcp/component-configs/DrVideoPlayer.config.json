@@ -134,7 +134,7 @@
       "field": "props.basic.url",
       "type": "string",
       "description": "视频链接地址，支持MP4、FLV、M3U8、RTMP格式",
-      "defaultValue": ""
+      "defaultValue": "https://sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-360p.mp4"
     },
     {
       "field": "props.basic.poster",

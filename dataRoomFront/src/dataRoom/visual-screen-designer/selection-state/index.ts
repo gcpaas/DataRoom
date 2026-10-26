@@ -27,7 +27,7 @@ export const getVisualScreenRenderableSelectedTargets = <T extends Element>(sele
 }
 
 export const shouldBlockVisualScreenIframeInteraction = (mode: 'designer' | 'preview', chartType: string, iframeInteractionEnabled: boolean) => {
-  return mode === 'designer' && chartType === 'DrIframe' && !iframeInteractionEnabled
+  return mode === 'designer' && ['DrIframe', 'DrHtml'].includes(chartType) && !iframeInteractionEnabled
 }
 
 export interface VisualScreenChartTreeClickEventLike {
@@ -36,6 +36,7 @@ export interface VisualScreenChartTreeClickEventLike {
 }
 
 export const shouldHandleVisualScreenChartTreeClick = (event: VisualScreenChartTreeClickEventLike) => {
+  void event
   return true
 }
 
@@ -53,6 +54,7 @@ export const shouldStopVisualScreenSelectoDragStart = (
   selectedChartIds: string[],
   _event: VisualScreenSelectoDragStartEventLike = {},
 ) => {
+  void _event
   return Boolean(chartId && selectedChartIds.includes(chartId))
 }
 
@@ -68,7 +70,7 @@ export interface VisualScreenControlPanelSelectionStateOptions {
 }
 
 export const getVisualScreenControlPanelSelectionState = (options: VisualScreenControlPanelSelectionStateOptions) => {
-  const { selectedChartCount, panelVisible, showingPageSettings } = options
+  const { selectedChartCount, panelVisible } = options
 
   if (selectedChartCount === 0) {
     return {

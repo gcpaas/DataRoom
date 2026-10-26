@@ -1,13 +1,14 @@
 <!-- 控制面板 -->
 <script setup lang="ts">
 import { computed, ref, watch, defineAsyncComponent, inject } from 'vue'
-import { Pointer, Setting } from '@element-plus/icons-vue'
+import { Delete, Pointer, Setting } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { Codemirror } from 'vue-codemirror'
 import { json } from '@codemirror/lang-json'
 import { eclipse } from '@uiw/codemirror-theme-eclipse'
 import { EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
-import { getComponentBehaviors, getComponentDatasetFields, getComponentMockDataset } from '@/dataRoom/components/AutoInstall.ts'
+import { getComponentBehaviors, getComponentDatasetFields, getComponentMockDataset, isCustomBehaviorsComponent } from '@/dataRoom/components/AutoInstall.ts'
 import type { DatasetEntity, DatasetInputParam, DatasetOutputParam } from '@/dataRoom/dataset/api'
 import { datasetApi } from '@/dataRoom/dataset/api'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
@@ -57,6 +58,11 @@ const mockDatasetDialogVisible = ref(false)
 const behaviors = ref<Behavior[]>([])
 const behaviorConfigDialogVisible = ref(false)
 const currentBehavior = ref<Behavior | null>(null)
+// 自定义交互事件（组件在 install.ts 中导出 customBehaviors 标识时启用）
+const customBehaviorMode = ref(false)
+const newBehaviorName = ref('')
+// ECharts 原生事件名约定为小写字母/数字，如 click、legendselectchanged
+const CUSTOM_BEHAVIOR_NAME_PATTERN = /^[a-z][a-zA-Z0-9]*$/
 const scriptDialogVisible = ref(false)
 // 数据集输出字段列表
 const datasetOutputList = ref<DatasetOutputParam[]>([])
@@ -111,6 +117,8 @@ const initComponentData = () => {
   datasetFields.value = getComponentDatasetFields(chart.type)
   mockDataset.value = getComponentMockDataset(chart.type)
   behaviors.value = getComponentBehaviors(chart.type)
+  customBehaviorMode.value = isCustomBehaviorsComponent(chart.type)
+  newBehaviorName.value = ''
   // 加载数据集名称
   loadDatasetName()
   // 初始化字段为数组
@@ -258,6 +266,57 @@ const toggleBehavior = (behavior: Behavior, enabled: string | number | boolean) 
 const openBehaviorConfig = (behavior: Behavior) => {
   currentBehavior.value = behavior
   behaviorConfigDialogVisible.value = true
+}
+
+/**
+ * 自定义交互事件列表：事件名即 chartConfig.behaviors 的键
+ */
+const customBehaviorList = computed<Behavior[]>(() => {
+  const behaviorsConfig = chartConfig.value.behaviors || {}
+  return Object.keys(behaviorsConfig).map((eventName) => ({
+    name: eventName,
+    desc: '自定义 ECharts 事件，事件参数为该事件原生参数',
+    method: eventName,
+    paramsList: [],
+  }))
+})
+
+/**
+ * 添加自定义交互事件
+ */
+const addCustomBehavior = () => {
+  const eventName = newBehaviorName.value.trim()
+  if (!eventName) {
+    ElMessage.warning('请输入事件名称')
+    return
+  }
+  if (!CUSTOM_BEHAVIOR_NAME_PATTERN.test(eventName)) {
+    ElMessage.warning('事件名称需以字母开头，仅包含字母和数字，如 click、legendselectchanged')
+    return
+  }
+  if (!chartConfig.value.behaviors) {
+    chartConfig.value.behaviors = {}
+  }
+  if (chartConfig.value.behaviors[eventName]) {
+    ElMessage.warning(`事件 ${eventName} 已存在`)
+    return
+  }
+  chartConfig.value.behaviors[eventName] = {
+    disabled: false,
+    actions: [],
+  }
+  newBehaviorName.value = ''
+}
+
+/**
+ * 删除自定义交互事件
+ * @param behavior
+ */
+const removeCustomBehavior = (behavior: Behavior) => {
+  if (!chartConfig.value.behaviors) {
+    return
+  }
+  delete chartConfig.value.behaviors[behavior.method]
 }
 
 const openScriptDialog = () => {
@@ -475,7 +534,37 @@ const triggerAutoRefresh = () => {
         </section>
         <section v-show="activeTab === 'interaction'" class="control-tab-pane" role="tabpanel">
           <div class="tab-content">
-            <div class="behavior-list">
+            <template v-if="customBehaviorMode">
+              <div class="behavior-add">
+                <el-input
+                  v-model="newBehaviorName"
+                  size="small"
+                  placeholder="请输入 ECharts 事件名，如 click"
+                  clearable
+                  @keyup.enter="addCustomBehavior"
+                />
+                <el-button type="primary" size="small" @click="addCustomBehavior">添加事件</el-button>
+              </div>
+              <div class="behavior-list" v-if="customBehaviorList.length > 0">
+                <div class="behavior-item" v-for="behavior in customBehaviorList" :key="behavior.name">
+                  <div class="behavior-info">
+                    <div class="behavior-name">{{ behavior.name }}</div>
+                    <div class="behavior-desc">{{ behavior.desc }}</div>
+                  </div>
+                  <div class="behavior-controls">
+                    <el-switch :model-value="isBehaviorEnabled(behavior)" size="small" @change="(val: string | number | boolean) => toggleBehavior(behavior, val)" />
+                    <el-icon class="setting-icon" @click="openBehaviorConfig(behavior)">
+                      <Setting />
+                    </el-icon>
+                    <el-icon class="delete-icon" @click="removeCustomBehavior(behavior)">
+                      <Delete />
+                    </el-icon>
+                  </div>
+                </div>
+              </div>
+              <el-empty v-else description="暂无自定义事件，添加后事件名将作为 ECharts 原生事件监听" :image-size="80" />
+            </template>
+            <div class="behavior-list" v-else>
               <div class="behavior-item" v-for="behavior in behaviors" :key="behavior.name">
                 <div class="behavior-info">
                   <div class="behavior-name">{{ behavior.name }}</div>
@@ -666,6 +755,13 @@ const triggerAutoRefresh = () => {
       width: 100%;
     }
 
+    .behavior-add {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
     .behavior-list {
       .behavior-item {
         display: flex;
@@ -709,6 +805,15 @@ const triggerAutoRefresh = () => {
 
             &:hover {
               color: var(--el-color-primary);
+            }
+          }
+
+          .delete-icon {
+            color: var(--el-text-color-regular);
+            cursor: pointer;
+
+            &:hover {
+              color: var(--el-color-danger);
             }
           }
         }

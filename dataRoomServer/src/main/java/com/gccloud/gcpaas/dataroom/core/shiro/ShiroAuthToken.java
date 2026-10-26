@@ -7,10 +7,20 @@ import org.apache.shiro.authc.AuthenticationToken;
  */
 public class ShiroAuthToken implements AuthenticationToken {
 
-    private String token;
+    private final String token;
+    private final boolean mcpToken;
 
     public ShiroAuthToken(String token) {
+        this(token, false);
+    }
+
+    public ShiroAuthToken(String token, boolean mcpToken) {
         this.token = token;
+        this.mcpToken = mcpToken;
+    }
+
+    public boolean isMcpToken() {
+        return mcpToken;
     }
 
     @Override

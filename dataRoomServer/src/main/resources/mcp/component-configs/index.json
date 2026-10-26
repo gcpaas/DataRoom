@@ -148,5 +148,10 @@
     "componentName": "DrMap",
     "displayName": "地图",
     "description": "地图、行政区、GeoJSON、标记点、飞线"
+  },
+  {
+    "componentName": "DrEcharts",
+    "displayName": "自定义图表",
+    "description": "自定义图表、echarts、option、任意图表"
   }
 ]

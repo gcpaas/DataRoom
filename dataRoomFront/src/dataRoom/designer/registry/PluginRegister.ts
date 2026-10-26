@@ -31,6 +31,7 @@ import {DrImageMetricCardPlugin} from '@/dataRoom/components/DrImageMetricCard/p
 import {DrDataTablePlugin} from '@/dataRoom/components/DrDataTable/plugin.ts'
 import {DrDateTimePlugin} from '@/dataRoom/components/DrDateTime/plugin.ts'
 import {DrHtmlPlugin} from '@/dataRoom/components/DrHtml/plugin.ts'
+import {DrEchartsPlugin} from '@/dataRoom/components/DrEcharts/plugin.ts'
 import type {ComponentLibTagInterface} from "@/dataRoom/designer/types/ComponentLibTagInterface.ts";
 import {ComponentLibTagTypeConst} from "@/dataRoom/constants/ComponentLibTagTypeConst.ts";
 
@@ -90,6 +91,10 @@ const componentLibTagList: ComponentLibTagInterface[] = [
   {
     name: '表单',
     tag: ComponentLibTagTypeConst.FORM
+  },
+  {
+    name: '自定义',
+    tag: ComponentLibTagTypeConst.CUSTOM
   }
 ]
 /**
@@ -125,7 +130,8 @@ const pluginList = [
   new DrBorderPlugin([ComponentLibTagTypeConst.DECORATION]),
   new DrDecorationPlugin([ComponentLibTagTypeConst.DECORATION]),
   new DrFullScreenPlugin([ComponentLibTagTypeConst.FORM]),
-  new DrMapPlugin([ComponentLibTagTypeConst.MAP])
+  new DrMapPlugin([ComponentLibTagTypeConst.MAP]),
+  new DrEchartsPlugin([ComponentLibTagTypeConst.CUSTOM])
 ]
 
 export { pluginList, componentLibTagList }
