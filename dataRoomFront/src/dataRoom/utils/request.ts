@@ -83,23 +83,23 @@ service.interceptors.response.use(
 )
 
 /**
- * 封装请求方法
+ * 封装请求方法。响应拦截器已解包业务数据，此处将 axios 响应类型收窄为业务类型。
  */
 const request = {
   get<T = any>(url: string, params?: any, config?: AxiosRequestConfig): Promise<T> {
-    return service.get(url, {params, ...config})
+    return service.get(url, {params, ...config}) as unknown as Promise<T>
   },
 
   post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    return service.post(url, data, config)
+    return service.post(url, data, config) as unknown as Promise<T>
   },
 
   put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    return service.put(url, data, config)
+    return service.put(url, data, config) as unknown as Promise<T>
   },
 
   delete<T = any>(url: string, params?: any, config?: AxiosRequestConfig): Promise<T> {
-    return service.delete(url, {params, ...config})
+    return service.delete(url, {params, ...config}) as unknown as Promise<T>
   },
 }
 export default request

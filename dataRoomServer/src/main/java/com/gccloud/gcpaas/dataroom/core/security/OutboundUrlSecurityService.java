@@ -3,6 +3,7 @@ package com.gccloud.gcpaas.dataroom.core.security;
 import com.gccloud.gcpaas.dataroom.core.config.DataRoomConfig;
 import com.gccloud.gcpaas.dataroom.core.exception.IllegalOutboundDestinationException;
 import com.google.common.net.InetAddresses;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,9 +15,12 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 @Slf4j
 @Service
@@ -25,11 +29,45 @@ public class OutboundUrlSecurityService {
     @Resource
     private DataRoomConfig dataRoomConfig;
 
+    private static final String REGEX_PREFIX = "regex:";
+
+    private List<Pattern> internalTargetPatterns = List.of();
+
     public OutboundUrlSecurityService() {
     }
 
     public OutboundUrlSecurityService(DataRoomConfig dataRoomConfig) {
         this.dataRoomConfig = dataRoomConfig;
+        initializePatterns();
+    }
+
+    @PostConstruct
+    private void initializePatterns() {
+        List<Pattern> patterns = new ArrayList<>();
+        for (String target : configuredTargets()) {
+            if (StringUtils.isBlank(target) || !target.trim().startsWith(REGEX_PREFIX)) {
+                continue;
+            }
+            String expression = target.trim().substring(REGEX_PREFIX.length());
+            if (StringUtils.isBlank(expression)) {
+                throw new IllegalArgumentException("dataroom.outboundHttp.allowedInternalTargets 的 regex: 表达式不能为空");
+            }
+            try {
+                patterns.add(Pattern.compile(expression));
+            } catch (PatternSyntaxException e) {
+                log.error(ExceptionUtils.getStackTrace(e));
+                throw new IllegalArgumentException("dataroom.outboundHttp.allowedInternalTargets 包含非法正则表达式", e);
+            }
+        }
+        internalTargetPatterns = List.copyOf(patterns);
+    }
+
+    private List<String> configuredTargets() {
+        if (dataRoomConfig == null || dataRoomConfig.getOutboundHttp() == null
+                || dataRoomConfig.getOutboundHttp().getAllowedInternalTargets() == null) {
+            return List.of();
+        }
+        return dataRoomConfig.getOutboundHttp().getAllowedInternalTargets();
     }
 
     public String validateAndResolve(String url, Set<String> allowedSchemes) {
@@ -50,14 +88,16 @@ public class OutboundUrlSecurityService {
                 throw reject(host + " 地址包含用户认证信息，禁止访问");
             }
             int port = resolvePort(uri, scheme);
-            InetAddress[] addresses = InetAddress.getAllByName(host);
+            InetAddress[] addresses = resolveAddresses(host);
             if (addresses.length == 0) {
                 throw reject(host + " 主机未解析到任何 IP 地址，禁止访问");
             }
             boolean allowedInternalTarget = isAllowedInternalTarget(host, port);
             for (InetAddress address : addresses) {
                 String unsafeReason = unsafeReason(address);
-                if (unsafeReason != null && !allowedInternalTarget) {
+                // IP 正则只授权当前地址，不能因某个解析结果命中而放行其他受限 IP。
+                if (unsafeReason != null && !allowedInternalTarget
+                        && !matchesInternalPattern(InetAddresses.toAddrString(address), port)) {
                     throw reject(buildUnsafeDestinationMessage(host, port, address, unsafeReason));
                 }
             }
@@ -111,20 +151,23 @@ public class OutboundUrlSecurityService {
         return port;
     }
 
+    protected InetAddress[] resolveAddresses(String host) throws UnknownHostException {
+        return InetAddress.getAllByName(host);
+    }
+
     private boolean isAllowedInternalTarget(String host, int port) {
-        if (dataRoomConfig == null || dataRoomConfig.getOutboundHttp() == null) {
-            return false;
-        }
-        List<String> targets = dataRoomConfig.getOutboundHttp().getAllowedInternalTargets();
-        if (targets == null) {
-            return false;
-        }
-        for (String target : targets) {
-            if (matchesTarget(target, host, port)) {
+        for (String target : configuredTargets()) {
+            if (StringUtils.isNotBlank(target) && !target.trim().startsWith(REGEX_PREFIX)
+                    && matchesTarget(target, host, port)) {
                 return true;
             }
         }
-        return false;
+        return matchesInternalPattern(host, port);
+    }
+
+    private boolean matchesInternalPattern(String host, int port) {
+        String target = formatHostPort(host, port);
+        return internalTargetPatterns.stream().anyMatch(pattern -> pattern.matcher(target).matches());
     }
 
     private boolean matchesTarget(String target, String host, int port) {

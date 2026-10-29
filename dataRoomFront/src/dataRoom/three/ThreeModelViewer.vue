@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, shallowRef, onMounted, onBeforeUnmount, watch } from 'vue'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
@@ -55,7 +55,7 @@ let scene: THREE.Scene
 let camera: THREE.PerspectiveCamera
 let renderer: THREE.WebGLRenderer
 let controls: OrbitControls
-let currentModel: THREE.Object3D | null = null
+const currentModel = shallowRef<THREE.Object3D | null>(null)
 let modelTransform: ModelTransform | null = null
 let animationId: number
 
@@ -163,9 +163,9 @@ const updateBackground = () => {
  * GLTF/OBJ/STL 统一生效，保留模型自带贴图，其余参数以配置为准
  */
 const applyMaterial = (config: MaterialConfig) => {
-  if (!currentModel) return
+  if (!currentModel.value) return
 
-  currentModel.traverse((child) => {
+  currentModel.value.traverse((child) => {
     if (!(child instanceof THREE.Mesh)) {
       return
     }
@@ -189,7 +189,7 @@ const applyMaterial = (config: MaterialConfig) => {
 }
 
 const updateMaterial = (config: MaterialConfig) => {
-  if (!currentModel) return
+  if (!currentModel.value) return
 
   applyMaterial(config)
 }
@@ -243,7 +243,7 @@ const loadModel = (url: string) => {
   if (modelTransform) {
     scene.remove(modelTransform.container)
     modelTransform = null
-    currentModel = null
+    currentModel.value = null
   }
 
   const extension = normalizeModelFormat(props.modelFormat) || getModelFormatFromUrl(url)
@@ -283,7 +283,7 @@ const loadGLTF = (url: string) => {
   loader.load(
     url,
     (gltf) => {
-      currentModel = gltf.scene
+      currentModel.value = gltf.scene
       applyEffectiveMaterial()
       centerAndScaleModel()
       handleModelLoadSuccess()
@@ -311,7 +311,7 @@ const loadOBJ = (url: string) => {
   loader.load(
     url,
     (obj) => {
-      currentModel = obj
+      currentModel.value = obj
       applyEffectiveMaterial()
       centerAndScaleModel()
       handleModelLoadSuccess()
@@ -333,7 +333,7 @@ const loadSTL = (url: string) => {
   loader.load(
     url,
     (geometry) => {
-      currentModel = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial())
+      currentModel.value = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial())
       applyEffectiveMaterial()
       centerAndScaleModel()
       handleModelLoadSuccess()
@@ -354,12 +354,12 @@ const updateTransformFromProps = () => {
 }
 
 const centerAndScaleModel = () => {
-  if (!currentModel) return
+  if (!currentModel.value) return
 
   if (modelTransform) {
     scene.remove(modelTransform.container)
   }
-  modelTransform = createModelTransform(currentModel)
+  modelTransform = createModelTransform(currentModel.value)
   updateTransformFromProps()
   scene.add(modelTransform.container)
 
@@ -393,7 +393,7 @@ const resetCamera = () => {
 }
 
 const updateMaterialFromProps = (config: MaterialConfig) => {
-  if (currentModel) {
+  if (currentModel.value) {
     updateMaterial(config)
   }
 }

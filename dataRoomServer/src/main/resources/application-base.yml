@@ -25,6 +25,22 @@ spring:
           mcp-endpoint: /mcp
 
 dataroom:
+  # Agent接入
+  agent:
+    enabled: true
+    # Agent 工作区固定目录：包含 AGENTS.md、skills/、tools.json（可选扩展 MCP 服务）
+    workspaceDir: ./agentWorkspace
+    model:
+      # 模型提供方：dashscope（阿里百炼）/ openai（OpenAI 及兼容端点，如 DeepSeek、Kimi）
+      provider: openai
+      model-name: gpt-6-astra
+      # API Key 必须通过环境变量注入，禁止填写真实密钥
+      api-key: sk-***
+      # OpenAI 兼容端点地址，dashscope 默认留空即可
+      base-url: https://api.openai.com/v1
+      stream: true
+      enable-thinking: true
+      max-iters: 30
   # 前端地址：Hash 模式需包含 /#/，History 模式填普通根地址
   uiUrl: http://localhost:5173/#/
   operation-log:
@@ -35,10 +51,14 @@ dataroom:
       - /dataRoom/mcpToken/add
       - /dataRoom/resource/file/**
   outboundHttp:
-    # 允许内网转发的目标地址和端口
+    # 内部目标白名单（字符串列表，默认空，修改后重启）：原 host:port 精确规则保持兼容。
+    # regex: 前缀使用 Java 正则完整匹配规范化 host:port 或每个解析 IP:port；IPv6 为 [ip]:port。
+    # 主机名转小写；URL 省略端口时使用协议默认端口。域名规则授权该域名，IP 规则逐个授权解析 IP。
     allowedInternalTargets:
+      # 固定IP和端口样例
       - 192.168.52.86:9200
-      - 192.168.59.45:8083
+      # 使用正则匹配样例
+      - 'regex:^192\.168\.\d{1,3}\.\d{1,3}:\d{1,5}$'
   cors:
     path-pattern: "/**"
     allowed-origin-patterns:
@@ -102,6 +122,24 @@ dataroom:
     expiration: 36000
     tokenKey: dataRoomToken
     alg: HS256
+
+# AgentScope AG-UI 协议端点（SSE），完整路径为 ${server.servlet.context-path}/agui/run
+agentscope:
+  agui:
+    path-prefix: /agui
+    # 全局 CORS 已由 dataroom.cors 覆盖该路径，关闭 starter 自带的 CORS 避免重复响应头
+    cors-enabled: false
+    run-timeout: 10m
+    emit-state-events: true
+    emit-tool-call-args: true
+    emit-token-usage: true
+    default-agent-id: dataroom-designer
+    enable-path-routing: true
+    # 服务端按（用户, 线程）缓存并复用 Agent 实例，保证多轮对话上下文
+    server-side-memory: true
+    max-thread-sessions: 500
+    session-timeout-minutes: 120
+    enable-reasoning: true
 
 # 接口文档配置
 knife4j:

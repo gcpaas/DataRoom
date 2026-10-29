@@ -2,16 +2,20 @@ package com.gccloud.gcpaas.core.component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.InvalidTypeIdException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gccloud.gcpaas.dataroom.core.bean.KeyVal;
 import com.gccloud.gcpaas.dataroom.core.bean.Resp;
 import com.gccloud.gcpaas.dataroom.core.constant.DatasetType;
 import com.gccloud.gcpaas.dataroom.core.dataset.DatasetController;
+import com.gccloud.gcpaas.dataroom.core.dataset.bean.BaseDataset;
+import com.gccloud.gcpaas.dataroom.core.dataset.bean.DirectorDataset;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.HttpDataset;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.JsonDataset;
 import com.gccloud.gcpaas.dataroom.core.entity.DatasetEntity;
 import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
 import com.gccloud.gcpaas.dataroom.core.mapper.DatasetMapper;
+import com.gccloud.gcpaas.dataroom.core.mcp.SchemaInlineToolCallback;
 import io.swagger.v3.oas.annotations.Operation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -259,6 +263,12 @@ class DatasetMcpToolTest {
         ArgumentCaptor<DatasetEntity> captor = ArgumentCaptor.forClass(DatasetEntity.class);
         verify(datasetMapper).insert(captor.capture());
         assertEquals(type, captor.getValue().getDatasetType());
+        if (type == DatasetType.JSON) {
+            assertTrue(captor.getValue().getDataset() instanceof JsonDataset);
+            assertEquals("[{\"value\":1}]", ((JsonDataset) captor.getValue().getDataset()).getJson());
+        } else {
+            assertEquals(null, captor.getValue().getDataset(), "目录不需要数据集配置");
+        }
         assertGeneratedCode(serializedResponseData(result), captor.getValue());
         assertReturnsCodeDescription(callback.getToolDefinition().description());
         verifyNoMoreInteractions(datasetMapper);
@@ -309,6 +319,49 @@ class DatasetMcpToolTest {
 
         assertEquals(REAL_CODE, serializedResponseData(result));
         verifyUpdatedRecord(type);
+    }
+
+    @ParameterizedTest
+    @EnumSource(DatasetType.class)
+    void datasetEntityEnumKeepsExistingWireAndStorageValues(DatasetType type) throws Exception {
+        DatasetEntity entity = objectMapper.readValue("{\"datasetType\":\"" + type.getType() + "\"}",
+                DatasetEntity.class);
+        assertEquals(type, entity.getDatasetType());
+        assertEquals(type.getType(), objectMapper.readTree(objectMapper.writeValueAsString(entity))
+                .path("datasetType").asText());
+        assertEquals(type.getType(), type.getValue(), "数据库存储值不应改变");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"JSON", "unregistered"})
+    void restStillRejectsInvalidOuterTypeWithoutWriting(String type) throws Exception {
+        ObjectNode request = requestJson(DatasetType.JSON, null, null);
+        request.put("datasetType", type);
+        MockMvcBuilders.standaloneSetup(controller).build()
+                .perform(post("/dataRoom/dataset/insert")
+                        .contentType(MediaType.APPLICATION_JSON).content(request.toString()))
+                .andExpect(status().isBadRequest());
+        verifyNoInteractions(datasetMapper);
+    }
+
+    @Test
+    void directoryAndJsonUseDistinctPolymorphicTypes() throws Exception {
+        BaseDataset directory = objectMapper.readValue("{\"datasetType\":\"directory\"}", BaseDataset.class);
+        assertEquals(DirectorDataset.class, directory.getClass());
+        BaseDataset json = objectMapper.readValue("{\"datasetType\":\"json\",\"json\":\"[]\"}", BaseDataset.class);
+        assertEquals(JsonDataset.class, json.getClass());
+        assertEquals("[]", ((JsonDataset) json).getJson());
+        assertEquals("json", objectMapper.readTree(objectMapper.writeValueAsString(json))
+                .path("datasetType").asText(), "JSON 配置序列化不能变为目录类型");
+        assertEquals("directory", objectMapper.readTree(objectMapper.writeValueAsString(directory))
+                .path("datasetType").asText());
+    }
+
+    @Test
+    void unregisteredDatasetTypeIsRejected() {
+        assertThrows(InvalidTypeIdException.class, () -> objectMapper.readValue(
+                "{\"datasetType\":\"unregistered\"}", BaseDataset.class));
+        verifyNoInteractions(datasetMapper);
     }
 
     private DatasetEntity dataset(DatasetType type) {
@@ -373,6 +426,7 @@ class DatasetMcpToolTest {
     private ToolCallback toolCallback(String name) {
         return Arrays.stream(MethodToolCallbackProvider.builder().toolObjects(controller).build().getToolCallbacks())
                 .filter(callback -> name.equals(callback.getToolDefinition().name()))
+                .map(SchemaInlineToolCallback::new)
                 .findFirst().orElseThrow();
     }
 

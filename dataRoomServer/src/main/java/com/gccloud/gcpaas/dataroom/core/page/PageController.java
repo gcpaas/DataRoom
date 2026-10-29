@@ -49,6 +49,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 页面
@@ -78,6 +79,9 @@ public class PageController {
      */
     @GetMapping("/list")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Tool(name = "listPages", description = "查询页面/大屏列表。参数name为页面名称（模糊匹配，可选），parentCode为目录编码（可选）；"
+            + "返回页面列表，包含id、code页面编码、name名称、pageType页面类型（page网格仪表盘/visualScreen大屏）、pageStatus状态。"
+            + "修改已有页面前必须先通过该工具确认目标页面的code")
     @Operation(summary = "列表查询", description = "根据名称查询")
     @Parameters({
             @Parameter(name = "name", description = "页面名称", in = ParameterIn.QUERY),
@@ -120,12 +124,12 @@ public class PageController {
      */
     @PostMapping("/insert")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
-    @Tool(name = "newPage", description = "新增页面。参数pageEntity为页面配置信息，返回页面ID；" +
+    @Tool(name = "newPage", description = "新增页面。参数pageEntity为页面配置信息，返回页面ID与页面编码code；" +
             "chartList中组件绑定数据集时需同时设置dataset.code和dataset.fields字段绑定，" +
             "字段绑定的key取自getComponentConfig返回的datasetFields中的name，value为getDatasetDetail返回的数据集字段名（outputList）数组")
     
     @Operation(summary = "新增", description = "新增页面")
-    public Resp<String> newPage(@RequestBody PageEntity pageEntity) {
+    public Resp<Map<String, String>> newPage(@RequestBody PageEntity pageEntity) {
         log.info("新增页面 {}", pageEntity);
         if (StringUtils.isBlank(pageEntity.getCode())) {
             pageEntity.setCode(CodeWorker.generateCode(null));
@@ -148,7 +152,7 @@ public class PageController {
             pageStage.setPageConfig(basePageConfig);
             pageStageService.save(pageStage);
         }
-        return Resp.success(pageEntity.getId());
+        return Resp.success(Map.of("id", pageEntity.getId(), "code", pageEntity.getCode()));
     }
 
     /**
@@ -397,6 +401,8 @@ public class PageController {
      */
     @GetMapping("/getPageConfig/{pageCode}/{pageStatus}")
     @RequiresRoles(value = DataRoomRole.SHARER)
+    @Tool(name = "getPageDesignConfig", description = "获取指定页面的完整配置。参数pageCode为页面编码，pageStatus固定传design（设计态）；"
+            + "返回页面完整配置（含chartList组件列表），修改已有页面前必须先调用该工具读取当前配置")
     @Operation(summary = "获取页面配置", description = "获取页面配置,仅支持获取设计态、预览态、发布态")
     
     public Resp<PageStageVo> getPageConfig(@PathVariable("pageCode") String pageCode, @PathVariable("pageStatus") String pageStatusStr) {

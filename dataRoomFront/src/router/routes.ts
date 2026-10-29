@@ -4,7 +4,12 @@ export const appRoutes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
-    redirect: '/dataRoom/page/index',
+    redirect: '/dataRoom/agent',
+  },
+  {
+    path: '/dataRoom/agent',
+    name: 'agentHome',
+    component: () => import('@/dataRoom/agent-home/index.vue'),
   },
   {
     path: '/login',

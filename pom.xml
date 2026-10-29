@@ -11,7 +11,7 @@
 
     <groupId>com.gccloud.gcpaas</groupId>
     <artifactId>DataRoom</artifactId>
-    <version>3.6.0</version>
+    <version>3.5.0</version>
     <packaging>pom</packaging>
     <modules>
         <module>dataRoom-script-api</module>
@@ -44,6 +44,7 @@
         <xmlbeans.version>5.3.0</xmlbeans.version>
         <spring-ai.version>1.1.8</spring-ai.version>
         <groovy.version>5.0.6</groovy.version>
+        <agentscope.version>2.0.4</agentscope.version>
     </properties>
 
     <dependencyManagement>
@@ -54,6 +55,26 @@
                 <version>${spring-ai.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.agentscope</groupId>
+                <artifactId>agentscope-harness</artifactId>
+                <version>${agentscope.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.agentscope</groupId>
+                <artifactId>agentscope-agui-spring-boot-starter</artifactId>
+                <version>${agentscope.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.agentscope</groupId>
+                <artifactId>agentscope-extensions-model-dashscope</artifactId>
+                <version>${agentscope.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.agentscope</groupId>
+                <artifactId>agentscope-extensions-model-openai</artifactId>
+                <version>${agentscope.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.poi</groupId>

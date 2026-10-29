@@ -92,10 +92,12 @@ class DataRoomConfigurationTest {
                 .withUserConfiguration(DataRoomConfig.class)
                 .withPropertyValues(
                         "dataroom.outbound-http.allowed-internal-targets[0]=127.0.0.1:9200",
-                        "dataroom.outbound-http.allowed-internal-targets[1]=es.internal.example.com:9200"
+                        "dataroom.outbound-http.allowed-internal-targets[1]=es.internal.example.com:9200",
+                        "dataroom.outbound-http.allowed-internal-targets[2]=regex:^192\\.168\\.1\\.\\d{1,3}:(8080|9200)$"
                 )
                 .run(context -> assertEquals(
-                        List.of("127.0.0.1:9200", "es.internal.example.com:9200"),
+                        List.of("127.0.0.1:9200", "es.internal.example.com:9200",
+                                "regex:^192\\.168\\.1\\.\\d{1,3}:(8080|9200)$"),
                         context.getBean(DataRoomConfig.class).getOutboundHttp().getAllowedInternalTargets()
                 ));
     }

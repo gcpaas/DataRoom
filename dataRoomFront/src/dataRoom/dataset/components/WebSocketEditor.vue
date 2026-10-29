@@ -38,7 +38,9 @@ const layoutRef = ref<{ revealPreview: () => Promise<void> }>()
 const groovyExtensions = [StreamLanguage.define(groovy), eclipse]
 const jsonExtensions = [json(), eclipse]
 
-const formData = reactive<DatasetEntity>({
+type WebSocketFormData = DatasetEntity & { dataset: WebSocketDataset }
+
+const formData = reactive<WebSocketFormData>({
   name: '',
   datasetType: 'websocket',
   parentCode: 'root',

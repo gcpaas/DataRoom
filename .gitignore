@@ -615,3 +615,6 @@ npm-debug.log
 yarn-error.log
 
 .worktrees/
+
+# Agent 运行时工作区（AGENTS.md/skills 种子 + 会话运行时状态）
+agentWorkspace/

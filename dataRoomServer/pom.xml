@@ -19,7 +19,25 @@
         <dependency>
             <groupId>com.gccloud.gcpaas</groupId>
             <artifactId>dataRoom-script-api</artifactId>
-            <version>${project.version}</version>
+            <!-- script-api 为独立模块（父 POM 是 spring-boot-starter-parent），独立发版，此处固定已安装版本 -->
+            <version>3.5.0</version>
+        </dependency>
+        <!-- AgentScope：对话式大屏设计 Agent -->
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-harness</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-agui-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-extensions-model-dashscope</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-extensions-model-openai</artifactId>
         </dependency>
     </dependencies>
 

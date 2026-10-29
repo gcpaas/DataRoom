@@ -11,10 +11,19 @@ description: 使用 dataroom-mcp-server MCP 工具设计和构建 DataRoom 页�
 
 | 工具 | 用途 | 调用时机 |
 |------|------|----------|
+| `listPages` | 查询页面/大屏列表（含 code、pageType） | 修改已有页面前，确认目标页面编码 |
+| `getPageDesignConfig` | 获取页面当前设计态完整配置 | 修改已有页面前，读取现状配置 |
 | `listComponents` | 获取系统可用组件列表 | 设计前，了解有哪些组件可用 |
 | `getComponentConfig` | 获取指定组件的详细配置字段 | 添加组件前，获取其完整属性定义 |
-| `newPage` | 创建新页面/大屏 | 流程第一步，创建页面实体 |
+| `newPage` | 创建新页面/大屏，返回页面ID与code | 流程第一步，创建页面实体 |
 | `updatePageConfig` | 更新页面配置（组件布局、数据等） | 创建页面后，配置页面内容 |
+
+## 修改已有页面/大屏的流程
+
+1. 调用 `listPages`（可按名称模糊匹配）确认目标页面的 `code` 与 `pageType`；匹配到多个时必须向用户确认。
+2. 调用 `getPageDesignConfig`（pageStatus 固定传 `design`）读取当前完整配置。
+3. 在当前配置基础上做最小必要修改，保持未涉及组件的配置原样不变。
+4. 调用 `updatePageConfig` 保存，pageConfig 必须保持完整结构（含 basicConfig/chartList/globalVariableList/pageType）。
 
 ## 设计流程
 

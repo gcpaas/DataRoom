@@ -6,11 +6,11 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { DrHtmlConfig } from './install.ts'
 import { useDrComponent } from '@/dataRoom/hooks/use-dr-component'
 import type { ComponentExpose } from '@/dataRoom/components/type/ComponentExpose.ts'
-import { buildHtmlSrcdoc, getPlaceholderPaths } from './html-render.ts'
+import { buildHtmlSrcdoc, getPlaceholderPaths, readElementPlusColors, type HtmlThemeColors } from './html-render.ts'
 import { getFieldValue, normalizeRows } from '@/dataRoom/components/_shared/metric-table-utils.ts'
 
 const { chart } = defineProps<{

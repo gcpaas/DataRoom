@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "datasetType")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = JsonDataset.class, name = DatasetType.DIRECTORY_TYPE),
+        @JsonSubTypes.Type(value = DirectorDataset.class, name = DatasetType.DIRECTORY_TYPE),
         @JsonSubTypes.Type(value = JsonDataset.class, name = DatasetType.JSON_TYPE),
         @JsonSubTypes.Type(value = HttpDataset.class, name = DatasetType.HTTP_TYPE),
         @JsonSubTypes.Type(value = RelationalDataset.class, name = DatasetType.SQL_TYPE),

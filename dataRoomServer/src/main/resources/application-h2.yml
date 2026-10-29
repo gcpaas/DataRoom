@@ -17,3 +17,15 @@ spring:
         web-allow-others: false
         # 开启 H2 控制台的详细日志追踪
         trace: false
+dataroom:
+  # Agent接入
+  agent:
+    model:
+      # 模型提供方：dashscope（阿里百炼）、openai（OpenAI 及兼容端点，如 DeepSeek、Kimi）
+      provider: openai
+      # 模型名称
+      model-name: gpt-6-astra
+      # API Key 必须通过环境变量注入，禁止填写真实密钥
+      api-key: ${DATAROOM_AGENT_TOKEN}
+      # OpenAI 兼容端点地址，dashscope 默认留空即可
+      base-url: http://192.168.58.251:30000/v1

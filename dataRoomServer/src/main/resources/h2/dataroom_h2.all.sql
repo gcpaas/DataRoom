@@ -273,3 +273,32 @@ CREATE TABLE IF NOT EXISTS dr_mcp_token (
     CONSTRAINT uk_mcp_token_hash UNIQUE (token_hash)
 );
 CREATE INDEX IF NOT EXISTS idx_mcp_token_owner ON dr_mcp_token(user_id, tenant_code, del_flag);
+
+-- ----------------------------
+-- Agent 对话任务表
+-- H2 本脚本启动时会自动执行：升级启动前必须先备份 dr_agent_task 的结构和全部数据。
+-- 本升级会永久删除 page_code/page_name/page_type 三列页面摘要；保留任务行、其他字段及 transcript 对话记录原文。
+-- 不从 transcript 回填摘要，不删表、不清空数据；失败或需要回滚时停止写入，并从备份恢复结构和数据。
+-- H2 DDL 可能隐式提交，不能依赖事务回滚；未完成备份前不要启动升级后的服务。
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS dr_agent_task
+(
+    id          VARCHAR(50) NOT NULL COMMENT '主键',
+    thread_id   VARCHAR(100) NOT NULL COMMENT 'AG-UI线程ID',
+    title       VARCHAR(100) NOT NULL COMMENT '任务标题',
+    transcript  CLOB         DEFAULT NULL COMMENT '对话记录JSON',
+    create_date TIMESTAMP    DEFAULT NULL COMMENT '创建时间',
+    create_user VARCHAR(50)  DEFAULT NULL COMMENT '创建人',
+    update_date TIMESTAMP    DEFAULT NULL COMMENT '更新时间',
+    update_user VARCHAR(50)  DEFAULT NULL COMMENT '更新人',
+    tenant_code VARCHAR(50)  DEFAULT NULL COMMENT '租户编码',
+    del_flag    VARCHAR(1)   DEFAULT '0' COMMENT '删除标识(0：正常，1：删除)',
+    PRIMARY KEY (id),
+    CONSTRAINT uk_agent_task_thread UNIQUE (thread_id)
+);
+CREATE INDEX IF NOT EXISTS idx_agent_task_user ON dr_agent_task(create_user, del_flag);
+
+-- 旧库升级：逐列幂等删除，支持部分列已缺失及重复执行。
+ALTER TABLE dr_agent_task DROP COLUMN IF EXISTS page_code;
+ALTER TABLE dr_agent_task DROP COLUMN IF EXISTS page_name;
+ALTER TABLE dr_agent_task DROP COLUMN IF EXISTS page_type;

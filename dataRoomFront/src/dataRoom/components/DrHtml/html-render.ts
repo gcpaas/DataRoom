@@ -88,10 +88,41 @@ const protectStyleEndTag = (css: string): string => {
   return css.replace(/<\/style/gi, '<\\/style')
 }
 
+// Only Element Plus color tokens cross the iframe boundary, never arbitrary CSS.
+export const ELEMENT_PLUS_COLOR_NAMES = [
+  '--el-color-white', '--el-color-black',
+  ...['primary', 'success', 'warning', 'danger', 'error', 'info'].flatMap(name => [
+    `--el-color-${name}`,
+    ...[3, 5, 7, 8, 9].map(level => `--el-color-${name}-light-${level}`),
+    `--el-color-${name}-dark-2`,
+  ]),
+  ...['primary', 'regular', 'secondary', 'placeholder', 'disabled'].map(name => `--el-text-color-${name}`),
+  '--el-border-color', ...['light', 'lighter', 'extra-light', 'dark', 'darker'].map(name => `--el-border-color-${name}`),
+  '--el-bg-color', '--el-bg-color-page', '--el-bg-color-overlay',
+  '--el-fill-color', ...['light', 'lighter', 'extra-light', 'dark', 'darker', 'blank'].map(name => `--el-fill-color-${name}`),
+] as const
+
+export type HtmlThemeColors = Readonly<Record<string, string>>
+
+export const readElementPlusColors = (element: Element): HtmlThemeColors => {
+  const styles = element.ownerDocument.defaultView?.getComputedStyle(element)
+  return Object.fromEntries(ELEMENT_PLUS_COLOR_NAMES.map(name => [name, styles?.getPropertyValue(name).trim() ?? '']))
+}
+
+export const serializeElementPlusColors = (colors: HtmlThemeColors): string => {
+  // Only literal colors: reject URLs, CSS escapes, separators and HTML delimiters.
+  const literalColor = /^(?:#[\da-f]{3,8}|(?:rgb|rgba|hsl|hsla)\([\d\s.,%+\-/]+\))$/i
+  return ELEMENT_PLUS_COLOR_NAMES.flatMap(name => {
+    const value = colors[name]?.trim()
+    return value && literalColor.test(value) ? [`${name}:${value};`] : []
+  }).join('')
+}
+
 export const buildHtmlSrcdoc = (
   html: string,
   css: string,
   datasetValue: unknown,
+  themeColors: HtmlThemeColors = {},
 ): HtmlRenderResult => {
   const substituted = substitutePlaceholders(html, datasetValue)
   const sanitizedHtml = sanitizeHtmlFragment(substituted.html)
@@ -104,6 +135,7 @@ export const buildHtmlSrcdoc = (
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    :root { ${serializeElementPlusColors(themeColors)} }
     html, body {
       width: 100%;
       min-height: 100%;
