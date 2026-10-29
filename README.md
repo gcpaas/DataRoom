@@ -1,6 +1,6 @@
 <div align="center">
   <h1>DataRoom</h1>
-  <strong>简单、免费、开源的大屏、页面设计器，支持通过AI对话生成</strong>
+  <strong>简单、免费、开源的大屏、页面设计器，支持通过智能体对话生成</strong>
 </div>
 <p align="center">
     <img alt="stars" src="https://gitee.com/gcpaas/DataRoom/badge/star.svg?theme=dark">
@@ -17,6 +17,7 @@
 * 商业版功能介绍与定价[点击这里](http://gcpaas.gccloud.com/#/pricing)
 
 ## 💯优势
+* 首个开源支持Agent智能体操作大屏、数据集
 * 一站式大屏解决方案，从数据源接入->数据清洗处理->大屏/页面设计->大屏/页面预览->大屏/页面发布上线
 * 支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、万里、ClickHouse、MariaDB、OceanBase、Hive、TDengine、Druid、ElasticSearch、Excel、CSV数据源接入
 * 支持多种数据集制作与接入，如：JSON、HTTP、SQL、Excel/CSV、ElasticSearch、WebSocket，满足常见数据接入需求
