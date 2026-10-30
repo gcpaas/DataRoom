@@ -98,7 +98,9 @@ const handleDeleteTask = async (task: AgentTask) => {
 }
 
 const handleOpenConsole = () => {
-  router.push('/dataRoom/page/index')
+  // 新窗口打开设计器，保留当前 Agent 会话页（Hash 路由下 router.resolve 会生成完整 # 路径）
+  const { href } = router.resolve('/dataRoom/page/index')
+  window.open(href, '_blank')
 }
 
 const isMessageBoxCancel = (error: unknown) => error === 'cancel' || error === 'close'

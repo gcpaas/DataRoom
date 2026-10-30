@@ -16,7 +16,7 @@ const TOOL_DISPLAY_NAMES: Record<string, string> = {
   updateDataset: '更新数据集',
   runDataset: '执行数据集',
   // 平台内置工具
-  load_skill_through_path: '加载技能指南',
+  load_skill_through_path: '加载技能',
 }
 
 /**
