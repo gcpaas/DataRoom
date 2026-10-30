@@ -62,7 +62,7 @@ onMounted(() => {
       <div class="logo" @click="jumpMenu('/')"><img :src="logo" /></div>
       <div class="title">DataRoom设计器</div>
       <div class="menu">
-        <div class="item" :class="{ active: isMenuActive('/dataRoom/agent') }" @click="jumpMenu('/dataRoom/agent')">AI设计</div>
+        <div class="item" :class="{ active: isMenuActive('/dataRoom/agent') }" @click="jumpMenu('/dataRoom/agent')">智能体</div>
         <div class="item" :class="{ active: isMenuActive('/dataRoom/page') }" @click="jumpMenu('/dataRoom/page/index')">页面设计</div>
         <div class="item" :class="{ active: isMenuActive('/dataRoom/resource') }" @click="jumpMenu('/dataRoom/resource/index')">素材库</div>
         <div class="item" :class="{ active: isMenuActive('/dataRoom/dataSource') }" @click="jumpMenu('/dataRoom/dataSource/index')">数据源</div>

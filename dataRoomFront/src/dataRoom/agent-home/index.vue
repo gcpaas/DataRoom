@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { Expand, Fold } from '@element-plus/icons-vue'
 import { v4 as uuidv4 } from 'uuid'
 import TaskSidebar from './components/TaskSidebar.vue'
 import ChatPanel from './components/ChatPanel.vue'
 import { AgentChatClient, extractPageResult } from './chat/AgentChatClient'
-import { agentTaskApi } from './api'
+import { agentApi, agentTaskApi } from './api'
 import { pageApi } from '@/dataRoom/page/api'
 import type { AgentTask, ChatMessage, PageResult } from './types'
 
@@ -14,9 +15,33 @@ const router = useRouter()
 
 const tasks = ref<AgentTask[]>([])
 const sidebarLoading = ref(false)
+const sidebarCollapsed = ref(false)
 const currentThreadId = ref('')
 const messages = ref<ChatMessage[]>([])
 const running = ref(false)
+/** 后端配置的大模型名称，展示在输入框底部 */
+const modelName = ref('')
+
+const loadModelName = async () => {
+  try {
+    const info = await agentApi.model()
+    modelName.value = info.modelName
+  } catch (error) {
+    console.error('加载模型信息失败:', error)
+  }
+}
+
+/**
+ * 头部任务标题：优先匹配任务列表；新建任务首轮运行中尚未建档时，取首条用户消息前 30 字符（与建档标题规则一致）
+ */
+const currentTaskTitle = computed(() => {
+  const task = tasks.value.find((item) => item.threadId === currentThreadId.value)
+  if (task) {
+    return task.title
+  }
+  const firstUserMessage = messages.value.find((message) => message.role === 'user')
+  return firstUserMessage ? firstUserMessage.content.slice(0, 30) : '新任务'
+})
 
 let chatClient: AgentChatClient | null = null
 /** 本次运行各工具调用的入参（toolCallId -> args） */
@@ -33,7 +58,10 @@ const loadTasks = async () => {
   }
 }
 
-onMounted(loadTasks)
+onMounted(() => {
+  loadTasks()
+  loadModelName()
+})
 
 const handleNewTask = () => {
   if (running.value) {
@@ -100,6 +128,12 @@ const handleDeleteTask = async (task: AgentTask) => {
 const handleOpenConsole = () => {
   // 新窗口打开设计器，保留当前 Agent 会话页（Hash 路由下 router.resolve 会生成完整 # 路径）
   const { href } = router.resolve('/dataRoom/page/index')
+  window.open(href, '_blank')
+}
+
+const handleOpenDataset = () => {
+  // 新窗口打开数据集管理页，保留当前 Agent 会话页
+  const { href } = router.resolve('/dataRoom/dataset/index')
   window.open(href, '_blank')
 }
 
@@ -272,17 +306,33 @@ const persistTask = async (threadId: string, firstText: string, isNewTask: boole
 
 <template>
   <div class="agent-home">
-    <TaskSidebar
-      :tasks="tasks"
-      :current-thread-id="currentThreadId"
-      :loading="sidebarLoading"
-      @new-task="handleNewTask"
-      @select="handleSelectTask"
-      @rename="handleRenameTask"
-      @delete="handleDeleteTask"
-      @open-console="handleOpenConsole"
-    />
-    <ChatPanel :messages="messages" :running="running" @send="handleSend" @abort="handleAbort" />
+    <div class="agent-home__sidebar" :class="{ 'agent-home__sidebar--collapsed': sidebarCollapsed }">
+      <TaskSidebar
+        :tasks="tasks"
+        :current-thread-id="currentThreadId"
+        :loading="sidebarLoading"
+        @new-task="handleNewTask"
+        @select="handleSelectTask"
+        @rename="handleRenameTask"
+        @delete="handleDeleteTask"
+        @open-console="handleOpenConsole"
+        @open-dataset="handleOpenDataset"
+      />
+    </div>
+    <div class="agent-home__main">
+      <header class="agent-home__header">
+        <el-icon
+          class="agent-home__collapse-btn"
+          :title="sidebarCollapsed ? '展开侧边栏' : '收起侧边栏'"
+          @click="sidebarCollapsed = !sidebarCollapsed"
+        >
+          <Expand v-if="sidebarCollapsed" />
+          <Fold v-else />
+        </el-icon>
+        <span class="agent-home__title" :title="currentTaskTitle">{{ currentTaskTitle }}</span>
+      </header>
+      <ChatPanel :messages="messages" :running="running" :model-name="modelName" @send="handleSend" @abort="handleAbort" />
+    </div>
   </div>
 </template>
 
@@ -293,5 +343,63 @@ const persistTask = async (threadId: string, firstText: string, isNewTask: boole
   width: 100%;
   overflow: hidden;
   background: var(--el-bg-color-page);
+
+  // 侧边栏折叠动画：外层容器宽度 260px -> 0，内部侧栏保持原宽度被裁剪，形成滑动收起效果
+  &__sidebar {
+    width: 260px;
+    height: 100%;
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: width 0.25s ease;
+
+    &--collapsed {
+      width: 0;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+  }
+
+  // 固定头部：位于滚动区外，消息列表滚动时保持不动
+  &__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 48px;
+    flex-shrink: 0;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--el-border-color-light);
+    background: var(--el-bg-color);
+  }
+
+  &__collapse-btn {
+    font-size: 18px;
+    color: var(--el-text-color-regular);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--el-color-primary);
+    }
+  }
+
+  // 标题绝对居中，不受左侧图标宽度影响；超长省略
+  &__title {
+    position: absolute;
+    left: 50%;
+    max-width: 60%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--el-text-color-primary);
+    line-height: 22px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 </style>

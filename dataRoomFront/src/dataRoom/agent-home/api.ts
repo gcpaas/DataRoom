@@ -2,6 +2,18 @@ import request from '@/dataRoom/utils/request'
 import type { AgentTask } from './types'
 
 /**
+ * Agent 基础信息 API
+ */
+export const agentApi = {
+  /**
+   * 当前配置的大模型信息（提供方与名称，不含敏感配置）
+   */
+  model() {
+    return request.get<{ provider: string; modelName: string }>('/dataRoom/agent/model')
+  },
+}
+
+/**
  * Agent 对话任务 API
  */
 export const agentTaskApi = {
