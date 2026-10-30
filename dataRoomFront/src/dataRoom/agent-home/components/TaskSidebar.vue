@@ -259,8 +259,8 @@ const formatRelativeTime = (value?: string): string => {
 
   // 用户名：主文本色加粗（规范字重上限 600），限宽省略，避免挤压右侧源码入口
   &__user-name {
-    max-width: 120px;
-    font-size: 14px;
+    width: 140px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--el-text-color-primary);
     line-height: 22px;
