@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import type { ScrollbarInstance } from 'element-plus'
-import { Promotion, CircleClose, Plus } from '@element-plus/icons-vue'
+import { Top, CircleCloseFilled, Plus } from '@element-plus/icons-vue'
 import userAvatar from '@/dataRoom/assets/xc.png'
 import type { ChatMessage } from '../types'
 import MessageItem from './MessageItem.vue'
@@ -173,12 +173,18 @@ const shouldShowAgentHeader = (index: number): boolean => {
         <div class="chat-panel__input-actions">
           <!-- 上传文件入口：功能未开放，暂为禁用态 -->
           <el-tooltip content="文件上传，暂不支持" placement="top">
-            <el-icon class="chat-panel__upload"><Plus /></el-icon>
+            <button type="button" class="chat-panel__icon-button chat-panel__upload" aria-label="文件上传，暂不支持" aria-disabled="true">
+              <el-icon><Plus /></el-icon>
+            </button>
           </el-tooltip>
           <div class="chat-panel__actions-right">
             <span v-if="modelName" class="chat-panel__model-name">{{ modelName }}</span>
-            <el-button v-if="running" circle type="danger" :icon="CircleClose" title="停止" @click="emit('abort')" />
-            <el-button v-else circle type="primary" :icon="Promotion" :disabled="!inputText.trim()" title="发送" @click="handleSend" />
+            <button v-if="running" type="button" class="chat-panel__icon-button chat-panel__stop" title="停止" aria-label="停止" @click="emit('abort')">
+              <el-icon><CircleCloseFilled /></el-icon>
+            </button>
+            <button v-else type="button" class="chat-panel__icon-button chat-panel__send" :disabled="!inputText.trim()" title="发送" aria-label="发送" @click="handleSend">
+              <el-icon><Top /></el-icon>
+            </button>
           </div>
         </div>
       </div>
@@ -362,11 +368,54 @@ const shouldShowAgentHeader = (index: number): boolean => {
     padding: 4px 16px 10px;
   }
 
-  // 上传文件入口：暂未开放，禁用态展示
-  &__upload {
+  // 自定义操作按钮，不覆盖 Element Plus 内部样式
+  &__icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--el-color-black);
     font-size: 18px;
-    color: var(--el-text-color-disabled);
+    letter-spacing: 0;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+
+    &:focus-visible {
+      outline: 2px solid var(--el-color-primary);
+      outline-offset: 2px;
+    }
+  }
+
+  // 上传功能暂未开放，保留提示与悬停反馈
+  &__upload {
+    color: var(--el-text-color-primary);
     cursor: not-allowed;
+
+    &:hover {
+      background: var(--el-fill-color);
+    }
+  }
+
+  &__send,
+  &__stop {
+    background: var(--el-fill-color);
+  }
+
+  &__send {
+    &:not(:disabled) {
+      background: var(--el-color-primary);
+      color: var(--el-color-white);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 
   &__actions-right {
@@ -376,9 +425,17 @@ const shouldShowAgentHeader = (index: number): boolean => {
   }
 
   &__model-name {
+    padding: 5px 8px;
+    border-radius: 8px;
     font-size: 14px;
-    color: var(--el-text-color-secondary);
+    color: var(--el-text-color-primary);
     line-height: 22px;
+    letter-spacing: 0;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background: var(--el-fill-color);
+    }
   }
 }
 </style>

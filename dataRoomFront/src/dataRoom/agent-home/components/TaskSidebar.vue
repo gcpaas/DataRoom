@@ -34,16 +34,30 @@ const DAY = 24 * HOUR
 
 const router = useRouter()
 const username = ref('')
+const userMenuVisible = ref(false)
 
 interface CurrentUser {
   realName?: string
   username?: string
 }
 
+const externalLinks: Record<string, string> = {
+  repository: 'https://gitee.com/gcpaas/DataRoom',
+  manual: 'https://www.yuque.com/gc-starter/dataroom-plus/index',
+  feedback: 'https://gitee.com/gcpaas/DataRoom/issues',
+}
+
 /**
- * 底部用户区下拉命令：与右上角用户名下拉行为一致（个人信息 / 退出登录）
+ * 底部用户区下拉命令：外部链接新窗口打开，内部个人信息页和退出登录保留原有行为。
  */
 const handleUserCommand = async (command: string) => {
+  userMenuVisible.value = false
+  const externalUrl = externalLinks[command]
+  if (externalUrl) {
+    window.open(externalUrl, '_blank', 'noopener,noreferrer')
+    return
+  }
+
   if (command === 'logout') {
     const logoutTarget = resolveLogoutTarget(getCasConfig())
     try {
@@ -61,7 +75,7 @@ const handleUserCommand = async (command: string) => {
   } else if (command === 'profile') {
     // 新窗口打开个人信息页，保留当前 Agent 会话页（与"设计器/数据集"菜单行为一致）
     const { href } = router.resolve('/dataRoom/console/profile')
-    window.open(href, '_blank')
+    window.open(href, '_blank', 'noopener,noreferrer')
   }
 }
 
@@ -149,25 +163,38 @@ const formatRelativeTime = (value?: string): string => {
     </div>
 
     <div class="task-sidebar__user">
-      <el-dropdown trigger="click" placement="top-start" @command="handleUserCommand">
-        <div class="task-sidebar__user-trigger">
-          <img :src="userAvatar" class="task-sidebar__user-avatar" alt="用户头像" />
-          <span class="task-sidebar__user-name">{{ username }}</span>
-        </div>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item command="profile">个人信息</el-dropdown-item>
-            <el-dropdown-item command="logout">退出登录</el-dropdown-item>
-          </el-dropdown-menu>
+      <!-- Dropdown 内置缩放过渡不可配置，使用 Popover 的公开属性关闭动画与等待。 -->
+      <el-popover
+        v-model:visible="userMenuVisible"
+        trigger="click"
+        placement="top-start"
+        transition=""
+        :show-after="0"
+        :hide-after="0"
+        :persistent="true"
+        :width="220"
+      >
+        <template #reference>
+          <div
+            class="task-sidebar__user-trigger"
+            role="button"
+            tabindex="0"
+            aria-label="用户菜单"
+            :aria-expanded="userMenuVisible"
+            @keydown.esc="userMenuVisible = false"
+          >
+            <img :src="userAvatar" class="task-sidebar__user-avatar" alt="用户头像" />
+            <span class="task-sidebar__user-name">{{ username }}</span>
+          </div>
         </template>
-      </el-dropdown>
-      <!-- 源码入口：独立于用户下拉，右对齐，新窗口打开 Gitee 仓库 -->
-      <a
-        class="task-sidebar__source"
-        href="https://gitee.com/gcpaas/DataRoom"
-        target="_blank"
-        rel="noopener noreferrer"
-      >源码</a>
+        <div class="user-actions" role="group" aria-label="用户操作" @keydown.esc="userMenuVisible = false">
+          <button type="button" class="user-actions__item" @click="handleUserCommand('repository')">开源仓库</button>
+          <button type="button" class="user-actions__item" @click="handleUserCommand('manual')">帮助手册</button>
+          <button type="button" class="user-actions__item" @click="handleUserCommand('feedback')">意见反馈</button>
+          <button type="button" class="user-actions__item" @click="handleUserCommand('profile')">个人信息</button>
+          <button type="button" class="user-actions__item" @click="handleUserCommand('logout')">退出登录</button>
+        </div>
+      </el-popover>
     </div>
   </aside>
 </template>
@@ -257,7 +284,7 @@ const formatRelativeTime = (value?: string): string => {
     border: 1px solid var(--el-border-color-light);
   }
 
-  // 用户名：主文本色加粗（规范字重上限 600），限宽省略，避免挤压右侧源码入口
+  // 用户名：主文本色加粗（规范字重上限 600），限宽省略
   &__user-name {
     width: 140px;
     font-size: 12px;
@@ -269,21 +296,35 @@ const formatRelativeTime = (value?: string): string => {
     text-overflow: ellipsis;
   }
 
-  // 源码入口：右对齐弱显示（次级文本色），hover 时主题色强调
-  &__source {
-    margin-left: auto;
-    flex-shrink: 0;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    line-height: 22px;
-    color: var(--el-text-color-secondary);
-    text-decoration: none;
-    cursor: pointer;
-    transition: color 0.2s ease;
+}
 
-    &:hover {
-      color: var(--el-color-primary);
+.user-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 2px 0;
+
+  &__item {
+    display: block;
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 4px;
+    background: var(--el-bg-color-overlay);
+    color: var(--el-text-color-primary);
+    font: inherit;
+    font-size: 13px;
+    line-height: 22px;
+    letter-spacing: 0;
+    text-align: left;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      outline: none;
+      background: var(--el-fill-color);
     }
   }
 }
