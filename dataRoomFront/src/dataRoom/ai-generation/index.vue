@@ -144,6 +144,7 @@ const copyText = async (text: string) => {
 </script>
 
 <template>
+  <el-scrollbar height="100%" :view-style="{ minHeight: '100%', display: 'flex', flexDirection: 'column' }">
   <div class="dr-ai-generation">
     <header class="dr-ai-generation__header">
       <div>
@@ -193,7 +194,9 @@ const copyText = async (text: string) => {
         </div>
         <el-button :icon="CopyDocument" @click="copyText(action.content)">复制</el-button>
       </div>
-      <pre class="dr-ai-generation__code"><code>{{ action.content }}</code></pre>
+      <el-scrollbar class="dr-ai-generation__code-scrollbar">
+        <pre class="dr-ai-generation__code"><code>{{ action.content }}</code></pre>
+      </el-scrollbar>
     </section>
 
     <el-dialog
@@ -241,7 +244,9 @@ const copyText = async (text: string) => {
           </div>
           <div class="dr-ai-generation__created-field">
             <div id="created-mcp-config-label" class="dr-ai-generation__field-label">MCP Server 配置</div>
-            <pre aria-labelledby="created-mcp-config-label" class="dr-ai-generation__code"><code>{{ formattedMcpConfig }}</code></pre>
+            <el-scrollbar class="dr-ai-generation__code-scrollbar">
+              <pre aria-labelledby="created-mcp-config-label" class="dr-ai-generation__code"><code>{{ formattedMcpConfig }}</code></pre>
+            </el-scrollbar>
           </div>
         </div>
       </template>
@@ -258,11 +263,13 @@ const copyText = async (text: string) => {
       </template>
     </el-dialog>
   </div>
+  </el-scrollbar>
 </template>
 
 <style scoped lang="scss">
 .dr-ai-generation {
-  min-height: 100%;
+  flex: 1;
+  min-width: 0;
   box-sizing: border-box;
   background: var(--el-fill-color-blank);
   border: 1px solid var(--el-border-color);
@@ -356,9 +363,12 @@ const copyText = async (text: string) => {
     letter-spacing: 0;
   }
 
+  &__code-scrollbar {
+    width: 100%;
+  }
+
   &__code {
     margin: 0;
-    overflow: auto;
     padding: 16px;
     background: var(--el-fill-color-light);
     border: 1px solid var(--el-border-color-lighter);

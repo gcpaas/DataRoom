@@ -6,6 +6,7 @@ import {datasetApi, type DatasetEntity, type DatasetTreeNode} from './api'
 import {dataSourceApi, type DataSourceEntity} from '../data-source/api'
 import { isStreamingDatasetType } from './streaming-dataset'
 import { fieldTypeLabel } from './field-type'
+import directoryIcon from './assets/images/directory.svg'
 
 // 定义 props
 const props = defineProps<{
@@ -702,7 +703,7 @@ const handleTestAndSave = async () => {
 
               <div class="node-content">
                 <el-icon v-if="data.datasetType === 'directory'" class="node-icon">
-                  <Folder/>
+                  <img :src="directoryIcon" width="14" height="14" alt="" aria-hidden="true" />
                 </el-icon>
                 <el-icon v-else class="node-icon">
                   <Document/>
