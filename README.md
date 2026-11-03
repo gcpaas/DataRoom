@@ -110,7 +110,7 @@
 ![AI生成接入.png](doc/image/AI%E7%94%9F%E6%88%90%E6%8E%A5%E5%85%A5.png)
 
 ### MCP协议
-> 支持对外提供MCP协议，实现与AI工具的对接
+> 支持对外提供MCP协议，实现与AI智能体工具对接
 
 ![MCP.png](doc/image/MCP.png)
 
