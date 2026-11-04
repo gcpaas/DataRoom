@@ -27,7 +27,6 @@ export type ValueFormat =
   | 'thousand'
   | 'currency'
   | 'date'
-export type SortOrder = 'ascending' | 'descending' | 'none' | ''
 
 /**
  * 条件样式使用的比较操作符。
@@ -47,20 +46,11 @@ export type ComparisonTrend = 'up' | 'down' | 'flat' | 'empty'
 export type AggregationMethod = 'sum' | 'avg' | 'min' | 'max' | 'count'
 
 /**
- * 表格列的公共配置结构。
- *
- * `DrDataTable` 使用该结构描述字段、标题、宽度、对齐方式、固定列位置、
- * 显隐状态和默认格式化方式。
+ * 表格列的公共配置结构，仅描述字段和标题。
  */
 export interface TableColumnConfig {
   field: string
   label: string
-  width?: number
-  minWidth?: number
-  align?: 'left' | 'center' | 'right'
-  fixed?: '' | 'left' | 'right'
-  visible?: boolean
-  format?: ValueFormat
 }
 
 /**
@@ -455,60 +445,11 @@ export const resolveComparison = (
 /**
  * 根据数据行自动生成表格列配置。
  *
- * 如果提供 `displayFields`，只按该字段顺序生成列；否则读取首行对象的全部字段。
- * 自动列默认可见、左对齐、最小宽 100，并按文本格式展示。
+ * 如果提供 `displayFields`，按该字段顺序生成列；否则读取首行对象的全部字段。
  */
 export const buildColumnsFromRows = (rows: DatasetRow[], displayFields: string[] = []): TableColumnConfig[] => {
   const fields = displayFields.length > 0 ? displayFields : Object.keys(rows[0] ?? {})
-  return fields.map(field => ({
-    field,
-    label: field,
-    minWidth: 100,
-    align: 'left',
-    fixed: '',
-    visible: true,
-    format: 'text',
-  }))
-}
-
-/**
- * 在前端按关键字过滤表格行。
- *
- * `fields` 为空时搜索整行所有字段；否则只搜索指定字段。
- * 搜索时统一转成小写字符串，适用于表格组件的客户端搜索模式。
- */
-export const filterRows = (rows: DatasetRow[], keyword: string, fields: string[] = []): DatasetRow[] => {
-  const normalizedKeyword = keyword.trim().toLowerCase()
-  if (!normalizedKeyword) {
-    return rows
-  }
-  return rows.filter(row => {
-    const keys = fields.length > 0 ? fields : Object.keys(row)
-    return keys.some(field => String(getFieldValue(row, field) ?? '').toLowerCase().includes(normalizedKeyword))
-  })
-}
-
-/**
- * 在前端按字段排序表格行。
- *
- * 数值字段优先按数值大小排序；无法同时转成数字时按字符串排序。
- * 未指定字段、排序方向为空或方向为 `none` 时返回原数组引用，不额外复制。
- */
-export const sortRows = (rows: DatasetRow[], field: string, order: SortOrder): DatasetRow[] => {
-  if (!field || !order || order === 'none') {
-    return rows
-  }
-  return [...rows].sort((a, b) => {
-    const aValue = getFieldValue(a, field)
-    const bValue = getFieldValue(b, field)
-    const aNumber = toFiniteNumber(aValue)
-    const bNumber = toFiniteNumber(bValue)
-    const diff =
-      aNumber !== undefined && bNumber !== undefined
-        ? aNumber - bNumber
-        : String(aValue ?? '').localeCompare(String(bValue ?? ''))
-    return order === 'ascending' ? diff : -diff
-  })
+  return fields.map(field => ({ field, label: field }))
 }
 
 /**
@@ -639,15 +580,4 @@ export const matchConditionalRule = (value: unknown, rule: ConditionalRule): boo
     default:
       return false
   }
-}
-
-/**
- * 按页码和每页条数截取当前页数据。
- *
- * 页码和页大小都会做最小值保护，避免 0 或负数导致 slice 下标异常。
- */
-export const getPaginationItems = <T>(rows: T[], page: number, pageSize: number): T[] => {
-  const safePageSize = Math.max(pageSize, 1)
-  const safePage = Math.max(page, 1)
-  return rows.slice((safePage - 1) * safePageSize, safePage * safePageSize)
 }

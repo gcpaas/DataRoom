@@ -4,7 +4,7 @@ import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
 import type { ChartMockDataset } from '@/dataRoom/components/type/ChartMockDataset.ts'
-import type { TableColumnConfig, ValueFormat } from '@/dataRoom/components/_shared/metric-table-utils.ts'
+import type { ValueFormat } from '@/dataRoom/components/_shared/metric-table-utils.ts'
 
 const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
@@ -18,9 +18,6 @@ export interface DrDataTablePropsInterface {
     borderRadius: number
   }
   table: {
-    autoColumns: boolean
-    columns: TableColumnConfig[]
-    rowKey: string
     size: 'large' | 'default' | 'small'
     border: boolean
     stripe: boolean
@@ -39,7 +36,8 @@ export interface DrDataTablePropsInterface {
   rowStyle: {
     height: number
     backgroundColor: string
-    stripeBackgroundColor: string
+    oddBackgroundColor: string
+    evenBackgroundColor: string
     hoverBackgroundColor: string
     borderColor: string
   }
@@ -51,24 +49,17 @@ export interface DrDataTablePropsInterface {
     overflow: 'ellipsis' | 'wrap' | 'clip'
     showTooltip: boolean
   }
-  search: {
-    show: boolean
-    placeholder: string
-    fields: string[]
-    debounce: number
-  }
-  sort: {
-    enabled: boolean
-    defaultField: string
-    defaultOrder: 'ascending' | 'descending' | 'none'
-  }
-  pagination: {
-    show: boolean
-    pageSize: number
-    pageSizes: number[]
-    layout: 'prev, pager, next' | 'total, prev, pager, next' | 'sizes, prev, pager, next'
-    position: 'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topRight'
-  }
+  /** 按实际数据字段覆盖列样式，不参与列生成。元素包含 field（必填字段名）、label（表头名称）、width（列宽px，省略则自适应）、headerFontSize/headerColor（表头字号/颜色）、fontSize/color（正文字号/颜色）、showTooltip（溢出提示布尔值）。可选属性省略时继承全表设置，提示仅在省略模式生效。 */
+  columnStyles?: Array<{
+    field: string
+    label?: string
+    width?: number
+    headerFontSize?: number
+    headerColor?: string
+    fontSize?: number
+    color?: string
+    showTooltip?: boolean
+  }>
   formatting: {
     defaultNumberFormat: ValueFormat
     dateFormat: string
@@ -84,19 +75,12 @@ const getInstance = (): DrDataTableConfig => {
     {
       global: {
         padding: [0, 0, 0, 0],
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-        borderColor: 'rgba(0, 0, 0, 0)',
+        backgroundColor: 'transparent',
+        borderColor: 'var(--el-border-color)',
         borderWidth: 0,
         borderRadius: 6,
       },
       table: {
-        autoColumns: true,
-        columns: [
-          { field: 'name', label: '名称', width: 160, align: 'left', format: 'text', visible: true },
-          { field: 'value', label: '数值', width: 120, align: 'right', format: 'thousand', visible: true },
-          { field: 'status', label: '状态', width: 120, align: 'center', format: 'text', visible: true },
-        ],
-        rowKey: '',
         size: 'default',
         border: false,
         stripe: true,
@@ -106,45 +90,29 @@ const getInstance = (): DrDataTableConfig => {
       },
       headerStyle: {
         height: 42,
-        backgroundColor: '#f5f7fa',
-        color: '#303133',
+        backgroundColor: 'transparent',
+        color: 'var(--el-text-color-regular)',
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'left',
       },
       rowStyle: {
         height: 40,
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-        stripeBackgroundColor: '#fafafa',
-        hoverBackgroundColor: '#ecf5ff',
-        borderColor: '#ebeef5',
+        backgroundColor: 'transparent',
+        oddBackgroundColor: 'transparent',
+        evenBackgroundColor: 'transparent',
+        hoverBackgroundColor: 'var(--el-fill-color-light)',
+        borderColor: 'var(--el-border-color-lighter)',
       },
       cellStyle: {
-        color: '#606266',
+        color: 'var(--el-text-color-regular)',
         fontSize: 14,
         fontWeight: 'normal',
         padding: [8, 12, 8, 12],
         overflow: 'ellipsis',
         showTooltip: true,
       },
-      search: {
-        show: false,
-        placeholder: '搜索',
-        fields: [],
-        debounce: 200,
-      },
-      sort: {
-        enabled: true,
-        defaultField: '',
-        defaultOrder: 'none',
-      },
-      pagination: {
-        show: true,
-        pageSize: 10,
-        pageSizes: [10, 20, 50, 100],
-        layout: 'prev, pager, next',
-        position: 'bottomRight',
-      },
+      columnStyles: [],
       formatting: {
         defaultNumberFormat: 'value',
         dateFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -182,24 +150,6 @@ const behaviors: Behavior[] = [
       { name: 'value', desc: '当前单元格值', type: 'string | number | boolean | null' },
     ],
   },
-  {
-    name: '分页变化',
-    desc: '页码或每页行数变化时触发',
-    method: 'pageChange',
-    paramsList: [
-      { name: 'page', desc: '当前页码', type: 'number' },
-      { name: 'pageSize', desc: '每页行数', type: 'number' },
-    ],
-  },
-  {
-    name: '排序变化',
-    desc: '列排序变化时触发',
-    method: 'sortChange',
-    paramsList: [
-      { name: 'field', desc: '排序字段', type: 'string' },
-      { name: 'order', desc: '排序方向', type: 'string' },
-    ],
-  },
 ]
 
 const datasetFields: ChartDatasetField[] = [
@@ -209,25 +159,23 @@ const datasetFields: ChartDatasetField[] = [
     required: false,
     multiple: true,
   },
-  {
-    name: 'rowKeyField',
-    desc: '行唯一键字段',
-    required: false,
-    multiple: false,
-  },
 ]
 
 const mockDataset: ChartMockDataset = {
   dataset: [
-    { id: 'A001', name: '政务服务', value: 320, status: '正常' },
-    { id: 'A002', name: '城市治理', value: 245, status: '正常' },
-    { id: 'A003', name: '民生保障', value: 186, status: '关注' },
+    { 产品名称: '手机', 分类: '数码', 销售额: 328000, 环比值: '+12.5%', 同比值: '+23.8%' },
+    { 产品名称: '笔记本电脑', 分类: '数码', 销售额: 256000, 环比值: '+8.2%', 同比值: '+18.6%' },
+    { 产品名称: '无线耳机', 分类: '数码', 销售额: 86000, 环比值: '-3.1%', 同比值: '+15.2%' },
+    { 产品名称: '空调', 分类: '家电', 销售额: 195000, 环比值: '+16.8%', 同比值: '+28.5%' },
+    { 产品名称: '咖啡机', 分类: '家电', 销售额: 72000, 环比值: '+5.6%', 同比值: '-2.4%' },
+    { 产品名称: '运动鞋', 分类: '服饰', 销售额: 108000, 环比值: '-1.8%', 同比值: '+9.7%' },
   ],
   fields: [
-    { name: 'displayFields', bindName: 'name' },
-    { name: 'displayFields', bindName: 'value' },
-    { name: 'displayFields', bindName: 'status' },
-    { name: 'rowKeyField', bindName: 'id' },
+    { name: 'displayFields', bindName: '产品名称' },
+    { name: 'displayFields', bindName: '分类' },
+    { name: 'displayFields', bindName: '销售额' },
+    { name: 'displayFields', bindName: '环比值' },
+    { name: 'displayFields', bindName: '同比值' },
   ],
 }
 

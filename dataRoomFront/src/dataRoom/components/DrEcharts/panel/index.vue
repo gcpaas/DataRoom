@@ -66,14 +66,15 @@ const applyEditor = () => {
 
     <el-dialog v-model="dialogVisible" title="编辑 Option" width="80%" :close-on-click-modal="false" append-to-body>
       <div class="dr-echarts-config-panel__editor-layout">
-        <Codemirror
-          v-model="draftOption"
-          class="dr-echarts-config-panel__editor"
-          :extensions="optionExtensions"
-          :indent-with-tab="true"
-          :tab-size="2"
-          placeholder="请编写 ECharts option 代码，最后 return option 对象"
-        />
+        <div class="dr-echarts-config-panel__editor">
+          <Codemirror
+            v-model="draftOption"
+            :extensions="optionExtensions"
+            :indent-with-tab="true"
+            :tab-size="2"
+            placeholder="请编写 ECharts option 代码，最后 return option 对象"
+          />
+        </div>
         <div class="dr-echarts-config-panel__help">
           <div class="dr-echarts-config-panel__help-title">帮助说明</div>
           <ul class="dr-echarts-config-panel__help-list">
@@ -140,16 +141,16 @@ const applyEditor = () => {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  // 内容总高必须落在对话框内：对话框默认外边距为 15vh 顶部 + 50px 底部，
-  // 再扣除标题栏、页脚和内容区内边距，内容高度按 calc(80vh - 220px) 预留，
-  // 保证代码编辑器和帮助说明始终完整显示在对话框内部
+  // 为对话框标题、页脚及外边距预留空间，不让代码长度影响内容区高度。
   height: calc(80vh - 220px);
-  min-height: 280px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .dr-echarts-config-panel__editor {
   flex: 1 1 auto;
   min-height: 0;
+  box-sizing: border-box;
   border: 1px solid var(--el-border-color-light);
   border-radius: 8px;
   overflow: hidden;
@@ -168,8 +169,10 @@ const applyEditor = () => {
 
 .dr-echarts-config-panel__help {
   flex: 0 0 auto;
-  max-height: 150px;
+  max-height: min(150px, 40%);
+  box-sizing: border-box;
   overflow-y: auto;
+  overflow-wrap: anywhere;
   padding: 12px;
   border: 1px solid var(--el-border-color-light);
   border-radius: 8px;

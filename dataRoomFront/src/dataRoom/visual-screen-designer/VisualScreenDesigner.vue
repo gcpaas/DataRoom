@@ -71,11 +71,7 @@ import {
 } from './viewport'
 import { getVisualScreenMoveableGuidelines, normalizeVisualScreenRulerConfig, RULER_SIZE_PX, type VisualScreenRulerConfig } from './ruler'
 import { handleSaveBeforeLeaveAction, type SaveBeforeLeaveAction } from '@/dataRoom/designer/utils/save-before-leave'
-import {
-  createDesignerHistoryAutoBackupController,
-  createDesignerHistoryHash,
-  hasUnsavedChanges,
-} from '@/dataRoom/designer/utils/designer-history-backup.ts'
+import { createDesignerHistoryAutoBackupController, createDesignerHistoryHash, hasUnsavedChanges } from '@/dataRoom/designer/utils/designer-history-backup.ts'
 import { PAGE_HISTORY_REMARKS } from '@/dataRoom/designer/utils/page-history-remark.ts'
 import {
   applySavedDesignerHistoryState,
@@ -85,17 +81,9 @@ import {
   createPageHistoryBackupPayload,
   savePageWithHistoryBackup,
 } from '@/dataRoom/designer/utils/designer-history-save.ts'
-import {
-  captureAndUpdatePageThumbnail,
-  getPageThumbnailFailureMessage,
-  type PageThumbnailSaveFailure,
-} from '@/dataRoom/designer/utils/page-thumbnail-save.ts'
+import { captureAndUpdatePageThumbnail, getPageThumbnailFailureMessage, type PageThumbnailSaveFailure } from '@/dataRoom/designer/utils/page-thumbnail-save.ts'
 import { createVisualScreenPageConfigPayload, normalizeVisualScreenIframeInteractionEnabled } from './visual-screen-designer-history.ts'
-import {
-  getVisualScreenAlignmentItems,
-  getVisualScreenAlignmentLabel,
-  type VisualScreenAlignmentCommand,
-} from './alignment'
+import { getVisualScreenAlignmentItems, getVisualScreenAlignmentLabel, type VisualScreenAlignmentCommand } from './alignment'
 import VisualScreenChartTree from './components/VisualScreenChartTree.vue'
 import FloatingSelectionToolbar from './components/FloatingSelectionToolbar.vue'
 import {
@@ -286,7 +274,12 @@ const selectedCharts = computed(() => {
   const chartById = new Map(currentScopeCharts.value.map((chart) => [chart.id, chart]))
   return selectedChartIds.value.map((chartId) => chartById.get(chartId)).filter((chart): chart is ChartConfig<unknown> => Boolean(chart))
 })
-const renderableSelectedChartIds = computed(() => getRenderableSelectedChartIds(selectedChartIds.value, moveableTargets.value.map((target) => target.dataset.drId || '')))
+const renderableSelectedChartIds = computed(() =>
+  getRenderableSelectedChartIds(
+    selectedChartIds.value,
+    moveableTargets.value.map((target) => target.dataset.drId || ''),
+  ),
+)
 const renderableSelectedCharts = computed(() => {
   const chartById = new Map(selectedCharts.value.map((chart) => [chart.id, chart]))
   return renderableSelectedChartIds.value.map((chartId) => chartById.get(chartId)).filter((chart): chart is ChartConfig<unknown> => Boolean(chart))
@@ -353,9 +346,7 @@ const floatingToolbarSelectionBounds = computed<FloatingSelectionToolbarBounds |
   if (!viewportRect) {
     return null
   }
-  const selectedRects = moveableTargets.value
-    .filter((target): target is HTMLElement => Boolean(target))
-    .map((target) => target.getBoundingClientRect())
+  const selectedRects = moveableTargets.value.filter((target): target is HTMLElement => Boolean(target)).map((target) => target.getBoundingClientRect())
   if (selectedRects.length === 0) {
     return null
   }
@@ -525,11 +516,13 @@ const isFloatingToolbarEventTarget = (target: EventTarget | null) => {
 }
 
 const getChartIdFromEventPathByParent = (event: MouseEvent, parentId: string) => {
-  return event
-    .composedPath()
-    .filter((target): target is HTMLElement => target instanceof HTMLElement && target.classList.contains('chart-wrapper'))
-    .find((target) => target.getAttribute('data-dr-parent-id') === parentId)
-    ?.getAttribute('data-dr-id') || null
+  return (
+    event
+      .composedPath()
+      .filter((target): target is HTMLElement => target instanceof HTMLElement && target.classList.contains('chart-wrapper'))
+      .find((target) => target.getAttribute('data-dr-parent-id') === parentId)
+      ?.getAttribute('data-dr-id') || null
+  )
 }
 
 const commitChartAdd = (chart: ChartConfig<unknown>, label: string = '新增组件') => {
@@ -682,17 +675,7 @@ const onGroupSelectedCharts = () => {
   normalizeEditingScopeGroupBounds()
   const after = currentScopeCharts.value.map((chart) => cloneChartConfig(chart))
   const groupBoundsAfter = captureEditingScopeGroupLayoutState()
-  editorHistory.record(
-    createReplaceChartChildrenHistoryEntry(
-      '组合',
-      'visual-screen-designer',
-      currentScopeParentRef.value,
-      before,
-      after,
-      groupBoundsBefore,
-      groupBoundsAfter,
-    ),
-  )
+  editorHistory.record(createReplaceChartChildrenHistoryEntry('组合', 'visual-screen-designer', currentScopeParentRef.value, before, after, groupBoundsBefore, groupBoundsAfter))
   setSelectedCharts(result.selectedIds)
   syncDesignerSelectionOverlay()
 }
@@ -715,15 +698,7 @@ const onUngroupSelectedChart = () => {
   const after = currentScopeCharts.value.map((chart) => cloneChartConfig(chart))
   const groupBoundsAfter = captureEditingScopeGroupLayoutState()
   editorHistory.record(
-    createReplaceChartChildrenHistoryEntry(
-      '取消组合',
-      'visual-screen-designer',
-      currentScopeParentRef.value,
-      before,
-      after,
-      groupBoundsBefore,
-      groupBoundsAfter,
-    ),
+    createReplaceChartChildrenHistoryEntry('取消组合', 'visual-screen-designer', currentScopeParentRef.value, before, after, groupBoundsBefore, groupBoundsAfter),
   )
   setSelectedCharts(result.selectedIds)
   syncDesignerSelectionOverlay()
@@ -1005,14 +980,12 @@ const onPreview = () => {
   if (!payload) {
     return
   }
-  pageApi
-    .updatePageConfig4Preview(payload)
-    .then(() => {
-      const routeData = router.resolve({
-        path: `/dataRoom/visualScreenPreview/preview/${pageStageEntity.value!.pageCode}`,
-      })
-      window.open(routeData.href, '_blank')
+  pageApi.updatePageConfig4Preview(payload).then(() => {
+    const routeData = router.resolve({
+      path: `/dataRoom/visualScreenPreview/preview/${pageStageEntity.value!.pageCode}`,
     })
+    window.open(routeData.href, '_blank')
+  })
 }
 
 const getPageConfigPayload = (showLoadError: boolean = true) => {
@@ -2087,11 +2060,7 @@ onBeforeUnmount(() => {
                     </div>
                     <template #dropdown>
                       <el-dropdown-menu>
-                        <el-dropdown-item
-                          v-for="item in alignmentMenuItems"
-                          :key="item.command"
-                          @click="onAlignmentCommand(item.command)"
-                        >
+                        <el-dropdown-item v-for="item in alignmentMenuItems" :key="item.command" @click="onAlignmentCommand(item.command)">
                           {{ item.label }}
                         </el-dropdown-item>
                       </el-dropdown-menu>
@@ -2105,19 +2074,13 @@ onBeforeUnmount(() => {
           </el-dropdown>
         </div>
         <div class="header-action">
-          <el-button size="small" :disabled="!editorHistory.canUndo" aria-label="回退" title="回退" @click="onUndo">
-            撤销
-          </el-button>
+          <el-button size="small" :disabled="!editorHistory.canUndo" aria-label="回退" title="回退" @click="onUndo"> 撤销 </el-button>
         </div>
         <div class="header-action">
-          <el-button size="small" :disabled="!editorHistory.canRedo" aria-label="重做" title="重做" @click="onRedo">
-            恢复
-          </el-button>
+          <el-button size="small" :disabled="!editorHistory.canRedo" aria-label="重做" title="重做" @click="onRedo"> 恢复 </el-button>
         </div>
         <div class="header-action">
-          <el-button size="small" aria-label="查看快捷键" title="查看快捷键" @click="keyboardShortcutDialogVisible = true">
-            快捷键
-          </el-button>
+          <el-button size="small" aria-label="查看快捷键" title="查看快捷键" @click="keyboardShortcutDialogVisible = true"> 快捷键 </el-button>
         </div>
       </div>
       <div class="header-actions header-actions--secondary">
@@ -2483,7 +2446,7 @@ onBeforeUnmount(() => {
       min-height: 0;
       height: calc(100vh - 48px);
       box-shadow: inset -1px 0 0 0 var(--el-border-color-light);
-
+      border-right: 1px solid var(--el-border-color-light);
       & .panel-header {
         background-color: var(--el-fill-color-light);
         box-sizing: border-box;

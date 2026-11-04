@@ -118,10 +118,24 @@
 > 支持通过配置的方式与若依框架完成单点登录，可扩展其他框架单点登录
 
 ## docker体验
-```shell
-# 访问地址、用户名、密码等参考用户手册说明，仅支持 linux/arm64 系统与架构
+访问地址、用户名、密码等参考用户手册说明，仅支持 linux/arm64 架构
 
-docker run -d --name dataroom -p 8081:8081 gcpaas/dataroom:latest 
+#### 方式1: 基础模式
+支持MCP对接但不支持内置Agent
+```shell
+docker run -d --name dataroom -p 8081:8081 gcpaas/dataroom:latest
+```
+#### 方式2: Agent模式
+支持MCP对接，且启动内置Agent能力
+```shell
+docker run -d \
+  --name dataroom \
+  -p 8081:8081 \
+  -e DATAROOM_MODEL_PROVIDER=模型提供商,可选值: openai/dashscope \
+  -e DATAROOM_MODEL_NAME=模型名称,如: gpt-6-astra \
+  -e DATAROOM_MODEL_TOKEN=模型令牌 \
+  -e DATAROOM_MODEL_URL=模型地址,如:https://api.openai.com/v1 \
+  gcpaas/dataroom:latest
 ```
 
 ## 用户手册

@@ -1,6 +1,6 @@
 ---
 name: dataroom-page
-description: 使用 dataroom-mcp-server MCP 工具设计和构建 DataRoom 页面或数据大屏的完整流程指南。当用户要求创建页面、设计大屏、配置可视化组件、搭建数据看板、或操作 DataRoom 平台页面时触发。也适用于用户提到"新建页面"、"大屏设计"、"添加图表"、"页面配置"、"DataRoom"等场景。
+description: 使用 dataroom-mcp-server MCP 工具设计和构建 DataRoom 页面或数据大屏的完整流程指南。当用户要求创建页面、设计大屏、配置可视化组件、搭建数据看板、或操作 DataRoom 平台页面时触发。也适用于用户提到"新建页面"、"大屏设计"、"添加图表"、"页面配置"、"数据集配置"、"DataRoom"等场景。
 ---
 
 # DataRoom 页面/大屏设计流程
@@ -18,35 +18,26 @@ description: 使用 dataroom-mcp-server MCP 工具设计和构建 DataRoom 页�
 | `newPage` | 创建新页面/大屏，返回页面ID与code | 流程第一步，创建页面实体 |
 | `updatePageConfig` | 更新页面配置（组件布局、数据等） | 创建页面后，配置页面内容 |
 
-## 修改已有页面/大屏的流程
+## 修改已有页面流程
 
-1. 调用 `listPages`（可按名称模糊匹配）确认目标页面的 `code` 与 `pageType`；匹配到多个时必须向用户确认。
-2. 调用 `getPageDesignConfig`（pageStatus 固定传 `design`）读取当前完整配置。
-3. 在当前配置基础上做最小必要修改，保持未涉及组件的配置原样不变。
-4. 调用 `updatePageConfig` 保存，pageConfig 必须保持完整结构（含 basicConfig/chartList/globalVariableList/pageType）。
+1. 调用 `listPages`（可按名称模糊匹配）确认目标页面的 `code` 与 `pageType`；匹配到多个时必须向用户确认
+2. 调用 `getPageDesignConfig`（pageStatus 固定传 `design`）读取当前完整配置
+3. 在当前配置基础上做最小必要修改，保持未涉及组件的配置原样不变
+4. 调用 `updatePageConfig` 保存，pageConfig 必须保持完整结构
 
-## 设计流程
+## 页面设计流程
 
-### 第一步：了解可用组件
+### 第一步：确认页面类型
 
-调用 `listComponents` 获取系统中所有可用组件的列表，包括 componentName、displayName 和 description。
+根据用户输入的需求进行意图识别，如设计看板、大屏，如果你不确定，可以提示用户进行确认
 
-```
-CallMcpTool:
-  server_name: dataroom-mcp-server
-  tool_name: listComponents
-  arguments: {}
-```
+### 第二步：了解可用组件
 
-根据返回结果，确定页面需要用到哪些组件（如 DrText、DrBarChart、DrLineChart 等）。
-
-### 第二步：确认页面类型
-
-根据用户输入的需求进行意图识别，用户是想创建页面还是想创建大屏，如果你不确定，可以提示用户进行确认
+调用 `listComponents` 获取系统中所有可用组件的列表，包括 componentName、displayName 和 description。根据返回结果，确定页面需要用到哪些组件（如 DrText、DrBarChart、DrLineChart 等）。
 
 ### 第三步：创建页面实体
 
-调用 `dataroom-mcp-server`的`newPage` 创建页面实体，除了id、createDate、createUser、updateDate、updateUser、tenantCode、delFlag字段不需要填写外，其他字段都必须填写。其中 `pageType` 决定后端自动生成的默认 pageConfig 结构，必须与后续设计器类型一致（页面传 `page`，大屏传 `visualScreen`），传错会导致默认配置与设计器不匹配。工具调用成功后返回页面ID。 记录返回的页面 ID，后续步骤需要用到。
+调用`newPage`工具创建页面实体，除了id、createDate、createUser、updateDate、updateUser、tenantCode、delFlag字段不需要填写外，其他字段都必须填写。其中 `pageType` 决定后端自动生成的默认 pageConfig 结构，必须与后续设计器类型一致（页面/看板传 `page`，大屏传 `visualScreen`），传错会导致默认配置与设计器不匹配。工具调用成功后返回页面ID。 记录返回的页面 ID，后续步骤需要用到。
 
 ### 第四步：设计页面
 思考用户想要的页面或大屏需要用到哪些组件，从`listComponents` 返回的组件列表中选择合适的；

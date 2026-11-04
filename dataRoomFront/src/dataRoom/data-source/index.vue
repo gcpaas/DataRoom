@@ -256,10 +256,6 @@ const dataSourceTypeGroups: Array<{ name: string; types: DataSourceTypeKey[] }> 
     types: ['mysql', 'postgresql', 'http', 'excel'],
   },
   {
-    name: '时序数据库',
-    types: ['tdengine'],
-  },
-  {
     name: '国产化',
     types: ['dameng', 'gbase', 'goldendb', 'greatdb', 'kingbase', 'oceanbase', 'polardb', 'tidb'],
   },
@@ -274,6 +270,10 @@ const dataSourceTypeGroups: Array<{ name: string; types: DataSourceTypeKey[] }> 
   {
     name: 'NoSQL',
     types: ['mongodb', 'es'],
+  },
+  {
+    name: '时序库',
+    types: ['tdengine'],
   },
   {
     name: '队列',
