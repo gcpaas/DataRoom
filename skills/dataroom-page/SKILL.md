@@ -1,132 +1,92 @@
 ---
 name: dataroom-page
-description: 使用 dataroom-mcp-server MCP 工具设计和构建 DataRoom 页面或数据大屏的完整流程指南。当用户要求创建页面、设计大屏、配置可视化组件、搭建数据看板、或操作 DataRoom 平台页面时触发。也适用于用户提到"新建页面"、"大屏设计"、"添加图表"、"页面配置"、"数据集配置"、"DataRoom"等场景。
+description: 通过 DataRoom MCP 工具新建或修改页面、仪表盘、可视化大屏和数据集，并完成组件布局、属性配置及数据绑定。适用于新建页面、修改大屏、添加图表、调整布局、新建数据集、修改查询和配置数据绑定等请求；支持独立处理数据集，无需先创建页面。
+agent_created: true
 ---
 
-# DataRoom 页面/大屏设计流程
+# DataRoom 页面与数据集设计
 
-通过 dataroom-mcp-server 提供的 MCP 工具，按以下流程完成页面或大屏的设计与配置。
+使用已连接的 DataRoom MCP 服务完成操作，以实际工具 schema 为准，不编造工具、参数、组件或资源编码。
 
-## 工具总览
+## 执行规则
 
-| 工具 | 用途 | 调用时机 |
-|------|------|----------|
-| `listPages` | 查询页面/大屏列表（含 code、pageType） | 修改已有页面前，确认目标页面编码 |
-| `getPageDesignConfig` | 获取页面当前设计态完整配置 | 修改已有页面前，读取现状配置 |
-| `listComponents` | 获取系统可用组件列表 | 设计前，了解有哪些组件可用 |
-| `getComponentConfig` | 获取指定组件的详细配置字段 | 添加组件前，获取其完整属性定义 |
-| `newPage` | 创建新页面/大屏，返回页面ID与code | 流程第一步，创建页面实体 |
-| `updatePageConfig` | 更新页面配置（组件布局、数据等） | 创建页面后，配置页面内容 |
+- 先识别操作：新建页面、修改页面、新建数据集、修改数据集；组合任务先准备数据集，再保存页面绑定。
+- 修改前读取现状；只改需求涉及的字段，保留其余配置，不以新建替代修改。
+- 写入前给出简短方案并取得明确确认；查询可先执行。已确认的方案不重复询问，变更范围扩大时重新确认。
+- 只追问缺失信息，将可同时确认的问题集中在一轮提出，用编号和简短选项组织，支持用户一次统一回答；已明确的信息不重复问，仅存在前后依赖的问题分轮确认。页面确认类型、指标、数据来源、主题布局及必要的尺寸/交互；数据集确认类型、来源、入参与输出字段。
+- 数据来源、编码或表结构不明确时先询问；仅在用户同意使用示例数据后生成 JSON 示例，并明确标注。
+- 涉及数据集新增、修改、执行或组件绑定时，按需读取 [数据集参考](refrence/dataset.md)；纯页面样式调整不读取。
 
-## 修改已有页面流程
+## 工具速查
 
-1. 调用 `listPages`（可按名称模糊匹配）确认目标页面的 `code` 与 `pageType`；匹配到多个时必须向用户确认
-2. 调用 `getPageDesignConfig`（pageStatus 固定传 `design`）读取当前完整配置
-3. 在当前配置基础上做最小必要修改，保持未涉及组件的配置原样不变
-4. 调用 `updatePageConfig` 保存，pageConfig 必须保持完整结构
+| 操作 | 工具 | 关键约定 |
+|---|---|---|
+| 查页面 | `listPages` | 按名称/目录定位 `code`、`pageType`；多个匹配先确认 |
+| 读页面 | `getPageDesignConfig` | 按 `pageCode` 读取完整设计态，状态值传 `design` |
+| 查页面结构 | `getPageConfig` / `getVisualScreenPageConfig` | 分别对应网格页面 / 自由布局大屏 |
+| 查组件 | `listComponents` → `getComponentConfig` | 获取真实组件名称、完整 `fields` 和 `datasetFields` |
+| 新建页面 | `newPage(pageEntity)` | 返回 `id` 与 `code`；后续以 `code` 作为 `pageCode` |
+| 保存页面 | `updatePageConfig(pageStage)` | 提交完整 `pageConfig`，不是局部补丁 |
+| 读数据集 | `getDatasetDetail(code)` | 获取完整配置及真实 `id` |
+| 新建数据集 | `insertDataset(datasetEntity)` | 返回 `code`，不是 `id` |
+| 修改数据集 | `updateDataset(datasetEntity)` | 携带真实 `id`，保留原 `code` 与完整配置 |
+| 执行数据集 | `runDataset` | 提供 `datasetCode`、`inputParam`；封装层级按实际 schema |
 
-## 页面设计流程
+## 新建页面 / 大屏
 
-### 第一步：确认页面类型
+1. 确认方案：网格页面用 `page`，自由布局大屏用 `visualScreen`。
+2. 按类型读取页面配置定义；查询组件列表，只获取拟使用组件的完整配置，同类组件复用已获取定义。
+3. 如需数据，按下述数据集流程准备并验证；已有数据集直接读取、执行，不重复创建。
+4. 调用 `newPage`，按 schema 填写业务字段；不伪造主键、审计字段，记录返回的 `id`、`code`。
+5. 用返回的 `code` 读取默认设计态；基于默认配置填充组件、布局、主题及数据绑定。
+6. 按“保存检查”校验，调用 `updatePageConfig`，再读取设计态核对结果。
 
-根据用户输入的需求进行意图识别，如设计看板、大屏，如果你不确定，可以提示用户进行确认
+## 修改页面 / 大屏
 
-### 第二步：了解可用组件
+1. 调用 `listPages` 确认目标 `code`、`pageType`，再读取完整设计态；未找到时停止，不擅自新建。
+2. 明确目标组件与改动范围，输出变更摘要并确认。
+3. 添加组件或修改组件属性/绑定前，获取对应 `getComponentConfig`；仅调整布局时复用现有配置。
+4. 深层修改目标字段，保留已有组件标识、未涉及的布局、属性、交互、数据绑定和全局变量。
+5. 按“保存检查”校验，提交完整配置并回读；发现并发变更时重新读取合并，不覆盖他人修改。
 
-调用 `listComponents` 获取系统中所有可用组件的列表，包括 componentName、displayName 和 description。根据返回结果，确定页面需要用到哪些组件（如 DrText、DrBarChart、DrLineChart 等）。
+## 新建数据集
 
-### 第三步：创建页面实体
+1. 读取数据集参考，确认名称、类型、目录、数据来源及字段；已有数据源编码由用户或可信上下文提供。
+2. 构造完整 `datasetEntity`，调用 `insertDataset`，记录返回的 `code`。
+3. 调用 `getDatasetDetail` 核对保存结果；非目录调用 `runDataset`，验证实际数据、字段及参数。
+4. 必要时按修改流程补齐 `outputList`；确认可用后再绑定页面组件。
 
-调用`newPage`工具创建页面实体，除了id、createDate、createUser、updateDate、updateUser、tenantCode、delFlag字段不需要填写外，其他字段都必须填写。其中 `pageType` 决定后端自动生成的默认 pageConfig 结构，必须与后续设计器类型一致（页面/看板传 `page`，大屏传 `visualScreen`），传错会导致默认配置与设计器不匹配。工具调用成功后返回页面ID。 记录返回的页面 ID，后续步骤需要用到。
+## 修改数据集
 
-### 第四步：设计页面
-思考用户想要的页面或大屏需要用到哪些组件，从`listComponents` 返回的组件列表中选择合适的；
-#### 特别注意：
-* 如果pageType为page时，那么组件的w表示的占用页面的列数，h表示占用页面的行数，其中页面被拆分为了48列、每行占用的高度是16px，i的值是唯一的且必填
-* 可以使用DrHTML组件进行视觉装饰和原生组件无法实现的特殊静态效果，如：
-  * 全局渐变背景 
-  * 网格、纹理、光晕、暗角 
-  * 面板半透明底板 
-  * 金色边框、切角、分隔线 
-  * 标题流光底座 
-  * 活动氛围装饰，例如“618”标识 
-  * 纯 CSS 动画 
-  * 原生组件无法实现的特殊排版或装饰
+1. 获取目标 `code`；未知时询问用户，或从已读取页面的组件绑定获取，不猜测编码。
+2. 调用 `getDatasetDetail` 获取原配置及 `id`，确认变更与影响范围；共享数据集的字段/类型变更需提示可能影响其他页面。
+3. 在原配置上修改，保留 `id`、`code`、入参、出参及未涉及的类型配置，调用 `updateDataset` 整体提交。
+4. 回读核对，非目录执行验证；涉及字段变更时检查已知组件绑定，仅同步修改用户确认范围内的页面。
 
-### 第五步：获取组件配置
+## 页面保存检查
 
-对每个需要添加到页面的组件，调用 `getComponentConfig` 获取其完整属性定义。
-
-```
-CallMcpTool:
-  server_name: dataroom-mcp-server
-  tool_name: getComponentConfig
-  arguments:
-    componentName: "DrBarChart"
-```
-
-返回的 `fields` 字段是扁平化的配置列表，需要将其转换为 JSON 树结构作为组件的初始化配置。
-
-
-### 第六步：更新页面配置
-
-根据页面类型选择调用`getPageConfig`或`getVisualScreenPageConfig`获取页面属性定义信息
-
-调用 `updatePageConfig` 将组件添加到页面并完成布局配置。
-
-`chartList` 中每个元素代表一个组件实例，包含：
-- 组件类型（componentName）
-- 位置和尺寸（x, y, width, height）
-- 组件属性配置（从第三步的 fields 转换而来）
-- 数据源绑定信息
-- 组件的配置信息要全量的，不能遗漏
-
-涉及数据集的创建、修改、执行或组件数据绑定时，先阅读参考资源 `refrence/dataset.md`，按其中的数据集类型、MCP 工具契约与绑定规范执行。
-
-## 关键注意事项
-
-### 页面类型与状态的固定传参格式
-
-MCP 工具入参 schema 由后端方法签名生成，HTTP API 文档中声明的枚举类型与 `BasePageConfig` 多态结构（`@JsonTypeInfo`）不会传导到 MCP 调用方。以下字段必须按固定格式传字符串值：
-
-| 字段位置 | 字段 | 固定取值（小写驼峰） | 说明 |
-|----------|------|----------------------|------|
-| pageEntity / pageStage | `pageType` | `directory` / `page` / `visualScreen` | 页面类型，`newPage` 据此生成对应的默认配置 |
-| pageEntity / pageStage | `pageStatus` | `design` / `preview` / `published` / `history` / `snapshot` | 由后端接管，设计流程固定传 `design` |
-| pageStage 的 `pageConfig` 内部 | `pageType` | `page` / `visualScreen` | 多态反序列化的类型判别字段 |
-
-硬性约束：
-
-- **两个层级的 `pageType` 必须同时存在且取值一致**（如外层 `visualScreen`、内层 `page` 会导致类型冲突）。
-- `pageConfig.pageType` 不会出现在工具 schema 的字段列表中，但它是**必需字段**，必须显式携带，缺失即多态反序列化失败。
-- 取值统一使用小写驼峰：`visualScreen` 不要写成 `visual_screen` 或 `visualscreen`。
-- `pageType` 为 `directory`（目录）时不会产生 pageStage 配置，后续设计流程不适用。
-
-### 组件属性完整性
-
-使用图表组件（如 DrLineChart、DrBarChart、DrPieChart 等）时，**必须严格依据 getComponentConfig 返回的 schema 补全所有属性字段**， 缺失关键属性会导致运行时报错。
-
-### fields 转 JSON 树
-
-`getComponentConfig` 、`getPageConfig` 、`getVisualScreenPageConfig` 返回的 fields 是扁平化列表，需要手动转换为嵌套 JSON 树结构。转换规则：
-- 以 `.` 分隔的字段名表示嵌套层级
-- 例如 `style.color` → `{ "style": { "color": "value" } }`
-
-### 页面配置结构
-
-`pageConfig` 必须包含以下四个必需字段：
-- `basicConfig`：页面基础配置（背景色、分辨率等）
-- `chartList`：组件实例数组
-- `globalVariableList`：全局变量数组（可为空数组）
-- `pageType`：页面类型标识（小写）
+- **类型与状态**：`pageStage.pageType` 与 `pageConfig.pageType` 同时存在且一致，只用 `page` / `visualScreen`；设计态固定为 `design`。`directory` 不进入页面设计流程。
+- **完整结构**：保留 `basicConfig`、`chartList`、`globalVariableList`、`pageType` 及其他已有字段；空数组、关闭状态及其子配置也保留。
+- **默认配置**：将 `fields[].field` 按点路径展开为 JSON 树，按 `type`、`defaultValue` 保留类型和默认值。
+- **布局单位**：`page` 为 48 列、行高 16px，`x/y/w/h` 使用网格单位，`i` 必填且唯一；`visualScreen` 按配置定义使用像素坐标与尺寸。检查越界、非预期重叠与标识重复。
+- **原生组件优先**：图表使用已有图表组件；HTML 组件仅用于装饰或原生组件无法实现的静态排版，名称以组件列表为准。
+- **数据绑定**：同时配置 `dataset.code`、真实 `datasetType` 与 `dataset.fields`；槽位取自 `datasetFields[].name`，值为真实数据字段名数组，满足 `required`、`multiple` 约束。
+- **变量与脚本**：全局变量引用必须存在；转换脚本使用 `bep.data`、`bep.params`，无转换需求保持为空。
 
 ## 禁止事项
-
-- 禁止从零手写组件 `props`。
+以下操作均属于禁止项，除非用户明确指出或经过用户确认允许。
+- 禁止从零手写组件 `props`，必须基于对应组件的完整默认配置修改。
 - 禁止根据其他图表组件推测当前组件字段。
-- 禁止因为父级配置为 `show: false` 或 `enabled: false`， 就删除其子配置对象。
+- 禁止因父级 `show: false` 或 `enabled: false` 删除其子配置对象。
 - 禁止删除值为空、关闭或暂未使用的默认字段。
-- 禁止把组件列表信息当作组件完整 Schema。
-- 禁止用 `DrHtml` 实现已有图表组件。
-- 禁止在未获取组件默认配置前调用 `updatePageConfig`。
+- 禁止把 `listComponents` 返回的组件列表当作完整 Schema。
+- 禁止用 HTML 组件替代已有图表组件。
+- 禁止在未获取相关组件完整默认配置前调用 `updatePageConfig`；仅调整已有组件布局时可复用已读取的完整设计态。
 - 禁止用浅合并覆盖嵌套配置对象。
+
+## 验证与交付
+
+- 用保存响应、配置回读、数据集执行和结构/字段检查验收；不启动浏览器、不截图、不做视觉验证。
+- 不以响应成功码或空数组单独认定数据有效；执行异常、实时链路未验证等情况明确说明。
+- 简要报告已完成操作、页面/数据集名称与编码、验证结果及未完成项；保存设计态不等于发布，不擅自发布或删除。
+- 写入失败先核实实际保存状态再重试，避免重复新建；部分成功时保留已生成编码并如实说明。

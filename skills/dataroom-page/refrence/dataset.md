@@ -1,174 +1,101 @@
-# DataRoom 数据集规范（页面设计参考资源）
+# 数据集配置与组件绑定
 
-本文件是 `dataroom-page` 技能的参考资源。当页面/大屏设计流程涉及**创建数据集、修改数据集、执行数据集、为组件绑定数据**时阅读本文件。数据集操作通过 `dataroom-mcp-server` 提供的 MCP 工具完成。
+仅在新增、修改、执行数据集或绑定组件时读取；流程与确认规则遵循主技能。
 
-## 一、MCP 工具契约
+## 通用契约
 
-数据集相关 MCP 工具**只有以下 4 个**，不要编造 `listDatasets`、`deleteDataset`、`testDataset`、`createDatasource` 等不存在的工具。
+- 当前数据集工具仅有 `getDatasetDetail`、`insertDataset`、`updateDataset`、`runDataset`；不编造列表、删除、测试或数据源管理工具。
+- 新增返回 `code`；详情查询、执行、组件绑定均用 `code`；更新必须使用详情返回的真实 `id`，不可修改 `code`。
+- 更新按完整配置提交，避免只传 `id` 和局部字段导致入参、出参等被清空；保留未修改字段。
+- 根目录显式传 `parentCode: "root"`；其他目录使用真实编码。新增不填写主键、编码、审计或删除标记字段。
+- 非目录的外层 `datasetType` 与内层 `dataset.datasetType` 必须一致；`mysql`、`postgresql` 是数据源类型，不是数据集类型。
 
-| 工具 | 入参 | 返回（Resp.data） | 说明 |
-|------|------|------|------|
-| `getDatasetDetail` | `code`：数据集编码 | 完整 DatasetEntity | 修改数据集前**必须先调用**获取现有配置 |
-| `insertDataset` | `datasetEntity`：配置对象 | 新生成的 `code`（**不是 id**） | 新增数据集或目录 |
-| `updateDataset` | `datasetEntity`：配置对象 | 数据库原有 `code` | 必须携带真实 `id`，按 id 更新 |
-| `runDataset` | `datasetCode` + `inputParam` | `{ outputList, data }` | 执行数据集，返回数据与输出字段 |
-
-关键规则：
-
-1. **`code` 与 `id` 是两个字段**。`insertDataset` 返回 `code`；`updateDataset` 需要 `id`（通过 `getDatasetDetail` 用 code 换取）；`runDataset`、组件绑定用 `code`。
-2. `updateDataset` 中 `code` 不可修改，以数据库原值为准。
-3. `runDataset` 响应有两层 `data`：外层 `Resp.data` 是 `{ outputList, data }`，内层 `data` 才是业务数据（通常为对象数组）。
-4. `outputList` 中的字段名可作为组件 `dataset.fields` 绑定的 value。
-
-## 二、DatasetEntity 公共结构
+完整 JSON 数据集示例：
 
 ```json
 {
-  "name": "数据集名称",
+  "name": "地区指标",
   "datasetType": "json",
   "parentCode": "root",
-  "dataSourceCode": "数据源编码（按类型决定是否需要）",
-  "dataset": { "datasetType": "json", "...": "类型专属配置" },
+  "dataset": {
+    "datasetType": "json",
+    "json": "[{\"region\":\"华东\",\"value\":12}]"
+  },
   "inputList": [],
-  "outputList": []
+  "outputList": [
+    { "name": "region", "type": "String", "desc": "地区" },
+    { "name": "value", "type": "int", "desc": "指标" }
+  ]
 }
 ```
 
-- `parentCode`：所属目录编码，根级显式传 `"root"`。
-- `datasetType`：**外层实体与内层 `dataset.datasetType` 必须一致**，否则运行时分派会类型转换失败。
-- `id`、`code`、`createDate`、`createUser`、`updateDate`、`updateUser`、`tenantCode`、`delFlag` 由后端维护，新增时不要填写。
-- **更新陷阱**：`updateDataset` 是全量覆盖语义。只传 `id` + 个别字段会把 `inputList`/`outputList` 等覆盖为空。正确流程：先 `getDatasetDetail` → 在原配置基础上改目标字段 → 带原 `id` 整体提交 → 再查详情核对。
+## 按类型配置
 
-## 三、数据集类型总览
+以下字段位于内层 `dataset`，`dataSourceCode` 位于外层实体。
 
-| datasetType | 用途 | 需要 dataSourceCode | 可执行 |
-|-------------|------|---------------------|--------|
-| `directory` | 目录，仅用于组织分类 | 否 | **否，禁止 runDataset** |
-| `json` | 静态 JSON 文本 | 否 | 是 |
-| `http` | HTTP 接口取数 | 可选（引用 HTTP 数据源或完整 URL） | 是 |
-| `sql` | 关系型数据库查询 | 是（关系型数据源） | 是 |
-| `excel` | 查询已导入的 Excel 表 | 否（用应用库连接） | 是 |
-| `es` | Elasticsearch 查询 | 是（ES 数据源） | 是 |
-| `websocket` | WebSocket 实时数据 | 否 | runDataset 仅处理 sampleData |
-| `mqtt` | MQTT 实时数据 | 是（MQTT 数据源） | runDataset 仅处理 sampleData |
+| `datasetType` | 内层字段 | 数据源要求 |
+|---|---|---|
+| `directory` | 不传 `dataset`，仅填名称、类型、目录 | 无；不可执行 |
+| `json` | `json`：JSON 文本字符串，推荐对象数组 | 无 |
+| `http` | `url`、`method`、`headerList`、`body`、`respJsonPath` | 可选 HTTP 数据源 |
+| `sql` | `sql`：查询语句 | 必须为已有关系型数据源 |
+| `excel` | `sql`：查询已导入的 `excel_` 表 | 使用应用库，无需数据源编码 |
+| `es` | `path`、`method`、`body`、`respJsonPath` | 必须为已有 ES 数据源 |
+| `websocket` | `url`、`script`、`sampleData` | 无 |
+| `mqtt` | `topic`、`cacheSize`、`sampleData`、`jsonFieldMappings` | 必须为已有 MQTT 数据源 |
 
-## 四、各类型 dataset 内层配置
+### JSON / SQL / Excel
 
-### 4.1 directory（目录）
+- JSON 必须传转义后的字符串，不传嵌套对象；不支持 `#{param}` 替换，`inputParam` 不生效。
+- SQL / Excel 仅允许单条只读 SELECT（含 CTE、JOIN、子查询）；禁止 DML、DDL、多语句及 `${}` 拼接。
+- 使用 `#{param}` 参数绑定，占位符外不加引号；支持 MyBatis 动态标签，裸 `<`、`&` 按 XML 转义。
+- 使用真实表名与字段，按数据库方言主动限制结果量；不要假设自动分页、行数上限或查询超时。
+- Excel 查询已导入的表，不填写本地文件路径；表名以 `excel_` 开头。
+- 字段名和别名以实际执行结果为准，不仅依据 SQL 文本推断。
 
-只需 `name`、`datasetType: "directory"`、`parentCode`，**不要传 `dataset`**。
+### HTTP / ES
 
-### 4.2 json（静态 JSON）
+- HTTP 显式指定 `method: "GET"` 或 `"POST"`；无请求体时传 `body: ""`，有请求体时保留实际内容。
+- HTTP 无数据源时使用完整 `http(s)://` URL；引用数据源时使用相对路径，由后端拼接 `baseUrl`。
+- HTTP 的 `url`、`headerList[].val`、`body` 支持 `#{参数名}`；不会自动把 `inputParam` 追加为查询参数。
+- 请求头结构为 `{ "key": "请求头名", "val": "值", "encrypted": false }`；`encrypted: true` 仅用于已加密的 RSA 密文，不将明文标记为密文。
+- 修改加密请求头时，保留原有 key 与加密标记；同名头的 `val` 为 `"******"` 或空值表示沿用旧密文，不泄露凭证。
+- ES 的 `path` 与数据源 `baseUrl` 拼接；支持 GET/POST，有 DSL 请求体时用 POST，`body` 为 JSON 文本。
+- ES 的 `path`、`body` 支持参数占位；不会自动展开 `_source`。
+- 用 `respJsonPath` 提取业务数据；HTTP 留空取整个响应。仅访问用户授权的数据来源，不执行有副作用的接口或 ES 写操作。
 
-```json
-{ "datasetType": "json", "json": "[{\"region\":\"华东\",\"value\":12}]" }
-```
+### WebSocket / MQTT
 
-- `json` 是 **JSON 文本字符串**（需转义），不是嵌套对象。
-- 图表推荐对象数组；不支持 `#{param}` 占位，`inputParam` 不生效。
-- JSON 格式错误时执行返回空数组。
+- `sampleData` 为 JSON 文本；`runDataset` 只解析样例，不连接上游、不读取实时缓存，不能证明订阅链路可用。
+- WebSocket 的后端 `script` 保持空字符串，默认不启用后端脚本执行。
+- MQTT 映射示例：`{ "field": "temperature", "jsonPath": "$.sensor.temperature", "type": "number" }`；路径仅支持点路径，`type` 不执行类型转换。
 
-### 4.3 http（HTTP 接口）
+## 入参与出参
 
-```json
-{
-  "datasetType": "http",
-  "url": "https://api.example.com/metrics 或 /relative/path",
-  "method": "GET",
-  "headerList": [{ "key": "Authorization", "val": "RSA密文", "encrypted": true }],
-  "body": "",
-  "respJsonPath": "$.data.records"
-}
-```
+- `inputList` 元素包含 `name`、`desc`、`type`、`required`、`defaultVal`、`testVal`。
+- 仅 `String`、`int` 有实际转换逻辑；先校验默认值合法性，默认值转换先于实际入参覆盖。
+- `required`、`testVal` 是元数据，不依赖后端自动校验必填或使用测试值；执行时显式提供所需 `inputParam`。
+- `outputList` 使用 `name`、`type`、`desc` 描述实际输出；普通执行不会自动保存字段元数据，缺失时从实际数据核实后按修改流程补齐。
+- `runDataset` 的 `Resp.data` 为结果对象，业务数据在 `Resp.data.data`，输出字段在 `Resp.data.outputList`。
+- 成功码不保证取数成功：JSON 解析错误及 SQL / HTTP / ES 一般异常可能返回空数组；空结果需复核配置、参数与预期，不能直接声称通过。
 
-- `method` 必须显式传 `GET` 或 `POST`（后端无默认值，GET 是前端默认）。
-- 无 `dataSourceCode` 时 `url` 必须是完整 `http(s)://` 地址；有 `dataSourceCode` 时 `url` 为相对路径，与数据源 `baseUrl` 拼接。
-- `body` 建议**始终显式传 `""`**（即使 GET），避免参数替换时空指针。
-- `url`、`headerList[].val`、`body` 支持 `#{参数名}` 占位；不会自动把 inputParam 拼成 query string。
-- `respJsonPath` 为空表示取整个响应体；响应必须可解析为 JSON。
-- `encrypted: true` 表示 `val` **已是 RSA 密文**；详情接口会脱敏为 `"******"`，更新时同名加密 header 传 `"******"` 或空值表示保留旧值。
+## 组件绑定
 
-### 4.4 sql（关系型查询）
-
-```json
-{ "datasetType": "sql", "sql": "SELECT region, value FROM t_metric WHERE region = #{region}" }
-```
-
-- `dataSourceCode` 必须指向已有关系型数据源（MySQL/PostgreSQL/H2）。
-- `#{param}` 走 PreparedStatement 参数绑定，**禁止 `${}` 拼接**（后端直接拒绝，防 SQL 注入）；`#{param}` 外不要自行加引号。
-- 仅允许**单条 SELECT**（支持 CTE、子查询、JOIN），不支持 INSERT/UPDATE/DELETE/DDL/多语句。
-- 支持 MyBatis 动态标签（`<if>`、`<foreach>`），SQL 中裸 `<`、`&` 需 XML 转义。
-- 无自动分页、行数上限、查询超时；返回字段键取自 JDBC `getColumnName`，别名行为以实际返回为准。
-
-### 4.5 excel（已导入 Excel 表查询）
-
-```json
-{ "datasetType": "excel", "sql": "SELECT region, value FROM excel_sales" }
-```
-
-- 查询的是**已通过 Excel 导入功能落库的表**，表名必须以 `excel_` 开头（大小写不敏感）。
-- 不是上传文件路径配置；SQL 规则同 `sql` 类型（`#{}` 绑定、仅单条 SELECT）。
-- 与 `sql` 的差异：执行错误会抛出而不是返回空数组。
-
-### 4.6 es（Elasticsearch）
-
-```json
-{ "datasetType": "es", "path": "/my_index/_search", "method": "POST", "body": "{\"size\":10}", "respJsonPath": "$.hits.hits" }
-```
-
-- `dataSourceCode` 必须指向 ES 数据源；`path` 与数据源 `baseUrl` 拼接。
-- `method` 支持 GET/POST，缺省按 POST；有 DSL body 时用 POST。
-- `path`、`body` 支持 `#{param}`；不会自动提取 `_source` 为业务行，用 `respJsonPath` 或组件脚本处理。
-
-### 4.7 websocket / mqtt（实时数据）
-
-```json
-// websocket
-{ "datasetType": "websocket", "url": "wss://example.com/stream", "script": "", "sampleData": "{\"value\":12}" }
-// mqtt
-{ "datasetType": "mqtt", "topic": "sensor/+/data", "cacheSize": 5, "sampleData": "{\"value\":12}", "jsonFieldMappings": [{ "field": "temperature", "jsonPath": "$.sensor.temperature", "type": "number" }] }
-```
-
-- **`runDataset` 只解析 `sampleData`，不连接上游、不读实时缓存**，不能用它验证实时链路。
-- mqtt：`jsonFieldMappings[].jsonPath` 仅支持 `$.a.b` 点路径（非完整 JSONPath），`type` 仅声明不做转换。
-- 后端脚本执行默认禁用，`script` 保持空字符串。
-
-## 五、inputList / outputList 参数规范
-
-```json
-{ "name": "region", "desc": "地区", "type": "String", "required": false, "defaultVal": "华东", "testVal": "华东" }
-```
-
-- `type` 有实际转换的只有 `String` 与 `int`（32 位整数）；其余类型原样透传。
-- `required`、`testVal` 无后端强制逻辑，属元数据；默认值先转换再被实际入参覆盖，**非法默认值会先触发失败**。
-- `outputList` 是字段元数据（`name`/`type`/`desc`），普通执行不会自动回填保存，建议显式维护，供组件绑定使用。
-
-## 六、组件绑定数据集（与页面设计衔接）
-
-`chartList` 中组件实例的 `dataset` 结构：
+以下结构位于组件实例的 `dataset`，不是数据集实体的内层配置：
 
 ```json
 {
-  "code": "数据集编码",
+  "code": "实际数据集编码",
   "datasetType": "json",
-  "fields": { "组件字段槽位": ["数据集字段名"] },
-  "params": { "region": { "from": "fixed", "variableName": "", "defaultValue": "华东" } },
+  "fields": { "实际组件槽位": ["region"] },
+  "params": {
+    "region": { "from": "fixed", "variableName": "", "defaultValue": "华东" }
+  },
   "script": ""
 }
 ```
 
-- `fields` 的 key 来自 `getComponentConfig` 返回的 `datasetFields` 定义，value 来自 `runDataset`/`getDatasetDetail` 的 `outputList` 字段名，**value 是数组**。
-- `params.*.from`：`fixed` 固定值 | `globalVar` 全局变量（配合 `variableName`）。
-- 转换脚本只接收单个 `bep` 参数：用 `bep.data`、`bep.params`，**禁止写裸 `data`/`params` 变量**；该脚本仅在前端组件层执行，`runDataset` 不执行。
-- 组件上的 `datasetType` 必须与数据集实际类型一致。
-
-## 七、注意事项与禁止事项
-
-1. 外层与内层 `datasetType` 必须一致；类型字段是 `datasetType` 不是 `type`；`mysql`/`postgresql` 是数据源类型，不是数据集类型。
-2. `updateDataset` 必须带真实 `id`，禁止把 `insertDataset` 返回的 `code` 当 id 使用。
-3. `runDataset` 返回外层 `code: 200` 不代表查询成功：sql/http/es 的一般异常会被兜底为空数组。空数组需区分"真实无数据"与"执行被吞错"，必要时结合 `getDatasetDetail` 复核配置。
-4. json/http/es/websocket/mqtt 普通执行通常不回填 `outputList`，空 `outputList` 不代表无字段。
-5. 禁止对 `directory` 调用 `runDataset`。
-6. SQL 禁止 `${}`；http 的 `body` 显式传 `""`、`method` 显式传值。
-7. websocket/mqtt 的 `runDataset` 结果只证明 `sampleData` 可解析，不代表实时订阅可用。
-8. 没有数据集列表、删除、数据源查询的 MCP 工具；需要目录编码时，使用用户提供的编码或先创建目录获取返回的 `code`。
+- `fields` 的 key 使用 `getComponentConfig` 返回的 `datasetFields[].name`，value 为实际输出字段名数组；必填槽位必须绑定，多字段绑定遵循 `multiple`。
+- `params.*.from` 使用 `fixed` 或 `globalVar`；后者通过 `variableName` 引用页面已定义的全局变量。
+- `datasetType` 与目标数据集一致，不得只填 `code` 而遗漏字段映射。
+- 组件转换脚本仅接收 `bep`，使用 `bep.data`、`bep.params`，不得引用裸 `data` / `params`；脚本在前端执行，不由 `runDataset` 验证。
