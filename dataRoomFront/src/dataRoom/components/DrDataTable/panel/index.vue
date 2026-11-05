@@ -319,22 +319,22 @@ const overflowOptions = [
               <el-input :model-value="selectedStyle?.label || ''" :placeholder="selectedField" clearable @update:model-value="value => updateColumnStyle('label', value)" />
             </el-form-item>
             <el-form-item label="列宽">
-              <el-input-number :model-value="selectedStyle?.width" :min="50" :max="2000" placeholder="自适应" controls-position="right" @update:model-value="value => updateColumnStyle('width', value)" />
+              <el-input-number :model-value="selectedStyle?.width" :min="50" :max="2000" placeholder="自适应" controls-position="right" @update:model-value="(value: number | undefined) => updateColumnStyle('width', value)" />
             </el-form-item>
             <el-form-item label="表头字号">
-              <el-input-number :model-value="selectedStyle?.headerFontSize" :min="10" :max="72" placeholder="跟随全表" controls-position="right" @update:model-value="value => updateColumnStyle('headerFontSize', value)" />
+              <el-input-number :model-value="selectedStyle?.headerFontSize" :min="10" :max="72" placeholder="跟随全表" controls-position="right" @update:model-value="(value: number | undefined) => updateColumnStyle('headerFontSize', value)" />
             </el-form-item>
             <el-form-item label="表头颜色">
-              <el-color-picker :model-value="pickerColor(selectedStyle?.headerColor || chart.props.headerStyle.color)" show-alpha @update:model-value="value => updateColumnStyle('headerColor', value || undefined)" />
+              <el-color-picker :model-value="pickerColor(selectedStyle?.headerColor || chart.props.headerStyle.color)" show-alpha @update:model-value="(value: string | null) => updateColumnStyle('headerColor', value || undefined)" />
             </el-form-item>
             <el-form-item label="正文字号">
-              <el-input-number :model-value="selectedStyle?.fontSize" :min="10" :max="72" placeholder="跟随全表" controls-position="right" @update:model-value="value => updateColumnStyle('fontSize', value)" />
+              <el-input-number :model-value="selectedStyle?.fontSize" :min="10" :max="72" placeholder="跟随全表" controls-position="right" @update:model-value="(value: number | undefined) => updateColumnStyle('fontSize', value)" />
             </el-form-item>
             <el-form-item label="正文颜色">
-              <el-color-picker :model-value="pickerColor(selectedStyle?.color || chart.props.cellStyle.color)" show-alpha @update:model-value="value => updateColumnStyle('color', value || undefined)" />
+              <el-color-picker :model-value="pickerColor(selectedStyle?.color || chart.props.cellStyle.color)" show-alpha @update:model-value="(value: string | null) => updateColumnStyle('color', value || undefined)" />
             </el-form-item>
             <el-form-item label="溢出提示">
-              <el-select :model-value="selectedStyle?.showTooltip === undefined ? 'inherit' : selectedStyle.showTooltip ? 'on' : 'off'" @update:model-value="value => updateColumnStyle('showTooltip', value === 'inherit' ? undefined : value === 'on')">
+              <el-select :model-value="selectedStyle?.showTooltip === undefined ? 'inherit' : selectedStyle.showTooltip ? 'on' : 'off'" @update:model-value="(value: string) => updateColumnStyle('showTooltip', value === 'inherit' ? undefined : value === 'on')">
                 <el-option label="跟随全表" value="inherit" />
                 <el-option label="开启" value="on" />
                 <el-option label="关闭" value="off" />
