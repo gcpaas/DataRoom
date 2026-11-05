@@ -110,15 +110,19 @@ public class DatasetController {
     @PostMapping("/update")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
     @Tool(name = "updateDataset", description = "修改数据集或目录。参数datasetEntity为修改后的配置：" +
-            "id为数据集或目录ID，必传，按ID更新，可通过getDatasetDetail查询获取；code不可修改，可不传，以数据库原编码为准；" +
+            "code为数据集或目录编码，必传，按code更新，不需要传入ID，传入的ID会被忽略；code仅用于定位，不可修改；" +
             "name、datasetType、dataset等其余字段含义同insertDataset；返回数据集或目录编码code（响应data字段），不是ID")
-    @Operation(summary = "更新数据集或目录", description = "按ID更新数据集或目录，响应data返回数据库原有编码code，不是主键ID；code不可修改")
+    @Operation(summary = "更新数据集或目录", description = "按code更新数据集或目录，无需传入ID，响应data返回数据库原有编码code，不是主键ID；code不可修改")
     public Resp<String> update(@RequestBody DatasetEntity datasetEntity) {
-        Assert.hasText(datasetEntity.getId(), "数据集或目录ID不能为空");
-        DatasetEntity dbEntity = datasetMapper.selectById(datasetEntity.getId());
+        Assert.hasText(datasetEntity.getCode(), "数据集或目录编码不能为空");
+        LambdaQueryWrapper<DatasetEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DatasetEntity::getCode, datasetEntity.getCode());
+        DatasetEntity dbEntity = datasetMapper.selectOne(queryWrapper);
         if (dbEntity == null) {
             throw new DataRoomException("数据集或目录不存在");
         }
+        // 更新目标仅由 code 决定，不信任调用方携带的主键。
+        datasetEntity.setId(dbEntity.getId());
         datasetEntity.setCode(dbEntity.getCode());
         preserveHttpDatasetHeaderSensitive(datasetEntity, dbEntity);
         datasetEntity.setUpdateDate(new Date());

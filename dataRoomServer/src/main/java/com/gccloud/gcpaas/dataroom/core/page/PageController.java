@@ -124,9 +124,9 @@ public class PageController {
      */
     @PostMapping("/insert")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
-    @Tool(name = "newPage", description = "新增页面。参数pageEntity为页面配置信息，返回页面ID与页面编码code；" +
-            "chartList中组件绑定数据集时需同时设置dataset.code和dataset.fields字段绑定，" +
-            "字段绑定的key取自getComponentConfig返回的datasetFields中的name，value为getDatasetDetail返回的数据集字段名（outputList）数组")
+    @Tool(name = "newPage", description = "新增页面。参数pageEntity中name必填；pageType省略时为page，parentCode默认为root；" +
+            "code为空时由服务端生成，id由服务端重新生成，pageStatus固定为design；返回页面ID与页面编码code；" +
+            "本工具创建默认页面配置，组件chartList等完整配置通过updatePageConfig写入")
     
     @Operation(summary = "新增", description = "新增页面")
     public Resp<Map<String, String>> newPage(@RequestBody PageEntity pageEntity) {
@@ -338,7 +338,8 @@ public class PageController {
      */
     @PostMapping("/updatePageConfig")
     @RequiresRoles(value = DataRoomRole.DEVELOPER)
-    @Tool(name = "updatePageConfig", description = "更新页面配置。参数pageStage为页面配置信息，其中chartList为组件列表；" +
+    @Tool(name = "updatePageConfig", description = "更新页面配置。参数pageStage仅pageCode和pageConfig必填，按pageCode整体替换design设计态配置；" +
+            "外层pageType、pageStatus、remark及服务端字段可省略，不用于配置写入；pageConfig内必须保留pageType判别字段，其中chartList为组件列表；" +
             "为组件绑定数据集时，除设置dataset.code外，还必须通过dataset.fields完成字段绑定，" +
             "key取自getComponentConfig返回的datasetFields中的name，value为getDatasetDetail返回的数据集字段名（outputList）数组，" +
             "只绑定数据集不绑定字段组件无法正常展示数据")

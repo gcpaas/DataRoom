@@ -2,6 +2,12 @@ package com.gccloud.gcpaas.core.component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.gccloud.gcpaas.dataroom.core.entity.BaseEntity;
+import com.gccloud.gcpaas.dataroom.core.entity.DatasetEntity;
+import com.gccloud.gcpaas.dataroom.core.entity.PageEntity;
+import com.gccloud.gcpaas.dataroom.core.entity.PageStageEntity;
+import org.springframework.ai.util.json.schema.JsonSchemaGenerator;
 import com.gccloud.gcpaas.dataroom.core.dataset.DatasetController;
 import com.gccloud.gcpaas.dataroom.core.constant.DatasetType;
 import com.gccloud.gcpaas.dataroom.core.mcp.SchemaInlineToolCallback;
@@ -14,6 +20,10 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -85,11 +95,30 @@ class McpToolSchemaContractTest {
     }
 
     @Test
-    void updatePageConfigSchemaKeepsPageTypesAfterInline() {
-        String schema = toolSchema("updatePageConfig");
-        assertNotNull(schema, "updatePageConfig 工具不存在");
-        assertTrue(schema.contains("\"visualScreen\""), "内联后缺少 visualScreen 页面类型");
-        assertTrue(schema.contains("\"pageCode\""), "内联后缺少 pageCode 字段");
+    void updatePageConfigSchemaKeepsPageTypesAfterInline() throws Exception {
+        JsonNode config = MAPPER.readTree(toolSchema("updatePageConfig")).path("properties")
+                .path("pageStage").path("properties").path("pageConfig");
+        for (String type : List.of("page", "visualScreen", "directory")) {
+            JsonNode branch = findDiscriminatorBranch(config, "pageType", type);
+            assertNotNull(branch, "缺少页面类型分支：" + type);
+            assertTrue(requiredFields(branch).contains("pageType"), "内层判别字段仍必填");
+            for (String field : List.of("basicConfig", "chartList", "globalVariableList")) {
+                assertTrue(branch.path("properties").has(field), type + " 缺少 " + field);
+            }
+        }
+    }
+
+    private JsonNode findDiscriminatorBranch(JsonNode node, String discriminator, String type) {
+        if (type.equals(node.path("properties").path(discriminator).path("const").asText())) {
+            return node;
+        }
+        for (JsonNode child : node) {
+            JsonNode result = findDiscriminatorBranch(child, discriminator, type);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
     }
 
     @Test
@@ -98,22 +127,110 @@ class McpToolSchemaContractTest {
         assertEquals(schema, ToolSchemaInlineSupport.normalizeInputSchema("unrelatedTool", schema));
     }
 
+    private static final Map<String, String> PARAMETERS = Map.of(
+            "insertDataset", "datasetEntity", "updateDataset", "datasetEntity",
+            "newPage", "pageEntity", "updatePageConfig", "pageStage");
+    private static final Set<String> SERVER_FIELDS = Set.of(
+            "id", "tenantCode", "createUser", "createDate", "updateUser", "updateDate");
+
     @ParameterizedTest
-    @ValueSource(strings = {"insertDataset", "updateDataset"})
-    void normalizationOnlyChangesOuterDatasetEnum(String toolName) throws Exception {
+    @ValueSource(strings = {"insertDataset", "updateDataset", "newPage", "updatePageConfig"})
+    void realSchemasRequireOnlyBusinessFieldsAndKeepServerProperties(String toolName) throws Exception {
+        Map<String, Set<String>> expectedRequired = Map.of(
+                "insertDataset", Set.of("name", "datasetType", "parentCode"),
+                "updateDataset", Set.of("code", "name", "datasetType", "parentCode"),
+                "newPage", Set.of("name"),
+                "updatePageConfig", Set.of("pageCode", "pageConfig"));
+        JsonNode root = MAPPER.readTree(toolSchema(toolName));
+        assertEquals(Set.of(PARAMETERS.get(toolName)), requiredFields(root));
+        JsonNode entity = root.path("properties").path(PARAMETERS.get(toolName));
+        assertEquals(expectedRequired.get(toolName), requiredFields(entity), toolName);
+        for (String field : SERVER_FIELDS) {
+            assertTrue(entity.path("properties").has(field), toolName + " 必须保留 " + field);
+            assertFalse(requiredFields(entity).contains(field), toolName + " 不应要求 " + field);
+            assertFalse(entity.path("properties").path(field).path("description").asText().isBlank());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"insertDataset", "updateDataset", "newPage", "updatePageConfig"})
+    void normalizationOnlyChangesTopLevelRequiredDescriptionsAndDatasetEnum(String toolName) throws Exception {
         ToolCallback original = Arrays.stream(MethodToolCallbackProvider.builder()
-                        .toolObjects(new DatasetController()).build().getToolCallbacks())
+                        .toolObjects(new DatasetController(), new PageController()).build().getToolCallbacks())
                 .filter(callback -> toolName.equals(callback.getToolDefinition().name()))
                 .findFirst().orElseThrow();
         JsonNode expected = MAPPER.readTree(ToolSchemaInlineSupport.inlineRefs(
                 original.getToolDefinition().inputSchema()));
-        ((com.fasterxml.jackson.databind.node.ObjectNode) expected.path("properties").path("datasetEntity")
-                .path("properties").path("datasetType")).set("enum",
-                MAPPER.valueToTree(Arrays.stream(DatasetType.values()).map(DatasetType::getType).toList()));
+        ObjectNode expectedEntity = (ObjectNode) expected.path("properties").path(PARAMETERS.get(toolName));
         SchemaInlineToolCallback wrapped = new SchemaInlineToolCallback(original);
-        assertEquals(expected, MAPPER.readTree(wrapped.getToolDefinition().inputSchema()));
+        JsonNode actual = MAPPER.readTree(wrapped.getToolDefinition().inputSchema());
+        ObjectNode actualEntity = (ObjectNode) actual.path("properties").path(PARAMETERS.get(toolName));
+        if ("datasetEntity".equals(PARAMETERS.get(toolName))) {
+            ((ObjectNode) expectedEntity.path("properties").path("datasetType")).set("enum",
+                    MAPPER.valueToTree(Arrays.stream(DatasetType.values()).map(DatasetType::getType).toList()));
+        }
+        // 必填清单和描述另行验证；此处确保类型、属性、内层多态结构等完全未变。
+        expectedEntity.remove("required");
+        actualEntity.remove("required");
+        for (String field : SERVER_FIELDS) {
+            ((ObjectNode) expectedEntity.path("properties").path(field)).remove("description");
+            ((ObjectNode) actualEntity.path("properties").path(field)).remove("description");
+        }
+        assertEquals(expected, actual);
         assertEquals(original.getToolDefinition().description(), wrapped.getToolDefinition().description());
         assertEquals(original.getToolMetadata(), wrapped.getToolMetadata());
+    }
+
+    @Test
+    void toolParamOverridesSchemaAutoRequiredWithoutRelaxingSharedBaseEntity() throws Exception {
+        JsonNode dataset = MAPPER.readTree(JsonSchemaGenerator.generateForType(DatasetEntity.class));
+        assertFalse(requiredFields(dataset).contains("code"));
+        assertFalse(requiredFields(dataset).contains("dataset"));
+        assertTrue(dataset.path("properties").path("code").path("description").asText().contains("新增时可省略"));
+        for (Class<?> type : List.of(BaseEntity.class, DatasetEntity.class, PageEntity.class, PageStageEntity.class)) {
+            JsonNode raw = MAPPER.readTree(JsonSchemaGenerator.generateForType(type));
+            assertTrue(requiredFields(raw).containsAll(SERVER_FIELDS), "共享基类必填声明不变：" + type);
+            String schema = JsonSchemaGenerator.generateForType(type);
+            assertEquals(MAPPER.readTree(ToolSchemaInlineSupport.inlineRefs(schema)),
+                    MAPPER.readTree(ToolSchemaInlineSupport.normalizeInputSchema("otherEntityTool", schema)));
+        }
+    }
+
+    @Test
+    void descriptionsMatchDefaultsConditionalInputsAndWriteBehavior() throws Exception {
+        JsonNode dataset = MAPPER.readTree(toolSchema("insertDataset")).path("properties")
+                .path("datasetEntity").path("properties");
+        assertTrue(dataset.path("id").path("description").asText().contains("不会在新增入口清除"));
+        assertTrue(dataset.path("code").path("description").asText().contains("覆盖传入值"));
+        assertTrue(dataset.path("parentCode").path("description").asText().contains("不会自动补为 root"));
+        assertFalse(dataset.path("parentCode").has("default"));
+        assertTrue(dataset.path("dataset").findValuesAsText("description").stream()
+                .anyMatch(description -> description.contains("目录可省略")), dataset.path("dataset").toString());
+        assertTrue(dataset.path("dataSourceCode").path("description").asText().contains("SQL"));
+        for (String field : List.of("inputList", "outputList")) {
+            assertTrue(dataset.path(field).path("description").asText().contains("可能清空"));
+        }
+        for (String field : List.of("tenantCode", "createUser", "createDate", "updateUser", "updateDate")) {
+            assertTrue(dataset.path(field).path("description").asText().contains("null"));
+        }
+        JsonNode page = MAPPER.readTree(toolSchema("newPage")).path("properties").path("pageEntity")
+                .path("properties");
+        assertTrue(page.path("id").path("description").asText().contains("清除传入值"));
+        assertTrue(page.path("code").path("description").asText().contains("非空时使用传入值"));
+        assertTrue(page.path("parentCode").path("description").asText().contains("默认 root"));
+        assertTrue(page.path("pageType").path("description").asText().contains("默认 page"));
+        assertTrue(page.path("pageStatus").path("description").asText().contains("固定设为 design"));
+        JsonNode stage = MAPPER.readTree(toolSchema("updatePageConfig")).path("properties").path("pageStage")
+                .path("properties");
+        assertTrue(stage.path("pageType").path("description").asText().contains("不能替代 pageConfig"));
+        assertTrue(stage.path("pageConfig").findValuesAsText("description").stream()
+                .anyMatch(description -> description.contains("整体替换")), stage.path("pageConfig").toString());
+    }
+
+    private Set<String> requiredFields(JsonNode schema) {
+        Set<String> required = new HashSet<>();
+        schema.path("required").forEach(field -> required.add(field.asText()));
+        return required;
     }
 
     @Test

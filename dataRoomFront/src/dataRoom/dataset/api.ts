@@ -198,7 +198,7 @@ export const datasetApi = {
   },
 
   /**
-   * 按 ID 更新数据集或目录，返回原有业务编码 code（不是 ID）
+   * 按 code 更新数据集或目录，无需传入 ID，返回原有业务编码 code（不是 ID）
    */
   update(data: DatasetEntity) {
     return request.post<string>('/dataRoom/dataset/update', data)

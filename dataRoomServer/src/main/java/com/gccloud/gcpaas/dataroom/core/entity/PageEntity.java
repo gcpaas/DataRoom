@@ -7,6 +7,7 @@ import com.gccloud.gcpaas.dataroom.core.constant.PageStatus;
 import com.gccloud.gcpaas.dataroom.core.constant.PageType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.springframework.ai.tool.annotation.ToolParam;
 
 /**
  * 页面、包含仪表盘、大屏
@@ -23,32 +24,38 @@ public class PageEntity extends BaseEntity {
     /**
      * 页面编码
      */
-    @Schema(description = "页面编码，使用UUID生成32位字符串转大写格式")
+    @ToolParam(required = false, description = "页面编码；新增时为空或空白则由服务端生成，非空时使用传入值")
+    @Schema(description = "页面编码；新增时为空或空白则由服务端生成，非空时使用传入值")
     private String code;
     /**
      * 页面类型
      */
-    @Schema(description = "页面类型, 使用字符串传入时需要转为驼峰法格式")
+    @ToolParam(required = false, description = "页面类型，可省略，默认 page；可传 page、visualScreen 或 directory")
+    @Schema(description = "页面类型，可省略，默认 page；可传 page、visualScreen 或 directory")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private PageType pageType = PageType.PAGE;
     /**
      * 所属目录编码
      */
-    @Schema(description = "所属目录编码")
+    @ToolParam(required = false, description = "所属目录编码，可省略，默认 root；新增时为空或空白也会补为 root")
+    @Schema(description = "所属目录编码，可省略，默认 root；新增时为空或空白也会补为 root")
     private String parentCode = "root";
     /**
      * 页面描述
      */
-    @Schema(description = "页面描述")
+    @ToolParam(required = false, description = "页面描述，可省略")
+    @Schema(description = "页面描述，可省略")
     private String remark;
     /**
      * 缩略图、封面
      */
-    @Schema(description = "封面地址")
+    @ToolParam(required = false, description = "封面地址，可省略")
+    @Schema(description = "封面地址，可省略")
     private String thumbnail;
     /**
      * 页面状态
      */
-    @Schema(description = "页面状态，使用字符串传入时需要转为驼峰法格式")
+    @ToolParam(required = false, description = "页面状态，可省略；新增时服务端固定设为 design，覆盖传入值")
+    @Schema(description = "页面状态，可省略；新增时服务端固定设为 design，覆盖传入值")
     private PageStatus pageStatus = PageStatus.DESIGN;
 }

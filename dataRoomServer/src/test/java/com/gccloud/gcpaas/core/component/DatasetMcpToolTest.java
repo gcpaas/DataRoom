@@ -1,5 +1,9 @@
 package com.gccloud.gcpaas.core.component;
 
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
+import com.baomidou.mybatisplus.core.MybatisMapperBuilderAssistant;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidTypeIdException;
@@ -16,7 +20,9 @@ import com.gccloud.gcpaas.dataroom.core.entity.DatasetEntity;
 import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
 import com.gccloud.gcpaas.dataroom.core.mapper.DatasetMapper;
 import com.gccloud.gcpaas.dataroom.core.mcp.SchemaInlineToolCallback;
+import com.gccloud.gcpaas.dataroom.core.mcp.ToolSchemaInlineSupport;
 import io.swagger.v3.oas.annotations.Operation;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,6 +42,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -55,17 +64,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * 数据集、目录新增和按 ID 更新的返回编码契约测试，不连接数据库或 MCP 服务。
+ * 数据集、目录新增和按 code 更新的返回编码契约测试，不连接数据库或 MCP 服务。
  */
 class DatasetMcpToolTest {
 
     private static final String DATASET_ID = "dataset-primary-key";
+    private static final String FORGED_ID = "dataset-forged-id";
     private static final String REAL_CODE = "dataset-existing-code";
     private static final String FORGED_CODE = "dataset-forged-code";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private DatasetController controller;
     private DatasetMapper datasetMapper;
+
+    @BeforeAll
+    static void initTableInfo() {
+        TableInfoHelper.initTableInfo(new MybatisMapperBuilderAssistant(new MybatisConfiguration(), ""),
+                DatasetEntity.class);
+    }
 
     @BeforeEach
     void setUp() {
@@ -90,7 +106,79 @@ class DatasetMcpToolTest {
         assertNotNull(method.getAnnotation(Tool.class));
         assertEquals("updateDataset", method.getAnnotation(Tool.class).name());
         assertReturnsCodeDescription(method.getAnnotation(Tool.class).description());
-        assertTrue(method.getAnnotation(Tool.class).description().contains("按ID更新"));
+        assertTrue(method.getAnnotation(Tool.class).description().contains("按code更新"));
+        assertFalse(method.getAnnotation(Tool.class).description().contains("按ID更新"));
+    }
+
+    @Test
+    void updateMcpSchemaKeepsOptionalIdAndRequiresCode() throws Exception {
+        JsonNode schema = objectMapper.readTree(toolCallback("updateDataset").getToolDefinition().inputSchema());
+        JsonNode entity = schema.path("properties").path("datasetEntity");
+
+        assertTrue(entity.path("properties").isObject());
+        assertTrue(entity.path("properties").has("id"), "更新工具保留可选的数据库主键属性");
+        assertTrue(entity.path("properties").has("code"));
+        assertTrue(entity.path("required").isArray());
+        assertFalse(entity.path("required").toString().contains("\"id\""));
+        assertTrue(entity.path("required").toString().contains("\"code\""), "更新必须传 code");
+        verifyNoInteractions(datasetMapper);
+    }
+
+    @Test
+    void insertMcpSchemaKeepsExistingIdAndRequiredFields() throws Exception {
+        ToolCallback raw = Arrays.stream(MethodToolCallbackProvider.builder().toolObjects(controller)
+                        .build().getToolCallbacks())
+                .filter(callback -> "insertDataset".equals(callback.getToolDefinition().name()))
+                .findFirst().orElseThrow();
+        JsonNode original = objectMapper.readTree(ToolSchemaInlineSupport.inlineRefs(
+                raw.getToolDefinition().inputSchema()));
+        JsonNode normalized = objectMapper.readTree(new SchemaInlineToolCallback(raw)
+                .getToolDefinition().inputSchema());
+        JsonNode originalEntity = original.path("properties").path("datasetEntity");
+        JsonNode normalizedEntity = normalized.path("properties").path("datasetEntity");
+
+        assertTrue(originalEntity.path("properties").has("id"));
+        assertEquals(originalEntity.path("properties").path("id").path("type"),
+                normalizedEntity.path("properties").path("id").path("type"));
+        assertTrue(normalizedEntity.path("properties").has("id"));
+        assertEquals(originalEntity.path("properties").path("code"),
+                normalizedEntity.path("properties").path("code"));
+        assertEquals(objectMapper.valueToTree(List.of("datasetType", "name", "parentCode")),
+                normalizedEntity.path("required"), "新增不要求 code 或服务端字段");
+        verifyNoInteractions(datasetMapper);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"updateDataset", "insertDataset"})
+    void schemaNormalizationKeepsIdAndOnlyRelaxesEntityLevelRequired(String toolName) throws Exception {
+        String input = """
+                {"type":"object","properties":{
+                  "datasetEntity":{"type":"object","properties":{
+                    "id":{"type":"string"},"code":{"type":"string"},
+                    "datasetType":{"type":"string","enum":["JSON"]},
+                    "dataset":{"type":"object","properties":{"id":{"type":"string"}},"required":["id"]}
+                  },"required":["id","code","datasetType","dataset"]},
+                  "id":{"type":"string"}
+                },"required":["datasetEntity","id"]}
+                """;
+        ObjectNode expected = (ObjectNode) objectMapper.readTree(input);
+        ObjectNode entity = (ObjectNode) expected.path("properties").path("datasetEntity");
+        ObjectNode type = (ObjectNode) entity.path("properties").path("datasetType");
+        var values = type.putArray("enum");
+        for (DatasetType datasetType : DatasetType.values()) {
+            values.add(datasetType.getType());
+        }
+        ((ObjectNode) entity.path("properties").path("id")).put("description",
+                "updateDataset".equals(toolName)
+                        ? "主键，可省略；服务端按 code 查询真实主键并覆盖传入值"
+                        : "主键，可省略；未提供时由持久化层生成，传入非空值不会在新增入口清除");
+        entity.putArray("required").add("code").add("datasetType").add("dataset");
+
+        JsonNode actual = objectMapper.readTree(ToolSchemaInlineSupport.normalizeInputSchema(toolName, input));
+
+        assertEquals(expected, actual,
+                "只调整实体顶层主键的必填和描述，保留属性、嵌套必填及工具根级必填");
+        verifyNoInteractions(datasetMapper);
     }
 
     @Test
@@ -139,11 +227,12 @@ class DatasetMcpToolTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"JSON,", "JSON, dataset-forged-code", "DIRECTORY,", "DIRECTORY, dataset-forged-code"})
-    void updateReturnsStoredCodeAndKeepsIdBasedUpdate(DatasetType type, String suppliedCode) {
+    @CsvSource({"JSON,", "JSON, dataset-forged-id", "JSON, dataset-primary-key",
+            "DIRECTORY,", "DIRECTORY, dataset-forged-id", "DIRECTORY, dataset-primary-key"})
+    void updateUsesCodeToResolveStoredIdAndReturnsStoredCode(DatasetType type, String suppliedId) {
         DatasetEntity request = dataset(type);
-        request.setId(DATASET_ID);
-        request.setCode(suppliedCode);
+        request.setId(suppliedId);
+        request.setCode(REAL_CODE);
         stubSuccessfulUpdate(type);
 
         Resp<String> response = controller.update(request);
@@ -154,7 +243,7 @@ class DatasetMcpToolTest {
         assertEquals(DATASET_ID, request.getId());
         assertEquals(REAL_CODE, request.getCode());
         assertNotNull(request.getUpdateDate());
-        verify(datasetMapper).selectById(DATASET_ID);
+        verifySelectedByCode(REAL_CODE);
         verify(datasetMapper).updateById(request);
         verifyNoMoreInteractions(datasetMapper);
     }
@@ -162,26 +251,29 @@ class DatasetMcpToolTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t\n"})
-    void updateRejectsMissingIdBeforeAccessingMapper(String id) {
-        DatasetEntity request = dataset(DatasetType.JSON);
-        request.setId(id);
-        request.setCode(REAL_CODE);
+    void updateRejectsMissingCodeEvenWithIdBeforeAccessingMapper(String code) {
+        for (DatasetType type : List.of(DatasetType.JSON, DatasetType.DIRECTORY)) {
+            DatasetEntity request = dataset(type);
+            request.setId(DATASET_ID);
+            request.setCode(code);
 
-        assertThrows(IllegalArgumentException.class, () -> controller.update(request));
+            assertThrows(IllegalArgumentException.class, () -> controller.update(request));
 
-        verifyNoInteractions(datasetMapper);
+            verifyNoInteractions(datasetMapper);
+        }
     }
 
-    @Test
-    void updateRejectsMissingRecordWithoutWriting() {
-        DatasetEntity request = dataset(DatasetType.DIRECTORY);
+    @ParameterizedTest
+    @EnumSource(value = DatasetType.class, names = {"JSON", "DIRECTORY"})
+    void updateRejectsMissingRecordWithoutWriting(DatasetType type) {
+        DatasetEntity request = dataset(type);
         request.setId(DATASET_ID);
         request.setCode(FORGED_CODE);
-        when(datasetMapper.selectById(DATASET_ID)).thenReturn(null);
+        when(datasetMapper.selectOne(any())).thenReturn(null);
 
         assertThrows(DataRoomException.class, () -> controller.update(request));
 
-        verify(datasetMapper).selectById(DATASET_ID);
+        verifySelectedByCode(FORGED_CODE);
         verify(datasetMapper, never()).updateById(any(DatasetEntity.class));
         verifyNoMoreInteractions(datasetMapper);
     }
@@ -190,22 +282,22 @@ class DatasetMcpToolTest {
     @CsvSource({"JSON, 0", "DIRECTORY, 0", "JSON, 2", "DIRECTORY, 2"})
     void updateRequiresExactlyOneUpdatedRow(DatasetType type, int affectedRows) {
         DatasetEntity request = dataset(type);
-        request.setId(DATASET_ID);
-        request.setCode(FORGED_CODE);
+        request.setId(FORGED_ID);
+        request.setCode(REAL_CODE);
         stubSuccessfulUpdate(type);
         when(datasetMapper.updateById(any(DatasetEntity.class))).thenReturn(affectedRows);
 
         assertThrows(DataRoomException.class, () -> controller.update(request));
 
-        verify(datasetMapper).selectById(DATASET_ID);
+        verifySelectedByCode(REAL_CODE);
         verify(datasetMapper).updateById(request);
         verifyNoMoreInteractions(datasetMapper);
     }
 
     @ParameterizedTest
     @NullAndEmptySource
-    @ValueSource(strings = {FORGED_CODE})
-    void httpSensitiveHeadersArePreservedFromRecordSelectedById(String suppliedCode) {
+    @ValueSource(strings = {FORGED_ID, DATASET_ID})
+    void httpSensitiveHeadersArePreservedFromRecordSelectedByCode(String suppliedId) {
         DatasetEntity stored = dataset(DatasetType.HTTP);
         stored.setId(DATASET_ID);
         stored.setCode(REAL_CODE);
@@ -217,12 +309,12 @@ class DatasetMcpToolTest {
                 header("X-Replaced", "old-replaced-value", true),
                 header("X-Public", "old-public-value", false)));
         stored.setDataset(storedHttp);
-        when(datasetMapper.selectById(DATASET_ID)).thenReturn(stored);
+        when(datasetMapper.selectOne(any())).thenReturn(stored);
         when(datasetMapper.updateById(any(DatasetEntity.class))).thenReturn(1);
 
         DatasetEntity request = dataset(DatasetType.HTTP);
-        request.setId(DATASET_ID);
-        request.setCode(suppliedCode);
+        request.setId(suppliedId);
+        request.setCode(REAL_CODE);
         HttpDataset requestedHttp = new HttpDataset();
         requestedHttp.setHeaderList(List.of(
                 header(" authorization ", "******", true),
@@ -236,7 +328,7 @@ class DatasetMcpToolTest {
 
         assertEquals(REAL_CODE, response.getData());
         ArgumentCaptor<DatasetEntity> captor = ArgumentCaptor.forClass(DatasetEntity.class);
-        verify(datasetMapper).selectById(DATASET_ID);
+        verifySelectedByCode(REAL_CODE);
         verify(datasetMapper).updateById(captor.capture());
         DatasetEntity written = captor.getValue();
         assertEquals(DATASET_ID, written.getId());
@@ -275,13 +367,14 @@ class DatasetMcpToolTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"JSON,", "JSON, dataset-forged-code", "DIRECTORY,", "DIRECTORY, dataset-forged-code"})
-    void updateMcpCallbackSerializesStoredCode(DatasetType type, String suppliedCode) throws Exception {
+    @CsvSource({"JSON,", "JSON, dataset-forged-id", "JSON, dataset-primary-key",
+            "DIRECTORY,", "DIRECTORY, dataset-forged-id", "DIRECTORY, dataset-primary-key"})
+    void updateMcpCallbackSerializesStoredCode(DatasetType type, String suppliedId) throws Exception {
         stubSuccessfulUpdate(type);
         ToolCallback callback = toolCallback("updateDataset");
 
         String result = callback.call(objectMapper.createObjectNode()
-                .set("datasetEntity", requestJson(type, DATASET_ID, suppliedCode)).toString());
+                .set("datasetEntity", requestJson(type, suppliedId, REAL_CODE)).toString());
 
         assertEquals(REAL_CODE, serializedResponseData(result));
         assertReturnsCodeDescription(callback.getToolDefinition().description());
@@ -307,14 +400,15 @@ class DatasetMcpToolTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"JSON,", "JSON, dataset-forged-code", "DIRECTORY,", "DIRECTORY, dataset-forged-code"})
-    void updateRestResponseContainsStoredCode(DatasetType type, String suppliedCode) throws Exception {
+    @CsvSource({"JSON,", "JSON, dataset-forged-id", "JSON, dataset-primary-key",
+            "DIRECTORY,", "DIRECTORY, dataset-forged-id", "DIRECTORY, dataset-primary-key"})
+    void updateRestResponseContainsStoredCode(DatasetType type, String suppliedId) throws Exception {
         stubSuccessfulUpdate(type);
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
         String result = mockMvc.perform(post("/dataRoom/dataset/update")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson(type, DATASET_ID, suppliedCode).toString()))
+                        .content(requestJson(type, suppliedId, REAL_CODE).toString()))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         assertEquals(REAL_CODE, serializedResponseData(result));
@@ -392,13 +486,27 @@ class DatasetMcpToolTest {
         DatasetEntity stored = dataset(type);
         stored.setId(DATASET_ID);
         stored.setCode(REAL_CODE);
-        when(datasetMapper.selectById(DATASET_ID)).thenReturn(stored);
+        when(datasetMapper.selectOne(any())).thenReturn(stored);
         when(datasetMapper.updateById(any(DatasetEntity.class))).thenReturn(1);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void verifySelectedByCode(String code) {
+        ArgumentCaptor<LambdaQueryWrapper<DatasetEntity>> captor =
+                ArgumentCaptor.forClass(LambdaQueryWrapper.class);
+        verify(datasetMapper).selectOne(captor.capture());
+        LambdaQueryWrapper<DatasetEntity> query = captor.getValue();
+        Matcher condition = Pattern.compile("\\(code = #\\{ew\\.paramNameValuePairs\\.(\\w+)\\}\\)")
+                .matcher(query.getSqlSegment());
+        assertTrue(condition.matches(), "查询必须仅包含 code 等值条件：" + query.getSqlSegment());
+        assertEquals(Map.of(condition.group(1), code), query.getParamNameValuePairs(),
+                "查询绑定值必须是请求 code，不能使用请求 id 或固定编码");
+        assertEquals(null, query.getEntity(), "不能通过实体附带额外查询条件");
     }
 
     private void verifyUpdatedRecord(DatasetType type) {
         ArgumentCaptor<DatasetEntity> captor = ArgumentCaptor.forClass(DatasetEntity.class);
-        verify(datasetMapper).selectById(DATASET_ID);
+        verifySelectedByCode(REAL_CODE);
         verify(datasetMapper).updateById(captor.capture());
         assertEquals(DATASET_ID, captor.getValue().getId());
         assertEquals(REAL_CODE, captor.getValue().getCode());

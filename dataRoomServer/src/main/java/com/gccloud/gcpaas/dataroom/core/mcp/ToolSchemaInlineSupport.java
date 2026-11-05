@@ -2,6 +2,7 @@ package com.gccloud.gcpaas.dataroom.core.mcp;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gccloud.gcpaas.dataroom.core.constant.DatasetType;
 import lombok.extern.slf4j.Slf4j;
@@ -37,25 +38,77 @@ public final class ToolSchemaInlineSupport {
      */
     public static String normalizeInputSchema(String toolName, String inputSchema) {
         String schema = inlineRefs(inputSchema);
-        if (!"insertDataset".equals(toolName) && !"updateDataset".equals(toolName)) {
+        String parameterName = switch (toolName) {
+            case "insertDataset", "updateDataset" -> "datasetEntity";
+            case "newPage" -> "pageEntity";
+            case "updatePageConfig" -> "pageStage";
+            default -> null;
+        };
+        if (parameterName == null) {
             return schema;
         }
         try {
             JsonNode root = MAPPER.readTree(schema);
-            JsonNode typeSchema = root.path("properties").path("datasetEntity")
-                    .path("properties").path("datasetType");
-            if (!(typeSchema instanceof ObjectNode typeObject)) {
-                throw new IllegalStateException("数据集 MCP 工具缺少 datasetEntity.datasetType 定义：" + toolName);
+            if (!(root.path("properties").path(parameterName) instanceof ObjectNode entitySchema)) {
+                throw new IllegalStateException("MCP 工具缺少参数定义：" + toolName + "." + parameterName);
             }
-            // 只替换外层类型枚举，不全局转小写，不改内层多态 const 或其他工具。
-            var values = typeObject.putArray("enum");
-            for (DatasetType type : DatasetType.values()) {
-                values.add(type.getType());
+            if ("datasetEntity".equals(parameterName)) {
+                JsonNode typeSchema = entitySchema.path("properties").path("datasetType");
+                if (!(typeSchema instanceof ObjectNode typeObject)) {
+                    throw new IllegalStateException("数据集 MCP 工具缺少 datasetEntity.datasetType 定义：" + toolName);
+                }
+                // 只替换外层类型枚举，不改内层多态 const 或其他工具。
+                var values = typeObject.putArray("enum");
+                for (DatasetType type : DatasetType.values()) {
+                    values.add(type.getType());
+                }
+                if ("updateDataset".equals(toolName)) {
+                    ArrayNode required = entitySchema.withArray("required");
+                    boolean codeRequired = false;
+                    for (JsonNode field : required) {
+                        codeRequired |= "code".equals(field.asText());
+                    }
+                    if (!codeRequired) {
+                        required.add("code");
+                    }
+                }
+            }
+            // 只调整这四个工具的实体顶层字段，保留属性及共享 BaseEntity 的其他入参契约。
+            Map<String, String> descriptions = Map.of(
+                    "id", switch (toolName) {
+                        case "insertDataset" -> "主键，可省略；未提供时由持久化层生成，传入非空值不会在新增入口清除";
+                        case "updateDataset" -> "主键，可省略；服务端按 code 查询真实主键并覆盖传入值";
+                        case "newPage" -> "主键，可省略；新增入口清除传入值，由持久化层生成";
+                        default -> "主键，可省略；按 pageCode 定位设计态，不使用传入主键";
+                    },
+                    "tenantCode", "租户编码，可省略；新增填充仅在值为 null 时执行，实体更新不修改此字段",
+                    "createUser", "创建人，可省略；新增时为 null 才按当前用户填充，实体更新不修改此字段",
+                    "createDate", "创建时间，可省略；新增时为 null 才填充当前时间，实体更新不修改此字段",
+                    "updateUser", "更新人，可省略；实体新增或更新填充仅在值为 null 时执行，按当前用户填充",
+                    "updateDate", "updateDataset".equals(toolName)
+                            ? "更新时间，可省略；更新入口覆盖为当前时间"
+                            : "更新时间，可省略；新增时为 null 才填充当前时间");
+            for (Map.Entry<String, String> entry : descriptions.entrySet()) {
+                if (entitySchema.path("properties").path(entry.getKey()) instanceof ObjectNode property) {
+                    String description = "updatePageConfig".equals(toolName)
+                            ? ("updateDate".equals(entry.getKey())
+                                    ? "更新时间，可省略；服务端写入当前时间，不使用传入值"
+                                    : "服务端字段，可省略；updatePageConfig 不读取或写入传入的 " + entry.getKey())
+                            : entry.getValue();
+                    property.put("description", description);
+                }
+            }
+            if (entitySchema.path("required") instanceof ArrayNode required) {
+                for (int i = required.size() - 1; i >= 0; i--) {
+                    if (descriptions.containsKey(required.get(i).asText())) {
+                        required.remove(i);
+                    }
+                }
             }
             return MAPPER.writeValueAsString(root);
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
-            throw new IllegalStateException("数据集 MCP 参数定义规范化失败：" + toolName, e);
+            throw new IllegalStateException("MCP 参数定义规范化失败：" + toolName, e);
         }
     }
 
