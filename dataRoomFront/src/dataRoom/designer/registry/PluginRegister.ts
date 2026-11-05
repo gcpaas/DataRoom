@@ -2,6 +2,7 @@
  * 组件插件列表、需要手动导入、否则无法在组件库中显示
  */
 import {DrTextPlugin} from '@/dataRoom/components/DrText/plugin.ts'
+import {DrRichTextPlugin} from '@/dataRoom/components/DrRichText/plugin.ts'
 import {DrImagePlugin} from '@/dataRoom/components/DrImage/plugin.ts'
 import {DrBarChartPlugin} from '@/dataRoom/components/DrBarChart/plugin.ts'
 import {DrLineChartPlugin} from '@/dataRoom/components/DrLineChart/plugin.ts'
@@ -102,6 +103,7 @@ const componentLibTagList: ComponentLibTagInterface[] = [
  */
 const pluginList = [
   new DrTextPlugin([ComponentLibTagTypeConst.TEXT]),
+  new DrRichTextPlugin([ComponentLibTagTypeConst.TEXT]),
   new DrDateTimePlugin([ComponentLibTagTypeConst.TEXT]),
   new DrImagePlugin([ComponentLibTagTypeConst.MEDIA]),
   new DrBarChartPlugin([ComponentLibTagTypeConst.BAR]),

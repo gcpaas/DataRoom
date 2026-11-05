@@ -5,6 +5,11 @@
     "description": "文字、文本、数字"
   },
   {
+    "componentName": "DrRichText",
+    "displayName": "富文本",
+    "description": "富文本、Tiptap、文字样式、数据占位符"
+  },
+  {
     "componentName": "DrDateTime",
     "displayName": "时间",
     "description": "时间、日期、当前时间、当前日期"
