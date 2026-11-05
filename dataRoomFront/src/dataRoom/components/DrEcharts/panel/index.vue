@@ -10,6 +10,7 @@ import {computed, ref} from 'vue'
 import {Codemirror} from 'vue-codemirror'
 import {javascript} from '@codemirror/lang-javascript'
 import {eclipse} from '@uiw/codemirror-theme-eclipse'
+import beautify from 'js-beautify'
 import type {DrEchartsConfig} from '../install.ts'
 
 const {chart} = defineProps<{
@@ -31,6 +32,13 @@ const openEditor = () => {
 
 const cancelEditor = () => {
   dialogVisible.value = false
+}
+
+const formatOption = () => {
+  draftOption.value = beautify.js(draftOption.value, {
+    indent_size: 2,
+    end_with_newline: true,
+  })
 }
 
 const applyEditor = () => {
@@ -90,6 +98,7 @@ const applyEditor = () => {
       </div>
       <template #footer>
         <el-button @click="cancelEditor">取消</el-button>
+        <el-button @click="formatOption">格式化</el-button>
         <el-button type="primary" @click="applyEditor">应用</el-button>
       </template>
     </el-dialog>

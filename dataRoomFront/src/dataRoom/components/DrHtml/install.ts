@@ -9,7 +9,9 @@ const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 
 export interface DrHtmlPropsInterface {
+  // html代码块，生成的代码不要放一行，需要进行代码格式化
   html: string
+  // css代码块，生成的代码不要放一行，需要进行代码格式化
   css: string
   sandbox: {
     allowScripts: boolean
@@ -66,7 +68,7 @@ const getInstance = (): DrHtmlConfig => {
       title: 'HTML',
       w: 400,
       h: 300,
-    }
+    },
   )
 }
 
@@ -75,21 +77,25 @@ const behaviors: Behavior[] = [
     name: '加载完成',
     desc: 'HTML内容加载完成时触发',
     method: 'loaded',
-    paramsList: [{
-      name: 'placeholderCount',
-      desc: '占位符数量',
-      type: 'number',
-    }],
+    paramsList: [
+      {
+        name: 'placeholderCount',
+        desc: '占位符数量',
+        type: 'number',
+      },
+    ],
   },
   {
     name: '单击',
     desc: '鼠标点击HTML组件时触发',
     method: 'click',
-    paramsList: [{
-      name: 'placeholderCount',
-      desc: '占位符数量',
-      type: 'number',
-    }],
+    paramsList: [
+      {
+        name: 'placeholderCount',
+        desc: '占位符数量',
+        type: 'number',
+      },
+    ],
   },
 ]
 
@@ -103,12 +109,8 @@ const datasetFields: ChartDatasetField[] = [
 ]
 
 const mockDataset: ChartMockDataset = {
-  dataset: [
-    { templateContext: { title: '数据样例', value: 12860 } },
-  ],
-  fields: [
-    { name: 'templateContext', bindName: 'templateContext' },
-  ],
+  dataset: [{ templateContext: { title: '数据样例', value: 12860 } }],
+  fields: [{ name: 'templateContext', bindName: 'templateContext' }],
 }
 
 export { component, controlPanel, getInstance, behaviors, datasetFields, mockDataset }

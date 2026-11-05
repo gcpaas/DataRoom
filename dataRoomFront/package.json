@@ -38,6 +38,7 @@
     "element-plus": "^2.13.0",
     "highlight.js": "11.11.1",
     "html-to-image": "^1.11.13",
+    "js-beautify": "^1.15.4",
     "jsencrypt": "^3.5.4",
     "lodash": "4.18.0",
     "markdown-it": "^15.0.3",
@@ -55,6 +56,7 @@
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.3",
+    "@types/js-beautify": "^1.14.3",
     "@types/node": "^24.10.1",
     "@types/three": "^0.184.1",
     "@vitejs/plugin-vue": "^6.0.6",

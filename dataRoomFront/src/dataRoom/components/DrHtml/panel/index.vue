@@ -11,6 +11,7 @@ import { Codemirror } from 'vue-codemirror'
 import { html } from '@codemirror/lang-html'
 import { css } from '@codemirror/lang-css'
 import { eclipse } from '@uiw/codemirror-theme-eclipse'
+import beautify from 'js-beautify'
 import type { DrHtmlConfig } from '../install.ts'
 import { getPlaceholderPaths } from '../html-render.ts'
 
@@ -36,6 +37,20 @@ const openEditor = () => {
 
 const cancelEditor = () => {
   dialogVisible.value = false
+}
+
+const formatHtml = () => {
+  draftHtml.value = beautify.html(draftHtml.value, {
+    indent_size: 2,
+    end_with_newline: true,
+  })
+}
+
+const formatCss = () => {
+  draftCss.value = beautify.css(draftCss.value, {
+    indent_size: 2,
+    end_with_newline: true,
+  })
 }
 
 const applyEditor = () => {
@@ -90,10 +105,13 @@ const applyEditor = () => {
       </el-collapse>
     </el-form>
 
-    <el-dialog v-model="dialogVisible" title="编辑 HTML" width="920px" append-to-body>
+    <el-dialog v-model="dialogVisible" title="编辑 HTML" width="920px" top="5vh" append-to-body>
       <div class="dr-html-config-panel__editor-layout">
         <section class="dr-html-config-panel__editor-section">
-          <div class="dr-html-config-panel__editor-title">HTML</div>
+          <div class="dr-html-config-panel__editor-title">
+            <span>HTML</span>
+            <el-button size="small" @click="formatHtml">格式化</el-button>
+          </div>
           <Codemirror
             v-model="draftHtml"
             class="dr-html-config-panel__editor"
@@ -103,7 +121,10 @@ const applyEditor = () => {
           />
         </section>
         <section class="dr-html-config-panel__editor-section">
-          <div class="dr-html-config-panel__editor-title">CSS</div>
+          <div class="dr-html-config-panel__editor-title">
+            <span>CSS</span>
+            <el-button size="small" @click="formatCss">格式化</el-button>
+          </div>
           <Codemirror
             v-model="draftCss"
             class="dr-html-config-panel__editor"
@@ -156,16 +177,23 @@ const applyEditor = () => {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 12px;
-  min-height: 420px;
+  height: min(520px, calc(100vh - 260px));
+  min-height: 0;
+  max-height: calc(100vh - 260px);
+  overflow: hidden;
 }
 
 .dr-html-config-panel__editor-section {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
 }
 
 .dr-html-config-panel__editor-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 8px;
   color: var(--el-text-color-regular);
   font-size: 12px;
@@ -174,15 +202,18 @@ const applyEditor = () => {
 }
 
 .dr-html-config-panel__editor {
-  min-height: 380px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .dr-html-config-panel__editor :deep(.cm-editor) {
-  min-height: 380px;
+  height: 100%;
   font-size: 13px;
 }
 
 .dr-html-config-panel__editor :deep(.cm-scroller) {
+  overflow: auto;
   font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
 }
 </style>

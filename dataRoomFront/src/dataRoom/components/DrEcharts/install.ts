@@ -14,6 +14,7 @@ export interface DrEchartsPropsInterface {
   /**
    * ECharts option 代码（JS 代码字符串，最后 return option 对象）。
    * 存字符串而非对象：页面配置需要 JSON 序列化，option 中的 formatter 等函数无法被 JSON 表达。
+   * 生成的代码不要放一行，需要进行代码格式化
    */
   option: string
 }

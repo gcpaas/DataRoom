@@ -151,7 +151,7 @@
   },
   {
     "componentName": "DrEcharts",
-    "displayName": "自定义图表",
+    "displayName": "自定义Echarts图表",
     "description": "自定义图表、echarts、option、任意图表"
   }
 ]
