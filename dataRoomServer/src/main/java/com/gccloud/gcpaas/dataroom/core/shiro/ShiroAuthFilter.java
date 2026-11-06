@@ -19,12 +19,23 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * oauth2过滤器
  */
 @Slf4j
 public class ShiroAuthFilter extends AuthenticatingFilter {
+
+    /**
+     * 允许使用 MCP 令牌（Authorization: Bearer drmcp_*）认证的路径（相对 context-path，含控制器字面量前缀）。
+     * 除 MCP 端点本身外，放行素材库直连上传接口，供外部 MCP 客户端复用既有 HTTP 上传能力。
+     */
+    private static final Set<String> MCP_TOKEN_API_PATHS = Set.of(
+            "/mcp",
+            "/dataRoom/resource/upload",
+            "/dataRoom/resource/insert"
+    );
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final String tokenKey;
@@ -134,7 +145,7 @@ public class ShiroAuthFilter extends AuthenticatingFilter {
         String requestUri = request.getRequestURI();
         String path = requestUri.startsWith(contextPath)
                 ? requestUri.substring(contextPath.length()) : requestUri;
-        return "/mcp".equals(path);
+        return MCP_TOKEN_API_PATHS.contains(path);
     }
 
     private void writeAuthError(HttpServletResponse response, Resp<String> authError, boolean mcpRequest)

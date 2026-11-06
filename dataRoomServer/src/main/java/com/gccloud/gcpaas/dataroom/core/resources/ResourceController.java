@@ -29,9 +29,12 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -251,6 +254,31 @@ public class ResourceController {
             return Resp.error("请上传封面");
         }
         return upload(id, null, coverFile, null, null, null, null);
+    }
+
+    /**
+     * MCP 素材目录新建工具。将目录字段构造为实体后复用 {@link #insert} 的既有逻辑，
+     * 目录类型固定为 directory，避免经 MCP 写入无文件的素材记录。
+     *
+     * @param name 目录名称
+     * @param parentCode 上级目录编码，缺省 root
+     * @param remark 备注
+     * @return 统一响应包装的目录 ID，可作为子级素材或子目录的 parentCode
+     */
+    @RequiresRoles(value = DataRoomRole.DEVELOPER)
+    @Tool(name = "insertResourceDirectory", description = "新增素材库目录，返回目录ID（响应data字段），" +
+            "该ID可作为上传素材或创建子目录时的parentCode；目录不存储文件")
+    public Resp<String> insertResourceDirectory(
+            @ToolParam(description = "目录名称", required = true) String name,
+            @ToolParam(description = "上级目录编码，根目录传root，不传默认root", required = false) String parentCode,
+            @ToolParam(description = "备注", required = false) String remark) {
+        Assert.hasText(name, "目录名称不能为空");
+        ResourceEntity resourceEntity = new ResourceEntity();
+        resourceEntity.setName(name);
+        resourceEntity.setResourceType(ResourceType.DIRECTORY);
+        resourceEntity.setParentCode(StringUtils.defaultIfBlank(parentCode, "root"));
+        resourceEntity.setRemark(remark);
+        return insert(resourceEntity);
     }
 
     private void applyMetadata(ResourceEntity resourceEntity, MultipartFile file, String name, String resourceType, String parentCode, String remark, boolean update) {

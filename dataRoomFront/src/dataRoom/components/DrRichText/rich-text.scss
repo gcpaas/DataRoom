@@ -1,13 +1,13 @@
 // 编辑区和画布统一默认样式，局部文字格式由 Tiptap marks 保留。
 .dr-rich-text-content {
   outline: none;
-  color: var(--el-text-color-primary, #303133);
+  color: #eee;
   font-family: 'Microsoft YaHei', Arial, sans-serif;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: var(--dr-rich-text-line-height, 1.6);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  p { margin: 0; min-height: 1.6em; }
+  p { margin: 0; min-height: calc(var(--dr-rich-text-line-height, 1.6) * 1em); }
   strong { font-weight: bold; }
   em { font-style: italic; }
   a { color: var(--el-color-primary, #409eff); cursor: pointer; text-decoration: underline; }

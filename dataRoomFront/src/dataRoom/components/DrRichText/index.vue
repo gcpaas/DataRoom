@@ -25,6 +25,7 @@ watch(resolvedContent, (content) => editor.value?.commands.setContent(content, {
 onBeforeUnmount(() => editor.value?.destroy())
 const alignment = computed(() => ({
   textAlign: chart.props.align,
+  '--dr-rich-text-line-height': chart.props.lineHeight ?? 1.6,
   justifyContent: { top: 'flex-start', center: 'center', bottom: 'flex-end' }[chart.props.verticalAlign],
 }))
 const openLink = (event: MouseEvent) => {

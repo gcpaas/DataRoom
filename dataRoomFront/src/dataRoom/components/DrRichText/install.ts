@@ -10,12 +10,14 @@ const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 
 interface DrRichTextPropsInterface {
-  /** Tiptap JSON 文档；文本支持 #{字段key}，替换值继承占位符起始样式 */
+  /** Tiptap组件 JSON 文档；文本支持 #{字段key}，替换值继承占位符起始样式 */
   content: JSONContent
   /** 整体水平对齐方式 */
   align: 'left' | 'center' | 'right'
   /** 整体垂直对齐方式 */
   verticalAlign: 'top' | 'center' | 'bottom'
+  /** 行间距倍数 */
+  lineHeight: number
 }
 
 export type DrRichTextConfig = ChartConfig<DrRichTextPropsInterface>
@@ -29,6 +31,7 @@ const getInstance = (): DrRichTextConfig => createChartConfig<DrRichTextPropsInt
     },
     align: 'left',
     verticalAlign: 'top',
+    lineHeight: 1.6,
   },
   { title: '富文本', w: 360, h: 180 },
 )

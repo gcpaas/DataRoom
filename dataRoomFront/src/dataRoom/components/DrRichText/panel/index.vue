@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
+import { Link } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import type { DrRichTextConfig } from '../install'
 import { createRichTextExtensions } from '../extensions'
@@ -39,6 +40,7 @@ const current = computed(() => {
     underline: instance?.isActive('underline'), link: instance?.isActive('link'),
     fontSize: attributes.fontSize ? Number.parseFloat(attributes.fontSize) : 14,
     fontFamily: attributes.fontFamily || 'Microsoft YaHei', color: attributes.color || '#303133',
+    lineHeight: chart.props.lineHeight ?? 1.6,
   }
 })
 const fonts = [
@@ -53,6 +55,16 @@ const setFontSize = (size: number | undefined) => {
 const setColor = (color: string | null) => {
   if (color) editor.value?.chain().focus().setColor(color).run()
   else editor.value?.chain().focus().unsetColor().run()
+}
+const lineHeightOptions = [
+  { label: '单倍', value: 1 },
+  { label: '1.15 倍', value: 1.15 },
+  { label: '1.5 倍', value: 1.5 },
+  { label: '1.6 倍', value: 1.6 },
+  { label: '2 倍', value: 2 },
+]
+const setLineHeight = (value: number | undefined) => {
+  if (typeof value === 'number' && Number.isFinite(value)) chart.props.lineHeight = value
 }
 const showLink = () => {
   linkUrl.value = editor.value?.getAttributes('link').href || ''
@@ -78,7 +90,20 @@ const applyLink = () => {
         <button type="button" title="加粗" aria-label="加粗" :aria-pressed="!!current.bold" :class="{ active: current.bold }" @mousedown.prevent @click="editor?.chain().focus().toggleBold().run()"><strong>B</strong></button>
         <button type="button" title="倾斜" aria-label="倾斜" :aria-pressed="!!current.italic" :class="{ active: current.italic }" @mousedown.prevent @click="editor?.chain().focus().toggleItalic().run()"><em>I</em></button>
         <button type="button" title="下划线" aria-label="下划线" :aria-pressed="!!current.underline" :class="{ active: current.underline }" @mousedown.prevent @click="editor?.chain().focus().toggleUnderline().run()"><u>U</u></button>
-        <button type="button" title="超链接" aria-label="超链接" :class="{ active: current.link }" @mousedown.prevent @click="showLink">链接</button>
+        <button type="button" title="超链接" aria-label="超链接" :class="{ active: current.link }" @mousedown.prevent @click="showLink"><el-icon><Link /></el-icon></button>
+        <el-popover placement="bottom" :width="180" trigger="click">
+          <template #reference>
+            <button type="button" :title="`行间距：${current.lineHeight} 倍`" aria-label="行间距" @mousedown.prevent>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 3v18M2 6l3-3 3 3M2 18l3 3 3-3M12 5h10M12 12h10M12 19h10" />
+              </svg>
+            </button>
+          </template>
+          <div class="line-height-options">
+            <button v-for="option in lineHeightOptions" :key="option.value" type="button" :class="{ active: current.lineHeight === option.value }" :aria-pressed="current.lineHeight === option.value" @mousedown.prevent @click="setLineHeight(option.value)">{{ option.label }}</button>
+            <el-input-number :model-value="current.lineHeight" :min="0.5" :max="5" :step="0.1" :precision="2" size="small" controls-position="right" aria-label="自定义行间距倍数" @change="setLineHeight" />
+          </div>
+        </el-popover>
         <el-color-picker :model-value="current.color" size="small" show-alpha aria-label="字体颜色" @change="setColor" />
         <div class="font-controls">
           <el-select :model-value="current.fontFamily" size="small" aria-label="字体" @change="(value: string) => editor?.chain().focus().setFontFamily(value).run()">
@@ -87,7 +112,7 @@ const applyLink = () => {
           <el-input-number :model-value="current.fontSize" :min="8" :max="200" :step="1" size="small" controls-position="right" aria-label="字体大小" @change="setFontSize" />
         </div>
       </div>
-      <EditorContent :editor="editor" class="rich-editor__body" :style="{ textAlign: chart.props.align }" />
+      <EditorContent :editor="editor" class="rich-editor__body" :style="{ textAlign: chart.props.align, '--dr-rich-text-line-height': current.lineHeight }" />
     </div>
     <el-form label-width="64px" size="small" label-position="left" class="alignment-form">
       <el-form-item label="水平对齐">
@@ -125,10 +150,20 @@ const applyLink = () => {
   display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 6px;
   background: var(--el-fill-color-light); border-bottom: 1px solid var(--el-border-color);
   button {
+    display: inline-flex; align-items: center; justify-content: center;
     height: 30px; min-width: 30px; padding: 0 6px; background: transparent;
     border: 1px solid transparent; border-radius: 3px; color: var(--el-text-color-primary); cursor: pointer;
     &:hover, &.active { color: var(--el-color-primary); background: var(--el-color-primary-light-9); border-color: var(--el-color-primary-light-7); }
   }
+}
+.line-height-options {
+  display: flex; flex-direction: column; gap: 4px;
+  button {
+    height: 30px; padding: 0 8px; text-align: left; border: 0; border-radius: 3px;
+    color: var(--el-text-color-primary); background: transparent; cursor: pointer;
+    &:hover, &.active { color: var(--el-color-primary); background: var(--el-color-primary-light-9); }
+  }
+  .el-input-number { width: 100%; margin-top: 4px; }
 }
 .font-controls {
   display: flex; gap: 6px; width: 100%; margin-top: 2px;

@@ -213,6 +213,76 @@ class ShiroAuthFilterTest {
         assertEquals("未登录或token已过期或认证异常", resp.getMessage());
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"/dataRoom/dataRoom/resource/upload", "/dataRoom/dataRoom/resource/insert"})
+    void resourceApiRoutesAcceptMcpBearerToken(String uri) {
+        ShiroAuthFilter filter = new ShiroAuthFilter("customToken");
+        MockHttpServletRequest request = request("/dataRoom", uri);
+        request.addHeader("Authorization", "Bearer drmcp_secret");
+        request.addHeader("customToken", "jwt-token");
+
+        ShiroAuthToken token = createToken(filter, request);
+
+        assertTrue(token.isMcpToken());
+        assertEquals("drmcp_secret", token.getPrincipal());
+        assertEquals("drmcp_secret", token.getCredentials());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"/dataRoom/dataRoom/resource/upload", "/dataRoom/dataRoom/resource/insert"})
+    void resourceApiRoutesWithoutAuthorizationHeaderKeepJwtCompatibility(String uri) {
+        ShiroAuthFilter filter = new ShiroAuthFilter("customToken");
+        MockHttpServletRequest request = request("/dataRoom", uri);
+        request.addHeader("customToken", "jwt-token");
+
+        ShiroAuthToken token = createToken(filter, request);
+
+        assertFalse(token.isMcpToken());
+        assertEquals("jwt-token", token.getPrincipal());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "/dataRoom, /dataRoom/dataRoom/resource/list",
+            "/dataRoom, /dataRoom/dataRoom/resource/detail/123",
+            "/dataRoom, /dataRoom/dataRoom/resource/delete/123",
+            "/dataRoom, /dataRoom/dataRoom/resource/updateModelConfig",
+            "/dataRoom, /dataRoom/dataRoom/resource/upload/extra",
+            "/dataRoom, /dataRoom/dataRoom/resource/upload/"
+    })
+    void nonWhitelistedResourceRoutesKeepRegularJwtToken(String contextPath, String uri) {
+        ShiroAuthFilter filter = new ShiroAuthFilter("customToken");
+        MockHttpServletRequest request = request(contextPath, uri);
+        request.addHeader("Authorization", "Bearer should-not-be-used");
+        request.addHeader("customToken", "jwt-token");
+
+        ShiroAuthToken token = createToken(filter, request);
+
+        assertFalse(token.isMcpToken());
+        assertEquals("jwt-token", token.getPrincipal());
+    }
+
+    @Test
+    void resourceUploadRouteLoginUsesMcpTokenWithoutJwt() throws Exception {
+        Subject subject = mock(Subject.class);
+        ShiroAuthFilter filter = filterFor(subject);
+        MockHttpServletRequest request = spy(request("/dataRoom", "/dataRoom/dataRoom/resource/upload"));
+        request.addHeader("Authorization", "Bearer drmcp_secret");
+        request.addHeader("customToken", "jwt-token");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        Boolean allowed = ReflectionTestUtils.invokeMethod(filter, "onAccessDenied", request, response);
+
+        assertTrue(allowed);
+        ArgumentCaptor<AuthenticationToken> captor = ArgumentCaptor.forClass(AuthenticationToken.class);
+        verify(subject).login(captor.capture());
+        ShiroAuthToken token = assertInstanceOf(ShiroAuthToken.class, captor.getValue());
+        assertTrue(token.isMcpToken());
+        assertEquals("drmcp_secret", token.getPrincipal());
+        verify(request, never()).getHeader("customToken");
+        verify(request, never()).getCookies();
+    }
+
     private static ShiroAuthFilter filterFor(Subject subject) {
         return new ShiroAuthFilter("customToken") {
             @Override

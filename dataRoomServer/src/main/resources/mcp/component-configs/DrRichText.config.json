@@ -133,7 +133,7 @@
     {
       "field": "props.content",
       "type": "object",
-      "description": "Tiptap JSON 文档；文本支持 #{字段key}，替换值继承占位符起始样式",
+      "description": "Tiptap组件 JSON 文档；文本支持 #{字段key}，替换值继承占位符起始样式",
       "defaultValue": {
         "type": "doc",
         "content": [
@@ -170,6 +170,12 @@
         "bottom"
       ],
       "defaultValue": "top"
+    },
+    {
+      "field": "props.lineHeight",
+      "type": "number",
+      "description": "行间距倍数",
+      "defaultValue": 1.6
     }
   ],
   "datasetFields": []
