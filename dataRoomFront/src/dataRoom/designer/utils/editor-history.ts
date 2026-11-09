@@ -134,6 +134,17 @@ export const normalizeSiblingZOrder = (siblings: ChartConfig<unknown>[]) => {
   })
 }
 
+/**
+ * 同级组件按图层降序排序（z 大者在前，同 z 保持数组原有顺序）。
+ * 数组下标 0 视为最顶层。组件层级由 chart.z 决定，与数组顺序无关。
+ */
+export const sortChartsByLayerDesc = (siblings: ChartConfig<unknown>[]) => {
+  return siblings
+    .map((chart, index) => ({ chart, index }))
+    .sort((a, b) => (b.chart.z - a.chart.z) || (a.index - b.index))
+    .map(({ chart }) => chart)
+}
+
 const hasChartListChange = (before: ChartConfig<unknown>[], after: ChartConfig<unknown>[]) => {
   return JSON.stringify(before.map((chart) => toRaw(chart))) !== JSON.stringify(after.map((chart) => toRaw(chart)))
 }

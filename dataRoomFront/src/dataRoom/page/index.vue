@@ -367,13 +367,7 @@ onMounted(() => {
   <div class="dr-page">
     <div class="page-header">
       <div class="search-box">
-        <el-input
-          v-model="searchName"
-          placeholder="请输入页面名称"
-          :prefix-icon="Search"
-          clearable
-          @keyup.enter="getPageList"
-        />
+        <el-input v-model="searchName" placeholder="请输入页面名称" :prefix-icon="Search" clearable @keyup.enter="getPageList" />
       </div>
       <div class="button-group">
         <el-button :icon="Search" @click="getPageList">查询</el-button>
@@ -384,7 +378,7 @@ onMounted(() => {
           <el-breadcrumb-item
             v-for="(item, index) in breadcrumbs"
             :key="item.code"
-            :class="{clickable: index < breadcrumbs.length - 1}"
+            :class="{ clickable: index < breadcrumbs.length - 1 }"
             @click="index < breadcrumbs.length - 1 ? handleBreadcrumbClick(index) : null"
           >
             {{ item.name }}
@@ -398,16 +392,10 @@ onMounted(() => {
         <div class="card-list">
           <div class="page-card" v-for="item in pageList" :key="item.code">
             <div class="card-thumbnail" @click="handleCardClick(item)">
-              <el-image
-                :src="getThumbnailSrc(item)"
-                :lazy="true"
-                fit="contain"
-                class="thumbnail-image"
-                :class="{ 'thumbnail-image--directory': isDirectoryPage(item.pageType) }"
-              >
+              <el-image :src="getThumbnailSrc(item)" :lazy="true" fit="contain" class="thumbnail-image" :class="{ 'thumbnail-image--directory': isDirectoryPage(item.pageType) }">
                 <template #error>
                   <div class="image-error">
-                    <img :src="getDefaultPlaceholder(item.pageType)" :alt="getPlaceholderAlt(item.pageType)"/>
+                    <img :src="getDefaultPlaceholder(item.pageType)" :alt="getPlaceholderAlt(item.pageType)" />
                   </div>
                 </template>
               </el-image>
@@ -427,9 +415,9 @@ onMounted(() => {
                 <el-tag :type="getStatusType(item.pageStatus)" size="small" v-if="item.pageType !== PageType.DIRECTORY">
                   {{ getStatusName(item.pageStatus) }}
                 </el-tag>
-                <el-dropdown trigger="click" @command="(command:string) => handleCardCommand(command, item)">
+                <el-dropdown trigger="click" @command="(command: string) => handleCardCommand(command, item)">
                   <el-icon class="more-icon">
-                    <MoreFilled/>
+                    <MoreFilled />
                   </el-icon>
                   <template #dropdown>
                     <el-dropdown-menu>
@@ -448,22 +436,16 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <el-empty :image-size="200" v-if="!loading && pageList.length === 0" description="暂无页面"/>
+        <el-empty :image-size="200" v-if="!loading && pageList.length === 0" description="暂无页面" />
       </el-scrollbar>
     </div>
 
     <!-- 新增类型选择对话框 -->
     <el-dialog v-model="addDialogVisible" title="选择新增类型" width="880px" :close-on-click-modal="true">
       <div class="add-type-cards">
-        <div
-          v-for="option in addTypeOptions"
-          :key="option.type"
-          class="add-type-card"
-          :class="{ 'add-type-card--disabled': option.disabled }"
-          @click="handleSelectType(option)"
-        >
+        <div v-for="option in addTypeOptions" :key="option.type" class="add-type-card" :class="{ 'add-type-card--disabled': option.disabled }" @click="handleSelectType(option)">
           <el-icon class="add-type-icon">
-            <component :is="option.icon"/>
+            <component :is="option.icon" />
           </el-icon>
           <div class="add-type-name">{{ option.name }}</div>
           <div class="add-type-desc">{{ option.description }}</div>
@@ -530,7 +512,9 @@ onMounted(() => {
         border: 1px solid var(--el-border-color-light);
         border-radius: 8px;
         overflow: hidden;
-        transition: border-color 0.2s ease, background-color 0.2s ease;
+        transition:
+          border-color 0.2s ease,
+          background-color 0.2s ease;
         cursor: pointer;
 
         &:hover {
@@ -541,7 +525,10 @@ onMounted(() => {
           position: relative;
           width: 100%;
           height: 180px;
-          background-color: var(--el-fill-color-extra-light);
+          background-color: #fff;
+          background-image: linear-gradient(45deg, #f5f6f7 25%, transparent 25%, transparent 75%, #f5f6f7 75%), linear-gradient(45deg, #f5f6f7 25%, transparent 25%, transparent 75%, #f5f6f7 75%);
+          background-position: 0 0, 8px 8px;
+          background-size: 16px 16px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -684,7 +671,9 @@ onMounted(() => {
     border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
 
     &:hover {
       border-color: var(--el-color-primary);

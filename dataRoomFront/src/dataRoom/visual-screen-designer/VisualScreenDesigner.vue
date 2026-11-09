@@ -34,16 +34,17 @@ import {
   captureChartLayoutState,
   cloneChartConfig,
   createAddChartHistoryEntry,
+  createChartLayoutHistoryEntry,
   createChartsLayoutHistoryEntry,
   createRemoveChartHistoryEntry,
   createReplaceChartChildrenHistoryEntry,
-  createReorderChartHistoryEntry,
   findChartReference,
   getChartListByParent,
   getEditorHistoryShortcutAction,
   isNativeTextEditingTarget,
   removeChartWithLocation,
-  reorderChartWithinParent,
+  sortChartsByLayerDesc,
+  type ChartLayoutState,
   type ChartParentRef,
 } from '@/dataRoom/designer/utils/editor-history.ts'
 import RulerOverlay from './RulerOverlay.vue'
@@ -561,46 +562,128 @@ const setChartHidden = (chartId: string, hidden: boolean) => {
   return true
 }
 
+/**
+ * 记录一次同级图层（z 值）变更到历史记录
+ * @param label 历史记录标签
+ * @param parent 同级父引用
+ * @param before 变更前同级组件快照
+ * @param siblings 变更后的同级组件列表（当前状态）
+ */
+const recordLayerZChange = (label: string, parent: ChartParentRef, before: ChartConfig<unknown>[], siblings: ChartConfig<unknown>[]) => {
+  const entry = createReplaceChartChildrenHistoryEntry(label, 'visual-screen-designer', parent, before, siblings)
+  if (!entry) {
+    return false
+  }
+  editorHistory.record(entry)
+  syncActiveChartReference()
+  syncDesignerSelectionOverlay()
+  return true
+}
+
+/**
+ * 调整图层顺序。层级由 chart.z 决定（任意整数，z 越大越靠顶层）：
+ * 置顶 = 同级最大 z + 1；置底 = 同级最小 z - 1；上移/下移 = 与相邻层交换 z，同 z 时越过一层。
+ */
 const moveChartLayer = (chartId: string, direction: ChartLayerMoveDirection) => {
   const reference = findChartReference(chartId, chartList.value)
   if (!reference) {
     return false
   }
 
-  const siblingList = getChartListByParent(chartList.value, reference.parent)
-  if (!siblingList || siblingList.length <= 1) {
+  const siblings = getChartListByParent(chartList.value, reference.parent)
+  if (!siblings || siblings.length <= 1) {
     return false
   }
 
-  let targetIndex = reference.index
+  const chart = reference.chart
+  const others = siblings.filter((item) => item.id !== chartId)
+  const sorted = sortChartsByLayerDesc(siblings)
+  const position = sorted.findIndex((item) => item.id === chartId)
+
+  const before = siblings.map((item) => cloneChartConfig(item))
   let label = '调整图层顺序'
+
   if (direction === 'top') {
-    targetIndex = 0
+    const maxZ = Math.max(...others.map((item) => item.z))
+    if (chart.z > maxZ) {
+      return false
+    }
+    chart.z = maxZ + 1
     label = '图层置顶'
+  } else if (direction === 'bottom') {
+    const minZ = Math.min(...others.map((item) => item.z))
+    if (chart.z < minZ) {
+      return false
+    }
+    chart.z = minZ - 1
+    label = '图层置底'
   } else if (direction === 'up') {
-    targetIndex = Math.max(0, reference.index - 1)
+    const prev = sorted[position - 1]
+    if (!prev) {
+      return false
+    }
+    if (prev.z > chart.z) {
+      const z = chart.z
+      chart.z = prev.z
+      prev.z = z
+    } else {
+      chart.z = prev.z + 1
+    }
     label = '图层上移'
   } else if (direction === 'down') {
-    targetIndex = Math.min(siblingList.length - 1, reference.index + 1)
+    const next = sorted[position + 1]
+    if (!next) {
+      return false
+    }
+    if (next.z < chart.z) {
+      const z = chart.z
+      chart.z = next.z
+      next.z = z
+    } else {
+      chart.z = next.z - 1
+    }
     label = '图层下移'
-  } else if (direction === 'bottom') {
-    targetIndex = siblingList.length - 1
-    label = '图层置底'
   }
 
-  const reordered = reorderChartWithinParent(chartList.value, {
-    parent: reference.parent,
-    chartId,
-    toIndex: targetIndex,
-  })
-  if (!reordered || targetIndex === reference.index) {
+  return recordLayerZChange(label, reference.parent, before, siblings)
+}
+
+/**
+ * 设置组件图层值（任意整数，可为负数）
+ */
+const setChartLayerZ = (chartId: string, z: number) => {
+  const reference = findChartReference(chartId, chartList.value)
+  if (!reference) {
     return false
   }
 
-  editorHistory.record(createReorderChartHistoryEntry(label, 'visual-screen-designer', reference.parent, chartId, reference.index, targetIndex))
+  const targetZ = Math.round(z)
+  if (reference.chart.z === targetZ) {
+    return false
+  }
+
+  const siblings = getChartListByParent(chartList.value, reference.parent)
+  if (!siblings) {
+    return false
+  }
+
+  const before = siblings.map((item) => cloneChartConfig(item))
+  reference.chart.z = targetZ
+  return recordLayerZChange('设置图层值', reference.parent, before, siblings)
+}
+
+/**
+ * 提交组件布局（x/y/w/h/旋转）变更到历史记录，供配置面板数值输入使用
+ */
+const commitChartLayout = (chartId: string, before: ChartLayoutState, after: ChartLayoutState, label = '调整位置尺寸') => {
+  const entry = createChartLayoutHistoryEntry(label, 'visual-screen-designer', chartId, before, after)
+  if (!entry) {
+    return
+  }
+
+  editorHistory.record(entry)
   syncActiveChartReference()
   syncDesignerSelectionOverlay()
-  return true
 }
 
 const applyHistoryAction = (action: 'undo' | 'redo') => {
@@ -617,6 +700,8 @@ const applyHistoryAction = (action: 'undo' | 'redo') => {
 
 const addChart = (type: string) => {
   const chartInst: ChartConfig<unknown> = getComponentInstance(type)
+  // 新组件默认置于同级最顶层
+  chartInst.z = currentScopeCharts.value.length > 0 ? Math.max(...currentScopeCharts.value.map((item) => item.z)) + 1 : 0
   currentScopeCharts.value.push(chartInst)
   return chartInst
 }
@@ -732,6 +817,8 @@ const { canvasInst, chartInstanceMap } = useCanvasInst({
   canUndo: () => editorHistory.canUndo,
   canRedo: () => editorHistory.canRedo,
   moveChartLayer,
+  setChartLayerZ,
+  commitChartLayout,
   deleteChart: deleteChartWithHistory,
   setChartHidden,
 })

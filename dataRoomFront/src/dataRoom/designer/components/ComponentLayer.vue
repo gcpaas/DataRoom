@@ -1,11 +1,12 @@
 <!-- 图层 -->
 <script setup lang="ts">
-import { computed, type ComputedRef, type CSSProperties, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, type ComputedRef, type CSSProperties, inject, onBeforeUnmount, onMounted, ref, unref, watch } from 'vue'
 import { ElMessageBox, type FilterNodeMethodFunction } from 'element-plus'
 import type { TreeInstance, TreeNodeData, TreeOptionProps } from 'element-plus'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
-import type { CanvasInst } from '@/dataRoom/designer/types/CanvasInst.ts'
+import type { CanvasInst, ChartLayerMoveDirection } from '@/dataRoom/designer/types/CanvasInst.ts'
 import { createLayerNodes, type LayerNode } from '@/dataRoom/designer/components/component-layer.ts'
+import { findChartReference, getChartListByParent, sortChartsByLayerDesc } from '@/dataRoom/designer/utils/editor-history.ts'
 
 const props = defineProps<{
   activeChartId?: string
@@ -113,6 +114,47 @@ const updateLayerChartHidden = (hidden: boolean) => {
   closeLayerContextMenu()
 }
 
+/**
+ * 右键菜单目标组件在同级中的图层可操作状态（层级按 z 值降序排序判断）
+ */
+const layerMoveState = computed(() => {
+  const chartId = layerContextMenuNode.value?.chart.id
+  if (!chartId) {
+    return { canMoveUp: false, canMoveDown: false }
+  }
+  const charts = unref(canvasInst.chartList)
+  const reference = findChartReference(chartId, charts)
+  const siblings = reference ? getChartListByParent(charts, reference.parent) : null
+  if (!reference || !siblings || siblings.length <= 1) {
+    return { canMoveUp: false, canMoveDown: false }
+  }
+  const sorted = sortChartsByLayerDesc(siblings)
+  const position = sorted.findIndex((item) => item.id === chartId)
+  return {
+    canMoveUp: position > 0,
+    canMoveDown: position >= 0 && position < sorted.length - 1,
+  }
+})
+
+const isLayerMoveDisabled = (direction: ChartLayerMoveDirection) => {
+  if (direction === 'top' || direction === 'up') {
+    return !layerMoveState.value.canMoveUp
+  }
+  return !layerMoveState.value.canMoveDown
+}
+
+/**
+ * 调整图层顺序：置顶/上移一层/下移一层/置底
+ */
+const moveLayerNode = (direction: ChartLayerMoveDirection) => {
+  const layerNode = layerContextMenuNode.value
+  if (!layerNode || isLayerMoveDisabled(direction)) {
+    return
+  }
+  canvasInst.moveChartLayer(layerNode.chart.id, direction)
+  closeLayerContextMenu()
+}
+
 const computedLayerContextMenuStyle = computed<CSSProperties>(() => {
   return {
     position: 'fixed',
@@ -168,6 +210,10 @@ onBeforeUnmount(() => {
       </el-scrollbar>
     </div>
     <div v-if="layerContextMenuVisible" ref="layerContextMenuRef" class="layer-context-menu" :style="computedLayerContextMenuStyle">
+      <button class="layer-context-menu__item" type="button" :disabled="isLayerMoveDisabled('top')" @click="moveLayerNode('top')">置顶</button>
+      <button class="layer-context-menu__item" type="button" :disabled="isLayerMoveDisabled('up')" @click="moveLayerNode('up')">上移一层</button>
+      <button class="layer-context-menu__item" type="button" :disabled="isLayerMoveDisabled('down')" @click="moveLayerNode('down')">下移一层</button>
+      <button class="layer-context-menu__item" type="button" :disabled="isLayerMoveDisabled('bottom')" @click="moveLayerNode('bottom')">置底</button>
       <button class="layer-context-menu__item" type="button" @click="deleteLayerChart">删除</button>
       <button v-if="layerContextMenuNode?.hidden" class="layer-context-menu__item" type="button" @click="updateLayerChartHidden(false)">显示</button>
       <button v-else class="layer-context-menu__item" type="button" @click="updateLayerChartHidden(true)">隐藏</button>
@@ -249,6 +295,16 @@ onBeforeUnmount(() => {
   &:hover {
     background: var(--el-color-primary-light-9);
     color: var(--el-color-primary);
+  }
+
+  &:disabled {
+    color: var(--el-text-color-disabled);
+    cursor: not-allowed;
+
+    &:hover {
+      background: transparent;
+      color: var(--el-text-color-disabled);
+    }
   }
 }
 </style>

@@ -818,7 +818,12 @@ onMounted(() => {
         .card-thumbnail {
           height: 180px;
           padding: 16px;
-          background-color: var(--el-fill-color-extra-light);
+          background-color: #fff;
+          background-image:
+            linear-gradient(45deg, #f5f6f7 25%, transparent 25%, transparent 75%, #f5f6f7 75%),
+            linear-gradient(45deg, #f5f6f7 25%, transparent 25%, transparent 75%, #f5f6f7 75%);
+          background-position: 0 0, 8px 8px;
+          background-size: 16px 16px;
           display: flex;
           align-items: center;
           justify-content: center;

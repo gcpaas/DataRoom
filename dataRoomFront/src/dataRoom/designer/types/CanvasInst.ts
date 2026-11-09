@@ -2,7 +2,7 @@ import type {Ref} from "vue";
 import type {ComponentInternalInstance} from "vue";
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts";
 import type {ChartAction} from "@/dataRoom/components/type/ChartAction.ts";
-import type {ChartParentRef} from "@/dataRoom/designer/utils/editor-history.ts";
+import type {ChartLayoutState, ChartParentRef} from "@/dataRoom/designer/utils/editor-history.ts";
 
 export type ChartLayerMoveDirection = 'up' | 'down' | 'top' | 'bottom'
 
@@ -100,11 +100,25 @@ export interface CanvasInst {
    */
   readonly canRedo: boolean
   /**
-   * 调整图层顺序
+   * 调整图层顺序（基于 z 值操作：置顶=maxZ+1、置底=minZ-1、上移/下移=与相邻层交换或越过）
    * @param chartId
    * @param direction
    */
   moveChartLayer: (chartId: string, direction: ChartLayerMoveDirection) => boolean
+  /**
+   * 设置组件图层值（任意整数，可为负数；z 越大越靠顶层，同 z 按数组顺序后者在上）
+   * @param chartId
+   * @param z 目标图层值
+   */
+  setChartLayerZ: (chartId: string, z: number) => boolean
+  /**
+   * 提交组件布局（x/y/w/h/旋转）变更到历史记录
+   * @param chartId
+   * @param before 变更前布局快照
+   * @param after 变更后布局快照
+   * @param label 历史记录标签，默认为「调整位置尺寸」
+   */
+  commitChartLayout: (chartId: string, before: ChartLayoutState, after: ChartLayoutState, label?: string) => void
   /**
    * 删除组件
    * @param chartId

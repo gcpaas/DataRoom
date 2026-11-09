@@ -169,9 +169,10 @@ const getSystemResourceCategories = async () => {
 const getSystemResourceList = async () => {
   systemResourceLoading.value = true
   try {
-    systemResourceList.value = (await resourceApi.systemResourceList({
-      category: systemResourceCategory.value,
-    })) || []
+    systemResourceList.value =
+      (await resourceApi.systemResourceList({
+        category: systemResourceCategory.value,
+      })) || []
     systemResourceLoaded.value = true
   } catch (error) {
     console.error('查询系统素材失败:', error)
@@ -725,182 +726,135 @@ onMounted(() => {
     </div>
 
     <div v-show="activeResourceTab === 'mine'" class="resource-tab-panel" role="tabpanel">
-        <div class="resource-header">
-          <div class="search-box">
-            <el-input
-              v-model="searchName"
-              placeholder="请输入资源名称"
-              :prefix-icon="Search"
-              clearable
-              @keyup.enter="getResourceList"
-            />
-          </div>
-          <div class="resource-type-filter">
-            <el-select v-model="searchResourceType" placeholder="素材类型" @change="getResourceList">
-              <el-option
-                v-for="item in resourceTypeFilterOptions"
-                :key="item.value || 'all'"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </div>
-          <div class="button-group">
-            <el-button :icon="Search" @click="getResourceList">查询</el-button>
-            <el-button type="primary" :icon="Plus" @click="handleAdd">新增</el-button>
-          </div>
-          <div class="breadcrumb-box">
-            <el-breadcrumb separator="/">
-              <el-breadcrumb-item
-                v-for="(item, index) in breadcrumbs"
-                :key="item.code"
-                :class="{ clickable: index < breadcrumbs.length - 1 }"
-                @click="index < breadcrumbs.length - 1 ? handleBreadcrumbClick(index) : null"
-              >
-                {{ item.name }}
-              </el-breadcrumb-item>
-            </el-breadcrumb>
-          </div>
+      <div class="resource-header">
+        <div class="search-box">
+          <el-input v-model="searchName" placeholder="请输入资源名称" :prefix-icon="Search" clearable @keyup.enter="getResourceList" />
         </div>
+        <div class="resource-type-filter">
+          <el-select v-model="searchResourceType" placeholder="素材类型" @change="getResourceList">
+            <el-option v-for="item in resourceTypeFilterOptions" :key="item.value || 'all'" :label="item.label" :value="item.value" />
+          </el-select>
+        </div>
+        <div class="button-group">
+          <el-button :icon="Search" @click="getResourceList">查询</el-button>
+          <el-button type="primary" :icon="Plus" @click="handleAdd">新增</el-button>
+        </div>
+        <div class="breadcrumb-box">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item
+              v-for="(item, index) in breadcrumbs"
+              :key="item.code"
+              :class="{ clickable: index < breadcrumbs.length - 1 }"
+              @click="index < breadcrumbs.length - 1 ? handleBreadcrumbClick(index) : null"
+            >
+              {{ item.name }}
+            </el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
+      </div>
 
-        <div class="resource-content" v-loading="loading">
-          <el-scrollbar>
-            <div class="card-list">
-              <div
-                class="resource-card"
-                v-for="item in resourceList"
-                :key="item.id"
-                :class="{ selected: props.selectable && isResourceSelected(item) }"
-              >
-                <div class="card-thumbnail" @click="handleCardClick(item)">
-                  <div class="selection-overlay" v-if="props.selectable && isSelectableResource(item)">
-                    <el-icon class="selection-icon" v-if="isResourceSelected(item)">
-                      <Check />
-                    </el-icon>
-                  </div>
-                  <div class="thumbnail-stage" :class="getResourceThumbnailStageClass(item)">
-                    <el-image
-                      :src="getResourceThumbnailSrc(item)"
-                      :lazy="true"
-                      fit="contain"
-                      class="thumbnail-image"
-                      :class="getResourceThumbnailImageClass(item)"
-                    >
-                      <template #error>
-                        <div class="image-error">
-                          <img :src="getDefaultPlaceholder(item.resourceType)" :alt="getPlaceholderAlt(item.resourceType)" />
-                        </div>
-                      </template>
-                    </el-image>
-                  </div>
+      <div class="resource-content" v-loading="loading">
+        <el-scrollbar>
+          <div class="card-list">
+            <div class="resource-card" v-for="item in resourceList" :key="item.id" :class="{ selected: props.selectable && isResourceSelected(item) }">
+              <div class="card-thumbnail" @click="handleCardClick(item)">
+                <div class="selection-overlay" v-if="props.selectable && isSelectableResource(item)">
+                  <el-icon class="selection-icon" v-if="isResourceSelected(item)">
+                    <Check />
+                  </el-icon>
                 </div>
-                <div class="card-footer">
-                  <div class="card-info">
-                    <span class="type-label">{{ getTypeName(item.resourceType) }}</span>
-                    <span class="card-name" :title="item.name">{{ item.name }}</span>
-                  </div>
-                  <div class="card-actions" v-if="!props.selectable">
-                    <el-dropdown trigger="click" @command="(command: string) => handleCardCommand(command, item)">
-                      <el-icon class="more-icon">
-                        <MoreFilled />
-                      </el-icon>
-                      <template #dropdown>
-                        <el-dropdown-menu>
-                          <el-dropdown-item command="edit">编辑</el-dropdown-item>
-                          <el-dropdown-item command="delete" divided>删除</el-dropdown-item>
-                        </el-dropdown-menu>
-                      </template>
-                    </el-dropdown>
-                  </div>
+                <div class="thumbnail-stage" :class="getResourceThumbnailStageClass(item)">
+                  <el-image :src="getResourceThumbnailSrc(item)" :lazy="true" fit="contain" class="thumbnail-image" :class="getResourceThumbnailImageClass(item)">
+                    <template #error>
+                      <div class="image-error">
+                        <img :src="getDefaultPlaceholder(item.resourceType)" :alt="getPlaceholderAlt(item.resourceType)" />
+                      </div>
+                    </template>
+                  </el-image>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-info">
+                  <span class="type-label">{{ getTypeName(item.resourceType) }}</span>
+                  <span class="card-name" :title="item.name">{{ item.name }}</span>
+                </div>
+                <div class="card-actions" v-if="!props.selectable">
+                  <el-dropdown trigger="click" @command="(command: string) => handleCardCommand(command, item)">
+                    <el-icon class="more-icon">
+                      <MoreFilled />
+                    </el-icon>
+                    <template #dropdown>
+                      <el-dropdown-menu>
+                        <el-dropdown-item command="edit">编辑</el-dropdown-item>
+                        <el-dropdown-item command="delete" divided>删除</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
+                  </el-dropdown>
                 </div>
               </div>
             </div>
-            <el-empty :image-size="200" v-if="!loading && resourceList.length === 0" description="暂无资源" />
-          </el-scrollbar>
-        </div>
+          </div>
+          <el-empty :image-size="200" v-if="!loading && resourceList.length === 0" description="暂无资源" />
+        </el-scrollbar>
+      </div>
     </div>
 
     <div v-show="activeResourceTab === 'system'" class="resource-tab-panel" role="tabpanel">
-        <div class="system-resource-toolbar">
-          <div class="system-category-tabs" role="tablist" aria-label="系统素材分类">
-            <button
-              v-for="category in systemResourceCategories"
-              :key="category.code"
-              type="button"
-              class="system-category-tab"
-              :class="{ 'is-active': systemResourceCategory === category.code }"
-              role="tab"
-              :aria-selected="systemResourceCategory === category.code"
-              @click="switchSystemCategory(category.code)"
-            >
-              {{ category.name }}
-            </button>
-          </div>
-          <span class="system-resource-note">素材源自网络，版权归原作者所有</span>
+      <div class="system-resource-toolbar">
+        <div class="system-category-tabs" role="tablist" aria-label="系统素材分类">
+          <button
+            v-for="category in systemResourceCategories"
+            :key="category.code"
+            type="button"
+            class="system-category-tab"
+            :class="{ 'is-active': systemResourceCategory === category.code }"
+            role="tab"
+            :aria-selected="systemResourceCategory === category.code"
+            @click="switchSystemCategory(category.code)"
+          >
+            {{ category.name }}
+          </button>
         </div>
+        <span class="system-resource-note">素材源自网络，版权归原作者所有</span>
+      </div>
 
-        <div class="resource-content" v-loading="systemResourceLoading">
-          <el-scrollbar>
-            <div class="card-list">
-              <div
-                class="resource-card"
-                v-for="item in systemResourceList"
-                :key="item.id"
-                :class="{ selected: props.selectable && isResourceSelected(item) }"
-              >
-                <div class="card-thumbnail" @click="handleSystemCardClick(item)">
-                  <div class="selection-overlay" v-if="props.selectable">
-                    <el-icon class="selection-icon" v-if="isResourceSelected(item)">
-                      <Check />
-                    </el-icon>
-                  </div>
-                  <div class="thumbnail-stage" :class="getResourceThumbnailStageClass(item)">
-                    <el-image
-                      :src="getResourceThumbnailSrc(item)"
-                      :lazy="true"
-                      fit="contain"
-                      class="thumbnail-image"
-                      :class="getResourceThumbnailImageClass(item)"
-                    >
-                      <template #error>
-                        <div class="image-error">
-                          <img :src="getDefaultPlaceholder(item.resourceType)" :alt="getPlaceholderAlt(item.resourceType)" />
-                        </div>
-                      </template>
-                    </el-image>
-                  </div>
+      <div class="resource-content" v-loading="systemResourceLoading">
+        <el-scrollbar>
+          <div class="card-list">
+            <div class="resource-card" v-for="item in systemResourceList" :key="item.id" :class="{ selected: props.selectable && isResourceSelected(item) }">
+              <div class="card-thumbnail" @click="handleSystemCardClick(item)">
+                <div class="selection-overlay" v-if="props.selectable">
+                  <el-icon class="selection-icon" v-if="isResourceSelected(item)">
+                    <Check />
+                  </el-icon>
                 </div>
-                <div class="card-footer">
-                  <div class="card-info">
-                    <span class="type-label">{{ getTypeName(item.resourceType) }}</span>
-                    <span class="card-name" :title="item.name">{{ item.name }}</span>
-                  </div>
+                <div class="thumbnail-stage" :class="getResourceThumbnailStageClass(item)">
+                  <el-image :src="getResourceThumbnailSrc(item)" :lazy="true" fit="contain" class="thumbnail-image" :class="getResourceThumbnailImageClass(item)">
+                    <template #error>
+                      <div class="image-error">
+                        <img :src="getDefaultPlaceholder(item.resourceType)" :alt="getPlaceholderAlt(item.resourceType)" />
+                      </div>
+                    </template>
+                  </el-image>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-info">
+                  <span class="type-label">{{ getTypeName(item.resourceType) }}</span>
+                  <span class="card-name" :title="item.name">{{ item.name }}</span>
                 </div>
               </div>
             </div>
-            <el-empty
-              :image-size="200"
-              v-if="!systemResourceLoading && systemResourceList.length === 0"
-              description="暂无系统素材"
-            />
-          </el-scrollbar>
-        </div>
+          </div>
+          <el-empty :image-size="200" v-if="!systemResourceLoading && systemResourceList.length === 0" description="暂无系统素材" />
+        </el-scrollbar>
+      </div>
     </div>
 
     <!-- 新增类型选择对话框 -->
-    <el-dialog
-      title="选择资源类型"
-      v-model="typeSelectDialogVisible"
-      width="560px"
-      :close-on-click-modal="true"
-    >
+    <el-dialog title="选择资源类型" v-model="typeSelectDialogVisible" width="560px" :close-on-click-modal="true">
       <div class="type-select-cards">
-        <div
-          class="type-card"
-          v-for="item in resourceTypeOptions"
-          :key="item.type"
-          @click="handleSelectType(item.type)"
-        >
+        <div class="type-card" v-for="item in resourceTypeOptions" :key="item.type" @click="handleSelectType(item.type)">
           <div class="type-card-icon">
             <el-icon :size="32"><component :is="item.icon" /></el-icon>
           </div>
@@ -977,40 +931,20 @@ onMounted(() => {
           </div>
         </el-form-item>
         <el-form-item label="描述">
-          <el-input
-            v-model="editingResource!.remark"
-            type="textarea"
-            placeholder="请输入描述"
-          />
+          <el-input v-model="editingResource!.remark" type="textarea" placeholder="请输入描述" />
         </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="uploadDialogVisible = false">取消</el-button>
-        <el-button
-          type="primary"
-          :loading="savingResource"
-          @click="handleEditConfirm()"
-        >
-          确定
-        </el-button>
+        <el-button type="primary" :loading="savingResource" @click="handleEditConfirm()"> 确定 </el-button>
       </template>
     </el-dialog>
 
     <!-- 图片详情弹框 -->
-    <el-dialog
-      :title="`${imageDetailResource?.name || ''}–详情`"
-      v-model="imageDetailDialogVisible"
-      width="720px"
-      :close-on-click-modal="true"
-      destroy-on-close
-    >
+    <el-dialog :title="`${imageDetailResource?.name || ''}–详情`" v-model="imageDetailDialogVisible" width="720px" :close-on-click-modal="true" destroy-on-close>
       <div class="image-detail-content">
         <div class="image-detail-preview">
-          <el-image
-            :src="getResourceUrl(imageDetailResource?.url)"
-            fit="contain"
-            class="detail-image"
-          />
+          <el-image :src="getResourceUrl(imageDetailResource?.url)" fit="contain" class="detail-image" />
         </div>
         <div class="image-detail-info">
           <h3>文件信息</h3>
@@ -1050,23 +984,11 @@ onMounted(() => {
     </el-dialog>
 
     <!-- 视频详情弹框 -->
-    <el-dialog
-      :title="`${videoDetailResource?.name || ''}–详情`"
-      v-model="videoDetailDialogVisible"
-      width="860px"
-      :close-on-click-modal="true"
-      destroy-on-close
-    >
+    <el-dialog :title="`${videoDetailResource?.name || ''}–详情`" v-model="videoDetailDialogVisible" width="860px" :close-on-click-modal="true" destroy-on-close>
       <div class="video-detail-content">
         <div class="video-detail-left">
           <div class="video-detail-player">
-            <video
-              ref="videoRef"
-              :src="getResourceUrl(videoDetailResource?.url)"
-              controls
-              class="detail-video"
-              crossorigin="anonymous"
-            />
+            <video ref="videoRef" :src="getResourceUrl(videoDetailResource?.url)" controls class="detail-video" crossorigin="anonymous" />
           </div>
         </div>
         <div class="video-detail-right">
@@ -1092,12 +1014,7 @@ onMounted(() => {
           <div class="video-detail-cover">
             <h3>封面信息</h3>
             <div class="cover-preview">
-              <el-image
-                v-if="videoDetailResource?.thumbnail"
-                :src="getResourceUrl(videoDetailResource.thumbnail)"
-                fit="contain"
-                class="cover-image"
-              />
+              <el-image v-if="videoDetailResource?.thumbnail" :src="getResourceUrl(videoDetailResource.thumbnail)" fit="contain" class="cover-image" />
               <div v-else class="cover-empty">暂无封面</div>
             </div>
             <div class="cover-actions">
@@ -1122,12 +1039,7 @@ onMounted(() => {
     </el-dialog>
 
     <!-- 模型详情弹框 -->
-    <ModelPreview
-      :visible="modelDetailDialogVisible"
-      :resource="modelDetailResource"
-      @success="handleModelPreviewSuccess"
-      @update:visible="modelDetailDialogVisible = $event"
-    />
+    <ModelPreview :visible="modelDetailDialogVisible" :resource="modelDetailResource" @success="handleModelPreviewSuccess" @update:visible="modelDetailDialogVisible = $event" />
   </div>
 </template>
 
@@ -1159,7 +1071,7 @@ onMounted(() => {
     cursor: pointer;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       right: 12px;
       bottom: 0;
@@ -1249,7 +1161,9 @@ onMounted(() => {
       line-height: 1.57;
       letter-spacing: 0;
       cursor: pointer;
-      transition: background-color 0.2s ease, color 0.2s ease;
+      transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
 
       &:hover {
         background: var(--el-fill-color-lighter);
@@ -1288,7 +1202,9 @@ onMounted(() => {
         border: 1px solid var(--el-border-color-light);
         border-radius: 8px;
         overflow: hidden;
-        transition: border-color 0.2s ease, background-color 0.2s ease;
+        transition:
+          border-color 0.2s ease,
+          background-color 0.2s ease;
         cursor: pointer;
 
         &:hover {
@@ -1296,7 +1212,6 @@ onMounted(() => {
         }
 
         &.selected {
-          background: var(--el-color-primary-light-9);
           border-color: var(--el-color-primary);
         }
 
@@ -1342,10 +1257,24 @@ onMounted(() => {
 
             &.thumbnail-stage--preview {
               padding: 12px;
+              background-color: #fff;
+              background-image:
+                linear-gradient(45deg, #f5f6f7 25%, transparent 25%, transparent 75%, #f5f6f7 75%),
+                linear-gradient(45deg, #f5f6f7 25%, transparent 25%, transparent 75%, #f5f6f7 75%);
+              background-position:
+                0 0,
+                8px 8px;
+              background-size: 16px 16px;
             }
 
             &.thumbnail-stage--directory {
               padding: 24px;
+              background-color: #fff;
+              background-image:
+                linear-gradient(45deg, #f5f6f7 25%, transparent 25%, transparent 75%, #f5f6f7 75%),
+                linear-gradient(45deg, #f5f6f7 25%, transparent 25%, transparent 75%, #f5f6f7 75%);
+              background-position: 0 0, 8px 8px;
+              background-size: 16px 16px;
             }
 
             .thumbnail-image {
@@ -1460,7 +1389,10 @@ onMounted(() => {
     border: 1px solid var(--el-border-color-light);
     border-radius: 8px;
     cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      transform 0.2s ease;
 
     &:hover {
       border-color: var(--el-color-primary);
@@ -1519,8 +1451,14 @@ onMounted(() => {
   .image-detail-preview {
     flex: 1;
     min-width: 0;
-    background: var(--el-fill-color-extra-light);
     border: 1px solid var(--el-border-color-light);
+    background-color: #fff;
+    background-image:
+      linear-gradient(45deg, #f5f6f7 25%, transparent 25%, transparent 75%, #f5f6f7 75%), linear-gradient(45deg, #f5f6f7 25%, transparent 25%, transparent 75%, #f5f6f7 75%);
+    background-position:
+      0 0,
+      8px 8px;
+    background-size: 16px 16px;
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -1560,7 +1498,7 @@ onMounted(() => {
       .info-value {
         color: var(--el-text-color-primary);
         font-weight: 400;
-        font-feature-settings: "tnum";
+        font-feature-settings: 'tnum';
       }
     }
 
@@ -1626,7 +1564,7 @@ onMounted(() => {
         .info-value {
           color: var(--el-text-color-primary);
           font-weight: 400;
-          font-feature-settings: "tnum";
+          font-feature-settings: 'tnum';
         }
       }
     }
@@ -1667,6 +1605,6 @@ onMounted(() => {
 }
 
 .tnum {
-  font-feature-settings: "tnum";
+  font-feature-settings: 'tnum';
 }
 </style>

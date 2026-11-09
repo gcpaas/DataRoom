@@ -20,7 +20,7 @@ import type {
 } from "@/dataRoom/components/type/ChartAction.ts";
 import {isTargetChartActionConfig} from "@/dataRoom/components/type/ChartAction.ts";
 import type {BehaviorEventParam} from "@/dataRoom/components/type/BehaviorEvent.ts";
-import type {ChartParentRef} from '@/dataRoom/designer/utils/editor-history.ts'
+import type {ChartLayoutState, ChartParentRef} from '@/dataRoom/designer/utils/editor-history.ts'
 import {resolveDatasetParamValue} from '@/dataRoom/hooks/use-canvas-inst/dataset-params.ts'
 import type {PageBasicConfig} from '@/dataRoom/page-designer/type/PageBasicConfig.ts'
 
@@ -42,6 +42,8 @@ interface UseCanvasInstOptions {
   canUndo?: () => boolean
   canRedo?: () => boolean
   moveChartLayer?: (chartId: string, direction: ChartLayerMoveDirection) => boolean
+  setChartLayerZ?: (chartId: string, z: number) => boolean
+  commitChartLayout?: (chartId: string, before: ChartLayoutState, after: ChartLayoutState, label?: string) => void
   deleteChart?: (chartId: string) => boolean
   setChartHidden?: (chartId: string, hidden: boolean) => boolean
 }
@@ -52,7 +54,7 @@ interface UseCanvasInstOptions {
  * @param options
  */
 export function useCanvasInst(options: UseCanvasInstOptions) {
-  const {chartList, globalVariable, basicConfig, addChart, activeChartById, commitChartAdd, undo, redo, canUndo, canRedo, moveChartLayer, deleteChart, setChartHidden} = options
+  const {chartList, globalVariable, basicConfig, addChart, activeChartById, commitChartAdd, undo, redo, canUndo, canRedo, moveChartLayer, setChartLayerZ, commitChartLayout, deleteChart, setChartHidden} = options
 
   const chartInstanceMap: ChartInstanceMap = {}
 
@@ -375,6 +377,8 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
       return canRedo ? canRedo() : false
     },
     moveChartLayer: moveChartLayer || (() => false),
+    setChartLayerZ: setChartLayerZ || (() => false),
+    commitChartLayout: commitChartLayout || (() => {}),
     deleteChart: deleteChart || (() => false),
     setChartHidden: setChartHidden || (() => false),
   })

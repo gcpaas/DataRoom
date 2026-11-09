@@ -13,6 +13,10 @@ import type { DatasetEntity, DatasetInputParam, DatasetOutputParam } from '@/dat
 import { datasetApi } from '@/dataRoom/dataset/api'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
 import type { CanvasInst } from '@/dataRoom/designer/types/CanvasInst.ts'
+import {
+  captureChartLayoutState,
+  type ChartLayoutState,
+} from '@/dataRoom/designer/utils/editor-history.ts'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
 import type { ChartMockDataset } from '@/dataRoom/components/type/ChartMockDataset.ts'
@@ -20,6 +24,7 @@ import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import type { ChartAction } from '@/dataRoom/components/type/ChartAction.ts'
 import DataTransformScriptEditor from './DataTransformScriptEditor.vue'
+import LayoutNumberField from './LayoutNumberField.vue'
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
 /**
@@ -41,6 +46,29 @@ const activeTab = ref('style')
 // 默认展开所有数据折叠面板
 const activeDataCollapse = ref(['dataset', 'fields', 'params', 'script'])
 const chartConfig = computed(() => chart)
+
+/**
+ * 位置/尺寸输入框开始编辑时捕获布局快照，提交时对比快照记录历史
+ */
+let layoutSnapshot: ChartLayoutState | null = null
+const onLayoutEditStart = () => {
+  layoutSnapshot = captureChartLayoutState(chartConfig.value)
+}
+const onLayoutEditCommit = () => {
+  if (!layoutSnapshot) {
+    return
+  }
+  const after = captureChartLayoutState(chartConfig.value)
+  canvasInst.commitChartLayout(chartConfig.value.id, layoutSnapshot, after, '调整位置尺寸')
+  layoutSnapshot = after
+}
+
+/**
+ * 自定义图层值：任意整数（可为负数），z 越大越靠顶层
+ */
+const onLayerZChange = (value: number) => {
+  canvasInst.setChartLayerZ(chartConfig.value.id, value)
+}
 const mockDatasetEditorExtensions = [
   json(),
   eclipse,
@@ -419,9 +447,24 @@ const triggerAutoRefresh = () => {
       <div class="control-tabs-content">
         <section v-show="activeTab === 'style'" class="control-tab-pane" role="tabpanel">
           <div class="tab-content">
-            <el-form label-width="100px" label-position="left" size="small">
-              <el-form-item label="标题/图层">
+            <el-form label-width="80px" label-position="left" size="small">
+              <el-form-item label="图层名">
                 <el-input v-model="chartConfig.title"></el-input>
+              </el-form-item>
+              <el-form-item label="位置">
+                <div class="chart-layout-fields">
+                  <LayoutNumberField v-model="chartConfig.x" label="X" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
+                  <LayoutNumberField v-model="chartConfig.y" label="Y" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
+                </div>
+              </el-form-item>
+              <el-form-item label="尺寸">
+                <div class="chart-layout-fields">
+                  <LayoutNumberField v-model="chartConfig.w" label="W" :min="1" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
+                  <LayoutNumberField v-model="chartConfig.h" label="H" :min="1" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
+                </div>
+              </el-form-item>
+              <el-form-item label="层级">
+                <LayoutNumberField :model-value="chartConfig.z" @update:model-value="onLayerZChange" />
               </el-form-item>
             </el-form>
             <slot></slot>
@@ -658,6 +701,18 @@ const triggerAutoRefresh = () => {
   overflow: hidden;
   background: var(--el-bg-color);
   border-left: 1px solid var(--el-border-color);
+
+  .chart-layout-fields {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .chart-layout-field {
+    flex: 1;
+    min-width: 0;
+  }
 
   .control-tabs {
     display: flex;
