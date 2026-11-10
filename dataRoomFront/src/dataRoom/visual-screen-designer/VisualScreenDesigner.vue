@@ -2689,6 +2689,8 @@ onBeforeUnmount(() => {
 
       & .canvas-capture-content {
         position: relative;
+        // 将负层级组件保留在画布内部，避免被容器自身拦截鼠标命中。
+        isolation: isolate;
         width: 100%;
         height: 100%;
       }
@@ -2696,6 +2698,7 @@ onBeforeUnmount(() => {
       & .canvas-background-layer {
         position: absolute;
         inset: 0;
+        pointer-events: none;
       }
 
       & .floating-selection-toolbar-wrap {

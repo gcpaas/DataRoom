@@ -203,6 +203,8 @@ const computedScalerStyle = computed<CSSProperties>(() => {
 
     .canvas-content {
       position: relative;
+      // 与设计器保持一致，让负层级组件仍可接收交互事件。
+      isolation: isolate;
       min-width: 100%;
       min-height: 100%;
     }
@@ -210,6 +212,7 @@ const computedScalerStyle = computed<CSSProperties>(() => {
     .canvas-background-layer {
       position: absolute;
       inset: 0;
+      pointer-events: none;
     }
   }
 }
