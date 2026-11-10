@@ -89,12 +89,26 @@ const onResize = () => {
 }
 
 /**
- * 画布尺寸和背景动态样式（与设计器一致）
+ * 画布尺寸动态样式
  */
 const computedCanvasContentStyle = computed<CSSProperties>(() => {
-  const styles: CSSProperties = {
+  return {
     width: `${basicConfig.value.size?.width || 1920}px`,
     height: `${basicConfig.value.size?.height || 1080}px`,
+  }
+})
+
+/**
+ * 画布背景层 z-index：取 CSS 32 位整数最小值，保证任意整数图层值（含负数）的组件都显示在背景之上
+ */
+const CANVAS_BACKGROUND_Z_INDEX = -2147483648
+
+/**
+ * 画布背景独立成层，避免负 z-index 组件被定位容器的背景遮盖
+ */
+const computedCanvasBackgroundStyle = computed<CSSProperties>(() => {
+  const styles: CSSProperties = {
+    zIndex: CANVAS_BACKGROUND_Z_INDEX,
   }
   const background = basicConfig.value.background
   if (!background) {
@@ -167,6 +181,7 @@ const computedScalerStyle = computed<CSSProperties>(() => {
   <div class="vs-preview-viewport">
     <div class="vs-preview-scaler" :style="computedScalerStyle">
       <div class="canvas-content" :style="computedCanvasContentStyle">
+        <div class="canvas-background-layer" :style="computedCanvasBackgroundStyle" aria-hidden="true"></div>
         <VisualScreenChartTree :charts="chartList" mode="preview" />
       </div>
     </div>
@@ -190,6 +205,11 @@ const computedScalerStyle = computed<CSSProperties>(() => {
       position: relative;
       min-width: 100%;
       min-height: 100%;
+    }
+
+    .canvas-background-layer {
+      position: absolute;
+      inset: 0;
     }
   }
 }

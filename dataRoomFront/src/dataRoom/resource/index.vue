@@ -1208,7 +1208,7 @@ onMounted(() => {
         cursor: pointer;
 
         &:hover {
-          border-color: var(--el-border-color);
+          border-color: var(--el-color-primary);
         }
 
         &.selected {

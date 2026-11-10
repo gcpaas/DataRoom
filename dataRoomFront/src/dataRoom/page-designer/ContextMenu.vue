@@ -77,7 +77,7 @@ const onChartCopyClick = () => {
  * 隐藏组件
  */
 const onChartHideClick = () => {
-  ElMessage.warning('功能开发中...')
+  canvasInst.setChartHidden(chart.id, true)
   contextMenuVisible.value = false
 }
 

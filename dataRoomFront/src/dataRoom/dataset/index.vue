@@ -252,10 +252,27 @@ const handleNodeClick = async (data: DatasetTreeNode, node: DatasetTreeViewNode)
   }
   // 手动设置高亮（因为 @click.stop 阻止了 el-tree 默认行为）
   treeRef.value?.setCurrentKey(data.code)
+  // 立即切换到最新点击的数据集：先展示树节点基础信息，并清空上一个数据集的预览数据；
+  // 若详情加载失败，右侧保留该占位信息且数据为空，不再残留上一个数据集
+  selectedNode.value = {
+    id: data.id,
+    name: data.label,
+    code: data.code,
+    datasetType: data.datasetType,
+    parentCode: data.parentCode,
+    inputList: [],
+    outputList: []
+  }
+  activeTab.value = 'preview'
+  previewData.value = []
+  previewColumns.value = []
   try {
     const detail = await datasetApi.detail(data.code!)
+    // 快速连续点击时，丢弃已非当前选中节点的迟到响应
+    if (selectedNode.value?.code !== data.code) {
+      return
+    }
     selectedNode.value = detail
-    activeTab.value = 'preview'
     // 如果是选择模式，发送选中事件
     if (props.selectable) {
       emit('update:selectedDataset', detail)
@@ -264,6 +281,7 @@ const handleNodeClick = async (data: DatasetTreeNode, node: DatasetTreeViewNode)
     handleRefresh()
   } catch (error) {
     console.error('加载数据集详情失败:', error)
+    ElMessage.error('加载数据集详情失败')
   }
 }
 
@@ -386,8 +404,10 @@ const handleEditNode = async (node: DatasetTreeNode) => {
       .catch(() => {
       })
   } else {
-    // 编辑数据集
-    handleEdit()
+    // 编辑数据集：基于被操作的节点，而非当前选中节点
+    if (node.code) {
+      openDatasetEditor(node.code)
+    }
   }
 }
 
@@ -452,21 +472,30 @@ const handleConfirmMove = async () => {
 }
 
 /**
- * 编辑数据集
+ * 打开数据集编辑对话框（始终拉取指定数据集的最新详情）
  */
-const handleEdit = async () => {
-  if (!selectedNode.value) {
-    return
-  }
+const openDatasetEditor = async (code: string) => {
   try {
-    const detail = await datasetApi.detail(selectedNode.value.code!)
+    const detail = await datasetApi.detail(code)
     const typeKey = detail.datasetType as keyof typeof datasetTypeMap
     dialogTitle.value = `编辑${datasetTypeMap[typeKey].name}数据集`
     currentDataset.value = detail
     dialogVisible.value = true
   } catch (error) {
     console.error('加载数据集详情失败:', error)
+    ElMessage.error('加载数据集详情失败')
   }
+}
+
+/**
+ * 编辑数据集
+ */
+const handleEdit = async () => {
+  if (!selectedNode.value?.code) {
+    return
+  }
+  // 始终基于当前选中节点的 code 拉取最新详情，保证编辑的是最新点击的数据集
+  await openDatasetEditor(selectedNode.value.code)
 }
 
 /**
@@ -545,6 +574,9 @@ const handleRefresh = async () => {
     previewColumns.value = firstRow ? Object.keys(firstRow) : []
   } catch (error) {
     console.error('执行数据集失败:', error)
+    // 执行失败时清空预览数据，避免残留上一个数据集的数据
+    previewData.value = []
+    previewColumns.value = []
     ElMessage.error('执行数据集失败')
   } finally {
     previewLoading.value = false

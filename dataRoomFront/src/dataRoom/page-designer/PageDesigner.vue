@@ -233,6 +233,19 @@ const moveChartLayer = (chartId: string, direction: ChartLayerMoveDirection) => 
 }
 
 /**
+ * 更新组件隐藏状态
+ */
+const setChartHidden = (chartId: string, hidden: boolean) => {
+  const reference = findChartReference(chartId, chartList.value)
+  if (!reference || reference.chart.hide === hidden) {
+    return false
+  }
+  reference.chart.hide = hidden
+  syncActiveChartReference()
+  return true
+}
+
+/**
  * 设置组件图层值（任意整数，可为负数）
  */
 const setChartLayerZ = (chartId: string, z: number) => {
@@ -359,6 +372,7 @@ const { canvasInst, chartInstanceMap } = useCanvasInst({
   moveChartLayer,
   setChartLayerZ,
   commitChartLayout,
+  setChartHidden,
 })
 
 provide(DrConst.CANVAS_INST, canvasInst)
