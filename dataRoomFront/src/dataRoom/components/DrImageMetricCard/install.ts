@@ -57,9 +57,6 @@ export interface DrImageMetricCardPropsInterface {
     format: 'value' | 'integer' | 'float1' | 'float2' | 'percent' | 'thousand' | 'currency'
     decimalPlaces: number
     thousandSeparator: boolean
-    prefix: string
-    suffix: string
-    emptyText: string
     fontSize: number
     color: string
     fontWeight: FontWeight
@@ -138,9 +135,6 @@ const getInstance = (pageType: PageType): DrImageMetricCardConfig => {
         format: 'thousand',
         decimalPlaces: 2,
         thousandSeparator: true,
-        prefix: '',
-        suffix: '',
-        emptyText: '--',
         fontSize: 36,
         color: theme.text.primary,
         fontWeight: 'bold',

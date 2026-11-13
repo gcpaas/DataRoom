@@ -6,8 +6,6 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import ConfigCollapse from '@/dataRoom/designer/components/ConfigCollapse.vue'
-import ConfigCollapseItem from '@/dataRoom/designer/components/ConfigCollapseItem.vue'
 import {computed, ref} from 'vue'
 import {Codemirror} from 'vue-codemirror'
 import {javascript} from '@codemirror/lang-javascript'
@@ -23,9 +21,6 @@ const chartConfig = computed(() => chart)
 const dialogVisible = ref(false)
 const draftOption = ref('')
 const optionExtensions = [javascript(), eclipse]
-
-const optionLength = computed(() => chartConfig.value.props.option.length)
-const datasetStatus = computed(() => chartConfig.value.dataset?.code ? '已配置' : '未配置')
 
 const openEditor = () => {
   draftOption.value = chartConfig.value.props.option
@@ -52,25 +47,9 @@ const applyEditor = () => {
 <template>
   <div class="dr-config-panel dr-echarts-config-panel">
     <el-form class="dr-config-panel__form" :model="chartConfig" label-width="72px" label-position="left">
-      <ConfigCollapse class="dr-config-panel__section">
-        <ConfigCollapseItem title="Option 配置" name="option">
-          <div class="dr-config-panel__sub-section">
-            <el-form-item label-width="0">
-              <el-button class="config-panel-text" type="primary" @click="openEditor">编辑 Option</el-button>
-            </el-form-item>
-            <div class="dr-echarts-config-panel__summary">
-              <div class="dr-echarts-config-panel__summary-item">
-                <span class="dr-echarts-config-panel__summary-label dr-config-panel__field-label">代码字符数</span>
-                <span class="dr-echarts-config-panel__summary-value">{{ optionLength }}</span>
-              </div>
-              <div class="dr-echarts-config-panel__summary-item">
-                <span class="dr-echarts-config-panel__summary-label dr-config-panel__field-label">数据集</span>
-                <span class="dr-echarts-config-panel__summary-value">{{ datasetStatus }}</span>
-              </div>
-            </div>
-          </div>
-        </ConfigCollapseItem>
-      </ConfigCollapse>
+      <el-form-item label="Option">
+        <el-button size="small" plain @click="openEditor">编辑</el-button>
+      </el-form-item>
     </el-form>
 
     <el-dialog v-model="dialogVisible" title="编辑 Option" width="80%" :close-on-click-modal="false" append-to-body>
@@ -110,36 +89,6 @@ const applyEditor = () => {
 
 .dr-echarts-config-panel {
   padding: 0;
-}
-
-.dr-echarts-config-panel .dr-config-panel__section {
-  margin-bottom: 0;
-}
-
-.dr-echarts-config-panel__summary {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.dr-echarts-config-panel__summary-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.dr-echarts-config-panel__summary-label {
-  flex: 0 0 64px;
-  width: 64px;
-  line-height: 1.5;
-}
-
-.dr-echarts-config-panel__summary-value {
-  color: var(--el-text-color-regular);
-  font-size: 12px;
-  font-feature-settings: "tnum";
-  line-height: 1.5;
 }
 
 .dr-echarts-config-panel__editor-layout {

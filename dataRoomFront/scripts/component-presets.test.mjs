@@ -76,7 +76,7 @@ function assertIndependent(instances) {
   }
 }
 
-test('真实仓库 36 个顶层工厂均支持双 pageType，且保留组件 type', async (t) => {
+test('真实仓库 34 个顶层工厂均支持双 pageType，且保留组件 type', async (t) => {
   const directories = await readdir(componentsDir, { withFileTypes: true })
   const factories = []
   for (const directory of directories.filter((entry) => entry.isDirectory())) {
@@ -84,7 +84,7 @@ test('真实仓库 36 个顶层工厂均支持双 pageType，且保留组件 typ
       factories.push(directory.name)
     }
   }
-  assert.equal(factories.length, 36, '覆盖全部顶层工厂，另行测试嵌套预设工厂')
+  assert.equal(factories.length, 34, '覆盖全部顶层工厂，另行测试嵌套预设工厂')
   const ids = new Set()
   for (const name of factories.sort()) {
     await t.test(name, async () => {
@@ -173,18 +173,18 @@ test('横向 props 保存为 JSON 后仅凭父 type 即可恢复，不需要预�
   }
 })
 
-test('真实导出可重复执行：34 普通 + 7 预设，父 type 和双尺寸完整落盘', async () => {
+test('真实导出可重复执行：32 普通 + 7 预设，父 type 和双尺寸完整落盘', async () => {
   const outputDir = await mkdtemp(path.join(tmpdir(), 'dataroom-preset-export-'))
   try {
     let previous
     for (let repeat = 0; repeat < 2; repeat += 1) {
       const result = await exportComponentConfigs({ projectRoot, outputDir })
       const index = JSON.parse(await readFile(path.join(outputDir, 'index.json'), 'utf8'))
-      assert.equal(index.length, 41)
-      assert.equal(new Set(index.map((entry) => entry.componentName)).size, 41)
+      assert.equal(index.length, 39)
+      assert.equal(new Set(index.map((entry) => entry.componentName)).size, 39)
       assert.deepEqual(index, result.components)
       const runtimeType = (detail) => detail.fields.find((field) => field.field === 'type')?.defaultValue
-      assert.equal(result.details.filter((entry) => entry.componentName === runtimeType(entry)).length, 34)
+      assert.equal(result.details.filter((entry) => entry.componentName === runtimeType(entry)).length, 32)
       assert.deepEqual(result.details.filter((entry) => entry.componentName !== runtimeType(entry))
         .map((entry) => entry.componentName), [...presetFactories.keys()])
       for (const summary of index) assertAllowedKeys(summary, ['componentName', 'displayName', 'description'])

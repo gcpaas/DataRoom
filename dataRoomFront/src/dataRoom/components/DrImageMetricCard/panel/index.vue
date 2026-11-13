@@ -247,15 +247,6 @@ const easingOptions = [
           <el-form-item label="千分位">
             <el-switch v-model="chartConfig.props.value.thousandSeparator" />
           </el-form-item>
-          <el-form-item label="前缀">
-            <DrInputField v-model="chartConfig.props.value.prefix" class="dr-config-panel__control" clearable />
-          </el-form-item>
-          <el-form-item label="后缀">
-            <DrInputField v-model="chartConfig.props.value.suffix" class="dr-config-panel__control" clearable />
-          </el-form-item>
-          <el-form-item label="空文本">
-            <DrInputField v-model="chartConfig.props.value.emptyText" class="dr-config-panel__control" clearable />
-          </el-form-item>
           <DrFieldRow label="字体" paired variant="number-color">
             <template #first>
               <DrNumberField v-model="chartConfig.props.value.fontSize" class="dr-config-panel__control" :min="12" :max="160" :step="1" controls-position="right" aria-label="数值字号"><template #suffix>px</template></DrNumberField>

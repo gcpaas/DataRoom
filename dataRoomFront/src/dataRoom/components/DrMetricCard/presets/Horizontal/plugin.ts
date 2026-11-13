@@ -1,7 +1,7 @@
 import { ComponentLibTagTypeConst } from '../../../../constants/ComponentLibTagTypeConst'
 import type { ChartPreset } from '../../../type/ChartPreset'
 import { getInstance } from './install'
-import thumbnail from './thumbnail.svg'
+import thumbnail from './thumbnail.png'
 
 export default {
   id: 'DrMetricCardHorizontal',

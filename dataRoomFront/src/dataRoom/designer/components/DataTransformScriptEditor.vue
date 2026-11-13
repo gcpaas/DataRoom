@@ -23,6 +23,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: string]
   apply: []
   fullscreen: []
+  help: []
 }>()
 
 const editorExtensions = computed(() => [
@@ -78,8 +79,9 @@ const handleFullscreen = () => {
       />
     </div>
     <div class="data-transform-script-editor__actions" v-if="showActions">
-      <el-button :class="{ 'config-panel-text': panelText }" type="primary" plain @click="handleApply">应用脚本</el-button>
-      <el-button v-if="showFullscreenAction" :class="{ 'config-panel-text': panelText }" plain @click="handleFullscreen">放大编辑&帮助</el-button>
+      <el-button size="small" type="primary" plain @click="handleApply">应用</el-button>
+      <el-button v-if="showFullscreenAction" size="small" plain @click="handleFullscreen">放大</el-button>
+      <el-button size="small" text @click="emit('help')">帮助</el-button>
     </div>
   </div>
 </template>
@@ -99,7 +101,7 @@ const handleFullscreen = () => {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin-top: 8px;
+  padding: 8px;
 }
 
 .data-transform-script-editor__body {

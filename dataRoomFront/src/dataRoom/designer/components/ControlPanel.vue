@@ -1,10 +1,12 @@
 <!-- 控制面板 -->
 <script setup lang="ts">
 import { computed, ref, watch, defineAsyncComponent, inject } from 'vue'
-import { Delete, Pointer, Setting } from '@element-plus/icons-vue'
+import { Delete, Setting } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { Codemirror } from 'vue-codemirror'
 import { json } from '@codemirror/lang-json'
+import { javascript } from '@codemirror/lang-javascript'
+import beautify from 'js-beautify'
 import { eclipse } from '@uiw/codemirror-theme-eclipse'
 import { EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
@@ -23,11 +25,10 @@ import type { ChartMockDataset } from '@/dataRoom/components/type/ChartMockDatas
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import type { ChartAction } from '@/dataRoom/components/type/ChartAction.ts'
-import DataTransformScriptEditor from './DataTransformScriptEditor.vue'
 import DrNumberField from './DrNumberField.vue'
 import DrInputField from './DrInputField.vue'
 import DrSelectField from './DrSelectField.vue'
-import ConfigCollapse from './ConfigCollapse.vue'
+import ConfigCollapse, { type ConfigCollapseName } from './ConfigCollapse.vue'
 import ConfigCollapseItem from './ConfigCollapseItem.vue'
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
@@ -47,8 +48,8 @@ const { chart, globalVariableList = [] } = defineProps<{
 
 // 默认激活样式tab
 const activeTab = ref('style')
-// 手风琴模式默认展开数据集选择
-const activeDataCollapse = ref('dataset')
+// 数据面板默认展开全部分组，允许独立折叠
+const activeDataCollapse = ref<ConfigCollapseName | ConfigCollapseName[]>(['dataset', 'fields', 'params', 'script'])
 const chartConfig = computed(() => chart)
 
 /**
@@ -96,6 +97,8 @@ const newBehaviorName = ref('')
 // ECharts 原生事件名约定为小写字母/数字，如 click、legendselectchanged
 const CUSTOM_BEHAVIOR_NAME_PATTERN = /^[a-z][a-zA-Z0-9]*$/
 const scriptDialogVisible = ref(false)
+const draftScript = ref('')
+const scriptEditorExtensions = [javascript(), eclipse]
 // 数据集输出字段列表
 const datasetOutputList = ref<DatasetOutputParam[]>([])
 // 数据集输入参数列表
@@ -352,10 +355,20 @@ const removeCustomBehavior = (behavior: Behavior) => {
 }
 
 const openScriptDialog = () => {
+  draftScript.value = chartConfig.value.dataset.script ?? ''
   scriptDialogVisible.value = true
 }
 
+const formatScript = () => {
+  draftScript.value = beautify.js(draftScript.value, {
+    indent_size: 2,
+    end_with_newline: true,
+  })
+}
+
 const applyScriptDialog = () => {
+  chartConfig.value.dataset.script = draftScript.value
+  scriptDialogVisible.value = false
   triggerAutoRefresh()
 }
 
@@ -476,15 +489,16 @@ const triggerAutoRefresh = () => {
         </section>
         <section v-show="activeTab === 'data'" class="control-tab-pane" role="tabpanel">
           <div class="tab-content">
-            <ConfigCollapse v-model="activeDataCollapse" class="dr-collapse">
+            <ConfigCollapse v-model="activeDataCollapse" :accordion="false" class="dr-collapse">
               <!-- 数据集选择 -->
               <ConfigCollapseItem name="dataset" title="数据集选择">
-                <el-form ref="dataFormRef" :model="chartConfig.dataset" :rules="dataFormRules" label-width="72px" label-position="left">
-                  <el-form-item class="config-panel-text" label="数据集">
-                    <DrInputField v-model="datasetName" placeholder="请选择数据集" :suffix-icon="Pointer" readonly @click="openDatasetDialog" class="dataset-picker-input"></DrInputField>
-                  </el-form-item>
-                  <el-form-item class="config-panel-text" label=" ">
-                    <el-button class="config-panel-text" @click="openMockDatasetDialog">数据样例</el-button>
+                <el-form ref="dataFormRef" :model="chartConfig.dataset" :rules="dataFormRules">
+                  <el-form-item>
+                    <DrInputField v-model="datasetName" aria-label="数据集" placeholder="请选择数据集" readonly @click="openDatasetDialog" class="dataset-picker-input">
+                      <template #suffix>
+                        <el-button size="small" text @click.stop="openMockDatasetDialog">数据样例</el-button>
+                      </template>
+                    </DrInputField>
                   </el-form-item>
                 </el-form>
               </ConfigCollapseItem>
@@ -568,14 +582,11 @@ const triggerAutoRefresh = () => {
 
               <!-- 数据处理 -->
               <ConfigCollapseItem name="script" title="数据处理">
-                <DataTransformScriptEditor
-                  v-model="chartConfig.dataset.script"
-                  class="field-full"
-                  :rows="10"
-                  panel-text
-                  @apply="triggerAutoRefresh"
-                  @fullscreen="openScriptDialog"
-                />
+                <el-form label-width="72px" label-position="left">
+                  <el-form-item class="config-panel-text" label="JS脚本">
+                    <el-button size="small" plain @click="openScriptDialog">编辑</el-button>
+                  </el-form-item>
+                </el-form>
               </ConfigCollapseItem>
             </ConfigCollapse>
           </div>
@@ -660,15 +671,18 @@ const triggerAutoRefresh = () => {
       <el-empty v-else description="该组件暂未提供数据样例" :image-size="120" />
     </el-dialog>
 
-    <!-- 数据处理脚本放大编辑对话框 -->
-    <el-dialog v-model="scriptDialogVisible" title="数据处理脚本" width="80%" :close-on-click-modal="false" @closed="applyScriptDialog">
+    <!-- 数据处理脚本编辑对话框 -->
+    <el-dialog v-model="scriptDialogVisible" title="编辑 JS脚本" width="80%" :close-on-click-modal="false" append-to-body>
       <div class="data-transform-script-dialog">
-        <DataTransformScriptEditor
-          v-model="chartConfig.dataset.script"
-          :rows="20"
-          :show-actions="false"
-          :show-fullscreen-action="false"
-        />
+        <div class="data-transform-script-dialog__editor">
+          <Codemirror
+            v-model="draftScript"
+            :extensions="scriptEditorExtensions"
+            :indent-with-tab="true"
+            :tab-size="2"
+            placeholder="请输入数据处理 JS 脚本"
+          />
+        </div>
         <div class="data-transform-script-help">
           <div class="data-transform-script-help__title">帮助说明</div>
           <ul class="data-transform-script-help__list">
@@ -681,6 +695,11 @@ const triggerAutoRefresh = () => {
           </ul>
         </div>
       </div>
+      <template #footer>
+        <el-button @click="scriptDialogVisible = false">取消</el-button>
+        <el-button @click="formatScript">格式化</el-button>
+        <el-button type="primary" @click="applyScriptDialog">应用</el-button>
+      </template>
     </el-dialog>
 
     <!-- 交互配置对话框 -->
@@ -968,9 +987,35 @@ const triggerAutoRefresh = () => {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  height: calc(80vh - 220px);
+  min-height: 436px;
+  overflow: hidden;
+}
+
+.data-transform-script-dialog__editor {
+  flex: 1 1 auto;
+  min-height: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.data-transform-script-dialog__editor :deep(.cm-editor) {
+  height: 100%;
+  font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
+  font-size: 13px;
+}
+
+.data-transform-script-dialog__editor :deep(.cm-scroller) {
+  overflow: auto;
 }
 
 .data-transform-script-help {
+  flex: 0 0 220px;
+  height: 220px;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
   padding: 12px;
   border: 1px solid var(--el-border-color-light);
   border-radius: 8px;

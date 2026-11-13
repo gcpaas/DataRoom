@@ -6,8 +6,6 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import ConfigCollapse from '@/dataRoom/designer/components/ConfigCollapse.vue'
-import ConfigCollapseItem from '@/dataRoom/designer/components/ConfigCollapseItem.vue'
 import { computed, ref } from 'vue'
 import { Codemirror } from 'vue-codemirror'
 import { html } from '@codemirror/lang-html'
@@ -15,7 +13,6 @@ import { css } from '@codemirror/lang-css'
 import { eclipse } from '@uiw/codemirror-theme-eclipse'
 import beautify from 'js-beautify'
 import type { DrHtmlConfig } from '../install.ts'
-import { getPlaceholderPaths } from '../html-render.ts'
 
 const { chart } = defineProps<{
   chart: DrHtmlConfig
@@ -27,9 +24,6 @@ const draftHtml = ref('')
 const draftCss = ref('')
 const htmlExtensions = [html(), eclipse]
 const cssExtensions = [css(), eclipse]
-
-const placeholderCount = computed(() => getPlaceholderPaths(chartConfig.value.props.html).length)
-const datasetStatus = computed(() => chartConfig.value.dataset?.code ? '已配置' : '未配置')
 
 const openEditor = () => {
   draftHtml.value = chartConfig.value.props.html
@@ -65,45 +59,18 @@ const applyEditor = () => {
 <template>
   <div class="dr-config-panel dr-html-config-panel">
     <el-form class="dr-config-panel__form" :model="chartConfig" label-width="72px" label-position="left">
-      <ConfigCollapse class="dr-config-panel__section">
-        <ConfigCollapseItem title="内容配置" name="content">
-          <div class="dr-config-panel__sub-section">
-            <el-form-item label-width="0">
-              <el-button class="config-panel-text" type="primary" @click="openEditor">编辑代码</el-button>
-            </el-form-item>
-            <div class="dr-html-config-panel__summary">
-              <div class="dr-html-config-panel__summary-item">
-                <span class="dr-html-config-panel__summary-label dr-config-panel__field-label">HTML 字符数</span>
-                <span class="dr-html-config-panel__summary-value">{{ chartConfig.props.html.length }}</span>
-              </div>
-              <div class="dr-html-config-panel__summary-item">
-                <span class="dr-html-config-panel__summary-label dr-config-panel__field-label">CSS 字符数</span>
-                <span class="dr-html-config-panel__summary-value">{{ chartConfig.props.css.length }}</span>
-              </div>
-              <div class="dr-html-config-panel__summary-item">
-                <span class="dr-html-config-panel__summary-label dr-config-panel__field-label">占位符数量</span>
-                <span class="dr-html-config-panel__summary-value">{{ placeholderCount }}</span>
-              </div>
-              <div class="dr-html-config-panel__summary-item">
-                <span class="dr-html-config-panel__summary-label dr-config-panel__field-label">数据集</span>
-                <span class="dr-html-config-panel__summary-value">{{ datasetStatus }}</span>
-              </div>
-            </div>
-          </div>
-        </ConfigCollapseItem>
-
-        <ConfigCollapseItem title="安全沙箱" name="sandbox">
-          <el-form-item label="允许同源">
-            <el-switch v-model="chartConfig.props.sandbox.allowSameOrigin" />
-          </el-form-item>
-          <el-form-item label="允许表单">
-            <el-switch v-model="chartConfig.props.sandbox.allowForms" />
-          </el-form-item>
-          <el-form-item label="允许弹窗">
-            <el-switch v-model="chartConfig.props.sandbox.allowPopups" />
-          </el-form-item>
-        </ConfigCollapseItem>
-      </ConfigCollapse>
+      <el-form-item label="HTML">
+        <el-button size="small" plain @click="openEditor">编辑</el-button>
+      </el-form-item>
+      <el-form-item label="允许同源">
+        <el-switch v-model="chartConfig.props.sandbox.allowSameOrigin" />
+      </el-form-item>
+      <el-form-item label="允许表单">
+        <el-switch v-model="chartConfig.props.sandbox.allowForms" />
+      </el-form-item>
+      <el-form-item label="允许弹窗">
+        <el-switch v-model="chartConfig.props.sandbox.allowPopups" />
+      </el-form-item>
     </el-form>
 
     <el-dialog v-model="dialogVisible" title="编辑 HTML" width="920px" top="5vh" append-to-body>
@@ -144,32 +111,6 @@ const applyEditor = () => {
 </template>
 
 <style scoped lang="scss">
-
-.dr-html-config-panel__summary {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.dr-html-config-panel__summary-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.dr-html-config-panel__summary-label {
-  flex: 0 0 64px;
-  width: 64px;
-  line-height: 1.5;
-}
-
-.dr-html-config-panel__summary-value {
-  color: var(--el-text-color-regular);
-  font-size: 12px;
-  font-feature-settings: "tnum";
-  line-height: 1.5;
-}
 
 .dr-html-config-panel__editor-layout {
   display: grid;

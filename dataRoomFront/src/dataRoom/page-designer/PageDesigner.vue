@@ -1013,7 +1013,7 @@ onUnmounted(() => {
                 @contextmenu="(e: MouseEvent) => onRightClick(e, item)"
               >
                 <div class="chart-wrapper" :key="item.id" :id="item.id" :data-dr-id="item.id" :style="computedChartStyle(item)">
-                  <component :is="getComponent(item.type)" :chart="item"></component>
+                  <component :is="getComponent(item.type)" :chart="item" v-bind="item.type === 'DrInput' ? { mode: 'designer' } : {}"></component>
                 </div>
               </GridItem>
             </GridLayout>

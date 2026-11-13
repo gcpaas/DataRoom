@@ -12,9 +12,13 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useDrComponent } from '@/dataRoom/hooks/use-dr-component'
 import type { ComponentExpose } from '@/dataRoom/components/type/ComponentExpose.ts'
 
-const { chart } = defineProps<{
+const { chart, mode = 'preview' } = defineProps<{
   chart: DrInputConfig
+  mode?: 'designer' | 'preview'
 }>()
+
+// 设计态将鼠标交互交给画布外层，且禁止键盘聚焦；不修改持久化输入配置。
+const isDesigner = computed(() => mode === 'designer')
 
 /**
  * 输入框不消费数据集，changeData 为空实现
@@ -192,7 +196,7 @@ defineExpose<ComponentExpose>({
 </script>
 
 <template>
-  <div class="dr-input" :id="chart.id" :style="cssVars">
+  <div class="dr-input" :class="{ 'dr-input--designer': isDesigner }" :inert="isDesigner" :id="chart.id" :style="cssVars">
     <div class="dr-input__wrapper" :style="wrapperStyle">
       <input
         :type="chart.props.basic.inputType"
@@ -229,6 +233,10 @@ defineExpose<ComponentExpose>({
 
 .dr-input__wrapper {
   position: relative;
+}
+
+.dr-input--designer {
+  pointer-events: none;
 }
 
 .dr-input__inner {

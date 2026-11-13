@@ -99,9 +99,6 @@ const formattedValue = computed(() => {
     format: chart.props.value.format,
     decimalPlaces: chart.props.value.decimalPlaces,
     thousandSeparator: chart.props.value.thousandSeparator,
-    prefix: chart.props.value.prefix,
-    suffix: chart.props.value.suffix,
-    emptyText: chart.props.value.emptyText,
   })
 })
 

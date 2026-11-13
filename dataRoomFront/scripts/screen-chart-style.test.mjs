@@ -82,8 +82,8 @@ test('旧折线缺少新属性时仍使用原渐变和实心点', async () => {
 
 test('所有已调整组件按页面默认主题初始化，布局尺寸仍独立', async () => {
   const types = ['DrLineChart', 'DrAreaChart', 'DrBarChart', 'DrHorizontalBarChart',
-    'DrBubbleChart', 'DrRadarChart', 'DrPieChart', 'DrMetricCard', 'DrTrendMetricCard',
-    'DrPeriodCompareCard', 'DrImageMetricCard', 'DrText', 'DrDateTime', 'DrTabList',
+    'DrBubbleChart', 'DrRadarChart', 'DrPieChart', 'DrMetricCard',
+    'DrImageMetricCard', 'DrText', 'DrDateTime', 'DrTabList',
     'DrMap', 'DrDataTable', 'DrBorder', 'DrDecoration']
   for (const type of types) {
     const { getInstance } = await factory(type)

@@ -76,7 +76,8 @@ export const aiGenerationActions: AiGenerationAction[] = [
   },
   {
     title: '案例',
-    desc: '在AI工具中打开新会话，输入下面的内容',
-    content: '/dataroom-page 帮我生成一个618监控大屏',
+    desc: '在AI工具中打开新会话，输入下面的内容,上传需要复刻的大屏图片',
+    content:
+      '参考这个效果图，使用dataroom-page技能和名称为dataroom-mcp-server的MCP生成一模一样的大屏，新创建一个数据集目录和大屏的名称保持一致，数据暂时使用JSON样例并生成对应的JSON数据集，将新生成的数据集都放在新生成的目录下',
   },
 ]

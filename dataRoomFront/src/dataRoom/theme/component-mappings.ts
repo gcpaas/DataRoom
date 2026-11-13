@@ -21,7 +21,6 @@ import { drLineChartThemeMapping } from '../components/DrLineChart/theme'
 import { drMapThemeMapping } from '../components/DrMap/theme'
 import { drMetricCardThemeMapping } from '../components/DrMetricCard/theme'
 import { drModel3DThemeMapping } from '../components/DrModel3D/theme'
-import { drPeriodCompareCardThemeMapping } from '../components/DrPeriodCompareCard/theme'
 import { drPieChartThemeMapping } from '../components/DrPieChart/theme'
 import { drProgressBarThemeMapping } from '../components/DrProgressBar/theme'
 import { drRadarChartThemeMapping } from '../components/DrRadarChart/theme'
@@ -29,7 +28,6 @@ import { drRadioThemeMapping } from '../components/DrRadio/theme'
 import { drSelectThemeMapping } from '../components/DrSelect/theme'
 import { drTabListThemeMapping } from '../components/DrTabList/theme'
 import { drTextThemeMapping } from '../components/DrText/theme'
-import { drTrendMetricCardThemeMapping } from '../components/DrTrendMetricCard/theme'
 import { drVideoPlayerThemeMapping } from '../components/DrVideoPlayer/theme'
 import { drWordCloudThemeMapping } from '../components/DrWordCloud/theme'
 import type { ThemeStylePath } from './types'
@@ -57,7 +55,6 @@ export const componentThemeMappings: Readonly<Record<string, readonly (readonly 
   DrMap: drMapThemeMapping,
   DrMetricCard: drMetricCardThemeMapping,
   DrModel3D: drModel3DThemeMapping,
-  DrPeriodCompareCard: drPeriodCompareCardThemeMapping,
   DrFunnelChart: drFunnelChartThemeMapping,
   DrPieChart: drPieChartThemeMapping,
   DrProgressBar: drProgressBarThemeMapping,
@@ -66,7 +63,6 @@ export const componentThemeMappings: Readonly<Record<string, readonly (readonly 
   DrSelect: drSelectThemeMapping,
   DrTabList: drTabListThemeMapping,
   DrText: drTextThemeMapping,
-  DrTrendMetricCard: drTrendMetricCardThemeMapping,
   DrVideoPlayer: drVideoPlayerThemeMapping,
   DrWordCloud: drWordCloudThemeMapping,
 }

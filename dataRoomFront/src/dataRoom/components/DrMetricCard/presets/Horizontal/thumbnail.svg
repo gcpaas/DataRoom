@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 160" role="img" aria-labelledby="title">
-  <title id="title">横向指标卡：指标名称、数值、说明横向排列</title>
-  <g fill="currentColor" font-family="sans-serif">
-    <text x="30" y="88" font-size="16" opacity="0.55">指标名称</text>
-    <text x="108" y="92" font-size="36" font-weight="bold">1,280</text>
-    <text x="220" y="87" font-size="14" opacity="0.55">实时统计</text>
-  </g>
-</svg>

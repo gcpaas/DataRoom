@@ -28,8 +28,6 @@ import {DrBorderPlugin} from '@/dataRoom/components/DrBorder/plugin.ts'
 import {DrDecorationPlugin} from '@/dataRoom/components/DrDecoration/plugin.ts'
 import {DrMetricCardPlugin} from '@/dataRoom/components/DrMetricCard/plugin.ts'
 import {DrAlarmImagePlugin} from '@/dataRoom/components/DrAlarmImage/plugin.ts'
-import {DrTrendMetricCardPlugin} from '@/dataRoom/components/DrTrendMetricCard/plugin.ts'
-import {DrPeriodCompareCardPlugin} from '@/dataRoom/components/DrPeriodCompareCard/plugin.ts'
 import {DrImageMetricCardPlugin} from '@/dataRoom/components/DrImageMetricCard/plugin.ts'
 import {DrDataTablePlugin} from '@/dataRoom/components/DrDataTable/plugin.ts'
 import {DrDateTimePlugin} from '@/dataRoom/components/DrDateTime/plugin.ts'
@@ -133,8 +131,6 @@ const pluginList = [
   new DrProgressBarPlugin([ComponentLibTagTypeConst.GAUGE]),
   new DrMetricCardPlugin([ComponentLibTagTypeConst.METRIC]),
   new DrAlarmImagePlugin([ComponentLibTagTypeConst.METRIC]),
-  new DrTrendMetricCardPlugin([ComponentLibTagTypeConst.METRIC]),
-  new DrPeriodCompareCardPlugin([ComponentLibTagTypeConst.METRIC]),
   new DrImageMetricCardPlugin([ComponentLibTagTypeConst.METRIC]),
   new DrDataTablePlugin([ComponentLibTagTypeConst.TABLE]),
   new DrInputPlugin([ComponentLibTagTypeConst.FORM]),

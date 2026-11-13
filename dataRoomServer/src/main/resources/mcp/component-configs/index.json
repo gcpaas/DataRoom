@@ -90,16 +90,6 @@
     "description": "告警、图片、阈值、指标、状态、区间"
   },
   {
-    "componentName": "DrTrendMetricCard",
-    "displayName": "趋势指标卡",
-    "description": "趋势指标卡、KPI、趋势线、折线、面积、变化率、同比、环比"
-  },
-  {
-    "componentName": "DrPeriodCompareCard",
-    "displayName": "周期对比卡",
-    "description": "周期对比卡、KPI、同比、环比、变化值、变化率、对比分析"
-  },
-  {
     "componentName": "DrImageMetricCard",
     "displayName": "图片指标卡",
     "description": "图片指标卡、图文指标、KPI、金额、单值、图标、数值"
