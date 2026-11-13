@@ -21,17 +21,23 @@ function loadModule(source, filename) {
     if (name === 'vue') return { ...vue, onMounted: () => {}, onBeforeUnmount: () => {} }
     if (name.includes('use-dr-component')) return { useDrComponent: () => ({ canvasInst: {}, expose: {} }) }
     if (name.includes('/utils/')) return { getSingleDatasetValueByField: () => undefined }
-    if (name === '../type/define') return { createChartConfig: (type, props, overrides) => ({ type, props, ...overrides }) }
+    if (name === '../type/define') return {
+      createChartConfig: (type, props, overrides, pageType, pageSize = { w: 16, h: 5 }) => {
+        assert.ok(pageType === PageType.PAGE || pageType === PageType.VISUAL_SCREEN)
+        return { type, props, ...overrides, ...(pageType === PageType.PAGE ? pageSize : {}) }
+      },
+    }
     throw new Error(`Unexpected dependency: ${name}`)
   }
   vm.runInThisContext(`(function(require, module, exports) {${outputText}\n})`, { filename })(load, module, module.exports)
   return module.exports
 }
 
+const { PageType } = loadModule(read('../../constants/PageType.ts'), 'PageType.ts')
 const component = loadModule(script.content, 'DrVideoPlayer.vue').default
 const install = loadModule(read('./install.ts'), 'install.ts')
 function setup(mode, controls) {
-  const chart = install.getInstance()
+  const chart = install.getInstance(PageType.VISUAL_SCREEN)
   chart.props.basic.controls = controls
   const props = vue.reactive({ chart, mode })
   const state = component.setup(props, { expose: () => {} })

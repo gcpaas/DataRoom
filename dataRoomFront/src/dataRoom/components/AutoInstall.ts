@@ -3,6 +3,7 @@ import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts";
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts";
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts";
 import type {ChartMockDataset} from "@/dataRoom/components/type/ChartMockDataset.ts";
+import {PageType} from "@/dataRoom/constants/PageType.ts";
 
 type ComponentMap = {
   [key: string]: Component
@@ -13,7 +14,7 @@ type PanelComponentMap = {
 }
 
 type ComponentInstanceMap = {
-  [key: string]: () => ChartConfig<unknown>
+  [key: string]: (pageType: PageType) => ChartConfig<unknown>
 }
 
 type BehaviorMap = {
@@ -35,8 +36,8 @@ type CustomBehaviorsMap = {
 
 // 使用 Vite 的 import.meta.glob 自动导入所有组件目录下的 install.ts
 const installModules = import.meta.glob<{
-  [key: string]: Component | (() => ChartConfig<unknown>) | Behavior[] | ChartDatasetField[] | ChartMockDataset
-}>('./**/install.ts', {eager: true})
+  [key: string]: Component | ((pageType: PageType) => ChartConfig<unknown>) | Behavior[] | ChartDatasetField[] | ChartMockDataset
+}>('./*/install.ts', {eager: true})
 
 // 存储组件、控制面板组件、实例方法和交互定义
 const components: ComponentMap = {}
@@ -68,7 +69,7 @@ Object.entries(installModules).forEach(([path, module]) => {
   // 注册实例方法
   const instanceMethodName = `getInstance`
   if (module[instanceMethodName]) {
-    componentInstances[componentName] = module[instanceMethodName] as () => ChartConfig<unknown>
+    componentInstances[componentName] = module[instanceMethodName] as (pageType: PageType) => ChartConfig<unknown>
   }
 
   // 注册交互定义
@@ -108,16 +109,22 @@ const getComponent = (name: string) => {
   return components[name]
 }
 
-const getComponentInstance = (name: string): ChartConfig<unknown> => {
-  const instanceFn = componentInstances[name]!
-  if (instanceFn) {
-    return {
-      hide: false,
-      ...instanceFn(),
-    }
+const getComponentInstance = (name: string, pageType: PageType): ChartConfig<unknown> => {
+  if (pageType !== PageType.PAGE && pageType !== PageType.VISUAL_SCREEN) {
+    throw new Error(`无效的页面类型 ${pageType}`)
   }
-  console.error(`未找到组件 ${name} 对应的实例化方法`)
-  return {} as ChartConfig<unknown>
+  const instanceFn = Object.prototype.hasOwnProperty.call(componentInstances, name) ? componentInstances[name] : undefined
+  if (!instanceFn) {
+    throw new Error(`未找到组件 ${name} 对应的实例化方法`)
+  }
+  const chart = instanceFn(pageType)
+  if (chart.type !== name) {
+    throw new Error(`组件 ${name} 返回的类型 ${chart.type} 不匹配`)
+  }
+  return {
+    hide: false,
+    ...chart,
+  }
 }
 
 

@@ -1,5 +1,6 @@
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
+import type { PageType } from '@/dataRoom/constants/PageType.ts'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
@@ -9,6 +10,16 @@ const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 
 export interface DrHtmlPropsInterface {
+  /** 页面主题写入的样式配置，旧页面可缺省。 */
+  themeStyle?: {
+    text: string
+    secondaryText: string
+    background: string
+    border: string
+    grid: string
+    primary: string
+    colors: string[]
+  }
   // html代码块，生成的代码不要放一行，需要进行代码格式化
   html: string
   // css代码块，生成的代码不要放一行，需要进行代码格式化
@@ -26,7 +37,7 @@ export interface DrHtmlPropsInterface {
 
 export type DrHtmlConfig = ChartConfig<DrHtmlPropsInterface>
 
-const getInstance = (): DrHtmlConfig => {
+const getInstance = (pageType: PageType): DrHtmlConfig => {
   return createChartConfig<DrHtmlPropsInterface>(
     'DrHtml',
     {
@@ -35,10 +46,10 @@ const getInstance = (): DrHtmlConfig => {
   width: 100%;
   height: 100%;
   padding: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 1px solid var(--el-border-color);
   border-radius: 12px;
-  background: rgba(15, 23, 42, 0.72);
-  color: #ffffff;
+  background: var(--el-bg-color);
+  color: var(--el-text-color-primary);
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -69,6 +80,7 @@ const getInstance = (): DrHtmlConfig => {
       w: 400,
       h: 300,
     },
+    pageType,
   )
 }
 

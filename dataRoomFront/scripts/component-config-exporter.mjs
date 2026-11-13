@@ -1,5 +1,6 @@
 import ts from 'typescript'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync, realpathSync, statSync } from 'node:fs'
+import vm from 'node:vm'
 import { mkdir, readFile, readdir, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
@@ -9,25 +10,7 @@ const chartConfigPath = 'src/dataRoom/components/type/ChartConfig.ts'
 const pageConfigPath = 'src/dataRoom/page-designer/type/PageConfig.ts'
 const visualScreenPageConfigPath = 'src/dataRoom/page-designer/type/VisualScreenPageConfig.ts'
 
-const baseChartConfigDefaults = {
-  title: '未命名组件',
-  w: 150,
-  h: 100,
-  x: 100,
-  y: 100,
-  z: 100,
-  rotateX: 0,
-  rotateY: 0,
-  rotateZ: 0,
-  behaviors: {},
-  dataset: {
-    code: '',
-    datasetType: '',
-    fields: {},
-    script: '',
-    params: {},
-  },
-}
+const layoutDescription = 'fields.defaultValue 默认对应 visualScreen；两种页面的默认值差异见字段 description，必须按目标 pageType 选择：page 的 w/h 为网格份数，visualScreen 的 w/h 为像素，不可混用。'
 
 const pageConfigSchemaDefinitions = [
   {
@@ -179,6 +162,9 @@ export function flattenConfigFields(interfaceInfo, defaults, prefix = '') {
 export async function exportComponentConfigs({ projectRoot, outputDir }) {
   const registerSource = await readText(path.join(projectRoot, registerPath))
   const registeredComponents = parseRegisteredComponents(registerSource)
+  const presetPaths = parseRegisteredPresets(projectRoot, registerSource)
+  const readFactory = createFactoryReader(projectRoot)
+  const parents = new Map()
   const chartConfigInterface = await parseChartConfigInterface(projectRoot)
   const pageConfigDetails = buildPageConfigDetails(projectRoot)
   const summaries = []
@@ -192,17 +178,51 @@ export async function exportComponentConfigs({ projectRoot, outputDir }) {
     const pluginMeta = parsePluginMetadata(pluginSource, componentName)
     const typeAliases = await parseImportedTypeAliases(projectRoot, installPath, installSource)
     const interfaceInfo = parsePropsInterface(installSource, componentName, typeAliases)
-    const defaults = parseCreateChartConfigDefaults(installSource, componentName)
-    const fields = buildComponentConfigFields(chartConfigInterface, interfaceInfo, defaults)
+    const configs = readFactory(installPath)
+    validateFactoryConfigs(configs, componentName)
+    const fields = buildPageAwareFields(chartConfigInterface, interfaceInfo, configs)
     const datasetFields = parseDatasetFields(installSource, componentName)
     const summary = {
       componentName: pluginMeta.componentName,
       displayName: pluginMeta.displayName,
       description: pluginMeta.description,
     }
-    const detail = { ...summary, fields, datasetFields }
+    const detail = {
+      ...summary,
+      description: `${summary.description}。实际 ChartConfig.type 必须为 ${componentName}。${layoutDescription}`,
+      fields,
+      datasetFields,
+    }
+    parents.set(componentName, { interfaceInfo, datasetFields })
     summaries.push(summary)
     details.push(detail)
+  }
+
+  const names = new Set([...registeredComponents, ...pageConfigDetails.map((item) => item.componentName)])
+  for (const presetPath of presetPaths) {
+    const { metadata, configs } = readFactory(presetPath, true)
+    const { id, componentType, name, desc } = metadata
+    if (typeof id !== 'string' || !/^[A-Za-z][A-Za-z0-9_-]*$/.test(id) || names.has(id)) {
+      throw new Error(`${presetPath} 中预设 id 非法或重复：${id}`)
+    }
+    const parent = parents.get(componentType)
+    if (!parent || typeof name !== 'string' || typeof desc !== 'string') {
+      throw new Error(`${presetPath} 中预设元数据无效或父组件未注册：${componentType}`)
+    }
+    validateFactoryConfigs(configs, componentType)
+    names.add(id)
+    const summary = {
+      componentName: id,
+      displayName: name,
+      description: `${desc}。预设检索名为 ${id}，实际 ChartConfig.type 必须为 ${componentType}，不可使用预设 id。`,
+    }
+    summaries.push(summary)
+    details.push({
+      ...summary,
+      description: `${summary.description}${layoutDescription}`,
+      fields: buildPageAwareFields(chartConfigInterface, parent.interfaceInfo, configs),
+      datasetFields: parent.datasetFields,
+    })
   }
 
   await mkdir(outputDir, { recursive: true })
@@ -358,13 +378,53 @@ async function parseChartConfigInterface(projectRoot) {
   }
 }
 
-function parseRegisteredComponents(source) {
-  const matches = [...source.matchAll(/new\s+([A-Za-z0-9_]+)Plugin\s*\(/g)]
-  const names = matches.map((match) => match[1])
-  if (names.length === 0) {
-    throw new Error('PluginRegister.ts 中未解析到组件插件')
+function registeredList(sourceFile, name) {
+  for (const statement of sourceFile.statements) {
+    if (!ts.isVariableStatement(statement)) continue
+    for (const declaration of statement.declarationList.declarations) {
+      if (!ts.isIdentifier(declaration.name) || declaration.name.text !== name) continue
+      let value = declaration.initializer
+      while (value && (ts.isAsExpression(value) || ts.isSatisfiesExpression(value) || ts.isParenthesizedExpression(value))) {
+        value = value.expression
+      }
+      if (!value || !ts.isArrayLiteralExpression(value)) {
+        throw new Error(`PluginRegister.ts 中 ${name} 必须为手动数组字面量`)
+      }
+      return value.elements
+    }
   }
+  return []
+}
+
+function parseRegisteredComponents(source) {
+  const sourceFile = ts.createSourceFile(registerPath, source, ts.ScriptTarget.Latest, true)
+  const names = registeredList(sourceFile, 'pluginList').map((element) => {
+    if (!ts.isNewExpression(element) || !ts.isIdentifier(element.expression) || !element.expression.text.endsWith('Plugin')) {
+      throw new Error('PluginRegister.ts 中 pluginList 仅支持 new Dr...Plugin(...)')
+    }
+    return element.expression.text.slice(0, -'Plugin'.length)
+  })
+  if (names.length === 0) throw new Error('PluginRegister.ts 中未解析到组件插件')
   return names
+}
+
+function parseRegisteredPresets(projectRoot, source) {
+  const sourceFile = ts.createSourceFile(registerPath, source, ts.ScriptTarget.Latest, true)
+  const imports = new Map()
+  for (const statement of sourceFile.statements) {
+    if (ts.isImportDeclaration(statement) && statement.importClause?.name && !statement.importClause.isTypeOnly && ts.isStringLiteral(statement.moduleSpecifier)) {
+      imports.set(statement.importClause.name.text, statement.moduleSpecifier.text)
+    }
+  }
+  return registeredList(sourceFile, 'presetList').map((element) => {
+    const specifier = ts.isIdentifier(element) && imports.get(element.text)
+    const resolved = specifier && (specifier.startsWith('@/') || specifier.startsWith('.')) &&
+      resolveImportPath(projectRoot, path.join(projectRoot, registerPath), specifier)
+    if (!resolved) {
+      throw new Error(`PluginRegister.ts 中 presetList 元素必须为可解析的本地 default 导入：${element.getText(sourceFile)}`)
+    }
+    return resolved
+  })
 }
 
 function parsePluginMetadata(source, expectedComponentName) {
@@ -453,9 +513,9 @@ function resolveImportPath(projectRoot, fromFile, moduleText) {
   const basePath = moduleText.startsWith('@/')
     ? path.resolve(projectRoot, 'src', moduleText.slice(2))
     : path.resolve(path.dirname(fromFile), moduleText)
-  for (const candidate of [basePath, `${basePath}.ts`]) {
+  for (const candidate of [basePath, `${basePath}.ts`, `${basePath}.js`, path.join(basePath, 'index.ts')]) {
     const relative = path.relative(projectRoot, candidate)
-    if (!relative.startsWith('..') && existsSync(candidate)) {
+    if (!relative.startsWith('..') && existsSync(candidate) && statSync(candidate).isFile()) {
       return candidate
     }
   }
@@ -574,58 +634,115 @@ function normalizeCommentText(commentText) {
     .join('\n')
 }
 
-function parseCreateChartConfigDefaults(source, componentName) {
-  const sourceFile = ts.createSourceFile(`${componentName}.defaults.ts`, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
-  const call = findCreateChartConfigCall(sourceFile)
-  if (!call) {
-    throw new Error(`${componentName}/install.ts 中未找到 createChartConfig 调用`)
-  }
-  const propsArg = call.arguments[1]
-  if (!propsArg || !ts.isObjectLiteralExpression(propsArg)) {
-    throw new Error(`${componentName}/install.ts 中 props 默认配置不是对象字面量`)
-  }
-  const componentType = readComponentTypeArgument(call, sourceFile, componentName)
-  const overrides = readOverridesArgument(call, sourceFile)
-  return {
-    chartConfig: {
-      ...baseChartConfigDefaults,
-      type: componentType,
-      ...overrides,
-    },
-    props: objectLiteralToValue(propsArg, sourceFile),
-  }
-}
-
-function readComponentTypeArgument(call, sourceFile, componentName) {
-  const typeArg = call.arguments[0]
-  if (typeArg && (ts.isStringLiteral(typeArg) || ts.isNoSubstitutionTemplateLiteral(typeArg))) {
-    return typeArg.text
-  }
-  return componentName
-}
-
-function readOverridesArgument(call, sourceFile) {
-  const overridesArg = call.arguments[2]
-  if (!overridesArg || !ts.isObjectLiteralExpression(overridesArg)) {
-    return {}
-  }
-  return objectLiteralToValue(overridesArg, sourceFile)
-}
-
-function findCreateChartConfigCall(sourceFile) {
-  let found
-  const visit = (node) => {
-    if (found) {
-      return
+function validateFactoryConfigs(configs, componentType) {
+  for (const [pageType, config] of Object.entries(configs)) {
+    if (!config || config.type !== componentType || !config.props ||
+        !Number.isFinite(config.w) || config.w <= 0 || !Number.isFinite(config.h) || config.h <= 0) {
+      throw new Error(`${componentType} 的 ${pageType} 工厂配置无效，type 必须为父组件类型且 w/h 必须为正数`)
     }
-    if (ts.isCallExpression(node) && node.expression.getText(sourceFile) === 'createChartConfig') {
-      found = node
-      return
-    }
-    ts.forEachChild(node, visit)
   }
-  visit(sourceFile)
-  return found
+}
+
+function buildPageAwareFields(chartConfigInterface, propsInterface, configs) {
+  const fieldsByPageType = Object.fromEntries(Object.entries(configs).map(([pageType, config]) => [
+    pageType,
+    buildComponentConfigFields(chartConfigInterface, propsInterface, { chartConfig: config, props: config.props }),
+  ]))
+  return fieldsByPageType.visualScreen.map((field, index) => {
+    const pageField = fieldsByPageType.page[index]
+    if (field.field === 'type') {
+      return { ...field, description: `${field.description}；实际 ChartConfig.type 必须为 ${field.defaultValue}，不可使用预设 id。` }
+    }
+    if (field.field === 'w' || field.field === 'h' ||
+        JSON.stringify(field.defaultValue) !== JSON.stringify(pageField.defaultValue)) {
+      return {
+        ...field,
+        description: `${field.description}；默认值须按 pageType 选择，page=${JSON.stringify(pageField.defaultValue) ?? '未设置'}${['w', 'h'].includes(field.field) ? '（网格份数）' : ''}，visualScreen=${JSON.stringify(field.defaultValue) ?? '未设置'}${['w', 'h'].includes(field.field) ? '（像素）' : ''}。`,
+      }
+    }
+    return field
+  })
+}
+
+// 仅用于可信仓库源码的构建导出；node:vm 不是恶意代码安全边界。
+// 不加载 Vue 视图、浏览器环境或任意 npm/Node 模块，未知依赖直接报错。
+function createFactoryReader(projectRoot) {
+  projectRoot = realpathSync(projectRoot)
+  const sourceRoot = realpathSync(path.join(projectRoot, 'src'))
+  const compiled = new Map()
+  return (entryPath, isPreset = false) => {
+    const context = vm.createContext(Object.create(null), {
+      codeGeneration: { strings: false, wasm: false },
+      microtaskMode: 'afterEvaluate',
+    })
+    const run = (code, filename = entryPath) => new vm.Script(code, { filename }).runInContext(context, { timeout: 1000 })
+    const stubs = run(`({
+      vue: { defineAsyncComponent: () => ({}) },
+      uuid: { v4: () => 'export-only-id' }
+    })`)
+    const modules = new Map()
+    const load = (filePath) => {
+      const realPath = realpathSync(filePath)
+      const relative = path.relative(sourceRoot, realPath)
+      if (relative.startsWith('..') || path.isAbsolute(relative)) {
+        throw new Error(`导出工厂禁止加载 src 外文件：${filePath}`)
+      }
+      if (/\.(png|jpe?g|gif|svg|webp|avif)$/i.test(realPath)) {
+        return `@/${relative.split(path.sep).join('/')}`
+      }
+      if (!/\.(ts|js)$/.test(realPath)) {
+        throw new Error(`导出工厂不支持模块：${filePath}`)
+      }
+      if (modules.has(realPath)) return modules.get(realPath).exports
+      if (!compiled.has(realPath)) {
+        const source = readTextSync(realPath)
+        compiled.set(realPath, ts.transpileModule(source, {
+          fileName: realPath,
+          compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true },
+        }).outputText)
+      }
+      const module = run('({ exports: {} })')
+      modules.set(realPath, module)
+      const requireModule = (specifier) => {
+        if (Object.hasOwn(stubs, specifier)) return stubs[specifier]
+        if (typeof specifier !== 'string' || (!specifier.startsWith('.') && !specifier.startsWith('@/'))) {
+          throw new Error(`导出工厂禁止加载外部模块：${specifier}（${realPath}）`)
+        }
+        const dependency = resolveImportPath(projectRoot, realPath, specifier)
+        if (!dependency) throw new Error(`导出工厂无法解析依赖：${specifier}（${realPath}）`)
+        return load(dependency)
+      }
+      const previous = context.__moduleArgs
+      context.__moduleArgs = [module.exports, module, requireModule]
+      try {
+        run(`(function(exports, module, require) {\n${compiled.get(realPath)}\n})(...__moduleArgs)`, realPath)
+      } finally {
+        context.__moduleArgs = previous
+      }
+      return module.exports
+    }
+    try {
+      context.__entry = load(entryPath)
+      const result = JSON.parse(run(`JSON.stringify((() => {
+        const entry = ${isPreset ? '__entry.default' : '__entry'};
+        if (!entry || typeof entry.getInstance !== 'function') throw new Error('未找到 getInstance 工厂');
+        const configs = {};
+        for (const pageType of ['page', 'visualScreen']) {
+          const config = entry.getInstance(pageType);
+          if (!config || typeof config !== 'object' || typeof config.then === 'function') throw new Error('工厂必须同步返回配置');
+          const { id, i, ...defaults } = config;
+          configs[pageType] = JSON.parse(JSON.stringify(defaults));
+        }
+        return {
+          configs,
+          metadata: ${isPreset ? '{ id: entry.id, componentType: entry.componentType, name: entry.name, desc: entry.desc, tags: entry.tags, thumbnail: entry.thumbnail }' : 'null'}
+        };
+      })())`))
+      return isPreset ? result : result.configs
+    } catch (error) {
+      throw new Error(`${entryPath} 工厂导出失败：${error.message}`, { cause: error })
+    }
+  }
 }
 
 function parseDatasetFields(source, componentName) {

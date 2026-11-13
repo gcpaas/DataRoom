@@ -1,4 +1,4 @@
-import thumbnail from './images/border.png'
+import thumbnail from './thumbnail.png'
 import {ChartPlugin} from '@/dataRoom/components/type/ChartPlugin.ts'
 
 export class DrBorderPlugin extends ChartPlugin {

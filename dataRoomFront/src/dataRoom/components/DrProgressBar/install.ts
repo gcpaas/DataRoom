@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts";
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts";
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts";
@@ -107,7 +109,8 @@ export type DrProgressBarConfig = ChartConfig<DrProgressBarPropsInterface>
 /**
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
-const getInstance = (): DrProgressBarConfig => {
+const getInstance = (pageType: PageType): DrProgressBarConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrProgressBarPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrProgressBar',
@@ -119,8 +122,8 @@ const getInstance = (): DrProgressBarConfig => {
       bar: {
         height: 20,
         fillColor: '#5470c6',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        borderRadius: 10,
+        backgroundColor: theme.border.primary,
+        borderRadius: 0,
         gradient: {
           enabled: false,
           startColor: '#5470c6',
@@ -138,8 +141,8 @@ const getInstance = (): DrProgressBarConfig => {
         customFormat: '{percent}%'
       },
       track: {
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        borderRadius: 10
+        backgroundColor: theme.border.primary,
+        borderRadius: 0
       },
       border: {
         show: false,
@@ -147,8 +150,8 @@ const getInstance = (): DrProgressBarConfig => {
         width: 1
       },
       title: {
-        show: false,
-        text: '',
+        show: true,
+        text: '通过率',
         position: 'left',
         fontSize: 14,
         color: '#cccccc',
@@ -164,7 +167,8 @@ const getInstance = (): DrProgressBarConfig => {
       title: '进度条',
       w: 300,
       h: 60
-    }
+    },
+    pageType
   )
 }
 

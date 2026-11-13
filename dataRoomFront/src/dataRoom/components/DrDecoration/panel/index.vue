@@ -8,6 +8,12 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
+import DrTypePreviewPicker from '@/dataRoom/designer/components/DrTypePreviewPicker.vue'
+import DrDecoration from '../index.vue'
+import DrNumberField from '@/dataRoom/designer/components/DrNumberField.vue'
+import DrColorField from '@/dataRoom/designer/components/DrColorField.vue'
+import ConfigCollapse from '@/dataRoom/designer/components/ConfigCollapse.vue'
+import ConfigCollapseItem from '@/dataRoom/designer/components/ConfigCollapseItem.vue'
 import { computed } from 'vue'
 import type { DrDecorationConfig } from '../install.ts'
 import { decorationTypeOptions, isDecorationPropSupported, normalizeDecorationType } from '../options.ts'
@@ -32,72 +38,64 @@ const addColor = () => {
 const removeColor = (index: number) => {
   chartConfig.value.props.colors.splice(index, 1)
 }
-
-const clearColors = () => {
-  chartConfig.value.props.colors.splice(0, chartConfig.value.props.colors.length)
-}
 </script>
 
 <template>
   <div class="dr-config-panel dr-decoration-config-panel">
-    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="60px" label-position="left" size="small">
-      <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="装饰类型" name="type">
-          <el-form-item label="类型">
-            <el-select v-model="chartConfig.props.decorationType" class="dr-config-panel__control">
-              <el-option v-for="item in decorationTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="72px" label-position="left">
+      <ConfigCollapse class="dr-config-panel__section">
+        <ConfigCollapseItem title="装饰类型" name="type">
+          <el-form-item label-width="0">
+            <DrTypePreviewPicker v-model="chartConfig.props.decorationType" :options="decorationTypeOptions" class="dr-config-panel__control">
+              <template #preview="{ value }">
+                <DrDecoration :chart="{ ...chartConfig, id: `${chartConfig.id}-preview-${value}`, props: { ...chartConfig.props, decorationType: value } }" />
+              </template>
+            </DrTypePreviewPicker>
           </el-form-item>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="颜色配置" name="colors">
+        <ConfigCollapseItem title="颜色配置" name="colors">
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>颜色列表</span>
-              <el-button size="small" @click="addColor">添加</el-button>
-            </div>
             <div class="dr-decoration-config-panel__colors">
               <div v-for="(color, index) in chartConfig.props.colors" :key="index" class="dr-decoration-config-panel__color-row">
-                <el-color-picker v-model="chartConfig.props.colors[index]" show-alpha />
-                <el-button size="small" @click="removeColor(index)">删除</el-button>
+                <DrColorField v-model="chartConfig.props.colors[index]" show-alpha />
+                <el-button class="config-panel-text" text size="small" aria-label="删除颜色" title="删除颜色" :icon="'Delete'" @click="removeColor(index)" />
               </div>
-              <el-empty v-if="chartConfig.props.colors.length === 0" description="使用默认颜色" :image-size="48" />
-              <el-button v-else size="small" @click="clearColors">清空颜色</el-button>
+              <el-empty class="config-panel-text" v-if="chartConfig.props.colors.length === 0" description="使用默认颜色" :image-size="48" />
+              <el-button class="config-panel-text" plain @click="addColor">添加颜色</el-button>
             </div>
           </div>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="专属配置" name="specific">
+        <ConfigCollapseItem title="专属配置" name="specific">
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>当前类型</span>
-            </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item v-if="isDecorationPropSupported(currentDecorationType, 'reverse')" class="dr-config-panel__sub-form-item">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <el-form-item v-if="isDecorationPropSupported(currentDecorationType, 'reverse')" class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">反向</span>
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">反向</span>
                   <el-switch v-model="chartConfig.props.reverse" />
                 </div>
               </el-form-item>
-              <el-form-item v-if="isDecorationPropSupported(currentDecorationType, 'dur')" class="dr-config-panel__sub-form-item">
+              <el-form-item v-if="isDecorationPropSupported(currentDecorationType, 'dur')" class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">时长</span>
-                  <el-input-number v-model="chartConfig.props.dur" class="dr-config-panel__control" :min="0.1" :max="60" :step="0.1" controls-position="right" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">时长</span>
+                  <DrNumberField v-model="chartConfig.props.dur" class="dr-config-panel__control" :min="0.1" :max="60" :step="0.1" controls-position="right" />
                 </div>
               </el-form-item>
-              <el-form-item v-if="isDecorationPropSupported(currentDecorationType, 'scanDur')" class="dr-config-panel__sub-form-item">
+              <el-form-item v-if="isDecorationPropSupported(currentDecorationType, 'scanDur')" class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">扫描时长</span>
-                  <el-input-number v-model="chartConfig.props.scanDur" class="dr-config-panel__control" :min="0.1" :max="60" :step="0.1" controls-position="right" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">扫描时长</span>
+                  <DrNumberField v-model="chartConfig.props.scanDur" class="dr-config-panel__control" :min="0.1" :max="60" :step="0.1" controls-position="right" />
                 </div>
               </el-form-item>
-              <el-form-item v-if="isDecorationPropSupported(currentDecorationType, 'haloDur')" class="dr-config-panel__sub-form-item">
+              <el-form-item v-if="isDecorationPropSupported(currentDecorationType, 'haloDur')" class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">光晕时长</span>
-                  <el-input-number v-model="chartConfig.props.haloDur" class="dr-config-panel__control" :min="0.1" :max="60" :step="0.1" controls-position="right" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">光晕时长</span>
+                  <DrNumberField v-model="chartConfig.props.haloDur" class="dr-config-panel__control" :min="0.1" :max="60" :step="0.1" controls-position="right" />
                 </div>
               </el-form-item>
               <el-empty
+                class="config-panel-text"
                 v-if="
                   !isDecorationPropSupported(currentDecorationType, 'reverse') &&
                   !isDecorationPropSupported(currentDecorationType, 'dur') &&
@@ -109,14 +107,13 @@ const clearColors = () => {
               />
             </el-form>
           </div>
-        </el-collapse-item>
-      </el-collapse>
+        </ConfigCollapseItem>
+      </ConfigCollapse>
     </el-form>
   </div>
 </template>
 
 <style scoped lang="scss">
-@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-decoration-config-panel {
   padding: 0;

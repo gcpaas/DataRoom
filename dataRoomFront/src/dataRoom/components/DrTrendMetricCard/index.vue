@@ -6,6 +6,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import { gradientStops } from '../../theme/color'
 import { mockDataset, type DrTrendMetricCardConfig } from './install.ts'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as echarts from 'echarts'
@@ -269,8 +270,10 @@ const buildOption = (): echarts.EChartsOption => {
         areaStyle:
           props.trend.chartType === 'area'
             ? {
-                color: props.trend.areaColor,
-                opacity: props.trend.areaOpacity,
+                color: props.trend.areaGradient
+                  ? { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: gradientStops(props.trend.areaColor, props.trend.areaOpacity, 0) }
+                  : props.trend.areaColor,
+                opacity: props.trend.areaGradient ? 1 : props.trend.areaOpacity,
               }
             : undefined,
         markPoint: props.axis.showMinMaxLabel

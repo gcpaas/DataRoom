@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
@@ -83,7 +85,8 @@ export interface DrMetricCardPropsInterface {
 
 export type DrMetricCardConfig = ChartConfig<DrMetricCardPropsInterface>
 
-const getInstance = (): DrMetricCardConfig => {
+const getInstance = (pageType: PageType): DrMetricCardConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrMetricCardPropsInterface>(
     'DrMetricCard',
     {
@@ -105,13 +108,13 @@ const getInstance = (): DrMetricCardConfig => {
         direction: 'vertical',
         horizontalAlign: 'left',
         verticalAlign: 'center',
-        gap: 8
+        gap: 16
       },
       title: {
         show: true,
         text: '指标名称',
         fontSize: 14,
-        color: '#909399',
+        color: theme.text.primary,
         fontWeight: 'normal'
       },
       value: {
@@ -123,15 +126,15 @@ const getInstance = (): DrMetricCardConfig => {
         suffix: '',
         emptyText: '--',
         fontSize: 36,
-        color: '#303133',
+        color: theme.text.primary,
         fontWeight: 'bold',
         lineHeight: 1
       },
       subtitle: {
-        show: true,
+        show: false,
         text: '实时统计',
         fontSize: 12,
-        color: '#909399',
+        color: theme.text.primary,
         fontWeight: 'normal'
       },
       unit: {
@@ -139,7 +142,7 @@ const getInstance = (): DrMetricCardConfig => {
         text: '',
         position: 'suffix',
         fontSize: 14,
-        color: '#909399',
+        color: theme.text.secondary,
         gap: 4
       },
       conditional: {
@@ -148,7 +151,7 @@ const getInstance = (): DrMetricCardConfig => {
           {
             operator: '>=',
             value: 1000,
-            valueColor: '#67c23a',
+            valueColor: theme.color.success,
             backgroundColor: 'rgba(0, 0, 0, 0)',
             borderColor: 'rgba(0, 0, 0, 0)'
           }
@@ -167,7 +170,9 @@ const getInstance = (): DrMetricCardConfig => {
       x: 0,
       y: 0,
       z: 0
-    }
+    },
+    pageType,
+    {w: 4, h: 5}
   )
 }
 

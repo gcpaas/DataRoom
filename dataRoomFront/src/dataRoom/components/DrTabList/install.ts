@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
@@ -86,7 +88,8 @@ export type DrTabListConfig = ChartConfig<DrTabListPropsInterface>
 /**
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
-const getInstance = (): DrTabListConfig => {
+const getInstance = (pageType: PageType): DrTabListConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrTabListPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrTabList',
@@ -101,8 +104,8 @@ const getInstance = (): DrTabListConfig => {
       },
       tabStyle: {
         fontSize: 14,
-        color: '#999999',
-        activeColor: '#FFFFFF',
+        color: theme.text.primary,
+        activeColor: theme.color.primary,
         backgroundColor: 'transparent',
         activeBgColor: 'transparent',
         borderRadius: 0,
@@ -111,13 +114,13 @@ const getInstance = (): DrTabListConfig => {
         height: 44,
         borderBottom: {
           show: false,
-          color: '#333333',
+          color: theme.text.primary,
           width: 1
         }
       },
       indicator: {
         show: true,
-        color: '#409EFF',
+        color: theme.color.primary,
         height: 3,
         borderRadius: 2
       },
@@ -136,7 +139,8 @@ const getInstance = (): DrTabListConfig => {
       title: 'Tab列表',
       w: 400,
       h: 44
-    }
+    },
+    pageType
   )
 }
 

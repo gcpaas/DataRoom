@@ -23,11 +23,11 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mybatis.plus.version>3.5.16</mybatis.plus.version>
-        <guava.version>33.4.0-jre</guava.version>
+        <guava.version>33.7.2-jre</guava.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <commons-io.version>2.21.0</commons-io.version>
         <jackson.core.version>2.22.3</jackson.core.version>
-        <shiro.version>2.2.1</shiro.version>
+        <shiro.version>3.0.1</shiro.version>
         <jjwt.version>0.12.6</jjwt.version>
         <dameng.jdbc.version>8.1.5.45</dameng.jdbc.version>
         <db2.jdbc.version>12.1.4.0</db2.jdbc.version>
@@ -35,7 +35,7 @@
         <mongodb.jdbc.version>3.0.6</mongodb.jdbc.version>
         <kingbase.jdbc.version>9.0.1</kingbase.jdbc.version>
         <clickhouse.jdbc.version>0.9.8</clickhouse.jdbc.version>
-        <mariadb.jdbc.version>3.5.10</mariadb.jdbc.version>
+        <mariadb.jdbc.version>3.5.11</mariadb.jdbc.version>
         <oceanbase.jdbc.version>2.4.12</oceanbase.jdbc.version>
         <hive.jdbc.version>4.2.0</hive.jdbc.version>
         <tdengine.jdbc.version>3.8.3</tdengine.jdbc.version>
@@ -164,38 +164,18 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
-            <classifier>jakarta</classifier>
             <version>${shiro.version}</version>
-            <!-- 排除仍使用了javax.servlet的依赖 -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.shiro</groupId>
-                    <artifactId>shiro-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.shiro</groupId>
-                    <artifactId>shiro-web</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <!-- 引入适配jakarta的依赖包 -->
+        <!-- Shiro 3 默认使用 Jakarta，不再需要 jakarta classifier。 -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
-            <classifier>jakarta</classifier>
             <version>${shiro.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-web</artifactId>
-            <classifier>jakarta</classifier>
             <version>${shiro.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.shiro</groupId>
-                    <artifactId>shiro-core</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>

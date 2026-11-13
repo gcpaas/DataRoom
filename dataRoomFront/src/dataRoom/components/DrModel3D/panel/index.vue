@@ -7,6 +7,13 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import DrFieldRow from '@/dataRoom/designer/components/DrFieldRow.vue'
+import DrInputField from '@/dataRoom/designer/components/DrInputField.vue'
+import DrSelectField from '@/dataRoom/designer/components/DrSelectField.vue'
+import DrNumberField from '@/dataRoom/designer/components/DrNumberField.vue'
+import DrColorField from '@/dataRoom/designer/components/DrColorField.vue'
+import ConfigCollapse from '@/dataRoom/designer/components/ConfigCollapse.vue'
+import ConfigCollapseItem from '@/dataRoom/designer/components/ConfigCollapseItem.vue'
 import type { DrModel3DConfig } from '../install.ts'
 import { computed } from 'vue'
 import { MODEL_SCALE_MIN, MODEL_SCALE_MAX, normalizeModelTransformConfig } from '@/dataRoom/three/modelConfig'
@@ -24,23 +31,23 @@ const resetTransform = () => {
 
 <template>
   <div class="dr-config-panel dr-model-3d-config-panel">
-    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="60px" label-position="left" size="small">
-      <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="基础配置" name="basic">
+    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="72px" label-position="left">
+      <ConfigCollapse class="dr-config-panel__section">
+        <ConfigCollapseItem title="基础配置" name="basic">
           <el-form-item label="模型地址">
-            <el-input v-model="chartConfig.props.modelUrl" placeholder="请输入模型地址或选择素材" />
+            <DrInputField v-model="chartConfig.props.modelUrl" placeholder="请输入模型地址或选择素材" />
           </el-form-item>
           <el-form-item label="模型格式">
-            <el-select v-model="chartConfig.props.modelFormat" placeholder="自动识别" clearable>
+            <DrSelectField v-model="chartConfig.props.modelFormat" placeholder="自动识别" clearable>
               <el-option label="自动识别" value="" />
               <el-option label="GLB" value="glb" />
               <el-option label="GLTF" value="gltf" />
               <el-option label="OBJ" value="obj" />
               <el-option label="STL" value="stl" />
-            </el-select>
+            </DrSelectField>
           </el-form-item>
           <el-form-item label="封面图片">
-            <el-input v-model="chartConfig.props.coverImage" placeholder="请输入封面图片地址" />
+            <DrInputField v-model="chartConfig.props.coverImage" placeholder="请输入封面图片地址" />
           </el-form-item>
           <el-form-item label="自动旋转">
             <el-switch v-model="chartConfig.props.autoRotate" />
@@ -50,7 +57,7 @@ const resetTransform = () => {
           </el-form-item>
 
           <div v-if="chartConfig.props.coverImage" class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
+            <div class="dr-config-panel__group-title">
               <span>封面预览</span>
             </div>
             <div class="dr-model-3d-config-panel__preview">
@@ -61,22 +68,22 @@ const resetTransform = () => {
               </el-image>
             </div>
           </div>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="模型变换" name="transform">
+        <ConfigCollapseItem title="模型变换" name="transform">
           <el-form-item label="缩放倍率">
-            <el-input-number v-model="chartConfig.props.modelScale" :min="MODEL_SCALE_MIN" :max="MODEL_SCALE_MAX" :step="0.1" :value-on-clear="1" controls-position="right" />
+            <DrNumberField v-model="chartConfig.props.modelScale" :min="MODEL_SCALE_MIN" :max="MODEL_SCALE_MAX" :step="0.1" :value-on-clear="1" controls-position="right" />
           </el-form-item>
           <el-form-item v-for="axis in positionAxes" :key="axis" :label="`${axis.toUpperCase()} 偏移`">
-            <el-input-number v-model="chartConfig.props.modelPosition[axis]" :step="0.1" :value-on-clear="0" controls-position="right" />
+            <DrNumberField v-model="chartConfig.props.modelPosition[axis]" :step="0.1" :value-on-clear="0" controls-position="right" />
           </el-form-item>
-          <el-text size="small" type="info">偏移使用场景单位，非像素；超出视野时可重置。</el-text>
+          <el-text class="config-panel-text" size="small" type="info">偏移使用场景单位，非像素；超出视野时可重置。</el-text>
           <el-form-item>
-            <el-button @click="resetTransform">重置变换</el-button>
+            <el-button class="config-panel-text" @click="resetTransform">重置变换</el-button>
           </el-form-item>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="材质配置" name="material">
+        <ConfigCollapseItem title="材质配置" name="material">
           <el-form-item label="线框模式">
             <el-switch v-model="chartConfig.props.material.wireframe" />
           </el-form-item>
@@ -85,133 +92,104 @@ const resetTransform = () => {
           </el-form-item>
 
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
+            <div class="dr-config-panel__group-title">
               <span>材质参数</span>
             </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-color-picker v-model="chartConfig.props.material.color" show-alpha />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">颜色</span>
+                  <DrColorField v-model="chartConfig.props.material.color" show-alpha />
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">粗糙度</span>
-                  <el-input-number v-model="chartConfig.props.material.roughness" class="dr-config-panel__control" :min="0" :max="1" :step="0.1" controls-position="right" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">粗糙度</span>
+                  <DrNumberField v-model="chartConfig.props.material.roughness" class="dr-config-panel__control" :min="0" :max="1" :step="0.1" controls-position="right" />
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">金属度</span>
-                  <el-input-number v-model="chartConfig.props.material.metalness" class="dr-config-panel__control" :min="0" :max="1" :step="0.1" controls-position="right" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">金属度</span>
+                  <DrNumberField v-model="chartConfig.props.material.metalness" class="dr-config-panel__control" :min="0" :max="1" :step="0.1" controls-position="right" />
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">透明度</span>
-                  <el-input-number v-model="chartConfig.props.material.opacity" class="dr-config-panel__control" :min="0" :max="1" :step="0.1" controls-position="right" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">透明度</span>
+                  <DrNumberField v-model="chartConfig.props.material.opacity" class="dr-config-panel__control" :min="0" :max="1" :step="0.1" controls-position="right" />
                 </div>
               </el-form-item>
             </el-form>
           </div>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="光照配置" name="lighting">
+        <ConfigCollapseItem title="光照配置" name="lighting">
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>环境光</span>
-              <el-switch v-model="chartConfig.props.lighting.ambient.enabled" size="small" />
-            </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-color-picker v-model="chartConfig.props.lighting.ambient.color" show-alpha />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">强度</span>
-                  <el-input-number
-                    v-model="chartConfig.props.lighting.ambient.intensity"
-                    class="dr-config-panel__control"
-                    :min="0"
-                    :max="1"
-                    :step="0.1"
-                    controls-position="right"
-                  />
-                </div>
-              </el-form-item>
+            <el-form-item label="环境光" label-width="72px" label-position="left">
+              <template #label><span class="dr-config-panel__group-title">环境光</span></template>
+              <el-switch v-model="chartConfig.props.lighting.ambient.enabled" />
+            </el-form-item>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <DrFieldRow label="光照" paired variant="number-color">
+                <template #first>
+                  <DrNumberField v-model="chartConfig.props.lighting.ambient.intensity" class="dr-config-panel__control" :min="0" :max="1" :step="0.1" controls-position="right" label="强" aria-label="环境光强度" />
+                </template>
+                <template #second>
+                  <DrColorField v-model="chartConfig.props.lighting.ambient.color" show-alpha aria-label="环境光颜色" />
+                </template>
+              </DrFieldRow>
             </el-form>
           </div>
 
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>平行光</span>
-              <el-switch v-model="chartConfig.props.lighting.directional.enabled" size="small" />
-            </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-color-picker v-model="chartConfig.props.lighting.directional.color" show-alpha />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">强度</span>
-                  <el-input-number
-                    v-model="chartConfig.props.lighting.directional.intensity"
-                    class="dr-config-panel__control"
-                    :min="0"
-                    :max="1"
-                    :step="0.1"
-                    controls-position="right"
-                  />
-                </div>
-              </el-form-item>
+            <el-form-item label="平行光" label-width="72px" label-position="left">
+              <template #label><span class="dr-config-panel__group-title">平行光</span></template>
+              <el-switch v-model="chartConfig.props.lighting.directional.enabled" />
+            </el-form-item>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <DrFieldRow label="光照" paired variant="number-color">
+                <template #first>
+                  <DrNumberField v-model="chartConfig.props.lighting.directional.intensity" class="dr-config-panel__control" :min="0" :max="1" :step="0.1" controls-position="right" label="强" aria-label="平行光强度" />
+                </template>
+                <template #second>
+                  <DrColorField v-model="chartConfig.props.lighting.directional.color" show-alpha aria-label="平行光颜色" />
+                </template>
+              </DrFieldRow>
             </el-form>
           </div>
 
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>点光源</span>
-              <el-switch v-model="chartConfig.props.lighting.point.enabled" size="small" />
-            </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-color-picker v-model="chartConfig.props.lighting.point.color" show-alpha />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">强度</span>
-                  <el-input-number v-model="chartConfig.props.lighting.point.intensity" class="dr-config-panel__control" :min="0" :max="1" :step="0.1" controls-position="right" />
-                </div>
-              </el-form-item>
+            <el-form-item label="点光源" label-width="72px" label-position="left">
+              <template #label><span class="dr-config-panel__group-title">点光源</span></template>
+              <el-switch v-model="chartConfig.props.lighting.point.enabled" />
+            </el-form-item>
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <DrFieldRow label="光照" paired variant="number-color">
+                <template #first>
+                  <DrNumberField v-model="chartConfig.props.lighting.point.intensity" class="dr-config-panel__control" :min="0" :max="1" :step="0.1" controls-position="right" label="强" aria-label="点光源强度" />
+                </template>
+                <template #second>
+                  <DrColorField v-model="chartConfig.props.lighting.point.color" show-alpha aria-label="点光源颜色" />
+                </template>
+              </DrFieldRow>
             </el-form>
           </div>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="背景配置" name="background">
+        <ConfigCollapseItem title="背景配置" name="background">
           <el-form-item label="背景颜色">
-            <el-color-picker v-model="chartConfig.props.background.value" show-alpha />
+            <DrColorField v-model="chartConfig.props.background.value" show-alpha />
           </el-form-item>
-        </el-collapse-item>
-      </el-collapse>
+        </ConfigCollapseItem>
+      </ConfigCollapse>
     </el-form>
   </div>
 </template>
 
 <style scoped lang="scss">
-@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-model-3d-config-panel {
-  --el-collapse-border-color: var(--el-bg-color);
-
   padding: 0;
 }
 

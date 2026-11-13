@@ -1,4 +1,4 @@
-import thumbnail from './images/thumbnail.svg'
+import thumbnail from './thumbnail.svg'
 import { ChartPlugin } from '../type/ChartPlugin'
 
 export class DrRichTextPlugin extends ChartPlugin {

@@ -1,5 +1,6 @@
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
+import type { PageType } from '@/dataRoom/constants/PageType.ts'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
@@ -45,12 +46,12 @@ export interface DrAlarmImagePropsInterface {
 
 export type DrAlarmImageConfig = ChartConfig<DrAlarmImagePropsInterface>
 
-const getInstance = (): DrAlarmImageConfig => {
+const getInstance = (pageType: PageType): DrAlarmImageConfig => {
   return createChartConfig<DrAlarmImagePropsInterface>(
     'DrAlarmImage',
     {
       value: {
-        show: true,
+        show: false,
         defaultValue: 95,
         format: 'integer',
         decimalPlaces: 0,
@@ -71,22 +72,15 @@ const getInstance = (): DrAlarmImageConfig => {
           {
             id: 'normal',
             name: '正常',
-            url: '/dataRoom/resource/image/placeholder.png',
-            condition: '',
+            url: '/dataRoom/resource/image/base/蓝色圆形银行图标.png',
+            condition: 'x <= 80',
             enabled: true,
           },
           {
             id: 'warning',
             name: '预警',
-            url: '/dataRoom/resource/image/placeholder.png',
-            condition: '100 > x > 90',
-            enabled: true,
-          },
-          {
-            id: 'danger',
-            name: '异常',
-            url: '/dataRoom/resource/image/placeholder.png',
-            condition: 'x >= 100',
+            url: '/dataRoom/resource/image/base/红色感叹号警告图标.png',
+            condition: 'x > 80',
             enabled: true,
           },
         ],
@@ -108,6 +102,7 @@ const getInstance = (): DrAlarmImageConfig => {
       w: 220,
       h: 180,
     },
+    pageType,
   )
 }
 

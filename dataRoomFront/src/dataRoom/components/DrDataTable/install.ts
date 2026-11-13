@@ -1,5 +1,8 @@
+import { getDefaultTheme } from '../../theme/registry'
+import { withOpacity } from '../../theme/color'
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
+import type { PageType } from '@/dataRoom/constants/PageType.ts'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
@@ -69,7 +72,8 @@ export interface DrDataTablePropsInterface {
 
 export type DrDataTableConfig = ChartConfig<DrDataTablePropsInterface>
 
-const getInstance = (): DrDataTableConfig => {
+const getInstance = (pageType: PageType): DrDataTableConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrDataTablePropsInterface>(
     'DrDataTable',
     {
@@ -90,22 +94,22 @@ const getInstance = (): DrDataTableConfig => {
       },
       headerStyle: {
         height: 42,
-        backgroundColor: 'transparent',
-        color: 'var(--el-text-color-regular)',
+        backgroundColor: withOpacity(theme.color.primary, 0.1),
+        color: theme.text.primary,
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'left',
       },
       rowStyle: {
-        height: 40,
+        height: 36,
         backgroundColor: 'transparent',
         oddBackgroundColor: 'transparent',
         evenBackgroundColor: 'transparent',
-        hoverBackgroundColor: 'var(--el-fill-color-light)',
-        borderColor: 'var(--el-border-color-lighter)',
+        hoverBackgroundColor: withOpacity(theme.color.primary, 0.1),
+        borderColor: theme.border.secondary,
       },
       cellStyle: {
-        color: 'var(--el-text-color-regular)',
+        color: theme.text.primary,
         fontSize: 14,
         fontWeight: 'normal',
         padding: [8, 12, 8, 12],
@@ -127,6 +131,7 @@ const getInstance = (): DrDataTableConfig => {
       y: 0,
       z: 0,
     },
+    pageType,
   )
 }
 

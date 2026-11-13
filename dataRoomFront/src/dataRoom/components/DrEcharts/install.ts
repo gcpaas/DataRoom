@@ -1,5 +1,6 @@
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
@@ -11,6 +12,16 @@ const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 
 export interface DrEchartsPropsInterface {
+  /** 页面主题写入的样式配置，旧页面可缺省。 */
+  themeStyle?: {
+    text: string
+    secondaryText: string
+    background: string
+    border: string
+    grid: string
+    primary: string
+    colors: string[]
+  }
   /**
    * ECharts option 代码（JS 代码字符串，最后 return option 对象）。
    * 存字符串而非对象：页面配置需要 JSON 序列化，option 中的 formatter 等函数无法被 JSON 表达。
@@ -27,7 +38,7 @@ export type DrEchartsConfig = ChartConfig<DrEchartsPropsInterface>
 /**
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
-const getInstance = (): DrEchartsConfig => {
+const getInstance = (pageType: PageType): DrEchartsConfig => {
   return createChartConfig<DrEchartsPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrEcharts',
@@ -66,7 +77,8 @@ return {
       title: '自定义图表',
       w: 400,
       h: 300
-    }
+    },
+    pageType
   )
 }
 

@@ -1,7 +1,7 @@
 {
   "componentName": "DrAlarmImage",
   "displayName": "告警图",
-  "description": "告警、图片、阈值、指标、状态、区间",
+  "description": "告警、图片、阈值、指标、状态、区间。实际 ChartConfig.type 必须为 DrAlarmImage。fields.defaultValue 默认对应 visualScreen；两种页面的默认值差异见字段 description，必须按目标 pageType 选择：page 的 w/h 为网格份数，visualScreen 的 w/h 为像素，不可混用。",
   "fields": [
     {
       "field": "id",
@@ -16,7 +16,7 @@
     {
       "field": "type",
       "type": "string",
-      "description": "组件类型",
+      "description": "组件类型；实际 ChartConfig.type 必须为 DrAlarmImage，不可使用预设 id。",
       "defaultValue": "DrAlarmImage"
     },
     {
@@ -28,13 +28,13 @@
     {
       "field": "w",
       "type": "number",
-      "description": "宽度或占用的份数",
+      "description": "宽度或占用的份数；默认值须按 pageType 选择，page=16（网格份数），visualScreen=220（像素）。",
       "defaultValue": 220
     },
     {
       "field": "h",
       "type": "number",
-      "description": "高度或占用的份数",
+      "description": "高度或占用的份数；默认值须按 pageType 选择，page=5（网格份数），visualScreen=180（像素）。",
       "defaultValue": 180
     },
     {
@@ -134,7 +134,7 @@
       "field": "props.value.show",
       "type": "boolean",
       "description": "show",
-      "defaultValue": true
+      "defaultValue": false
     },
     {
       "field": "props.value.defaultValue",
@@ -250,22 +250,15 @@
         {
           "id": "normal",
           "name": "正常",
-          "url": "/dataRoom/resource/image/placeholder.png",
-          "condition": "",
+          "url": "/dataRoom/resource/image/base/蓝色圆形银行图标.png",
+          "condition": "x <= 80",
           "enabled": true
         },
         {
           "id": "warning",
           "name": "预警",
-          "url": "/dataRoom/resource/image/placeholder.png",
-          "condition": "100 > x > 90",
-          "enabled": true
-        },
-        {
-          "id": "danger",
-          "name": "异常",
-          "url": "/dataRoom/resource/image/placeholder.png",
-          "condition": "x >= 100",
+          "url": "/dataRoom/resource/image/base/红色感叹号警告图标.png",
+          "condition": "x > 80",
           "enabled": true
         }
       ]

@@ -1,4 +1,4 @@
-import thumbnail from './images/alarm-image.svg'
+import thumbnail from './thumbnail.svg'
 import { ChartPlugin } from '@/dataRoom/components/type/ChartPlugin.ts'
 
 export class DrAlarmImagePlugin extends ChartPlugin {

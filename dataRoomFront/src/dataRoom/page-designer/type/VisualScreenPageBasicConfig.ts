@@ -5,6 +5,8 @@ import type { VisualScreenRulerConfig } from '@/dataRoom/visual-screen-designer/
  * 大屏页面基础配置
  */
 export interface VisualScreenPageBasicConfig {
+  // 页面选择的图表主题，保存后新插入组件沿用
+  themeId?: string
   background: {
     // 背景填充方式
     fill: string | 'image' | 'color'

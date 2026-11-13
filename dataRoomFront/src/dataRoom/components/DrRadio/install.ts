@@ -1,5 +1,6 @@
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
@@ -64,7 +65,7 @@ export type DrRadioConfig = ChartConfig<DrRadioPropsInterface>
 /**
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
-const getInstance = (): DrRadioConfig => {
+const getInstance = (pageType: PageType): DrRadioConfig => {
   return createChartConfig<DrRadioPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrRadio',
@@ -102,7 +103,8 @@ const getInstance = (): DrRadioConfig => {
       title: '单选框',
       w: 300,
       h: 40
-    }
+    },
+    pageType
   )
 }
 

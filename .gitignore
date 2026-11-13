@@ -6,6 +6,11 @@ docs
 .superpowers
 !dataRoomFront/src/dataRoom/_common/save-before-leave.spec.ts
 *.mjs
+!dataRoomFront/scripts/pictorial-bar-chart.test.mjs
+!dataRoomFront/scripts/component-presets.test.mjs
+!dataRoomFront/scripts/screen-chart-style.test.mjs
+!dataRoomFront/scripts/bar-theme.test.mjs
+!dataRoomFront/scripts/all-component-theme.test.mjs
 .claude
 .codex
 CLAUDE.md

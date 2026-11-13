@@ -24,7 +24,11 @@ import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import type { ChartAction } from '@/dataRoom/components/type/ChartAction.ts'
 import DataTransformScriptEditor from './DataTransformScriptEditor.vue'
-import LayoutNumberField from './LayoutNumberField.vue'
+import DrNumberField from './DrNumberField.vue'
+import DrInputField from './DrInputField.vue'
+import DrSelectField from './DrSelectField.vue'
+import ConfigCollapse from './ConfigCollapse.vue'
+import ConfigCollapseItem from './ConfigCollapseItem.vue'
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
 /**
@@ -43,8 +47,8 @@ const { chart, globalVariableList = [] } = defineProps<{
 
 // 默认激活样式tab
 const activeTab = ref('style')
-// 默认展开所有数据折叠面板
-const activeDataCollapse = ref(['dataset', 'fields', 'params', 'script'])
+// 手风琴模式默认展开数据集选择
+const activeDataCollapse = ref('dataset')
 const chartConfig = computed(() => chart)
 
 /**
@@ -447,24 +451,24 @@ const triggerAutoRefresh = () => {
       <div class="control-tabs-content">
         <section v-show="activeTab === 'style'" class="control-tab-pane" role="tabpanel">
           <div class="tab-content">
-            <el-form label-width="80px" label-position="left" size="small">
-              <el-form-item label="图层名">
-                <el-input v-model="chartConfig.title"></el-input>
+            <el-form label-width="72px" label-position="left">
+              <el-form-item class="config-panel-text" label="图层名">
+                <DrInputField v-model="chartConfig.title"></DrInputField>
               </el-form-item>
-              <el-form-item label="位置">
+              <el-form-item class="config-panel-text" label="位置">
                 <div class="chart-layout-fields">
-                  <LayoutNumberField v-model="chartConfig.x" label="X" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
-                  <LayoutNumberField v-model="chartConfig.y" label="Y" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
+                  <DrNumberField :precision="0" v-model="chartConfig.x" label="X" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
+                  <DrNumberField :precision="0" v-model="chartConfig.y" label="Y" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
                 </div>
               </el-form-item>
-              <el-form-item label="尺寸">
+              <el-form-item class="config-panel-text" label="尺寸">
                 <div class="chart-layout-fields">
-                  <LayoutNumberField v-model="chartConfig.w" label="W" :min="1" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
-                  <LayoutNumberField v-model="chartConfig.h" label="H" :min="1" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
+                  <DrNumberField :precision="0" v-model="chartConfig.w" label="W" :min="1" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
+                  <DrNumberField :precision="0" v-model="chartConfig.h" label="H" :min="1" class="chart-layout-field" @edit-start="onLayoutEditStart" @edit-commit="onLayoutEditCommit" />
                 </div>
               </el-form-item>
-              <el-form-item label="层级">
-                <LayoutNumberField :model-value="chartConfig.z" @update:model-value="onLayerZChange" />
+              <el-form-item class="config-panel-text" label="层级">
+                <DrNumberField :precision="0" :model-value="chartConfig.z" @update:model-value="onLayerZChange" />
               </el-form-item>
             </el-form>
             <slot></slot>
@@ -472,24 +476,24 @@ const triggerAutoRefresh = () => {
         </section>
         <section v-show="activeTab === 'data'" class="control-tab-pane" role="tabpanel">
           <div class="tab-content">
-            <el-collapse v-model="activeDataCollapse" class="dr-collapse">
+            <ConfigCollapse v-model="activeDataCollapse" class="dr-collapse">
               <!-- 数据集选择 -->
-              <el-collapse-item name="dataset" title="数据集选择">
-                <el-form ref="dataFormRef" :model="chartConfig.dataset" :rules="dataFormRules" label-width="100px" label-position="left" size="small">
-                  <el-form-item label="数据集">
-                    <el-input v-model="datasetName" placeholder="请选择数据集" :suffix-icon="Pointer" readonly @click="openDatasetDialog" class="dataset-picker-input"></el-input>
+              <ConfigCollapseItem name="dataset" title="数据集选择">
+                <el-form ref="dataFormRef" :model="chartConfig.dataset" :rules="dataFormRules" label-width="72px" label-position="left">
+                  <el-form-item class="config-panel-text" label="数据集">
+                    <DrInputField v-model="datasetName" placeholder="请选择数据集" :suffix-icon="Pointer" readonly @click="openDatasetDialog" class="dataset-picker-input"></DrInputField>
                   </el-form-item>
-                  <el-form-item label=" ">
-                    <el-button size="small" @click="openMockDatasetDialog">数据样例</el-button>
+                  <el-form-item class="config-panel-text" label=" ">
+                    <el-button class="config-panel-text" @click="openMockDatasetDialog">数据样例</el-button>
                   </el-form-item>
                 </el-form>
-              </el-collapse-item>
+              </ConfigCollapseItem>
 
               <!-- 字段绑定 -->
-              <el-collapse-item name="fields" title="组件字段绑定">
-                <el-form ref="dataFormRef" class="fields-binding-form" :model="chartConfig.dataset" :rules="dataFormRules" label-position="top" size="small">
-                  <el-form-item v-for="field in datasetFields" :key="field.name" :label="field.desc" :prop="'fields.' + field.name" :required="field.required">
-                    <el-select
+              <ConfigCollapseItem name="fields" title="组件字段绑定">
+                <el-form ref="dataFormRef" class="fields-binding-form" :model="chartConfig.dataset" :rules="dataFormRules" label-position="top">
+                  <el-form-item class="config-panel-text" v-for="field in datasetFields" :key="field.name" :label="field.desc" :prop="'fields.' + field.name" :required="field.required">
+                    <DrSelectField
                       :model-value="chartConfig.dataset.fields[field.name]"
                       @update:model-value="(val: string[]) => handleFieldChange(field, val)"
                       :placeholder="`请选择${field.desc}`"
@@ -507,14 +511,14 @@ const triggerAutoRefresh = () => {
                           <span class="option-desc">{{ output.desc }}</span>
                         </div>
                       </el-option>
-                    </el-select>
+                    </DrSelectField>
                   </el-form-item>
                 </el-form>
-              </el-collapse-item>
+              </ConfigCollapseItem>
 
               <!-- 数据集参数绑定 -->
-              <el-collapse-item name="params" title="数据集参数绑定" v-if="validDatasetInputList.length > 0">
-                <el-form :model="chartConfig.dataset" label-width="100px" label-position="left" size="small">
+              <ConfigCollapseItem name="params" title="数据集参数绑定" v-if="validDatasetInputList.length > 0">
+                <el-form :model="chartConfig.dataset" label-width="72px" label-position="left">
                   <template v-for="inputParam in validDatasetInputList" :key="inputParam.name">
                     <div class="param-item">
                       <div class="param-header">
@@ -522,14 +526,14 @@ const triggerAutoRefresh = () => {
                         <span class="param-desc" v-if="inputParam.desc">（{{ inputParam.desc }}）</span>
                       </div>
 
-                      <el-form-item label="参数来源" v-if="getParamConfig(inputParam.name)">
-                        <el-select v-model="getParamConfig(inputParam.name)!.from" placeholder="请选择参数来源" class="field-full" @change="triggerAutoRefresh">
+                      <el-form-item class="config-panel-text" label="参数来源" v-if="getParamConfig(inputParam.name)">
+                        <DrSelectField v-model="getParamConfig(inputParam.name)!.from" placeholder="请选择参数来源" class="field-full" @change="triggerAutoRefresh">
                           <el-option label="全局变量" value="globalVar"></el-option>
-                        </el-select>
+                        </DrSelectField>
                       </el-form-item>
 
-                      <el-form-item label="变量名称" v-if="getParamConfig(inputParam.name)">
-                        <el-select
+                      <el-form-item class="config-panel-text" label="变量名称" v-if="getParamConfig(inputParam.name)">
+                        <DrSelectField
                           v-if="getParamConfig(inputParam.name)!.from === 'globalVar'"
                           v-model="getParamConfig(inputParam.name)!.variableName"
                           placeholder="请选择全局变量"
@@ -544,49 +548,49 @@ const triggerAutoRefresh = () => {
                               <span class="option-desc">{{ gVar.remark }}</span>
                             </div>
                           </el-option>
-                        </el-select>
-                        <el-input
+                        </DrSelectField>
+                        <DrInputField
                           v-else
                           v-model="getParamConfig(inputParam.name)!.variableName"
                           placeholder="请输入变量名称"
                           class="field-full"
                           @change="triggerAutoRefresh"
-                        ></el-input>
+                        ></DrInputField>
                       </el-form-item>
 
-                      <el-form-item label="默认值" v-if="getParamConfig(inputParam.name)">
-                        <el-input v-model="getParamConfig(inputParam.name)!.defaultValue" placeholder="请输入默认值" class="field-full" @change="triggerAutoRefresh"></el-input>
+                      <el-form-item class="config-panel-text" label="默认值" v-if="getParamConfig(inputParam.name)">
+                        <DrInputField v-model="getParamConfig(inputParam.name)!.defaultValue" placeholder="请输入默认值" class="field-full" @change="triggerAutoRefresh"></DrInputField>
                       </el-form-item>
                     </div>
                   </template>
                 </el-form>
-              </el-collapse-item>
+              </ConfigCollapseItem>
 
               <!-- 数据处理 -->
-              <el-collapse-item name="script" title="数据处理">
+              <ConfigCollapseItem name="script" title="数据处理">
                 <DataTransformScriptEditor
                   v-model="chartConfig.dataset.script"
                   class="field-full"
                   :rows="10"
+                  panel-text
                   @apply="triggerAutoRefresh"
                   @fullscreen="openScriptDialog"
                 />
-              </el-collapse-item>
-            </el-collapse>
+              </ConfigCollapseItem>
+            </ConfigCollapse>
           </div>
         </section>
         <section v-show="activeTab === 'interaction'" class="control-tab-pane" role="tabpanel">
           <div class="tab-content">
             <template v-if="customBehaviorMode">
               <div class="behavior-add">
-                <el-input
+                <DrInputField
                   v-model="newBehaviorName"
-                  size="small"
                   placeholder="请输入 ECharts 事件名，如 click"
                   clearable
                   @keyup.enter="addCustomBehavior"
                 />
-                <el-button type="primary" size="small" @click="addCustomBehavior">添加事件</el-button>
+                <el-button class="config-panel-text" type="primary" @click="addCustomBehavior">添加事件</el-button>
               </div>
               <div class="behavior-list" v-if="customBehaviorList.length > 0">
                 <div class="behavior-item" v-for="behavior in customBehaviorList" :key="behavior.name">
@@ -595,7 +599,7 @@ const triggerAutoRefresh = () => {
                     <div class="behavior-desc">{{ behavior.desc }}</div>
                   </div>
                   <div class="behavior-controls">
-                    <el-switch :model-value="isBehaviorEnabled(behavior)" size="small" @change="(val: string | number | boolean) => toggleBehavior(behavior, val)" />
+                    <el-switch :model-value="isBehaviorEnabled(behavior)" @change="(val: string | number | boolean) => toggleBehavior(behavior, val)" />
                     <el-icon class="setting-icon" @click="openBehaviorConfig(behavior)">
                       <Setting />
                     </el-icon>
@@ -605,7 +609,7 @@ const triggerAutoRefresh = () => {
                   </div>
                 </div>
               </div>
-              <el-empty v-else description="暂无自定义事件，添加后事件名将作为 ECharts 原生事件监听" :image-size="80" />
+              <el-empty class="config-panel-text" v-else description="暂无自定义事件，添加后事件名将作为 ECharts 原生事件监听" :image-size="80" />
             </template>
             <div class="behavior-list" v-else>
               <div class="behavior-item" v-for="behavior in behaviors" :key="behavior.name">
@@ -614,7 +618,7 @@ const triggerAutoRefresh = () => {
                   <div class="behavior-desc">{{ behavior.desc }}</div>
                 </div>
                 <div class="behavior-controls">
-                  <el-switch :model-value="isBehaviorEnabled(behavior)" size="small" @change="(val: string | number | boolean) => toggleBehavior(behavior, val)" />
+                  <el-switch :model-value="isBehaviorEnabled(behavior)" @change="(val: string | number | boolean) => toggleBehavior(behavior, val)" />
                   <el-icon class="setting-icon" @click="openBehaviorConfig(behavior)">
                     <Setting />
                   </el-icon>
@@ -741,7 +745,7 @@ const triggerAutoRefresh = () => {
       background: var(--el-fill-color-light);
       color: var(--el-text-color-secondary);
       font-family: inherit;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 500;
       letter-spacing: 0;
       cursor: pointer;
@@ -789,6 +793,7 @@ const triggerAutoRefresh = () => {
 
       .placeholder {
         color: var(--el-text-color-secondary);
+        font-size: 12px;
         text-align: center;
         padding: 40px 0;
       }
@@ -822,6 +827,7 @@ const triggerAutoRefresh = () => {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        min-width: 0;
         padding: 12px;
         margin-bottom: 12px;
         background: var(--el-fill-color-blank);
@@ -833,8 +839,15 @@ const triggerAutoRefresh = () => {
           min-width: 0;
           margin-right: 12px;
 
+          .behavior-name,
+          .behavior-desc {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
           .behavior-name {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
             color: var(--el-text-color-primary);
             margin-bottom: 4px;
@@ -843,13 +856,11 @@ const triggerAutoRefresh = () => {
           .behavior-desc {
             font-size: 12px;
             color: var(--el-text-color-secondary);
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
           }
         }
 
         .behavior-controls {
+          flex: 0 0 auto;
           display: flex;
           align-items: center;
           gap: 12px;
@@ -990,7 +1001,7 @@ const triggerAutoRefresh = () => {
 
 // 参数项样式
 .param-item {
-  padding: 12px;
+  padding: 12px 0;
   margin-bottom: 12px;
   background: var(--el-fill-color-blank);
   border: 1px solid var(--el-border-color);
@@ -1002,7 +1013,7 @@ const triggerAutoRefresh = () => {
 
     .param-name {
       color: var(--el-text-color-primary);
-      font-size: 14px;
+      font-size: 12px;
     }
 
     .param-desc {

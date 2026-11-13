@@ -3,6 +3,7 @@ import { createModelTransform, updateModelTransform } from './modelTransform'
 import { normalizeModelTransformConfig, parseModelAppearanceConfig } from './modelConfig'
 import { applyResourceToChart, getResourceChartType } from '../designer/utils/resourceChart'
 import { getInstance } from '../components/DrModel3D/install'
+import { PageType } from '../constants/PageType'
 import { readFileSync } from 'node:fs'
 
 const assert = (condition: boolean, message: string) => {
@@ -127,8 +128,8 @@ assert(JSON.stringify(invalidPosition.modelPosition) === '{"x":0,"y":0,"z":-2}',
 const savedConfig = JSON.stringify({ modelScale: 2, modelPosition: { x: 1.2, y: -0.3, z: 0.5 }, format: 'glb' })
 const resource = { name: '变换模型', resourceType: 'model', url: '/resource/proxy/id', config: savedConfig }
 assert(getResourceChartType(resource) === 'DrModel3D', '模型类型分流')
-const first = getInstance()
-const second = getInstance()
+const first = getInstance(PageType.VISUAL_SCREEN)
+const second = getInstance(PageType.VISUAL_SCREEN)
 applyResourceToChart(first, resource)
 applyResourceToChart(second, resource)
 near(first.props.modelScale, 2, '复制缩放配置')

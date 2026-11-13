@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import ThemeSelector from '@/dataRoom/designer/components/ThemeSelector.vue'
+import { applyThemeToCharts, applyThemeToNewChart } from '@/dataRoom/theme/apply-theme'
+import { getTheme } from '@/dataRoom/theme/registry'
+
 import { getComponent, getComponentInstance, getPanelComponent } from '@/dataRoom/components/AutoInstall.ts'
 import { computed, type CSSProperties, defineAsyncComponent, nextTick, onMounted, onUnmounted, provide, reactive, ref, watch } from 'vue'
 import { GridItem, GridLayout } from 'vue-grid-layout-v3'
-import { v4 as uuidv4 } from 'uuid'
+import { PageType } from '@/dataRoom/constants/PageType.ts'
+import { createFromPreset } from '@/dataRoom/designer/registry/PluginRegister.ts'
 import { getChartById, getResourceUrl } from '@/dataRoom/utils/index.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -334,16 +339,19 @@ const switchPageControlPanel = () => {
 }
 /**
  * 添加组件到画布中、默认添加到左上角
- * @param type
+ * @param chartInst
  */
-const addChart = (type: string) => {
-  const chartInst: ChartConfig<unknown> = getComponentInstance(type)
-  chartInst.i = uuidv4()
-  chartInst.id = chartInst.i
+const switchTheme = (themeId: string) => {
+  const theme = getTheme(themeId)
+  if (!theme) return
+  applyThemeToCharts(chartList.value, theme)
+  pageBasicConfig.value.themeId = theme.id
+}
+
+const insertChart = (chartInst: ChartConfig<unknown>) => {
+  applyThemeToNewChart(chartInst, pageBasicConfig.value.themeId, PageType.PAGE)
   chartInst.x = 0
   chartInst.y = 0
-  chartInst.w = 16
-  chartInst.h = 5
   // 新组件默认置于同级最顶层
   chartInst.z = chartList.value.length > 0 ? Math.max(...chartList.value.map((item) => item.z)) + 1 : 0
   chartList.value.push(chartInst)
@@ -358,11 +366,15 @@ const addChart = (type: string) => {
   return chartInst
 }
 
+const addChart = (type: string) => insertChart(getComponentInstance(type, PageType.PAGE))
+const addChartFromPreset = (id: string) => insertChart(createFromPreset(id, PageType.PAGE))
+
 const { canvasInst, chartInstanceMap } = useCanvasInst({
   chartList,
   globalVariable,
   basicConfig: pageBasicConfig,
   addChart,
+  addChartFromPreset,
   activeChartById,
   commitChartAdd,
   undo: () => applyHistoryAction('undo'),
@@ -961,6 +973,9 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="header-actions header-actions--secondary">
+        <div class="header-action">
+          <ThemeSelector :theme-id="pageBasicConfig.themeId" :disabled="!pageStageEntity" @select="switchTheme" />
+        </div>
         <div class="header-action">
           <el-button @click="switchPageControlPanel" size="small">设置</el-button>
         </div>

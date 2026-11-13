@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
+import type { PageType } from '@/dataRoom/constants/PageType.ts'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
@@ -63,6 +65,8 @@ export interface DrTrendMetricCardPropsInterface {
     lineColor: string
     areaColor: string
     areaOpacity: number
+    /** 启用向透明渐变，缺省保持旧版纯色填充 */
+    areaGradient?: boolean
     showSymbol: boolean
     symbolSize: number
     startYAxisAtZero: boolean
@@ -87,7 +91,8 @@ export interface DrTrendMetricCardPropsInterface {
 
 export type DrTrendMetricCardConfig = ChartConfig<DrTrendMetricCardPropsInterface>
 
-const getInstance = (): DrTrendMetricCardConfig => {
+const getInstance = (pageType: PageType): DrTrendMetricCardConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrTrendMetricCardPropsInterface>(
     'DrTrendMetricCard',
     {
@@ -109,7 +114,7 @@ const getInstance = (): DrTrendMetricCardConfig => {
         show: true,
         text: '趋势指标',
         fontSize: 14,
-        color: '#909399',
+        color: theme.text.primary,
         fontWeight: 'normal',
       },
       value: {
@@ -119,7 +124,7 @@ const getInstance = (): DrTrendMetricCardConfig => {
         prefix: '',
         suffix: '',
         fontSize: 34,
-        color: '#303133',
+        color: theme.text.primary,
         fontWeight: 'bold',
       },
       timestamp: {
@@ -127,14 +132,14 @@ const getInstance = (): DrTrendMetricCardConfig => {
         format: 'YYYY-MM-DD HH:mm',
         prefix: '更新时间 ',
         fontSize: 12,
-        color: '#909399',
+        color: theme.text.secondary,
       },
       compare: {
         show: true,
         mode: 'rate',
-        positiveColor: '#67c23a',
-        negativeColor: '#f56c6c',
-        neutralColor: '#909399',
+        positiveColor: theme.color.success,
+        negativeColor: theme.color.danger,
+        neutralColor: theme.text.secondary,
         fontSize: 12,
       },
       trend: {
@@ -142,9 +147,10 @@ const getInstance = (): DrTrendMetricCardConfig => {
         chartType: 'line',
         smooth: true,
         lineWidth: 2,
-        lineColor: '#409eff',
-        areaColor: '#ecf5ff',
-        areaOpacity: 0.35,
+        lineColor: theme.color.primary,
+        areaColor: theme.color.primary,
+        areaGradient: true,
+        areaOpacity: 0.2,
         showSymbol: false,
         symbolSize: 4,
         startYAxisAtZero: false,
@@ -153,7 +159,7 @@ const getInstance = (): DrTrendMetricCardConfig => {
         showXAxis: false,
         showYAxis: false,
         showMinMaxLabel: false,
-        labelColor: '#909399',
+        labelColor: theme.text.secondary,
         labelFontSize: 10,
       },
       tooltip: {
@@ -174,6 +180,7 @@ const getInstance = (): DrTrendMetricCardConfig => {
       y: 0,
       z: 0,
     },
+    pageType,
   )
 }
 

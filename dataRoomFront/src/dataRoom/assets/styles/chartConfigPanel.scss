@@ -1,5 +1,85 @@
+@use 'element-plus/theme-chalk/src/mixins/var' as theme;
+
+// 面板三级文字统一定义；仅标记标题/标签，不向控件和弹窗传递主题变量。
+.dr-config-panel__section-title {
+  color: var(--el-text-color-primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.dr-config-panel__group-title,
+.dr-config-panel__sub-title {
+  color: var(--el-text-color-regular);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.dr-config-panel__field-label,
+.dr-config-panel__sub-label {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+// 普通属性标签属于第三级；组标题通过 label 插槽显式标记，不按 DOM 深度判断。
+.config-panel-text.el-form-item > .el-form-item__label,
+.config-panel-text.el-form-item > .el-form-item__label-wrap > .el-form-item__label,
+.dr-config-panel__form.el-form .el-form-item:not(:where(.el-dialog *, .el-popper *, [role='dialog'] *)) > .el-form-item__label,
+.dr-config-panel__form.el-form .el-form-item:not(:where(.el-dialog *, .el-popper *, [role='dialog'] *)) > .el-form-item__label-wrap > .el-form-item__label,
+.dr-config-panel__sub-form.el-form > .el-form-item:not(:where(.el-dialog *, .el-popper *, [role='dialog'] *)) > .el-form-item__label,
+.dr-config-panel__sub-form.el-form > .el-form-item:not(:where(.el-dialog *, .el-popper *, [role='dialog'] *)) > .el-form-item__label-wrap > .el-form-item__label {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+// 仅在面板中明确标记的文字控件根节点启用，不改变尺寸与图标字号。
+.config-panel-text.el-button {
+  @include theme.set-component-css-var('button', (
+    'font-size': 12px,
+  ));
+  font-size: var(--el-button-font-size);
+}
+
+.config-panel-text.el-radio {
+  @include theme.set-component-css-var('radio', (
+    'font-size': 12px,
+  ));
+
+  > .el-radio__label {
+    font-size: var(--el-radio-font-size);
+  }
+}
+
+// RadioButton 的字号由尺寸规则直接设置，仅覆盖标记根节点的文字 wrapper。
+.config-panel-text.el-radio-button > .el-radio-button__inner {
+  font-size: 12px;
+}
+
+.config-panel-text.el-checkbox {
+  @include theme.set-component-css-var('checkbox', (
+    'font-size': 12px,
+  ));
+
+  > .el-checkbox__label {
+    font-size: var(--el-checkbox-font-size);
+  }
+}
+
+.config-panel-text.el-text {
+  @include theme.set-component-css-var('text', (
+    'font-size': 12px,
+  ));
+}
+
+.config-panel-text.el-empty {
+  @include theme.set-component-css-var('empty', (
+    'description-font-size': 12px,
+  ));
+}
+
 .dr-config-panel {
-  padding: 12px;
+  padding: 0;
 }
 
 .dr-config-panel__form {
@@ -14,23 +94,20 @@
   margin-top: 12px;
 }
 
+div.dr-config-panel__group-title,
 .dr-config-panel__sub-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   margin: 0 0 4px;
-  padding-top: 12px;
-  border-top: 1px solid var(--el-border-color-lighter);
-  color: var(--el-text-color-secondary);
-  font-size: 12px;
-  font-weight: 600;
+  padding: 0;
   line-height: 1.5;
 }
 
 .dr-config-panel__sub-form {
   margin-top: 8px;
-  padding-left: 12px;
+  padding: 0;
 }
 
 .dr-config-panel__sub-form-item {
@@ -50,11 +127,9 @@
 }
 
 .dr-config-panel__sub-label {
-  flex: 0 0 60px;
-  width: 60px;
+  flex: 0 0 64px;
+  width: 64px;
   margin-right: 8px;
-  color: var(--el-text-color-regular);
-  font-size: 12px;
   line-height: 1.5;
   white-space: nowrap;
 }

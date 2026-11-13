@@ -36,7 +36,15 @@ const placeholderContext = computed(() => {
   return getFieldValue(normalizeRows(latestDatasetValue.value)[0], templateContextField)
 })
 
-const renderResult = computed(() => buildHtmlSrcdoc(chart.props.html, chart.props.css, placeholderContext.value))
+const renderResult = computed(() => buildHtmlSrcdoc(chart.props.html, chart.props.css, placeholderContext.value, chart.props.themeStyle ? {
+  '--el-text-color-primary': chart.props.themeStyle.text,
+  '--el-text-color-regular': chart.props.themeStyle.text,
+  '--el-text-color-secondary': chart.props.themeStyle.secondaryText,
+  '--el-bg-color': chart.props.themeStyle.background,
+  '--el-bg-color-overlay': chart.props.themeStyle.background,
+  '--el-border-color': chart.props.themeStyle.border,
+  '--el-color-primary': chart.props.themeStyle.primary,
+} : {}))
 
 const sandboxAttr = computed(() => {
   const sandbox = chart.props.sandbox

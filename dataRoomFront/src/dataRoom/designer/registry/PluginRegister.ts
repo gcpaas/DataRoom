@@ -4,9 +4,11 @@
 import {DrTextPlugin} from '@/dataRoom/components/DrText/plugin.ts'
 import {DrRichTextPlugin} from '@/dataRoom/components/DrRichText/plugin.ts'
 import {DrImagePlugin} from '@/dataRoom/components/DrImage/plugin.ts'
+import {DrPictorialBarChartPlugin} from '@/dataRoom/components/DrPictorialBarChart/plugin.ts'
 import {DrBarChartPlugin} from '@/dataRoom/components/DrBarChart/plugin.ts'
 import {DrLineChartPlugin} from '@/dataRoom/components/DrLineChart/plugin.ts'
 import {DrAreaChartPlugin} from '@/dataRoom/components/DrAreaChart/plugin.ts'
+import {DrFunnelChartPlugin} from '@/dataRoom/components/DrFunnelChart/plugin.ts'
 import {DrPieChartPlugin} from '@/dataRoom/components/DrPieChart/plugin.ts'
 import {DrBubbleChartPlugin} from '@/dataRoom/components/DrBubbleChart/plugin.ts'
 import {DrHorizontalBarChartPlugin} from '@/dataRoom/components/DrHorizontalBarChart/plugin.ts'
@@ -33,6 +35,17 @@ import {DrDataTablePlugin} from '@/dataRoom/components/DrDataTable/plugin.ts'
 import {DrDateTimePlugin} from '@/dataRoom/components/DrDateTime/plugin.ts'
 import {DrHtmlPlugin} from '@/dataRoom/components/DrHtml/plugin.ts'
 import {DrEchartsPlugin} from '@/dataRoom/components/DrEcharts/plugin.ts'
+import horizontalMetricCardPreset from '@/dataRoom/components/DrMetricCard/presets/Horizontal/plugin.ts'
+import drLineChartSmoothPreset from '@/dataRoom/components/DrLineChart/presets/Smooth/plugin.ts'
+import drBarChartGradientPreset from '@/dataRoom/components/DrBarChart/presets/Gradient/plugin.ts'
+import drBarChartRoundedPreset from '@/dataRoom/components/DrBarChart/presets/Rounded/plugin.ts'
+import drBarChartStackedPreset from '@/dataRoom/components/DrBarChart/presets/Stacked/plugin.ts'
+import drPieChartRingPreset from '@/dataRoom/components/DrPieChart/presets/Ring/plugin.ts'
+import drPieChartRoundedRingPreset from '@/dataRoom/components/DrPieChart/presets/RoundedRing/plugin.ts'
+import type {ChartPreset} from '@/dataRoom/components/type/ChartPreset.ts'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
+import {componentInstances, getComponentInstance} from '@/dataRoom/components/AutoInstall.ts'
+import {createPresetRegistry} from './preset-registry.ts'
 import type {ComponentLibTagInterface} from "@/dataRoom/designer/types/ComponentLibTagInterface.ts";
 import {ComponentLibTagTypeConst} from "@/dataRoom/constants/ComponentLibTagTypeConst.ts";
 
@@ -106,9 +119,11 @@ const pluginList = [
   new DrRichTextPlugin([ComponentLibTagTypeConst.TEXT]),
   new DrDateTimePlugin([ComponentLibTagTypeConst.TEXT]),
   new DrImagePlugin([ComponentLibTagTypeConst.MEDIA]),
+  new DrPictorialBarChartPlugin([ComponentLibTagTypeConst.BAR]),
   new DrBarChartPlugin([ComponentLibTagTypeConst.BAR]),
   new DrLineChartPlugin([ComponentLibTagTypeConst.LINE]),
   new DrAreaChartPlugin([ComponentLibTagTypeConst.LINE]),
+  new DrFunnelChartPlugin([ComponentLibTagTypeConst.FUNNEL]),
   new DrPieChartPlugin([ComponentLibTagTypeConst.PIE]),
   new DrBubbleChartPlugin([ComponentLibTagTypeConst.SCATTER]),
   new DrHorizontalBarChartPlugin([ComponentLibTagTypeConst.BAR]),
@@ -136,4 +151,21 @@ const pluginList = [
   new DrEchartsPlugin([ComponentLibTagTypeConst.CUSTOM])
 ]
 
-export { pluginList, componentLibTagList }
+const presetList = [horizontalMetricCardPreset, drLineChartSmoothPreset, drBarChartGradientPreset, drBarChartRoundedPreset, drBarChartStackedPreset, drPieChartRingPreset, drPieChartRoundedRingPreset]
+
+const componentEntries: ChartPreset[] = [
+  ...pluginList.map((plugin): ChartPreset => ({
+    id: plugin.type,
+    componentType: plugin.type,
+    name: plugin.name,
+    desc: plugin.desc,
+    thumbnail: plugin.thumbnail,
+    tags: plugin.tags,
+    getInstance: (pageType: PageType) => getComponentInstance(plugin.type, pageType),
+  })),
+  ...presetList,
+]
+
+const { createFromPreset } = createPresetRegistry(componentEntries, Object.keys(componentInstances))
+
+export { pluginList, presetList, componentEntries, componentLibTagList, createFromPreset }

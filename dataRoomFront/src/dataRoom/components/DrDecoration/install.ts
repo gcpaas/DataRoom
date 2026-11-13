@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from '@/dataRoom/components/type/ChartConfig.ts'
 import type {Behavior} from '@/dataRoom/components/type/Behavior.ts'
 import type {ChartDatasetField} from '@/dataRoom/components/type/ChartDatasetField.ts'
@@ -19,13 +21,14 @@ export interface DrDecorationPropsInterface {
 
 export type DrDecorationConfig = ChartConfig<DrDecorationPropsInterface>
 
-const getInstance = (): DrDecorationConfig => {
+const getInstance = (pageType: PageType): DrDecorationConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrDecorationPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrDecoration',
     {
       decorationType: 'Decoration1',
-      colors: [],
+      colors: [theme.color.primary, theme.color.secondary],
       reverse: false,
       dur: null,
       scanDur: null,
@@ -36,6 +39,7 @@ const getInstance = (): DrDecorationConfig => {
       w: 300,
       h: 80,
     },
+    pageType,
   )
 }
 

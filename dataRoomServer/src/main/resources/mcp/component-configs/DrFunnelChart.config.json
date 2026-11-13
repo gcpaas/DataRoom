@@ -1,0 +1,202 @@
+{
+  "componentName": "DrFunnelChart",
+  "displayName": "漏斗图",
+  "description": "漏斗图、funnel、阶段、转化、流程。实际 ChartConfig.type 必须为 DrFunnelChart。fields.defaultValue 默认对应 visualScreen；两种页面的默认值差异见字段 description，必须按目标 pageType 选择：page 的 w/h 为网格份数，visualScreen 的 w/h 为像素，不可混用。",
+  "fields": [
+    {
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识，必填"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，当pageType=page时必填，默认与id保持一致"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型；实际 ChartConfig.type 必须为 DrFunnelChart，不可使用预设 id。",
+      "defaultValue": "DrFunnelChart"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "漏斗图"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数；默认值须按 pageType 选择，page=16（网格份数），visualScreen=400（像素）。",
+      "defaultValue": 400
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数；默认值须按 pageType 选择，page=5（网格份数），visualScreen=320（像素）。",
+      "defaultValue": 320
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.datasetType",
+      "type": "enum",
+      "description": "数据集类型，历史配置可为空",
+      "options": [
+        "",
+        "directory",
+        "json",
+        "http",
+        "sql",
+        "excel",
+        "es",
+        "websocket",
+        "mqtt"
+      ],
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.funnel.sort",
+      "type": "enum",
+      "description": "sort",
+      "options": [
+        "descending",
+        "ascending",
+        "none"
+      ],
+      "defaultValue": "descending"
+    },
+    {
+      "field": "props.funnel.gap",
+      "type": "number",
+      "description": "gap",
+      "defaultValue": 2
+    },
+    {
+      "field": "props.label.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.label.content",
+      "type": "enum",
+      "description": "content",
+      "options": [
+        "name",
+        "value",
+        "name+value"
+      ],
+      "defaultValue": "name+value"
+    },
+    {
+      "field": "props.label.position",
+      "type": "enum",
+      "description": "position",
+      "options": [
+        "inside",
+        "outside"
+      ],
+      "defaultValue": "inside"
+    },
+    {
+      "field": "props.series.colors",
+      "type": "array",
+      "description": "colors；默认值须按 pageType 选择，page=[\"#1F78D1\",\"#36B37E\",\"#FF8C38\"]，visualScreen=[\"#0F76E8\",\"#36B8FF\",\"#48E4F8\"]。",
+      "defaultValue": [
+        "#0F76E8",
+        "#36B8FF",
+        "#48E4F8"
+      ]
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "nameField",
+      "desc": "阶段名称",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "valueField",
+      "desc": "数值",
+      "required": true,
+      "multiple": false
+    }
+  ]
+}

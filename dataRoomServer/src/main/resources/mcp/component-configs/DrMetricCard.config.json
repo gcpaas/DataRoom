@@ -1,7 +1,7 @@
 {
   "componentName": "DrMetricCard",
   "displayName": "指标卡",
-  "description": "指标卡、KPI、单值、核心指标、数值、单位、条件色",
+  "description": "指标卡、KPI、单值、核心指标、数值、单位、条件色。实际 ChartConfig.type 必须为 DrMetricCard。fields.defaultValue 默认对应 visualScreen；两种页面的默认值差异见字段 description，必须按目标 pageType 选择：page 的 w/h 为网格份数，visualScreen 的 w/h 为像素，不可混用。",
   "fields": [
     {
       "field": "id",
@@ -16,7 +16,7 @@
     {
       "field": "type",
       "type": "string",
-      "description": "组件类型",
+      "description": "组件类型；实际 ChartConfig.type 必须为 DrMetricCard，不可使用预设 id。",
       "defaultValue": "DrMetricCard"
     },
     {
@@ -28,13 +28,13 @@
     {
       "field": "w",
       "type": "number",
-      "description": "宽度或占用的份数",
+      "description": "宽度或占用的份数；默认值须按 pageType 选择，page=4（网格份数），visualScreen=280（像素）。",
       "defaultValue": 280
     },
     {
       "field": "h",
       "type": "number",
-      "description": "高度或占用的份数",
+      "description": "高度或占用的份数；默认值须按 pageType 选择，page=5（网格份数），visualScreen=140（像素）。",
       "defaultValue": 140
     },
     {
@@ -231,7 +231,7 @@
       "field": "props.layout.gap",
       "type": "number",
       "description": "gap",
-      "defaultValue": 8
+      "defaultValue": 16
     },
     {
       "field": "props.title.show",
@@ -352,7 +352,7 @@
       "field": "props.subtitle.show",
       "type": "boolean",
       "description": "show",
-      "defaultValue": true
+      "defaultValue": false
     },
     {
       "field": "props.subtitle.text",

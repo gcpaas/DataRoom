@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
@@ -136,6 +138,9 @@ export interface DrHorizontalBarChartPropsInterface {
     gradient: {
       enabled: boolean
       direction: 'vertical' | 'horizontal'
+      /** 渐变端点不透明度，缺省兼容旧页面 */
+      startOpacity?: number
+      endOpacity?: number
     }
     /** 条形标签 */
     label: {
@@ -169,7 +174,8 @@ export type DrHorizontalBarChartConfig = ChartConfig<DrHorizontalBarChartPropsIn
 /**
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
-const getInstance = (): DrHorizontalBarChartConfig => {
+const getInstance = (pageType: PageType): DrHorizontalBarChartConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrHorizontalBarChartPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrHorizontalBarChart',
@@ -187,13 +193,13 @@ const getInstance = (): DrHorizontalBarChartConfig => {
         },
         axisLine: {
           show: true,
-          color: '#cccccc',
+          color: theme.border.primary,
           width: 1
         },
         axisLabel: {
           show: true,
           fontSize: 12,
-          color: '#999999',
+          color: theme.text.secondary,
           fontWeight: 'normal',
           fontFamily: 'Microsoft YaHei',
           format: 'default'
@@ -201,11 +207,11 @@ const getInstance = (): DrHorizontalBarChartConfig => {
         axisTick: {
           show: true,
           length: 5,
-          color: '#cccccc'
+          color: theme.border.secondary
         },
         splitLine: {
           show: true,
-          color: '#eeeeee',
+          color: theme.border.secondary,
           width: 1,
           type: 'dashed'
         }
@@ -215,13 +221,13 @@ const getInstance = (): DrHorizontalBarChartConfig => {
         type: 'category',
         axisLine: {
           show: false,
-          color: '#cccccc',
+          color: theme.border.primary,
           width: 1
         },
         axisLabel: {
           show: true,
           fontSize: 12,
-          color: '#999999',
+          color: theme.text.secondary,
           fontWeight: 'normal',
           fontFamily: 'Microsoft YaHei',
           maxWidth: 80
@@ -229,11 +235,11 @@ const getInstance = (): DrHorizontalBarChartConfig => {
         axisTick: {
           show: false,
           length: 5,
-          color: '#cccccc'
+          color: theme.border.secondary
         },
         splitLine: {
           show: false,
-          color: '#eeeeee',
+          color: theme.border.secondary,
           width: 1,
           type: 'dashed'
         }
@@ -243,7 +249,7 @@ const getInstance = (): DrHorizontalBarChartConfig => {
         position: 'top',
         textStyle: {
           fontSize: 12,
-          color: '#666666',
+          color: theme.text.secondary,
           fontWeight: 'normal'
         },
         itemGap: 16
@@ -251,11 +257,11 @@ const getInstance = (): DrHorizontalBarChartConfig => {
       tooltip: {
         show: true,
         trigger: 'axis',
-        backgroundColor: 'rgba(50, 50, 50, 0.7)',
-        borderColor: 'transparent',
+        backgroundColor: theme.background.secondary,
+        borderColor: theme.border.primary,
         textStyle: {
           fontSize: 12,
-          color: '#ffffff'
+          color: theme.text.primary
         }
       },
       series: {
@@ -263,10 +269,12 @@ const getInstance = (): DrHorizontalBarChartConfig => {
         barWidth: null,
         barMaxWidth: 40,
         barCategoryGap: '30%',
-        barGap: '20%',
+        barGap: '3',
         borderRadius: [0, 2, 2, 0],
-        colors: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272'],
+        colors: [...theme.series.colors],
         gradient: {
+          startOpacity: theme.series.barGradient.startOpacity,
+          endOpacity: theme.series.barGradient.endOpacity,
           enabled: false,
           direction: 'horizontal'
         },
@@ -274,7 +282,7 @@ const getInstance = (): DrHorizontalBarChartConfig => {
           show: false,
           position: 'right',
           fontSize: 12,
-          color: '#333333',
+          color: theme.text.primary,
           fontWeight: 'normal',
           format: 'default'
         },
@@ -293,7 +301,8 @@ const getInstance = (): DrHorizontalBarChartConfig => {
       title: '条形图',
       w: 400,
       h: 300
-    }
+    },
+    pageType
   )
 }
 

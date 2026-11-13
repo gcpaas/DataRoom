@@ -341,11 +341,6 @@ defineExpose({
                 <el-input v-model="row.val" size="small" placeholder="Value" />
               </template>
             </el-table-column>
-            <el-table-column label="加密" width="80">
-              <template #default="{ row }">
-                <el-checkbox v-model="row.encrypted" />
-              </template>
-            </el-table-column>
             <el-table-column label="操作" width="80" fixed="right">
               <template #default="{ $index }">
                 <el-button
@@ -367,7 +362,7 @@ defineExpose({
           v-model="formData.dataset.body"
           type="textarea"
           :rows="5"
-          placeholder="请输入请求体（JSON格式）"
+          placeholder="请输入请求体，格式需与 Content-Type 请求头一致"
         />
       </el-form-item>
       <el-form-item label="响应路径">

@@ -11,6 +11,9 @@ import { createDefaultTimerBehaviors } from '@/dataRoom/page-designer/type/PageT
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 import { v4 as uuidv4 } from 'uuid'
+import DrColorField from '@/dataRoom/designer/components/DrColorField.vue'
+import DrNumberField from '@/dataRoom/designer/components/DrNumberField.vue'
+import DrSelectField from '@/dataRoom/designer/components/DrSelectField.vue'
 
 /**
  * 懒加载定时器配置对话框
@@ -140,19 +143,19 @@ const deleteTimer = (id: string) => {
       <div class="control-tabs-content">
         <section v-show="activeTab === 'config'" class="control-tab-pane" role="tabpanel">
           <div class="tab-content">
-            <el-form label-width="80px" label-position="left" size="small" v-if="basicConfig.background">
+            <el-form label-width="72px" label-position="left" v-if="basicConfig.background">
               <!-- 背景填充方式 -->
-              <el-form-item label="背景填充">
+              <el-form-item class="config-panel-text" label="背景填充">
                 <el-radio-group v-model="basicConfig.background.fill">
-                  <el-radio value="color">颜色</el-radio>
-                  <el-radio value="image">图片</el-radio>
+                  <el-radio class="config-panel-text" value="color">颜色</el-radio>
+                  <el-radio class="config-panel-text" value="image">图片</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="背景颜色" v-if="basicConfig.background.fill === 'color'">
-                <el-color-picker v-model="basicConfig.background.color" show-alpha></el-color-picker>
+              <el-form-item class="config-panel-text" label="背景颜色" v-if="basicConfig.background.fill === 'color'">
+                <DrColorField v-model="basicConfig.background.color" show-alpha />
               </el-form-item>
               <template v-if="basicConfig.background.fill === 'image'">
-                <el-form-item label="背景图片">
+                <el-form-item class="config-panel-text" label="背景图片">
                   <div class="bg-upload-section">
                     <el-upload
                       :action="uploadUrl"
@@ -185,17 +188,17 @@ const deleteTimer = (id: string) => {
                   </div>
                 </el-form-item>
 
-                <el-form-item label="透明度">
-                  <el-input-number v-model="basicConfig.background.opacity" :min="0" :max="100" :step="1" controls-position="right" class="field-full" />
+                <el-form-item class="config-panel-text" label="透明度">
+                  <DrNumberField v-model="basicConfig.background.opacity" :min="0" :max="100" :step="1" controls-position="right" class="field-full" />
                 </el-form-item>
 
-                <el-form-item label="填充方式">
-                  <el-select v-model="basicConfig.background.repeat" placeholder="请选择填充方式">
+                <el-form-item class="config-panel-text" label="填充方式">
+                  <DrSelectField v-model="basicConfig.background.repeat" placeholder="请选择填充方式">
                     <el-option label="不重复" value="no-repeat"></el-option>
                     <el-option label="重复" value="repeat"></el-option>
                     <el-option label="水平重复" value="repeat-x"></el-option>
                     <el-option label="垂直重复" value="repeat-y"></el-option>
-                  </el-select>
+                  </DrSelectField>
                 </el-form-item>
               </template>
             </el-form>
@@ -205,7 +208,7 @@ const deleteTimer = (id: string) => {
           <div class="tab-content">
             <div class="timer-header">
               <span class="timer-title">定时器</span>
-              <el-button type="primary" size="small" plain @click="addTimer">添加定时器</el-button>
+              <el-button class="config-panel-text" type="primary" plain @click="addTimer">添加定时器</el-button>
             </div>
             <div class="timer-list">
               <div class="timer-item" v-for="timer in timers" :key="timer.id">
@@ -214,7 +217,7 @@ const deleteTimer = (id: string) => {
                   <div class="timer-desc">{{ timer.interval }} 毫秒1次</div>
                 </div>
                 <div class="timer-controls">
-                  <el-switch v-model="timer.enabled" size="small" @change="(val: string | number | boolean) => toggleTimer(timer, val)" />
+                  <el-switch v-model="timer.enabled" @change="(val: string | number | boolean) => toggleTimer(timer, val)" />
                   <el-icon class="setting-icon" @click="openTimerConfig(timer)">
                     <Setting />
                   </el-icon>
@@ -224,7 +227,7 @@ const deleteTimer = (id: string) => {
                 </div>
               </div>
               <div v-if="timers.length === 0" class="empty-timer">
-                <el-empty description="暂无定时器，请点击上方按钮添加" :image-size="80" />
+                <el-empty class="config-panel-text" description="暂无定时器，请点击上方按钮添加" :image-size="80" />
               </div>
             </div>
           </div>
@@ -274,7 +277,7 @@ const deleteTimer = (id: string) => {
       background: var(--el-bg-color);
       color: var(--el-text-color-secondary);
       font-family: inherit;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 500;
       letter-spacing: 0;
       cursor: pointer;
@@ -322,6 +325,7 @@ const deleteTimer = (id: string) => {
 
       .placeholder {
         color: var(--el-text-color-secondary);
+        font-size: 12px;
         text-align: center;
         padding: 40px 0;
       }
@@ -332,13 +336,12 @@ const deleteTimer = (id: string) => {
         justify-content: space-between;
         margin-bottom: 16px;
         padding-bottom: 12px;
-        border-bottom: 1px solid var(--el-border-color-light);
 
         .timer-title {
           font-size: 12px;
           font-weight: 500;
           text-transform: uppercase;
-          color: var(--el-text-color-secondary);
+          color: var(--el-text-color-primary);
           letter-spacing: 0;
         }
       }
@@ -348,6 +351,7 @@ const deleteTimer = (id: string) => {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          min-width: 0;
           padding: 12px;
           margin-bottom: 12px;
           background: var(--el-fill-color-blank);
@@ -365,8 +369,15 @@ const deleteTimer = (id: string) => {
             min-width: 0;
             margin-right: 12px;
 
+            .timer-name,
+            .timer-desc {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+
             .timer-name {
-              font-size: 14px;
+              font-size: 12px;
               font-weight: 500;
               color: var(--el-text-color-primary);
               margin-bottom: 4px;
@@ -379,6 +390,7 @@ const deleteTimer = (id: string) => {
           }
 
           .timer-controls {
+            flex: 0 0 auto;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -471,7 +483,7 @@ const deleteTimer = (id: string) => {
             justify-content: center;
             background-color: var(--el-fill-color-extra-light);
             color: var(--el-text-color-secondary);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 400;
 
             .el-icon {

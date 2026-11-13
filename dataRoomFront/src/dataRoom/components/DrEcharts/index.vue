@@ -7,6 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import { applyCustomChartTheme } from './theme-option'
 import {ref, watch, onMounted, onBeforeUnmount, nextTick} from 'vue'
 import * as echarts from 'echarts'
 import {ElMessage} from 'element-plus'
@@ -106,7 +107,7 @@ const renderOption = () => {
       console.warn(`组件${chart.type}: ${chart.id} option 代码未返回 option 对象`)
       return
     }
-    chartInstance.setOption(option as echarts.EChartsOption, true)
+    chartInstance.setOption(applyCustomChartTheme(option, chart.props.themeStyle) as echarts.EChartsOption, true)
   } catch (error) {
     console.error(`组件${chart.type}: ${chart.id} option 代码执行失败:`, error)
     ElMessage.error('option 代码执行失败，请检查代码语法')
@@ -165,10 +166,11 @@ const handleResize = () => {
 
 // 监听 option 代码变化时重新求值渲染
 watch(
-  () => chart.props.option,
+  () => [chart.props.option, chart.props.themeStyle],
   () => {
     nextTick(() => renderOption())
-  }
+  },
+  { deep: true },
 )
 
 // 监听交互配置变化，重新绑定自定义事件

@@ -1,0 +1,642 @@
+{
+  "componentName": "DrBarChartStacked",
+  "displayName": "堆叠柱状图",
+  "description": "堆叠柱状图、ECharts。预设检索名为 DrBarChartStacked，实际 ChartConfig.type 必须为 DrBarChart，不可使用预设 id。fields.defaultValue 默认对应 visualScreen；两种页面的默认值差异见字段 description，必须按目标 pageType 选择：page 的 w/h 为网格份数，visualScreen 的 w/h 为像素，不可混用。",
+  "fields": [
+    {
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识，必填"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，当pageType=page时必填，默认与id保持一致"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型；实际 ChartConfig.type 必须为 DrBarChart，不可使用预设 id。",
+      "defaultValue": "DrBarChart"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "堆叠柱状图"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数；默认值须按 pageType 选择，page=16（网格份数），visualScreen=400（像素）。",
+      "defaultValue": 400
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数；默认值须按 pageType 选择，page=5（网格份数），visualScreen=300（像素）。",
+      "defaultValue": 300
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.datasetType",
+      "type": "enum",
+      "description": "数据集类型，历史配置可为空",
+      "options": [
+        "",
+        "directory",
+        "json",
+        "http",
+        "sql",
+        "excel",
+        "es",
+        "websocket",
+        "mqtt"
+      ],
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
+      "defaultValue": {
+        "xField": [
+          "time"
+        ],
+        "yField": [
+          "value",
+          "compareValue"
+        ],
+        "seriesField": []
+      }
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.global.padding",
+      "type": "array",
+      "description": "图表内边距 [上, 右, 下, 左] (px)",
+      "defaultValue": [
+        40,
+        20,
+        30,
+        40
+      ]
+    },
+    {
+      "field": "props.xAxis.show",
+      "type": "boolean",
+      "description": "是否显示",
+      "defaultValue": true
+    },
+    {
+      "field": "props.xAxis.type",
+      "type": "enum",
+      "description": "数据类型",
+      "options": [
+        "category",
+        "time"
+      ],
+      "defaultValue": "category"
+    },
+    {
+      "field": "props.xAxis.axisLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.xAxis.axisLine.color",
+      "type": "string",
+      "description": "color；默认值须按 pageType 选择，page=\"#D8DFE6\"，visualScreen=\"#8BA3C7\"。",
+      "defaultValue": "#8BA3C7"
+    },
+    {
+      "field": "props.xAxis.axisLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "props.xAxis.axisLabel.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.xAxis.axisLabel.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "props.xAxis.axisLabel.color",
+      "type": "string",
+      "description": "color；默认值须按 pageType 选择，page=\"#6E7681\"，visualScreen=\"#8BA3C7\"。",
+      "defaultValue": "#8BA3C7"
+    },
+    {
+      "field": "props.xAxis.axisLabel.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "props.xAxis.axisLabel.fontFamily",
+      "type": "string",
+      "description": "fontFamily",
+      "defaultValue": "Microsoft YaHei"
+    },
+    {
+      "field": "props.xAxis.axisLabel.rotate",
+      "type": "number",
+      "description": "旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "props.xAxis.axisTick.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.xAxis.axisTick.length",
+      "type": "number",
+      "description": "length",
+      "defaultValue": 5
+    },
+    {
+      "field": "props.xAxis.axisTick.color",
+      "type": "string",
+      "description": "color；默认值须按 pageType 选择，page=\"#D8DFE6\"，visualScreen=\"rgba(139, 163, 199, 0.15)\"。",
+      "defaultValue": "rgba(139, 163, 199, 0.15)"
+    },
+    {
+      "field": "props.xAxis.splitLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "props.xAxis.splitLine.color",
+      "type": "string",
+      "description": "color；默认值须按 pageType 选择，page=\"#D8DFE6\"，visualScreen=\"rgba(139, 163, 199, 0.15)\"。",
+      "defaultValue": "rgba(139, 163, 199, 0.15)"
+    },
+    {
+      "field": "props.xAxis.splitLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "props.xAxis.splitLine.type",
+      "type": "enum",
+      "description": "type",
+      "options": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "defaultValue": "dashed"
+    },
+    {
+      "field": "props.yAxis.show",
+      "type": "boolean",
+      "description": "是否显示",
+      "defaultValue": true
+    },
+    {
+      "field": "props.yAxis.name",
+      "type": "string",
+      "description": "轴名称",
+      "defaultValue": ""
+    },
+    {
+      "field": "props.yAxis.range.auto",
+      "type": "boolean",
+      "description": "auto",
+      "defaultValue": true
+    },
+    {
+      "field": "props.yAxis.range.min",
+      "type": "number",
+      "description": "min",
+      "defaultValue": 0
+    },
+    {
+      "field": "props.yAxis.range.max",
+      "type": "number",
+      "description": "max",
+      "defaultValue": 100
+    },
+    {
+      "field": "props.yAxis.axisLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "props.yAxis.axisLine.color",
+      "type": "string",
+      "description": "color；默认值须按 pageType 选择，page=\"#D8DFE6\"，visualScreen=\"#8BA3C7\"。",
+      "defaultValue": "#8BA3C7"
+    },
+    {
+      "field": "props.yAxis.axisLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "props.yAxis.axisLabel.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.yAxis.axisLabel.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "props.yAxis.axisLabel.color",
+      "type": "string",
+      "description": "color；默认值须按 pageType 选择，page=\"#6E7681\"，visualScreen=\"#8BA3C7\"。",
+      "defaultValue": "#8BA3C7"
+    },
+    {
+      "field": "props.yAxis.axisLabel.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "props.yAxis.axisLabel.fontFamily",
+      "type": "string",
+      "description": "fontFamily",
+      "defaultValue": "Microsoft YaHei"
+    },
+    {
+      "field": "props.yAxis.axisTick.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "props.yAxis.axisTick.length",
+      "type": "number",
+      "description": "length",
+      "defaultValue": 5
+    },
+    {
+      "field": "props.yAxis.axisTick.color",
+      "type": "string",
+      "description": "color；默认值须按 pageType 选择，page=\"#D8DFE6\"，visualScreen=\"rgba(139, 163, 199, 0.15)\"。",
+      "defaultValue": "rgba(139, 163, 199, 0.15)"
+    },
+    {
+      "field": "props.yAxis.splitLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.yAxis.splitLine.color",
+      "type": "string",
+      "description": "color；默认值须按 pageType 选择，page=\"#D8DFE6\"，visualScreen=\"rgba(139, 163, 199, 0.15)\"。",
+      "defaultValue": "rgba(139, 163, 199, 0.15)"
+    },
+    {
+      "field": "props.yAxis.splitLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "props.yAxis.splitLine.type",
+      "type": "enum",
+      "description": "type",
+      "options": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "defaultValue": "dashed"
+    },
+    {
+      "field": "props.legend.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.legend.position",
+      "type": "enum",
+      "description": "position",
+      "options": [
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "defaultValue": "top"
+    },
+    {
+      "field": "props.legend.textStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "props.legend.textStyle.color",
+      "type": "string",
+      "description": "color；默认值须按 pageType 选择，page=\"#6E7681\"，visualScreen=\"#8BA3C7\"。",
+      "defaultValue": "#8BA3C7"
+    },
+    {
+      "field": "props.legend.textStyle.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "props.legend.itemGap",
+      "type": "number",
+      "description": "itemGap",
+      "defaultValue": 16
+    },
+    {
+      "field": "props.tooltip.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.tooltip.trigger",
+      "type": "enum",
+      "description": "trigger",
+      "options": [
+        "axis",
+        "item"
+      ],
+      "defaultValue": "axis"
+    },
+    {
+      "field": "props.tooltip.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor；默认值须按 pageType 选择，page=\"#F5F7FA\"，visualScreen=\"#081429\"。",
+      "defaultValue": "#081429"
+    },
+    {
+      "field": "props.tooltip.borderColor",
+      "type": "string",
+      "description": "borderColor；默认值须按 pageType 选择，page=\"#D8DFE6\"，visualScreen=\"#8BA3C7\"。",
+      "defaultValue": "#8BA3C7"
+    },
+    {
+      "field": "props.tooltip.textStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "props.tooltip.textStyle.color",
+      "type": "string",
+      "description": "color；默认值须按 pageType 选择，page=\"#1D2129\"，visualScreen=\"#FFFFFF\"。",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "props.series.displayMode",
+      "type": "enum",
+      "description": "展示形式",
+      "options": [
+        "group",
+        "stack"
+      ],
+      "defaultValue": "stack"
+    },
+    {
+      "field": "props.series.barWidth",
+      "type": "number",
+      "description": "柱子宽度(px), null=自适应",
+      "defaultValue": null
+    },
+    {
+      "field": "props.series.barMaxWidth",
+      "type": "number",
+      "description": "柱子最大宽度(px)",
+      "defaultValue": 40
+    },
+    {
+      "field": "props.series.barCategoryGap",
+      "type": "string",
+      "description": "类目间距",
+      "defaultValue": "30%"
+    },
+    {
+      "field": "props.series.barGap",
+      "type": "string",
+      "description": "组内间距",
+      "defaultValue": "20%"
+    },
+    {
+      "field": "props.series.borderRadius",
+      "type": "array",
+      "description": "圆角 [左上, 右上, 右下, 左下]",
+      "defaultValue": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "field": "props.series.colors",
+      "type": "array",
+      "description": "颜色列表；默认值须按 pageType 选择，page=[\"#1F78D1\",\"#36B37E\",\"#FF8C38\"]，visualScreen=[\"#0F76E8\",\"#36B8FF\",\"#48E4F8\"]。",
+      "defaultValue": [
+        "#0F76E8",
+        "#36B8FF",
+        "#48E4F8"
+      ]
+    },
+    {
+      "field": "props.series.gradient.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": false
+    },
+    {
+      "field": "props.series.gradient.direction",
+      "type": "enum",
+      "description": "direction",
+      "options": [
+        "vertical",
+        "horizontal"
+      ],
+      "defaultValue": "vertical"
+    },
+    {
+      "field": "props.series.gradient.startOpacity",
+      "type": "number",
+      "description": "渐变端点不透明度，缺省兼容旧页面",
+      "defaultValue": 0.2
+    },
+    {
+      "field": "props.series.gradient.endOpacity",
+      "type": "number",
+      "description": "endOpacity",
+      "defaultValue": 0
+    },
+    {
+      "field": "props.series.label.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "props.series.label.position",
+      "type": "enum",
+      "description": "position",
+      "options": [
+        "top",
+        "inside",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "defaultValue": "top"
+    },
+    {
+      "field": "props.series.label.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "props.series.label.color",
+      "type": "string",
+      "description": "color；默认值须按 pageType 选择，page=\"#1D2129\"，visualScreen=\"#FFFFFF\"。",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "props.series.label.fontWeight",
+      "type": "string",
+      "description": "fontWeight",
+      "defaultValue": "normal"
+    },
+    {
+      "field": "props.animation.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": true
+    },
+    {
+      "field": "props.animation.duration",
+      "type": "number",
+      "description": "duration",
+      "defaultValue": 1000
+    },
+    {
+      "field": "props.animation.easing",
+      "type": "enum",
+      "description": "easing",
+      "options": [
+        "linear",
+        "cubicOut",
+        "elasticOut",
+        "bounceOut"
+      ],
+      "defaultValue": "cubicOut"
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "xField",
+      "desc": "X轴/类目字段（维度）",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "yField",
+      "desc": "Y轴/数值字段（指标）",
+      "required": true,
+      "multiple": true
+    },
+    {
+      "name": "seriesField",
+      "desc": "系列分组字段",
+      "required": false,
+      "multiple": false
+    }
+  ]
+}

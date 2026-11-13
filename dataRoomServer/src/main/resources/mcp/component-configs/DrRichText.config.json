@@ -1,7 +1,7 @@
 {
   "componentName": "DrRichText",
   "displayName": "富文本",
-  "description": "富文本、Tiptap、文字样式、数据占位符",
+  "description": "富文本、Tiptap、文字样式、数据占位符。实际 ChartConfig.type 必须为 DrRichText。fields.defaultValue 默认对应 visualScreen；两种页面的默认值差异见字段 description，必须按目标 pageType 选择：page 的 w/h 为网格份数，visualScreen 的 w/h 为像素，不可混用。",
   "fields": [
     {
       "field": "id",
@@ -16,7 +16,7 @@
     {
       "field": "type",
       "type": "string",
-      "description": "组件类型",
+      "description": "组件类型；实际 ChartConfig.type 必须为 DrRichText，不可使用预设 id。",
       "defaultValue": "DrRichText"
     },
     {
@@ -28,13 +28,13 @@
     {
       "field": "w",
       "type": "number",
-      "description": "宽度或占用的份数",
+      "description": "宽度或占用的份数；默认值须按 pageType 选择，page=16（网格份数），visualScreen=360（像素）。",
       "defaultValue": 360
     },
     {
       "field": "h",
       "type": "number",
-      "description": "高度或占用的份数",
+      "description": "高度或占用的份数；默认值须按 pageType 选择，page=5（网格份数），visualScreen=180（像素）。",
       "defaultValue": 180
     },
     {
@@ -142,7 +142,22 @@
             "content": [
               {
                 "type": "text",
-                "text": "请输入富文本内容"
+                "text": "请输入"
+              },
+              {
+                "type": "text",
+                "text": "富文本",
+                "marks": [
+                  {
+                    "type": "bold"
+                  },
+                  {
+                    "type": "textStyle",
+                    "attrs": {
+                      "color": "#ff0000"
+                    }
+                  }
+                ]
               }
             ]
           }

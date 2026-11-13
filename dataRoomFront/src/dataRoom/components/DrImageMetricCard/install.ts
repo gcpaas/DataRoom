@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
+import type { PageType } from '@/dataRoom/constants/PageType.ts'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
@@ -89,7 +91,8 @@ export interface DrImageMetricCardPropsInterface {
 
 export type DrImageMetricCardConfig = ChartConfig<DrImageMetricCardPropsInterface>
 
-const getInstance = (): DrImageMetricCardConfig => {
+const getInstance = (pageType: PageType): DrImageMetricCardConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrImageMetricCardPropsInterface>(
     'DrImageMetricCard',
     {
@@ -101,7 +104,7 @@ const getInstance = (): DrImageMetricCardConfig => {
         borderRadius: 8,
         shadow: {
           enabled: false,
-          color: '',
+          color: theme.text.primary,
           blur: 12,
           offsetX: 0,
           offsetY: 4,
@@ -125,7 +128,7 @@ const getInstance = (): DrImageMetricCardConfig => {
       description: {
         text: '批销总金额',
         fontSize: 16,
-        color: '',
+        color: theme.text.primary,
         fontWeight: 'bold',
         lineHeight: 1.4,
         align: 'left',
@@ -139,13 +142,13 @@ const getInstance = (): DrImageMetricCardConfig => {
         suffix: '',
         emptyText: '--',
         fontSize: 36,
-        color: '',
+        color: theme.text.primary,
         fontWeight: 'bold',
         lineHeight: 1,
         align: 'left',
         glow: {
           enabled: true,
-          color: '',
+          color: theme.text.primary,
           blur: 8,
           offsetX: 0,
           offsetY: 0,
@@ -156,7 +159,7 @@ const getInstance = (): DrImageMetricCardConfig => {
         position: 'descriptionSuffix',
         gap: 6,
         fontSize: 14,
-        color: '',
+        color: theme.text.primary,
         fontWeight: 'normal',
         lineHeight: 1.4,
       },
@@ -174,6 +177,7 @@ const getInstance = (): DrImageMetricCardConfig => {
       y: 0,
       z: 0,
     },
+    pageType,
   )
 }
 

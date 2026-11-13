@@ -6,6 +6,8 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import ConfigCollapse from '@/dataRoom/designer/components/ConfigCollapse.vue'
+import ConfigCollapseItem from '@/dataRoom/designer/components/ConfigCollapseItem.vue'
 import {computed, ref} from 'vue'
 import {Codemirror} from 'vue-codemirror'
 import {javascript} from '@codemirror/lang-javascript'
@@ -49,27 +51,26 @@ const applyEditor = () => {
 
 <template>
   <div class="dr-config-panel dr-echarts-config-panel">
-    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="60px" size="small" label-position="left">
-      <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="Option 配置" name="option">
+    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="72px" label-position="left">
+      <ConfigCollapse class="dr-config-panel__section">
+        <ConfigCollapseItem title="Option 配置" name="option">
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>代码</span>
-              <el-button type="primary" size="small" @click="openEditor">编辑 Option</el-button>
-            </div>
+            <el-form-item label-width="0">
+              <el-button class="config-panel-text" type="primary" @click="openEditor">编辑 Option</el-button>
+            </el-form-item>
             <div class="dr-echarts-config-panel__summary">
               <div class="dr-echarts-config-panel__summary-item">
-                <span class="dr-echarts-config-panel__summary-label">代码字符数</span>
+                <span class="dr-echarts-config-panel__summary-label dr-config-panel__field-label">代码字符数</span>
                 <span class="dr-echarts-config-panel__summary-value">{{ optionLength }}</span>
               </div>
               <div class="dr-echarts-config-panel__summary-item">
-                <span class="dr-echarts-config-panel__summary-label">数据集</span>
+                <span class="dr-echarts-config-panel__summary-label dr-config-panel__field-label">数据集</span>
                 <span class="dr-echarts-config-panel__summary-value">{{ datasetStatus }}</span>
               </div>
             </div>
           </div>
-        </el-collapse-item>
-      </el-collapse>
+        </ConfigCollapseItem>
+      </ConfigCollapse>
     </el-form>
 
     <el-dialog v-model="dialogVisible" title="编辑 Option" width="80%" :close-on-click-modal="false" append-to-body>
@@ -106,11 +107,8 @@ const applyEditor = () => {
 </template>
 
 <style scoped lang="scss">
-@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-echarts-config-panel {
-  --el-collapse-border-color: var(--el-bg-color);
-
   padding: 0;
 }
 
@@ -122,25 +120,23 @@ const applyEditor = () => {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding-left: 12px;
 }
 
 .dr-echarts-config-panel__summary-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
   min-width: 0;
 }
 
 .dr-echarts-config-panel__summary-label {
-  color: var(--el-text-color-regular);
-  font-size: 12px;
+  flex: 0 0 64px;
+  width: 64px;
   line-height: 1.5;
 }
 
 .dr-echarts-config-panel__summary-value {
-  color: var(--el-text-color-primary);
+  color: var(--el-text-color-regular);
   font-size: 12px;
   font-feature-settings: "tnum";
   line-height: 1.5;

@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
@@ -122,6 +124,8 @@ export interface DrPieChartPropsInterface {
   series: {
     /** 颜色列表 */
     colors: string[]
+    /** 玫瑰图独立色板；旧页面缺省时沿用 colors */
+    roseColors?: string[]
     /** 选中模式 */
     selectedMode: false | 'single' | 'multiple'
     /** 选中偏移量 */
@@ -151,7 +155,8 @@ export type DrPieChartConfig = ChartConfig<DrPieChartPropsInterface>
 /**
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
-const getInstance = (): DrPieChartConfig => {
+const getInstance = (pageType: PageType): DrPieChartConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrPieChartPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrPieChart',
@@ -165,7 +170,7 @@ const getInstance = (): DrPieChartConfig => {
         center: ['50%', '50%'],
         startAngle: 90,
         roseType: false,
-        borderColor: '#ffffff',
+        borderColor: theme.border.primary,
         borderWidth: 1,
         borderRadius: 0
       },
@@ -175,14 +180,14 @@ const getInstance = (): DrPieChartConfig => {
         title: {
           text: '总计',
           fontSize: 14,
-          color: '#999999',
+          color: theme.text.primary,
           fontWeight: 'normal',
           offsetY: -10
         },
         value: {
           field: '',
           fontSize: 24,
-          color: '#333333',
+          color: theme.text.primary,
           fontWeight: 'bold',
           offsetY: 10,
           format: 'default',
@@ -200,22 +205,22 @@ const getInstance = (): DrPieChartConfig => {
         position: 'outside',
         content: 'name+percent',
         fontSize: 12,
-        color: '',
+        color: theme.text.primary,
         fontWeight: 'normal',
         guideLine: {
           show: true,
           length: 15,
           length2: 20,
           lineWidth: 1,
-          color: ''
+          color: theme.text.secondary
         }
       },
       legend: {
-        show: true,
+        show: false,
         position: 'bottom',
         textStyle: {
           fontSize: 12,
-          color: '#666666',
+          color: theme.text.secondary,
           fontWeight: 'normal'
         },
         itemGap: 16
@@ -223,16 +228,17 @@ const getInstance = (): DrPieChartConfig => {
       tooltip: {
         show: true,
         trigger: 'item',
-        backgroundColor: 'rgba(50, 50, 50, 0.7)',
-        borderColor: 'transparent',
+        backgroundColor: theme.background.secondary,
+        borderColor: theme.border.primary,
         textStyle: {
           fontSize: 12,
-          color: '#ffffff'
+          color: theme.text.primary
         },
         showPercent: true
       },
       series: {
-        colors: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4'],
+        roseColors: [...theme.series.colors],
+        colors: [...theme.series.colors],
         selectedMode: false,
         selectedOffset: 10,
         minAngle: 0,
@@ -252,7 +258,8 @@ const getInstance = (): DrPieChartConfig => {
       title: '饼图',
       w: 350,
       h: 350
-    }
+    },
+    pageType
   )
 }
 
@@ -302,6 +309,10 @@ const datasetFields: ChartDatasetField[] = [
 const mockDataset: ChartMockDataset = {
   dataset: [
     {name: '政务服务', value: 320},
+    {name: '城市管理', value: 260},
+    {name: '公共安全', value: 210},
+    {name: '交通出行', value: 160},
+    {name: '民生保障', value: 120},
   ],
   fields: [
     {

@@ -1,4 +1,4 @@
-import thumbnail from './images/图片.png'
+import thumbnail from './thumbnail.png'
 import {ChartPlugin} from "@/dataRoom/components/type/ChartPlugin.ts";
 
 

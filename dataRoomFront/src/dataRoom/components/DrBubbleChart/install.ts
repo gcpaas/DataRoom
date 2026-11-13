@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
@@ -167,7 +169,8 @@ export type DrBubbleChartConfig = ChartConfig<DrBubbleChartPropsInterface>
 /**
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
-const getInstance = (): DrBubbleChartConfig => {
+const getInstance = (pageType: PageType): DrBubbleChartConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrBubbleChartPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrBubbleChart',
@@ -186,13 +189,13 @@ const getInstance = (): DrBubbleChartConfig => {
         },
         axisLine: {
           show: true,
-          color: '#cccccc',
+          color: theme.border.primary,
           width: 1
         },
         axisLabel: {
           show: true,
           fontSize: 12,
-          color: '#999999',
+          color: theme.text.secondary,
           fontWeight: 'normal',
           fontFamily: 'Microsoft YaHei',
           rotate: 0
@@ -200,11 +203,11 @@ const getInstance = (): DrBubbleChartConfig => {
         axisTick: {
           show: true,
           length: 5,
-          color: '#cccccc'
+          color: theme.border.secondary
         },
         splitLine: {
           show: true,
-          color: '#eeeeee',
+          color: theme.border.secondary,
           width: 1,
           type: 'dashed'
         }
@@ -219,24 +222,24 @@ const getInstance = (): DrBubbleChartConfig => {
         },
         axisLine: {
           show: true,
-          color: '#cccccc',
+          color: theme.border.primary,
           width: 1
         },
         axisLabel: {
           show: true,
           fontSize: 12,
-          color: '#999999',
+          color: theme.text.secondary,
           fontWeight: 'normal',
           fontFamily: 'Microsoft YaHei'
         },
         axisTick: {
           show: true,
           length: 5,
-          color: '#cccccc'
+          color: theme.border.secondary
         },
         splitLine: {
           show: true,
-          color: '#eeeeee',
+          color: theme.border.secondary,
           width: 1,
           type: 'dashed'
         }
@@ -246,7 +249,7 @@ const getInstance = (): DrBubbleChartConfig => {
         position: 'top',
         textStyle: {
           fontSize: 12,
-          color: '#666666',
+          color: theme.text.secondary,
           fontWeight: 'normal'
         },
         itemGap: 16
@@ -254,16 +257,16 @@ const getInstance = (): DrBubbleChartConfig => {
       tooltip: {
         show: true,
         trigger: 'item',
-        backgroundColor: 'rgba(50, 50, 50, 0.7)',
-        borderColor: 'transparent',
+        backgroundColor: theme.background.secondary,
+        borderColor: theme.border.primary,
         textStyle: {
           fontSize: 12,
-          color: '#ffffff'
+          color: theme.text.primary
         }
       },
       series: {
         sizeRange: [10, 60],
-        colors: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272'],
+        colors: [...theme.series.colors],
         opacity: 0.7,
         borderWidth: 1,
         borderColor: '',
@@ -272,7 +275,7 @@ const getInstance = (): DrBubbleChartConfig => {
           show: false,
           content: 'name',
           fontSize: 11,
-          color: '#333333',
+          color: theme.text.primary,
           fontWeight: 'normal'
         },
         emphasis: {
@@ -291,7 +294,8 @@ const getInstance = (): DrBubbleChartConfig => {
       title: '气泡图',
       w: 450,
       h: 350
-    }
+    },
+    pageType
   )
 }
 
@@ -360,6 +364,15 @@ const datasetFields: ChartDatasetField[] = [
 const mockDataset: ChartMockDataset = {
   dataset: [
     {x: 12, y: 38, size: 20, group: 'A', name: '节点A'},
+    {x: 22, y: 65, size: 32, group: 'B', name: '节点B'},
+    {x: 35, y: 28, size: 18, group: 'C', name: '节点C'},
+    {x: 43, y: 52, size: 40, group: 'A', name: '节点D'},
+    {x: 51, y: 82, size: 28, group: 'B', name: '节点E'},
+    {x: 62, y: 42, size: 35, group: 'C', name: '节点F'},
+    {x: 70, y: 68, size: 24, group: 'A', name: '节点G'},
+    {x: 78, y: 20, size: 16, group: 'B', name: '节点H'},
+    {x: 86, y: 88, size: 45, group: 'C', name: '节点I'},
+    {x: 95, y: 55, size: 30, group: 'A', name: '节点J'},
   ],
   fields: [
     {

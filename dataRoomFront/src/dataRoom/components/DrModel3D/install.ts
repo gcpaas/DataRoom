@@ -1,5 +1,6 @@
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts";
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts";
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts";
@@ -30,7 +31,7 @@ export interface DrModel3DPropsInterface extends ModelTransformConfig {
 
 export type DrModel3DConfig = ChartConfig<DrModel3DPropsInterface>
 
-const getInstance = (): DrModel3DConfig => {
+const getInstance = (pageType: PageType): DrModel3DConfig => {
   const appearance = parseModelAppearanceConfig(null)
   return createChartConfig<DrModel3DPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
@@ -51,7 +52,8 @@ const getInstance = (): DrModel3DConfig => {
       title: '3D模型',
       w: 320,
       h: 240,
-    }
+    },
+    pageType
   )
 }
 

@@ -25,6 +25,10 @@ export interface CanvasInst {
    */
   addChart: (type: string) => ChartConfig<unknown>
   /**
+   * 按组件库入口 ID 新增图表，保留实际父组件类型
+   */
+  addChartFromPreset: (id: string) => ChartConfig<unknown>
+  /**
    * 获取所有图表配置
    */
   chartList: Ref<Array<ChartConfig<unknown>>>

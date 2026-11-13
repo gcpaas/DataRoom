@@ -7,6 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import { gradientStops, withOpacity } from '../../theme/color'
 import {mockDataset, type DrAreaChartConfig} from './install.ts'
 import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
@@ -217,10 +218,7 @@ const buildSeriesItem = (name: string, data: number[], index: number): echarts.L
   if (props.series.areaStyle.gradient.enabled) {
     areaStyle = {
       opacity: props.series.areaStyle.opacity,
-      color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        {offset: 0, color: adjustColorOpacity(baseColor, props.series.areaStyle.gradient.topOpacity)},
-        {offset: 1, color: adjustColorOpacity(baseColor, props.series.areaStyle.gradient.bottomOpacity)}
-      ])
+      color: new echarts.graphic.LinearGradient(0, 0, 0, 1, gradientStops(baseColor, props.series.areaStyle.gradient.topOpacity, props.series.areaStyle.gradient.bottomOpacity))
     }
   } else {
     areaStyle = {
@@ -244,7 +242,8 @@ const buildSeriesItem = (name: string, data: number[], index: number): echarts.L
       type: props.series.lineStyle
     },
     itemStyle: {
-      color: baseColor,
+      color: props.series.symbol.fillOpacity === undefined ? baseColor : withOpacity(baseColor, props.series.symbol.fillOpacity),
+      borderColor: baseColor,
       borderWidth: props.series.symbol.borderWidth
     },
     areaStyle: areaStyle,
@@ -256,19 +255,6 @@ const buildSeriesItem = (name: string, data: number[], index: number): echarts.L
       fontWeight: props.series.label.fontWeight as any
     }
   }
-}
-
-/**
- * 调整颜色透明度
- */
-const adjustColorOpacity = (color: string, opacity: number): string => {
-  if (color.startsWith('#')) {
-    const r = parseInt(color.slice(1, 3), 16)
-    const g = parseInt(color.slice(3, 5), 16)
-    const b = parseInt(color.slice(5, 7), 16)
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`
-  }
-  return color
 }
 
 /**

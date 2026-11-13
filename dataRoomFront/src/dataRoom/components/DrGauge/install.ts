@@ -1,5 +1,6 @@
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
@@ -173,7 +174,7 @@ export type DrGaugeConfig = ChartConfig<DrGaugePropsInterface>
 /**
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
-const getInstance = (): DrGaugeConfig => {
+const getInstance = (pageType: PageType): DrGaugeConfig => {
   return createChartConfig<DrGaugePropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrGauge',
@@ -243,7 +244,7 @@ const getInstance = (): DrGaugeConfig => {
         color: 'auto',
         fontWeight: 'bold',
         format: 'value',
-        offsetY: 60,
+        offsetY: 45,
         prefix: '',
         suffix: ''
       },
@@ -265,7 +266,8 @@ const getInstance = (): DrGaugeConfig => {
       title: '仪表盘',
       w: 300,
       h: 300
-    }
+    },
+    pageType
   )
 }
 

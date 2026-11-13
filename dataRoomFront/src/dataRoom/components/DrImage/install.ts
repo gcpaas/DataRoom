@@ -1,5 +1,6 @@
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts";
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts";
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts";
@@ -38,7 +39,7 @@ export type DrImageConfig = ChartConfig<DrImagePropsInterface>
  * 定义获取该组件实例的方法，返回本组件新实例对象
  * @constructor
  */
-const getInstance = (): DrImageConfig => {
+const getInstance = (pageType: PageType): DrImageConfig => {
   return createChartConfig<DrImagePropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrImage',
@@ -55,7 +56,8 @@ const getInstance = (): DrImageConfig => {
     },
     {
       title: '图片',
-    }
+    },
+    pageType
   )
 }
 /**

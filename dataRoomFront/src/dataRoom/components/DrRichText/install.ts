@@ -1,6 +1,7 @@
 import { defineAsyncComponent } from 'vue'
 import type { JSONContent } from '@tiptap/core'
 import { createChartConfig } from '../type/define'
+import type { PageType } from '@/dataRoom/constants/PageType.ts'
 import type { ChartConfig } from '../type/ChartConfig'
 import type { ChartDatasetField } from '../type/ChartDatasetField'
 import type { ChartMockDataset } from '../type/ChartMockDataset'
@@ -10,6 +11,8 @@ const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 
 interface DrRichTextPropsInterface {
+  /** 正文默认颜色；由主题切换设置。 */
+  color?: string
   /** Tiptap组件 JSON 文档；文本支持 #{字段key}，替换值继承占位符起始样式 */
   content: JSONContent
   /** 整体水平对齐方式 */
@@ -22,18 +25,32 @@ interface DrRichTextPropsInterface {
 
 export type DrRichTextConfig = ChartConfig<DrRichTextPropsInterface>
 
-const getInstance = (): DrRichTextConfig => createChartConfig<DrRichTextPropsInterface>(
+const getInstance = (pageType: PageType): DrRichTextConfig => createChartConfig<DrRichTextPropsInterface>(
   'DrRichText',
   {
     content: {
       type: 'doc',
-      content: [{ type: 'paragraph', content: [{ type: 'text', text: '请输入富文本内容' }] }],
+      content: [{
+        type: 'paragraph',
+        content: [
+          { type: 'text', text: '请输入' },
+          {
+            type: 'text',
+            text: '富文本',
+            marks: [
+              { type: 'bold' },
+              { type: 'textStyle', attrs: { color: '#ff0000' } },
+            ],
+          },
+        ],
+      }],
     },
     align: 'left',
     verticalAlign: 'top',
     lineHeight: 1.6,
   },
   { title: '富文本', w: 360, h: 180 },
+  pageType,
 )
 
 // 直接使用返回对象的字段 key，无需另配字段映射；数组默认取第一行。

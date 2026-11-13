@@ -1,0 +1,499 @@
+{
+  "componentName": "DrMetricCardHorizontal",
+  "displayName": "横向指标卡",
+  "description": "指标卡、KPI、单值、横向排列、紧凑布局。预设检索名为 DrMetricCardHorizontal，实际 ChartConfig.type 必须为 DrMetricCard，不可使用预设 id。fields.defaultValue 默认对应 visualScreen；两种页面的默认值差异见字段 description，必须按目标 pageType 选择：page 的 w/h 为网格份数，visualScreen 的 w/h 为像素，不可混用。",
+  "fields": [
+    {
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识，必填"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，当pageType=page时必填，默认与id保持一致"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型；实际 ChartConfig.type 必须为 DrMetricCard，不可使用预设 id。",
+      "defaultValue": "DrMetricCard"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "横向指标卡"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数；默认值须按 pageType 选择，page=8（网格份数），visualScreen=420（像素）。",
+      "defaultValue": 420
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数；默认值须按 pageType 选择，page=3（网格份数），visualScreen=100（像素）。",
+      "defaultValue": 100
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 0
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 0
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.datasetType",
+      "type": "enum",
+      "description": "数据集类型，历史配置可为空",
+      "options": [
+        "",
+        "directory",
+        "json",
+        "http",
+        "sql",
+        "excel",
+        "es",
+        "websocket",
+        "mqtt"
+      ],
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.global.padding",
+      "type": "array",
+      "description": "padding",
+      "defaultValue": [
+        16,
+        18,
+        16,
+        18
+      ]
+    },
+    {
+      "field": "props.global.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor",
+      "defaultValue": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "field": "props.global.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "field": "props.global.borderWidth",
+      "type": "number",
+      "description": "borderWidth",
+      "defaultValue": 0
+    },
+    {
+      "field": "props.global.borderRadius",
+      "type": "number",
+      "description": "borderRadius",
+      "defaultValue": 8
+    },
+    {
+      "field": "props.global.shadow.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": false
+    },
+    {
+      "field": "props.global.shadow.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "rgba(0, 0, 0, 0.16)"
+    },
+    {
+      "field": "props.global.shadow.blur",
+      "type": "number",
+      "description": "blur",
+      "defaultValue": 12
+    },
+    {
+      "field": "props.global.shadow.offsetX",
+      "type": "number",
+      "description": "offsetX",
+      "defaultValue": 0
+    },
+    {
+      "field": "props.global.shadow.offsetY",
+      "type": "number",
+      "description": "offsetY",
+      "defaultValue": 4
+    },
+    {
+      "field": "props.layout.direction",
+      "type": "enum",
+      "description": "direction",
+      "options": [
+        "vertical",
+        "horizontal"
+      ],
+      "defaultValue": "horizontal"
+    },
+    {
+      "field": "props.layout.horizontalAlign",
+      "type": "enum",
+      "description": "horizontalAlign",
+      "options": [
+        "left",
+        "center",
+        "right"
+      ],
+      "defaultValue": "left"
+    },
+    {
+      "field": "props.layout.verticalAlign",
+      "type": "enum",
+      "description": "verticalAlign",
+      "options": [
+        "top",
+        "center",
+        "bottom"
+      ],
+      "defaultValue": "center"
+    },
+    {
+      "field": "props.layout.gap",
+      "type": "number",
+      "description": "gap",
+      "defaultValue": 16
+    },
+    {
+      "field": "props.title.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.title.text",
+      "type": "string",
+      "description": "text",
+      "defaultValue": "指标名称"
+    },
+    {
+      "field": "props.title.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "props.title.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "props.title.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "normal"
+    },
+    {
+      "field": "props.value.defaultValue",
+      "type": "number",
+      "description": "defaultValue",
+      "defaultValue": 1280
+    },
+    {
+      "field": "props.value.format",
+      "type": "enum",
+      "description": "format",
+      "options": [
+        "value",
+        "integer",
+        "float1",
+        "float2",
+        "percent",
+        "thousand",
+        "currency"
+      ],
+      "defaultValue": "thousand"
+    },
+    {
+      "field": "props.value.decimalPlaces",
+      "type": "number",
+      "description": "decimalPlaces",
+      "defaultValue": 0
+    },
+    {
+      "field": "props.value.thousandSeparator",
+      "type": "boolean",
+      "description": "thousandSeparator",
+      "defaultValue": true
+    },
+    {
+      "field": "props.value.prefix",
+      "type": "string",
+      "description": "prefix",
+      "defaultValue": ""
+    },
+    {
+      "field": "props.value.suffix",
+      "type": "string",
+      "description": "suffix",
+      "defaultValue": ""
+    },
+    {
+      "field": "props.value.emptyText",
+      "type": "string",
+      "description": "emptyText",
+      "defaultValue": "--"
+    },
+    {
+      "field": "props.value.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 36
+    },
+    {
+      "field": "props.value.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#303133"
+    },
+    {
+      "field": "props.value.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "bold"
+    },
+    {
+      "field": "props.value.lineHeight",
+      "type": "number",
+      "description": "lineHeight",
+      "defaultValue": 1
+    },
+    {
+      "field": "props.subtitle.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "props.subtitle.text",
+      "type": "string",
+      "description": "text",
+      "defaultValue": "实时统计"
+    },
+    {
+      "field": "props.subtitle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "props.subtitle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "props.subtitle.fontWeight",
+      "type": "enum",
+      "description": "fontWeight",
+      "options": [
+        "normal",
+        "bold",
+        "bolder"
+      ],
+      "defaultValue": "normal"
+    },
+    {
+      "field": "props.unit.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.unit.text",
+      "type": "string",
+      "description": "text",
+      "defaultValue": ""
+    },
+    {
+      "field": "props.unit.position",
+      "type": "enum",
+      "description": "position",
+      "options": [
+        "prefix",
+        "suffix",
+        "top",
+        "bottom"
+      ],
+      "defaultValue": "suffix"
+    },
+    {
+      "field": "props.unit.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "props.unit.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#909399"
+    },
+    {
+      "field": "props.unit.gap",
+      "type": "number",
+      "description": "gap",
+      "defaultValue": 4
+    },
+    {
+      "field": "props.conditional.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": false
+    },
+    {
+      "field": "props.conditional.rules",
+      "type": "array",
+      "description": "rules",
+      "defaultValue": [
+        {
+          "operator": ">=",
+          "value": 1000,
+          "valueColor": "#67c23a",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderColor": "rgba(0, 0, 0, 0)"
+        }
+      ]
+    },
+    {
+      "field": "props.animation.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": true
+    },
+    {
+      "field": "props.animation.duration",
+      "type": "number",
+      "description": "duration",
+      "defaultValue": 800
+    },
+    {
+      "field": "props.animation.easing",
+      "type": "enum",
+      "description": "easing",
+      "options": [
+        "linear",
+        "cubicOut",
+        "elasticOut",
+        "bounceOut"
+      ],
+      "defaultValue": "cubicOut"
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "valueField",
+      "desc": "指标数值字段",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "titleField",
+      "desc": "标题字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "subtitleField",
+      "desc": "副标题字段",
+      "required": false,
+      "multiple": false
+    },
+    {
+      "name": "unitField",
+      "desc": "单位字段",
+      "required": false,
+      "multiple": false
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import thumbnail from './images/video-player.png'
+import thumbnail from './thumbnail.png'
 import {ChartPlugin} from "@/dataRoom/components/type/ChartPlugin.ts"
 
 export class DrVideoPlayerPlugin extends ChartPlugin {

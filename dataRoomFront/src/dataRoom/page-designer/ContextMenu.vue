@@ -77,7 +77,7 @@ const onChartCopyClick = () => {
  * 隐藏组件
  */
 const onChartHideClick = () => {
-  canvasInst.setChartHidden(chart.id, true)
+  canvasInst.setChartHidden(chart.id, !chart.hide)
   contextMenuVisible.value = false
 }
 
@@ -127,7 +127,7 @@ const onLayerMoveClick = (direction: ChartLayerMoveDirection) => {
     <div class="menu" :class="{ 'menu--disabled': isLayerDirectionDisabled('bottom') }" @click="onLayerMoveClick('bottom')">置底</div>
     <div class="menu" @click="onChartDeleteClick">删除</div>
     <div class="menu" @click="onChartCopyClick">复制并粘贴</div>
-    <div class="menu" @click="onChartHideClick">设为隐藏</div>
+    <div class="menu" @click="onChartHideClick">{{ chart.hide ? '设为显示' : '设为隐藏' }}</div>
   </div>
 </template>
 

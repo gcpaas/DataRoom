@@ -1,4 +1,4 @@
-import thumbnail from './images/horizontal-bar-chart.png'
+import thumbnail from './thumbnail.png'
 import {ChartPlugin} from "@/dataRoom/components/type/ChartPlugin.ts"
 
 export class DrHorizontalBarChartPlugin extends ChartPlugin {

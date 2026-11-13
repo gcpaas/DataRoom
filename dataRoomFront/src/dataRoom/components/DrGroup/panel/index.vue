@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DrInputField from '@/dataRoom/designer/components/DrInputField.vue'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import { computed } from 'vue'
 
@@ -15,9 +16,13 @@ const groupTitle = computed({
 </script>
 
 <template>
-  <el-form label-width="80px" size="small">
-    <el-form-item label="名称">
-      <el-input v-model="groupTitle" maxlength="50" />
+  <el-form class="dr-config-panel dr-config-panel__form" label-width="72px" label-position="left">
+    <el-form-item class="config-panel-text" label="名称">
+      <template #label><span class="dr-config-panel__field-label">名称</span></template>
+      <DrInputField v-model="groupTitle" maxlength="50" />
     </el-form-item>
   </el-form>
 </template>
+
+<style scoped lang="scss">
+</style>

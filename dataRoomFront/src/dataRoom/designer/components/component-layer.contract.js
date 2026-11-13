@@ -11,12 +11,12 @@ const { parse } = require('@vue/compiler-sfc')
 const source = readFileSync(new URL('./ComponentLayer.vue', import.meta.url), 'utf8')
 const designer = readFileSync(new URL('../../visual-screen-designer/VisualScreenDesigner.vue', import.meta.url), 'utf8')
 
-function execute(sourceText, load, defineProps = undefined) {
+function execute(sourceText, load, defineProps = undefined, defineEmits = undefined) {
   const { outputText } = ts.transpileModule(sourceText, {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   })
   const module = { exports: {} }
-  vm.runInThisContext(`(function(require, module, exports, defineProps) {\n${outputText}\n})`)(load, module, module.exports, defineProps)
+  vm.runInThisContext(`(function(require, module, exports, defineProps, defineEmits) {\n${outputText}\n})`)(load, module, module.exports, defineProps, defineEmits)
   return module.exports
 }
 
@@ -24,6 +24,7 @@ function fixture(t, initialId) {
   const props = vue.reactive({ activeChartId: initialId })
   const charts = vue.ref([{ id: 'a', title: 'A' }, { id: 'b', title: 'B' }])
   const activations = []
+  const emitted = []
   const canvas = {
     chartList: charts,
     activeChartById(id) {
@@ -41,7 +42,7 @@ function fixture(t, initialId) {
     if (name.endsWith('DrConst.ts')) return { DrConst: { CANVAS_INST: 'canvas' } }
     if (name.endsWith('component-layer.ts')) return layerModule
     throw new Error(`Unexpected import: ${name}`)
-  }, () => props))
+  }, () => props, () => (...args) => emitted.push(args)))
   let current = null
   const writes = []
   const tree = {
@@ -50,11 +51,11 @@ function fixture(t, initialId) {
     setCurrentKey(id) { current = id; writes.push(id) },
     filter() {},
   }
-  return { props, charts, activations, api, tree, writes, resetTree: () => { current = null } }
+  return { props, charts, activations, emitted, api, tree, writes, resetTree: () => { current = null } }
 }
 
 test('父组件传入主激活 ID，树仅以 node-click 触发画布激活', () => {
-  assert.match(designer, /<ComponentLayer :active-chart-id="activeChart\?\.id" \/>/)
+  assert.match(designer, /<ComponentLayer :active-chart-id="activeChart\?\.id" @contextmenu="onRightClick" \/>/)
   assert.match(source, /@node-click="onLayerClick"/)
   assert.doesNotMatch(source, /@current-change/)
   assert.match(source, /immediate: true, flush: 'post'/)
@@ -111,6 +112,9 @@ test('点击及右键图层各激活画布一次，反向监听不会再次调�
   f.api.onLayerContextMenu({ preventDefault() {}, stopPropagation() {} }, { id: 'b', chart: { id: 'b' } })
   await vue.nextTick()
   assert.deepEqual(f.activations, ['a', 'b'])
+  assert.equal(f.emitted.length, 1)
+  assert.equal(f.emitted[0][0], 'contextmenu')
+  assert.equal(f.emitted[0][2].id, 'b')
   assert.equal(f.tree.getCurrentKey(), 'b')
   assert.deepEqual(f.writes, ['a', 'b'])
 })

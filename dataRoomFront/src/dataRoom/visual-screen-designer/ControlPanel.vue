@@ -11,6 +11,11 @@ import { createDefaultTimerBehaviors } from '@/dataRoom/page-designer/type/PageT
 import type { GlobalVariable } from '@/dataRoom/designer/types/GlobalVariable.ts'
 import { getResourceUrl } from '@/dataRoom/utils/index.ts'
 import { v4 as uuidv4 } from 'uuid'
+import DrColorField from '@/dataRoom/designer/components/DrColorField.vue'
+import DrNumberField from '@/dataRoom/designer/components/DrNumberField.vue'
+import DrSelectField from '@/dataRoom/designer/components/DrSelectField.vue'
+import ConfigCollapse from '@/dataRoom/designer/components/ConfigCollapse.vue'
+import ConfigCollapseItem from '@/dataRoom/designer/components/ConfigCollapseItem.vue'
 
 const TimerConfigDialog = defineAsyncComponent(() => import('../page-designer/TimerConfigDialog.vue'))
 
@@ -90,7 +95,7 @@ const timerConfigDialogVisible = ref(false)
 const currentTimer = ref<PageTimer | null>(null)
 
 const activeTab = ref('config')
-const activePanelNames = ref(['size', 'background', 'zoom'])
+const activePanelNames = ref('size')
 const currentZoomModeDesc = computed(() => {
   return ZOOM_MODES.find((mode) => mode.value === basicConfig.size.zoom)?.desc || ''
 })
@@ -186,38 +191,38 @@ const deleteTimer = (id: string) => {
       <div class="control-tabs-content">
         <section v-show="activeTab === 'config'" class="control-tab-pane" role="tabpanel">
           <div class="tab-content">
-            <el-form class="dr-config-panel__form" :model="basicConfig" label-width="72px" size="small" label-position="left">
-              <el-collapse v-model="activePanelNames" class="dr-config-panel__section">
-                <el-collapse-item title="画布尺寸" name="size">
-                  <el-form-item label="分辨率">
-                    <el-select v-model="selectedPreset" class="dr-config-panel__control" placeholder="请选择分辨率">
+            <el-form class="dr-config-panel__form" :model="basicConfig" label-width="72px" label-position="left">
+              <ConfigCollapse v-model="activePanelNames" class="dr-config-panel__section">
+                <ConfigCollapseItem title="画布尺寸" name="size">
+                  <el-form-item class="config-panel-text" label="分辨率">
+                    <DrSelectField v-model="selectedPreset" class="dr-config-panel__control" placeholder="请选择分辨率">
                       <el-option v-for="preset in RESOLUTION_PRESETS" :key="preset.value" :label="preset.label" :value="preset.value" />
-                    </el-select>
+                    </DrSelectField>
                   </el-form-item>
 
-                  <el-form-item label="宽度">
-                    <el-input-number v-model="basicConfig.size.width" class="dr-config-panel__control" :min="320" :step="10" controls-position="right" />
+                  <el-form-item class="config-panel-text" label="宽度">
+                    <DrNumberField v-model="basicConfig.size.width" class="dr-config-panel__control" :min="320" :step="10" controls-position="right" />
                   </el-form-item>
 
-                  <el-form-item label="高度">
-                    <el-input-number v-model="basicConfig.size.height" class="dr-config-panel__control" :min="320" :step="10" controls-position="right" />
+                  <el-form-item class="config-panel-text" label="高度">
+                    <DrNumberField v-model="basicConfig.size.height" class="dr-config-panel__control" :min="320" :step="10" controls-position="right" />
                   </el-form-item>
-                </el-collapse-item>
+                </ConfigCollapseItem>
 
-                <el-collapse-item title="背景" name="background">
-                  <el-form-item label="背景填充">
+                <ConfigCollapseItem title="背景" name="background">
+                  <el-form-item class="config-panel-text" label="背景填充">
                     <el-radio-group v-model="basicConfig.background.fill">
-                      <el-radio value="color">颜色</el-radio>
-                      <el-radio value="image">图片</el-radio>
+                      <el-radio class="config-panel-text" value="color">颜色</el-radio>
+                      <el-radio class="config-panel-text" value="image">图片</el-radio>
                     </el-radio-group>
                   </el-form-item>
 
-                  <el-form-item v-if="basicConfig.background.fill === 'color'" label="背景颜色">
-                    <el-color-picker v-model="basicConfig.background.color" show-alpha />
+                  <el-form-item class="config-panel-text" v-if="basicConfig.background.fill === 'color'" label="背景颜色">
+                    <DrColorField v-model="basicConfig.background.color" show-alpha />
                   </el-form-item>
 
                   <template v-if="basicConfig.background.fill === 'image'">
-                    <el-form-item label="背景图片">
+                    <el-form-item class="config-panel-text" label="背景图片">
                       <div class="bg-upload-section">
                         <el-upload
                           :action="uploadUrl"
@@ -250,34 +255,34 @@ const deleteTimer = (id: string) => {
                       </div>
                     </el-form-item>
 
-                    <el-form-item label="透明度">
-                      <el-input-number v-model="basicConfig.background.opacity" class="dr-config-panel__control" :min="0" :max="100" :step="1" controls-position="right" />
+                    <el-form-item class="config-panel-text" label="透明度">
+                      <DrNumberField v-model="basicConfig.background.opacity" class="dr-config-panel__control" :min="0" :max="100" :step="1" controls-position="right" />
                     </el-form-item>
 
-                    <el-form-item label="填充方式">
-                      <el-select v-model="basicConfig.background.repeat" class="dr-config-panel__control" placeholder="请选择填充方式">
+                    <el-form-item class="config-panel-text" label="填充方式">
+                      <DrSelectField v-model="basicConfig.background.repeat" class="dr-config-panel__control" placeholder="请选择填充方式">
                         <el-option label="不重复" value="no-repeat" />
                         <el-option label="重复" value="repeat" />
                         <el-option label="水平重复" value="repeat-x" />
                         <el-option label="垂直重复" value="repeat-y" />
-                      </el-select>
+                      </DrSelectField>
                     </el-form-item>
                   </template>
-                </el-collapse-item>
+                </ConfigCollapseItem>
 
-                <el-collapse-item title="预览缩放" name="zoom">
-                  <el-form-item label="缩放模式">
-                    <el-select v-model="basicConfig.size.zoom" class="dr-config-panel__control" placeholder="请选择缩放模式">
+                <ConfigCollapseItem title="预览缩放" name="zoom">
+                  <el-form-item class="config-panel-text" label="缩放模式">
+                    <DrSelectField v-model="basicConfig.size.zoom" class="dr-config-panel__control" placeholder="请选择缩放模式">
                       <el-option v-for="mode in ZOOM_MODES" :key="mode.value" :label="mode.label" :value="mode.value" />
-                    </el-select>
+                    </DrSelectField>
                   </el-form-item>
 
                   <div v-if="currentZoomModeDesc" class="dr-config-panel__sub-section">
                     <div class="dr-config-panel__sub-title">缩放说明</div>
                     <div class="panel-desc">{{ currentZoomModeDesc }}</div>
                   </div>
-                </el-collapse-item>
-              </el-collapse>
+                </ConfigCollapseItem>
+              </ConfigCollapse>
             </el-form>
           </div>
         </section>
@@ -286,7 +291,7 @@ const deleteTimer = (id: string) => {
           <div class="tab-content">
             <div class="timer-header">
               <span class="timer-title">定时器</span>
-              <el-button type="primary" size="small" plain @click="addTimer">添加定时器</el-button>
+              <el-button class="config-panel-text" type="primary" plain @click="addTimer">添加定时器</el-button>
             </div>
             <div class="timer-list">
               <div v-for="timer in timers" :key="timer.id" class="timer-item">
@@ -295,17 +300,17 @@ const deleteTimer = (id: string) => {
                   <div class="timer-desc">{{ timer.interval }} 毫秒1次</div>
                 </div>
                 <div class="timer-controls">
-                  <el-switch v-model="timer.enabled" size="small" @change="(val: string | number | boolean) => toggleTimer(timer, val)" />
-                  <el-button size="small" text @click="openTimerConfig(timer)">
+                  <el-switch v-model="timer.enabled" @change="(val: string | number | boolean) => toggleTimer(timer, val)" />
+                  <el-button text @click="openTimerConfig(timer)">
                     <el-icon><Setting /></el-icon>
                   </el-button>
-                  <el-button size="small" text type="danger" @click="deleteTimer(timer.id)">
+                  <el-button text type="danger" @click="deleteTimer(timer.id)">
                     <el-icon><Delete /></el-icon>
                   </el-button>
                 </div>
               </div>
               <div v-if="timers.length === 0" class="empty-timer">
-                <el-empty description="暂无定时器，请点击上方按钮添加" :image-size="80" />
+                <el-empty class="config-panel-text" description="暂无定时器，请点击上方按钮添加" :image-size="80" />
               </div>
             </div>
           </div>
@@ -318,11 +323,8 @@ const deleteTimer = (id: string) => {
 </template>
 
 <style scoped lang="scss">
-@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-visual-screen-config-panel {
-  --el-collapse-border-color: var(--el-bg-color);
-
   width: 100%;
   height: 100%;
   display: flex;
@@ -358,7 +360,7 @@ const deleteTimer = (id: string) => {
   background: var(--el-fill-color-light);
   color: var(--el-text-color-secondary);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0;
   cursor: pointer;
@@ -418,11 +420,10 @@ const deleteTimer = (id: string) => {
   gap: 12px;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--el-border-color-light);
 }
 
 .timer-title {
-  color: var(--el-text-color-secondary);
+  color: var(--el-text-color-primary);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0;
@@ -445,6 +446,7 @@ const deleteTimer = (id: string) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-width: 0;
   gap: 12px;
   padding: 12px;
   background: var(--el-fill-color-blank);
@@ -462,10 +464,17 @@ const deleteTimer = (id: string) => {
   min-width: 0;
 }
 
+.timer-name,
+.timer-desc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .timer-name {
   margin-bottom: 4px;
   color: var(--el-text-color-primary);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0;
 }
@@ -530,7 +539,7 @@ const deleteTimer = (id: string) => {
   background-color: var(--el-fill-color-extra-light);
   border-radius: 4px;
   color: var(--el-text-color-secondary);
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0;
 }
 

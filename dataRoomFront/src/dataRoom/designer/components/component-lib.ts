@@ -1,18 +1,23 @@
-import type { ChartPlugin } from '../../components/type/ChartPlugin.ts'
 import type { ComponentLibTagInterface } from '../types/ComponentLibTagInterface.ts'
 
-export interface ComponentGroup {
+interface ComponentGroupEntry {
+  name: string
+  desc: string
+  tags: string[]
+}
+
+export interface ComponentGroup<T extends ComponentGroupEntry = ComponentGroupEntry> {
   tag: string
   name: string
-  plugins: ChartPlugin[]
+  plugins: T[]
 }
 
 /** 分类与组内顺序均沿用注册表，多标签组件可跨组展示。 */
-export function groupComponents(
-  plugins: ChartPlugin[],
+export function groupComponents<T extends ComponentGroupEntry>(
+  plugins: T[],
   categories: ComponentLibTagInterface[],
   query: string,
-): ComponentGroup[] {
+): ComponentGroup<T>[] {
   const keyword = query.trim().toLocaleLowerCase()
   const matches = plugins.filter((plugin) =>
     [plugin.name, plugin.desc].some((text) => text.toLocaleLowerCase().includes(keyword)),

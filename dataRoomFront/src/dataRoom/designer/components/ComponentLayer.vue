@@ -1,15 +1,20 @@
 <!-- 图层 -->
 <script setup lang="ts">
-import { computed, type ComputedRef, type CSSProperties, inject, onBeforeUnmount, onMounted, ref, unref, watch } from 'vue'
-import { ElMessageBox, type FilterNodeMethodFunction } from 'element-plus'
+import { computed, type ComputedRef, inject, ref, watch } from 'vue'
+import type { FilterNodeMethodFunction } from 'element-plus'
 import type { TreeInstance, TreeNodeData, TreeOptionProps } from 'element-plus'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
-import type { CanvasInst, ChartLayerMoveDirection } from '@/dataRoom/designer/types/CanvasInst.ts'
+import type { CanvasInst } from '@/dataRoom/designer/types/CanvasInst.ts'
 import { createLayerNodes, type LayerNode } from '@/dataRoom/designer/components/component-layer.ts'
-import { findChartReference, getChartListByParent, sortChartsByLayerDesc } from '@/dataRoom/designer/utils/editor-history.ts'
+import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
+import DrInputField from './DrInputField.vue'
 
 const props = defineProps<{
   activeChartId?: string
+}>()
+
+const emit = defineEmits<{
+  contextmenu: [event: MouseEvent, chart: ChartConfig<unknown>]
 }>()
 
 const canvasInst = inject(DrConst.CANVAS_INST) as CanvasInst
@@ -25,11 +30,6 @@ const layerList: ComputedRef<LayerNode[]> = computed(() => {
 
 const layerTreeRef = ref<TreeInstance>()
 const layerName = ref('')
-const layerContextMenuVisible = ref(false)
-const layerContextMenuRef = ref<HTMLElement>()
-const layerContextMenuEvent = ref<MouseEvent>()
-const layerContextMenuNode = ref<LayerNode>()
-
 /**
  * 根据标题过滤图层
  * @param value
@@ -58,11 +58,6 @@ watch(
   { immediate: true, flush: 'post' },
 )
 
-const closeLayerContextMenu = () => {
-  layerContextMenuVisible.value = false
-  layerContextMenuNode.value = undefined
-}
-
 const syncLayerSelection = (layerNode: LayerNode) => {
   layerTreeRef.value?.setCurrentKey(layerNode.id)
   canvasInst.activeChartById(layerNode.chart.id)
@@ -70,7 +65,6 @@ const syncLayerSelection = (layerNode: LayerNode) => {
 
 const onLayerClick = (data: TreeNodeData) => {
   const layerData = data as LayerNode
-  closeLayerContextMenu()
   syncLayerSelection(layerData)
 }
 
@@ -78,110 +72,14 @@ const onLayerContextMenu = (event: MouseEvent, layerNode: LayerNode) => {
   event.preventDefault()
   event.stopPropagation()
   syncLayerSelection(layerNode)
-  layerContextMenuEvent.value = event
-  layerContextMenuNode.value = layerNode
-  layerContextMenuVisible.value = true
+  emit('contextmenu', event, layerNode.chart)
 }
-
-const deleteLayerChart = async () => {
-  const layerNode = layerContextMenuNode.value
-  if (!layerNode) {
-    return
-  }
-
-  try {
-    await ElMessageBox.confirm('确定要删除这个组件吗？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    })
-    canvasInst.deleteChart(layerNode.chart.id)
-    closeLayerContextMenu()
-  } catch {
-    // 用户取消删除
-  }
-}
-
-const updateLayerChartHidden = (hidden: boolean) => {
-  const layerNode = layerContextMenuNode.value
-  if (!layerNode) {
-    return
-  }
-  const updated = canvasInst.setChartHidden(layerNode.chart.id, hidden)
-  if (updated && !hidden) {
-    canvasInst.activeChartById(layerNode.chart.id)
-  }
-  closeLayerContextMenu()
-}
-
-/**
- * 右键菜单目标组件在同级中的图层可操作状态（层级按 z 值降序排序判断）
- */
-const layerMoveState = computed(() => {
-  const chartId = layerContextMenuNode.value?.chart.id
-  if (!chartId) {
-    return { canMoveUp: false, canMoveDown: false }
-  }
-  const charts = unref(canvasInst.chartList)
-  const reference = findChartReference(chartId, charts)
-  const siblings = reference ? getChartListByParent(charts, reference.parent) : null
-  if (!reference || !siblings || siblings.length <= 1) {
-    return { canMoveUp: false, canMoveDown: false }
-  }
-  const sorted = sortChartsByLayerDesc(siblings)
-  const position = sorted.findIndex((item) => item.id === chartId)
-  return {
-    canMoveUp: position > 0,
-    canMoveDown: position >= 0 && position < sorted.length - 1,
-  }
-})
-
-const isLayerMoveDisabled = (direction: ChartLayerMoveDirection) => {
-  if (direction === 'top' || direction === 'up') {
-    return !layerMoveState.value.canMoveUp
-  }
-  return !layerMoveState.value.canMoveDown
-}
-
-/**
- * 调整图层顺序：置顶/上移一层/下移一层/置底
- */
-const moveLayerNode = (direction: ChartLayerMoveDirection) => {
-  const layerNode = layerContextMenuNode.value
-  if (!layerNode || isLayerMoveDisabled(direction)) {
-    return
-  }
-  canvasInst.moveChartLayer(layerNode.chart.id, direction)
-  closeLayerContextMenu()
-}
-
-const computedLayerContextMenuStyle = computed<CSSProperties>(() => {
-  return {
-    position: 'fixed',
-    left: `${layerContextMenuEvent.value?.clientX || 0}px`,
-    top: `${layerContextMenuEvent.value?.clientY || 0}px`,
-  }
-})
-
-const onDocumentClick = (event: MouseEvent) => {
-  if (!layerContextMenuRef.value?.contains(event.target as Node)) {
-    closeLayerContextMenu()
-  }
-}
-
-onMounted(() => {
-  document.addEventListener('click', onDocumentClick)
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', onDocumentClick)
-})
 </script>
 
 <template>
   <div class="component-layer-wrapper">
     <div class="layer-search">
-      <el-input v-model="layerName" size="small" placeholder="请输入组件标题" />
+      <DrInputField v-model="layerName" size="small" placeholder="请输入组件标题" />
     </div>
     <div class="layer-list">
       <el-scrollbar height="100%">
@@ -209,15 +107,7 @@ onBeforeUnmount(() => {
         </el-tree>
       </el-scrollbar>
     </div>
-    <div v-if="layerContextMenuVisible" ref="layerContextMenuRef" class="layer-context-menu" :style="computedLayerContextMenuStyle">
-      <button class="layer-context-menu__item" type="button" :disabled="isLayerMoveDisabled('top')" @click="moveLayerNode('top')">置顶</button>
-      <button class="layer-context-menu__item" type="button" :disabled="isLayerMoveDisabled('up')" @click="moveLayerNode('up')">上移一层</button>
-      <button class="layer-context-menu__item" type="button" :disabled="isLayerMoveDisabled('down')" @click="moveLayerNode('down')">下移一层</button>
-      <button class="layer-context-menu__item" type="button" :disabled="isLayerMoveDisabled('bottom')" @click="moveLayerNode('bottom')">置底</button>
-      <button class="layer-context-menu__item" type="button" @click="deleteLayerChart">删除</button>
-      <button v-if="layerContextMenuNode?.hidden" class="layer-context-menu__item" type="button" @click="updateLayerChartHidden(false)">显示</button>
-      <button v-else class="layer-context-menu__item" type="button" @click="updateLayerChartHidden(true)">隐藏</button>
-    </div>
+
   </div>
 </template>
 
@@ -267,44 +157,10 @@ onBeforeUnmount(() => {
 }
 
 .layer-node__title {
+  font-size: 12px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.layer-context-menu {
-  min-width: 140px;
-  background: var(--el-fill-color-blank);
-  border: 1px solid var(--el-border-color);
-  border-radius: 8px;
-  box-shadow: var(--el-box-shadow-light);
-  padding: 8px 0;
-  z-index: 2000;
-}
-
-.layer-context-menu__item {
-  display: block;
-  width: 100%;
-  border: 0;
-  background: transparent;
-  color: var(--el-text-color-regular);
-  text-align: left;
-  padding: 8px 16px;
-  letter-spacing: 0;
-
-  &:hover {
-    background: var(--el-color-primary-light-9);
-    color: var(--el-color-primary);
-  }
-
-  &:disabled {
-    color: var(--el-text-color-disabled);
-    cursor: not-allowed;
-
-    &:hover {
-      background: transparent;
-      color: var(--el-text-color-disabled);
-    }
-  }
-}
 </style>

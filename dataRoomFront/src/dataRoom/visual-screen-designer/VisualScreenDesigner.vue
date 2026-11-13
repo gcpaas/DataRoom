@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import ThemeSelector from '@/dataRoom/designer/components/ThemeSelector.vue'
+import { applyThemeToCharts, applyThemeToNewChart } from '@/dataRoom/theme/apply-theme'
+import { getTheme } from '@/dataRoom/theme/registry'
+
 import { getComponentInstance, getPanelComponent } from '@/dataRoom/components/AutoInstall.ts'
+import { PageType } from '@/dataRoom/constants/PageType.ts'
+import { createFromPreset } from '@/dataRoom/designer/registry/PluginRegister.ts'
 import { computed, type ComputedRef, type CSSProperties, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, type Ref, watch } from 'vue'
 import Moveable, {
   type OnDrag,
@@ -698,13 +704,23 @@ const applyHistoryAction = (action: 'undo' | 'redo') => {
   return true
 }
 
-const addChart = (type: string) => {
-  const chartInst: ChartConfig<unknown> = getComponentInstance(type)
+const switchTheme = (themeId: string) => {
+  const theme = getTheme(themeId)
+  if (!theme) return
+  applyThemeToCharts(chartList.value, theme)
+  basicConfig.value.themeId = theme.id
+}
+
+const insertChart = (chartInst: ChartConfig<unknown>) => {
+  applyThemeToNewChart(chartInst, basicConfig.value.themeId, PageType.VISUAL_SCREEN)
   // 新组件默认置于同级最顶层
   chartInst.z = currentScopeCharts.value.length > 0 ? Math.max(...currentScopeCharts.value.map((item) => item.z)) + 1 : 0
   currentScopeCharts.value.push(chartInst)
   return chartInst
 }
+
+const addChart = (type: string) => insertChart(getComponentInstance(type, PageType.VISUAL_SCREEN))
+const addChartFromPreset = (id: string) => insertChart(createFromPreset(id, PageType.VISUAL_SCREEN))
 
 const enterGroupScope = (groupId: string, initialSelectedChartId?: string | null) => {
   const chart = selectedCharts.value.length === 1 && selectedCharts.value[0]?.id === groupId ? selectedCharts.value[0] : undefined
@@ -810,6 +826,7 @@ const { canvasInst, chartInstanceMap } = useCanvasInst({
   globalVariable,
   basicConfig: basicConfig as unknown as Ref<PageBasicConfig>,
   addChart,
+  addChartFromPreset,
   activeChartById,
   commitChartAdd,
   undo: () => applyHistoryAction('undo'),
@@ -2186,6 +2203,9 @@ onBeforeUnmount(() => {
       </div>
       <div class="header-actions header-actions--secondary">
         <div class="header-action">
+          <ThemeSelector :theme-id="basicConfig.themeId" :disabled="!pageStageEntity" @select="switchTheme" />
+        </div>
+        <div class="header-action">
           <el-button @click="togglePageControlPanel" size="small">设置</el-button>
         </div>
         <div class="header-action">
@@ -2213,7 +2233,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <div class="panel-body">
-          <ComponentLayer :active-chart-id="activeChart?.id" />
+          <ComponentLayer :active-chart-id="activeChart?.id" @contextmenu="onRightClick" />
         </div>
       </div>
       <div class="canvas">

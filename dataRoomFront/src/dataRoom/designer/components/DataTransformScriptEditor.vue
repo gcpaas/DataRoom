@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { javascript } from '@codemirror/lang-javascript'
+import { EditorView } from '@codemirror/view'
 import { eclipse } from '@uiw/codemirror-theme-eclipse'
 import { Codemirror } from 'vue-codemirror'
 
@@ -9,11 +10,13 @@ const {
   rows = 10,
   showActions = true,
   showFullscreenAction = true,
+  panelText = false,
 } = defineProps<{
   modelValue: string
   rows?: number
   showActions?: boolean
   showFullscreenAction?: boolean
+  panelText?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -22,7 +25,23 @@ const emit = defineEmits<{
   fullscreen: []
 }>()
 
-const editorExtensions = [javascript(), eclipse]
+const editorExtensions = computed(() => [
+  javascript(),
+  EditorView.theme({
+    '&': {
+      height: '100%',
+      maxWidth: '100%',
+      fontFamily: "'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace",
+      fontSize: panelText ? '12px' : '13px',
+      lineHeight: '1.5',
+    },
+    '.cm-cursor, .cm-dropCursor': {
+      borderLeftColor: 'var(--el-text-color-primary)',
+    },
+    '.cm-scroller': { overflow: 'auto' },
+  }),
+  eclipse,
+])
 const lineHeightPx = 20
 
 const editorHeight = computed(() => `${Math.max(rows, 1) * lineHeightPx}px`)
@@ -59,8 +78,8 @@ const handleFullscreen = () => {
       />
     </div>
     <div class="data-transform-script-editor__actions" v-if="showActions">
-      <el-button type="primary" plain size="small" @click="handleApply">应用脚本</el-button>
-      <el-button v-if="showFullscreenAction" plain size="small" @click="handleFullscreen">放大编辑&帮助</el-button>
+      <el-button :class="{ 'config-panel-text': panelText }" type="primary" plain @click="handleApply">应用脚本</el-button>
+      <el-button v-if="showFullscreenAction" :class="{ 'config-panel-text': panelText }" plain @click="handleFullscreen">放大编辑&帮助</el-button>
     </div>
   </div>
 </template>
@@ -91,20 +110,4 @@ const handleFullscreen = () => {
   height: 100%;
 }
 
-.data-transform-script-editor :deep(.cm-editor) {
-  height: 100%;
-  max-width: 100%;
-  font-family: 'JetBrains Mono', 'SF Mono', SFMono-Regular, ui-monospace, Menlo, monospace;
-  font-size: 13px;
-  line-height: 1.5;
-
-  .cm-cursor,
-  .cm-dropCursor {
-    border-left-color: var(--el-text-color-primary);
-  }
-}
-
-.data-transform-script-editor :deep(.cm-scroller) {
-  overflow: auto;
-}
 </style>

@@ -7,6 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import { gradientStops } from '../../theme/color'
 import {mockDataset, type DrBarChartConfig} from './install.ts'
 import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
@@ -220,10 +221,7 @@ const buildSeriesItem = (name: string, data: number[], index: number): echarts.B
     itemColor = {
       type: 'linear',
       ...gradientConfig,
-      colorStops: [
-        {offset: 0, color: baseColor},
-        {offset: 1, color: adjustColorOpacity(baseColor, 0.3)}
-      ]
+      colorStops: gradientStops(baseColor, props.series.gradient.startOpacity ?? 1, props.series.gradient.endOpacity ?? 0.3)
     }
   }
 
@@ -235,7 +233,7 @@ const buildSeriesItem = (name: string, data: number[], index: number): echarts.B
     barWidth: props.series.barWidth || undefined,
     barMaxWidth: props.series.barMaxWidth,
     barCategoryGap: props.series.barCategoryGap,
-    barGap: props.series.barGap,
+    barGap: /^\d+(\.\d+)?$/.test(props.series.barGap) ? Number(props.series.barGap) : props.series.barGap,
     itemStyle: {
       color: itemColor,
       borderRadius: props.series.borderRadius
@@ -248,19 +246,6 @@ const buildSeriesItem = (name: string, data: number[], index: number): echarts.B
       fontWeight: props.series.label.fontWeight as any
     }
   }
-}
-
-/**
- * 调整颜色透明度
- */
-const adjustColorOpacity = (color: string, opacity: number): string => {
-  if (color.startsWith('#')) {
-    const r = parseInt(color.slice(1, 3), 16)
-    const g = parseInt(color.slice(3, 5), 16)
-    const b = parseInt(color.slice(5, 7), 16)
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`
-  }
-  return color
 }
 
 /**

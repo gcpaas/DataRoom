@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
@@ -23,7 +25,8 @@ interface DrDateTimePropsInterface {
 
 export type DrDateTimeConfig = ChartConfig<DrDateTimePropsInterface>
 
-const getInstance = (): DrDateTimeConfig => {
+const getInstance = (pageType: PageType): DrDateTimeConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrDateTimePropsInterface>(
     'DrDateTime',
     {
@@ -33,7 +36,7 @@ const getInstance = (): DrDateTimeConfig => {
         fontFamily: 'Microsoft YaHei',
         fontWeight: '400',
         letterSpacing: 1,
-        color: '#909399',
+        color: theme.text.secondary,
       },
       align: 'center',
       verticalAlign: 'center',
@@ -43,6 +46,7 @@ const getInstance = (): DrDateTimeConfig => {
       w: 240,
       h: 60,
     },
+    pageType,
   )
 }
 

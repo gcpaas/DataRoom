@@ -3,7 +3,7 @@
 import { computed, inject, nextTick, ref, watch } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import type { ScrollbarInstance } from 'element-plus'
-import { componentLibTagList, pluginList } from '@/dataRoom/designer/registry/PluginRegister.ts'
+import { componentLibTagList, componentEntries } from '@/dataRoom/designer/registry/PluginRegister.ts'
 import { getActiveComponentGroup, groupComponents } from './component-lib.ts'
 import { Check, Search } from '@element-plus/icons-vue'
 import { DrConst } from '@/dataRoom/constants/DrConst.ts'
@@ -14,21 +14,21 @@ const emit = defineEmits(['close'])
 const componentLibVisible = ref(true)
 
 const searchName = ref('')
-const selectedPluginTypes = ref<string[]>([])
+const selectedPluginIds = ref<string[]>([])
 /**
  * 切换组件选中状态
- * @param type
+ * @param id
  */
-const togglePluginSelection = (type: string) => {
-  const targetIndex = selectedPluginTypes.value.indexOf(type)
+const togglePluginSelection = (id: string) => {
+  const targetIndex = selectedPluginIds.value.indexOf(id)
   if (targetIndex >= 0) {
-    selectedPluginTypes.value.splice(targetIndex, 1)
+    selectedPluginIds.value.splice(targetIndex, 1)
     return
   }
-  selectedPluginTypes.value.push(type)
+  selectedPluginIds.value.push(id)
 }
 
-const isPluginSelected = (type: string) => selectedPluginTypes.value.includes(type)
+const isPluginSelected = (id: string) => selectedPluginIds.value.includes(id)
 
 const closeDialog = () => {
   componentLibVisible.value = false
@@ -38,14 +38,14 @@ const closeDialog = () => {
  * 按选中顺序逐个插入组件
  */
 const handleConfirm = () => {
-  selectedPluginTypes.value.forEach((type) => {
-    const chart = canvasInst.addChart(type)
+  selectedPluginIds.value.forEach((id) => {
+    const chart = canvasInst.addChartFromPreset(id)
     canvasInst.commitChartAdd(chart)
   })
   closeDialog()
 }
 
-const componentGroups = computed(() => groupComponents(pluginList, componentLibTagList, searchName.value))
+const componentGroups = computed(() => groupComponents(componentEntries, componentLibTagList, searchName.value))
 const activeTag = ref('')
 const categoryScrollbar = ref<ScrollbarInstance>()
 const componentScrollbar = ref<ScrollbarInstance>()
@@ -151,15 +151,15 @@ useResizeObserver([componentScroller, groupContainer], refreshScrollLayout)
                 <div class="component-card">
                   <button
                     v-for="plugin in group.plugins"
-                    :key="plugin.type"
+                    :key="plugin.id"
                     type="button"
                     class="card"
-                    :class="{ 'card--selected': isPluginSelected(plugin.type) }"
-                    :aria-pressed="isPluginSelected(plugin.type)"
+                    :class="{ 'card--selected': isPluginSelected(plugin.id) }"
+                    :aria-pressed="isPluginSelected(plugin.id)"
                     :aria-label="plugin.name"
-                    @click="togglePluginSelection(plugin.type)"
+                    @click="togglePluginSelection(plugin.id)"
                   >
-                    <span v-if="isPluginSelected(plugin.type)" class="selection-overlay" aria-hidden="true">
+                    <span v-if="isPluginSelected(plugin.id)" class="selection-overlay" aria-hidden="true">
                       <el-icon class="selection-icon"><Check /></el-icon>
                     </span>
                     <span class="image">
@@ -168,7 +168,7 @@ useResizeObserver([componentScroller, groupContainer], refreshScrollLayout)
                     <span class="card-footer">
                       <span class="card-heading">
                         <span class="card-name" :title="plugin.name">{{ plugin.name }}</span>
-                        <span class="card-type" :title="plugin.type">{{ plugin.type }}</span>
+                        <span class="card-type" :title="plugin.id">{{ plugin.id }}</span>
                       </span>
                       <span class="card-desc" :title="plugin.desc">{{ plugin.desc }}</span>
                     </span>
@@ -182,10 +182,10 @@ useResizeObserver([componentScroller, groupContainer], refreshScrollLayout)
         </div>
       </div>
       <div class="footer">
-        <div class="selection-summary">已选 {{ selectedPluginTypes.length }} 个组件</div>
+        <div class="selection-summary">已选 {{ selectedPluginIds.length }} 个组件</div>
         <div class="footer-actions">
           <el-button @click="closeDialog">取消</el-button>
-          <el-button type="primary" :disabled="selectedPluginTypes.length === 0" @click="handleConfirm">插入</el-button>
+          <el-button type="primary" :disabled="selectedPluginIds.length === 0" @click="handleConfirm">插入</el-button>
         </div>
       </div>
     </div>

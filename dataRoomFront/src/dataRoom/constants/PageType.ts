@@ -6,3 +6,5 @@ export const PageType = {
   VISUAL_SCREEN: 'visualScreen',
   PAGE: 'page'
 } as const;
+
+export type PageType = typeof PageType.PAGE | typeof PageType.VISUAL_SCREEN;

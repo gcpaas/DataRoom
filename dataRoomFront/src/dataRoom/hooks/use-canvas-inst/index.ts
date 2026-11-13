@@ -35,6 +35,7 @@ interface UseCanvasInstOptions {
   globalVariable: Ref<GlobalVariable[]>
   basicConfig?: Ref<PageBasicConfig>
   addChart?: (type: string) => ChartConfig<unknown>
+  addChartFromPreset?: (id: string) => ChartConfig<unknown>
   activeChartById?: (id: string) => void
   commitChartAdd?: (chart: ChartConfig<unknown>, label?: string, parent?: ChartParentRef, index?: number) => void
   undo?: () => boolean
@@ -54,7 +55,7 @@ interface UseCanvasInstOptions {
  * @param options
  */
 export function useCanvasInst(options: UseCanvasInstOptions) {
-  const {chartList, globalVariable, basicConfig, addChart, activeChartById, commitChartAdd, undo, redo, canUndo, canRedo, moveChartLayer, setChartLayerZ, commitChartLayout, deleteChart, setChartHidden} = options
+  const {chartList, globalVariable, basicConfig, addChart, addChartFromPreset, activeChartById, commitChartAdd, undo, redo, canUndo, canRedo, moveChartLayer, setChartLayerZ, commitChartLayout, deleteChart, setChartHidden} = options
 
   const chartInstanceMap: ChartInstanceMap = {}
 
@@ -214,6 +215,9 @@ export function useCanvasInst(options: UseCanvasInstOptions) {
     chartList: chartList,
     addChart: addChart || (() => {
       throw new Error('addChart方法未实现')
+    }),
+    addChartFromPreset: addChartFromPreset || (() => {
+      throw new Error('addChartFromPreset方法未实现')
     }),
     activeChartById: activeChartById || (() => {
       throw new Error('activeChartById方法未实现')

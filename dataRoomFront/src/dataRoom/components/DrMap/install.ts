@@ -1,5 +1,8 @@
+import { getDefaultTheme } from '../../theme/registry'
+import { withOpacity } from '../../theme/color'
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
+import type { PageType } from '@/dataRoom/constants/PageType.ts'
 import type { ChartConfig } from '@/dataRoom/components/type/ChartConfig.ts'
 import type { Behavior } from '@/dataRoom/components/type/Behavior.ts'
 import type { ChartDatasetField } from '@/dataRoom/components/type/ChartDatasetField.ts'
@@ -143,7 +146,8 @@ export interface DrMapPropsInterface {
 
 export type DrMapConfig = ChartConfig<DrMapPropsInterface>
 
-const getInstance = (): DrMapConfig => {
+const getInstance = (pageType: PageType): DrMapConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrMapPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrMap',
@@ -166,13 +170,13 @@ const getInstance = (): DrMapConfig => {
         roam: false,
         viewMode: '2D',
         pitch: 60,
-        skyColor: '#53A9DE',
+        skyColor: theme.background.secondary,
         showOnlineLabel: true,
         onlineFeatures: ['bg', 'point', 'road', 'building'],
       },
       regionStyle: {
-        areaGradient: ['#e0ecff', '#e0ecff'],
-        borderColor: '#7babea',
+        areaGradient: [withOpacity(theme.color.primary, 0.2), withOpacity(theme.color.primary, 0)],
+        borderColor: theme.text.secondary,
         borderWidth: 1,
         shadowColor: 'transparent',
         shadowBlur: 0,
@@ -181,16 +185,16 @@ const getInstance = (): DrMapConfig => {
       regionLabel: {
         show: true,
         fontSize: 10,
-        color: '#333333',
+        color: theme.text.primary,
       },
       emphasis: {
         disabled: false,
-        areaColor: '#4d90e8',
+        areaColor: theme.color.primary,
         borderWidth: 1,
         shadowColor: 'transparent',
         label: {
           fontSize: 12,
-          color: '#FFFFFF',
+          color: theme.text.primary,
         },
       },
       visualMap: {
@@ -204,35 +208,35 @@ const getInstance = (): DrMapConfig => {
           { gte: 10, lte: 49, label: '10-49' },
           { lte: 9, label: '<9' },
         ],
-        colors: ['#c3d7df', '#5cb3cc', '#8abcd1', '#66a9c9', '#2f90b9', '#1781b5'],
+        colors: [...theme.series.colors],
         textStyle: {
-          color: '#FFFFFF',
+          color: theme.text.primary,
         },
       },
       marker: {
         show: true,
         type: 'effectScatter',
         symbolSize: 4,
-        color: '#FFFFFF',
-        borderColor: 'rgba(225, 255, 255, 1)',
+        color: theme.text.primary,
+        borderColor: theme.border.primary,
         borderWidth: 4,
         ripple: {
           show: true,
           scale: 6,
-          color: '#FFFFFF',
+          color: theme.text.primary,
           brushType: 'fill',
         },
         label: {
           show: false,
           position: 'bottom',
           fontSize: 11,
-          color: '#FFFFFF',
+          color: theme.text.primary,
           offset: [0, 2],
         },
       },
       flowLine: {
         show: false,
-        color: '#4fb6d2',
+        color: theme.color.success,
         width: 1,
         opacity: 0.1,
         curveness: 0.3,
@@ -247,17 +251,17 @@ const getInstance = (): DrMapConfig => {
       tooltip: {
         show: true,
         trigger: 'item',
-        backgroundColor: '#FFFFFF',
-        borderColor: '#FFFFFF',
+        backgroundColor: theme.background.secondary,
+        borderColor: theme.border.primary,
         textStyle: {
           fontSize: 12,
-          color: '#333333',
+          color: theme.text.primary,
         },
       },
       backControl: {
         text: '返回上级',
         fontSize: 20,
-        color: '#FFFFFF',
+        color: theme.text.primary,
       },
       onlineLayers: {
         satellite: {
@@ -282,9 +286,10 @@ const getInstance = (): DrMapConfig => {
     },
     {
       title: '地图',
-      w: 20,
-      h: 20,
+      w: 600,
+      h: 500,
     },
+    pageType,
   )
 }
 

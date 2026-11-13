@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts";
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts";
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts";
@@ -67,7 +69,8 @@ export type DrTextConfig = ChartConfig<DrTextPropsInterface>
  * 定义获取该组件实例的方法，返回本组件新实例对象
  * @constructor
  */
-const getInstance = (): DrTextConfig => {
+const getInstance = (pageType: PageType): DrTextConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrTextPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrText',
@@ -77,19 +80,19 @@ const getInstance = (): DrTextConfig => {
         fontSize: 14,
         fontWeight: 'normal',
         fontFamily: 'Microsoft YaHei',
-        color: '#333333',
+        color: '#C9CDD4',
       },
       align: 'left',
       verticalAlign: 'top',
       letterSpacing: 0,
       background: {
         enabled: false,
-        color: '#007aff',
+        color: theme.color.primary,
         borderRadius: 0,
         border: {
           width: 1,
           style: 'solid',
-          color: '#eeeeee',
+          color: theme.border.secondary,
         },
       },
       ellipsis: false,
@@ -100,7 +103,8 @@ const getInstance = (): DrTextConfig => {
     },
     {
       title: '文本'
-    }
+    },
+    pageType
   )
 }
 /**

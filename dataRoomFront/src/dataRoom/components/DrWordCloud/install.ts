@@ -1,5 +1,6 @@
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
@@ -86,7 +87,7 @@ export type DrWordCloudConfig = ChartConfig<DrWordCloudPropsInterface>
 /**
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
-const getInstance = (): DrWordCloudConfig => {
+const getInstance = (pageType: PageType): DrWordCloudConfig => {
   return createChartConfig<DrWordCloudPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrWordCloud',
@@ -135,7 +136,8 @@ const getInstance = (): DrWordCloudConfig => {
       title: '词云',
       w: 400,
       h: 300
-    }
+    },
+    pageType
   )
 }
 
@@ -184,6 +186,15 @@ const datasetFields: ChartDatasetField[] = [
 const mockDataset: ChartMockDataset = {
   dataset: [
     {word: '数据治理', value: 120},
+    {word: '数据可视化', value: 110},
+    {word: '实时分析', value: 100},
+    {word: '智慧城市', value: 90},
+    {word: '业务监控', value: 80},
+    {word: '数据集成', value: 70},
+    {word: '指标管理', value: 60},
+    {word: '智能决策', value: 50},
+    {word: '趋势预测', value: 40},
+    {word: '数字运营', value: 30},
   ],
   fields: [
     {

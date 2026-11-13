@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from '@/dataRoom/components/type/ChartConfig.ts'
 import type {Behavior} from '@/dataRoom/components/type/Behavior.ts'
 import type {ChartDatasetField} from '@/dataRoom/components/type/ChartDatasetField.ts'
@@ -78,7 +80,8 @@ export interface DrPeriodCompareCardPropsInterface {
 
 export type DrPeriodCompareCardConfig = ChartConfig<DrPeriodCompareCardPropsInterface>
 
-const getInstance = (): DrPeriodCompareCardConfig => {
+const getInstance = (pageType: PageType): DrPeriodCompareCardConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrPeriodCompareCardPropsInterface>(
     'DrPeriodCompareCard',
     {
@@ -99,7 +102,7 @@ const getInstance = (): DrPeriodCompareCardConfig => {
         show: true,
         text: '周期对比',
         fontSize: 14,
-        color: '#909399',
+        color: theme.text.primary,
         fontWeight: 'normal',
       },
       current: {
@@ -109,7 +112,7 @@ const getInstance = (): DrPeriodCompareCardConfig => {
         prefix: '',
         suffix: '',
         fontSize: 34,
-        color: '#303133',
+        color: theme.text.primary,
         fontWeight: 'bold',
       },
       comparison: {
@@ -125,9 +128,9 @@ const getInstance = (): DrPeriodCompareCardConfig => {
         show: true,
         type: 'arrow',
         positiveDirection: 'increaseGood',
-        positiveColor: '#67c23a',
-        negativeColor: '#f56c6c',
-        neutralColor: '#909399',
+        positiveColor: theme.color.success,
+        negativeColor: theme.color.danger,
+        neutralColor: theme.text.secondary,
         iconSize: 14,
       },
       layout: {
@@ -138,7 +141,7 @@ const getInstance = (): DrPeriodCompareCardConfig => {
       },
       textStyle: {
         labelFontSize: 12,
-        labelColor: '#909399',
+        labelColor: theme.text.secondary,
         compareFontSize: 14,
         compareFontWeight: 'normal',
       },
@@ -156,6 +159,7 @@ const getInstance = (): DrPeriodCompareCardConfig => {
       y: 0,
       z: 0,
     },
+    pageType,
   )
 }
 

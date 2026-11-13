@@ -7,6 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import { gradientStops, withOpacity } from '../../theme/color'
 import {mockDataset, type DrLineChartConfig} from './install.ts'
 import {ref, watch, onMounted, onBeforeUnmount, nextTick} from "vue"
 import * as echarts from 'echarts'
@@ -248,23 +249,20 @@ const buildSeriesItem = (name: string, data: (number | null)[], index: number): 
   if (props.series.areaStyle.show) {
     if (props.series.areaStyle.gradient) {
       areaStyle = {
-        opacity: props.series.areaStyle.opacity,
+        opacity: props.series.areaStyle.endOpacity === undefined ? props.series.areaStyle.opacity : 1,
         color: {
           type: 'linear',
           x: 0,
           y: 0,
           x2: 0,
           y2: 1,
-          colorStops: [
-            {offset: 0, color: adjustColorOpacity(baseColor, props.series.areaStyle.opacity)},
-            {offset: 1, color: adjustColorOpacity(baseColor, 0.05)}
-          ]
+          colorStops: gradientStops(baseColor, props.series.areaStyle.opacity, props.series.areaStyle.endOpacity ?? 0.05)
         }
       }
     } else {
       areaStyle = {
         opacity: props.series.areaStyle.opacity,
-        color: adjustColorOpacity(baseColor, props.series.areaStyle.opacity)
+        color: props.series.areaStyle.endOpacity === undefined ? adjustColorOpacity(baseColor, props.series.areaStyle.opacity) : baseColor
       }
     }
   }
@@ -286,7 +284,7 @@ const buildSeriesItem = (name: string, data: (number | null)[], index: number): 
       color: baseColor
     },
     itemStyle: {
-      color: baseColor,
+      color: props.series.symbol.fillOpacity === undefined ? baseColor : withOpacity(baseColor, props.series.symbol.fillOpacity),
       borderWidth: props.series.symbol.borderWidth,
       borderColor: props.series.symbol.borderColor || baseColor
     },

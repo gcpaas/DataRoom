@@ -177,7 +177,7 @@ const buildOption = () => {
       alignTo: 'labelLine',
       hideOverlap: true
     } : undefined,
-    color: props.series.colors
+    color: props.pie.roseType && props.series.roseColors ? props.series.roseColors : props.series.colors
   }
 
   // 构建 graphic (中心内容，仅环形图有效)

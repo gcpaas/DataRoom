@@ -6,6 +6,13 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import DrFieldRow from '@/dataRoom/designer/components/DrFieldRow.vue'
+import DrInputField from '@/dataRoom/designer/components/DrInputField.vue'
+import DrSelectField from '@/dataRoom/designer/components/DrSelectField.vue'
+import DrNumberField from '@/dataRoom/designer/components/DrNumberField.vue'
+import DrColorField from '@/dataRoom/designer/components/DrColorField.vue'
+import ConfigCollapse from '@/dataRoom/designer/components/ConfigCollapse.vue'
+import ConfigCollapseItem from '@/dataRoom/designer/components/ConfigCollapseItem.vue'
 import type {DrPeriodCompareCardConfig} from '../install.ts'
 import {computed} from 'vue'
 
@@ -89,187 +96,152 @@ const easingOptions = [
 
 <template>
   <div class="dr-config-panel dr-period-compare-card-config-panel">
-    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="60px" size="small" label-position="left">
-      <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="全局配置" name="global">
-          <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
-              <span>内边距</span>
-            </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">上</span>
-                  <el-input-number v-model="chartConfig.props.global.padding[0]" class="dr-config-panel__control" :min="0" :max="80" controls-position="right" />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">右</span>
-                  <el-input-number v-model="chartConfig.props.global.padding[1]" class="dr-config-panel__control" :min="0" :max="80" controls-position="right" />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">下</span>
-                  <el-input-number v-model="chartConfig.props.global.padding[2]" class="dr-config-panel__control" :min="0" :max="80" controls-position="right" />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">左</span>
-                  <el-input-number v-model="chartConfig.props.global.padding[3]" class="dr-config-panel__control" :min="0" :max="80" controls-position="right" />
-                </div>
-              </el-form-item>
-            </el-form>
-          </div>
+    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="72px" label-position="left">
+      <ConfigCollapse class="dr-config-panel__section">
+        <ConfigCollapseItem title="全局配置" name="global">
+          <DrFieldRow label="垂直边距" paired variant="equal">
+            <template #first><DrNumberField v-model="chartConfig.props.global.padding[0]" class="dr-config-panel__control" :min="0" :max="80" controls-position="right" label="上" /></template>
+            <template #second><DrNumberField v-model="chartConfig.props.global.padding[2]" class="dr-config-panel__control" :min="0" :max="80" controls-position="right" label="下" /></template>
+          </DrFieldRow>
+          <DrFieldRow label="水平边距" paired variant="equal">
+            <template #first><DrNumberField v-model="chartConfig.props.global.padding[3]" class="dr-config-panel__control" :min="0" :max="80" controls-position="right" label="左" /></template>
+            <template #second><DrNumberField v-model="chartConfig.props.global.padding[1]" class="dr-config-panel__control" :min="0" :max="80" controls-position="right" label="右" /></template>
+          </DrFieldRow>
 
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
+            <div class="dr-config-panel__group-title">
               <span>容器</span>
             </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">背景色</span>
-                  <el-color-picker v-model="chartConfig.props.global.backgroundColor" show-alpha />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">背景色</span>
+                  <DrColorField v-model="chartConfig.props.global.backgroundColor" show-alpha />
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <DrFieldRow label="边框" paired variant="number-color">
+                <template #first>
+                  <DrNumberField v-model="chartConfig.props.global.borderWidth" class="dr-config-panel__control" :min="0" :max="20" controls-position="right" aria-label="边框宽度"><template #suffix>px</template></DrNumberField>
+                </template>
+                <template #second>
+                  <DrColorField v-model="chartConfig.props.global.borderColor" show-alpha aria-label="边框颜色" />
+                </template>
+              </DrFieldRow>
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">边框色</span>
-                  <el-color-picker v-model="chartConfig.props.global.borderColor" show-alpha />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">边框宽</span>
-                  <el-input-number v-model="chartConfig.props.global.borderWidth" class="dr-config-panel__control" :min="0" :max="20" controls-position="right" />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">圆角</span>
-                  <el-input-number v-model="chartConfig.props.global.borderRadius" class="dr-config-panel__control" :min="0" :max="80" controls-position="right" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">圆角</span>
+                  <DrNumberField v-model="chartConfig.props.global.borderRadius" class="dr-config-panel__control" :min="0" :max="80" controls-position="right" />
                 </div>
               </el-form-item>
             </el-form>
           </div>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="数据模式" name="dataMode">
+        <ConfigCollapseItem title="数据模式" name="dataMode">
           <el-form-item label="模式">
-            <el-select v-model="chartConfig.props.dataMode.mode">
+            <DrSelectField v-model="chartConfig.props.dataMode.mode">
               <el-option v-for="item in dataModeOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            </DrSelectField>
           </el-form-item>
           <el-form-item label="滞后期">
-            <el-input-number v-model="chartConfig.props.dataMode.lag" class="dr-config-panel__control" :min="1" :max="365" controls-position="right" />
+            <DrNumberField v-model="chartConfig.props.dataMode.lag" class="dr-config-panel__control" :min="1" :max="365" controls-position="right" />
           </el-form-item>
           <el-form-item label="排序">
-            <el-select v-model="chartConfig.props.dataMode.sortByTime">
+            <DrSelectField v-model="chartConfig.props.dataMode.sortByTime">
               <el-option v-for="item in sortByTimeOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            </DrSelectField>
           </el-form-item>
           <el-form-item label="零值">
-            <el-select v-model="chartConfig.props.dataMode.zeroPolicy">
+            <DrSelectField v-model="chartConfig.props.dataMode.zeroPolicy">
               <el-option v-for="item in zeroPolicyOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            </DrSelectField>
           </el-form-item>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="标题" name="title">
+        <ConfigCollapseItem title="标题" name="title">
           <el-form-item label="显示">
             <el-switch v-model="chartConfig.props.title.show" />
           </el-form-item>
           <el-form-item label="文本">
-            <el-input v-model="chartConfig.props.title.text" />
+            <DrInputField v-model="chartConfig.props.title.text" />
           </el-form-item>
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
+            <div class="dr-config-panel__group-title">
               <span>文本样式</span>
             </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <DrFieldRow label="字体" paired variant="number-color">
+                <template #first>
+                  <DrNumberField v-model="chartConfig.props.title.fontSize" class="dr-config-panel__control" :min="10" :max="48" controls-position="right" aria-label="标题字号"><template #suffix>px</template></DrNumberField>
+                </template>
+                <template #second>
+                  <DrColorField v-model="chartConfig.props.title.color" show-alpha aria-label="标题颜色" />
+                </template>
+              </DrFieldRow>
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">字号</span>
-                  <el-input-number v-model="chartConfig.props.title.fontSize" class="dr-config-panel__control" :min="10" :max="48" controls-position="right" />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-color-picker v-model="chartConfig.props.title.color" show-alpha />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">字重</span>
-                  <el-select v-model="chartConfig.props.title.fontWeight" class="dr-config-panel__control">
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">字重</span>
+                  <DrSelectField v-model="chartConfig.props.title.fontWeight" class="dr-config-panel__control">
                     <el-option v-for="item in fontWeightOptions" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
+                  </DrSelectField>
                 </div>
               </el-form-item>
             </el-form>
           </div>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="当前值" name="current">
+        <ConfigCollapseItem title="当前值" name="current">
           <el-form-item label="标签">
-            <el-input v-model="chartConfig.props.current.label" />
+            <DrInputField v-model="chartConfig.props.current.label" />
           </el-form-item>
           <el-form-item label="默认值">
-            <el-input-number v-model="chartConfig.props.current.defaultValue" class="dr-config-panel__control" controls-position="right" />
+            <DrNumberField v-model="chartConfig.props.current.defaultValue" class="dr-config-panel__control" controls-position="right" />
           </el-form-item>
           <el-form-item label="格式">
-            <el-select v-model="chartConfig.props.current.format">
+            <DrSelectField v-model="chartConfig.props.current.format">
               <el-option v-for="item in valueFormatOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            </DrSelectField>
           </el-form-item>
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
+            <div class="dr-config-panel__group-title">
               <span>数值文本</span>
             </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">前缀</span>
-                  <el-input v-model="chartConfig.props.current.prefix" class="dr-config-panel__control" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">前缀</span>
+                  <DrInputField v-model="chartConfig.props.current.prefix" class="dr-config-panel__control" />
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">后缀</span>
-                  <el-input v-model="chartConfig.props.current.suffix" class="dr-config-panel__control" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">后缀</span>
+                  <DrInputField v-model="chartConfig.props.current.suffix" class="dr-config-panel__control" />
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <DrFieldRow label="字体" paired variant="number-color">
+                <template #first>
+                  <DrNumberField v-model="chartConfig.props.current.fontSize" class="dr-config-panel__control" :min="12" :max="120" controls-position="right" aria-label="当前值字号"><template #suffix>px</template></DrNumberField>
+                </template>
+                <template #second>
+                  <DrColorField v-model="chartConfig.props.current.color" show-alpha aria-label="当前值颜色" />
+                </template>
+              </DrFieldRow>
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">字号</span>
-                  <el-input-number v-model="chartConfig.props.current.fontSize" class="dr-config-panel__control" :min="12" :max="120" controls-position="right" />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">颜色</span>
-                  <el-color-picker v-model="chartConfig.props.current.color" show-alpha />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">字重</span>
-                  <el-select v-model="chartConfig.props.current.fontWeight" class="dr-config-panel__control">
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">字重</span>
+                  <DrSelectField v-model="chartConfig.props.current.fontWeight" class="dr-config-panel__control">
                     <el-option v-for="item in fontWeightOptions" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
+                  </DrSelectField>
                 </div>
               </el-form-item>
             </el-form>
           </div>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="对比信息" name="comparison">
+        <ConfigCollapseItem title="对比信息" name="comparison">
           <el-form-item label="标签">
-            <el-input v-model="chartConfig.props.comparison.label" />
+            <DrInputField v-model="chartConfig.props.comparison.label" />
           </el-form-item>
           <el-form-item label="对比值">
             <el-switch v-model="chartConfig.props.comparison.showPreviousValue" />
@@ -281,137 +253,134 @@ const easingOptions = [
             <el-switch v-model="chartConfig.props.comparison.showChangeRate" />
           </el-form-item>
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
+            <div class="dr-config-panel__group-title">
               <span>变化显示</span>
             </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">率格式</span>
-                  <el-select v-model="chartConfig.props.comparison.rateFormat" class="dr-config-panel__control">
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">率格式</span>
+                  <DrSelectField v-model="chartConfig.props.comparison.rateFormat" class="dr-config-panel__control">
                     <el-option v-for="item in rateFormatOptions" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
+                  </DrSelectField>
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">值前缀</span>
-                  <el-input v-model="chartConfig.props.comparison.changeValuePrefix" class="dr-config-panel__control" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">值前缀</span>
+                  <DrInputField v-model="chartConfig.props.comparison.changeValuePrefix" class="dr-config-panel__control" />
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">值后缀</span>
-                  <el-input v-model="chartConfig.props.comparison.changeValueSuffix" class="dr-config-panel__control" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">值后缀</span>
+                  <DrInputField v-model="chartConfig.props.comparison.changeValueSuffix" class="dr-config-panel__control" />
                 </div>
               </el-form-item>
             </el-form>
           </div>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="涨跌指示" name="indicator">
+        <ConfigCollapseItem title="涨跌指示" name="indicator">
           <el-form-item label="显示">
             <el-switch v-model="chartConfig.props.indicator.show" />
           </el-form-item>
           <el-form-item label="样式">
-            <el-select v-model="chartConfig.props.indicator.type">
+            <DrSelectField v-model="chartConfig.props.indicator.type">
               <el-option v-for="item in indicatorTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            </DrSelectField>
           </el-form-item>
           <el-form-item label="方向">
-            <el-select v-model="chartConfig.props.indicator.positiveDirection">
+            <DrSelectField v-model="chartConfig.props.indicator.positiveDirection">
               <el-option v-for="item in positiveDirectionOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            </DrSelectField>
           </el-form-item>
           <div class="dr-config-panel__sub-section">
-            <div class="dr-config-panel__sub-title">
+            <div class="dr-config-panel__group-title">
               <span>颜色与尺寸</span>
             </div>
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <DrFieldRow label="正向 / 负向" paired variant="equal">
+                <template #first>
+                  <DrColorField v-model="chartConfig.props.indicator.positiveColor" show-alpha aria-label="正向颜色" />
+                </template>
+                <template #second>
+                  <DrColorField v-model="chartConfig.props.indicator.negativeColor" show-alpha aria-label="负向颜色" />
+                </template>
+              </DrFieldRow>
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">正向色</span>
-                  <el-color-picker v-model="chartConfig.props.indicator.positiveColor" show-alpha />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">中性色</span>
+                  <DrColorField v-model="chartConfig.props.indicator.neutralColor" show-alpha />
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">负向色</span>
-                  <el-color-picker v-model="chartConfig.props.indicator.negativeColor" show-alpha />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">中性色</span>
-                  <el-color-picker v-model="chartConfig.props.indicator.neutralColor" show-alpha />
-                </div>
-              </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
-                <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">图标</span>
-                  <el-input-number v-model="chartConfig.props.indicator.iconSize" class="dr-config-panel__control" :min="8" :max="40" controls-position="right" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">图标</span>
+                  <DrNumberField v-model="chartConfig.props.indicator.iconSize" class="dr-config-panel__control" :min="8" :max="40" controls-position="right" />
                 </div>
               </el-form-item>
             </el-form>
           </div>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="布局" name="layout">
+        <ConfigCollapseItem title="布局" name="layout">
           <el-form-item label="模式">
-            <el-select v-model="chartConfig.props.layout.mode">
+            <DrSelectField v-model="chartConfig.props.layout.mode">
               <el-option v-for="item in layoutModeOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            </DrSelectField>
           </el-form-item>
           <el-form-item label="对齐">
-            <el-select v-model="chartConfig.props.layout.horizontalAlign">
+            <DrSelectField v-model="chartConfig.props.layout.horizontalAlign">
               <el-option v-for="item in alignOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            </DrSelectField>
           </el-form-item>
           <el-form-item label="间距">
-            <el-input-number v-model="chartConfig.props.layout.gap" class="dr-config-panel__control" :min="0" :max="48" controls-position="right" />
+            <DrNumberField v-model="chartConfig.props.layout.gap" class="dr-config-panel__control" :min="0" :max="48" controls-position="right" />
           </el-form-item>
           <el-form-item label="标签宽">
-            <el-input-number v-model="chartConfig.props.layout.labelWidth" class="dr-config-panel__control" :min="0" :max="160" controls-position="right" />
+            <DrNumberField v-model="chartConfig.props.layout.labelWidth" class="dr-config-panel__control" :min="0" :max="160" controls-position="right" />
           </el-form-item>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="对比文本" name="textStyle">
-          <el-form-item label="标签字号">
-            <el-input-number v-model="chartConfig.props.textStyle.labelFontSize" class="dr-config-panel__control" :min="10" :max="36" controls-position="right" />
-          </el-form-item>
-          <el-form-item label="标签颜色">
-            <el-color-picker v-model="chartConfig.props.textStyle.labelColor" show-alpha />
-          </el-form-item>
+        <ConfigCollapseItem title="对比文本" name="textStyle">
+          <DrFieldRow label="标签字体" paired variant="number-color">
+            <template #first>
+              <DrNumberField v-model="chartConfig.props.textStyle.labelFontSize" class="dr-config-panel__control" :min="10" :max="36" controls-position="right" aria-label="标签字号"><template #suffix>px</template></DrNumberField>
+            </template>
+            <template #second>
+              <DrColorField v-model="chartConfig.props.textStyle.labelColor" show-alpha aria-label="标签颜色" />
+            </template>
+          </DrFieldRow>
           <el-form-item label="数值字号">
-            <el-input-number v-model="chartConfig.props.textStyle.compareFontSize" class="dr-config-panel__control" :min="10" :max="48" controls-position="right" />
+            <DrNumberField v-model="chartConfig.props.textStyle.compareFontSize" class="dr-config-panel__control" :min="10" :max="48" controls-position="right" />
           </el-form-item>
           <el-form-item label="数值字重">
-            <el-select v-model="chartConfig.props.textStyle.compareFontWeight">
+            <DrSelectField v-model="chartConfig.props.textStyle.compareFontWeight">
               <el-option v-for="item in fontWeightOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            </DrSelectField>
           </el-form-item>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="动画" name="animation">
+        <ConfigCollapseItem title="动画" name="animation">
           <el-form-item label="启用">
             <el-switch v-model="chartConfig.props.animation.enabled" />
           </el-form-item>
           <el-form-item label="时长">
-            <el-input-number v-model="chartConfig.props.animation.duration" class="dr-config-panel__control" :min="0" :max="5000" controls-position="right" />
+            <DrNumberField v-model="chartConfig.props.animation.duration" class="dr-config-panel__control" :min="0" :max="5000" controls-position="right" />
           </el-form-item>
           <el-form-item label="缓动">
-            <el-select v-model="chartConfig.props.animation.easing">
+            <DrSelectField v-model="chartConfig.props.animation.easing">
               <el-option v-for="item in easingOptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            </DrSelectField>
           </el-form-item>
-        </el-collapse-item>
-      </el-collapse>
+        </ConfigCollapseItem>
+      </ConfigCollapse>
     </el-form>
   </div>
 </template>
 
 <style scoped lang="scss">
-@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-period-compare-card-config-panel {
   padding: 0;

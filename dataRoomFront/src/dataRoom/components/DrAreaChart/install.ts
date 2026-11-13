@@ -1,5 +1,7 @@
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
+import type {PageType} from '@/dataRoom/constants/PageType.ts'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts"
 import type {Behavior} from "@/dataRoom/components/type/Behavior.ts"
 import type {ChartDatasetField} from "@/dataRoom/components/type/ChartDatasetField.ts"
@@ -139,6 +141,8 @@ export interface DrAreaChartPropsInterface {
     }
     /** 数据点符号 */
     symbol: {
+      /** 填充不透明度；旧配置缺省时保持实心 */
+      fillOpacity?: number
       show: boolean
       type: 'circle' | 'rect' | 'triangle' | 'diamond' | 'none'
       size: number
@@ -171,7 +175,8 @@ export type DrAreaChartConfig = ChartConfig<DrAreaChartPropsInterface>
 /**
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
-const getInstance = (): DrAreaChartConfig => {
+const getInstance = (pageType: PageType): DrAreaChartConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrAreaChartPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrAreaChart',
@@ -184,13 +189,13 @@ const getInstance = (): DrAreaChartConfig => {
         type: 'category',
         axisLine: {
           show: true,
-          color: '#cccccc',
+          color: theme.border.primary,
           width: 1
         },
         axisLabel: {
           show: true,
           fontSize: 12,
-          color: '#999999',
+          color: theme.text.secondary,
           fontWeight: 'normal',
           fontFamily: 'Microsoft YaHei',
           rotate: 0
@@ -198,11 +203,11 @@ const getInstance = (): DrAreaChartConfig => {
         axisTick: {
           show: true,
           length: 5,
-          color: '#cccccc'
+          color: theme.border.secondary
         },
         splitLine: {
           show: false,
-          color: '#eeeeee',
+          color: theme.border.secondary,
           width: 1,
           type: 'dashed'
         }
@@ -217,24 +222,24 @@ const getInstance = (): DrAreaChartConfig => {
         },
         axisLine: {
           show: false,
-          color: '#cccccc',
+          color: theme.border.primary,
           width: 1
         },
         axisLabel: {
           show: true,
           fontSize: 12,
-          color: '#999999',
+          color: theme.text.secondary,
           fontWeight: 'normal',
           fontFamily: 'Microsoft YaHei'
         },
         axisTick: {
           show: false,
           length: 5,
-          color: '#cccccc'
+          color: theme.border.secondary
         },
         splitLine: {
           show: true,
-          color: '#eeeeee',
+          color: theme.border.secondary,
           width: 1,
           type: 'dashed'
         }
@@ -244,7 +249,7 @@ const getInstance = (): DrAreaChartConfig => {
         position: 'top',
         textStyle: {
           fontSize: 12,
-          color: '#666666',
+          color: theme.text.secondary,
           fontWeight: 'normal'
         },
         itemGap: 16
@@ -252,11 +257,11 @@ const getInstance = (): DrAreaChartConfig => {
       tooltip: {
         show: true,
         trigger: 'axis',
-        backgroundColor: 'rgba(50, 50, 50, 0.7)',
-        borderColor: 'transparent',
+        backgroundColor: theme.background.secondary,
+        borderColor: theme.border.primary,
         textStyle: {
           fontSize: 12,
-          color: '#ffffff'
+          color: theme.text.primary
         }
       },
       series: {
@@ -264,16 +269,17 @@ const getInstance = (): DrAreaChartConfig => {
         lineType: 'line',
         lineWidth: 2,
         lineStyle: 'solid',
-        colors: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272'],
+        colors: [...theme.series.colors],
         areaStyle: {
-          opacity: 0.6,
+          opacity: 1,
           gradient: {
             enabled: true,
-            topOpacity: 0.6,
-            bottomOpacity: 0.05
+            topOpacity: theme.series.gradient.startOpacity,
+            bottomOpacity: theme.series.gradient.endOpacity
           }
         },
         symbol: {
+          fillOpacity: theme.series.point.fillOpacity,
           show: false,
           type: 'circle',
           size: 4,
@@ -283,7 +289,7 @@ const getInstance = (): DrAreaChartConfig => {
           show: false,
           position: 'top',
           fontSize: 12,
-          color: '#333333',
+          color: theme.text.primary,
           fontWeight: 'normal'
         },
         connectNulls: false
@@ -295,10 +301,11 @@ const getInstance = (): DrAreaChartConfig => {
       }
     },
     {
-      title: '区域图',
+      title: '面积图',
       w: 400,
       h: 300
-    }
+    },
+    pageType
   )
 }
 
@@ -308,7 +315,7 @@ const getInstance = (): DrAreaChartConfig => {
 const behaviors: Behavior[] = [
   {
     name: '数据点单击',
-    desc: '鼠标点击区域图数据点时触发',
+    desc: '鼠标点击面积图数据点时触发',
     method: 'click',
     paramsList: [
       {name: 'x', desc: '点击数据点的类目值', type: 'string'},

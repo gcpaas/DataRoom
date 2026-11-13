@@ -7,6 +7,11 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import DrInputField from '@/dataRoom/designer/components/DrInputField.vue'
+import DrSelectField from '@/dataRoom/designer/components/DrSelectField.vue'
+import DrNumberField from '@/dataRoom/designer/components/DrNumberField.vue'
+import ConfigCollapse from '@/dataRoom/designer/components/ConfigCollapse.vue'
+import ConfigCollapseItem from '@/dataRoom/designer/components/ConfigCollapseItem.vue'
 import type { DrImageConfig } from '../install.ts'
 import { computed } from 'vue'
 import { getResourceUrl } from '@/dataRoom/utils/index.ts'
@@ -27,33 +32,33 @@ const repeatModeOptions = [
 </script>
 <template>
   <div class="dr-config-panel dr-image-config-panel">
-    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="60px" label-position="left" size="small">
-      <el-collapse class="dr-config-panel__section">
-        <el-collapse-item title="图片配置" name="image">
+    <el-form class="dr-config-panel__form" :model="chartConfig" label-width="72px" label-position="left">
+      <ConfigCollapse class="dr-config-panel__section">
+        <ConfigCollapseItem title="图片配置" name="image">
           <div class="dr-config-panel__sub-section">
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">类型</span>
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">类型</span>
                   <el-radio-group v-model="chartConfig.props.imageType">
-                    <el-radio-button value="bitmap">位图</el-radio-button>
-                    <el-radio-button value="svg">矢量图</el-radio-button>
+                    <el-radio-button class="config-panel-text" value="bitmap">位图</el-radio-button>
+                    <el-radio-button class="config-panel-text" value="svg">矢量图</el-radio-button>
                   </el-radio-group>
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">地址</span>
-                  <el-input v-model="chartConfig.props.url" class="dr-config-panel__control" placeholder="请输入图片地址">
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">地址</span>
+                  <DrInputField v-model="chartConfig.props.url" class="dr-config-panel__control" placeholder="请输入图片地址">
                     <template #prefix>
                       <el-icon><Link /></el-icon>
                     </template>
-                  </el-input>
+                  </DrInputField>
                 </div>
               </el-form-item>
-              <el-form-item v-if="chartConfig.props.url" class="dr-config-panel__sub-form-item">
+              <el-form-item v-if="chartConfig.props.url" class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row dr-config-panel__sub-row--start">
-                  <span class="dr-config-panel__sub-label">预览</span>
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">预览</span>
                   <div class="dr-image-config-panel__preview">
                     <el-image :src="getResourceUrl(chartConfig.props.url)" fit="contain" class="dr-image-config-panel__preview-image">
                       <template #error>
@@ -67,60 +72,57 @@ const repeatModeOptions = [
           </div>
 
           <div class="dr-config-panel__sub-section">
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">图片重复</span>
-                  <el-select v-model="chartConfig.props.repeatMode" class="dr-config-panel__control">
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">图片重复</span>
+                  <DrSelectField v-model="chartConfig.props.repeatMode" class="dr-config-panel__control">
                     <el-option v-for="item in repeatModeOptions" :key="item.value" :label="item.label" :value="item.value" />
-                  </el-select>
+                  </DrSelectField>
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">圆角</span>
-                  <el-input-number v-model="chartConfig.props.borderRadius" class="dr-config-panel__control" :min="0" :max="500" :step="1" controls-position="right" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">圆角</span>
+                  <DrNumberField v-model="chartConfig.props.borderRadius" class="dr-config-panel__control" :min="0" :max="500" :step="1" controls-position="right" />
                 </div>
               </el-form-item>
             </el-form>
           </div>
-        </el-collapse-item>
+        </ConfigCollapseItem>
 
-        <el-collapse-item title="超链接" name="hyperlink">
+        <ConfigCollapseItem title="超链接" name="hyperlink">
           <div class="dr-config-panel__sub-section">
-            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" size="small" label-position="left">
-              <el-form-item class="dr-config-panel__sub-form-item">
+            <el-form class="dr-config-panel__sub-form" :model="chartConfig" label-width="72px" label-position="left">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">地址</span>
-                  <el-input v-model="chartConfig.props.hyperlink.url" class="dr-config-panel__control" placeholder="请输入链接地址" />
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">地址</span>
+                  <DrInputField v-model="chartConfig.props.hyperlink.url" class="dr-config-panel__control" placeholder="请输入链接地址" />
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">新窗口</span>
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">新窗口</span>
                   <el-switch v-model="chartConfig.props.hyperlink.openNewWindow" />
                 </div>
               </el-form-item>
-              <el-form-item class="dr-config-panel__sub-form-item">
+              <el-form-item class="dr-config-panel__sub-form-item" label-width="0">
                 <div class="dr-config-panel__sub-row">
-                  <span class="dr-config-panel__sub-label">手势</span>
+                  <span class="dr-config-panel__sub-label dr-config-panel__field-label">手势</span>
                   <el-switch v-model="chartConfig.props.hyperlink.cursorPointer" />
                 </div>
               </el-form-item>
             </el-form>
           </div>
-        </el-collapse-item>
-      </el-collapse>
+        </ConfigCollapseItem>
+      </ConfigCollapse>
     </el-form>
   </div>
 </template>
 
 <style scoped lang="scss">
-@use '@/dataRoom/assets/styles/chartConfigPanel.scss';
 
 .dr-image-config-panel {
-  --el-collapse-border-color: var(--el-bg-color);
-
   padding: 0;
 }
 

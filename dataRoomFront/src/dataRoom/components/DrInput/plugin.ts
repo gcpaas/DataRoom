@@ -1,4 +1,4 @@
-import thumbnail from './images/input.png'
+import thumbnail from './thumbnail.png'
 import {ChartPlugin} from "@/dataRoom/components/type/ChartPlugin.ts"
 
 export class DrInputPlugin extends ChartPlugin {

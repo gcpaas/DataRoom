@@ -20,6 +20,11 @@
     "description": "图片、素材"
   },
   {
+    "componentName": "DrPictorialBarChart",
+    "displayName": "象形图",
+    "description": "象形图、山峰、图片、pictorialBar"
+  },
+  {
     "componentName": "DrBarChart",
     "displayName": "柱状图",
     "description": "柱状图、bar、柱形图、条形图"
@@ -31,8 +36,13 @@
   },
   {
     "componentName": "DrAreaChart",
-    "displayName": "区域图",
-    "description": "区域图、面积图、area、堆叠面积图"
+    "displayName": "面积图",
+    "description": "面积图、area、堆叠面积图"
+  },
+  {
+    "componentName": "DrFunnelChart",
+    "displayName": "漏斗图",
+    "description": "漏斗图、funnel、阶段、转化、流程"
   },
   {
     "componentName": "DrPieChart",
@@ -158,5 +168,40 @@
     "componentName": "DrEcharts",
     "displayName": "自定义Echarts图表",
     "description": "自定义图表、echarts、option、任意图表"
+  },
+  {
+    "componentName": "DrMetricCardHorizontal",
+    "displayName": "横向指标卡",
+    "description": "指标卡、KPI、单值、横向排列、紧凑布局。预设检索名为 DrMetricCardHorizontal，实际 ChartConfig.type 必须为 DrMetricCard，不可使用预设 id。"
+  },
+  {
+    "componentName": "DrLineChartSmooth",
+    "displayName": "平滑折线图",
+    "description": "平滑折线图、ECharts。预设检索名为 DrLineChartSmooth，实际 ChartConfig.type 必须为 DrLineChart，不可使用预设 id。"
+  },
+  {
+    "componentName": "DrBarChartGradient",
+    "displayName": "渐变柱状图",
+    "description": "渐变柱状图、ECharts。预设检索名为 DrBarChartGradient，实际 ChartConfig.type 必须为 DrBarChart，不可使用预设 id。"
+  },
+  {
+    "componentName": "DrBarChartRounded",
+    "displayName": "圆角柱状图",
+    "description": "圆角柱状图、ECharts。预设检索名为 DrBarChartRounded，实际 ChartConfig.type 必须为 DrBarChart，不可使用预设 id。"
+  },
+  {
+    "componentName": "DrBarChartStacked",
+    "displayName": "堆叠柱状图",
+    "description": "堆叠柱状图、ECharts。预设检索名为 DrBarChartStacked，实际 ChartConfig.type 必须为 DrBarChart，不可使用预设 id。"
+  },
+  {
+    "componentName": "DrPieChartRing",
+    "displayName": "环形图",
+    "description": "环形图、ECharts。预设检索名为 DrPieChartRing，实际 ChartConfig.type 必须为 DrPieChart，不可使用预设 id。"
+  },
+  {
+    "componentName": "DrPieChartRoundedRing",
+    "displayName": "圆角环形图",
+    "description": "圆角环形图、ECharts。预设检索名为 DrPieChartRoundedRing，实际 ChartConfig.type 必须为 DrPieChart，不可使用预设 id。"
   }
 ]
