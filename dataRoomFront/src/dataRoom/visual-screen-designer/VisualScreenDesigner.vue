@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DesignerPageName from '@/dataRoom/designer/components/DesignerPageName.vue'
 import ThemeSelector from '@/dataRoom/designer/components/ThemeSelector.vue'
 import { applyThemeToCharts } from '@/dataRoom/theme/apply-theme'
 import { getTheme } from '@/dataRoom/theme/registry'
@@ -1051,27 +1052,10 @@ const onRedo = () => {
   applyHistoryAction('redo')
 }
 
-// 重命名对话框
-const renameDialogVisible = ref(false)
-const renameInput = ref('')
-const onTitleClick = () => {
-  renameInput.value = pageStageEntity.value?.name || ''
-  renameDialogVisible.value = true
-}
-const onRenameConfirm = () => {
-  const name = renameInput.value.trim()
-  if (!name) {
-    ElMessage.warning('名称不能为空')
-    return
+const onNameUpdated = (name: string) => {
+  if (pageStageEntity.value) {
+    pageStageEntity.value.name = name
   }
-  const code = route.params.pageCode as string
-  pageApi.updateName(code, name).then(() => {
-    if (pageStageEntity.value) {
-      pageStageEntity.value.name = name
-    }
-    ElMessage.success('修改成功')
-    renameDialogVisible.value = false
-  })
 }
 
 /**
@@ -2108,7 +2092,11 @@ onBeforeUnmount(() => {
     <div class="header" ref="titleRef">
       <div class="header-left">
         <img src="@/dataRoom/assets/logo-small.png" alt="logo" class="logo" @click="onBackByLogo" />
-        <div class="title" @click="onTitleClick">{{ pageStageEntity?.name }}</div>
+        <DesignerPageName
+          :name="pageStageEntity?.name || ''"
+          :page-code="pageStageEntity?.pageCode || ''"
+          @updated="onNameUpdated"
+        />
       </div>
       <div class="header-actions header-actions--primary">
         <div class="header-action">
@@ -2452,13 +2440,6 @@ onBeforeUnmount(() => {
 
   <!-- 全局变量（组件自带弹框，用 v-if 控制挂载） -->
   <GlobalVariable v-if="globalVariableDialogVisible" :global-variable="globalVariable" @close="globalVariableDialogVisible = false" />
-  <el-dialog v-model="renameDialogVisible" title="修改页面名称" width="400px" :close-on-click-modal="false">
-    <el-input v-model="renameInput" placeholder="请输入页面名称" maxlength="50" @keyup.enter="onRenameConfirm"></el-input>
-    <template #footer>
-      <el-button @click="renameDialogVisible = false">取消</el-button>
-      <el-button type="primary" @click="onRenameConfirm">确定</el-button>
-    </template>
-  </el-dialog>
   <el-dialog v-model="keyboardShortcutDialogVisible" title="快捷键" width="680px">
     <el-table :data="visualScreenKeyboardShortcuts" border>
       <el-table-column prop="feature" label="功能" min-width="180" />
@@ -2514,20 +2495,6 @@ onBeforeUnmount(() => {
         object-fit: contain;
         cursor: pointer;
         width: 44px;
-      }
-
-      & .title {
-        margin-left: 16px;
-        font-size: 14px;
-        font-weight: 500;
-        white-space: nowrap;
-        color: var(--el-text-color-primary);
-        cursor: pointer;
-        transition: color 0.2s;
-
-        &:hover {
-          color: var(--el-color-primary);
-        }
       }
     }
 

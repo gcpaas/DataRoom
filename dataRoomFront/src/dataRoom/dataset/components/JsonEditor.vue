@@ -326,11 +326,11 @@ defineExpose({
         </div>
       </el-form-item>
     </el-form>
+    <template #fields-actions>
+      <el-button type="primary" size="small" @click="parseFields">字段解析</el-button>
+    </template>
     <template #fields>
       <div class="dataset-form-section">
-        <div class="dataset-form-toolbar">
-          <el-button type="primary" size="small" @click="parseFields">字段解析</el-button>
-        </div>
         <el-table class="dataset-form-table" :data="formData.outputList" border>
           <el-table-column prop="name" label="字段名" width="200" />
           <el-table-column label="类型" width="150">

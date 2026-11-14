@@ -74,27 +74,36 @@ defineExpose({
         </button>
         <div v-show="previewExpanded" class="dataset-editor-panel__body dataset-editor-preview__body">
           <div class="dataset-editor-preview__tabs">
-            <div class="dataset-editor-preview__tab-nav" role="tablist" aria-label="数据预览">
-              <button
-                class="dataset-editor-preview__tab"
-                :class="{ 'dataset-editor-preview__tab--active': activePreviewTab === 'data' }"
-                type="button"
-                role="tab"
-                :aria-selected="activePreviewTab === 'data'"
-                @click="activePreviewTab = 'data'"
+            <div class="dataset-editor-preview__tab-header">
+              <div class="dataset-editor-preview__tab-nav" role="tablist" aria-label="数据预览">
+                <button
+                  class="dataset-editor-preview__tab"
+                  :class="{ 'dataset-editor-preview__tab--active': activePreviewTab === 'data' }"
+                  type="button"
+                  role="tab"
+                  :aria-selected="activePreviewTab === 'data'"
+                  @click="activePreviewTab = 'data'"
+                >
+                  数据
+                </button>
+                <button
+                  class="dataset-editor-preview__tab"
+                  :class="{ 'dataset-editor-preview__tab--active': activePreviewTab === 'fields' }"
+                  type="button"
+                  role="tab"
+                  :aria-selected="activePreviewTab === 'fields'"
+                  @click="activePreviewTab = 'fields'"
+                >
+                  字段
+                </button>
+              </div>
+              <div
+                v-if="slots['fields-actions']"
+                v-show="activePreviewTab === 'fields'"
+                class="dataset-editor-preview__tab-actions"
               >
-                数据
-              </button>
-              <button
-                class="dataset-editor-preview__tab"
-                :class="{ 'dataset-editor-preview__tab--active': activePreviewTab === 'fields' }"
-                type="button"
-                role="tab"
-                :aria-selected="activePreviewTab === 'fields'"
-                @click="activePreviewTab = 'fields'"
-              >
-                字段
-              </button>
+                <slot name="fields-actions" />
+              </div>
             </div>
             <div v-show="activePreviewTab === 'data'" class="dataset-editor-preview__tab-content" role="tabpanel">
               <DatasetPreviewTable :data="previewData" />
@@ -220,12 +229,27 @@ defineExpose({
   min-height: 0;
 }
 
+.dataset-editor-preview__tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 16px;
+  min-height: 40px;
+  margin-bottom: 12px;
+}
+
+.dataset-editor-preview__tab-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .dataset-editor-preview__tab-nav {
   display: flex;
   flex-shrink: 0;
   gap: 4px;
   min-height: 40px;
-  margin-bottom: 12px;
 }
 
 .dataset-editor-preview__tab {
