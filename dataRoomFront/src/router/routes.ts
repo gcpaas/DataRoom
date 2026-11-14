@@ -4,7 +4,7 @@ export const appRoutes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
-    redirect: '/dataRoom/agent',
+    redirect: '/dataRoom/page/index',
   },
   {
     path: '/dataRoom/agent',

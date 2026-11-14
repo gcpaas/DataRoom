@@ -1,3 +1,5 @@
+import { withOpacity } from '../../theme/color'
+import { DEFAULT_NEUTRAL_COLOR, TOOLTIP_TEXT_COLOR, TOOLTIP_BACKGROUND_OPACITY } from '../../theme/defaults'
 import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
@@ -170,7 +172,7 @@ const getInstance = (pageType: PageType): DrPieChartConfig => {
         center: ['50%', '50%'],
         startAngle: 90,
         roseType: false,
-        borderColor: theme.border.primary,
+        borderColor: DEFAULT_NEUTRAL_COLOR,
         borderWidth: 1,
         borderRadius: 0
       },
@@ -180,14 +182,14 @@ const getInstance = (pageType: PageType): DrPieChartConfig => {
         title: {
           text: '总计',
           fontSize: 14,
-          color: theme.text.primary,
+          color: DEFAULT_NEUTRAL_COLOR,
           fontWeight: 'normal',
           offsetY: -10
         },
         value: {
           field: '',
           fontSize: 24,
-          color: theme.text.primary,
+          color: DEFAULT_NEUTRAL_COLOR,
           fontWeight: 'bold',
           offsetY: 10,
           format: 'default',
@@ -205,14 +207,14 @@ const getInstance = (pageType: PageType): DrPieChartConfig => {
         position: 'outside',
         content: 'name+percent',
         fontSize: 12,
-        color: theme.text.primary,
+        color: DEFAULT_NEUTRAL_COLOR,
         fontWeight: 'normal',
         guideLine: {
           show: true,
           length: 15,
           length2: 20,
           lineWidth: 1,
-          color: theme.text.secondary
+          color: DEFAULT_NEUTRAL_COLOR
         }
       },
       legend: {
@@ -220,7 +222,7 @@ const getInstance = (pageType: PageType): DrPieChartConfig => {
         position: 'bottom',
         textStyle: {
           fontSize: 12,
-          color: theme.text.secondary,
+          color: DEFAULT_NEUTRAL_COLOR,
           fontWeight: 'normal'
         },
         itemGap: 16
@@ -228,11 +230,11 @@ const getInstance = (pageType: PageType): DrPieChartConfig => {
       tooltip: {
         show: true,
         trigger: 'item',
-        backgroundColor: theme.background.secondary,
-        borderColor: theme.border.primary,
+        backgroundColor: withOpacity(theme.color.primary, TOOLTIP_BACKGROUND_OPACITY),
+        borderColor: theme.color.primary,
         textStyle: {
           fontSize: 12,
-          color: theme.text.primary
+          color: TOOLTIP_TEXT_COLOR
         },
         showPercent: true
       },

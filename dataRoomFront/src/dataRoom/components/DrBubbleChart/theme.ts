@@ -1,21 +1,8 @@
 import type { DrBubbleChartConfig } from './install'
 import type { ThemeMapping } from '../../theme/types'
 
-/** 主题仅重置颜色与填充参数，不改动布局、数据或交互。 */
+/** 仅切换背景与数据配色，保留文字、结构线及交互状态。 */
 export const drBubbleChartThemeMapping = [
-  ['xAxis.axisLine.color', 'border.primary'],
-  ['xAxis.axisLabel.color', 'text.secondary'],
-  ['xAxis.axisTick.color', 'border.secondary'],
-  ['xAxis.splitLine.color', 'border.secondary'],
-  ['yAxis.axisLine.color', 'border.primary'],
-  ['yAxis.axisLabel.color', 'text.secondary'],
-  ['yAxis.axisTick.color', 'border.secondary'],
-  ['yAxis.splitLine.color', 'border.secondary'],
-  ['legend.textStyle.color', 'text.secondary'],
-  ['tooltip.backgroundColor', 'background.secondary'],
-  ['tooltip.borderColor', 'border.primary'],
-  ['tooltip.textStyle.color', 'text.primary'],
   ['series.colors', 'series.colors'],
-  ['series.borderColor', 'border.primary'],
-  ['series.label.color', 'text.primary']
+  ['tooltip.borderColor', 'color.primary'],
 ] as const satisfies ThemeMapping<DrBubbleChartConfig['props']>

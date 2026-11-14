@@ -1,4 +1,3 @@
-import { applyThemeToNewChart } from '../../theme/apply-theme'
 import type {ChartConfig} from "@/dataRoom/components/type/ChartConfig.ts";
 import {v4 as uuidv4} from 'uuid'
 import {PageType} from '@/dataRoom/constants/PageType.ts'
@@ -8,7 +7,7 @@ import {PageType} from '@/dataRoom/constants/PageType.ts'
  * @param props 组件个性化配置
  * @param overrides 需要覆盖的配置项
  * @param pageType 页面类型，仅支持普通页面和可视化大屏
- * @param pageSize 普通页面网格尺寸，默认 16×5
+ * @param pageSize 普通页面网格尺寸，默认 16×10
  * @returns 完整的 ChartConfig 对象
  */
 export function createChartConfig<T>(
@@ -16,7 +15,7 @@ export function createChartConfig<T>(
   props: T,
   overrides: Partial<Omit<ChartConfig<T>, 'type' | 'props'>> | undefined,
   pageType: PageType,
-  pageSize: {w: number; h: number} = {w: 16, h: 5}
+  pageSize: {w: number; h: number} = {w: 16, h: 10}
 ): ChartConfig<T> {
   if (pageType !== PageType.PAGE && pageType !== PageType.VISUAL_SCREEN) {
     throw new Error('不支持的页面类型，仅支持 PAGE 或 VISUAL_SCREEN')
@@ -50,6 +49,5 @@ export function createChartConfig<T>(
     config.w = pageSize.w
     config.h = pageSize.h
   }
-  applyThemeToNewChart(config, undefined, pageType)
   return config
 }

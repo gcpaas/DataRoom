@@ -1,3 +1,4 @@
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
@@ -104,8 +105,8 @@ const getInstance = (pageType: PageType): DrTabListConfig => {
       },
       tabStyle: {
         fontSize: 14,
-        color: theme.text.primary,
-        activeColor: theme.color.primary,
+        color: DEFAULT_NEUTRAL_COLOR,
+        activeColor: DEFAULT_NEUTRAL_COLOR,
         backgroundColor: 'transparent',
         activeBgColor: 'transparent',
         borderRadius: 0,
@@ -114,7 +115,7 @@ const getInstance = (pageType: PageType): DrTabListConfig => {
         height: 44,
         borderBottom: {
           show: false,
-          color: theme.text.primary,
+          color: DEFAULT_NEUTRAL_COLOR,
           width: 1
         }
       },

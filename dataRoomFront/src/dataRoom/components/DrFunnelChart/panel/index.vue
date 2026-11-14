@@ -35,6 +35,7 @@ const removeColor = (index: number) => {
         <ConfigCollapseItem title="标签" name="label">
           <el-form-item label="显示标签"><el-switch v-model="chartConfig.props.label.show" /></el-form-item>
           <template v-if="chartConfig.props.label.show">
+            <el-form-item label="文字颜色"><DrColorField v-model="chartConfig.props.label.color" show-alpha /></el-form-item>
             <el-form-item label="标签内容">
               <DrSelectField v-model="chartConfig.props.label.content" class="dr-config-panel__control">
                 <el-option label="名称" value="name" />
@@ -60,6 +61,11 @@ const removeColor = (index: number) => {
               <el-button plain @click="addColor">添加颜色</el-button>
             </div>
           </el-form-item>
+        </ConfigCollapseItem>
+        <ConfigCollapseItem v-if="chartConfig.props.tooltip?.textStyle" title="提示框配色" name="tooltipAppearance">
+          <el-form-item label="背景色"><DrColorField v-model="chartConfig.props.tooltip.backgroundColor" show-alpha /></el-form-item>
+          <el-form-item label="边框色"><DrColorField v-model="chartConfig.props.tooltip.borderColor" show-alpha /></el-form-item>
+          <el-form-item label="文字色"><DrColorField v-model="chartConfig.props.tooltip.textStyle.color" show-alpha /></el-form-item>
         </ConfigCollapseItem>
       </ConfigCollapse>
     </el-form>

@@ -1,17 +1,9 @@
 import type { DrPieChartConfig } from './install'
 import type { ThemeMapping } from '../../theme/types'
 
-/** 主题仅重置颜色与填充参数，不改动布局、数据或交互。 */
+/** 仅切换背景与数据配色，保留文字、结构线及交互状态。 */
 export const drPieChartThemeMapping = [
-  ['pie.borderColor', 'border.primary'],
-  ['centerContent.title.color', 'text.primary'],
-  ['centerContent.value.color', 'text.primary'],
-  ['label.color', 'text.primary'],
-  ['label.guideLine.color', 'border.secondary'],
-  ['legend.textStyle.color', 'text.secondary'],
-  ['tooltip.backgroundColor', 'background.secondary'],
-  ['tooltip.borderColor', 'border.primary'],
-  ['tooltip.textStyle.color', 'text.primary'],
+  ['series.colors', 'series.colors'],
   ['series.roseColors', 'series.colors'],
-  ['series.colors', 'series.colors']
+  ['tooltip.borderColor', 'color.primary'],
 ] as const satisfies ThemeMapping<DrPieChartConfig['props']>

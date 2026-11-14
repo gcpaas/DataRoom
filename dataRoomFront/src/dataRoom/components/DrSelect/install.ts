@@ -1,3 +1,4 @@
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
 import type {PageType} from '@/dataRoom/constants/PageType.ts'
@@ -103,8 +104,8 @@ const getInstance = (pageType: PageType): DrSelectConfig => {
       },
       style: {
         fontSize: 14,
-        color: '#FFFFFF',
-        placeholderColor: '#999999',
+        color: DEFAULT_NEUTRAL_COLOR,
+        placeholderColor: DEFAULT_NEUTRAL_COLOR,
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
         borderColor: '#444444',
         borderWidth: 1,
@@ -118,7 +119,7 @@ const getInstance = (pageType: PageType): DrSelectConfig => {
           {label: '选项三', value: '3'},
         ],
         optionFontSize: 14,
-        optionColor: '#FFFFFF',
+        optionColor: DEFAULT_NEUTRAL_COLOR,
       },
       dropdown: {
         maxHeight: 200,
@@ -126,7 +127,7 @@ const getInstance = (pageType: PageType): DrSelectConfig => {
         borderColor: '#444444',
         hoverBgColor: 'rgba(64, 158, 255, 0.2)',
         activeBgColor: 'rgba(64, 158, 255, 0.3)',
-        activeColor: '#409EFF',
+        activeColor: DEFAULT_NEUTRAL_COLOR,
       },
       globalVar: {
         globalVarName: '',

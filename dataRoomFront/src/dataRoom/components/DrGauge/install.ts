@@ -1,3 +1,4 @@
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
 import type {PageType} from '@/dataRoom/constants/PageType.ts'
@@ -202,19 +203,19 @@ const getInstance = (pageType: PageType): DrGaugeConfig => {
         show: true,
         splitNumber: 5,
         length: 6,
-        color: 'auto',
+        color: DEFAULT_NEUTRAL_COLOR,
         width: 1
       },
       splitLine: {
         show: true,
         length: 12,
-        color: 'auto',
+        color: DEFAULT_NEUTRAL_COLOR,
         width: 2
       },
       axisLabel: {
         show: true,
         fontSize: 12,
-        color: '#999999',
+        color: DEFAULT_NEUTRAL_COLOR,
         distance: 15,
         formatter: '{value}'
       },
@@ -241,7 +242,7 @@ const getInstance = (pageType: PageType): DrGaugeConfig => {
       detail: {
         show: true,
         fontSize: 28,
-        color: 'auto',
+        color: DEFAULT_NEUTRAL_COLOR,
         fontWeight: 'bold',
         format: 'value',
         offsetY: 45,
@@ -252,7 +253,7 @@ const getInstance = (pageType: PageType): DrGaugeConfig => {
         show: true,
         text: '',
         fontSize: 14,
-        color: '#999999',
+        color: DEFAULT_NEUTRAL_COLOR,
         fontWeight: 'normal',
         offsetY: 75
       },

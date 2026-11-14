@@ -7,6 +7,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
+import { tooltipPopperStyle } from '../../theme/defaults'
 import type { CSSProperties } from 'vue'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { tableColumnFields } from './column-fields'
@@ -168,6 +169,7 @@ defineExpose<ComponentExpose>({ ...expose })
 <template>
   <div class="dr-data-table" :id="chart.id" :style="rootStyle">
     <el-table
+      :tooltip-options="{ popperStyle: tooltipPopperStyle(chart.props.tooltip) }"
       class="dr-data-table__table"
       :style="tableStyle"
       :data="rawRows"

@@ -1,3 +1,4 @@
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
@@ -114,7 +115,7 @@ const getInstance = (pageType: PageType): DrMetricCardConfig => {
         show: true,
         text: '指标名称',
         fontSize: 14,
-        color: theme.text.primary,
+        color: DEFAULT_NEUTRAL_COLOR,
         fontWeight: 'normal'
       },
       value: {
@@ -126,7 +127,7 @@ const getInstance = (pageType: PageType): DrMetricCardConfig => {
         suffix: '',
         emptyText: '--',
         fontSize: 36,
-        color: theme.text.primary,
+        color: DEFAULT_NEUTRAL_COLOR,
         fontWeight: 'bold',
         lineHeight: 1
       },
@@ -134,7 +135,7 @@ const getInstance = (pageType: PageType): DrMetricCardConfig => {
         show: false,
         text: '实时统计',
         fontSize: 12,
-        color: theme.text.primary,
+        color: DEFAULT_NEUTRAL_COLOR,
         fontWeight: 'normal'
       },
       unit: {
@@ -142,7 +143,7 @@ const getInstance = (pageType: PageType): DrMetricCardConfig => {
         text: '',
         position: 'suffix',
         fontSize: 14,
-        color: theme.text.secondary,
+        color: DEFAULT_NEUTRAL_COLOR,
         gap: 4
       },
       conditional: {
@@ -172,7 +173,7 @@ const getInstance = (pageType: PageType): DrMetricCardConfig => {
       z: 0
     },
     pageType,
-    {w: 4, h: 5}
+    {w: 16, h: 5}
   )
 }
 

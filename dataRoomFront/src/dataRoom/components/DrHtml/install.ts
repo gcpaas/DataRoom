@@ -1,3 +1,4 @@
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
 import type { PageType } from '@/dataRoom/constants/PageType.ts'
@@ -12,13 +13,13 @@ const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 export interface DrHtmlPropsInterface {
   /** 页面主题写入的样式配置，旧页面可缺省。 */
   themeStyle?: {
-    text: string
-    secondaryText: string
+    text?: string
+    secondaryText?: string
     background: string
-    border: string
-    grid: string
-    primary: string
-    colors: string[]
+    border?: string
+    grid?: string
+    primary?: string
+    colors?: string[]
   }
   // html代码块，生成的代码不要放一行，需要进行代码格式化
   html: string
@@ -49,6 +50,7 @@ const getInstance = (pageType: PageType): DrHtmlConfig => {
   border: 1px solid var(--el-border-color);
   border-radius: 12px;
   background: var(--el-bg-color);
+  --el-text-color-primary: ${DEFAULT_NEUTRAL_COLOR};
   color: var(--el-text-color-primary);
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }

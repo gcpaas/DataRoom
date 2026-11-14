@@ -7,6 +7,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
+import { tooltipPopperStyle } from '../../theme/defaults'
 import type {DrFullScreenConfig} from './install.ts'
 import {ref, computed, onMounted, onBeforeUnmount} from "vue"
 import {useDrComponent} from "@/dataRoom/hooks/use-dr-component"
@@ -20,7 +21,7 @@ const {chart} = defineProps<{
 /**
  * 纯交互组件，不需要数据集，changeData 为空操作
  */
-const changeData = (_datasetValue: any) => {
+const changeData = (_datasetValue: unknown) => {
   // 纯交互组件，无数据集处理逻辑
 }
 
@@ -140,6 +141,7 @@ defineExpose<ComponentExpose>({
     @mouseleave="isHovered = false"
   >
     <el-tooltip
+      :popper-style="tooltipPopperStyle(chart.props.tooltip)"
       :content="tooltipText"
       :disabled="!chart.props.tooltip.show"
       placement="bottom"

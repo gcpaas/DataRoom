@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ThemeSelector from '@/dataRoom/designer/components/ThemeSelector.vue'
-import { applyThemeToCharts, applyThemeToNewChart } from '@/dataRoom/theme/apply-theme'
+import { applyThemeToCharts } from '@/dataRoom/theme/apply-theme'
 import { getTheme } from '@/dataRoom/theme/registry'
 
 import { getComponentInstance, getPanelComponent } from '@/dataRoom/components/AutoInstall.ts'
@@ -708,11 +708,9 @@ const switchTheme = (themeId: string) => {
   const theme = getTheme(themeId)
   if (!theme) return
   applyThemeToCharts(chartList.value, theme)
-  basicConfig.value.themeId = theme.id
 }
 
 const insertChart = (chartInst: ChartConfig<unknown>) => {
-  applyThemeToNewChart(chartInst, basicConfig.value.themeId, PageType.VISUAL_SCREEN)
   // 新组件默认置于同级最顶层
   chartInst.z = currentScopeCharts.value.length > 0 ? Math.max(...currentScopeCharts.value.map((item) => item.z)) + 1 : 0
   currentScopeCharts.value.push(chartInst)
@@ -876,7 +874,7 @@ const onClearCanvas = async () => {
   clearCanvasPending.value = true
   try {
     await ElMessageBox.confirm(
-      '将清空全部组件、全局变量、定时器、参考线及关联交互，并清除撤销/恢复记录；保留页面名称、画布尺寸和背景等基础设置。此操作无法通过撤销恢复，清空后需保存。是否继续？',
+      '将清空全部组件、全局变量、定时器等基础设置。此操作无法通过撤销恢复, 是否继续？',
       '清空画布',
       { type: 'warning', confirmButtonText: '确认清空', cancelButtonText: '取消', closeOnClickModal: false },
     )
@@ -2203,7 +2201,7 @@ onBeforeUnmount(() => {
       </div>
       <div class="header-actions header-actions--secondary">
         <div class="header-action">
-          <ThemeSelector :theme-id="basicConfig.themeId" :disabled="!pageStageEntity" @select="switchTheme" />
+          <ThemeSelector :disabled="!pageStageEntity" @select="switchTheme" />
         </div>
         <div class="header-action">
           <el-button @click="togglePageControlPanel" size="small">设置</el-button>

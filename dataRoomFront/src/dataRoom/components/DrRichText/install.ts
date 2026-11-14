@@ -1,3 +1,4 @@
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import { defineAsyncComponent } from 'vue'
 import type { JSONContent } from '@tiptap/core'
 import { createChartConfig } from '../type/define'
@@ -11,7 +12,7 @@ const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 
 interface DrRichTextPropsInterface {
-  /** 正文默认颜色；由主题切换设置。 */
+  /** 正文默认颜色；主题切换保持不变。 */
   color?: string
   /** Tiptap组件 JSON 文档；文本支持 #{字段key}，替换值继承占位符起始样式 */
   content: JSONContent
@@ -28,6 +29,7 @@ export type DrRichTextConfig = ChartConfig<DrRichTextPropsInterface>
 const getInstance = (pageType: PageType): DrRichTextConfig => createChartConfig<DrRichTextPropsInterface>(
   'DrRichText',
   {
+    color: DEFAULT_NEUTRAL_COLOR,
     content: {
       type: 'doc',
       content: [{
@@ -39,7 +41,7 @@ const getInstance = (pageType: PageType): DrRichTextConfig => createChartConfig<
             text: '富文本',
             marks: [
               { type: 'bold' },
-              { type: 'textStyle', attrs: { color: '#ff0000' } },
+              { type: 'textStyle', attrs: { color: DEFAULT_NEUTRAL_COLOR } },
             ],
           },
         ],

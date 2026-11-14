@@ -1,3 +1,6 @@
+import { getDefaultTheme } from '../../theme/registry'
+import { TOOLTIP_TEXT_COLOR, TOOLTIP_BACKGROUND_OPACITY } from '../../theme/defaults'
+import { withOpacity } from '../../theme/color'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
 import type {PageType} from '@/dataRoom/constants/PageType.ts'
@@ -88,6 +91,7 @@ export type DrWordCloudConfig = ChartConfig<DrWordCloudPropsInterface>
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
 const getInstance = (pageType: PageType): DrWordCloudConfig => {
+  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrWordCloudPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrWordCloud',
@@ -112,11 +116,11 @@ const getInstance = (pageType: PageType): DrWordCloudConfig => {
       },
       tooltip: {
         show: true,
-        backgroundColor: 'rgba(50, 50, 50, 0.7)',
-        borderColor: 'transparent',
+        backgroundColor: withOpacity(theme.color.primary, TOOLTIP_BACKGROUND_OPACITY),
+        borderColor: theme.color.primary,
         textStyle: {
           fontSize: 12,
-          color: '#ffffff'
+          color: TOOLTIP_TEXT_COLOR
         }
       },
       emphasis: {

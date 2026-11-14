@@ -1,3 +1,4 @@
+import { DEFAULT_NEUTRAL_COLOR, TOOLTIP_TEXT_COLOR, TOOLTIP_BACKGROUND_OPACITY } from '../../theme/defaults'
 import { getDefaultTheme } from '../../theme/registry'
 import { withOpacity } from '../../theme/color'
 import { defineAsyncComponent } from 'vue'
@@ -176,7 +177,7 @@ const getInstance = (pageType: PageType): DrMapConfig => {
       },
       regionStyle: {
         areaGradient: [withOpacity(theme.color.primary, 0.2), withOpacity(theme.color.primary, 0)],
-        borderColor: theme.text.secondary,
+        borderColor: DEFAULT_NEUTRAL_COLOR,
         borderWidth: 1,
         shadowColor: 'transparent',
         shadowBlur: 0,
@@ -185,7 +186,7 @@ const getInstance = (pageType: PageType): DrMapConfig => {
       regionLabel: {
         show: true,
         fontSize: 10,
-        color: theme.text.primary,
+        color: DEFAULT_NEUTRAL_COLOR,
       },
       emphasis: {
         disabled: false,
@@ -194,7 +195,7 @@ const getInstance = (pageType: PageType): DrMapConfig => {
         shadowColor: 'transparent',
         label: {
           fontSize: 12,
-          color: theme.text.primary,
+          color: DEFAULT_NEUTRAL_COLOR,
         },
       },
       visualMap: {
@@ -210,27 +211,27 @@ const getInstance = (pageType: PageType): DrMapConfig => {
         ],
         colors: [...theme.series.colors],
         textStyle: {
-          color: theme.text.primary,
+          color: DEFAULT_NEUTRAL_COLOR,
         },
       },
       marker: {
         show: true,
         type: 'effectScatter',
         symbolSize: 4,
-        color: theme.text.primary,
-        borderColor: theme.border.primary,
+        color: DEFAULT_NEUTRAL_COLOR,
+        borderColor: DEFAULT_NEUTRAL_COLOR,
         borderWidth: 4,
         ripple: {
           show: true,
           scale: 6,
-          color: theme.text.primary,
+          color: DEFAULT_NEUTRAL_COLOR,
           brushType: 'fill',
         },
         label: {
           show: false,
           position: 'bottom',
           fontSize: 11,
-          color: theme.text.primary,
+          color: DEFAULT_NEUTRAL_COLOR,
           offset: [0, 2],
         },
       },
@@ -251,17 +252,17 @@ const getInstance = (pageType: PageType): DrMapConfig => {
       tooltip: {
         show: true,
         trigger: 'item',
-        backgroundColor: theme.background.secondary,
-        borderColor: theme.border.primary,
+        backgroundColor: withOpacity(theme.color.primary, TOOLTIP_BACKGROUND_OPACITY),
+        borderColor: theme.color.primary,
         textStyle: {
           fontSize: 12,
-          color: theme.text.primary,
+          color: TOOLTIP_TEXT_COLOR,
         },
       },
       backControl: {
         text: '返回上级',
         fontSize: 20,
-        color: theme.text.primary,
+        color: DEFAULT_NEUTRAL_COLOR,
       },
       onlineLayers: {
         satellite: {

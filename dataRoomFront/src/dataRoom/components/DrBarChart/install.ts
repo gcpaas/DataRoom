@@ -1,3 +1,5 @@
+import { withOpacity } from '../../theme/color'
+import { DEFAULT_NEUTRAL_COLOR, TOOLTIP_TEXT_COLOR, TOOLTIP_BACKGROUND_OPACITY } from '../../theme/defaults'
 import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
@@ -179,13 +181,13 @@ const getInstance = (pageType: PageType): DrBarChartConfig => {
         type: 'category',
         axisLine: {
           show: true,
-          color: theme.border.primary,
+          color: DEFAULT_NEUTRAL_COLOR,
           width: 1
         },
         axisLabel: {
           show: true,
           fontSize: 12,
-          color: theme.text.secondary,
+          color: DEFAULT_NEUTRAL_COLOR,
           fontWeight: 'normal',
           fontFamily: 'Microsoft YaHei',
           rotate: 0
@@ -193,11 +195,11 @@ const getInstance = (pageType: PageType): DrBarChartConfig => {
         axisTick: {
           show: true,
           length: 5,
-          color: theme.border.secondary
+          color: DEFAULT_NEUTRAL_COLOR
         },
         splitLine: {
           show: false,
-          color: theme.border.secondary,
+          color: DEFAULT_NEUTRAL_COLOR,
           width: 1,
           type: 'dashed'
         }
@@ -212,24 +214,24 @@ const getInstance = (pageType: PageType): DrBarChartConfig => {
         },
         axisLine: {
           show: false,
-          color: theme.border.primary,
+          color: DEFAULT_NEUTRAL_COLOR,
           width: 1
         },
         axisLabel: {
           show: true,
           fontSize: 12,
-          color: theme.text.secondary,
+          color: DEFAULT_NEUTRAL_COLOR,
           fontWeight: 'normal',
           fontFamily: 'Microsoft YaHei'
         },
         axisTick: {
           show: false,
           length: 5,
-          color: theme.border.secondary
+          color: DEFAULT_NEUTRAL_COLOR
         },
         splitLine: {
           show: true,
-          color: theme.border.secondary,
+          color: DEFAULT_NEUTRAL_COLOR,
           width: 1,
           type: 'dashed'
         }
@@ -239,7 +241,7 @@ const getInstance = (pageType: PageType): DrBarChartConfig => {
         position: 'top',
         textStyle: {
           fontSize: 12,
-          color: theme.text.secondary,
+          color: DEFAULT_NEUTRAL_COLOR,
           fontWeight: 'normal'
         },
         itemGap: 16
@@ -247,11 +249,11 @@ const getInstance = (pageType: PageType): DrBarChartConfig => {
       tooltip: {
         show: true,
         trigger: 'axis',
-        backgroundColor: theme.background.secondary,
-        borderColor: theme.border.primary,
+        backgroundColor: withOpacity(theme.color.primary, TOOLTIP_BACKGROUND_OPACITY),
+        borderColor: theme.color.primary,
         textStyle: {
           fontSize: 12,
-          color: theme.text.primary
+          color: TOOLTIP_TEXT_COLOR
         }
       },
       series: {
@@ -272,7 +274,7 @@ const getInstance = (pageType: PageType): DrBarChartConfig => {
           show: false,
           position: 'top',
           fontSize: 12,
-          color: theme.text.primary,
+          color: DEFAULT_NEUTRAL_COLOR,
           fontWeight: 'normal'
         }
       },

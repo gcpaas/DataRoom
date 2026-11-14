@@ -24,7 +24,7 @@ export const getInstance = (pageType: PageType) => {
   })
   if (pageType === PageType.PAGE) {
     config.w = 16
-    config.h = 5
+    config.h = 10
   }
   return config
 }

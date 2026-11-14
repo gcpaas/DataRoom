@@ -6,11 +6,11 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { DrHtmlConfig } from './install.ts'
 import { useDrComponent } from '@/dataRoom/hooks/use-dr-component'
 import type { ComponentExpose } from '@/dataRoom/components/type/ComponentExpose.ts'
-import { buildHtmlSrcdoc, getPlaceholderPaths, readElementPlusColors, type HtmlThemeColors } from './html-render.ts'
+import { buildHtmlSrcdoc, getPlaceholderPaths } from './html-render.ts'
 import { getFieldValue, normalizeRows } from '@/dataRoom/components/_shared/metric-table-utils.ts'
 
 const { chart } = defineProps<{
@@ -37,13 +37,15 @@ const placeholderContext = computed(() => {
 })
 
 const renderResult = computed(() => buildHtmlSrcdoc(chart.props.html, chart.props.css, placeholderContext.value, chart.props.themeStyle ? {
-  '--el-text-color-primary': chart.props.themeStyle.text,
-  '--el-text-color-regular': chart.props.themeStyle.text,
-  '--el-text-color-secondary': chart.props.themeStyle.secondaryText,
+  ...(chart.props.themeStyle.text ? {
+    '--el-text-color-primary': chart.props.themeStyle.text,
+    '--el-text-color-regular': chart.props.themeStyle.text,
+  } : {}),
+  ...(chart.props.themeStyle.secondaryText ? { '--el-text-color-secondary': chart.props.themeStyle.secondaryText } : {}),
+  ...(chart.props.themeStyle.border ? { '--el-border-color': chart.props.themeStyle.border } : {}),
+  ...(chart.props.themeStyle.primary ? { '--el-color-primary': chart.props.themeStyle.primary } : {}),
   '--el-bg-color': chart.props.themeStyle.background,
   '--el-bg-color-overlay': chart.props.themeStyle.background,
-  '--el-border-color': chart.props.themeStyle.border,
-  '--el-color-primary': chart.props.themeStyle.primary,
 } : {}))
 
 const sandboxAttr = computed(() => {

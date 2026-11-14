@@ -3,10 +3,10 @@ import { ref, useId } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
 import themeIcon from '../assets/icons/theme.svg'
-import { getTheme, themes } from '@/dataRoom/theme/registry'
+import { themes } from '@/dataRoom/theme/registry'
 import type { ChartTheme } from '@/dataRoom/theme/types'
 
-const props = defineProps<{ themeId?: string; disabled?: boolean }>()
+const props = defineProps<{ disabled?: boolean }>()
 const emit = defineEmits<{ select: [themeId: string] }>()
 const visible = ref(false)
 const confirming = ref(false)
@@ -46,7 +46,7 @@ const selectTheme = async (theme: ChartTheme) => {
       <div class="theme-selector__list">
         <button
           v-for="theme in themes" :key="theme.id" type="button"
-          class="theme-selector__option" :aria-pressed="getTheme(themeId)?.id === theme.id"
+          class="theme-selector__option"
           :disabled="confirming" @click="selectTheme(theme)"
         >
           <svg class="theme-selector__preview" viewBox="0 0 144 90" role="img" :aria-label="`${theme.name}柱状图预览`">
@@ -96,7 +96,7 @@ const selectTheme = async (theme: ChartTheme) => {
   letter-spacing: 0;
   text-align: left;
   cursor: pointer;
-  &:hover, &[aria-pressed='true'] { border-color: var(--el-color-primary); }
+  &:hover { border-color: var(--el-color-primary); }
   &:focus-visible { outline: 2px solid var(--el-color-primary); outline-offset: 2px; }
   &:disabled { cursor: default; }
 }

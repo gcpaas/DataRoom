@@ -1,3 +1,5 @@
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
+import { createTooltipAppearance, type TooltipAppearance } from '../../theme/defaults'
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
 import { getDefaultTheme } from '../../theme/registry'
@@ -11,8 +13,9 @@ export const component = defineAsyncComponent(() => import('./index.vue'))
 export const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 
 export interface DrFunnelChartPropsInterface {
+  tooltip?: TooltipAppearance
   funnel: { sort: 'descending' | 'ascending' | 'none'; gap: number }
-  label: { show: boolean; content: 'name' | 'value' | 'name+value'; position: 'inside' | 'outside' }
+  label: { show: boolean; content: 'name' | 'value' | 'name+value'; position: 'inside' | 'outside'; color?: string }
   series: { colors: string[] }
 }
 export type DrFunnelChartConfig = ChartConfig<DrFunnelChartPropsInterface>
@@ -21,8 +24,9 @@ export const getInstance = (pageType: PageType): DrFunnelChartConfig =>
   createChartConfig<DrFunnelChartPropsInterface>(
     'DrFunnelChart',
     {
+      tooltip: createTooltipAppearance(getDefaultTheme(pageType).color.primary),
       funnel: { sort: 'descending', gap: 2 },
-      label: { show: true, content: 'name+value', position: 'inside' },
+      label: { show: true, content: 'name+value', position: 'inside', color: DEFAULT_NEUTRAL_COLOR },
       series: { colors: [...getDefaultTheme(pageType).series.colors] },
     },
     { title: '漏斗图', w: 400, h: 320 },

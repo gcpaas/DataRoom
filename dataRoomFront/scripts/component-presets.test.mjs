@@ -17,8 +17,8 @@ const jiti = createJiti(import.meta.url, {
 const pageTypes = ['page', 'visualScreen']
 const parentType = 'DrMetricCard'
 const presetId = 'DrMetricCardHorizontal'
-const parentSizes = { page: [4, 5], visualScreen: [280, 140] }
-const presetSizes = { page: [8, 3], visualScreen: [420, 100] }
+const parentSizes = { page: [16, 5], visualScreen: [280, 140] }
+const presetSizes = { page: [16, 5], visualScreen: [420, 100] }
 const loadFactory = (relativePath) => jiti.import(path.join(componentsDir, relativePath))
 const parent = await loadFactory('DrMetricCard/install.ts')
 const horizontal = await loadFactory('DrMetricCard/presets/Horizontal/install.ts')
@@ -94,6 +94,10 @@ test('真实仓库 34 个顶层工厂均支持双 pageType，且保留组件 typ
         for (let repeat = 0; repeat < 2; repeat += 1) {
           const config = factory.getInstance(pageType)
           assert.equal(config.type, name)
+          if (pageType === 'page') {
+            const expected = ['DrMetricCard', 'DrImageMetricCard'].includes(name) ? [16, 5] : [16, 10]
+            assertSize(config, expected)
+          }
           assert.ok(config.props && typeof config.props === 'object')
           assert.ok(Number.isFinite(config.w) && config.w > 0)
           assert.ok(Number.isFinite(config.h) && config.h > 0)
@@ -240,8 +244,7 @@ test('真实导出可重复执行：32 普通 + 7 预设，父 type 和双尺寸
 })
 
 
-test('新增预设在双设计器主题应用、JSON 保存后保留差异，实例不污染父组件', async () => {
-  const { applyThemeToNewChart } = await jiti.import(path.join(projectRoot, 'src/dataRoom/theme/apply-theme.ts'))
+test('新增预设在双设计器中使用自身默认样式、JSON 保存后保留差异，实例不污染父组件', async () => {
   const { getChartDatasetFieldNames } = await loadFactory('_shared/chart-data-defaults.ts')
   const checks = {
     DrLineChartSmooth: (chart) => assert.equal(chart.props.series.lineType, 'smooth'),
@@ -275,7 +278,6 @@ test('新增预设在双设计器主题应用、JSON 保存后保留差异，实
       assertIndependent([base, chart, second])
       assert.equal(chart.type, type)
       assertSize(chart, [base.w, base.h])
-      applyThemeToNewChart(chart, undefined, pageType)
       checks[id](JSON.parse(JSON.stringify(chart)))
       assert.equal(JSON.stringify(base.props), snapshot)
       if (id === 'DrBarChartStacked') {

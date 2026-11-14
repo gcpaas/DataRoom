@@ -80,7 +80,7 @@ test('旧折线缺少新属性时仍使用原渐变和实心点', async () => {
 })
 
 
-test('所有已调整组件按页面默认主题初始化，布局尺寸仍独立', async () => {
+test('组件默认数据配色与固定中性色独立，布局尺寸保持不变', async () => {
   const types = ['DrLineChart', 'DrAreaChart', 'DrBarChart', 'DrHorizontalBarChart',
     'DrBubbleChart', 'DrRadarChart', 'DrPieChart', 'DrMetricCard',
     'DrImageMetricCard', 'DrText', 'DrDateTime', 'DrTabList',
@@ -88,12 +88,11 @@ test('所有已调整组件按页面默认主题初始化，布局尺寸仍独�
   for (const type of types) {
     const { getInstance } = await factory(type)
     const page = getInstance('page'), screen = getInstance('visualScreen')
-    assert.notDeepEqual(page.props, screen.props, type)
     for (const [pageType, config] of [['page', page], ['visualScreen', screen]]) {
       const tokens = getDefaultTheme(pageType)
       if (config.props.series?.colors) assert.deepEqual(config.props.series.colors, tokens.series.colors, type)
-      if (config.props.title?.color) assert.equal(config.props.title.color, tokens.text.primary, type)
-      if (config.props.tooltip?.textStyle) assert.equal(config.props.tooltip.textStyle.color, tokens.text.primary, type)
+      if (config.props.title?.color) assert.equal(config.props.title.color, '#A8ABB2', type)
+      if (config.props.tooltip?.textStyle) assert.equal(config.props.tooltip.textStyle.color, '#FFFFFF', type)
     }
     assert.notDeepEqual([page.w, page.h], [screen.w, screen.h], type)
   }

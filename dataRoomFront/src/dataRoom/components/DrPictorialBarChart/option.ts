@@ -1,3 +1,4 @@
+import { TOOLTIP_TEXT_COLOR } from '../../theme/defaults'
 import type { EChartsOption } from 'echarts'
 import type { DrPictorialBarChartPropsInterface } from './install'
 import type { PictorialRow } from './data'
@@ -39,6 +40,8 @@ export function buildPictorialOption(props: DrPictorialBarChartPropsInterface, r
       splitLine: { show: props.yAxis.splitLine, lineStyle: { color: props.yAxis.lineColor } },
     },
     tooltip: {
+      ...props.tooltip,
+      textStyle: { color: TOOLTIP_TEXT_COLOR, ...props.tooltip.textStyle },
       show: props.tooltip.show,
       trigger: 'item',
       renderMode: 'richText',

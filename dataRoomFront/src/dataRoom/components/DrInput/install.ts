@@ -1,3 +1,4 @@
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
 import type {PageType} from '@/dataRoom/constants/PageType.ts'
@@ -91,8 +92,8 @@ const getInstance = (pageType: PageType): DrInputConfig => {
       },
       style: {
         fontSize: 14,
-        color: '#FFFFFF',
-        placeholderColor: '#999999',
+        color: DEFAULT_NEUTRAL_COLOR,
+        placeholderColor: DEFAULT_NEUTRAL_COLOR,
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
         borderColor: '#444444',
         borderWidth: 1,

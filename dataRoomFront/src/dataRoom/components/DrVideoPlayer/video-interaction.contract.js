@@ -22,7 +22,7 @@ function loadModule(source, filename) {
     if (name.includes('use-dr-component')) return { useDrComponent: () => ({ canvasInst: {}, expose: {} }) }
     if (name.includes('/utils/')) return { getSingleDatasetValueByField: () => undefined }
     if (name === '../type/define') return {
-      createChartConfig: (type, props, overrides, pageType, pageSize = { w: 16, h: 5 }) => {
+      createChartConfig: (type, props, overrides, pageType, pageSize = { w: 16, h: 10 }) => {
         assert.ok(pageType === PageType.PAGE || pageType === PageType.VISUAL_SCREEN)
         return { type, props, ...overrides, ...(pageType === PageType.PAGE ? pageSize : {}) }
       },

@@ -4,8 +4,6 @@ import type {PageTimer} from "@/dataRoom/page-designer/type/PageTimer.ts";
  * 页面基础配置
  */
 export interface PageBasicConfig {
-  // 页面选择的图表主题，保存后新插入组件沿用
-  themeId?: string
   // 页面背景设置
   background: {
     // 背景填充方式

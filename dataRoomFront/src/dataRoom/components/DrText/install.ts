@@ -1,3 +1,4 @@
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
@@ -80,7 +81,7 @@ const getInstance = (pageType: PageType): DrTextConfig => {
         fontSize: 14,
         fontWeight: 'normal',
         fontFamily: 'Microsoft YaHei',
-        color: '#C9CDD4',
+        color: DEFAULT_NEUTRAL_COLOR,
       },
       align: 'left',
       verticalAlign: 'top',
@@ -92,7 +93,7 @@ const getInstance = (pageType: PageType): DrTextConfig => {
         border: {
           width: 1,
           style: 'solid',
-          color: theme.border.secondary,
+          color: DEFAULT_NEUTRAL_COLOR,
         },
       },
       ellipsis: false,

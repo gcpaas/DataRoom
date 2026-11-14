@@ -1,3 +1,5 @@
+import { createTooltipAppearance, type TooltipAppearance } from '../../theme/defaults'
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
 import { getInstance as getTextInstance } from '../DrText/install'
@@ -17,7 +19,7 @@ export interface DrPictorialBarChartPropsInterface {
   xAxis: { show: boolean; fontSize: number; color: string; rotate: number }
   yAxis: { show: boolean; autoMax: boolean; max: number; splitLine: boolean; color: string; lineColor: string }
   label: { show: boolean; fontSize: number; color: string; decimals: number; unit: string }
-  tooltip: { show: boolean }
+  tooltip: { show: boolean } & Partial<TooltipAppearance>
   global: { padding: [number, number, number, number] }
 }
 export type DrPictorialBarChartConfig = ChartConfig<DrPictorialBarChartPropsInterface>
@@ -30,9 +32,9 @@ export const getInstance = (pageType: PageType): DrPictorialBarChartConfig => {
       series: { colors: [...theme.series.colors] },
       image: { show: true, url: '', width: 64, height: 64, gap: 8 },
       xAxis: { show: true, fontSize: 14, color: getTextInstance(pageType).props.textStyle.color, rotate: 0 },
-      yAxis: { show: false, autoMax: true, max: 100, splitLine: false, color: theme.text.secondary, lineColor: theme.border.primary },
-      label: { show: false, fontSize: 14, color: theme.text.primary, decimals: 0, unit: '' },
-      tooltip: { show: true },
+      yAxis: { show: false, autoMax: true, max: 100, splitLine: false, color: DEFAULT_NEUTRAL_COLOR, lineColor: DEFAULT_NEUTRAL_COLOR },
+      label: { show: false, fontSize: 14, color: DEFAULT_NEUTRAL_COLOR, decimals: 0, unit: '' },
+      tooltip: { show: true, ...createTooltipAppearance(theme.color.primary) },
       global: { padding: [16, 16, 16, 16] },
     },
     { title: '象形图', w: 640, h: 400 },

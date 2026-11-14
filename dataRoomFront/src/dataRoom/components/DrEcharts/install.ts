@@ -1,3 +1,5 @@
+import { DEFAULT_NEUTRAL_COLOR, createTooltipAppearance } from '../../theme/defaults'
+import { getDefaultTheme } from '../../theme/registry'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
 import type {PageType} from '@/dataRoom/constants/PageType.ts'
@@ -14,11 +16,11 @@ const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 export interface DrEchartsPropsInterface {
   /** 页面主题写入的样式配置，旧页面可缺省。 */
   themeStyle?: {
-    text: string
-    secondaryText: string
+    text?: string
+    secondaryText?: string
     background: string
-    border: string
-    grid: string
+    border?: string
+    grid?: string
     primary: string
     colors: string[]
   }
@@ -58,10 +60,11 @@ const list = Array.isArray(ctx.data) && ctx.data.length
     ]
 
 return {
-  tooltip: { trigger: 'axis' },
+  textStyle: { color: '${DEFAULT_NEUTRAL_COLOR}' },
+  tooltip: { trigger: 'axis', ...${JSON.stringify(createTooltipAppearance(getDefaultTheme(pageType).color.primary))} },
   grid: { top: 40, right: 20, bottom: 30, left: 40, containLabel: true },
-  xAxis: { type: 'category', data: list.map((item) => item.name) },
-  yAxis: { type: 'value' },
+  xAxis: { type: 'category', data: list.map((item) => item.name), axisLabel: { color: '${DEFAULT_NEUTRAL_COLOR}' }, axisLine: { lineStyle: { color: '${DEFAULT_NEUTRAL_COLOR}' } }, axisTick: { lineStyle: { color: '${DEFAULT_NEUTRAL_COLOR}' } }, splitLine: { lineStyle: { color: '${DEFAULT_NEUTRAL_COLOR}' } } },
+  yAxis: { type: 'value', axisLabel: { color: '${DEFAULT_NEUTRAL_COLOR}' }, axisLine: { lineStyle: { color: '${DEFAULT_NEUTRAL_COLOR}' } }, axisTick: { lineStyle: { color: '${DEFAULT_NEUTRAL_COLOR}' } }, splitLine: { lineStyle: { color: '${DEFAULT_NEUTRAL_COLOR}' } } },
   series: [
     {
       name: '数值',

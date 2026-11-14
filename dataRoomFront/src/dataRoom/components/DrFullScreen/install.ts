@@ -1,3 +1,5 @@
+import { getDefaultTheme } from '../../theme/registry'
+import { createTooltipAppearance, type TooltipAppearance } from '../../theme/defaults'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
 import type {PageType} from '@/dataRoom/constants/PageType.ts'
@@ -25,7 +27,7 @@ interface DrFullScreenPropsInterface {
     hoverColor: string
   }
   /** 提示文字配置 */
-  tooltip: {
+  tooltip: Partial<TooltipAppearance> & {
     /** 是否显示悬停提示文字 */
     show: boolean
     /** 进入全屏的提示文字 */
@@ -78,6 +80,7 @@ const getInstance = (pageType: PageType): DrFullScreenConfig => {
         hoverColor: '#409EFF',
       },
       tooltip: {
+        ...createTooltipAppearance(getDefaultTheme(pageType).color.primary),
         show: true,
         enterText: '进入全屏',
         exitText: '退出全屏',

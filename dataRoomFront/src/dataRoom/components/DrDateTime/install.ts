@@ -1,4 +1,4 @@
-import { getDefaultTheme } from '../../theme/registry'
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
 import type {PageType} from '@/dataRoom/constants/PageType.ts'
@@ -26,7 +26,6 @@ interface DrDateTimePropsInterface {
 export type DrDateTimeConfig = ChartConfig<DrDateTimePropsInterface>
 
 const getInstance = (pageType: PageType): DrDateTimeConfig => {
-  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrDateTimePropsInterface>(
     'DrDateTime',
     {
@@ -36,7 +35,7 @@ const getInstance = (pageType: PageType): DrDateTimeConfig => {
         fontFamily: 'Microsoft YaHei',
         fontWeight: '400',
         letterSpacing: 1,
-        color: theme.text.secondary,
+        color: DEFAULT_NEUTRAL_COLOR,
       },
       align: 'center',
       verticalAlign: 'center',

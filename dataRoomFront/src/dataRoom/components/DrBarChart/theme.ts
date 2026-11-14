@@ -1,22 +1,8 @@
 import type { DrBarChartPropsInterface } from './install'
 import type { ThemeMapping } from '../../theme/types'
 
-/** 仅声明主题负责的属性；切换不影响开关、尺寸、坐标与数据。 */
+/** 仅切换背景与数据配色，保留文字、结构线及交互状态。 */
 export const barThemeMapping = [
-  ['xAxis.axisLine.color', 'border.primary'],
-  ['xAxis.axisTick.color', 'border.secondary'],
-  ['xAxis.axisLabel.color', 'text.secondary'],
-  ['xAxis.splitLine.color', 'border.secondary'],
-  ['yAxis.axisLine.color', 'border.primary'],
-  ['yAxis.axisTick.color', 'border.secondary'],
-  ['yAxis.axisLabel.color', 'text.secondary'],
-  ['yAxis.splitLine.color', 'border.secondary'],
-  ['legend.textStyle.color', 'text.secondary'],
-  ['tooltip.backgroundColor', 'background.secondary'],
-  ['tooltip.borderColor', 'border.primary'],
-  ['tooltip.textStyle.color', 'text.primary'],
   ['series.colors', 'series.colors'],
-  ['series.label.color', 'text.primary'],
-  ['series.gradient.startOpacity', 'series.barGradient.startOpacity'],
-  ['series.gradient.endOpacity', 'series.barGradient.endOpacity'],
+  ['tooltip.borderColor', 'color.primary'],
 ] as const satisfies ThemeMapping<DrBarChartPropsInterface>

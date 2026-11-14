@@ -1,3 +1,5 @@
+import { createTooltipAppearance, type TooltipAppearance } from '../../theme/defaults'
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import { getDefaultTheme } from '../../theme/registry'
 import { withOpacity } from '../../theme/color'
 import { defineAsyncComponent } from 'vue'
@@ -13,6 +15,7 @@ const component = defineAsyncComponent(() => import('./index.vue'))
 const controlPanel = defineAsyncComponent(() => import('./panel/index.vue'))
 
 export interface DrDataTablePropsInterface {
+  tooltip?: TooltipAppearance
   global: {
     padding: [number, number, number, number]
     backgroundColor: string
@@ -77,6 +80,7 @@ const getInstance = (pageType: PageType): DrDataTableConfig => {
   return createChartConfig<DrDataTablePropsInterface>(
     'DrDataTable',
     {
+      tooltip: createTooltipAppearance(theme.color.primary),
       global: {
         padding: [0, 0, 0, 0],
         backgroundColor: 'transparent',
@@ -95,7 +99,7 @@ const getInstance = (pageType: PageType): DrDataTableConfig => {
       headerStyle: {
         height: 42,
         backgroundColor: withOpacity(theme.color.primary, 0.1),
-        color: theme.text.primary,
+        color: DEFAULT_NEUTRAL_COLOR,
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'left',
@@ -106,10 +110,10 @@ const getInstance = (pageType: PageType): DrDataTableConfig => {
         oddBackgroundColor: 'transparent',
         evenBackgroundColor: 'transparent',
         hoverBackgroundColor: withOpacity(theme.color.primary, 0.1),
-        borderColor: theme.border.secondary,
+        borderColor: DEFAULT_NEUTRAL_COLOR,
       },
       cellStyle: {
-        color: theme.text.primary,
+        color: DEFAULT_NEUTRAL_COLOR,
         fontSize: 14,
         fontWeight: 'normal',
         padding: [8, 12, 8, 12],

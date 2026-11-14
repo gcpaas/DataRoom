@@ -19,7 +19,7 @@ test('主题覆盖映射属性，保留数据布局和非映射配置，支持�
   const dataset = JSON.stringify(a.dataset)
   const group = { type: 'DrGroup', props: {}, children: [b, other] }
   assert.equal(applyThemeToCharts([a, group], themes[0]), 2)
-  assert.equal(a.props.series.label.color, themes[0].text.primary)
+  assert.equal(a.props.series.label.color, 'custom')
   assert.equal(a.props.series.barWidth, 33)
   assert.deepEqual([a.x, a.y, a.w, a.h], layout)
   assert.equal(JSON.stringify(a.dataset), dataset)
@@ -30,22 +30,25 @@ test('主题覆盖映射属性，保留数据布局和非映射配置，支持�
   assert.notEqual(themes[0].series.colors[0], 'edited')
   applyThemeToCharts([a], themes[1])
   applyThemeToCharts([a], themes[0])
-  assert.equal(a.props.series.label.color, themes[0].text.primary)
+  assert.equal(a.props.series.label.color, 'custom')
 })
 
-test('保存重载后新组件沿用主题，旧页面新组件按页面类型选择默认主题', async () => {
-  const { applyThemeToNewChart } = await jiti.import('../src/dataRoom/theme/apply-theme.ts')
-  const saved = JSON.parse(JSON.stringify({ basicConfig: { themeId: 'blue-ocean' } }))
-  const chart = getInstance('page')
-  applyThemeToNewChart(chart, saved.basicConfig.themeId, 'page')
-  assert.equal(chart.props.series.gradient.startOpacity, 1)
-  assert.equal(chart.props.series.gradient.endOpacity, 0.5)
-  const light = getInstance('page'), dark = getInstance('visualScreen')
-  applyThemeToNewChart(light, undefined, 'page')
-  applyThemeToNewChart(dark, undefined, 'visualScreen')
-  assert.notEqual(light.props.xAxis.axisLabel.color, dark.props.xAxis.axisLabel.color)
-  const roundtrip = JSON.parse(JSON.stringify(chart))
-  assert.deepEqual(roundtrip.props, chart.props)
+test('主动切换只影响已有组件，保存重载和后续新增保留各自样式', async () => {
+  const { applyThemeToCharts } = await jiti.import('../src/dataRoom/theme/apply-theme.ts')
+  const { themes } = await jiti.import('../src/dataRoom/theme/registry.ts')
+  for (const pageType of ['page', 'visualScreen']) {
+    const defaults = structuredClone(getInstance(pageType).props)
+    const existing = getInstance(pageType)
+    applyThemeToCharts([existing], themes[1])
+    const saved = JSON.parse(JSON.stringify(existing))
+    assert.deepEqual(saved.props.series.colors, themes[1].series.colors)
+    const added = getInstance(pageType)
+    assert.deepEqual(added.props, defaults)
+    applyThemeToCharts([existing, added], themes[2])
+    assert.deepEqual(existing.props.series.colors, themes[2].series.colors)
+    assert.deepEqual(added.props.series.colors, themes[2].series.colors)
+    assert.deepEqual(getInstance(pageType).props, defaults)
+  }
 })
 
 test('主题浮层真实处理函数：取消不切换，确认后才发出切换事件', async () => {
@@ -89,23 +92,20 @@ test('旧主题标识兼容新版预设，九套主题均能应用且保持独�
     const chart = getInstance('page')
     applyThemeToCharts([chart], theme)
     assert.deepEqual(chart.props.series.colors, theme.series.colors)
-    assert.equal(chart.props.tooltip.backgroundColor, theme.background.secondary)
+    assert.equal(chart.props.tooltip.borderColor, theme.color.primary)
     assert.equal(typeof theme.color.danger, 'string')
     if (theme.id === 'starport-blue') assert.ok(!chart.props.series.colors.includes(theme.color.danger))
   }
 })
 
-test('柱状图工厂默认值与默认主题映射一致，无需插入后再次修正颜色', async () => {
-  const { applyThemeToCharts } = await jiti.import('../src/dataRoom/theme/apply-theme.ts')
-  const { getDefaultTheme } = await jiti.import('../src/dataRoom/theme/registry.ts')
+test('公共组件工厂保留调用方默认样式', async () => {
+  const { createChartConfig } = await jiti.import('../src/dataRoom/components/type/define.ts')
   for (const pageType of ['page', 'visualScreen']) {
-    const chart = getInstance(pageType)
-    const before = JSON.stringify(chart.props)
-    applyThemeToCharts([chart], getDefaultTheme(pageType))
-    assert.equal(JSON.stringify(chart.props), before)
+    const props = { textStyle: { color: 'custom' } }
+    const chart = createChartConfig('DrText', structuredClone(props), undefined, pageType)
+    assert.deepEqual(chart.props, props)
   }
 })
-
 
 test('相对样式路径解析深层数值与数组，非法路径立即报错', async () => {
   const { getThemeStyle } = await jiti.import('../src/dataRoom/theme/apply-theme.ts')

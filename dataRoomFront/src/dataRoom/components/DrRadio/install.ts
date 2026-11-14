@@ -1,3 +1,4 @@
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
 import type {PageType} from '@/dataRoom/constants/PageType.ts'
@@ -80,10 +81,10 @@ const getInstance = (pageType: PageType): DrRadioConfig => {
       },
       style: {
         fontSize: 14,
-        color: '#CCCCCC',
-        activeColor: '#FFFFFF',
+        color: DEFAULT_NEUTRAL_COLOR,
+        activeColor: DEFAULT_NEUTRAL_COLOR,
         activeBgColor: '#409EFF',
-        inactiveColor: '#CCCCCC',
+        inactiveColor: DEFAULT_NEUTRAL_COLOR,
         inactiveBgColor: 'rgba(255, 255, 255, 0.1)',
         borderRadius: 4,
         padding: [6, 16, 6, 16]

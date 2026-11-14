@@ -1,3 +1,4 @@
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import { defineAsyncComponent } from 'vue'
 import { createChartConfig } from '../type/define'
 import type { PageType } from '@/dataRoom/constants/PageType.ts'
@@ -60,7 +61,7 @@ const getInstance = (pageType: PageType): DrAlarmImageConfig => {
         suffix: '',
         emptyText: '--',
         fontSize: 28,
-        color: 'var(--el-text-color-primary)',
+        color: DEFAULT_NEUTRAL_COLOR,
         fontWeight: 'bold',
         lineHeight: 1,
       },

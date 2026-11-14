@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { DEFAULT_NEUTRAL_COLOR, TOOLTIP_TEXT_COLOR } from '../../theme/defaults'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as echarts from 'echarts'
 import { mockDataset, type DrFunnelChartConfig } from './install'
@@ -30,17 +31,18 @@ function updateChart() {
   const outside = label.show && label.position === 'outside'
   const option: echarts.EChartsOption = {
     color: series.colors,
-    tooltip: { trigger: 'item', renderMode: 'richText', confine: true, formatter: '{b}: {c}' },
+    tooltip: { ...chart.props.tooltip, textStyle: { color: TOOLTIP_TEXT_COLOR, ...chart.props.tooltip?.textStyle }, trigger: 'item', renderMode: 'richText', confine: true, formatter: '{b}: {c}' },
     series: [{
       type: 'funnel',
       left: '10%', right: outside ? '30%' : '10%', top: 20, bottom: 20,
       min: 0, sort: funnel.sort, gap: funnel.gap,
       itemStyle: { borderWidth: 0 },
       label: {
+        color: label.color ?? DEFAULT_NEUTRAL_COLOR,
         show: label.show, position: label.position === 'outside' ? 'right' : 'inside',
         formatter: label.content === 'name' ? '{b}' : label.content === 'value' ? '{c}' : '{b}: {c}',
       },
-      labelLine: { show: outside, length: 12 },
+      labelLine: { show: outside, length: 12, lineStyle: { color: DEFAULT_NEUTRAL_COLOR } },
       data: data.value,
     }],
   }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ThemeSelector from '@/dataRoom/designer/components/ThemeSelector.vue'
-import { applyThemeToCharts, applyThemeToNewChart } from '@/dataRoom/theme/apply-theme'
+import { applyThemeToCharts } from '@/dataRoom/theme/apply-theme'
 import { getTheme } from '@/dataRoom/theme/registry'
 
 import { getComponent, getComponentInstance, getPanelComponent } from '@/dataRoom/components/AutoInstall.ts'
@@ -345,11 +345,9 @@ const switchTheme = (themeId: string) => {
   const theme = getTheme(themeId)
   if (!theme) return
   applyThemeToCharts(chartList.value, theme)
-  pageBasicConfig.value.themeId = theme.id
 }
 
 const insertChart = (chartInst: ChartConfig<unknown>) => {
-  applyThemeToNewChart(chartInst, pageBasicConfig.value.themeId, PageType.PAGE)
   chartInst.x = 0
   chartInst.y = 0
   // 新组件默认置于同级最顶层
@@ -897,7 +895,9 @@ onMounted(() => {
     pageStageEntity.value = res
     chartList.value = res.pageConfig?.chartList || []
     rebuildChartLayoutBaselines()
-    pageBasicConfig.value = res.pageConfig?.basicConfig || {}
+    pageBasicConfig.value = { ...(res.pageConfig?.basicConfig || {}) }
+    // 清理旧页面遗留的主题标识，组件样式以已保存的 props 为准。
+    delete (pageBasicConfig.value as PageBasicConfig & { themeId?: string }).themeId
     if (!pageBasicConfig.value.timers) {
       pageBasicConfig.value.timers = []
     }
@@ -974,7 +974,7 @@ onUnmounted(() => {
       </div>
       <div class="header-actions header-actions--secondary">
         <div class="header-action">
-          <ThemeSelector :theme-id="pageBasicConfig.themeId" :disabled="!pageStageEntity" @select="switchTheme" />
+          <ThemeSelector :disabled="!pageStageEntity" @select="switchTheme" />
         </div>
         <div class="header-action">
           <el-button @click="switchPageControlPanel" size="small">设置</el-button>

@@ -346,6 +346,11 @@ const overflowOptions = [
             <DrInputField v-model="chartConfig.props.formatting.nullText" clearable />
           </el-form-item>
         </ConfigCollapseItem>
+        <ConfigCollapseItem v-if="chartConfig.props.tooltip?.textStyle" title="提示框配色" name="tooltipAppearance">
+          <el-form-item label="背景色"><DrColorField v-model="chartConfig.props.tooltip.backgroundColor" show-alpha /></el-form-item>
+          <el-form-item label="边框色"><DrColorField v-model="chartConfig.props.tooltip.borderColor" show-alpha /></el-form-item>
+          <el-form-item label="文字色"><DrColorField v-model="chartConfig.props.tooltip.textStyle.color" show-alpha /></el-form-item>
+        </ConfigCollapseItem>
       </ConfigCollapse>
     </el-form>
   </div>

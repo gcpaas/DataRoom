@@ -6,6 +6,6 @@ export const getInstance = (pageType: PageType) => {
   const chart = superGetInstance(pageType)
   chart.title = '横向指标卡'
   chart.props.layout.direction = 'horizontal'
-  Object.assign(chart, pageType === PageType.PAGE ? { w: 8, h: 3 } : { w: 420, h: 100 })
+  Object.assign(chart, pageType === PageType.PAGE ? { w: 16, h: 5 } : { w: 420, h: 100 })
   return chart
 }

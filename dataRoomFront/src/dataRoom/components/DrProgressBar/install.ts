@@ -1,4 +1,4 @@
-import { getDefaultTheme } from '../../theme/registry'
+import { DEFAULT_NEUTRAL_COLOR } from '../../theme/defaults'
 import {defineAsyncComponent} from 'vue'
 import {createChartConfig} from '../type/define'
 import type {PageType} from '@/dataRoom/constants/PageType.ts'
@@ -110,7 +110,6 @@ export type DrProgressBarConfig = ChartConfig<DrProgressBarPropsInterface>
  * 定义获取该组件实例的方法，返回本组件新实例对象
  */
 const getInstance = (pageType: PageType): DrProgressBarConfig => {
-  const theme = getDefaultTheme(pageType)
   return createChartConfig<DrProgressBarPropsInterface>(
     // 组件类型需与当前组件目录名保持一致
     'DrProgressBar',
@@ -122,7 +121,7 @@ const getInstance = (pageType: PageType): DrProgressBarConfig => {
       bar: {
         height: 20,
         fillColor: '#5470c6',
-        backgroundColor: theme.border.primary,
+        backgroundColor: DEFAULT_NEUTRAL_COLOR,
         borderRadius: 0,
         gradient: {
           enabled: false,
@@ -135,13 +134,13 @@ const getInstance = (pageType: PageType): DrProgressBarConfig => {
         show: true,
         position: 'outside',
         fontSize: 14,
-        color: '#ffffff',
+        color: DEFAULT_NEUTRAL_COLOR,
         fontWeight: 'normal',
         format: 'percent',
         customFormat: '{percent}%'
       },
       track: {
-        backgroundColor: theme.border.primary,
+        backgroundColor: DEFAULT_NEUTRAL_COLOR,
         borderRadius: 0
       },
       border: {
@@ -154,7 +153,7 @@ const getInstance = (pageType: PageType): DrProgressBarConfig => {
         text: '通过率',
         position: 'left',
         fontSize: 14,
-        color: '#cccccc',
+        color: DEFAULT_NEUTRAL_COLOR,
         width: 80
       },
       animation: {
