@@ -83,6 +83,9 @@ export interface EsDataset extends BaseDataset {
 export interface WebSocketDataset extends BaseDataset {
   datasetType: 'websocket'
   url: string
+  /** 旧配置未指定时，有脚本使用 script，否则使用 json。 */
+  processingMode?: 'json' | 'script'
+  jsonPath?: string
   script: string
   sampleData: string
 }

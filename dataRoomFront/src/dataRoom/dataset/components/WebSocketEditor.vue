@@ -22,10 +22,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: DatasetEntity]
 }>()
 
-const defaultScript = `// message 为当前收到的原始消息字符串
-// payload 为自动解析后的JSON对象；非JSON消息时 payload 等于 message
-// 返回对象或对象数组，作为组件最终消费的数据
-return payload instanceof List ? payload : [payload]`
+const defaultScript = 'return payload instanceof List ? payload : [payload]'
 
 const defaultSampleData = `{
   "time": "2026-06-23 10:00:00",
@@ -47,6 +44,8 @@ const formData = reactive<WebSocketFormData>({
   dataset: {
     datasetType: 'websocket',
     url: '',
+    processingMode: 'json',
+    jsonPath: '',
     script: defaultScript,
     sampleData: defaultSampleData,
   },
@@ -59,6 +58,8 @@ const ensureWebSocketDataset = () => {
     formData.dataset = {
       datasetType: 'websocket',
       url: '',
+      processingMode: 'json',
+      jsonPath: '',
       script: defaultScript,
       sampleData: defaultSampleData,
     }
@@ -67,6 +68,9 @@ const ensureWebSocketDataset = () => {
 
   const dataset = formData.dataset as WebSocketDataset
   dataset.url = dataset.url || ''
+  // 必须在补齐默认脚本前推断旧配置的模式。
+  dataset.processingMode = dataset.processingMode || (dataset.script?.trim() ? 'script' : 'json')
+  dataset.jsonPath = dataset.jsonPath || ''
   dataset.script = dataset.script || defaultScript
   dataset.sampleData = dataset.sampleData || defaultSampleData
 }
@@ -106,6 +110,11 @@ const getData = (): DatasetEntity => {
   return { ...formData }
 }
 
+const resetProcessingResult = () => {
+  previewData.value = []
+  formData.outputList = []
+}
+
 const test = async () => {
   try {
     ensureWebSocketDataset()
@@ -114,7 +123,7 @@ const test = async () => {
       ElMessage.error('请先输入WebSocket地址')
       return false
     }
-    if (!dataset.script.trim()) {
+    if (dataset.processingMode === 'script' && !dataset.script.trim()) {
       ElMessage.error('请先输入消息处理脚本')
       return false
     }
@@ -136,12 +145,13 @@ const test = async () => {
       }))
       ElMessage.success('测试样本处理成功，字段列表已更新')
     } else {
+      formData.outputList = []
       ElMessage.warning('测试样本处理结果无法推断字段')
     }
     return true
   } catch (error) {
     console.error('WebSocket测试样本处理失败:', error)
-    ElMessage.error('测试样本处理失败')
+    // 请求封装已展示后端错误，保留 JSON/JSONPath 或脚本禁用的具体原因。
     return false
   }
 }
@@ -183,13 +193,36 @@ defineExpose({
           <el-input v-model="formData.dataset.url" placeholder="ws://localhost:8080/example" clearable />
         </el-form-item>
 
-        <el-form-item class="dataset-editor-form-grid__full" label="消息处理脚本">
+        <el-form-item class="dataset-editor-form-grid__full" label="数据处理方式">
+          <el-radio-group v-model="formData.dataset.processingMode" @change="resetProcessingResult">
+            <el-radio value="json">JSON</el-radio>
+            <el-radio value="script">自定义脚本</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item
+          v-if="formData.dataset.processingMode === 'json'"
+          class="dataset-editor-form-grid__full"
+          label="JSONPath"
+        >
+          <el-input v-model="formData.dataset.jsonPath" placeholder="例如 $.data，留空使用完整 JSON" clearable />
+          <div class="script-hint">
+            <el-text tag="p" type="info" size="small">直接解析 JSON 消息，JSONPath 支持提取嵌套对象或数组，例如 $.data 或 $.data[0]</el-text>
+          </div>
+        </el-form-item>
+
+        <el-form-item v-else class="dataset-editor-form-grid__full" label="消息处理脚本">
           <div class="codemirror-wrapper codemirror-wrapper--script">
             <Codemirror
               v-model="formData.dataset.script"
               :extensions="groovyExtensions"
               placeholder="请输入Groovy消息处理脚本"
             />
+          </div>
+          <div class="script-hint">
+            <el-text tag="p" type="info" size="small">message 为当前收到的原始消息字符串。</el-text>
+            <el-text tag="p" type="info" size="small">payload 为自动解析后的 JSON 对象；非 JSON 消息时 payload 等于 message。</el-text>
+            <el-text tag="p" type="info" size="small">返回对象或对象数组，作为组件最终消费的数据。</el-text>
           </div>
         </el-form-item>
 
@@ -231,7 +264,7 @@ defineExpose({
         </el-table>
         <el-empty
           v-if="!formData.outputList || formData.outputList.length === 0"
-          description="请点击「解析测试样本」按钮执行脚本并自动解析字段列表"
+          description="请点击「解析测试样本」按钮，按所选方式处理消息并自动解析字段列表"
           :image-size="100"
         />
       </div>
@@ -242,6 +275,11 @@ defineExpose({
 <style scoped lang="scss">
 .dataset-editor-form {
   min-width: 0;
+}
+
+.script-hint {
+  width: 100%;
+  margin-top: 8px;
 }
 
 .codemirror-wrapper {

@@ -1,10 +1,13 @@
 package com.gccloud.gcpaas.dataroom.core.dataset.service;
 
+import com.alibaba.fastjson2.JSONPath;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gccloud.gcpaas.dataroom.core.constant.DatasetType;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.BaseDataset;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.StreamingDataset;
+import com.gccloud.gcpaas.dataroom.core.dataset.bean.WebSocketDataset;
 import com.gccloud.gcpaas.dataroom.core.dataset.runtime.StreamingDatasetMessageContext;
 import com.gccloud.gcpaas.dataroom.core.entity.DatasetEntity;
 import com.gccloud.gcpaas.dataroom.core.exception.DataRoomException;
@@ -21,7 +24,7 @@ import java.util.Map;
 
 /**
  * 流式数据集消息处理器。
- * WebSocket、MQTT、Kafka 等订阅型数据集收到原始消息后统一通过这里执行脚本转换。
+ * 订阅型数据集消息共用处理入口；WebSocket 支持 JSON 提取或脚本转换。
  */
 @Slf4j
 @Service
@@ -37,7 +40,6 @@ public class StreamingDatasetMessageProcessor {
         DatasetType datasetType = datasetEntity == null ? null : datasetEntity.getDatasetType();
         context.setDatasetType(datasetType);
         context.setMessage(message);
-        context.setPayload(parseMessage(message));
         context.setParams(params == null ? Map.of() : params);
         String script = streamingDataset == null ? "" : streamingDataset.getScript();
         return process(datasetEntity, streamingDataset, context, script);
@@ -54,14 +56,29 @@ public class StreamingDatasetMessageProcessor {
     }
 
     public Object process(DatasetEntity datasetEntity, StreamingDataset streamingDataset, StreamingDatasetMessageContext context) {
-        if (context.getPayload() == null) {
-            context.setPayload(parseMessage(context.getMessage()));
-        }
         String script = streamingDataset == null ? "" : streamingDataset.getScript();
         return process(datasetEntity, streamingDataset, context, script);
     }
 
     private Object process(DatasetEntity datasetEntity, StreamingDataset streamingDataset, StreamingDatasetMessageContext context, String script) {
+        if (streamingDataset instanceof WebSocketDataset webSocketDataset) {
+            String mode = webSocketDataset.getProcessingMode();
+            if (StringUtils.isBlank(mode)) {
+                mode = StringUtils.isNotBlank(script) ? "script" : "json";
+            }
+            if ("json".equals(mode)) {
+                return processJsonMessage(context.getMessage(), webSocketDataset.getJsonPath());
+            }
+            if (!"script".equals(mode)) {
+                throw new DataRoomException("不支持的 WebSocket 数据处理方式");
+            }
+            if (StringUtils.isBlank(script)) {
+                throw new DataRoomException("请输入消息处理脚本");
+            }
+        }
+        if (context.getPayload() == null) {
+            context.setPayload(parseMessage(context.getMessage()));
+        }
         if (StringUtils.isBlank(script)) {
             return context.getPayload();
         }
@@ -85,6 +102,30 @@ public class StreamingDatasetMessageProcessor {
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
             throw new DataRoomException("流式数据集消息处理脚本执行失败");
+        }
+    }
+
+    private Object processJsonMessage(String message, String jsonPath) {
+        if (StringUtils.isBlank(message)) {
+            throw new DataRoomException("WebSocket 消息不能为空，请提供有效的 JSON 数据");
+        }
+        Object payload;
+        try {
+            payload = objectMapper.readerFor(Object.class)
+                    .with(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
+                    .readValue(message);
+        } catch (JsonProcessingException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new DataRoomException("WebSocket 消息不是有效的 JSON 数据", e);
+        }
+        if (StringUtils.isBlank(jsonPath)) {
+            return payload;
+        }
+        try {
+            return JSONPath.eval(payload, jsonPath.trim());
+        } catch (RuntimeException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new DataRoomException("WebSocket JSONPath 解析失败，请检查表达式", e);
         }
     }
 

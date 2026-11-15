@@ -376,7 +376,7 @@ const handleAddDataset = (datasetType: keyof typeof datasetTypeMap, node?: Datas
               ? {datasetType: 'excel', sql: ''}
               : datasetType === 'es'
                 ? {datasetType: 'es', path: '', method: 'POST', body: '', respJsonPath: ''}
-                : {datasetType: 'websocket', url: '', script: '', sampleData: ''}
+                : {datasetType: 'websocket', url: '', processingMode: 'json', jsonPath: '', script: '', sampleData: ''}
   }
   dialogVisible.value = true
 }
