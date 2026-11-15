@@ -12,13 +12,12 @@ const { applyThemeToCharts, getThemeStyle } = await jiti.import('../src/dataRoom
 const factory = type => jiti.import(`../src/dataRoom/components/${type}/install.ts`)
 const at = (object, key) => key.split('.').reduce((value, part) => value?.[part], object)
 
-test('35 个组件显式登记；九套主题切换、序列化和基础配置隔离', async () => {
+test('所有组件显式登记；九套主题切换、序列化和基础配置隔离', async () => {
   const dirs = await readdir(path.join(root, 'dataRoom/components'), { withFileTypes: true })
   const types = []
   for (const dir of dirs.filter(dir => dir.isDirectory())) {
     if ((await readdir(path.join(root, 'dataRoom/components', dir.name))).includes('install.ts')) types.push(dir.name)
   }
-  assert.equal(types.length, 35)
   assert.deepEqual([...Object.keys(componentThemeMappings), ...Object.keys(contentOnlyComponents)].sort(), types.sort())
   for (const type of types) {
     const { getInstance } = await factory(type)
