@@ -8,6 +8,7 @@ import { drAreaChartThemeMapping } from '../components/DrAreaChart/theme'
 import { barThemeMapping } from '../components/DrBarChart/theme'
 import { drBorderThemeMapping } from '../components/DrBorder/theme'
 import { drBubbleChartThemeMapping } from '../components/DrBubbleChart/theme'
+import { drCandlestickChartThemeMapping } from '../components/DrCandlestickChart/theme'
 import { drDataTableThemeMapping } from '../components/DrDataTable/theme'
 import { drDateTimeThemeMapping } from '../components/DrDateTime/theme'
 import { drDecorationThemeMapping } from '../components/DrDecoration/theme'
@@ -18,6 +19,7 @@ import { drIframeThemeMapping } from '../components/DrIframe/theme'
 import { drImageMetricCardThemeMapping } from '../components/DrImageMetricCard/theme'
 import { drInputThemeMapping } from '../components/DrInput/theme'
 import { drLineChartThemeMapping } from '../components/DrLineChart/theme'
+import { drLiquidFillThemeMapping } from '../components/DrLiquidFill/theme'
 import { drMapThemeMapping } from '../components/DrMap/theme'
 import { drMetricCardThemeMapping } from '../components/DrMetricCard/theme'
 import { drModel3DThemeMapping } from '../components/DrModel3D/theme'
@@ -39,8 +41,7 @@ export const componentThemeMappings: Readonly<Record<string, readonly (readonly 
   DrAlarmImage: drAlarmImageThemeMapping,
   DrAreaChart: drAreaChartThemeMapping,
   DrBarChart: barThemeMapping,
-  // 保留涨跌语义色和轴标签文字，提示框与其他图表同步主题边框。
-  DrCandlestickChart: [['tooltip.borderColor', 'color.primary']],
+  DrCandlestickChart: drCandlestickChartThemeMapping,
   DrPictorialBarChart: drPictorialBarChartThemeMapping,
   DrBorder: drBorderThemeMapping,
   DrBubbleChart: drBubbleChartThemeMapping,
@@ -49,6 +50,7 @@ export const componentThemeMappings: Readonly<Record<string, readonly (readonly 
   DrDecoration: drDecorationThemeMapping,
   DrFullScreen: drFullScreenThemeMapping,
   DrGauge: drGaugeThemeMapping,
+  DrLiquidFill: drLiquidFillThemeMapping,
   DrHorizontalBarChart: drHorizontalBarChartThemeMapping,
   DrIframe: drIframeThemeMapping,
   DrImageMetricCard: drImageMetricCardThemeMapping,

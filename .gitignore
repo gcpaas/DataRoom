@@ -8,6 +8,7 @@ docs
 *.mjs
 !dataRoomFront/scripts/candlestick-chart.test.mjs
 !dataRoomFront/scripts/pictorial-bar-chart.test.mjs
+!dataRoomFront/scripts/liquid-fill.test.mjs
 !dataRoomFront/scripts/component-presets.test.mjs
 !dataRoomFront/scripts/screen-chart-style.test.mjs
 !dataRoomFront/scripts/bar-theme.test.mjs

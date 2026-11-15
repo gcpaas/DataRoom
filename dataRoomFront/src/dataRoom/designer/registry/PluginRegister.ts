@@ -15,6 +15,7 @@ import {DrBubbleChartPlugin} from '@/dataRoom/components/DrBubbleChart/plugin.ts
 import {DrHorizontalBarChartPlugin} from '@/dataRoom/components/DrHorizontalBarChart/plugin.ts'
 import {DrRadarChartPlugin} from '@/dataRoom/components/DrRadarChart/plugin.ts'
 import {DrWordCloudPlugin} from '@/dataRoom/components/DrWordCloud/plugin.ts'
+import { DrLiquidFillPlugin } from '@/dataRoom/components/DrLiquidFill/plugin.ts'
 import {DrGaugePlugin} from '@/dataRoom/components/DrGauge/plugin.ts'
 import {DrProgressBarPlugin} from '@/dataRoom/components/DrProgressBar/plugin.ts'
 import {DrInputPlugin} from '@/dataRoom/components/DrInput/plugin.ts'
@@ -130,6 +131,7 @@ const pluginList = [
   new DrRadarChartPlugin([ComponentLibTagTypeConst.RADAR]),
   new DrWordCloudPlugin([ComponentLibTagTypeConst.TEXT]),
   new DrGaugePlugin([ComponentLibTagTypeConst.GAUGE]),
+  new DrLiquidFillPlugin([ComponentLibTagTypeConst.GAUGE]),
   new DrProgressBarPlugin([ComponentLibTagTypeConst.GAUGE]),
   new DrMetricCardPlugin([ComponentLibTagTypeConst.METRIC]),
   new DrAlarmImagePlugin([ComponentLibTagTypeConst.METRIC]),
