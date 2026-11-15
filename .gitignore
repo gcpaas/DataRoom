@@ -11,6 +11,8 @@ docs
 !dataRoomFront/scripts/liquid-fill.test.mjs
 !dataRoomFront/scripts/component-presets.test.mjs
 !dataRoomFront/scripts/screen-chart-style.test.mjs
+!dataRoomFront/scripts/3d-bar-chart.test.mjs
+!dataRoomFront/scripts/3d-pie-chart.test.mjs
 !dataRoomFront/scripts/bar-theme.test.mjs
 !dataRoomFront/scripts/all-component-theme.test.mjs
 .claude

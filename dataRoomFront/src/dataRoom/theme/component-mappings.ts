@@ -1,3 +1,5 @@
+import { pie3DThemeMapping } from '../components/Dr3DPieChart/theme'
+import { bar3DThemeMapping } from '../components/Dr3DBarChart/theme'
 import { drPictorialBarChartThemeMapping } from '../components/DrPictorialBarChart/theme'
 import { drFunnelChartThemeMapping } from '../components/DrFunnelChart/theme'
 import { DrRichTextThemeMapping } from '../components/DrRichText/theme'
@@ -41,6 +43,7 @@ export const componentThemeMappings: Readonly<Record<string, readonly (readonly 
   DrAlarmImage: drAlarmImageThemeMapping,
   DrAreaChart: drAreaChartThemeMapping,
   DrBarChart: barThemeMapping,
+  Dr3DBarChart: bar3DThemeMapping,
   DrCandlestickChart: drCandlestickChartThemeMapping,
   DrPictorialBarChart: drPictorialBarChartThemeMapping,
   DrBorder: drBorderThemeMapping,
@@ -61,6 +64,7 @@ export const componentThemeMappings: Readonly<Record<string, readonly (readonly 
   DrModel3D: drModel3DThemeMapping,
   DrFunnelChart: drFunnelChartThemeMapping,
   DrPieChart: drPieChartThemeMapping,
+  Dr3DPieChart: pie3DThemeMapping,
   DrProgressBar: drProgressBarThemeMapping,
   DrRadarChart: drRadarChartThemeMapping,
   DrRadio: drRadioThemeMapping,

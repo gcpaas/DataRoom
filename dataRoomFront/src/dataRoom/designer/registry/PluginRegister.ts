@@ -1,3 +1,5 @@
+import { Dr3DPieChartPlugin } from '../../components/Dr3DPieChart/plugin'
+import { Dr3DBarChartPlugin } from '../../components/Dr3DBarChart/plugin'
 import { DrCandlestickChartPlugin } from '@/dataRoom/components/DrCandlestickChart/plugin.ts'
 /**
  * 组件插件列表、需要手动导入、否则无法在组件库中显示
@@ -120,11 +122,13 @@ const pluginList = [
   new DrDateTimePlugin([ComponentLibTagTypeConst.TEXT]),
   new DrImagePlugin([ComponentLibTagTypeConst.MEDIA]),
   new DrPictorialBarChartPlugin([ComponentLibTagTypeConst.BAR]),
+  new Dr3DBarChartPlugin([ComponentLibTagTypeConst.BAR]),
   new DrBarChartPlugin([ComponentLibTagTypeConst.BAR]),
   new DrCandlestickChartPlugin([ComponentLibTagTypeConst.BAR]),
   new DrLineChartPlugin([ComponentLibTagTypeConst.LINE]),
   new DrAreaChartPlugin([ComponentLibTagTypeConst.LINE]),
   new DrFunnelChartPlugin([ComponentLibTagTypeConst.FUNNEL]),
+  new Dr3DPieChartPlugin([ComponentLibTagTypeConst.PIE]),
   new DrPieChartPlugin([ComponentLibTagTypeConst.PIE]),
   new DrBubbleChartPlugin([ComponentLibTagTypeConst.SCATTER]),
   new DrHorizontalBarChartPlugin([ComponentLibTagTypeConst.BAR]),
