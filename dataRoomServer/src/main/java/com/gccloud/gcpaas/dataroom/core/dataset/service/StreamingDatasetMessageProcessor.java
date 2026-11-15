@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gccloud.gcpaas.dataroom.core.constant.DatasetType;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.BaseDataset;
+import com.gccloud.gcpaas.dataroom.core.dataset.bean.MqttDataset;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.StreamingDataset;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.WebSocketDataset;
 import com.gccloud.gcpaas.dataroom.core.dataset.runtime.StreamingDatasetMessageContext;
@@ -20,6 +21,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -41,6 +43,9 @@ public class StreamingDatasetMessageProcessor {
         context.setDatasetType(datasetType);
         context.setMessage(message);
         context.setParams(params == null ? Map.of() : params);
+        if (streamingDataset instanceof MqttDataset mqttDataset) {
+            context.getMetadata().put("topic", mqttDataset.getTopic());
+        }
         String script = streamingDataset == null ? "" : streamingDataset.getScript();
         return process(datasetEntity, streamingDataset, context, script);
     }
@@ -61,16 +66,27 @@ public class StreamingDatasetMessageProcessor {
     }
 
     private Object process(DatasetEntity datasetEntity, StreamingDataset streamingDataset, StreamingDatasetMessageContext context, String script) {
+        String mode = null;
+        String jsonPath = null;
         if (streamingDataset instanceof WebSocketDataset webSocketDataset) {
-            String mode = webSocketDataset.getProcessingMode();
+            mode = webSocketDataset.getProcessingMode();
+            jsonPath = webSocketDataset.getJsonPath();
             if (StringUtils.isBlank(mode)) {
                 mode = StringUtils.isNotBlank(script) ? "script" : "json";
             }
+        } else if (streamingDataset instanceof MqttDataset mqttDataset) {
+            mode = mqttDataset.getProcessingMode();
+            jsonPath = mqttDataset.getJsonPath();
+            if (StringUtils.isBlank(mode)) {
+                return processLegacyMqttMessage(mqttDataset, context.getMessage());
+            }
+        }
+        if (mode != null) {
             if ("json".equals(mode)) {
-                return processJsonMessage(context.getMessage(), webSocketDataset.getJsonPath());
+                return processJsonMessage(context.getMessage(), jsonPath);
             }
             if (!"script".equals(mode)) {
-                throw new DataRoomException("不支持的 WebSocket 数据处理方式");
+                throw new DataRoomException("不支持的流式数据处理方式");
             }
             if (StringUtils.isBlank(script)) {
                 throw new DataRoomException("请输入消息处理脚本");
@@ -105,9 +121,33 @@ public class StreamingDatasetMessageProcessor {
         }
     }
 
+    private Object processLegacyMqttMessage(MqttDataset dataset, String message) {
+        Object parsed = processJsonMessage(message, null);
+        if (!(parsed instanceof Map<?, ?> data)) {
+            throw new DataRoomException("旧版 MQTT 字段映射要求 JSON 对象");
+        }
+        if (dataset.getJsonFieldMappings() == null || dataset.getJsonFieldMappings().isEmpty()) {
+            return data;
+        }
+        Map<String, Object> result = new LinkedHashMap<>();
+        for (MqttDataset.JsonFieldMapping mapping : dataset.getJsonFieldMappings()) {
+            String path = mapping.getJsonPath();
+            Object value = null;
+            if (path != null) {
+                path = path.startsWith("$.") ? path.substring(2) : path;
+                value = data;
+                for (String part : path.split("\\.")) {
+                    value = value instanceof Map<?, ?> object ? object.get(part) : null;
+                }
+            }
+            result.put(mapping.getField(), value);
+        }
+        return result;
+    }
+
     private Object processJsonMessage(String message, String jsonPath) {
         if (StringUtils.isBlank(message)) {
-            throw new DataRoomException("WebSocket 消息不能为空，请提供有效的 JSON 数据");
+            throw new DataRoomException("流式消息不能为空，请提供有效的 JSON 数据");
         }
         Object payload;
         try {
@@ -116,7 +156,7 @@ public class StreamingDatasetMessageProcessor {
                     .readValue(message);
         } catch (JsonProcessingException e) {
             log.error(ExceptionUtils.getStackTrace(e));
-            throw new DataRoomException("WebSocket 消息不是有效的 JSON 数据", e);
+            throw new DataRoomException("流式消息不是有效的 JSON 数据", e);
         }
         if (StringUtils.isBlank(jsonPath)) {
             return payload;
@@ -125,7 +165,7 @@ public class StreamingDatasetMessageProcessor {
             return JSONPath.eval(payload, jsonPath.trim());
         } catch (RuntimeException e) {
             log.error(ExceptionUtils.getStackTrace(e));
-            throw new DataRoomException("WebSocket JSONPath 解析失败，请检查表达式", e);
+            throw new DataRoomException("流式数据 JSONPath 解析失败，请检查表达式", e);
         }
     }
 

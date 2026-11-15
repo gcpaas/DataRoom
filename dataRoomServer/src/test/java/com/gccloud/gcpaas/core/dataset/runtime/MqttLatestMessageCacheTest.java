@@ -16,8 +16,8 @@ class MqttLatestMessageCacheTest {
             cache.addMessage(Map.of("value", i));
         }
         assertEquals(5, cache.size());
-        assertEquals(2, cache.getMessages().get(0).get("value"));
-        assertEquals(6, cache.getMessages().get(4).get("value"));
+        assertEquals(2, ((Map<?, ?>) cache.getMessages().get(0)).get("value"));
+        assertEquals(6, ((Map<?, ?>) cache.getMessages().get(4)).get("value"));
     }
 
     @Test
@@ -29,8 +29,8 @@ class MqttLatestMessageCacheTest {
         cache.addMessage(Map.of("v", 4));
 
         assertEquals(3, cache.size());
-        assertEquals(2, cache.getMessages().get(0).get("v"));
-        assertEquals(4, cache.getMessages().get(2).get("v"));
+        assertEquals(2, ((Map<?, ?>) cache.getMessages().get(0)).get("v"));
+        assertEquals(4, ((Map<?, ?>) cache.getMessages().get(2)).get("v"));
     }
 
     @Test

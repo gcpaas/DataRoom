@@ -95,6 +95,10 @@ export interface WebSocketDataset extends BaseDataset {
  */
 export interface MqttDataset extends BaseDataset {
   datasetType: 'mqtt'
+  /** 未指定时保留旧字段映射。 */
+  processingMode?: 'json' | 'script'
+  jsonPath?: string
+  script?: string
   topic: string
   cacheSize: number
   jsonFieldMappings: Array<{ field: string; jsonPath: string; type: string }>

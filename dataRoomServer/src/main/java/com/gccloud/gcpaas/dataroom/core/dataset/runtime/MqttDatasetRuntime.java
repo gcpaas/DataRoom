@@ -1,8 +1,8 @@
 package com.gccloud.gcpaas.dataroom.core.dataset.runtime;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gccloud.gcpaas.dataroom.core.constant.DatasetType;
+import com.gccloud.gcpaas.dataroom.core.entity.DatasetEntity;
+import com.gccloud.gcpaas.dataroom.core.dataset.service.StreamingDatasetMessageProcessor;
 import com.gccloud.gcpaas.dataroom.core.dataset.bean.MqttDataset;
 import com.gccloud.gcpaas.dataroom.core.datasource.bean.MqttDatasource;
 import com.gccloud.gcpaas.dataroom.core.dataset.ws.RealtimeDatasetSessionRegistry;
@@ -30,15 +30,21 @@ public class MqttDatasetRuntime implements StreamingDatasetRuntime {
     private final MqttDatasource mqttDatasource;
     private final MqttLatestMessageCache cache;
     private final RealtimeDatasetSessionRegistry sessionRegistry;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final DatasetEntity datasetEntity;
+    private final Map<String, Object> params;
+    private final StreamingDatasetMessageProcessor messageProcessor;
 
     private Mqtt3AsyncClient client;
     private volatile boolean running = false;
 
-    public MqttDatasetRuntime(String datasetCode, MqttDataset mqttDataset, MqttDatasource mqttDatasource,
+    public MqttDatasetRuntime(DatasetEntity datasetEntity, Map<String, Object> params,
+                              MqttDatasource mqttDatasource, StreamingDatasetMessageProcessor messageProcessor,
                               RealtimeDatasetSessionRegistry sessionRegistry) {
-        this.datasetCode = datasetCode;
-        this.mqttDataset = mqttDataset;
+        this.datasetEntity = datasetEntity;
+        this.datasetCode = datasetEntity.getCode();
+        this.mqttDataset = (MqttDataset) datasetEntity.getDataset();
+        this.params = params == null ? Map.of() : new HashMap<>(params);
+        this.messageProcessor = messageProcessor;
         this.mqttDatasource = mqttDatasource;
         this.cache = new MqttLatestMessageCache(mqttDataset.getCacheSize() != null ? mqttDataset.getCacheSize() : 5);
         this.sessionRegistry = sessionRegistry;
@@ -133,8 +139,13 @@ public class MqttDatasetRuntime implements StreamingDatasetRuntime {
 
     private void handleMessage(String payload) {
         try {
-            Map<String, Object> parsed = objectMapper.readValue(payload, new TypeReference<>() {});
-            Map<String, Object> mapped = applyFieldMappings(parsed);
+            StreamingDatasetMessageContext context = new StreamingDatasetMessageContext();
+            context.setDatasetCode(datasetCode);
+            context.setDatasetType(DatasetType.MQTT);
+            context.setMessage(payload);
+            context.setParams(params);
+            context.getMetadata().put("topic", mqttDataset.getTopic());
+            Object mapped = messageProcessor.process(datasetEntity, mqttDataset, context);
             cache.addMessage(mapped);
 
             if (sessionRegistry != null) {
@@ -142,37 +153,8 @@ public class MqttDatasetRuntime implements StreamingDatasetRuntime {
             }
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
-            cache.setLastError("JSON解析失败: " + e.getMessage());
+            cache.setLastError("MQTT消息处理失败");
         }
-    }
-
-    private Map<String, Object> applyFieldMappings(Map<String, Object> parsed) {
-        List<MqttDataset.JsonFieldMapping> mappings = mqttDataset.getJsonFieldMappings();
-        if (mappings == null || mappings.isEmpty()) {
-            return parsed;
-        }
-        Map<String, Object> result = new LinkedHashMap<>();
-        for (MqttDataset.JsonFieldMapping mapping : mappings) {
-            String jsonPath = mapping.getJsonPath();
-            Object value = resolveJsonPath(parsed, jsonPath);
-            result.put(mapping.getField(), value);
-        }
-        return result;
-    }
-
-    private Object resolveJsonPath(Map<String, Object> data, String jsonPath) {
-        if (jsonPath == null) return null;
-        String path = jsonPath.startsWith("$.") ? jsonPath.substring(2) : jsonPath;
-        String[] parts = path.split("\\.");
-        Object current = data;
-        for (String part : parts) {
-            if (current instanceof Map<?, ?> map) {
-                current = map.get(part);
-            } else {
-                return null;
-            }
-        }
-        return current;
     }
 
     private void applySsl(Mqtt3ClientBuilder builder, String caCertPem) {

@@ -53,7 +53,7 @@ const currentDataset = ref<DatasetEntity>({
   parentCode: 'root'
 })
 const editorRef = ref()
-const wideEditorDatasetTypes = ['json', 'http', 'sql', 'excel', 'es', 'websocket'] as const
+const wideEditorDatasetTypes = ['json', 'http', 'sql', 'excel', 'es', 'websocket', 'mqtt'] as const
 const datasetDialogWidth = computed(() =>
   wideEditorDatasetTypes.includes(currentDataset.value.datasetType as typeof wideEditorDatasetTypes[number])
     ? '90%'
@@ -103,6 +103,11 @@ const addTypeOptions = [
     key: 'websocket',
     name: 'WebSocket数据集',
     description: '实时监听数据变化并通过脚本转换'
+  },
+  {
+    key: 'mqtt',
+    name: 'MQTT数据集',
+    description: '订阅MQTT主题并提取JSON或通过脚本转换'
   }
 ]
 
@@ -362,7 +367,7 @@ const handleAddDataset = (datasetType: keyof typeof datasetTypeMap, node?: Datas
     name: '',
     datasetType,
     parentCode: node?.code || 'root',
-    dataSourceCode: datasetType === 'sql' || datasetType === 'es' || datasetType === 'http' ? '' : undefined,
+    dataSourceCode: datasetType === 'sql' || datasetType === 'es' || datasetType === 'http' || datasetType === 'mqtt' ? '' : undefined,
     inputList: [],
     outputList: [],
     dataset:
@@ -376,7 +381,9 @@ const handleAddDataset = (datasetType: keyof typeof datasetTypeMap, node?: Datas
               ? {datasetType: 'excel', sql: ''}
               : datasetType === 'es'
                 ? {datasetType: 'es', path: '', method: 'POST', body: '', respJsonPath: ''}
-                : {datasetType: 'websocket', url: '', processingMode: 'json', jsonPath: '', script: '', sampleData: ''}
+                : datasetType === 'mqtt'
+                  ? {datasetType: 'mqtt', topic: '', cacheSize: 5, processingMode: 'json', jsonPath: '', script: '', sampleData: '', jsonFieldMappings: [], emptyDataStrategy: 'emptyArray'}
+                  : {datasetType: 'websocket', url: '', processingMode: 'json', jsonPath: '', script: '', sampleData: ''}
   }
   dialogVisible.value = true
 }
@@ -929,7 +936,7 @@ const handleTestAndSave = async () => {
     <el-dialog
       v-model="typeSelectVisible"
       title="选择新增类型"
-      width="560px"
+      width="min(560px, calc(100vw - 32px))"
       :close-on-click-modal="true"
       destroy-on-close
     >
@@ -1172,12 +1179,13 @@ const handleTestAndSave = async () => {
 
 .type-select-cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 16px;
   padding: 8px 2px;
 
   .type-card {
     display: flex;
+    min-width: 0;
     align-items: center;
     gap: 12px;
     padding: 16px;
@@ -1214,14 +1222,13 @@ const handleTestAndSave = async () => {
         font-weight: 500;
         color: var(--el-text-color-primary);
         margin-bottom: 4px;
+        overflow-wrap: anywhere;
       }
 
       .type-card-desc {
         font-size: 12px;
         color: var(--el-text-color-secondary);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        overflow-wrap: anywhere;
       }
     }
   }

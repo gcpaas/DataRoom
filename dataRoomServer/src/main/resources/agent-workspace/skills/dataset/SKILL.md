@@ -131,11 +131,12 @@ description: 当涉及到数据集或数据集目录创建、修改时使用
 // websocket
 { "datasetType": "websocket", "url": "wss://example.com/stream", "script": "", "sampleData": "{\"value\":12}" }
 // mqtt
-{ "datasetType": "mqtt", "topic": "sensor/+/data", "cacheSize": 5, "sampleData": "{\"value\":12}", "jsonFieldMappings": [{ "field": "temperature", "jsonPath": "$.sensor.temperature", "type": "number" }] }
+{ "datasetType": "mqtt", "topic": "sensor/+/data", "cacheSize": 5, "processingMode": "json", "jsonPath": "$.data", "sampleData": "{\"data\":[{\"value\":12}]}" }
 ```
 
 - **`runDataset` 只解析 `sampleData`，不连接上游、不读实时缓存**，不能用它验证实时链路。
-- mqtt：`jsonFieldMappings[].jsonPath` 仅支持 `$.a.b` 点路径（非完整 JSONPath），`type` 仅声明不做转换。
+- mqtt：`processingMode` 支持 `json`（完整 JSONPath 提取，空路径返回完整 JSON）和 `script`（自定义脚本）。样本测试和实时消息使用相同处理逻辑。
+- mqtt 旧配置未指定 `processingMode` 时保留 `jsonFieldMappings`；映射路径仅支持 `$.a.b` 点路径，`type` 仅声明不做转换。
 - 后端脚本执行默认禁用，`script` 保持空字符串。
 
 ## 五、inputList / outputList 参数规范

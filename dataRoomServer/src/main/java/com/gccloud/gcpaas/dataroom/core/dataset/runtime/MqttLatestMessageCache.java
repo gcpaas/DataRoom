@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class MqttLatestMessageCache {
 
     private final int maxSize;
-    private final LinkedList<Map<String, Object>> messages = new LinkedList<>();
+    private final LinkedList<Object> messages = new LinkedList<>();
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private Instant lastMessageAt;
     private String lastError;
@@ -16,7 +16,7 @@ public class MqttLatestMessageCache {
         this.maxSize = maxSize > 0 ? maxSize : 5;
     }
 
-    public void addMessage(Map<String, Object> message) {
+    public void addMessage(Object message) {
         lock.writeLock().lock();
         try {
             messages.addLast(message);
@@ -30,7 +30,7 @@ public class MqttLatestMessageCache {
         }
     }
 
-    public List<Map<String, Object>> getMessages() {
+    public List<Object> getMessages() {
         lock.readLock().lock();
         try {
             return new ArrayList<>(messages);

@@ -24,10 +24,14 @@ public class MqttDataset extends BaseDataset implements StreamingDataset {
     @Schema(description = "测试样本数据")
     private String sampleData;
 
-    @Override
-    public String getScript() {
-        return null;
-    }
+    @Schema(description = "数据处理方式：json 或 script；未指定时保留旧字段映射", allowableValues = {"json", "script"})
+    private String processingMode;
+
+    @Schema(description = "JSON 模式提取路径；为空使用完整 JSON")
+    private String jsonPath;
+
+    @Schema(description = "消息处理脚本，仅 script 模式使用且必填")
+    private String script;
 
     @Override
     public String getSampleData() {
