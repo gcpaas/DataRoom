@@ -1,3 +1,4 @@
+import { DrCandlestickChartPlugin } from '@/dataRoom/components/DrCandlestickChart/plugin.ts'
 /**
  * 组件插件列表、需要手动导入、否则无法在组件库中显示
  */
@@ -119,6 +120,7 @@ const pluginList = [
   new DrImagePlugin([ComponentLibTagTypeConst.MEDIA]),
   new DrPictorialBarChartPlugin([ComponentLibTagTypeConst.BAR]),
   new DrBarChartPlugin([ComponentLibTagTypeConst.BAR]),
+  new DrCandlestickChartPlugin([ComponentLibTagTypeConst.BAR]),
   new DrLineChartPlugin([ComponentLibTagTypeConst.LINE]),
   new DrAreaChartPlugin([ComponentLibTagTypeConst.LINE]),
   new DrFunnelChartPlugin([ComponentLibTagTypeConst.FUNNEL]),

@@ -39,6 +39,8 @@ export const componentThemeMappings: Readonly<Record<string, readonly (readonly 
   DrAlarmImage: drAlarmImageThemeMapping,
   DrAreaChart: drAreaChartThemeMapping,
   DrBarChart: barThemeMapping,
+  // 保留涨跌语义色和轴标签文字，提示框与其他图表同步主题边框。
+  DrCandlestickChart: [['tooltip.borderColor', 'color.primary']],
   DrPictorialBarChart: drPictorialBarChartThemeMapping,
   DrBorder: drBorderThemeMapping,
   DrBubbleChart: drBubbleChartThemeMapping,
