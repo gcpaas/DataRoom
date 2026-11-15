@@ -173,6 +173,12 @@ const datasetTypeMap = {
   }
 } as const
 
+const selectedDatasetTypeName = computed(() => {
+  const datasetType = selectedNode.value?.datasetType
+  if (!datasetType) return ''
+  return datasetTypeMap[datasetType as keyof typeof datasetTypeMap]?.name ?? datasetType
+})
+
 /**
  * 加载树数据
  */
@@ -827,10 +833,11 @@ const handleTestAndSave = async () => {
               字段列表
             </button>
           </div>
-          <div class="right-actions">
+          <el-space class="right-actions" :size="20">
+            <el-tag type="info" effect="light">{{ selectedDatasetTypeName }}</el-tag>
             <el-button link :icon="Edit" @click="handleEdit">编辑</el-button>
             <el-button link :icon="Refresh" @click="handleRefresh">刷新</el-button>
-          </div>
+          </el-space>
         </div>
         <div class="right-content">
           <el-scrollbar class="right-scrollbar">
@@ -1136,8 +1143,6 @@ const handleTestAndSave = async () => {
       }
 
       .right-actions {
-        display: flex;
-        gap: 8px;
         flex-shrink: 0;
       }
     }

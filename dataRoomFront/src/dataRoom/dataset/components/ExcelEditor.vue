@@ -2,7 +2,7 @@
 import { nextTick, reactive, ref, watch } from 'vue'
 import type { FormInstance, FormRules, LoadFunction } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import { Expand, Fold, Grid, Refresh } from '@element-plus/icons-vue'
+import { CopyDocument, Expand, Fold, Menu, Refresh } from '@element-plus/icons-vue'
 import { Codemirror } from 'vue-codemirror'
 import { sql } from '@codemirror/lang-sql'
 import { eclipse } from '@uiw/codemirror-theme-eclipse'
@@ -170,9 +170,10 @@ const copyMetadataNodeName = async (data: ExcelMetaTreeNode) => {
   }
   try {
     await navigator.clipboard.writeText(name)
+    ElMessage.success(data.nodeType === 'table' ? '表名已复制' : '字段名已复制')
   } catch (error) {
     console.error('复制Excel表结构节点名称失败:', error)
-    ElMessage.error('复制失败,请手动复制')
+    ElMessage.error('复制失败，请手动复制')
   }
 }
 
@@ -329,21 +330,34 @@ defineExpose({
             :props="metadataTreeProps"
             node-key="id"
             highlight-current
-            :expand-on-click-node="true"
+            :expand-on-click-node="false"
             empty-text="暂无Excel表信息"
             v-loading="metadataTreeLoading"
-            @node-click="copyMetadataNodeName"
           >
             <template #default="{ data }">
-              <div class="excel-metadata-node">
+              <div
+                class="excel-metadata-node"
+                :class="{ 'excel-metadata-node--table': data.nodeType === 'table' }"
+              >
                 <el-icon v-if="data.nodeType === 'table'" class="excel-metadata-node__icon">
-                  <Grid />
+                  <Menu />
                 </el-icon>
                 <span v-if="data.nodeType === 'table'" class="excel-metadata-node__label">{{ data.label }}</span>
                 <span v-else class="excel-metadata-node__content">
                   <span class="excel-metadata-node__label">{{ data.label }}</span>
                   <span v-if="data.type" class="excel-metadata-node__type">{{ data.type }}</span>
                   <span v-if="data.comment?.trim()" class="excel-metadata-node__comment">{{ data.comment }}</span>
+                </span>
+                <span class="excel-metadata-node__copy" @keydown.stop>
+                  <el-tooltip :content="data.nodeType === 'table' ? '复制表名' : '复制字段名'" placement="top">
+                    <el-button
+                      link
+                      size="small"
+                      :icon="CopyDocument"
+                      :aria-label="data.nodeType === 'table' ? '复制表名' : '复制字段名'"
+                      @click.stop="copyMetadataNodeName(data)"
+                    />
+                  </el-tooltip>
                 </span>
               </div>
             </template>
@@ -542,10 +556,25 @@ defineExpose({
   line-height: 1.57;
   letter-spacing: 0;
 
+  &--table {
+    align-items: center;
+  }
+
   &__icon {
     flex-shrink: 0;
-    margin-top: 2px;
     color: var(--el-text-color-regular);
+  }
+
+  &__copy {
+    flex-shrink: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:hover &__copy,
+  &:focus-within &__copy {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   &__content {

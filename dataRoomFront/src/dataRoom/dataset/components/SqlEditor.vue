@@ -5,7 +5,7 @@ import type { DatasetEntity } from '../api'
 import { datasetApi } from '../api'
 import { dataSourceApi, type DataSourceColumnMeta, type DataSourceTableMeta } from '@/dataRoom/data-source/api'
 import { ElMessage } from 'element-plus'
-import { Expand, Fold, Grid, Refresh } from '@element-plus/icons-vue'
+import { CopyDocument, Expand, Fold, Menu, Refresh } from '@element-plus/icons-vue'
 import { parseParams } from '@/dataRoom/utils'
 import { Codemirror } from 'vue-codemirror'
 import { sql } from '@codemirror/lang-sql'
@@ -235,9 +235,10 @@ const copyMetadataNodeName = async (data: DataSourceMetaTreeNode) => {
   }
   try {
     await navigator.clipboard.writeText(name)
+    ElMessage.success(data.nodeType === 'table' ? '表名已复制' : '字段名已复制')
   } catch (error) {
     console.error('复制表结构节点名称失败:', error)
-    ElMessage.error('复制失败,请手动复制')
+    ElMessage.error('复制失败，请手动复制')
   }
 }
 
@@ -425,21 +426,34 @@ defineExpose({
             :props="metadataTreeProps"
             node-key="id"
             highlight-current
-            :expand-on-click-node="true"
+            :expand-on-click-node="false"
             :empty-text="metadataTreeEmptyText"
             v-loading="metadataTreeLoading"
-            @node-click="copyMetadataNodeName"
           >
             <template #default="{ data }">
-              <div class="sql-metadata-node">
+              <div
+                class="sql-metadata-node"
+                :class="{ 'sql-metadata-node--table': data.nodeType === 'table' }"
+              >
                 <el-icon v-if="data.nodeType === 'table'" class="sql-metadata-node__icon">
-                  <Grid />
+                  <Menu />
                 </el-icon>
                 <span v-if="data.nodeType === 'table'" class="sql-metadata-node__label">{{ data.label }}</span>
                 <span v-else class="sql-metadata-node__content">
                   <span class="sql-metadata-node__label">{{ data.label }}</span>
                   <span v-if="data.type" class="sql-metadata-node__type">{{ data.type }}</span>
                   <span v-if="data.comment?.trim()" class="sql-metadata-node__comment">{{ data.comment }}</span>
+                </span>
+                <span class="sql-metadata-node__copy" @keydown.stop>
+                  <el-tooltip :content="data.nodeType === 'table' ? '复制表名' : '复制字段名'" placement="top">
+                    <el-button
+                      link
+                      size="small"
+                      :icon="CopyDocument"
+                      :aria-label="data.nodeType === 'table' ? '复制表名' : '复制字段名'"
+                      @click.stop="copyMetadataNodeName(data)"
+                    />
+                  </el-tooltip>
                 </span>
               </div>
             </template>
@@ -667,10 +681,25 @@ defineExpose({
   line-height: 1.57;
   letter-spacing: 0;
 
+  &--table {
+    align-items: center;
+  }
+
   &__icon {
     flex-shrink: 0;
-    margin-top: 2px;
     color: var(--el-text-color-regular);
+  }
+
+  &__copy {
+    flex-shrink: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:hover &__copy,
+  &:focus-within &__copy {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   &__content {
