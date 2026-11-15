@@ -47,11 +47,9 @@ const getInstance = (pageType: PageType): DrHtmlConfig => {
   width: 100%;
   height: 100%;
   padding: 24px;
-  border: 1px solid var(--el-border-color);
+  border: 1px solid currentColor;
   border-radius: 12px;
-  background: var(--el-bg-color);
-  --el-text-color-primary: ${DEFAULT_NEUTRAL_COLOR};
-  color: var(--el-text-color-primary);
+  color: ${DEFAULT_NEUTRAL_COLOR};
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
