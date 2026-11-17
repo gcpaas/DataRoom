@@ -1,5 +1,10 @@
 [
   {
+    "componentName": "DrHeatmapChart",
+    "displayName": "热力图",
+    "description": "热力图、heatmap、矩阵、双类目、固定色标"
+  },
+  {
     "componentName": "DrText",
     "displayName": "文本",
     "description": "文字、文本、数字"

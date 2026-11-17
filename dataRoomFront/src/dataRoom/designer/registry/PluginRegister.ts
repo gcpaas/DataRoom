@@ -1,3 +1,4 @@
+import { DrHeatmapChartPlugin } from '../../components/DrHeatmapChart/plugin'
 import { Dr3DPieChartPlugin } from '../../components/Dr3DPieChart/plugin'
 import { Dr3DBarChartPlugin } from '../../components/Dr3DBarChart/plugin'
 import { DrCandlestickChartPlugin } from '@/dataRoom/components/DrCandlestickChart/plugin.ts'
@@ -52,6 +53,7 @@ import type {ComponentLibTagInterface} from "@/dataRoom/designer/types/Component
 import {ComponentLibTagTypeConst} from "@/dataRoom/constants/ComponentLibTagTypeConst.ts";
 
 const componentLibTagList: ComponentLibTagInterface[] = [
+  { name: '热力图', tag: ComponentLibTagTypeConst.HEATMAP },
   {
     name: '折线图',
     tag: ComponentLibTagTypeConst.LINE
@@ -117,6 +119,7 @@ const componentLibTagList: ComponentLibTagInterface[] = [
  * 组件列表
  */
 const pluginList = [
+  new DrHeatmapChartPlugin([ComponentLibTagTypeConst.HEATMAP]),
   new DrTextPlugin([ComponentLibTagTypeConst.TEXT]),
   new DrRichTextPlugin([ComponentLibTagTypeConst.TEXT]),
   new DrDateTimePlugin([ComponentLibTagTypeConst.TEXT]),

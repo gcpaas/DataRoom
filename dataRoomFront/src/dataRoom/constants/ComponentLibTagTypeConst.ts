@@ -2,6 +2,7 @@
  * 组件注册时类型
  */
 export enum ComponentLibTagTypeConst {
+  HEATMAP = 'heatmap',
   /**
    * 折线图、面积图
    */

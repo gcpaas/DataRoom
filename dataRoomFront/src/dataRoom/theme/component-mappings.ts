@@ -1,3 +1,4 @@
+import { heatmapThemeMapping } from '../components/DrHeatmapChart/theme'
 import { pie3DThemeMapping } from '../components/Dr3DPieChart/theme'
 import { bar3DThemeMapping } from '../components/Dr3DBarChart/theme'
 import { drPictorialBarChartThemeMapping } from '../components/DrPictorialBarChart/theme'
@@ -37,6 +38,7 @@ import { drWordCloudThemeMapping } from '../components/DrWordCloud/theme'
 import type { ThemeStylePath } from './types'
 
 export const componentThemeMappings: Readonly<Record<string, readonly (readonly [string, ThemeStylePath])[]>> = {
+  DrHeatmapChart: heatmapThemeMapping,
   DrRichText: DrRichTextThemeMapping,
   DrEcharts: DrEchartsThemeMapping,
   DrHtml: DrHtmlThemeMapping,

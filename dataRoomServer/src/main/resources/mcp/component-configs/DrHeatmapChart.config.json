@@ -1,0 +1,429 @@
+{
+  "componentName": "DrHeatmapChart",
+  "displayName": "热力图",
+  "description": "热力图、heatmap、矩阵、双类目、固定色标。实际 ChartConfig.type 必须为 DrHeatmapChart。fields.defaultValue 默认对应 visualScreen；两种页面的默认值差异见字段 description，必须按目标 pageType 选择：page 的 w/h 为网格份数，visualScreen 的 w/h 为像素，不可混用。",
+  "fields": [
+    {
+      "field": "id",
+      "type": "string",
+      "description": "唯一标识，必填"
+    },
+    {
+      "field": "i",
+      "type": "string",
+      "description": "唯一标识，当pageType=page时必填，默认与id保持一致"
+    },
+    {
+      "field": "type",
+      "type": "string",
+      "description": "组件类型；实际 ChartConfig.type 必须为 DrHeatmapChart，不可使用预设 id。",
+      "defaultValue": "DrHeatmapChart"
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "description": "组件显示的图层名称 或 卡片名称",
+      "defaultValue": "热力图"
+    },
+    {
+      "field": "w",
+      "type": "number",
+      "description": "宽度或占用的份数；默认值须按 pageType 选择，page=16（网格份数），visualScreen=600（像素）。",
+      "defaultValue": 600
+    },
+    {
+      "field": "h",
+      "type": "number",
+      "description": "高度或占用的份数；默认值须按 pageType 选择，page=8（网格份数），visualScreen=360（像素）。",
+      "defaultValue": 360
+    },
+    {
+      "field": "x",
+      "type": "number",
+      "description": "x坐标或x轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "y",
+      "type": "number",
+      "description": "y坐标或y轴份数",
+      "defaultValue": 100
+    },
+    {
+      "field": "z",
+      "type": "number",
+      "description": "组件层级、层级越大、越靠前显示",
+      "defaultValue": 100
+    },
+    {
+      "field": "rotateX",
+      "type": "number",
+      "description": "X轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateY",
+      "type": "number",
+      "description": "Y轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "rotateZ",
+      "type": "number",
+      "description": "Z轴旋转角度",
+      "defaultValue": 0
+    },
+    {
+      "field": "hide",
+      "type": "boolean",
+      "description": "是否隐藏组件，true 时设计器与预览不渲染"
+    },
+    {
+      "field": "children",
+      "type": "array",
+      "description": "子组件，仅在容器类组件有效"
+    },
+    {
+      "field": "behaviors",
+      "type": "object",
+      "description": "图表交互",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.code",
+      "type": "string",
+      "description": "数据集编码",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.datasetType",
+      "type": "enum",
+      "description": "数据集类型，历史配置可为空",
+      "options": [
+        "",
+        "directory",
+        "json",
+        "http",
+        "sql",
+        "excel",
+        "es",
+        "websocket",
+        "mqtt"
+      ],
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.fields",
+      "type": "object",
+      "description": "字段绑定，key为组件可绑定的维度、指标、属性等字段名（见组件datasetFields定义），value为绑定的数据集字段名数组",
+      "defaultValue": {}
+    },
+    {
+      "field": "dataset.script",
+      "type": "string",
+      "description": "数据处理脚本",
+      "defaultValue": ""
+    },
+    {
+      "field": "dataset.params",
+      "type": "object",
+      "description": "数据集入参、如果数据集需要入参的话",
+      "defaultValue": {}
+    },
+    {
+      "field": "props.global.padding",
+      "type": "array",
+      "description": "padding",
+      "defaultValue": [
+        30,
+        20,
+        30,
+        20
+      ]
+    },
+    {
+      "field": "props.xAxis.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.xAxis.name",
+      "type": "string",
+      "description": "name",
+      "defaultValue": ""
+    },
+    {
+      "field": "props.xAxis.nameTextStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "props.xAxis.nameTextStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#A8ABB2"
+    },
+    {
+      "field": "props.xAxis.categories",
+      "type": "array",
+      "description": "为空时按数据首次出现顺序；非空时限定轴范围及顺序。",
+      "defaultValue": []
+    },
+    {
+      "field": "props.xAxis.inverse",
+      "type": "boolean",
+      "description": "inverse",
+      "defaultValue": false
+    },
+    {
+      "field": "props.xAxis.axisLabel.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.xAxis.axisLabel.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "props.xAxis.axisLabel.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#A8ABB2"
+    },
+    {
+      "field": "props.xAxis.axisLabel.rotate",
+      "type": "number",
+      "description": "rotate",
+      "defaultValue": 0
+    },
+    {
+      "field": "props.xAxis.axisLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "props.xAxis.axisLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "props.xAxis.axisLine.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#A8ABB2"
+    },
+    {
+      "field": "props.xAxis.splitArea",
+      "type": "boolean",
+      "description": "splitArea",
+      "defaultValue": false
+    },
+    {
+      "field": "props.yAxis.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.yAxis.name",
+      "type": "string",
+      "description": "name",
+      "defaultValue": ""
+    },
+    {
+      "field": "props.yAxis.nameTextStyle.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "props.yAxis.nameTextStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#A8ABB2"
+    },
+    {
+      "field": "props.yAxis.categories",
+      "type": "array",
+      "description": "为空时按数据首次出现顺序；非空时限定轴范围及顺序。",
+      "defaultValue": []
+    },
+    {
+      "field": "props.yAxis.inverse",
+      "type": "boolean",
+      "description": "inverse",
+      "defaultValue": false
+    },
+    {
+      "field": "props.yAxis.axisLabel.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.yAxis.axisLabel.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 12
+    },
+    {
+      "field": "props.yAxis.axisLabel.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#A8ABB2"
+    },
+    {
+      "field": "props.yAxis.axisLabel.rotate",
+      "type": "number",
+      "description": "rotate",
+      "defaultValue": 0
+    },
+    {
+      "field": "props.yAxis.axisLine.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": false
+    },
+    {
+      "field": "props.yAxis.axisLine.width",
+      "type": "number",
+      "description": "width",
+      "defaultValue": 1
+    },
+    {
+      "field": "props.yAxis.axisLine.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#A8ABB2"
+    },
+    {
+      "field": "props.yAxis.splitArea",
+      "type": "boolean",
+      "description": "splitArea",
+      "defaultValue": false
+    },
+    {
+      "field": "props.series.backgroundColor",
+      "type": "string",
+      "description": "格子基础背景色，透明度按分段计算。；默认值须按 pageType 选择，page=\"#1F78D1\"，visualScreen=\"#0F76E8\"。",
+      "defaultValue": "#0F76E8"
+    },
+    {
+      "field": "props.series.segments",
+      "type": "number",
+      "description": "等宽分段数，正整数，默认 5。",
+      "defaultValue": 5
+    },
+    {
+      "field": "props.series.min",
+      "type": "number",
+      "description": "固定范围下限，不随数据变化。",
+      "defaultValue": 0
+    },
+    {
+      "field": "props.series.max",
+      "type": "number",
+      "description": "固定范围上限，必须大于最小值。",
+      "defaultValue": 100
+    },
+    {
+      "field": "props.series.name",
+      "type": "string",
+      "description": "name",
+      "defaultValue": "热力图"
+    },
+    {
+      "field": "props.series.borderWidth",
+      "type": "number",
+      "description": "borderWidth",
+      "defaultValue": 0
+    },
+    {
+      "field": "props.series.borderColor",
+      "type": "string",
+      "description": "borderColor",
+      "defaultValue": "#A8ABB2"
+    },
+    {
+      "field": "props.series.label.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.series.label.fontSize",
+      "type": "number",
+      "description": "fontSize",
+      "defaultValue": 14
+    },
+    {
+      "field": "props.series.label.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "props.tooltip.show",
+      "type": "boolean",
+      "description": "show",
+      "defaultValue": true
+    },
+    {
+      "field": "props.tooltip.backgroundColor",
+      "type": "string",
+      "description": "backgroundColor；默认值须按 pageType 选择，page=\"rgba(31, 120, 209, 0.6)\"，visualScreen=\"rgba(15, 118, 232, 0.6)\"。",
+      "defaultValue": "rgba(15, 118, 232, 0.6)"
+    },
+    {
+      "field": "props.tooltip.borderColor",
+      "type": "string",
+      "description": "borderColor；默认值须按 pageType 选择，page=\"#1F78D1\"，visualScreen=\"#0F76E8\"。",
+      "defaultValue": "#0F76E8"
+    },
+    {
+      "field": "props.tooltip.textStyle.color",
+      "type": "string",
+      "description": "color",
+      "defaultValue": "#FFFFFF"
+    },
+    {
+      "field": "props.animation.enabled",
+      "type": "boolean",
+      "description": "enabled",
+      "defaultValue": true
+    },
+    {
+      "field": "props.animation.duration",
+      "type": "number",
+      "description": "duration",
+      "defaultValue": 300
+    }
+  ],
+  "datasetFields": [
+    {
+      "name": "xField",
+      "desc": "X 轴类目字段",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "yField",
+      "desc": "Y 轴类目字段",
+      "required": true,
+      "multiple": false
+    },
+    {
+      "name": "valueField",
+      "desc": "格子数值字段",
+      "required": true,
+      "multiple": false
+    }
+  ]
+}

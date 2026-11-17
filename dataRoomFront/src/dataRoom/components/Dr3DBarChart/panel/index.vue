@@ -71,7 +71,6 @@ const { amount: seriesGap, unit: seriesGapUnit } = gapModel('barGap')
               <template #suffix>px</template>
             </DrNumberField>
           </DrFieldRow>
-          <el-text size="small" type="info">{{ widthMode === 'auto' ? '按图表空间自动分配柱宽，不超过上限。' : '设置每根柱子的宽度；空间不足时自动缩小，避免重叠。' }}</el-text>
           <DrFieldRow label="组间留白" paired variant="equal">
             <template #first>
               <DrNumberField v-model="categoryGap" class="dr-config-panel__control" :min="0" :step="1" aria-label="组间留白数值">
@@ -80,11 +79,10 @@ const { amount: seriesGap, unit: seriesGapUnit } = gapModel('barGap')
             </template>
             <template #second>
               <DrSelectField v-model="categoryGapUnit" class="dr-config-panel__control" aria-label="组间留白单位">
-                <el-option label="比例（%）" value="%" /><el-option label="像素（px）" value="px" />
+                <el-option label="比例" value="%" /><el-option label="像素" value="px" />
               </DrSelectField>
             </template>
           </DrFieldRow>
-          <el-text size="small" type="info">不同类目之间的留白，例如 1 月与 2 月之间。比例按每个类目的可用宽度计算，最多留出 95%。</el-text>
           <DrFieldRow label="同组柱距" paired variant="equal">
             <template #first>
               <DrNumberField v-model="seriesGap" class="dr-config-panel__control" :min="0" :step="1" aria-label="同组柱距数值">
@@ -93,11 +91,10 @@ const { amount: seriesGap, unit: seriesGapUnit } = gapModel('barGap')
             </template>
             <template #second>
               <DrSelectField v-model="seriesGapUnit" class="dr-config-panel__control" aria-label="同组柱距单位">
-                <el-option label="比例（%）" value="%" /><el-option label="像素（px）" value="px" />
+                <el-option label="比例" value="%" /><el-option label="像素" value="px" />
               </DrSelectField>
             </template>
           </DrFieldRow>
-          <el-text size="small" type="info">同一类目内多根柱子的距离，例如同月的销售额与利润。比例按柱宽计算，单系列时不生效。</el-text>
           <DrFieldRow label="不透明度"
             ><DrNumberField
               v-model="chartConfig.props.series.opacity"
