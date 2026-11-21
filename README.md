@@ -9,10 +9,10 @@
     <img alt="Company" src="https://img.shields.io/badge/公司-科大国创云网科技有限公司-blue.svg">
     <a href="http://gcpaas.gccloud.com"><img src="https://img.shields.io/badge/%E9%A2%84%E8%A7%88-演示环境-yellow" alt="预览"></a>
 </p>
-🔥DataRoom是一款基于SpringBoot3.x、JDK17、Vue3.x、Vite8.x、Element-plus、Echarts6.x等技术栈的大屏设计器，具备大屏、仪表板设计、预览能力，支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、MQTT、ClickHouse、MariaDB、OceanBase、Hive、TDengine、TiDB、StarRocks、Druid、ElasticSearch、Excel、CSV等20+数据源接入，支持AI生成页面，使用简单，完全免费，代码开源。<br/>
+🔥DataRoom是一款基于SpringBoot4.x、JDK17、Vue3.x、Vite8.x、Element-plus、Echarts6.x等技术栈的大屏设计器，具备大屏、仪表板设计、预览能力，支持MySQL、PostgreSQL、Oracle、SQLServer、Doris、达梦、DB2、GBase、PolarDB、H2、GoldenDB、MongoDB、人大金仓、MQTT、ClickHouse、MariaDB、OceanBase、Hive、TDengine、TiDB、StarRocks、Druid、ElasticSearch、Excel、CSV等20+数据源接入，支持AI生成页面，使用简单，完全免费，代码开源。<br/>
 
 ## 🎉特别说明
-* 当前项目代码完全开源，暂时未提供演示环境
+* 当前项目代码完全开源，暂时未提供演示环境,可通过Docker一键部署
 * 我们也有商业版本，[点击立即体验](http://gcpaas.gccloud.com/dataRoom/login)、需要自己用邮箱注册，密码会发送到邮件中
 * 商业版功能介绍与定价[点击这里](http://gcpaas.gccloud.com/#/pricing)
 
