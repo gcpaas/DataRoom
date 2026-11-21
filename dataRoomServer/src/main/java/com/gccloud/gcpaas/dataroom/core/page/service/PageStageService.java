@@ -2,7 +2,7 @@ package com.gccloud.gcpaas.dataroom.core.page.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.gccloud.gcpaas.dataroom.core.constant.PageStatus;
 import com.gccloud.gcpaas.dataroom.core.constant.PageType;
 import com.gccloud.gcpaas.dataroom.core.entity.PageStageEntity;

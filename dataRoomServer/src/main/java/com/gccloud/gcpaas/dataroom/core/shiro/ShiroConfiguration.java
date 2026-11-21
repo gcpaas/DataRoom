@@ -85,7 +85,7 @@ public class ShiroConfiguration {
         filterMap.put("/dataRoom/user/login/**", STATELESS_ANON);
         filterMap.put("/cas/login", STATELESS_ANON);
 
-        // Knife4j doc.html 需要
+        filterMap.put("/webjars/swagger-ui/**", STATELESS_OAUTH);
         filterMap.put("/webjars/**", STATELESS_ANON);
         filterMap.put("/v3/api-docs/**", STATELESS_ANON);
         filterMap.put("/doc.html/**", STATELESS_ANON);

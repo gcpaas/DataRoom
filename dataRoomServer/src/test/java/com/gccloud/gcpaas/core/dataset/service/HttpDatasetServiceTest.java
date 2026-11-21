@@ -142,7 +142,7 @@ class HttpDatasetServiceTest {
         );
 
         assertEquals("Bearer dataset", headers.getFirst("authorization"));
-        assertTrue(new ArrayList<>(headers.keySet()).contains("authorization"));
+        assertTrue(new ArrayList<>(headers.headerNames()).contains("authorization"));
         assertEquals("source", headers.getFirst("X-Trace"));
     }
 

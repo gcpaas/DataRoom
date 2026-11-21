@@ -64,6 +64,12 @@ class ShiroConfigurationCasTest {
             assertEquals("noSessionCreation,anon", filter.getFilterChainDefinitionMap().get(path));
         }
         assertEquals("noSessionCreation,OAUTH", filter.getFilterChainDefinitionMap().get("/**"));
+        var matcher = new org.springframework.util.AntPathMatcher();
+        for (String path : List.of("/swagger-ui.html", "/swagger-ui/index.html", "/webjars/swagger-ui/index.html")) {
+            String firstMatch = filter.getFilterChainDefinitionMap().keySet().stream()
+                    .filter(pattern -> matcher.match(pattern, path)).findFirst().orElseThrow();
+            assertEquals("noSessionCreation,OAUTH", filter.getFilterChainDefinitionMap().get(firstMatch), path);
+        }
     }
 
     @Test

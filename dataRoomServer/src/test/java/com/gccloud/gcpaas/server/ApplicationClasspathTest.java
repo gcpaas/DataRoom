@@ -6,7 +6,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 
 import java.util.Arrays;
 
@@ -30,7 +29,7 @@ class ApplicationClasspathTest {
         SpringBootApplication annotation = DataRoomApplication.class.getAnnotation(SpringBootApplication.class);
 
         assertTrue(
-                Arrays.asList(annotation.exclude()).contains(MongoAutoConfiguration.class),
+                Arrays.asList(annotation.excludeName()).contains("org.springframework.boot.mongodb.autoconfigure.MongoAutoConfiguration"),
                 "MongoDB JDBC must not trigger Spring Boot's native MongoClient auto-configuration"
         );
     }

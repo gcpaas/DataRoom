@@ -3,7 +3,7 @@ package com.gccloud.gcpaas.dataroom.core.util;
 import com.gccloud.gcpaas.dataroom.core.bean.Rsa;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
 import java.security.*;
